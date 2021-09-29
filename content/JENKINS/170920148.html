@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : CodeBuilder: AWS CodeBuild Cloud Agents Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : CodeBuilder: AWS CodeBuild Cloud Agents Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (lsegal)</span>, last modified on Mar 26, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p class="code-line">This Jenkins plugin dynamically spins up cloud agents using AWS CodeBuild to execute jobs as Jenkins builds.</p><p class="code-line">This means that instead of using an AWS CodeBuild <code>buildspec.yml</code> file, the job will be configured and managed by Jenkins. Steps can be configured directly in the Jenkins UI as normal, and pipelines can continue make use of the <code>Jenkinsfile</code> with no need to migrate configuration.</p><p class="code-line">Effectively, this plugin is a full drop-in replacement to any other node provider.</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-PluginInstallation">Plugin Installation</h2><p class="code-line">You can install the plugin by searching for &quot;CodeBuilder: AWS CodeBuild Cloud Agents&quot; (artifact ID is <code>codebuilder-cloud</code>) in the Jenkins Plugin Manager.</p><h3 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-CompatibilityandRequirements">Compatibility and Requirements</h3><p class="code-line">This plugin depends on <code>aws-java-sdk@1.11.341+</code> and <code>aws-credentials@1.23+</code> and is compatible with Jenkins 1.651.3+.</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-Usage">Usage</h2><p class="code-line">Because permission management can be difficult, this plugin assumes you have created an AWS CodeBuild project with the necessary IAM roles for the job types that you will be running. The project can have any configuration; all settings will be overridden by the plugin to provide a build using source provided by the Jenkins host.</p><p class="code-line">Once a project is created, you can configure the cloud in Jenkins by adding a new cloud and configuring the plugin in <code>Manage Jenkins &gt; Configure System</code>. After this, builds that match the cloud label will automatically be provisioned through AWS CodeBuild.</p><h3 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-QuickStart">Quick Start</h3><h4 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-CreatinganAWSCodeBuildProject(Optional)">Creating an AWS CodeBuild Project (Optional)</h4><p class="code-line">If you have already setup a project, you can skip this step. Otherwise, if you want a quick way to bootstrap configuration, you can use the <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html" title="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html" class="external-link" rel="nofollow">AWS CLI</a> to create an AWS CodeBuild project with bare permissions by running the commands below:</p><pre><code class="code-line language-sh"><span class="hljs-comment" style="color: rgb(0,128,0);"># Optional command to create a bare IAM role named &quot;jenkins-default&quot;</span>
+aws iam create-role \
+  --role-name jenkins-default \
+  --assume-role-policy-document \
+  <span class="hljs-string" style="color: rgb(163,21,21);">'{&quot;Version&quot;:&quot;2012-10-17 &quot;,&quot;Statement&quot;:[{&quot;Effect&quot;: &quot;Allow&quot;,&quot;Principal&quot;:{&quot;Service&quot;:&quot;codebuild.amazonaws.com&quot;},&quot;Action&quot;:&quot;sts:AssumeRole&quot;}]}'</span>
+
+<span class="hljs-comment" style="color: rgb(0,128,0);"># Create the project named &quot;jenkins-cluster&quot; using our service role</span>
+aws codebuild create-project \
+  --name jenkins-cluster \
+  --service-role jenkins-default \
+  --artifacts <span class="hljs-built_in" style="color: rgb(0,0,255);">type</span>=NO_ARTIFACTS \
+  --environment <span class="hljs-built_in" style="color: rgb(0,0,255);">type</span>=LINUX_CONTAINER,image=aws/codebuild/docker:18.09.0,computeType=BUILD_GENERAL1_SMALL \
+  --<span class="hljs-built_in" style="color: rgb(0,0,255);">source</span> $<span class="hljs-string" style="color: rgb(163,21,21);">'type=NO_SOURCE,buildspec=version:0.2\nphases:\n build:\n commands:\n - exit 1'</span>
+</code></pre><h4 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-ConfiguringthePlugin">Configuring the Plugin</h4><p class="code-line">In <code>Manage Jenkins &gt; Configure System</code> you will find a drop-down to &quot;Add a New Cloud&quot;:</p><p class="code-line"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/170920148/170920146.png" data-image-src="attachments/170920148/170920146.png" data-unresolved-comment-count="0" data-linked-resource-id="170920146" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-3-21_18-44-44.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="170920148" data-linked-resource-container-version="3"></span></p><p class="code-line">After adding the cloud, you can configure the region, project name, and other basic build agent details. Only region and project name are required. Credentials can be sourced from your <code>~/.aws/credentials</code> file or <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> environment variables if left blank.</p><p class="code-line">Your configuration might look something like this:</p><p class="code-line"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/170920148/170920147.png" data-image-src="attachments/170920148/170920147.png" data-unresolved-comment-count="0" data-linked-resource-id="170920147" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-3-21_18-44-57.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="170920148" data-linked-resource-container-version="3"></span></p><p class="code-line">And that's it, you're all set to trigger new builds on AWS CodeBuild!</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-ConfiguringBuildswithDefaultJNLPImage">Configuring Builds with Default JNLP Image</h2><p class="code-line">The base image of <code>lsegal/jnlp-docker-image:alpine</code> provides a base Alpine install with <code>docker</code>, and <code>git</code>, and Java 8. It is recommended to rely on Docker images for building when possible. A <code>Jenkinsfile</code> example of this would be:</p><pre><code class="code-line language-groovy">pipeline {
+  agent {
+    label <span class="hljs-string" style="color: rgb(163,21,21);">'codebuilder'</span>
+    docker { image <span class="hljs-string" style="color: rgb(163,21,21);">'node:7-alpine'</span> }
+  }
+  stages {
+    stage(<span class="hljs-string" style="color: rgb(163,21,21);">'Build'</span>) {
+      steps {
+        sh <span class="hljs-string" style="color: rgb(163,21,21);">'node --version'</span>
+      }
+    }
+  }
+}
+</code></pre><p class="code-line">If you would prefer to install software directly, you can do using your <code>root</code> privileges on the machine (builds are by default run as a root user):</p><pre><code class="code-line language-groovy">pipeline {
+  agent { label <span class="hljs-string" style="color: rgb(163,21,21);">'codebuilder'</span> }
+  stages {
+    stage(<span class="hljs-string" style="color: rgb(163,21,21);">'Install'</span>) {
+      steps { sh <span class="hljs-string" style="color: rgb(163,21,21);">'apk add -U nodejs'</span> }
+    }
+    stage(<span class="hljs-string" style="color: rgb(163,21,21);">'Build'</span>) {
+      steps { sh <span class="hljs-string" style="color: rgb(163,21,21);">'node --version'</span> }
+    }
+  }
+}
+</code></pre><p class="code-line">Performing package installs can be slow, so to speed up and take advantage of CodeBuild caching you may want to create a custom image that contains the necessary software tooling. This is described in the next section.</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-CreatingaCustomJNLPDockerImage">Creating a Custom JNLP Docker Image</h2><p class="code-line">The Docker image that configures agents can be customized to contain other build environment tools if needed. To do this, you must create a Docker image with a <code>jenkins-agent</code> binary that can spawn the <a href="https://jenkins.io/projects/remoting/" title="https://jenkins.io/projects/remoting/" class="external-link" rel="nofollow">Jenkins Remoting library</a> and passes arguments over to that jar.</p><p class="code-line">Optionally you can also provide a <code>dockerd-entrypoint.sh</code> executable in the PATH that spins up a Docker daemon for supporting <code>docker run</code> in the instance.</p><p class="code-line">The easiest way to set this up is to create a <code>Dockerfile</code> that relies on the pre-existing base image <code>lsegal/jnlp-docker-agent:alpine</code>, installing all software there:</p><pre><code class="code-line language-dockerfile"><span class="hljs-keyword" style="color: rgb(0,0,255);">FROM</span> lsegal/jnlp-docker-agent:alpine
+<span class="hljs-keyword" style="color: rgb(0,0,255);">RUN</span><span class="bash"> apk add -U ruby </span></code></pre><p class="code-line">Run <code>docker build -t myname/myimage .</code> to build this image and publish it to your favorite Docker registry. You can now customize the <code>jnlpImage</code> configuration option with <code>myname/myimage</code> to run builds with extra software pre-installed.</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-ProgrammaticConfigurationwithGroovy">Programmatic Configuration with Groovy</h2><p class="code-line">You can automatically configure the CodeBuilder cloud with Groovy init scripts by adding a <code>codebuilder.groovy</code> to <code>JENKINS_HOME/init.groovy.d</code>:</p><pre><code class="code-line language-groovy"><span class="hljs-keyword" style="color: rgb(0,0,255);">import</span> dev.lsegal.jenkins.codebuilder.CodeBuilderCloud
+<span class="hljs-keyword" style="color: rgb(0,0,255);">import</span> jenkins.model.Jenkins
+
+credentialsId = <span class="hljs-literal" style="color: rgb(163,21,21);">null</span>                         <span class="hljs-comment" style="color: rgb(0,128,0);">// IAM profile or credentials file</span>
+region        = System.getenv(<span class="hljs-string" style="color: rgb(163,21,21);">&quot;AWS_REGION&quot;</span>)  <span class="hljs-comment" style="color: rgb(0,128,0);">// the region for the project</span>
+projectName   = <span class="hljs-string" style="color: rgb(163,21,21);">&quot;jenkins-cluster&quot;</span>            <span class="hljs-comment" style="color: rgb(0,128,0);">// the name of the project</span>
+label         = <span class="hljs-string" style="color: rgb(163,21,21);">&quot;codebuild&quot;</span>                  <span class="hljs-comment" style="color: rgb(0,128,0);">// set a label to limit builds</span>
+jenkinsUrl    = <span class="hljs-literal" style="color: rgb(163,21,21);">null</span>                         <span class="hljs-comment" style="color: rgb(0,128,0);">// use default Jenkins URL for JNLP</span>
+jnlpImage     = <span class="hljs-literal" style="color: rgb(163,21,21);">null</span>                         <span class="hljs-comment" style="color: rgb(0,128,0);">// use default JNLP Docker image</span>
+computeType   = <span class="hljs-string" style="color: rgb(163,21,21);">&quot;BUILD_GENERAL1_SMALL&quot;</span>       <span class="hljs-comment" style="color: rgb(0,128,0);">// use a small build instance</span>
+
+<span class="hljs-comment" style="color: rgb(0,128,0);">// Remove previous cloud instances</span>
+jenkins = Jenkins.getInstance()
+prevInstances = jenkins.clouds.findAll { c -&gt; c <span class="hljs-keyword" style="color: rgb(0,0,255);">instanceof</span> CodeBuilderCloud }
+jenkins.clouds.removeAll(prevInstances)
+
+<span class="hljs-comment" style="color: rgb(0,128,0);">// Re-add this cloud</span>
+cbc = <span class="hljs-keyword" style="color: rgb(0,0,255);">new</span> CodeBuilderCloud(<span class="hljs-literal" style="color: rgb(163,21,21);">null</span>, projectName, credentialsId, region)
+cbc.setLabel(label)
+cbc.setJenkinsUrl(jenkinsUrl)
+cbc.setJnlpImage(jnlpImage)
+cbc.setComputeType(computeType)
+
+jenkins.clouds.add(cbc);
+jenkins.save()
+</code></pre><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-FAQ">FAQ</h2><h3 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-1.WhynotusetheAmazonECSPlugin?">1. Why not use the <a title="https://plugins.jenkins.io/amazon-ecs" href="https://plugins.jenkins.io/amazon-ecs" class="external-link" rel="nofollow">Amazon ECS Plugin</a>?</h3><p class="code-line">The Amazon ECS plugin can also provision on-demand nodes, and that can be useful in certain cases, however the ECS plugin introduces significantly more complexity in the configuration of these nodes, and provisioning nodes is not always as fast with cold-starts from Fargate. AWS CodeBuild provides a very similar on-demand provisioning scheme to Fargate, but also allows for some nice features such as Docker image caching, in addition to other temporal locally cached assets.</p><p class="code-line">For jobs that are expected to be provisioned independently and run repeatedly but for a relatively short amount of time, AWS CodeBuild has a good matching set of features to support these types of builds with much less configuring than manually provisioned Amazon ECS clusters.</p><h3 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-2.WhynotuseJenkinssupportinAWSCodeBuild?">2. Why not use Jenkins support in AWS CodeBuild?</h3><p class="code-line">AWS CodeBuild has official support for <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/jenkins-plugin.html" title="https://docs.aws.amazon.com/codebuild/latest/userguide/jenkins-plugin.html" class="external-link" rel="nofollow">using Jenkins hosts as a source</a> for builds, and even has <a href="https://github.com/awslabs/aws-codebuild-jenkins-plugin" title="https://github.com/awslabs/aws-codebuild-jenkins-plugin" class="external-link" rel="nofollow">a Jenkins plugin</a> that enables sending Jenkins jobs to CodeBuild in a very similar way to this plugin.</p><p class="code-line">The big difference between these two plugins is that the AWS plugin uses AWS CodeBuild as the source of truth for builds, rather than Jenkins. In practice, this means that project sources will need to use <code>buildspec.yml</code> files to define steps, as well as explicitly define build steps in Jenkins jobs to send work to AWS CodeBuild. This requires the migration of job configuration, as well as extra AWS resources (S3 buckets in particular) to pass source code to AWS CodeBuild. With that plugin, AWS CodeBuild is the tool that actually manages source, environments, secrets, and all build logic for the job; Jenkins only acts as a trigger.</p><p class="code-line">On the other hand, this plugin keeps Jenkins as the source of truth, ensuring that all configuration, logging, and state management remains inside of Jenkins itself in order to provide a transparent transition to running builds on AWS CodeBuild. This plugin is primarily aimed at environments that rely on Jenkins as a primary build management tool. The AWS plugin might be better suited for use cases where builds are primarily logged in AWS CodeBuild.</p><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-Changelog">Changelog</h2><h3 id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-Version1.0.0(releasedMarch26th2019)">Version 1.0.0 (released March 26th 2019)</h3><ul><li>Initial release</li></ul><h2 class="code-line" id="CodeBuilder:AWSCodeBuildCloudAgentsPlugin-License">License</h2><p class="code-line">This plugin is developed by <a href="mailto:lsegal@soen.ca" class="external-link" rel="nofollow">Loren Segal</a> and is licensed under the MIT license.</p><p class="code-line"><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/170920148/170920146.png">image2019-3-21_18-44-44.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/170920148/170920147.png">image2019-3-21_18-44-57.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

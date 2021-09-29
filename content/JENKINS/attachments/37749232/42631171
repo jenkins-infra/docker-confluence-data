@@ -1,0 +1,48 @@
+Index: src/main/java/hudson/plugins/qmake/QmakeBuilder.java
+===================================================================
+--- src/main/java/hudson/plugins/qmake/QmakeBuilder.java	(revision 23777)
++++ src/main/java/hudson/plugins/qmake/QmakeBuilder.java	(working copy)
+@@ -36,10 +36,10 @@
+     private QmakeBuilderImpl builderImpl;
+     
+     @DataBoundConstructor
+-    public QmakeBuilder(String projectFile, String extraArguments) {
++    public QmakeBuilder(String projectFile, String extraArguments, Boolean cleanBuild) {
+       this.projectFile = projectFile;
+       this.extraArguments = extraArguments;
+-      this.cleanBuild = false;
++      this.cleanBuild = cleanBuild;
+       builderImpl = new QmakeBuilderImpl();		
+     }
+ 
+@@ -94,7 +94,16 @@
+ 
+ 	String makeExe = "make";
+ 	if (!launcher.isUnix()) makeExe = "nmake";
++	
++	// launch make clean
++	if (getCleanBuild()) {
++		result = launcher.launch().cmds(makeExe, "clean").envs(envVars).stdout(logger).pwd(workDir).join();
++		if (result != 0) {
++		  return false;
++		}
++	}
+ 
++	// launch make
+ 	result = launcher.launch().cmds(makeExe).envs(envVars).stdout(logger).pwd(workDir).join();
+ 
+ 	if (result != 0) {
+Index: src/main/resources/hudson/plugins/qmake/QmakeBuilder/config.jelly
+===================================================================
+--- src/main/resources/hudson/plugins/qmake/QmakeBuilder/config.jelly	(revision 23777)
++++ src/main/resources/hudson/plugins/qmake/QmakeBuilder/config.jelly	(working copy)
+@@ -7,5 +7,9 @@
+   <f:entry title="Extra arguments to qmake (optional)" field="extraArguments">
+     	<f:textbox  />
+   </f:entry>
++  
++  <f:entry title="Clean first" field="cleanBuild">
++    	<f:checkbox default="false"  />
++  </f:entry>
+ 	
+ </j:jelly>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : How I setup Git, Gerrit, Jenkins, Nginx for 1 master with linux, windows, mac slaves for Continuous Delivery of Cpp builds and tests.</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Case-studies_71436053.html">Case studies</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : How I setup Git, Gerrit, Jenkins, Nginx for 1 master with linux, windows, mac slaves for Continuous Delivery of Cpp builds and tests.
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (shankar)</span>, last modified on Mar 09, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is my notes on how I setup Jenkins and Gerrit for continuous delivery on my servers.</p>
+
+<p>There seems to be a lot of bits and pieces to master to get this up  and running.  I have noted down the steps I have done so that someone else can repeat it for their own setup by seeing what I have done.</p>
+
+<p>My objective is to setup gerrit for commit review and for each commit  the jenkins master will schedule 2 jobs one each for linux and windows.  After it is all  done it will collect the job results and if all are successful it should  mark the gerrit commit as verified.</p>
+
+<p><strong>Machines used</strong>: I have one linux server for gerrit. One server for jenkins. One server for linux master. One server for windows master. Some linux slaves. Some windows slaves.  The purpose of the linux master and windows master is to compile the software which just takes only a few minutes.  All other slaves are used to split the testing time.  If tests are executed one after the other they take several hours.  So I get the lin/win master to compile the software and the slaves will download the compiled software and run in parallel different sets of tests that do not depend on each other.  So the testing time goes down to the time taken for the longest test set.</p>
+
+<p><strong>Install Postgresql.</strong></p>
+
+<p>This is used as a backend for Gerrit. I used the following script.</p>
+
+<p>wget <a href="https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.gz" class="external-link" rel="nofollow">https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.gz</a><br/>
+tar zxf postgresql-9.4.4.tar.gz<br/>
+cd postgresql-9.4.4<br/>
+yum install -y readline-devel<br/>
+./configure<br/>
+gmake world<br/>
+gmake install-world<br/>
+useradd pguser<br/>
+mkdir -p /home/pguser/data<br/>
+chown -R pguser:pguser /home/pguser<br/>
+echo &quot;to init run these following&quot;<br/>
+echo &quot;su pguser&quot;<br/>
+echo &quot;/usr/local/pgsql/bin/initdb -D /home/pguser/data&quot;<br/>
+echo &quot;to start run these following commands&quot;<br/>
+echo &quot;su pguser&quot;<br/>
+echo &quot;cd /home/pguser&quot;<br/>
+echo &quot;/usr/local/pgsql/bin/postgres -D /home/pguser/data &gt;logfile 2&gt;&amp;1 &amp;&quot;<br/>
+echo &quot;exit&quot;</p>
+
+<p><strong>Install Git</strong></p>
+
+<p>Git must be installed before gerrit.</p>
+
+<p>yum install -y git</p>
+
+<p><strong>Install Gerrit.</strong></p>
+
+<p>yum install -y java<br/>
+/usr/local/pgsql/bin/createuser --username=pguser -RDIElPS gerrit<br/>
+/usr/local/pgsql/bin/createdb --username=pguser -E UTF-8 -O gerrit reviewdb<br/>
+Give a password for the gerrit user and enter it below during gerrit setup<br/>
+useradd gerrit<br/>
+su gerrit<br/>
+cd /home/gerrit/<br/>
+mkdir reviewsite<br/>
+wget <a href="https://www.gerritcodereview.com/download/gerrit-2.11.3.war" class="external-link" rel="nofollow">https://www.gerritcodereview.com/download/gerrit-2.11.3.war</a><br/>
+java -jar gerrit-2.11.3.war init -d /home/gerrit/reviewsite</p>
+
+<p>Press enter to all questions except the following:<br/>
+Database server type [h2]:postgresql<br/>
+Authentication method []:http<br/>
+Get username from custom HTTP header []? y<br/>
+Install verified label []? y<br/>
+Behind reverse proxy []? y<br/>
+Proxy uses SSL (https://) []? y<br/>
+Subdirectory on proxy server []: /r/<br/>
+Canonical URL : <a href="https://review.sveena.com/r/" class="external-link" rel="nofollow">https://review.sveena.com/r/</a><br/>
+Install plugin reviewnotes ? y<br/>
+Install plugin replication ? y<br/>
+Install commit-message-length-validator plugin? y</p>
+
+<p>To start gerrit if it is not already started:</p>
+
+<p>su gerrit<br/>
+cd /home/gerrit/reviewsite<br/>
+bin/gerrit.sh start</p>
+
+<p>If that doesn't start try this:<br/>
+Start postgres sql first.<br/>
+su gerrit<br/>
+cd /home/gerrit/reviewsite<br/>
+java -jar bin/gerrit.war daemon -d /home/gerrit/reviewsite/ &amp;</p>
+
+<p><strong>Install Jenkins.</strong></p>
+
+<p>I used the following script.  I am using a centos machine for the master, some linux slaves and some windows slaves.<br/>
+I move the jenkins folder from /var/lib/jenkins to /home/jenkins because I like to backup only the home folder.</p>
+
+<p>wget -O /etc/yum.repos.d/jenkins.repo <a href="http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo" class="external-link" rel="nofollow">http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo</a><br/>
+rpm --import <a href="https://jenkins-ci.org/redhat/jenkins-ci.org.key" class="external-link" rel="nofollow">https://jenkins-ci.org/redhat/jenkins-ci.org.key</a><br/>
+yum -y install java jenkins git<br/>
+service jenkins stop<br/>
+cd /usr/lib/jenkins<br/>
+mv jenkins.war jenkins.bak<br/>
+wget <a href="http://mirrors.jenkins-ci.org/war/latest/jenkins.war" class="external-link" rel="nofollow">http://mirrors.jenkins-ci.org/war/latest/jenkins.war</a><br/>
+mv /var/lib/jenkins /home/<br/>
+sed -i -e 's/\/var\/lib\/jenkins/\/home\/jenkins/g' /etc/sysconfig/jenkins<br/>
+service jenkins start<br/>
+chkconfig jenkins on</p>
+
+<p><strong>Setup Nginx:</strong></p>
+
+<p>Nginx is used as a reverse proxy with client certificates on both the Gerrit and Jenkins machines.<br/>
+Client certificates are simple, easy and more secure than mere passwords.<br/>
+I haven't figured out how to setup Jenkins (with open anyone can sign up) client certificates yet, I still have to log in.<br/>
+But Gerrit works fine with open client certficates.<br/>
+Direct your users to get a free client certificate at <a href="https://userid.sveena.com" class="external-link" rel="nofollow">https://userid.sveena.com</a><br/>
+In the nginx.conf</p>
+
+<p>server {<br/>
+    server_name     car.sveena.com; #car stands for continuous automatic releases<br/>
+    rewrite ^       <a href="https://car.sveena.com$request_uri?" class="external-link" rel="nofollow">https://car.sveena.com$request_uri?</a> permanent;<br/>
+}<br/>
+server {<br/>
+    listen          443 ssl;<br/>
+    server_name     car.sveena.com;<br/>
+    root            /home/car;<br/>
+    ssl_certificate      /home/sveena.com.crt2;<br/>
+    ssl_certificate_key  /home/sveena.com.key2;<br/>
+    ssl_verify_client       on;<br/>
+    ssl_verify_depth       2;<br/>
+    location = /robots.txt {<br/>
+    }<br/>
+    location = /496.htm {<br/>
+        root /home;<br/>
+    }<br/>
+    client_body_buffer_size   3m;# these are required to install jenkins plugins<br/>
+    client_max_body_size      3m;<br/>
+    location / {<br/>
+        proxy_pass      <a href="http://127.0.0.1:8080/" class="external-link" rel="nofollow">http://127.0.0.1:8080/</a>;<br/>
+        proxy_redirect $scheme://$host:$server_port/ /; # this is required for reverse proxy to work correctly<br/>
+        proxy_set_header X-Forwarded-For $remote_addr;<br/>
+        proxy_set_header Host $host;<br/>
+        proxy_set_header X-Forwarded-User $ssl_client_s_dn_id;<br/>
+        proxy_set_header X-Forwarded-Groups &quot;Authenticated&quot;;<br/>
+        }<br/>
+}</p>
+
+<p>server {<br/>
+    server_name     review.sveena.com;<br/>
+    rewrite ^       <a href="https://review.sveena.com$request_uri?" class="external-link" rel="nofollow">https://review.sveena.com$request_uri?</a> permanent;<br/>
+}<br/>
+server {<br/>
+    listen      443 ssl;<br/>
+    server_name     review.sveena.com commit2.sveena.com; #commit2.sveena.com is replication backup of gerrit server<br/>
+    root        /home/commit;<br/>
+    ssl_certificate      /home/sveena.com.crt2;<br/>
+    ssl_certificate_key  /home/sveena.com.key2;<br/>
+    ssl_verify_client       on;<br/>
+    ssl_verify_depth       2;<br/>
+    location = /496.htm {        root /home;    }<br/>
+    location /r/ {<br/>
+        proxy_pass      <a href="http://127.0.0.1:8081" class="external-link" rel="nofollow">http://127.0.0.1:8081</a>;<br/>
+        proxy_set_header X-Forwarded-For $remote_addr;<br/>
+        proxy_set_header Host $host;<br/>
+        proxy_set_header SM_USER $ssl_client_s_dn_id;<br/>
+    }<br/>
+}</p>
+
+<p><strong>Secure Gerrit:</strong></p>
+
+<p>The first user to open your Gerrit site in a browser becomes the administrator.</p>
+
+<p><strong>Secure Jenkins:</strong></p>
+
+<p>Open your Jenkins site in a browser.<br/>
+Click Manage Jenkins.<br/>
+Click Configure Global Security.<br/>
+Check Enable Security.<br/>
+Check Jenkins own user database under security realm.<br/>
+Check Matrix based security.<br/>
+Type your name in User/group to add and click add.<br/>
+Select everything for your name.<br/>
+Check Read under overall for anonymous, so others can see your configuration.<br/>
+Restart the browser and access Jenkins site again.<br/>
+Click create an account and sign up.<br/>
+Click Manage Jenkins.<br/>
+Click Configure Global Security.<br/>
+Uncheck allow users to sign up.<br/>
+Click Save.</p>
+
+<p><strong>Setup Nodes:</strong></p>
+
+<p>You must create the nodes BEFORE you create a project otherwise there will be no option to add slaves configuration matrix in the project setup.  This took me many days to figure out.<br/>
+On the linux slaves run the following:<br/>
+yum install -y ntp<br/>
+service ntpd start<br/>
+chkconfig ntpd on<br/>
+yum install -y java<br/>
+useradd jenkins<br/>
+passwd jenkins<br/>
+su jenkins<br/>
+mkdir /home/jenkins/work</p>
+
+<p>Create a node:</p>
+
+<p>Click Jenkins home/Manage Jenkins/Manage Nodes/New node.<br/>
+Give the node name, select dumb node and click ok.<br/>
+Set # of executors to the number of processing cores.<br/>
+Enter /home/jenkins/work for the Remote root directory.<br/>
+For both windows and linux slaves:<br/>
+  choose Launch method as 'Launch slave agents on Unix machines via SSH'<br/>
+  Enter host address and click credentials add.<br/>
+In the Add credentials dialog:<br/>
+  Give Kind as Username with password.<br/>
+  Scope as global, username as jenkins and the password for that user and click Add.<br/>
+For labels enter the following for different machines:</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Machine <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Used For </p></th>
+<th class="confluenceTh"><p> Labels </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Linux Master <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Compiling </p></td>
+<td class="confluenceTd"><p> LinuxMaster <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Linux Slave <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Testing </p></td>
+<td class="confluenceTd"><p> Linux <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Windows Master <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Compiling </p></td>
+<td class="confluenceTd"><p> WindowsMaster <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Windows Slave <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Testing </p></td>
+<td class="confluenceTd"><p> Windows <br class="atl-forced-newline"/> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<p>Labels will be used to run specific configurations of a project on specific groups of machines.</p>
+
+<p><strong>On the windows machines:</strong></p>
+
+<p><strong>Install openssh:</strong></p>
+
+<p>Open Internet Explorer.<br/>
+Goto Java.com and download and install java.</p>
+
+<p>Go to cygwin.com<br/>
+Download setup-x86-64.exe from the home page and save as  cygwin-setup-x86-64.exe (so that you don't have to download it again.   If everyone named their babies as cute baby we wouldn't be able to tell each  other apart.  If every setup file is called setup how will you know  which one is which without running them?)<br/>
+Run the setup file.<br/>
+Search cygrunsrv and openssh and select them and click next to install them.<br/>
+Click yes to create a start menu item for cygwin terminal.<br/>
+Run cygwin64 terminal as adminstrator.<br/>
+Type ssh-host-config in the terminal and press enter.<br/>
+Enter yes for all questions except for the question do you want to use a different name.<br/>
+Enter ntsec for the question 'Enter the value of CYGWIN for the daemon'.</p>
+
+<p>In the cygwin terminal type:<br/>
+ln -s /cygdrive/c/ProgramData/Oracle/Java/javapath/java /bin/java<br/>
+mkdir -p /home/jenkins/work<br/>
+chown -R jenkins /home/jenkins</p>
+
+<p>Open windows  firewall from the control panel. (for windows 2008 server).<br/>
+Click advanced settings.<br/>
+Click Inbound rules.<br/>
+Click New Rule.<br/>
+Select Port and click next.<br/>
+For specific local ports Enter 22 or another number of your choice.<br/>
+Click Next.<br/>
+Select allow the connection and click next.<br/>
+Check Domain, Private and Public and click next.<br/>
+For Name Give SSH and click finish.<br/>
+Click Start/Administrative Tools/Services.<br/>
+Right click CYGWIN sshd and click start.</p>
+
+<p>Click start/control panel/User Accounts/Add or remove user accounts<br/>
+Click create a new account.<br/>
+Give Jenkins as name of account, select standard user and click create account.<br/>
+Double click Jenkins user and click create a password.<br/>
+Enter a password twice and click create password.</p>
+
+<p>Click on the time on the task bar.<br/>
+Click change date and time settings.<br/>
+Click Internet time.<br/>
+Click change settings.<br/>
+Check Synchronize wih an Internet time server<br/>
+Click update now.<br/>
+Click OK.</p>
+
+<p><strong>Install Mingw-w64:</strong></p>
+
+<p>After many weeks of googling and hair pulling and banging my head on the keyboard I have at last found a satisfactory set of c++ compilers and tool chains for automated install and builds on the windows machines.</p>
+
+<p>I needed to compile to both 32 bit and 64 bit native targets on the same machine but I wanted windows native threads instead of posix threads. I found mingw-w64, which uses gcc.</p>
+
+
+<p>Go to <a href="http://sourceforge.net/projects/mingw-w64/files/" class="external-link" rel="nofollow">http://sourceforge.net/projects/mingw-w64/files/</a><br/>
+Select Toolchains targetting Win64 and Toolchains targetting Win32, choose Personal builds. Choose mingw-builds. Choose latest version (currently 5.2.0). Choose threads-win32. Choose one of the authors.<br/>
+Choose &lt;target&gt;<span style="text-decoration: line-through;">&lt;version&gt;-release-win32</span>&lt;author&gt;-*.7z and download it. Unzip them to c:\mingw64 and c:\mingw32 respectively.  Write a simple program and compile them to exe files to make sure they both work. We will later use these paths in our scripts.</p>
+
+<p><strong>Import previous git project into Gerrit:</strong></p>
+
+<p>Users will pull from sveena-master but will commit to sveena-commit.  This setup is to recheck that all tests pass again in the master after code is approved and merged into the mainline.</p>
+
+<p>su gerrit<br/>
+cd /home/gerrit/reviewsite/git<br/>
+git clone git://open.source.sveena.com/git/sveena sveena-master.git --bare<br/>
+git clone sveena-master.git/ sveena-commit.git --bare<br/>
+cd ..<br/>
+bin/gerrit.sh restart</p>
+
+<p><strong>Setup Gerrit:</strong></p>
+
+<p>Create groups.<br/>
+Sign in to your gerrit site as administrator.<br/>
+Click People/Create New Group.<br/>
+Give group name as Committer.<br/>
+Click Create Group.<br/>
+Click General.<br/>
+Check Make group visible to all users.<br/>
+Click Save Group Options.<br/>
+Similarly create another group called Reviewer.</p>
+
+<p>Create a key for jenkins user on Gerrit<br/>
+At a linux prompt type:<br/>
+ssh-keygen -t rsa -b 4096<br/>
+For 'Enter file in which to save the key (/root/.ssh/id_rsa):' type /root/.ssh/jg_rsa<br/>
+cat /root/.ssh/jg_rsa.pub | ssh -p 29418 shankar@review.sveena.com gerrit create-account --group &quot;'Non-Interactive Users'&quot; --ssh-key - jgwatcher<br/>
+Upload the jg_rsa file to the Jenkins server as /home/jenkins/secrets/.jg_rsa</p>
+
+<p>In the Gerrit Web UI<br/>
+Click Projects/List/All Projects.<br/>
+Click Access.<br/>
+Click Edit.<br/>
+Under Reference:Refs/*<br/>
+Under Read<br/>
+Click Add Group<br/>
+Type Non Interactive Users and click add.<br/>
+Make sure ALLOW is selected.<br/>
+Under Reference:Refs/heads/*<br/>
+Under Label Code-Review<br/>
+Click Add Group<br/>
+Type Non Interactive Users and click add.<br/>
+Select -1 to +1<br/>
+Under Reference:Refs/heads/*<br/>
+Click Add Permission and select Label Verified.<br/>
+Type Non interactive users and click add.<br/>
+Select -1 to +1<br/>
+Make sure under Global Capabilities<br/>
+Stream Events is allowed for non interactive users.<br/>
+Goto the bottom of the screen and click save changes.</p>
+
+<p><strong>Setup Gerrit Trigger:</strong></p>
+
+<p>Sign in to your Jenkins site.<br/>
+Click Manage Jenkins.<br/>
+Click Manage Plugins.<br/>
+In the updates tab.<br/>
+Check all the updates and click Download and install after restart.<br/>
+Click Available Tab.<br/>
+Type git in the filter field.<br/>
+Select GIT Plugin<br/>
+Click Install without restart.<br/>
+Type gerrit in Filter field.<br/>
+Select Gerrit Trigger and click Install without restart.<br/>
+From Home page click Manage Jenkins.<br/>
+Click Gerrit Trigger.<br/>
+Click Add New Server.<br/>
+Give name as sveena and click OK.<br/>
+Give hostname as review.sveena.com.<br/>
+For Frontend URL type <a href="https://review.sveena.com/r/" class="external-link" rel="nofollow">https://review.sveena.com/r/</a><br/>
+For username give jgwatcher<br/>
+For SSH key file type /home/jenkins/secrets/.jg_rsa<br/>
+Give the password for the file.<br/>
+Click Test Connection. If the result is Bad SSH file or password. Re-encode the file using des3 if the encryption is aes256 it doesn't work.<br/>
+Click Save.<br/>
+If the Server status is Red, Remove the password on the jg_rsa file.<br/>
+Edit /home/jenkins/gerrit-trigger.xml<br/>
+Remove the password between gerritAuthFileKeyPassword Tags.<br/>
+service jenkins restart.<br/>
+That fixed the server contact.</p>
+
+<p><strong>Setup Project:</strong></p>
+
+<p>Sign in to your Jenkins site.<br/>
+Click New Item.<br/>
+Check Multi Configuration Project.<br/>
+Give Item name as sveena-commit.<br/>
+Click OK.<br/>
+In the project configuration screen.</p>
+
+<p>Check Gerrit Event.<br/>
+For Choose a server field, choose a server duh! If no server is listed goto manage jenkins/gerrit trigger and add a server.<br/>
+Click Add against Trigger On and select Patchset created.<br/>
+Click Add and select Draft published.<br/>
+Under Gerrit Projects click on the box next to plain and select sveena-commit. If nothing is listed then the server connection is not working, you have to fix that first.<br/>
+Under Branches pattern click on plain and select path. In the text box next to it type **.<br/>
+Click Add project and select sveena-master.<br/>
+Under Branches pattern click on plain and select path. In the text box next to it type **.</p>
+
+<p>Under Configuration Matrix click Add axis.<br/>
+Click Slaves.(If you do not find this option then it means you have not setup any nodes. Goto manage jenkins/manage nodes and create the slaves first)<br/>
+Open Labels branch and check Linux, LinuxMaster, Windows and WindowsMaster labels.<br/>
+Click Add Axis and select User-defined Axis.<br/>
+Type name as TestSet<br/>
+Give Values as Compile TestSet0 TestSet1 TestSet2 TestSet3<br/>
+Check Combination Filter<br/>
+For Filter Type ((label==&quot;WindowsMaster&quot; || label==&quot;LinuxMaster&quot;) &amp;&amp; TestSet==&quot;Compile&quot;) || !(label==&quot;WindowsMaster&quot; || label==&quot;LinuxMaster&quot; || TestSet==&quot;Compile&quot;)<br/>
+Important: There seems to be bug in jenkins where if you screw up the combination filter and a combination gets switched on you cannot later on switch it off even if you change the filter formula.  You will have to delete the project and create a new one with the correct formula. I spent many days to find this.<br/>
+Check Execute touchstone builds first.<br/>
+For filter type label==&quot;LinuxMaster&quot; || label==&quot;WindowsMaster&quot;<br/>
+Click Add build step<br/>
+Select Execute shell<br/>
+For command type printenv<br/>
+Click Save.<br/>
+Click BuildNow. This should run all the configurations and show success. It merely prints out the environment variables of all the builds.  We will write the build scripts later.</p>
+
+<p><strong>Setup Gerrit Events log:</strong></p>
+
+<p>Setting up Gerrit Events log will make you love the Jenkins Plugins ecosystem, where you go to Manage Plugins check plugin click install.  Contrast this with the number of hoops you need to jump before you can get gerrit events log.</p>
+
+<p>First I searched how to install gerrit event log on the gerrit site.<br/>
+I was directed to <a href="https://gerrit.googlesource.com/plugins/events-log" class="external-link" rel="nofollow">https://gerrit.googlesource.com/plugins/events-log</a><br/>
+where I was instructed to<br/>
+git clone <a href="https://gerrit.googlesource.com/plugins/events-log" class="external-link" rel="nofollow">https://gerrit.googlesource.com/plugins/events-log</a><br/>
+OK now what? This doesn't give me a cookie jar. I have to compile it. Oh well. More googling.</p>
+
+<p>To compile this I need to do:<br/>
+git clone <a href="https://gerrit.googlesource.com/gerrit" class="external-link" rel="nofollow">https://gerrit.googlesource.com/gerrit</a><br/>
+cd gerrit<br/>
+git checkout v2.11.2<br/>
+git submodule init<br/>
+git submodule update</p>
+
+<p>git clone <a href="https://gerrit.googlesource.com/plugins/events-log" class="external-link" rel="nofollow">https://gerrit.googlesource.com/plugins/events-log</a> plugins/events-log<br/>
+buck build plugins/events-log</p>
+
+<p>Oh, I need buck. What buck? What is buck? The buck doesn't stop here. More googling.<br/>
+Turns out buck is available here: <a href="https://buckbuild.com/setup/install.html" class="external-link" rel="nofollow">https://buckbuild.com/setup/install.html</a><br/>
+Oh that is not a binary either.<br/>
+I have to compile it. I am not on OS X so I need the manual build. Let me see what I need for that.<br/>
+I need:<br/>
+Oracle JDK 7<br/>
+Apache Ant 1.8 (or newer)<br/>
+Python 2.6 or 2.7<br/>
+Git</p>
+
+<p>This is getting out of hand. More googling for how to get those. Hope I touch bottom at least now.<br/>
+Git: I have. Python: Check.<br/>
+yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel<br/>
+Apache Ant? I don't know any ants. More googling.<br/>
+OK to get ant I did:<br/>
+wget <a href="http://www.eu.apache.org/dist//ant/binaries/apache-ant-1.9.6-bin.tar.gz" class="external-link" rel="nofollow">http://www.eu.apache.org/dist//ant/binaries/apache-ant-1.9.6-bin.tar.gz</a><br/>
+tar zxf apache-ant-1.9.6-bin.tar.gz<br/>
+cd apache-ant-1.9.6<br/>
+Whew at least this is a binary. Why the deuce doesn't everyone distribute binaries in the first place? Especially as these builds can be automated by using continuous delivery.</p>
+
+<p>After lots of build failures, I decided to live without events log for now.<br/>
+If the build server fails I will just have to schedule builds manually for missed patches.</p>
+
+<p>If you found my notes useful, please leave a comment.  That will prevent random bozos from deleting something that is useful and replacing it with crap.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,874 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+# java.lang.OutOfMemoryError: requested 536870928 bytes for Chunk::new. Out of swap space?
+#
+#  Internal Error (allocation.cpp:215), pid=19777, tid=140363900471040
+#  Error: Chunk::new
+#
+# JRE version: 6.0_22-b04
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (17.1-b03 mixed mode linux-amd64 )
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000040d67800):  JavaThread "CompilerThread1" daemon [_thread_in_native, id=19793, stack(0x00007fa9045d4000,0x00007fa9046d5000)]
+
+Stack: [0x00007fa9045d4000,0x00007fa9046d5000],  sp=0x00007fa9046ce1a0,  free space=3e80000000000000018k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0x7306a0]
+V  [libjvm.so+0x2f31e8]
+V  [libjvm.so+0x1e1d71]
+V  [libjvm.so+0x1e2341]
+V  [libjvm.so+0x628ce7]
+V  [libjvm.so+0x628aa9]
+V  [libjvm.so+0x62b213]
+V  [libjvm.so+0x62ac2d]
+V  [libjvm.so+0x2b5193]
+V  [libjvm.so+0x2b18e3]
+V  [libjvm.so+0x23b3b6]
+V  [libjvm.so+0x2bb028]
+V  [libjvm.so+0x2ba95e]
+V  [libjvm.so+0x6f49f9]
+V  [libjvm.so+0x6ee4e2]
+V  [libjvm.so+0x5f816f]
+
+
+Current CompileTask:
+C2:3994  !   org.apache.velocity.runtime.directive.Foreach.render(Lorg/apache/velocity/context/InternalContextAdapter;Ljava/io/Writer;Lorg/apache/velocity/runtime/parser/node/Node;)Z (514 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x0000000041820000 JavaThread "Thread-112" daemon [_thread_in_native, id=20154, stack(0x00007fa8f5c5e000,0x00007fa8f5d5f000)]
+  0x0000000041821800 JavaThread "Thread-111" daemon [_thread_in_native, id=20153, stack(0x00007fa8f5d5f000,0x00007fa8f5e60000)]
+  0x0000000040d18000 JavaThread "Thread-110" daemon [_thread_in_native, id=20152, stack(0x00007fa8f5e60000,0x00007fa8f5f61000)]
+  0x000000004131d800 JavaThread "Thread-109" daemon [_thread_in_native, id=20151, stack(0x00007fa8f5f61000,0x00007fa8f6062000)]
+  0x000000004131d000 JavaThread "Thread-108" daemon [_thread_in_native, id=20150, stack(0x00007fa8f6062000,0x00007fa8f6163000)]
+  0x0000000041a3c800 JavaThread "Thread-107" daemon [_thread_in_native, id=20149, stack(0x00007fa8f6163000,0x00007fa8f6264000)]
+  0x0000000041a3c000 JavaThread "Thread-106" daemon [_thread_in_native, id=20148, stack(0x00007fa8f6264000,0x00007fa8f6365000)]
+  0x0000000041320800 JavaThread "Thread-105" daemon [_thread_in_native, id=20147, stack(0x00007fa8f78db000,0x00007fa8f79dc000)]
+  0x0000000041320000 JavaThread "Thread-104" daemon [_thread_in_native, id=20146, stack(0x00007fa8f77da000,0x00007fa8f78db000)]
+  0x0000000041b91000 JavaThread "Thread-103" daemon [_thread_in_native, id=20145, stack(0x00007fa8fc510000,0x00007fa8fc611000)]
+  0x0000000041606000 JavaThread "Thread-102" daemon [_thread_in_native, id=20112, stack(0x00007fa8f6a9d000,0x00007fa8f6b9e000)]
+  0x00000000415f2800 JavaThread "Thread-101" daemon [_thread_in_native, id=20111, stack(0x00007fa8fcc77000,0x00007fa8fcd78000)]
+  0x00000000415f1800 JavaThread "Thread-100" daemon [_thread_in_native, id=20110, stack(0x00007fa8f6b9e000,0x00007fa8f6c9f000)]
+  0x00000000415f1000 JavaThread "Thread-99" daemon [_thread_in_native, id=20109, stack(0x00007fa8f6fa2000,0x00007fa8f70a3000)]
+  0x0000000040ea2800 JavaThread "Thread-98" daemon [_thread_in_native, id=20108, stack(0x00007fa8f6da0000,0x00007fa8f6ea1000)]
+  0x0000000040ea1800 JavaThread "Thread-97" daemon [_thread_in_native, id=20107, stack(0x00007fa8f6ea1000,0x00007fa8f6fa2000)]
+  0x00007fa900ac9800 JavaThread "Thread-96" daemon [_thread_in_native, id=20106, stack(0x00007fa8f76d9000,0x00007fa8f77da000)]
+  0x00007fa900ac8800 JavaThread "Thread-95" daemon [_thread_in_native, id=20103, stack(0x00007fa8f6c9f000,0x00007fa8f6da0000)]
+  0x00007fa9007ae800 JavaThread "Thread-78" daemon [_thread_in_native, id=19982, stack(0x00007fa8f75d8000,0x00007fa8f76d9000)]
+  0x00007fa8f837f000 JavaThread "Thread-68" daemon [_thread_in_native, id=19959, stack(0x00007fa8fcfb4000,0x00007fa8fd0b5000)]
+  0x0000000042fc3000 JavaThread "http-127.0.0.1-8081-26" daemon [_thread_in_native, id=19940, stack(0x00007fa8fcb76000,0x00007fa8fcc77000)]
+  0x0000000042fc2800 JavaThread "http-127.0.0.1-8081-25" daemon [_thread_in_native, id=19939, stack(0x00007fa8fd1b6000,0x00007fa8fd2b7000)]
+  0x0000000042fc1800 JavaThread "http-127.0.0.1-8081-24" daemon [_thread_in_native, id=19938, stack(0x00007fa8fc20d000,0x00007fa8fc30e000)]
+  0x000000004230a000 JavaThread "http-127.0.0.1-8081-23" daemon [_thread_in_native, id=19937, stack(0x00007fa8fc00b000,0x00007fa8fc10c000)]
+  0x0000000042309800 JavaThread "http-127.0.0.1-8081-22" daemon [_thread_blocked, id=19936, stack(0x00007fa8fd8f5000,0x00007fa8fd9f6000)]
+  0x0000000042b88000 JavaThread "http-127.0.0.1-8081-21" daemon [_thread_blocked, id=19907, stack(0x00007fa8fc974000,0x00007fa8fca75000)]
+  0x000000004133f800 JavaThread "http-127.0.0.1-8081-20" daemon [_thread_in_native, id=19906, stack(0x00007fa8fca75000,0x00007fa8fcb76000)]
+  0x000000004133e800 JavaThread "http-127.0.0.1-8081-19" daemon [_thread_blocked, id=19905, stack(0x00007fa8fc40f000,0x00007fa8fc510000)]
+  0x0000000042b8b000 JavaThread "http-127.0.0.1-8081-18" daemon [_thread_blocked, id=19904, stack(0x00007fa8fce79000,0x00007fa8fcf7a000)]
+  0x000000004273c000 JavaThread "http-127.0.0.1-8081-17" daemon [_thread_in_native, id=19903, stack(0x00007fa8fc10c000,0x00007fa8fc20d000)]
+  0x00000000440c3000 JavaThread "http-127.0.0.1-8081-16" daemon [_thread_in_native, id=19902, stack(0x00007fa8fcd78000,0x00007fa8fce79000)]
+  0x0000000041876800 JavaThread "http-127.0.0.1-8081-15" daemon [_thread_in_native, id=19899, stack(0x00007fa8fd0b5000,0x00007fa8fd1b6000)]
+  0x0000000041599000 JavaThread "http-127.0.0.1-8081-14" daemon [_thread_in_native, id=19898, stack(0x00007fa8fc30e000,0x00007fa8fc40f000)]
+  0x000000004261d000 JavaThread "http-127.0.0.1-8081-13" daemon [_thread_in_native, id=19897, stack(0x00007fa8f6497000,0x00007fa8f6598000)]
+  0x00000000424cf800 JavaThread "http-127.0.0.1-8081-12" daemon [_thread_in_native, id=19896, stack(0x00007fa8f6598000,0x00007fa8f6699000)]
+  0x0000000042621800 JavaThread "http-127.0.0.1-8081-11" daemon [_thread_blocked, id=19867, stack(0x00007fa8f6699000,0x00007fa8f679a000)]
+  0x00000000438e7000 JavaThread "http-127.0.0.1-8081-10" daemon [_thread_blocked, id=19866, stack(0x00007fa8f679a000,0x00007fa8f689b000)]
+  0x0000000042bbb800 JavaThread "http-127.0.0.1-8081-9" daemon [_thread_in_native, id=19865, stack(0x00007fa8f689b000,0x00007fa8f699c000)]
+  0x00000000430a6800 JavaThread "http-127.0.0.1-8081-8" daemon [_thread_blocked, id=19864, stack(0x00007fa8f699c000,0x00007fa8f6a9d000)]
+  0x00000000410a4800 JavaThread "http-127.0.0.1-8081-7" daemon [_thread_in_native, id=19857, stack(0x00007fa8f70d3000,0x00007fa8f71d4000)]
+  0x00000000411e7000 JavaThread "http-127.0.0.1-8081-6" daemon [_thread_blocked, id=19856, stack(0x00007fa8f71d4000,0x00007fa8f72d5000)]
+  0x00000000411e2800 JavaThread "http-127.0.0.1-8081-5" daemon [_thread_in_native, id=19855, stack(0x00007fa8f72d5000,0x00007fa8f73d6000)]
+  0x0000000041b3b800 JavaThread "http-127.0.0.1-8081-4" daemon [_thread_blocked, id=19854, stack(0x00007fa8f73d6000,0x00007fa8f74d7000)]
+  0x0000000041835000 JavaThread "http-127.0.0.1-8081-3" daemon [_thread_in_native, id=19853, stack(0x00007fa8f74d7000,0x00007fa8f75d8000)]
+  0x00000000418cb000 JavaThread "Thread-33" daemon [_thread_blocked, id=19848, stack(0x00007fa8f79dc000,0x00007fa8f7add000)]
+  0x0000000041656800 JavaThread "http-127.0.0.1-8081-2" daemon [_thread_in_native, id=19847, stack(0x00007fa8f7add000,0x00007fa8f7bde000)]
+  0x000000004103c800 JavaThread "http-127.0.0.1-8081-1" daemon [_thread_in_native, id=19846, stack(0x00007fa8ffcfd000,0x00007fa8ffdfe000)]
+  0x00007fa8f9383000 JavaThread "http-127.0.0.1-8081-Acceptor-0" daemon [_thread_in_native, id=19843, stack(0x00007fa8ffdfe000,0x00007fa8ffeff000)]
+  0x00007fa8f8d6b800 JavaThread "ContainerBackgroundProcessor[StandardEngine[Standalone]]" daemon [_thread_blocked, id=19842, stack(0x00007fa904087000,0x00007fa904188000)]
+  0x00007fa900382800 JavaThread "com.google.common.base.internal.Finalizer" daemon [_thread_blocked, id=19841, stack(0x00007fa8f7eef000,0x00007fa8f7ff0000)]
+  0x00007fa8f8054800 JavaThread "Timer-4" daemon [_thread_blocked, id=19823, stack(0x00007fa8fd340000,0x00007fa8fd441000)]
+  0x00007fa8f86e9000 JavaThread "Timer-3" daemon [_thread_blocked, id=19822, stack(0x00007fa8fd441000,0x00007fa8fd542000)]
+  0x00007fa8f8054000 JavaThread "FelixPackageAdmin" daemon [_thread_blocked, id=19821, stack(0x00007fa8fd542000,0x00007fa8fd643000)]
+  0x00007fa8f883b000 JavaThread "FelixStartLevel" daemon [_thread_blocked, id=19820, stack(0x00007fa8fd643000,0x00007fa8fd744000)]
+  0x00007fa8f830d800 JavaThread "FelixDispatchQueue" daemon [_thread_blocked, id=19819, stack(0x00007fa8fd744000,0x00007fa8fd845000)]
+  0x00007fa8f87e6800 JavaThread "Timer-2" daemon [_thread_blocked, id=19817, stack(0x00007fa8fdb45000,0x00007fa8fdc46000)]
+  0x00007fa8f885b000 JavaThread "DefaultQuartzScheduler_QuartzSchedulerThread" [_thread_blocked, id=19816, stack(0x00007fa8fdc46000,0x00007fa8fdd47000)]
+  0x00007fa8f885a800 JavaThread "DefaultQuartzScheduler_Worker-10" [_thread_blocked, id=19815, stack(0x00007fa8fdd47000,0x00007fa8fde48000)]
+  0x00007fa8f882b000 JavaThread "DefaultQuartzScheduler_Worker-9" [_thread_blocked, id=19814, stack(0x00007fa8fde48000,0x00007fa8fdf49000)]
+  0x00007fa8f882a800 JavaThread "DefaultQuartzScheduler_Worker-8" [_thread_blocked, id=19813, stack(0x00007fa8fdf49000,0x00007fa8fe04a000)]
+  0x00007fa8f869f800 JavaThread "DefaultQuartzScheduler_Worker-7" [_thread_blocked, id=19812, stack(0x00007fa8fe04a000,0x00007fa8fe14b000)]
+  0x00007fa8f869e800 JavaThread "DefaultQuartzScheduler_Worker-6" [_thread_blocked, id=19811, stack(0x00007fa8fe14b000,0x00007fa8fe24c000)]
+  0x00007fa8f835f800 JavaThread "DefaultQuartzScheduler_Worker-5" [_thread_blocked, id=19810, stack(0x00007fa8fe24c000,0x00007fa8fe34d000)]
+  0x00007fa8f835e800 JavaThread "DefaultQuartzScheduler_Worker-4" [_thread_blocked, id=19809, stack(0x00007fa8fe34d000,0x00007fa8fe44e000)]
+  0x00007fa8f8466000 JavaThread "DefaultQuartzScheduler_Worker-3" [_thread_blocked, id=19808, stack(0x00007fa8fe44e000,0x00007fa8fe54f000)]
+  0x00007fa8f842d800 JavaThread "DefaultQuartzScheduler_Worker-2" [_thread_blocked, id=19807, stack(0x00007fa8fe54f000,0x00007fa8fe650000)]
+  0x00007fa8f85d8000 JavaThread "DefaultQuartzScheduler_Worker-1" [_thread_blocked, id=19806, stack(0x00007fa8fe650000,0x00007fa8fe751000)]
+  0x00007fa8f85fc800 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#2" daemon [_thread_blocked, id=19805, stack(0x00007fa8fe751000,0x00007fa8fe852000)]
+  0x00007fa8f8730800 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#1" daemon [_thread_blocked, id=19804, stack(0x00007fa8fe852000,0x00007fa8fe953000)]
+  0x00007fa8f8588000 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#0" daemon [_thread_blocked, id=19803, stack(0x00007fa8fe953000,0x00007fa8fea54000)]
+  0x00007fa8f834c000 JavaThread "Timer-1" daemon [_thread_blocked, id=19802, stack(0x00007fa8fea54000,0x00007fa8feb55000)]
+  0x00007fa8f8693000 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=19801, stack(0x00007fa8fec5d000,0x00007fa8fed5e000)]
+  0x00007fa8f81c2800 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#2" daemon [_thread_blocked, id=19800, stack(0x00007fa8ff1d9000,0x00007fa8ff2da000)]
+  0x00007fa8f82de800 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#1" daemon [_thread_blocked, id=19799, stack(0x00007fa8ff2da000,0x00007fa8ff3db000)]
+  0x00007fa8f848f800 JavaThread "com.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread-#0" daemon [_thread_blocked, id=19798, stack(0x00007fa8ff3db000,0x00007fa8ff4dc000)]
+  0x00007fa8f826a800 JavaThread "Timer-0" daemon [_thread_blocked, id=19797, stack(0x00007fa8ff4dc000,0x00007fa8ff5dd000)]
+  0x0000000040d6a000 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=19794, stack(0x00007fa9044d3000,0x00007fa9045d4000)]
+=>0x0000000040d67800 JavaThread "CompilerThread1" daemon [_thread_in_native, id=19793, stack(0x00007fa9045d4000,0x00007fa9046d5000)]
+  0x0000000040d64800 JavaThread "CompilerThread0" daemon [_thread_blocked, id=19792, stack(0x00007fa9046d5000,0x00007fa9047d6000)]
+  0x0000000040d62800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=19791, stack(0x00007fa9047d6000,0x00007fa9048d7000)]
+  0x0000000040d44000 JavaThread "Finalizer" daemon [_thread_blocked, id=19790, stack(0x00007fa8ffeff000,0x00007fa900000000)]
+  0x0000000040d42000 JavaThread "Reference Handler" daemon [_thread_blocked, id=19789, stack(0x00007fa904b7b000,0x00007fa904c7c000)]
+  0x0000000040ce4000 JavaThread "main" [_thread_in_native, id=19785, stack(0x00007fa931952000,0x00007fa931a53000)]
+
+Other Threads:
+  0x0000000040d3d800 VMThread [stack: 0x00007fa904c7c000,0x00007fa904d7d000] [id=19788]
+  0x0000000040d74800 WatcherThread [stack: 0x00007fa9043d2000,0x00007fa9044d3000] [id=19795]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 139648K, used 57116K [0x00007fa924560000, 0x00007fa92dab0000, 0x00007fa92dab0000)
+  eden space 126400K, 38% used [0x00007fa924560000,0x00007fa927468860,0x00007fa92c0d0000)
+  from space 13248K, 67% used [0x00007fa92c0d0000,0x00007fa92c98e910,0x00007fa92cdc0000)
+  to   space 13248K, 0% used [0x00007fa92cdc0000,0x00007fa92cdc0000,0x00007fa92dab0000)
+ PSOldGen        total 305856K, used 263651K [0x00007fa911ab0000, 0x00007fa924560000, 0x00007fa924560000)
+  object space 305856K, 86% used [0x00007fa911ab0000,0x00007fa921c28d90,0x00007fa924560000)
+ PSPermGen       total 196032K, used 112114K [0x00007fa9056b0000, 0x00007fa911620000, 0x00007fa911ab0000)
+  object space 196032K, 57% used [0x00007fa9056b0000,0x00007fa90c42ca90,0x00007fa911620000)
+
+Dynamic libraries:
+40000000-40009000 r-xp 00000000 fc:03 6167                               /usr/lib/jvm/java-6-sun-1.6.0.22/jre/bin/java
+40108000-4010a000 rwxp 00008000 fc:03 6167                               /usr/lib/jvm/java-6-sun-1.6.0.22/jre/bin/java
+40cdb000-442e9000 rwxp 00000000 00:00 0                                  [heap]
+7fa8d6057000-7fa8f5c5e000 rwxp 00000000 00:00 0 
+7fa8f5c5e000-7fa8f5c61000 ---p 00000000 00:00 0 
+7fa8f5c61000-7fa8f5d5f000 rwxp 00000000 00:00 0 
+7fa8f5d5f000-7fa8f5d62000 ---p 00000000 00:00 0 
+7fa8f5d62000-7fa8f5e60000 rwxp 00000000 00:00 0 
+7fa8f5e60000-7fa8f5e63000 ---p 00000000 00:00 0 
+7fa8f5e63000-7fa8f5f61000 rwxp 00000000 00:00 0 
+7fa8f5f61000-7fa8f5f64000 ---p 00000000 00:00 0 
+7fa8f5f64000-7fa8f6062000 rwxp 00000000 00:00 0 
+7fa8f6062000-7fa8f6065000 ---p 00000000 00:00 0 
+7fa8f6065000-7fa8f6163000 rwxp 00000000 00:00 0 
+7fa8f6163000-7fa8f6166000 ---p 00000000 00:00 0 
+7fa8f6166000-7fa8f6264000 rwxp 00000000 00:00 0 
+7fa8f6264000-7fa8f6267000 ---p 00000000 00:00 0 
+7fa8f6267000-7fa8f6365000 rwxp 00000000 00:00 0 
+7fa8f6365000-7fa8f6391000 r-xp 00000000 fc:03 6313                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjpeg.so
+7fa8f6391000-7fa8f6491000 ---p 0002c000 fc:03 6313                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjpeg.so
+7fa8f6491000-7fa8f6497000 rwxp 0002c000 fc:03 6313                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjpeg.so
+7fa8f6497000-7fa8f649a000 ---p 00000000 00:00 0 
+7fa8f649a000-7fa8f6598000 rwxp 00000000 00:00 0 
+7fa8f6598000-7fa8f659b000 ---p 00000000 00:00 0 
+7fa8f659b000-7fa8f6699000 rwxp 00000000 00:00 0 
+7fa8f6699000-7fa8f669c000 ---p 00000000 00:00 0 
+7fa8f669c000-7fa8f679a000 rwxp 00000000 00:00 0 
+7fa8f679a000-7fa8f679d000 ---p 00000000 00:00 0 
+7fa8f679d000-7fa8f689b000 rwxp 00000000 00:00 0 
+7fa8f689b000-7fa8f689e000 ---p 00000000 00:00 0 
+7fa8f689e000-7fa8f699c000 rwxp 00000000 00:00 0 
+7fa8f699c000-7fa8f699f000 ---p 00000000 00:00 0 
+7fa8f699f000-7fa8f6a9d000 rwxp 00000000 00:00 0 
+7fa8f6a9d000-7fa8f6aa0000 ---p 00000000 00:00 0 
+7fa8f6aa0000-7fa8f6b9e000 rwxp 00000000 00:00 0 
+7fa8f6b9e000-7fa8f6ba1000 ---p 00000000 00:00 0 
+7fa8f6ba1000-7fa8f6c9f000 rwxp 00000000 00:00 0 
+7fa8f6c9f000-7fa8f6ca2000 ---p 00000000 00:00 0 
+7fa8f6ca2000-7fa8f6da0000 rwxp 00000000 00:00 0 
+7fa8f6da0000-7fa8f6da3000 ---p 00000000 00:00 0 
+7fa8f6da3000-7fa8f6ea1000 rwxp 00000000 00:00 0 
+7fa8f6ea1000-7fa8f6ea4000 ---p 00000000 00:00 0 
+7fa8f6ea4000-7fa8f6fa2000 rwxp 00000000 00:00 0 
+7fa8f6fa2000-7fa8f6fa5000 ---p 00000000 00:00 0 
+7fa8f6fa5000-7fa8f70a3000 rwxp 00000000 00:00 0 
+7fa8f70a3000-7fa8f70b5000 r-xs 000c2000 fc:03 147652                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jaxb-impl-2.1.10.jar
+7fa8f70b5000-7fa8f70d3000 r-xs 0027d000 fc:03 147664                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xalan-2.7.0.jar
+7fa8f70d3000-7fa8f70d6000 ---p 00000000 00:00 0 
+7fa8f70d6000-7fa8f71d4000 rwxp 00000000 00:00 0 
+7fa8f71d4000-7fa8f71d7000 ---p 00000000 00:00 0 
+7fa8f71d7000-7fa8f72d5000 rwxp 00000000 00:00 0 
+7fa8f72d5000-7fa8f72d8000 ---p 00000000 00:00 0 
+7fa8f72d8000-7fa8f73d6000 rwxp 00000000 00:00 0 
+7fa8f73d6000-7fa8f73d9000 ---p 00000000 00:00 0 
+7fa8f73d9000-7fa8f74d7000 rwxp 00000000 00:00 0 
+7fa8f74d7000-7fa8f74da000 ---p 00000000 00:00 0 
+7fa8f74da000-7fa8f75d8000 rwxp 00000000 00:00 0 
+7fa8f75d8000-7fa8f75db000 ---p 00000000 00:00 0 
+7fa8f75db000-7fa8f76d9000 rwxp 00000000 00:00 0 
+7fa8f76d9000-7fa8f76dc000 ---p 00000000 00:00 0 
+7fa8f76dc000-7fa8f77da000 rwxp 00000000 00:00 0 
+7fa8f77da000-7fa8f77dd000 ---p 00000000 00:00 0 
+7fa8f77dd000-7fa8f78db000 rwxp 00000000 00:00 0 
+7fa8f78db000-7fa8f78de000 ---p 00000000 00:00 0 
+7fa8f78de000-7fa8f79dc000 rwxp 00000000 00:00 0 
+7fa8f79dc000-7fa8f79df000 ---p 00000000 00:00 0 
+7fa8f79df000-7fa8f7add000 rwxp 00000000 00:00 0 
+7fa8f7add000-7fa8f7ae0000 ---p 00000000 00:00 0 
+7fa8f7ae0000-7fa8f7bde000 rwxp 00000000 00:00 0 
+7fa8f7bde000-7fa8f7be2000 r-xs 00024000 fc:03 147690                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xwork-1.0.3.1.jar
+7fa8f7be2000-7fa8f7be8000 r-xs 00031000 fc:03 147758                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xstream-1.1.1.jar
+7fa8f7be8000-7fa8f7bea000 r-xs 00005000 fc:03 147764                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xpp3_min-1.1.3.4.O.jar
+7fa8f7bea000-7fa8f7bed000 r-xs 00018000 fc:03 147771                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xmlrpc-2.0+xmlrpc61.1+sbfix.jar
+7fa8f7bed000-7fa8f7bf5000 r-xs 00060000 fc:03 147733                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xfire-core-1.2.6.jar
+7fa8f7bf5000-7fa8f7bf8000 r-xs 0001e000 fc:03 147648                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xfire-aegis-1.2.6.jar
+7fa8f7bf8000-7fa8f7c10000 r-xs 00115000 fc:03 147787                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xercesImpl-2.9.1.jar
+7fa8f7c10000-7fa8f7c2e000 r-xs 0027d000 fc:03 147664                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xalan-2.7.0.jar
+7fa8f7c2e000-7fa8f7c34000 r-xs 00079000 fc:03 147679                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/wstx-asl-3.2.4.jar
+7fa8f7c34000-7fa8f7c37000 r-xs 0001c000 fc:03 147651                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/wsdl4j-1.5.1.jar
+7fa8f7c37000-7fa8f7c40000 r-xs 0004e000 fc:03 147707                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/webwork-2.1.5-atlassian-2.jar
+7fa8f7c40000-7fa8f7c42000 r-xs 0000e000 fc:03 147693                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/velocity-tools-view-1.1.jar
+7fa8f7c42000-7fa8f7c4a000 r-xs 00063000 fc:03 147695                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/velocity-1.6.1-atlassian-1.jar
+7fa8f7c4a000-7fa8f7c4d000 r-xs 00022000 fc:03 147783                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/urlrewrite-2.6.0.jar
+7fa8f7c4d000-7fa8f7c50000 r-xs 00019000 fc:03 147746                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/stax-utils-20040917.jar
+7fa8f7c50000-7fa8f7c52000 r-xs 00004000 fc:03 147706                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/stax-api-1.0-2.jar
+7fa8f7c52000-7fa8f7c57000 r-xs 00021000 fc:03 147734                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-web-2.0.8.jar
+7fa8f7c57000-7fa8f7c5a000 r-xs 0001a000 fc:03 147767                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-support-2.0.8.jar
+7fa8f7c5a000-7fa8f7c5d000 r-xs 00013000 fc:03 147745                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-jmx-2.0.8.jar
+7fa8f7c5d000-7fa8f7c63000 r-xs 00032000 fc:03 147765                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-jdbc-2.0.8.jar
+7fa8f7c63000-7fa8f7c66000 r-xs 00012000 fc:03 147653                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-hibernate2-2.0.8.jar
+7fa8f7c66000-7fa8f7c6a000 r-xs 0001c000 fc:03 147723                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-dao-2.0.8.jar
+7fa8f7c6a000-7fa8f7c6f000 r-xs 00028000 fc:03 147750                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-core-2.0.8.jar
+7fa8f7c6f000-7fa8f7c74000 r-xs 00023000 fc:03 147768                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-context-2.0.8.jar
+7fa8f7c74000-7fa8f7c7d000 r-xs 00057000 fc:03 147646                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-beans-2.0.8.jar
+7fa8f7c7d000-7fa8f7c86000 r-xs 00043000 fc:03 147649                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/spring-aop-2.0.8.jar
+7fa8f7c86000-7fa8f7c8a000 r-xs 00027000 fc:03 147717                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/slide-2.1.jar
+7fa8f7c8a000-7fa8f7c8b000 r-xs 00002000 fc:03 147712                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/slf4j-log4j12-1.5.8.jar
+7fa8f7c8b000-7fa8f7c8c000 r-xs 00005000 fc:03 147645                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/slf4j-api-1.5.8.jar
+7fa8f7c8c000-7fa8f7c92000 r-xs 00027000 fc:03 147777                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sitemesh-2.3-atlassian.jar
+7fa8f7c92000-7fa8f7c94000 r-xs 00001000 fc:03 147749                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sal-spring-2.2.1.jar
+7fa8f7c94000-7fa8f7c95000 r-xs 00000000 fc:03 147775                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sal-spi-2.2.1.jar
+7fa8f7c95000-7fa8f7c97000 r-xs 00006000 fc:03 147715                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sal-api-2.2.1.jar
+7fa8f7c97000-7fa8f7c98000 r-xs 00003000 fc:03 147766                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sac-1.3.jar
+7fa8f7c98000-7fa8f7c9c000 r-xs 00032000 fc:03 147705                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/rome-1.0.jar
+7fa8f7c9c000-7fa8f7ca2000 r-xs 00030000 fc:03 147703                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/radeox-1.0b2-forked-22Apr2004.jar
+7fa8f7ca2000-7fa8f7ca9000 r-xs 00066000 fc:03 147763                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/quartz-1.8.0.jar
+7fa8f7ca9000-7fa8f7cad000 r-xs 0001a000 fc:03 147759                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/propertyset-1.3-21Nov03.jar
+7fa8f7cad000-7fa8f7cb3000 r-xs 0006e000 fc:03 147773                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/postgresql-8.4-701.jdbc3.jar
+7fa8f7cb3000-7fa8f7cbf000 r-xs 000b7000 fc:03 147708                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/poi-scratchpad-3.5-FINAL.jar
+7fa8f7cbf000-7fa8f7cda000 r-xs 00158000 fc:03 147789                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/poi-3.5-FINAL.jar
+7fa8f7cda000-7fa8f7cef000 r-xs 00475000 fc:03 147686                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/pdfbox-1.2.1.jar
+7fa8f7cef000-7fa8f7cf0000 r-xs 00004000 fc:03 147710                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/package-scanner-0.7.7.jar
+7fa8f7cf0000-7fa8f7cf6000 r-xs 00031000 fc:03 147675                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/osuser-atl.user.jar
+7fa8f7cf6000-7fa8f7cf9000 r-xs 00012000 fc:03 147685                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/oscore-2.2.7-atlassian-1.jar
+7fa8f7cf9000-7fa8f7cfc000 r-xs 0001b000 fc:03 147654                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/oscache-2.2.jar
+7fa8f7cfc000-7fa8f7cfe000 r-xs 0000e000 fc:03 147701                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/oro-2.0.8.jar
+7fa8f7cfe000-7fa8f7d05000 r-xs 00058000 fc:03 147730                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/org.apache.felix.framework-3.0.2.jar
+7fa8f7d05000-7fa8f7d09000 r-xs 00039000 fc:03 147709                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/ognl-2.6.5-atlassian-2.jar
+7fa8f7d09000-7fa8f7d0b000 r-xs 00002000 fc:03 147754                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/odmg-3.0.jar
+7fa8f7d0b000-7fa8f7d0d000 r-xs 0001a000 fc:03 147722                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/nekohtml-1.9.7.jar
+7fa8f7d0d000-7fa8f7d13000 r-xs 000ad000 fc:03 147698                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/mysql-connector-java-5.1.11.jar
+7fa8f7d13000-7fa8f7d15000 r-xs 00003000 fc:03 147757                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/modz-detector-0.8.jar
+7fa8f7d15000-7fa8f7d17000 r-xs 00002000 fc:03 147699                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/mockobjects-alt-jdk1.3-j2ee1.3-0.09.jar
+7fa8f7d17000-7fa8f7d1e000 r-xs 00067000 fc:03 147711                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/mail-1.4.1.jar
+7fa8f7d1e000-7fa8f7d1f000 r-xs 0000b000 fc:03 147753                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/lucene-misc-2.2.0.jar
+7fa8f7d1f000-7fa8f7d20000 r-xs 00006000 fc:03 147778                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/lucene-highlighter-2.3.2.jar
+7fa8f7d20000-7fa8f7d2a000 r-xs 0007a000 fc:03 147714                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/lucene-core-2.2.0.jar
+7fa8f7d2a000-7fa8f7d2c000 r-xs 00010000 fc:03 147716                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/lucene-analyzers-2.2.0.jar
+7fa8f7d2c000-7fa8f7d33000 r-xs 00059000 fc:03 147770                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/log4j-1.2.15.jar
+7fa8f7d33000-7fa8f7d35000 r-xs 0000e000 fc:03 147702                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/ldaptemplate-1.0.1.jar
+7fa8f7d35000-7fa8f7d3d000 r-xs 000a1000 fc:03 147731                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jython-2.1-forked.jar
+7fa8f7d3d000-7fa8f7d3f000 r-xs 00000000 fc:03 147643                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jul-to-slf4j-1.5.8.jar
+7fa8f7d3f000-7fa8f7d42000 r-xs 0003a000 fc:03 147727                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jtidy-r8-20060801.jar
+7fa8f7d42000-7fa8f7d45000 r-xs 00045000 fc:03 147677                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jtds-1.2.2.jar
+7fa8f7d45000-7fa8f7d47000 r-xs 00001000 fc:03 147785                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jta-1.0.1B.jar
+7fa8f7d47000-7fa8f7d56000 r-xs 00074000 fc:03 147667                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/joda-time-1.6.jar
+7fa8f7d56000-7fa8f7d63000 r-xs 000fa000 fc:03 147672                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jfreechart-1.0.0.jar
+7fa8f7d63000-7fa8f7d65000 r-xs 0000b000 fc:03 147724                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jempbox-1.2.1.jar
+7fa8f7d65000-7fa8f7d68000 r-xs 00023000 fc:03 147737                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jdom-1.0.jar
+7fa8f7d68000-7fa8f7d6e000 r-xs 00043000 fc:03 147688                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jcommon-1.0.0.jar
+7fa8f7d6e000-7fa8f7d6f000 r-xs 00000000 fc:03 147691                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jcip-annotations-1.0.jar
+7fa8f7d6f000-7fa8f7d79000 r-xs 0005f000 fc:03 147791                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jcaptcha-all-1.0-RC6.jar
+7fa8f7d79000-7fa8f7d8b000 r-xs 000c2000 fc:03 147652                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jaxb-impl-2.1.10.jar
+7fa8f7d8b000-7fa8f7d8e000 r-xs 00013000 fc:03 147741                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/jaxb-api-2.1.jar
+7fa8f7d8e000-7fa8f7dab000 r-xs 00423000 fc:03 147687                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/icu4j-3.8.jar
+7fa8f7dab000-7fa8f7db3000 r-xs 00096000 fc:03 147742                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/hsqldb-1.8.0.7.jar
+7fa8f7db3000-7fa8f7dc2000 r-xs 000df000 fc:03 147729                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/hibernate-2.1.8-atlassian-9.jar
+7fa8f7dc2000-7fa8f7dd0000 r-xs 0008f000 fc:03 147697                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/google-collections-1.0.jar
+7fa8f7dd0000-7fa8f7df7000 r-xs 002de000 fc:03 147657                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/glue-5.0b2.jar
+7fa8f7df7000-7fa8f7dfa000 r-xs 00026000 fc:03 147784                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/fontbox-1.2.1.jar
+7fa8f7dfa000-7fa8f7dfd000 r-xs 00010000 fc:03 147772                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/exml-7.1.jar
+7fa8f7dfd000-7fa8f7e02000 r-xs 00030000 fc:03 147696                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/ehcache-1.6.0-atlassian-3.jar
+7fa8f7e02000-7fa8f7e0c000 r-xs 00071000 fc:03 147736                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/dwr-2.0.3.jar
+7fa8f7e0c000-7fa8f7e15000 r-xs 00075000 fc:03 147704                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/dom4j-1.4-full.jar
+7fa8f7e15000-7fa8f7e18000 r-xs 0003b000 fc:03 147681                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/cssparser-0.9.5.jar
+7fa8f7e18000-7fa8f7e19000 r-xs 00003000 fc:03 147662                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-upgrade-3.4.7.jar
+7fa8f7e19000-7fa8f7e1c000 r-xs 00019000 fc:03 147756                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-rpc-plugin-3.4.7.jar
+7fa8f7e1c000-7fa8f7e1d000 r-xs 00001000 fc:03 147793                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-compatibility-3.4.7.jar
+7fa8f7e1d000-7fa8f7e1f000 r-xs 00003000 fc:03 147676                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-cache-ehcache-3.4.7.jar
+7fa8f7e1f000-7fa8f7e22000 r-xs 00019000 fc:03 147660                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-bucket-3.4.7.jar
+7fa8f7e22000-7fa8f7e8a000 r-xs 004a4000 fc:03 147786                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-3.4.7.jar
+7fa8f7e8a000-7fa8f7e91000 r-xs 00028000 fc:03 147666                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/concurrent-1.3.4.jar
+7fa8f7e91000-7fa8f7e93000 r-xs 0000d000 fc:03 147692                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-logging-1.1.1.jar
+7fa8f7e93000-7fa8f7e97000 r-xs 0003c000 fc:03 147725                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-lang-2.4.jar
+7fa8f7e97000-7fa8f7e99000 r-xs 00005000 fc:03 147788                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-jrcs-diff-0.1.7.jar
+7fa8f7e99000-7fa8f7e9c000 r-xs 00018000 fc:03 147684                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-io-1.4.jar
+7fa8f7e9c000-7fa8f7ea1000 r-xs 00040000 fc:03 147774                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-httpclient-3.0.jar
+7fa8f7ea1000-7fa8f7ea4000 r-xs 0000c000 fc:03 147659                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-fileupload-1.2.1.jar
+7fa8f7ea4000-7fa8f7ea7000 r-xs 0000f000 fc:03 147656                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-discovery-0.2.jar
+7fa8f7ea7000-7fa8f7eaa000 r-xs 00018000 fc:03 147792                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-digester-1.5.jar
+7fa8f7eaa000-7fa8f7eb7000 r-xs 0007f000 fc:03 147665                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-collections-3.2.jar
+7fa8f7eb7000-7fa8f7eb9000 r-xs 0000a000 fc:03 147752                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-codec-1.3.jar
+7fa8f7eb9000-7fa8f7ebc000 r-xs 0001a000 fc:03 147794                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/commons-beanutils-1.6.1.jar
+7fa8f7ebc000-7fa8f7ec2000 r-xs 0003f000 fc:03 147661                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/cglib-2.1_3.jar
+7fa8f7ec2000-7fa8f7ee6000 r-xs 0016e000 fc:03 147670                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bcprov-jdk15-1.44.jar
+7fa8f7ee6000-7fa8f7eef000 r-xs 0004e000 fc:03 147707                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/webwork-2.1.5-atlassian-2.jar
+7fa8f7eef000-7fa8f7ef2000 ---p 00000000 00:00 0 
+7fa8f7ef2000-7fa8f7ff0000 rwxp 00000000 00:00 0 
+7fa8f7ff0000-7fa8f7ff7000 r-xs 00040000 fc:03 153850                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle19/version0.0/bundle.jar-embedded/httpclient-4.0.jar
+7fa8f7ff7000-7fa8f7ff9000 r-xs 0000a000 fc:03 153849                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle19/version0.0/bundle.jar-embedded/commons-codec-1.3.jar
+7fa8f7ff9000-7fa8f8000000 r-xs 0004e000 fc:03 153846                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle19/version0.0/bundle.jar-embedded/apache-mime4j-0.6.jar
+7fa8f8000000-7fa8fa3f3000 rwxp 00000000 00:00 0 
+7fa8fa3f3000-7fa8fc000000 ---p 00000000 00:00 0 
+7fa8fc000000-7fa8fc002000 r-xs 00005000 fc:03 153844                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle19/version0.0/bundle.jar-embedded/httpmime-4.0.jar
+7fa8fc002000-7fa8fc007000 r-xs 00026000 fc:03 153833                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle20/version0.0/bundle.jar-embedded/httpcore-4.0.jar
+7fa8fc007000-7fa8fc00b000 r-xs 00028000 fc:03 153832                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle20/version0.0/bundle.jar-embedded/httpcore-nio-4.0.jar
+7fa8fc00b000-7fa8fc00e000 ---p 00000000 00:00 0 
+7fa8fc00e000-7fa8fc10c000 rwxp 00000000 00:00 0 
+7fa8fc10c000-7fa8fc10f000 ---p 00000000 00:00 0 
+7fa8fc10f000-7fa8fc20d000 rwxp 00000000 00:00 0 
+7fa8fc20d000-7fa8fc210000 ---p 00000000 00:00 0 
+7fa8fc210000-7fa8fc30e000 rwxp 00000000 00:00 0 
+7fa8fc30e000-7fa8fc311000 ---p 00000000 00:00 0 
+7fa8fc311000-7fa8fc40f000 rwxp 00000000 00:00 0 
+7fa8fc40f000-7fa8fc412000 ---p 00000000 00:00 0 
+7fa8fc412000-7fa8fc510000 rwxp 00000000 00:00 0 
+7fa8fc510000-7fa8fc513000 ---p 00000000 00:00 0 
+7fa8fc513000-7fa8fc611000 rwxp 00000000 00:00 0 
+7fa8fc611000-7fa8fc615000 r-xs 0003c000 fc:03 153719                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle40/version0.0/bundle.jar-embedded/META-INF/lib/commons-lang-2.4.jar
+7fa8fc615000-7fa8fc618000 r-xs 0000d000 fc:03 153709                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle31/version0.0/bundle.jar-embedded/META-INF/lib/sal-core-2.2.1.jar
+7fa8fc618000-7fa8fc61a000 r-xs 0000a000 fc:03 153676                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle25/version0.0/bundle.jar-embedded/META-INF/lib/json-20090211.jar
+7fa8fc61a000-7fa8fc657000 r-xs 0024f000 fc:03 153655                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/xmlbeans-2.3.0.jar
+7fa8fc657000-7fa8fc658000 r-xs 00003000 fc:03 153654                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/webdavloader-1.15.jar
+7fa8fc658000-7fa8fc65a000 r-xs 0000d000 fc:03 153653                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/twelvemonkeys-imageio-pict-2.1.jar
+7fa8fc65a000-7fa8fc65b000 r-xs 00005000 fc:03 153652                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/twelvemonkeys-imageio-core-2.1.jar
+7fa8fc65b000-7fa8fc662000 r-xs 0005d000 fc:03 153651                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/twelvemonkeys-core-2.1.jar
+7fa8fc662000-7fa8fc664000 r-xs 00005000 fc:03 153650                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/stax-api-1.0.1.jar
+7fa8fc664000-7fa8fc670000 r-xs 000b7000 fc:03 153649                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/poi-scratchpad-3.5-FINAL.jar
+7fa8fc670000-7fa8fc676000 r-xs 0005a000 fc:03 153648                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/poi-ooxml-3.5-FINAL.jar
+7fa8fc676000-7fa8fc691000 r-xs 00158000 fc:03 153647                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/poi-3.5-FINAL.jar
+7fa8fc691000-7fa8fc695000 r-xs 0002b000 fc:03 153646                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/pixie-1.15.jar
+7fa8fc695000-7fa8fc69b000 r-xs 00176000 fc:03 153645                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/pdf-renderer-1.13-atlassian-1.jar
+7fa8fc69b000-7fa8fc8ab000 r-xs 00b4b000 fc:03 153644                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/ooxml-schemas-1.0.jar
+7fa8fc8ab000-7fa8fc8bf000 r-xs 00191000 fc:03 153643                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/jxcell-1.2.3.jar
+7fa8fc8bf000-7fa8fc8c2000 r-xs 0001b000 fc:03 153642                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/junit-3.8.1.jar
+7fa8fc8c2000-7fa8fc8c4000 r-xs 0000f000 fc:03 153641                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-io-2.0.4.jar
+7fa8fc8c4000-7fa8fc8c7000 r-xs 00019000 fc:03 153640                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-graphicsio-tests-2.1.2.jar
+7fa8fc8c7000-7fa8fc8cc000 r-xs 00028000 fc:03 153639                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-graphicsio-swf-2.1.2.jar
+7fa8fc8cc000-7fa8fc8d0000 r-xs 0002a000 fc:03 153638                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-graphicsio-2.1.2.jar
+7fa8fc8d0000-7fa8fc8d2000 r-xs 0001d000 fc:03 153637                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-graphics2d-2.1.2.jar
+7fa8fc8d2000-7fa8fc8d4000 r-xs 0000e000 fc:03 153636                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/freehep-graphics-base-2.1.2.jar
+7fa8fc8d4000-7fa8fc8d5000 r-xs 00001000 fc:03 153635                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/fontmanager-1.15.jar
+7fa8fc8d5000-7fa8fc8d7000 r-xs 00005000 fc:03 153634                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/extractor-1.15.jar
+7fa8fc8d7000-7fa8fc8db000 r-xs 0003c000 fc:03 153633                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/commons-lang-2.4.jar
+7fa8fc8db000-7fa8fc8dc000 r-xs 00002000 fc:03 153632                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/common-1.15.jar
+7fa8fc8dc000-7fa8fc8fb000 r-xs 001c2000 fc:03 153631                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/aspose.words-3.2.1.jar
+7fa8fc8fb000-7fa8fc90e000 r-xs 00139000 fc:03 153629                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/JavaPpt-1.15.jar
+7fa8fc90e000-7fa8fc911000 r-xs 0000c000 fc:03 153623                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/commons-fileupload-1.2.1.jar
+7fa8fc911000-7fa8fc915000 r-xs 0000f000 fc:03 153622                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/pacs-shared-1.1.13.jar
+7fa8fc915000-7fa8fc919000 r-xs 00012000 fc:03 153621                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/atlassian-util-concurrent-0.0.12.jar
+7fa8fc919000-7fa8fc91c000 r-xs 0000d000 fc:03 153620                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/jersey-client-1.0.2.jar
+7fa8fc91c000-7fa8fc92b000 r-xs 00074000 fc:03 153619                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/joda-time-1.6.jar
+7fa8fc92b000-7fa8fc931000 r-xs 00045000 fc:03 153618                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/commons-httpclient-3.1.jar
+7fa8fc931000-7fa8fc933000 r-xs 00000000 fc:03 153617                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/spi-1.2.3.jar
+7fa8fc933000-7fa8fc935000 r-xs 00003000 fc:03 153616                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/jackson-jaxrs-1.4.4.jar
+7fa8fc935000-7fa8fc936000 r-xs 00001000 fc:03 153615                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/atlassian-secure-random-1.0.jar
+7fa8fc936000-7fa8fc938000 r-xs 0000a000 fc:03 153614                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/commons-codec-1.3.jar
+7fa8fc938000-7fa8fc940000 r-xs 00057000 fc:03 153613                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/jackson-mapper-asl-1.4.4.jar
+7fa8fc940000-7fa8fc943000 r-xs 00021000 fc:03 153612                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/org.apache.felix.bundlerepository-1.4.0.jar
+7fa8fc943000-7fa8fc945000 r-xs 00003000 fc:03 153611                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/jersey-apache-client-1.0.2.jar
+7fa8fc945000-7fa8fc947000 r-xs 0000d000 fc:03 153610                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/org.apache.felix.shell-1.2.0.jar
+7fa8fc947000-7fa8fc94a000 r-xs 00022000 fc:03 153609                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/jackson-core-asl-1.4.4.jar
+7fa8fc94a000-7fa8fc94c000 r-xs 00008000 fc:03 153608                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar-embedded/META-INF/lib/pacs-client-1.1.13.jar
+7fa8fc94c000-7fa8fc94f000 r-xs 00007000 fc:03 153601                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/jcr-1.0.jar
+7fa8fc94f000-7fa8fc951000 r-xs 00001000 fc:03 153600                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/jcl104-over-slf4j-1.3.0.jar
+7fa8fc951000-7fa8fc958000 r-xs 00041000 fc:03 153599                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/jackrabbit-webdav-1.4.jar
+7fa8fc958000-7fa8fc95d000 r-xs 0003b000 fc:03 153598                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/jackrabbit-jcr-server-1.4.jar
+7fa8fc95d000-7fa8fc962000 r-xs 00024000 fc:03 153597                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/jackrabbit-jcr-commons-1.4.jar
+7fa8fc962000-7fa8fc967000 r-xs 00040000 fc:03 153596                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/commons-httpclient-3.0.jar
+7fa8fc967000-7fa8fc974000 r-xs 0007c000 fc:03 153595                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/commons-collections-3.1.jar
+7fa8fc974000-7fa8fc977000 ---p 00000000 00:00 0 
+7fa8fc977000-7fa8fca75000 rwxp 00000000 00:00 0 
+7fa8fca75000-7fa8fca78000 ---p 00000000 00:00 0 
+7fa8fca78000-7fa8fcb76000 rwxp 00000000 00:00 0 
+7fa8fcb76000-7fa8fcb79000 ---p 00000000 00:00 0 
+7fa8fcb79000-7fa8fcc77000 rwxp 00000000 00:00 0 
+7fa8fcc77000-7fa8fcc7a000 ---p 00000000 00:00 0 
+7fa8fcc7a000-7fa8fcd78000 rwxp 00000000 00:00 0 
+7fa8fcd78000-7fa8fcd7b000 ---p 00000000 00:00 0 
+7fa8fcd7b000-7fa8fce79000 rwxp 00000000 00:00 0 
+7fa8fce79000-7fa8fce7c000 ---p 00000000 00:00 0 
+7fa8fce7c000-7fa8fcf7a000 rwxp 00000000 00:00 0 
+7fa8fcf7a000-7fa8fcf81000 r-xs 0003e000 fc:03 153581                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/hamcrest-all-1.2.jar
+7fa8fcf81000-7fa8fcf83000 r-xs 00003000 fc:03 153580                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/atlassian-gadgets-shared-2.0.8.jar
+7fa8fcf83000-7fa8fcf86000 r-xs 00019000 fc:03 153579                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/shindig-common-1.0-incubating-atlassian-15.jar
+7fa8fcf86000-7fa8fcf88000 r-xs 0000d000 fc:03 153578                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/oauth-20090617.jar
+7fa8fcf88000-7fa8fcf8e000 r-xs 0002e000 fc:03 153577                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/shindig-social-api-1.0-incubating-atlassian-15.jar
+7fa8fcf8e000-7fa8fcf9a000 r-xs 0007c000 fc:03 153576                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/guice-1.0-atlassian-2.jar
+7fa8fcf9a000-7fa8fcf9e000 r-xs 00038000 fc:03 153575                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/shindig-features-1.0-incubating-atlassian-15.jar
+7fa8fcf9e000-7fa8fcfa6000 r-xs 00061000 fc:03 153574                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/shindig-gadgets-1.0-incubating-atlassian-15.jar
+7fa8fcfa6000-7fa8fcfb4000 r-xs 00078000 fc:03 153572                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/xstream-1.2.jar
+7fa8fcfb4000-7fa8fcfb7000 ---p 00000000 00:00 0 
+7fa8fcfb7000-7fa8fd0b5000 rwxp 00000000 00:00 0 
+7fa8fd0b5000-7fa8fd0b8000 ---p 00000000 00:00 0 
+7fa8fd0b8000-7fa8fd1b6000 rwxp 00000000 00:00 0 
+7fa8fd1b6000-7fa8fd1b9000 ---p 00000000 00:00 0 
+7fa8fd1b9000-7fa8fd2b7000 rwxp 00000000 00:00 0 
+7fa8fd2b7000-7fa8fd2bb000 r-xs 001fd000 fc:03 153559                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar
+7fa8fd2bb000-7fa8fd2bf000 r-xs 00055000 fc:03 153551                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle58/version0.0/bundle.jar
+7fa8fd2bf000-7fa8fd2c8000 r-xs 0030f000 fc:03 153543                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle57/version0.0/bundle.jar
+7fa8fd2c8000-7fa8fd2cc000 r-xs 00022000 fc:03 153535                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle56/version0.0/bundle.jar
+7fa8fd2cc000-7fa8fd2ce000 r-xs 00007000 fc:03 153527                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle55/version0.0/bundle.jar
+7fa8fd2ce000-7fa8fd2d9000 r-xs 00586000 fc:03 153519                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle54/version0.0/bundle.jar
+7fa8fd2d9000-7fa8fd310000 r-xs 00511000 fc:03 153503                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle52/version0.0/bundle.jar
+7fa8fd310000-7fa8fd315000 r-xs 00054000 fc:03 153487                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle50/version0.0/bundle.jar
+7fa8fd315000-7fa8fd319000 r-xs 00032000 fc:03 153270                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle24/version0.0/bundle.jar
+7fa8fd319000-7fa8fd31b000 r-xs 0000a000 fc:03 153594                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/commons-codec-1.3.jar
+7fa8fd31b000-7fa8fd31d000 r-xs 00002000 fc:03 153571                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/atlassian-oauth-bridge-1.0.0.jar
+7fa8fd31d000-7fa8fd31e000 r-xs 00003000 fc:03 153261                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle23/version0.0/bundle.jar
+7fa8fd31e000-7fa8fd31f000 r-xs 00015000 fc:03 153630                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar-embedded/META-INF/lib/Slides-1.15.jar
+7fa8fd31f000-7fa8fd321000 r-xs 00009000 fc:03 153253                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle22/version0.0/bundle.jar
+7fa8fd321000-7fa8fd323000 r-xs 00013000 fc:03 153511                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle53/version0.0/bundle.jar
+7fa8fd323000-7fa8fd340000 r-xs 00424000 fc:03 153245                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle21/version0.0/bundle.jar
+7fa8fd340000-7fa8fd343000 ---p 00000000 00:00 0 
+7fa8fd343000-7fa8fd441000 rwxp 00000000 00:00 0 
+7fa8fd441000-7fa8fd444000 ---p 00000000 00:00 0 
+7fa8fd444000-7fa8fd542000 rwxp 00000000 00:00 0 
+7fa8fd542000-7fa8fd545000 ---p 00000000 00:00 0 
+7fa8fd545000-7fa8fd643000 rwxp 00000000 00:00 0 
+7fa8fd643000-7fa8fd646000 ---p 00000000 00:00 0 
+7fa8fd646000-7fa8fd744000 rwxp 00000000 00:00 0 
+7fa8fd744000-7fa8fd747000 ---p 00000000 00:00 0 
+7fa8fd747000-7fa8fd845000 rwxp 00000000 00:00 0 
+7fa8fd845000-7fa8fd847000 r-xs 00016000 fc:03 153495                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle51/version0.0/bundle.jar
+7fa8fd847000-7fa8fd84b000 r-xs 0003b000 fc:03 153479                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle49/version0.0/bundle.jar
+7fa8fd84b000-7fa8fd84d000 r-xs 00008000 fc:03 153471                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle48/version0.0/bundle.jar
+7fa8fd84d000-7fa8fd850000 r-xs 00031000 fc:03 153463                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle47/version0.0/bundle.jar
+7fa8fd850000-7fa8fd854000 r-xs 0006a000 fc:03 153455                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle46/version0.0/bundle.jar
+7fa8fd854000-7fa8fd859000 r-xs 002a3000 fc:03 153447                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar
+7fa8fd859000-7fa8fd85b000 r-xs 00006000 fc:03 153439                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle44/version0.0/bundle.jar
+7fa8fd85b000-7fa8fd85d000 r-xs 00018000 fc:03 153431                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle43/version0.0/bundle.jar
+7fa8fd85d000-7fa8fd863000 r-xs 00063000 fc:03 153423                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle42/version0.0/bundle.jar
+7fa8fd863000-7fa8fd867000 r-xs 00042000 fc:03 153415                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle41/version0.0/bundle.jar
+7fa8fd867000-7fa8fd869000 r-xs 00006000 fc:03 153399                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle39/version0.0/bundle.jar
+7fa8fd869000-7fa8fd86b000 r-xs 00007000 fc:03 153391                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle38/version0.0/bundle.jar
+7fa8fd86b000-7fa8fd86d000 r-xs 000d0000 fc:03 153383                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle37/version0.0/bundle.jar
+7fa8fd86d000-7fa8fd86f000 r-xs 0000a000 fc:03 153375                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle36/version0.0/bundle.jar
+7fa8fd86f000-7fa8fd872000 r-xs 00053000 fc:03 153367                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle35/version0.0/bundle.jar
+7fa8fd872000-7fa8fd87e000 r-xs 00082000 fc:03 153221                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle18/version0.0/bundle.jar
+7fa8fd87e000-7fa8fd87f000 r-xs 00001000 fc:03 153603                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/slf4j-log4j12-1.3.0.jar
+7fa8fd87f000-7fa8fd886000 r-xs 01ce2000 fc:03 153295                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle27/version0.0/bundle.jar
+7fa8fd886000-7fa8fd88a000 r-xs 0015f000 fc:03 153279                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle25/version0.0/bundle.jar
+7fa8fd88a000-7fa8fd88d000 r-xs 00023000 fc:03 153205                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle17/version0.0/bundle.jar
+7fa8fd88d000-7fa8fd88e000 r-xs 00008000 fc:03 153359                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle34/version0.0/bundle.jar
+7fa8fd88e000-7fa8fd890000 r-xs 00024000 fc:03 153351                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle33/version0.0/bundle.jar
+7fa8fd890000-7fa8fd893000 r-xs 00025000 fc:03 153155                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle15/version0.0/bundle.jar
+7fa8fd893000-7fa8fd894000 r-xs 00002000 fc:03 153602                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle59/version0.0/bundle.jar-embedded/META-INF/lib/slf4j-api-1.3.0.jar
+7fa8fd894000-7fa8fd896000 r-xs 00016000 fc:03 153343                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle32/version0.0/bundle.jar
+7fa8fd896000-7fa8fd898000 r-xs 00002000 fc:03 153137                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle14/version0.0/bundle.jar
+7fa8fd898000-7fa8fd89a000 r-xs 00024000 fc:03 153335                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle31/version0.0/bundle.jar
+7fa8fd89a000-7fa8fd8b2000 r-xs 00115000 fc:03 147787                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xercesImpl-2.9.1.jar
+7fa8fd8b2000-7fa8fd8ee000 r-xs 00294000 fc:03 153040                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle3/version0.0/bundle.jar
+7fa8fd8ee000-7fa8fd8f5000 r-xs 00094000 fc:03 6055                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/jsse.jar
+7fa8fd8f5000-7fa8fd8f8000 ---p 00000000 00:00 0 
+7fa8fd8f8000-7fa8fd9f6000 rwxp 00000000 00:00 0 
+7fa8fd9f6000-7fa8fd9fd000 r-xs 00058000 fc:03 147730                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/org.apache.felix.framework-3.0.2.jar
+7fa8fd9fd000-7fa8fda00000 r-xs 00025000 fc:03 147755                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bndlib-0.0.255.jar
+7fa8fda00000-7fa8fda24000 r-xs 0016e000 fc:03 147670                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bcprov-jdk15-1.44.jar
+7fa8fda24000-7fa8fda2a000 r-xs 00032000 fc:03 147747                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bcmail-jdk15-1.44.jar
+7fa8fda2a000-7fa8fda6a000 r-xs 00241000 fc:03 147683                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/batik-all-1.6.jar
+7fa8fda6a000-7fa8fda7e000 r-xs 00174000 fc:03 147738                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-1.2.1.jar
+7fa8fda7e000-7fa8fda7f000 r-xs 00000000 fc:03 147674                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-xwork-10-1.11.jar
+7fa8fda7f000-7fa8fda81000 r-xs 00001000 fc:03 147795                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-velocity-0.7.jar
+7fa8fda81000-7fa8fda85000 r-xs 00012000 fc:03 147726                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-util-concurrent-0.0.12.jar
+7fa8fda85000-7fa8fda86000 r-xs 00001000 fc:03 147744                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trusted-apps-seraph-integration-2.2.jar
+7fa8fda86000-7fa8fda88000 r-xs 00003000 fc:03 147669                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trackback-0.10.jar
+7fa8fda88000-7fa8fda8a000 r-xs 00004000 fc:03 147762                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-spring-1.1.jar
+7fa8fda8a000-7fa8fda8d000 r-xs 00015000 fc:03 147673                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-seraph-2.3.4.jar
+7fa8fda8d000-7fa8fda8e000 r-xs 00001000 fc:03 147779                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-secure-random-1.0.jar
+7fa8fda8e000-7fa8fda90000 r-xs 00003000 fc:03 147718                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-profiling-1.8.1.jar
+7fa8fda90000-7fa8fda91000 r-xs 00003000 fc:03 147735                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-spring-2.6.4.jar
+7fa8fda91000-7fa8fda93000 r-xs 00000000 fc:03 147719                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-osgi-events-2.6.4.jar
+7fa8fda93000-7fa8fda95000 r-xs 00008000 fc:03 147728                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-paddle-5.jar
+7fa8fda95000-7fa8fda97000 r-xs 0000b000 fc:03 147751                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-mail-1.16.jar
+7fa8fda97000-7fa8fda98000 r-xs 00005000 fc:03 147776                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-johnson-0.10.jar
+7fa8fda98000-7fa8fda9a000 r-xs 00002000 fc:03 147761                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-jdk-utilities-0.4.jar
+7fa8fda9a000-7fa8fda9f000 r-xs 0003c000 fc:03 147689                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-gzipfilter-1.9.jar
+7fa8fda9f000-7fa8fdaa4000 r-xs 0001f000 fc:03 147642                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-extras-2.4.jar
+7fa8fdaa4000-7fa8fdaa5000 r-xs 00003000 fc:03 147780                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-servlet-0.10.jar
+7fa8fdaa5000-7fa8fdaa6000 r-xs 00001000 fc:03 147655                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-memory-0.1.jar
+7fa8fdaa6000-7fa8fdac1000 r-xs 001b7000 fc:03 147739                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/aspectjweaver-1.6.0.jar
+7fa8fdac1000-7fa8fdac2000 r-xs 00006000 fc:03 147658                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/asm-1.5.3.jar
+7fa8fdac2000-7fa8fdac4000 r-xs 00000000 fc:03 147743                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/aopalliance-1.0.jar
+7fa8fdac4000-7fa8fdac6000 r-xs 0000c000 fc:03 147700                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/activation-1.0.2.jar
+7fa8fdac6000-7fa8fdaca000 r-xs 0001c000 fc:03 147721                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/XmlSchema-1.1.jar
+7fa8fdaca000-7fa8fdacb000 r-xs 00000000 fc:03 147775                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/sal-spi-2.2.1.jar
+7fa8fdacb000-7fa8fdacd000 r-xs 00009000 fc:03 147694                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-xwork-core-1.11.jar
+7fa8fdacd000-7fa8fdadc000 r-xs 000df000 fc:03 147729                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/hibernate-2.1.8-atlassian-9.jar
+7fa8fdadc000-7fa8fdae1000 r-xs 00025000 fc:03 147678                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-core-4.5.5.jar
+7fa8fdae1000-7fa8fdae3000 r-xs 0000d000 fc:03 147748                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-config-0.13.2.jar
+7fa8fdae3000-7fa8fdae6000 r-xs 00019000 fc:03 147660                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-bucket-3.4.7.jar
+7fa8fdae6000-7fa8fdae9000 r-xs 0000e000 fc:03 147782                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-webresource-2.6.4.jar
+7fa8fdae9000-7fa8fdaec000 r-xs 0000b000 fc:03 147663                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-webfragment-2.6.4.jar
+7fa8fdaec000-7fa8fdaee000 r-xs 00001000 fc:03 147760                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-bandana-3.1.jar
+7fa8fdaee000-7fa8fdaf2000 r-xs 0001a000 fc:03 147790                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-bonnie-3.4.1.jar
+7fa8fdaf2000-7fa8fdaf5000 r-xs 00007000 fc:03 147769                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-event-2.0.3.jar
+7fa8fdaf5000-7fa8fdafd000 r-xs 00036000 fc:03 147644                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-core-2.6.4.jar
+7fa8fdafd000-7fa8fdb04000 r-xs 0003b000 fc:03 147713                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-renderer-6.2.1.jar
+7fa8fdb04000-7fa8fdb05000 r-xs 00000000 fc:03 147740                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-api-0.1.jar
+7fa8fdb05000-7fa8fdb0a000 r-xs 00011000 fc:03 147668                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trusted-apps-core-2.2.jar
+7fa8fdb0a000-7fa8fdb0c000 r-xs 0000b000 fc:03 147680                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-servlet-2.6.4.jar
+7fa8fdb0c000-7fa8fdb0d000 r-xs 00000000 fc:03 153173                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle16/version0.0/bundle.jar
+7fa8fdb0d000-7fa8fdb0f000 r-xs 00001000 fc:03 153129                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle13/version0.0/bundle.jar
+7fa8fdb0f000-7fa8fdb11000 r-xs 00003000 fc:03 153327                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle30/version0.0/bundle.jar
+7fa8fdb11000-7fa8fdb13000 r-xs 00003000 fc:03 153121                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle12/version0.0/bundle.jar
+7fa8fdb13000-7fa8fdb14000 r-xs 00004000 fc:03 147781                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-saaj-1.2.1.jar
+7fa8fdb14000-7fa8fdb16000 r-xs 00006000 fc:03 147647                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-jaxrpc-1.2.1-noqname.jar
+7fa8fdb16000-7fa8fdb19000 r-xs 00025000 fc:03 153311                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle28/version0.0/bundle.jar
+7fa8fdb19000-7fa8fdb1b000 r-xs 00004000 fc:03 153113                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle11/version0.0/bundle.jar
+7fa8fdb1b000-7fa8fdb1c000 r-xs 00001000 fc:03 153573                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle45/version0.0/bundle.jar-embedded/oauth-provider-20090531.jar
+7fa8fdb1c000-7fa8fdb1e000 r-xs 0000f000 fc:03 153287                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle26/version0.0/bundle.jar
+7fa8fdb1e000-7fa8fdb1f000 r-xs 0004e000 fc:03 153237                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle20/version0.0/bundle.jar
+7fa8fdb1f000-7fa8fdb22000 r-xs 00011000 fc:03 153105                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle10/version0.0/bundle.jar
+7fa8fdb22000-7fa8fdb23000 r-xs 0004b000 fc:03 153407                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle40/version0.0/bundle.jar
+7fa8fdb23000-7fa8fdb24000 r-xs 0009c000 fc:03 153229                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle19/version0.0/bundle.jar
+7fa8fdb24000-7fa8fdb25000 r-xs 0000c000 fc:03 153319                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle29/version0.0/bundle.jar
+7fa8fdb25000-7fa8fdb26000 r-xs 00008000 fc:03 153088                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle9/version0.0/bundle.jar
+7fa8fdb26000-7fa8fdb27000 r-xs 00002000 fc:03 153080                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle8/version0.0/bundle.jar
+7fa8fdb27000-7fa8fdb2b000 r-xs 0001a000 fc:03 153072                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle7/version0.0/bundle.jar
+7fa8fdb2b000-7fa8fdb35000 r-xs 0004f000 fc:03 153064                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle6/version0.0/bundle.jar
+7fa8fdb35000-7fa8fdb37000 r-xs 00003000 fc:03 153056                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle5/version0.0/bundle.jar
+7fa8fdb37000-7fa8fdb38000 r-xs 00005000 fc:03 153048                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle4/version0.0/bundle.jar
+7fa8fdb38000-7fa8fdb40000 r-xs 00060000 fc:03 153029                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle2/version0.0/bundle.jar
+7fa8fdb40000-7fa8fdb41000 r-xs 00003000 fc:03 153020                     /srv/wiki/home/plugins-osgi-cache/felix/felix-cache/bundle1/version0.0/bundle.jar
+7fa8fdb41000-7fa8fdb45000 r-xs 00372000 fc:03 147682                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-osgi-2.6.4.jar
+7fa8fdb45000-7fa8fdb48000 ---p 00000000 00:00 0 
+7fa8fdb48000-7fa8fdc46000 rwxp 00000000 00:00 0 
+7fa8fdc46000-7fa8fdc49000 ---p 00000000 00:00 0 
+7fa8fdc49000-7fa8fdd47000 rwxp 00000000 00:00 0 
+7fa8fdd47000-7fa8fdd4a000 ---p 00000000 00:00 0 
+7fa8fdd4a000-7fa8fde48000 rwxp 00000000 00:00 0 
+7fa8fde48000-7fa8fde4b000 ---p 00000000 00:00 0 
+7fa8fde4b000-7fa8fdf49000 rwxp 00000000 00:00 0 
+7fa8fdf49000-7fa8fdf4c000 ---p 00000000 00:00 0 
+7fa8fdf4c000-7fa8fe04a000 rwxp 00000000 00:00 0 
+7fa8fe04a000-7fa8fe04d000 ---p 00000000 00:00 0 
+7fa8fe04d000-7fa8fe14b000 rwxp 00000000 00:00 0 
+7fa8fe14b000-7fa8fe14e000 ---p 00000000 00:00 0 
+7fa8fe14e000-7fa8fe24c000 rwxp 00000000 00:00 0 
+7fa8fe24c000-7fa8fe24f000 ---p 00000000 00:00 0 
+7fa8fe24f000-7fa8fe34d000 rwxp 00000000 00:00 0 
+7fa8fe34d000-7fa8fe350000 ---p 00000000 00:00 0 
+7fa8fe350000-7fa8fe44e000 rwxp 00000000 00:00 0 
+7fa8fe44e000-7fa8fe451000 ---p 00000000 00:00 0 
+7fa8fe451000-7fa8fe54f000 rwxp 00000000 00:00 0 
+7fa8fe54f000-7fa8fe552000 ---p 00000000 00:00 0 
+7fa8fe552000-7fa8fe650000 rwxp 00000000 00:00 0 
+7fa8fe650000-7fa8fe653000 ---p 00000000 00:00 0 
+7fa8fe653000-7fa8fe751000 rwxp 00000000 00:00 0 
+7fa8fe751000-7fa8fe754000 ---p 00000000 00:00 0 
+7fa8fe754000-7fa8fe852000 rwxp 00000000 00:00 0 
+7fa8fe852000-7fa8fe855000 ---p 00000000 00:00 0 
+7fa8fe855000-7fa8fe953000 rwxp 00000000 00:00 0 
+7fa8fe953000-7fa8fe956000 ---p 00000000 00:00 0 
+7fa8fe956000-7fa8fea54000 rwxp 00000000 00:00 0 
+7fa8fea54000-7fa8fea57000 ---p 00000000 00:00 0 
+7fa8fea57000-7fa8feb55000 rwxp 00000000 00:00 0 
+7fa8feb55000-7fa8feb5c000 r-xp 00000000 fc:03 6279                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnio.so
+7fa8feb5c000-7fa8fec5b000 ---p 00007000 fc:03 6279                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnio.so
+7fa8fec5b000-7fa8fec5d000 rwxp 00006000 fc:03 6279                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnio.so
+7fa8fec5d000-7fa8fec60000 ---p 00000000 00:00 0 
+7fa8fec60000-7fa8fed5e000 rwxp 00000000 00:00 0 
+7fa8fed5e000-7fa8fedd7000 r-xp 00000000 fc:03 6286                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libfontmanager.so
+7fa8fedd7000-7fa8feed6000 ---p 00079000 fc:03 6286                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libfontmanager.so
+7fa8feed6000-7fa8feeeb000 rwxp 00078000 fc:03 6286                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libfontmanager.so
+7fa8feeeb000-7fa8feefc000 rwxp 00000000 00:00 0 
+7fa8feefc000-7fa8fef01000 r-xp 00000000 fc:03 6318                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/headless/libmawt.so
+7fa8fef01000-7fa8ff000000 ---p 00005000 fc:03 6318                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/headless/libmawt.so
+7fa8ff000000-7fa8ff002000 rwxp 00004000 fc:03 6318                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/headless/libmawt.so
+7fa8ff002000-7fa8ff094000 r-xp 00000000 fc:03 6321                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libawt.so
+7fa8ff094000-7fa8ff193000 ---p 00092000 fc:03 6321                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libawt.so
+7fa8ff193000-7fa8ff1ac000 rwxp 00091000 fc:03 6321                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libawt.so
+7fa8ff1ac000-7fa8ff1d1000 rwxp 00000000 00:00 0 
+7fa8ff1d1000-7fa8ff1d9000 r-xs 00042000 fc:03 147650                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-user-2.2.1.jar
+7fa8ff1d9000-7fa8ff1dc000 ---p 00000000 00:00 0 
+7fa8ff1dc000-7fa8ff2da000 rwxp 00000000 00:00 0 
+7fa8ff2da000-7fa8ff2dd000 ---p 00000000 00:00 0 
+7fa8ff2dd000-7fa8ff3db000 rwxp 00000000 00:00 0 
+7fa8ff3db000-7fa8ff3de000 ---p 00000000 00:00 0 
+7fa8ff3de000-7fa8ff4dc000 rwxp 00000000 00:00 0 
+7fa8ff4dc000-7fa8ff4df000 ---p 00000000 00:00 0 
+7fa8ff4df000-7fa8ff5dd000 rwxp 00000000 00:00 0 
+7fa8ff5dd000-7fa8ff5e3000 r-xs 0006e000 fc:03 147773                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/postgresql-8.4-701.jdbc3.jar
+7fa8ff5e3000-7fa8ff5e9000 r-xs 000ad000 fc:03 147698                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/mysql-connector-java-5.1.11.jar
+7fa8ff5e9000-7fa8ff5ff000 r-xp 00000000 fc:03 396120                     /lib/libresolv-2.12.1.so
+7fa8ff5ff000-7fa8ff7fe000 ---p 00016000 fc:03 396120                     /lib/libresolv-2.12.1.so
+7fa8ff7fe000-7fa8ff7ff000 r-xp 00015000 fc:03 396120                     /lib/libresolv-2.12.1.so
+7fa8ff7ff000-7fa8ff800000 rwxp 00016000 fc:03 396120                     /lib/libresolv-2.12.1.so
+7fa8ff800000-7fa8ff802000 rwxp 00000000 00:00 0 
+7fa8ff802000-7fa8ff807000 r-xp 00000000 fc:03 396113                     /lib/libnss_dns-2.12.1.so
+7fa8ff807000-7fa8ffa06000 ---p 00005000 fc:03 396113                     /lib/libnss_dns-2.12.1.so
+7fa8ffa06000-7fa8ffa07000 r-xp 00004000 fc:03 396113                     /lib/libnss_dns-2.12.1.so
+7fa8ffa07000-7fa8ffa08000 rwxp 00005000 fc:03 396113                     /lib/libnss_dns-2.12.1.so
+7fa8ffa08000-7fa8ffa0a000 r-xp 00000000 fc:03 394038                     /lib/libnss_mdns4_minimal.so.2
+7fa8ffa0a000-7fa8ffc09000 ---p 00002000 fc:03 394038                     /lib/libnss_mdns4_minimal.so.2
+7fa8ffc09000-7fa8ffc0a000 r-xp 00001000 fc:03 394038                     /lib/libnss_mdns4_minimal.so.2
+7fa8ffc0a000-7fa8ffc0b000 rwxp 00002000 fc:03 394038                     /lib/libnss_mdns4_minimal.so.2
+7fa8ffc0b000-7fa8ffc0c000 r-xs 00001000 fc:03 147720                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/alt-jdk1.3-0.07.jar
+7fa8ffc0c000-7fa8ffc0f000 r-xs 00013000 fc:03 6060                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/jce.jar
+7fa8ffc0f000-7fa8ffc17000 r-xs 00115000 fc:03 6354                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/resources.jar
+7fa8ffc17000-7fa8ffc1b000 r-xs 00024000 fc:03 147690                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/xwork-1.0.3.1.jar
+7fa8ffc1b000-7fa8ffc83000 r-xs 004a4000 fc:03 147786                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-3.4.7.jar
+7fa8ffc83000-7fa8ffc86000 r-xs 00019000 fc:03 147756                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-rpc-plugin-3.4.7.jar
+7fa8ffc86000-7fa8ffc88000 r-xs 00003000 fc:03 147676                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/confluence-cache-ehcache-3.4.7.jar
+7fa8ffc8b000-7fa8ffc8d000 r-xs 00001000 fc:03 6058                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/dnsns.jar
+7fa8ffc8d000-7fa8ffc98000 r-xs 0008b000 fc:03 147671                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/c3p0-0.9.1.2.jar
+7fa8ffc98000-7fa8ffc9c000 r-xs 00027000 fc:03 147732                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bsf-2.3.0.jar
+7fa8ffc9c000-7fa8ffc9f000 r-xs 00025000 fc:03 147755                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bndlib-0.0.255.jar
+7fa8ffc9f000-7fa8ffca5000 r-xs 00032000 fc:03 147747                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/bcmail-jdk15-1.44.jar
+7fa8ffca5000-7fa8ffce5000 r-xs 00241000 fc:03 147683                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/batik-all-1.6.jar
+7fa8ffce5000-7fa8ffce7000 r-xs 00006000 fc:03 147647                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-jaxrpc-1.2.1-noqname.jar
+7fa8ffce7000-7fa8ffcfb000 r-xs 00174000 fc:03 147738                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-1.2.1.jar
+7fa8ffcfb000-7fa8ffcfd000 r-xs 00009000 fc:03 147694                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-xwork-core-1.11.jar
+7fa8ffcfd000-7fa8ffd00000 ---p 00000000 00:00 0 
+7fa8ffd00000-7fa8ffdfe000 rwxp 00000000 00:00 0 
+7fa8ffdfe000-7fa8ffe01000 ---p 00000000 00:00 0 
+7fa8ffe01000-7fa8ffeff000 rwxp 00000000 00:00 0 
+7fa8ffeff000-7fa8fff02000 ---p 00000000 00:00 0 
+7fa8fff02000-7fa900000000 rwxp 00000000 00:00 0 
+7fa900000000-7fa902eb3000 rwxp 00000000 00:00 0 
+7fa902eb3000-7fa904000000 ---p 00000000 00:00 0 
+7fa904000000-7fa904001000 r-xs 00004000 fc:03 147781                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/axis-saaj-1.2.1.jar
+7fa904001000-7fa904002000 r-xs 00000000 fc:03 147674                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-xwork-10-1.11.jar
+7fa904002000-7fa904004000 r-xs 00001000 fc:03 147795                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-velocity-0.7.jar
+7fa904004000-7fa904008000 r-xs 00012000 fc:03 147726                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-util-concurrent-0.0.12.jar
+7fa904008000-7fa904010000 r-xs 00042000 fc:03 147650                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-user-2.2.1.jar
+7fa904010000-7fa904011000 r-xs 00001000 fc:03 147744                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trusted-apps-seraph-integration-2.2.jar
+7fa904011000-7fa904016000 r-xs 00011000 fc:03 147668                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trusted-apps-core-2.2.jar
+7fa904016000-7fa904018000 r-xs 00003000 fc:03 147669                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-trackback-0.10.jar
+7fa904018000-7fa90401a000 r-xs 00004000 fc:03 147762                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-spring-1.1.jar
+7fa90401a000-7fa90401d000 r-xs 00015000 fc:03 147673                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-seraph-2.3.4.jar
+7fa90401d000-7fa90401e000 r-xs 00001000 fc:03 147779                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-secure-random-1.0.jar
+7fa90401e000-7fa904025000 r-xs 0003b000 fc:03 147713                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-renderer-6.2.1.jar
+7fa904025000-7fa904027000 r-xs 00003000 fc:03 147718                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-profiling-1.8.1.jar
+7fa904027000-7fa90402a000 r-xs 0000e000 fc:03 147782                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-webresource-2.6.4.jar
+7fa90402a000-7fa90402d000 r-xs 0000b000 fc:03 147663                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-webfragment-2.6.4.jar
+7fa90402d000-7fa90402e000 r-xs 00003000 fc:03 147735                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-spring-2.6.4.jar
+7fa90402e000-7fa904030000 r-xs 0000b000 fc:03 147680                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-servlet-2.6.4.jar
+7fa904030000-7fa904032000 r-xs 00000000 fc:03 147719                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-osgi-events-2.6.4.jar
+7fa904032000-7fa904036000 r-xs 00372000 fc:03 147682                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-osgi-2.6.4.jar
+7fa904036000-7fa90403e000 r-xs 00036000 fc:03 147644                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-plugins-core-2.6.4.jar
+7fa90403e000-7fa904040000 r-xs 00008000 fc:03 147728                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-paddle-5.jar
+7fa904040000-7fa904042000 r-xs 0000b000 fc:03 147751                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-mail-1.16.jar
+7fa904042000-7fa904043000 r-xs 00005000 fc:03 147776                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-johnson-0.10.jar
+7fa904043000-7fa904045000 r-xs 00002000 fc:03 147761                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-jdk-utilities-0.4.jar
+7fa904045000-7fa90404a000 r-xs 0003c000 fc:03 147689                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-gzipfilter-1.9.jar
+7fa90404a000-7fa90404f000 r-xs 0001f000 fc:03 147642                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-extras-2.4.jar
+7fa90404f000-7fa904052000 r-xs 00007000 fc:03 147769                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-event-2.0.3.jar
+7fa904052000-7fa904057000 r-xs 00025000 fc:03 147678                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-core-4.5.5.jar
+7fa904057000-7fa904059000 r-xs 0000d000 fc:03 147748                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-config-0.13.2.jar
+7fa904059000-7fa90405a000 r-xs 00003000 fc:03 147780                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-servlet-0.10.jar
+7fa90405a000-7fa90405b000 r-xs 00001000 fc:03 147655                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-memory-0.1.jar
+7fa90405b000-7fa90405c000 r-xs 00000000 fc:03 147740                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-cache-api-0.1.jar
+7fa90405c000-7fa904060000 r-xs 0001a000 fc:03 147790                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-bonnie-3.4.1.jar
+7fa904060000-7fa904062000 r-xs 00001000 fc:03 147760                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/atlassian-bandana-3.1.jar
+7fa904062000-7fa90407d000 r-xs 001b7000 fc:03 147739                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/aspectjweaver-1.6.0.jar
+7fa90407d000-7fa90407e000 r-xs 00006000 fc:03 147658                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/asm-1.5.3.jar
+7fa90407e000-7fa904080000 r-xs 00000000 fc:03 147743                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/aopalliance-1.0.jar
+7fa904080000-7fa904081000 r-xs 00001000 fc:03 147720                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/alt-jdk1.3-0.07.jar
+7fa904081000-7fa904083000 r-xs 0000c000 fc:03 147700                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/activation-1.0.2.jar
+7fa904083000-7fa904087000 r-xs 0001c000 fc:03 147721                     /srv/wiki/confluence-3.4.7-std/confluence/WEB-INF/lib/XmlSchema-1.1.jar
+7fa904087000-7fa90408a000 ---p 00000000 00:00 0 
+7fa90408a000-7fa904188000 rwxp 00000000 00:00 0 
+7fa904188000-7fa90419b000 r-xp 00000000 fc:03 6278                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnet.so
+7fa90419b000-7fa90429c000 ---p 00013000 fc:03 6278                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnet.so
+7fa90429c000-7fa90429f000 rwxp 00014000 fc:03 6278                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libnet.so
+7fa90429f000-7fa9042a2000 r-xs 000cb000 fc:03 6059                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/ext/localedata.jar
+7fa9042a2000-7fa9042a5000 r-xs 00018000 fc:03 150130                     /srv/wiki/confluence-3.4.7-std/lib/jasper-el.jar
+7fa9042a5000-7fa9042a8000 r-xs 0000f000 fc:03 150120                     /srv/wiki/confluence-3.4.7-std/lib/tomcat-i18n-es.jar
+7fa9042a8000-7fa9042b7000 r-xs 00113000 fc:03 150124                     /srv/wiki/confluence-3.4.7-std/lib/catalina.jar
+7fa9042b7000-7fa9042c2000 r-xs 000af000 fc:03 150128                     /srv/wiki/confluence-3.4.7-std/lib/tomcat-coyote.jar
+7fa9042c2000-7fa9042c4000 r-xs 0000c000 fc:03 150116                     /srv/wiki/confluence-3.4.7-std/lib/catalina-ant.jar
+7fa9042c4000-7fa9042c6000 r-xs 0000b000 fc:03 150125                     /srv/wiki/confluence-3.4.7-std/lib/tomcat-i18n-fr.jar
+7fa9042c6000-7fa9042c8000 r-xs 00011000 fc:03 150129                     /srv/wiki/confluence-3.4.7-std/lib/jsp-api.jar
+7fa9042c8000-7fa9042cb000 r-xs 0001d000 fc:03 150127                     /srv/wiki/confluence-3.4.7-std/lib/catalina-ha.jar
+7fa9042cb000-7fa9042d1000 r-xp 00000000 fc:03 6323                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libmanagement.so
+7fa9042d1000-7fa9043d0000 ---p 00006000 fc:03 6323                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libmanagement.so
+7fa9043d0000-7fa9043d2000 rwxp 00005000 fc:03 6323                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libmanagement.so
+7fa9043d2000-7fa9043d3000 ---p 00000000 00:00 0 
+7fa9043d3000-7fa9044d3000 rwxp 00000000 00:00 0 
+7fa9044d3000-7fa9044d6000 ---p 00000000 00:00 0 
+7fa9044d6000-7fa9045d4000 rwxp 00000000 00:00 0 
+7fa9045d4000-7fa9045d7000 ---p 00000000 00:00 0 
+7fa9045d7000-7fa9046d5000 rwxp 00000000 00:00 0 
+7fa9046d5000-7fa9046d8000 ---p 00000000 00:00 0 
+7fa9046d8000-7fa9047d6000 rwxp 00000000 00:00 0 
+7fa9047d6000-7fa9047d9000 ---p 00000000 00:00 0 
+7fa9047d9000-7fa9048d7000 rwxp 00000000 00:00 0 
+7fa9048d7000-7fa904b7b000 r-xp 00000000 fc:03 398995                     /usr/lib/locale/locale-archive
+7fa904b7b000-7fa904b7e000 ---p 00000000 00:00 0 
+7fa904b7e000-7fa904c7c000 rwxp 00000000 00:00 0 
+7fa904c7c000-7fa904c7d000 ---p 00000000 00:00 0 
+7fa904c7d000-7fa9050b3000 rwxp 00000000 00:00 0 
+7fa9050b3000-7fa90524b000 r-xs 03013000 fc:03 6271                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/rt.jar
+7fa90524b000-7fa905273000 rwxp 00000000 00:00 0 
+7fa905273000-7fa905274000 ---p 00000000 00:00 0 
+7fa905274000-7fa905374000 rwxp 00000000 00:00 0 
+7fa905374000-7fa905375000 ---p 00000000 00:00 0 
+7fa905375000-7fa9054d5000 rwxp 00000000 00:00 0 
+7fa9054d5000-7fa9054d7000 ---p 00000000 00:00 0 
+7fa9054d7000-7fa90556d000 rwxp 00000000 00:00 0 
+7fa90556d000-7fa9055cd000 rwxp 00000000 00:00 0 
+7fa9055cd000-7fa9055cf000 ---p 00000000 00:00 0 
+7fa9055cf000-7fa905664000 rwxp 00000000 00:00 0 
+7fa905664000-7fa9056af000 rwxp 00000000 00:00 0 
+7fa9056af000-7fa911620000 rwxp 00000000 00:00 0 
+7fa911620000-7fa911ab0000 ---p 00000000 00:00 0 
+7fa911ab0000-7fa924560000 rwxp 00000000 00:00 0 
+7fa924560000-7fa92dab0000 rwxp 00000000 00:00 0 
+7fa92dab0000-7fa92dab2000 r-xs 00014000 fc:03 150121                     /srv/wiki/confluence-3.4.7-std/lib/servlet-api.jar
+7fa92dab2000-7fa92ea32000 rwxp 00000000 00:00 0 
+7fa92ea32000-7fa930ab2000 rwxp 00000000 00:00 0 
+7fa930ab2000-7fa930ac0000 r-xp 00000000 fc:03 6288                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libzip.so
+7fa930ac0000-7fa930bc2000 ---p 0000e000 fc:03 6288                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libzip.so
+7fa930bc2000-7fa930bc5000 rwxp 00010000 fc:03 6288                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libzip.so
+7fa930bc5000-7fa930bc6000 rwxp 00000000 00:00 0 
+7fa930bc6000-7fa930bd2000 r-xp 00000000 fc:03 396114                     /lib/libnss_files-2.12.1.so
+7fa930bd2000-7fa930dd1000 ---p 0000c000 fc:03 396114                     /lib/libnss_files-2.12.1.so
+7fa930dd1000-7fa930dd2000 r-xp 0000b000 fc:03 396114                     /lib/libnss_files-2.12.1.so
+7fa930dd2000-7fa930dd3000 rwxp 0000c000 fc:03 396114                     /lib/libnss_files-2.12.1.so
+7fa930dd3000-7fa930ddd000 r-xp 00000000 fc:03 396116                     /lib/libnss_nis-2.12.1.so
+7fa930ddd000-7fa930fdc000 ---p 0000a000 fc:03 396116                     /lib/libnss_nis-2.12.1.so
+7fa930fdc000-7fa930fdd000 r-xp 00009000 fc:03 396116                     /lib/libnss_nis-2.12.1.so
+7fa930fdd000-7fa930fde000 rwxp 0000a000 fc:03 396116                     /lib/libnss_nis-2.12.1.so
+7fa930fde000-7fa930fe6000 r-xp 00000000 fc:03 396112                     /lib/libnss_compat-2.12.1.so
+7fa930fe6000-7fa9311e5000 ---p 00008000 fc:03 396112                     /lib/libnss_compat-2.12.1.so
+7fa9311e5000-7fa9311e6000 r-xp 00007000 fc:03 396112                     /lib/libnss_compat-2.12.1.so
+7fa9311e6000-7fa9311e7000 rwxp 00008000 fc:03 396112                     /lib/libnss_compat-2.12.1.so
+7fa9311e7000-7fa9311ee000 r-xp 00000000 fc:03 6290                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/native_threads/libhpi.so
+7fa9311ee000-7fa9312ef000 ---p 00007000 fc:03 6290                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/native_threads/libhpi.so
+7fa9312ef000-7fa9312f1000 rwxp 00008000 fc:03 6290                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/native_threads/libhpi.so
+7fa9312f1000-7fa9312f2000 rwxp 00000000 00:00 0 
+7fa9312f2000-7fa931309000 r-xp 00000000 fc:03 396111                     /lib/libnsl-2.12.1.so
+7fa931309000-7fa931508000 ---p 00017000 fc:03 396111                     /lib/libnsl-2.12.1.so
+7fa931508000-7fa931509000 r-xp 00016000 fc:03 396111                     /lib/libnsl-2.12.1.so
+7fa931509000-7fa93150a000 rwxp 00017000 fc:03 396111                     /lib/libnsl-2.12.1.so
+7fa93150a000-7fa93150c000 rwxp 00000000 00:00 0 
+7fa93150c000-7fa931534000 r-xp 00000000 fc:03 6301                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjava.so
+7fa931534000-7fa931634000 ---p 00028000 fc:03 6301                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjava.so
+7fa931634000-7fa93163b000 rwxp 00028000 fc:03 6301                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libjava.so
+7fa93163b000-7fa931648000 r-xp 00000000 fc:03 6283                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libverify.so
+7fa931648000-7fa931747000 ---p 0000d000 fc:03 6283                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libverify.so
+7fa931747000-7fa93174a000 rwxp 0000c000 fc:03 6283                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/libverify.so
+7fa93174a000-7fa931751000 r-xp 00000000 fc:03 396121                     /lib/librt-2.12.1.so
+7fa931751000-7fa931950000 ---p 00007000 fc:03 396121                     /lib/librt-2.12.1.so
+7fa931950000-7fa931951000 r-xp 00006000 fc:03 396121                     /lib/librt-2.12.1.so
+7fa931951000-7fa931952000 rwxp 00007000 fc:03 396121                     /lib/librt-2.12.1.so
+7fa931952000-7fa931955000 ---p 00000000 00:00 0 
+7fa931955000-7fa931a53000 rwxp 00000000 00:00 0 
+7fa931a53000-7fa931ad5000 r-xp 00000000 fc:03 396109                     /lib/libm-2.12.1.so
+7fa931ad5000-7fa931cd4000 ---p 00082000 fc:03 396109                     /lib/libm-2.12.1.so
+7fa931cd4000-7fa931cd5000 r-xp 00081000 fc:03 396109                     /lib/libm-2.12.1.so
+7fa931cd5000-7fa931cd6000 rwxp 00082000 fc:03 396109                     /lib/libm-2.12.1.so
+7fa931cd6000-7fa9324b0000 r-xp 00000000 fc:03 6308                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/server/libjvm.so
+7fa9324b0000-7fa9325b2000 ---p 007da000 fc:03 6308                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/server/libjvm.so
+7fa9325b2000-7fa932743000 rwxp 007dc000 fc:03 6308                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/server/libjvm.so
+7fa932743000-7fa93277e000 rwxp 00000000 00:00 0 
+7fa93277e000-7fa9328f8000 r-xp 00000000 fc:03 396105                     /lib/libc-2.12.1.so
+7fa9328f8000-7fa932af7000 ---p 0017a000 fc:03 396105                     /lib/libc-2.12.1.so
+7fa932af7000-7fa932afb000 r-xp 00179000 fc:03 396105                     /lib/libc-2.12.1.so
+7fa932afb000-7fa932afc000 rwxp 0017d000 fc:03 396105                     /lib/libc-2.12.1.so
+7fa932afc000-7fa932b01000 rwxp 00000000 00:00 0 
+7fa932b01000-7fa932b03000 r-xp 00000000 fc:03 396108                     /lib/libdl-2.12.1.so
+7fa932b03000-7fa932d03000 ---p 00002000 fc:03 396108                     /lib/libdl-2.12.1.so
+7fa932d03000-7fa932d04000 r-xp 00002000 fc:03 396108                     /lib/libdl-2.12.1.so
+7fa932d04000-7fa932d05000 rwxp 00003000 fc:03 396108                     /lib/libdl-2.12.1.so
+7fa932d05000-7fa932d1d000 r-xp 00000000 fc:03 396119                     /lib/libpthread-2.12.1.so
+7fa932d1d000-7fa932f1c000 ---p 00018000 fc:03 396119                     /lib/libpthread-2.12.1.so
+7fa932f1c000-7fa932f1d000 r-xp 00017000 fc:03 396119                     /lib/libpthread-2.12.1.so
+7fa932f1d000-7fa932f1e000 rwxp 00018000 fc:03 396119                     /lib/libpthread-2.12.1.so
+7fa932f1e000-7fa932f22000 rwxp 00000000 00:00 0 
+7fa932f22000-7fa932f42000 r-xp 00000000 fc:03 396102                     /lib/ld-2.12.1.so
+7fa932f42000-7fa932f43000 r-xs 00007000 fc:03 150119                     /srv/wiki/confluence-3.4.7-std/lib/el-api.jar
+7fa932f43000-7fa932f45000 r-xs 0000c000 fc:03 150118                     /srv/wiki/confluence-3.4.7-std/lib/tomcat-i18n-ja.jar
+7fa932f45000-7fa932f51000 r-xs 0014c000 fc:03 150117                     /srv/wiki/confluence-3.4.7-std/lib/jasper-jdt.jar
+7fa932f51000-7fa932f59000 r-xs 00079000 fc:03 150123                     /srv/wiki/confluence-3.4.7-std/lib/jasper.jar
+7fa932f59000-7fa932f5a000 r-xs 00003000 fc:03 150131                     /srv/wiki/confluence-3.4.7-std/lib/annotations-api.jar
+7fa932f5a000-7fa932f5f000 r-xs 00035000 fc:03 150122                     /srv/wiki/confluence-3.4.7-std/lib/catalina-tribes.jar
+7fa932f5f000-7fa932f63000 r-xs 00035000 fc:03 150126                     /srv/wiki/confluence-3.4.7-std/lib/tomcat-dbcp.jar
+7fa932f63000-7fa932f64000 r-xs 00006000 fc:03 149942                     /srv/wiki/confluence-3.4.7-std/bin/tomcat-juli.jar
+7fa932f64000-7fa932f66000 r-xs 00001000 fc:03 149953                     /srv/wiki/confluence-3.4.7-std/bin/commons-daemon.jar
+7fa932f66000-7fa932fa4000 rwxp 00000000 00:00 0 
+7fa932fa4000-7fa933026000 rwxp 00000000 00:00 0 
+7fa933026000-7fa93302e000 rwxs 00000000 fc:03 152519                     /tmp/hsperfdata_wiki/19777
+7fa93302e000-7fa933031000 rwxp 00000000 00:00 0 
+7fa933031000-7fa933038000 r-xp 00000000 fc:03 6274                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/jli/libjli.so
+7fa933038000-7fa933139000 ---p 00007000 fc:03 6274                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/jli/libjli.so
+7fa933139000-7fa93313b000 rwxp 00008000 fc:03 6274                       /usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/jli/libjli.so
+7fa93313b000-7fa93313c000 rwxp 00000000 00:00 0 
+7fa93313c000-7fa93313e000 r-xs 00004000 fc:03 149943                     /srv/wiki/confluence-3.4.7-std/bin/bootstrap.jar
+7fa93313e000-7fa93313f000 rwxp 00000000 00:00 0 
+7fa93313f000-7fa933140000 r-xp 00000000 00:00 0 
+7fa933140000-7fa933142000 rwxp 00000000 00:00 0 
+7fa933142000-7fa933143000 r-xp 00020000 fc:03 396102                     /lib/ld-2.12.1.so
+7fa933143000-7fa933144000 rwxp 00021000 fc:03 396102                     /lib/ld-2.12.1.so
+7fa933144000-7fa933145000 rwxp 00000000 00:00 0 
+7fff7b59d000-7fff7b5be000 rwxp 00000000 00:00 0                          [stack]
+7fff7b5ff000-7fff7b600000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+jvm_args: -Djava.util.logging.config.file=/srv/wiki/current/conf/logging.properties -Xms256m -Xmx448m -XX:MaxPermSize=196m -Djava.awt.headless=true -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.endorsed.dirs=/srv/wiki/current/endorsed -Dcatalina.base=/srv/wiki/current -Dcatalina.home=/srv/wiki/current -Djava.io.tmpdir=/srv/wiki/current/temp 
+java_command: org.apache.catalina.startup.Bootstrap start
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-6-sun
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin
+USERNAME=root
+LD_LIBRARY_PATH=/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64/server:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/lib/amd64:/usr/lib/jvm/java-6-sun-1.6.0.22/jre/../lib/amd64
+SHELL=/usr/bin/zsh
+DISPLAY=localhost:10.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x731250], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x731250], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x5f5e30], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x5f5e30], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGXFSZ: [libjvm.so+0x5f5e30], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x5f5e30], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x5f8650], sa_mask[0]=0x00000000, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x5f83a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: SIG_IGN, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGTERM: [libjvm.so+0x5f83a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x5f83a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:squeeze/sid
+
+uname:Linux 2.6.35-24-virtual #42-Ubuntu SMP Thu Dec 2 05:15:26 UTC 2010 x86_64
+libc:glibc 2.12.1 NPTL 2.12.1 
+rlimit: STACK 8192k, CORE 0k, NPROC infinity, NOFILE 1024, AS infinity
+load average:0.61 0.45 0.54
+
+CPU:total 2 (1 cores per cpu, 1 threads per core) family 6 model 2 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3
+
+Memory: 4k page, physical 2056796k(15620k free), swap 530140k(112160k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (17.1-b03) for linux-amd64 JRE (1.6.0_22-b04), built on Sep 15 2010 01:07:59 by "java_re" with gcc 3.2.2 (SuSE Linux)
+
+time: Wed Mar 16 15:54:04 2011
+elapsed time: 2479 seconds
+

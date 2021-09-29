@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Changes in the Artifact Deployer settings to make it work</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Git_Branch</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>master</string>
+              <string>stable</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>cd &quot;%WORKSPACE%&quot;
+mkdir dir1 2&gt; null
+mkdir dir2 2&gt; null
+mkdir dir3 2&gt; null
+mkdir dir4 2&gt; null
+set r=%RANDOM%
+echo %BUILD_DISPLAY_NAME% %BUILD_ID% %R% &gt; dir1\output_%R%.txt
+set r=%RANDOM%
+echo %BUILD_DISPLAY_NAME% %BUILD_ID% %R% &gt; dir2\output_%R%.txt
+set r=%RANDOM%
+echo %BUILD_DISPLAY_NAME% %BUILD_ID% %R% &gt; dir3\output_%R%.txt
+set r=%RANDOM%
+echo %BUILD_DISPLAY_NAME% %BUILD_ID% %R% &gt; dir4\output_%R%.txt
+exit /b 0</command>
+    </hudson.tasks.BatchFile>
+    <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder plugin="artifactdeployer@0.32">
+      <entry>
+        <includes>dir3\*.txt</includes>
+        <basedir></basedir>
+        <excludes></excludes>
+        <remote>${TARGET}</remote>
+        <flatten>false</flatten>
+        <deleteRemote>false</deleteRemote>
+        <deleteRemoteArtifacts>true</deleteRemoteArtifacts>
+        <deleteRemoteArtifactsByScript>false</deleteRemoteArtifactsByScript>
+        <failNoFilesDeploy>false</failNoFilesDeploy>
+      </entry>
+    </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder>
+    <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder plugin="artifactdeployer@0.32">
+      <entry>
+        <includes>dir1\*.txt</includes>
+        <basedir></basedir>
+        <excludes></excludes>
+        <remote>${TARGET}</remote>
+        <flatten>false</flatten>
+        <deleteRemote>false</deleteRemote>
+        <deleteRemoteArtifacts>true</deleteRemoteArtifacts>
+        <deleteRemoteArtifactsByScript>false</deleteRemoteArtifactsByScript>
+        <failNoFilesDeploy>false</failNoFilesDeploy>
+      </entry>
+    </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder>
+    <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder plugin="artifactdeployer@0.32">
+      <entry>
+        <includes>dir4\*.txt</includes>
+        <basedir></basedir>
+        <excludes></excludes>
+        <remote>${TARGET}</remote>
+        <flatten>false</flatten>
+        <deleteRemote>false</deleteRemote>
+        <deleteRemoteArtifacts>false</deleteRemoteArtifacts>
+        <deleteRemoteArtifactsByScript>false</deleteRemoteArtifactsByScript>
+        <failNoFilesDeploy>false</failNoFilesDeploy>
+      </entry>
+    </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder>
+    <org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder plugin="artifactdeployer@0.32">
+      <entry>
+        <includes>dir2\*.txt</includes>
+        <basedir></basedir>
+        <excludes></excludes>
+        <remote>${TARGET}</remote>
+        <flatten>false</flatten>
+        <deleteRemote>false</deleteRemote>
+        <deleteRemoteArtifacts>false</deleteRemoteArtifacts>
+        <deleteRemoteArtifactsByScript>false</deleteRemoteArtifactsByScript>
+        <failNoFilesDeploy>false</failNoFilesDeploy>
+      </entry>
+    </org.jenkinsci.plugins.artifactdeployer.ArtifactDeployerBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <com.lookout.jenkins.EnvironmentScript plugin="environment-script@1.1.2">
+      <script>if [[ &quot;$GIT_BRANCH&quot; = &quot;master&quot; ]]; then 
+    echo Target=&apos;c:\\public\\&apos;$JOB_NAME&apos;\\SNAPSHOT\\&apos;
+else 
+    echo Target=&apos;c:\\public\\&apos;$JOB_NAME&apos;\\&apos;$BUILD_ID&apos;\\&apos;
+fi
+</script>
+      <onlyRunOnParent>false</onlyRunOnParent>
+    </com.lookout.jenkins.EnvironmentScript>
+  </buildWrappers>
+</project>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : JenkinsをWindowsサービスとしてインストールする</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins_28934151.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins_31064125.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Installing-Jenkins_31457309.html">Installing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : JenkinsをWindowsサービスとしてインストールする
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (kohsuke)</span> on Feb 26, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="JenkinsをWindowsサービスとしてインストールする-WindowsのサービスとしてJenkinsをインストールする">WindowsのサービスとしてJenkinsをインストールする</h2>
+<p>まず、インストールする前にJenkinsを起動する必要があります。<a href="Meet-Jenkins_34930877.html#MeetJenkins-TestDrive">JNLP</a>や <code>&quot;java -jar jenkins.war&quot;</code> で起動します。<br/>
+一度起動すると、&quot;Windowsのサービスとしてインストール&quot;というリンクがシステム管理画面に表示されます。</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/36111078/36208696.png" data-image-src="attachments/36111078/36208696.png" data-unresolved-comment-count="0" data-linked-resource-id="36208696" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson-manage-menu.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36111078" data-linked-resource-container-version="14"></span></p>
+
+<p>このリンクをクリックすると、インストール画面が表示されます。</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/36111078/36208697.png" data-image-src="attachments/36111078/36208697.png" data-unresolved-comment-count="0" data-linked-resource-id="36208697" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson-install.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36111078" data-linked-resource-container-version="14"></span></p>
+
+<p>Jenkinsをインストールするディレクトリを選択してください。選択したディレクトリが <code>JENKINS_HOME</code> になり、データやプログラムをそこに保存します。<br/>
+インストールに成功すると、Jenkinsの再起動を確認する画面を表示します。</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/36111078/36208699.png" data-image-src="attachments/36111078/36208699.png" data-unresolved-comment-count="0" data-linked-resource-id="36208699" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson-reboot-confirm.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36111078" data-linked-resource-container-version="14"></span></p>
+
+<p>これは、新規にインストールしたWindowsのサービスとしてJenkinsを再起動するためです。実行をクリックすると、再起動が完了するまで待つように指示されます。</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/36111078/36208700.png" data-image-src="attachments/36111078/36208700.png" data-unresolved-comment-count="0" data-linked-resource-id="36208700" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson-restarting.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36111078" data-linked-resource-container-version="14"></span></p>
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>もし何らかの原因で再起動に失敗したら、インストールしたディレクトに保存されているJenkinsの出力を確認します。</p></div></div>
+
+<p>At this point you can use the service manager to confirm that Jenkins is running as a service.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/36111078/36208701.png" data-image-src="attachments/36111078/36208701.png" data-unresolved-comment-count="0" data-linked-resource-id="36208701" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson-service.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36111078" data-linked-resource-container-version="14"></span></p>
+
+<h2 id="JenkinsをWindowsサービスとしてインストールする-InstallSlaveasaWindowsservice">Install Slave as a Windows service</h2>
+<p>Jenkins also allows you to install a slave agent as a Windows service. (See <a href="Distributed-builds_32047141.html">Distributed builds</a> for more about how to do distribute builds in general.)</p>
+
+<p>First, you configure your slave to run as a JNLP slave agent. This should create a JNLP launch icon in the corresponding page, as shown below:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave-launch-icon.png"></span></p>
+
+<p>From the slave machine, launch a slave agent. You should see a window like this:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave.png"></span></p>
+
+<p>Choose &quot;File&quot; &gt; &quot;Install as Windows Service&quot; from the menu:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave-install-menu.png"></span></p>
+
+<p>Confirm your intention to install as a service. The installation will place the program files to the directory designated as the slave root directory (from the &quot;configure executors&quot; screen.)</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave-install-confirm.png"></span></p>
+
+<p>Once the installation succeeds, you'll be asked if you'd like to stop the current slave agent and immediately start a slave agent.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave-reboot-confirm.png"></span></p>
+
+<p>When you click &quot;OK&quot;, the slave agent window will terminate. The new slave agent runs as a service without showing a window, so head over to the service manager from the control panel and confirm that the slave agent is indeed running as a service:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="plugins/servlet/confluence/placeholder/unknown-attachment" title="slave-service.png"></span></p>
+
+
+<h2 id="JenkinsをWindowsサービスとしてインストールする-Changingtheconfigurationofservices">Changing the configuration of services</h2>
+<p>The JVM launch parameters of these Windows services are controlled by an XML file <code>jenkins.xml</code> and <code>jenkins-slave.xml</code> respectively. These files can be found in <code>$JENKINS_HOME</code> and in the slave root directory, respectively.</p>
+
+<p>The file format should be self-explanatory. Tweak the arguments for example to give JVM a bigger memory.</p>
+
+<p>Stdout and stderr from the service processes go to log files in the same directory.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208696.png">hudson-manage-menu.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208698.png">hudson-install.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208697.png">hudson-install.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208699.png">hudson-reboot-confirm.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208700.png">hudson-restarting.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111078/36208701.png">hudson-service.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="comments" class="pageSectionTitle">Comments:</h2>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-51544131"></a>
+                                    <font class="smallfont"><p>This book provides an exceptionally lucid treatment of classical electrodynamics~<a class="external-link" href="http://www.jordansforsale.cc" rel="nofollow">http://www.jordansforsale.cc</a> <br class="atl-forced-newline"/></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Jan 10, 2011 23:41
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    </div>
+                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

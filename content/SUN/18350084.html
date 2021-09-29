@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sun&#39;s Hudson deployment : JVM crash at memcpy+0x1c</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Sun&#39;s Hudson deployment</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_17465352.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Investigation-Notes_18153477.html">Investigation Notes</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Sun&#39;s Hudson deployment : JVM crash at memcpy+0x1c
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Apr 03, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>On jennings, <a href="http://kohsuke.sfbay/hudson/view/GFv3/job/glassfish-v3-devbuild/763/" class="external-link" rel="nofollow">a glassfish-v3-devbuild failed</a> with JVM crash:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0xb7df034c, pid=22973, tid=3084225424
+#
+# Java VM: Java HotSpot(TM) Server VM (1.6.0_02-b05 mixed mode)
+# Problematic frame:
+# C  [libc.so.6+0x6f34c]  memcpy+0x1c
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x08058800):  JavaThread &quot;main&quot; [_thread_in_native, id=22982]
+
+siginfo:si_signo=11, si_errno=0, si_code=2, si_addr=0x8fd7a000
+
+Registers:
+EAX=0x084e19c0, EBX=0xb7ca071c, ECX=0x00002b40, EDX=0x8fd78d8e
+ESP=0xb7d56a24, EBP=0xb7d56a50, ESI=0x8fd79ffd, EDI=0x083880e1
+EIP=0xb7df034c, CR2=0x8fd7a000, EFLAGS=0x00010212
+
+Top of Stack: (sp=0xb7d56a24)
+0xb7d56a24:   b7c9bd4b 08386ea0 8fd78dbc 0000bf41
+0xb7d56a34:   08057b84 00004d00 00000000 0000bf41
+0xb7d56a44:   b7ca071c 900ba0dc 00000000 b7d56a80
+0xb7d56a54:   b7c9bfbb 900ba290 900ba0dc 00000000
+0xb7d56a64:   08056398 08058800 b7d56aec 5bbd78a2
+0xb7d56a74:   b7ca071c b7d56ac8 080588ec b7d56ef0
+0xb7d56a84:   b7c93169 900ba290 b7d56ac8 00000014
+0xb7d56a94:   00000014 b7d56ac8 b7d56acc 0644a7cb 
+
+Instructions: (pc=0xb7df034c)
+0xb7df033c:   8b 74 24 08 fc d1 e9 73 01 a4 d1 e9 73 02 66 a5
+0xb7df034c:   f3 a5 89 c7 89 d6 8b 44 24 04 c3 90 90 90 90 90 
+
+Stack: [0xb7d08000,0xb7d59000),  sp=0xb7d56a24,  free space=314k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libc.so.6+0x6f34c]  memcpy+0x1c
+C  [libzip.so+0xbfbb]  ZIP_GetEntry+0x10b
+C  [libzip.so+0x3169]  Java_java_util_zip_ZipFile_getEntry+0xc9
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+J  java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
+J  sun.misc.URLClassPath$JarLoader.getResource(Ljava/lang/String;Z)Lsun/misc/Resource;
+J  sun.misc.URLClassPath$1.next()Z
+j  sun.misc.URLClassPath$1.hasMoreElements()Z+1
+j  java.net.URLClassLoader$3$1.run()Ljava/lang/Object;+7
+v  ~StubRoutines::call_stub
+J  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedAction;Ljava/security/AccessControlContext;)Ljava/lang/Object;
+J  org.codehaus.classworlds.DefaultClassRealm.findResources(Ljava/lang/String;)Ljava/util/Enumeration;
+j  org.codehaus.classworlds.RealmClassLoader.findResources(Ljava/lang/String;)Ljava/util/Enumeration;+5
+j  java.lang.ClassLoader.getResources(Ljava/lang/String;)Ljava/util/Enumeration;+37
+j  aQute.lib.osgi.Analyzer.getBndManifest()V+18
+j  aQute.lib.osgi.Analyzer.getVersion()Ljava/lang/String;+1
+j  aQute.lib.osgi.Analyzer.calcManifest()Ljava/util/jar/Manifest;+95
+j  aQute.lib.osgi.Builder.build()LaQute/lib/osgi/Jar;+46
+j  org.apache.felix.bundleplugin.BundlePlugin.buildOSGiBundle(Lorg/apache/maven/project/MavenProject;Ljava/util/Map;Ljava/util/Properties;[LaQute/lib/osgi/Jar;)LaQute/lib/osgi/Builder
+;+206
+j  org.apache.felix.bundleplugin.BundlePlugin.execute(Lorg/apache/maven/project/MavenProject;Ljava/util/Map;Ljava/util/Properties;[LaQute/lib/osgi/Jar;)V+24
+j  org.apache.felix.bundleplugin.BundlePlugin.execute(Lorg/apache/maven/project/MavenProject;Ljava/util/Map;Ljava/util/Properties;)V+9
+j  org.apache.felix.bundleplugin.BundlePlugin.execute()V+109
+j  org.apache.maven.plugin.DefaultPluginManager.executeMojo(Lorg/apache/maven/project/MavenProject;Lorg/apache/maven/plugin/MojoExecution;Lorg/apache/maven/execution/MavenSession;)V+4
+07
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoals(Ljava/util/List;Ljava/util/Stack;Lorg/apache/maven/execution/MavenSession;Lorg/apache/maven/project/MavenProject;)V
++184
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoalWithLifecycle(Ljava/lang/String;Ljava/util/Stack;Lorg/apache/maven/execution/MavenSession;Ljava/util/Map;Lorg/apache/
+maven/project/MavenProject;Lorg/apache/maven/lifecycle/Lifecycle;)V+28
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoal(Ljava/lang/String;Lorg/apache/maven/execution/MavenSession;Lorg/apache/maven/project/MavenProject;)V+50
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoalAndHandleFailures(Ljava/lang/String;Lorg/apache/maven/execution/MavenSession;Lorg/apache/maven/project/MavenProject;L
+org/apache/maven/monitor/event/EventDispatcher;Ljava/lang/String;Lorg/apache/maven/execution/ReactorManager;JLjava/lang/String;)V+4
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeTaskSegments(Ljava/util/List;Lorg/apache/maven/execution/ReactorManager;Lorg/apache/maven/execution/MavenSession;Lorg/apa
+che/maven/project/MavenProject;Lorg/apache/maven/monitor/event/EventDispatcher;)V+554
+j  org.apache.maven.lifecycle.DefaultLifecycleExecutor.execute(Lorg/apache/maven/execution/MavenSession;Lorg/apache/maven/execution/ReactorManager;Lorg/apache/maven/monitor/event/Even
+tDispatcher;)V+90
+j  org.apache.maven.DefaultMaven.doExecute(Lorg/apache/maven/execution/MavenExecutionRequest;Lorg/apache/maven/monitor/event/EventDispatcher;)Lorg/apache/maven/execution/ReactorManage
+r;+442
+j  org.apache.maven.DefaultMaven.execute(Lorg/apache/maven/execution/MavenExecutionRequest;)V+26
+j  org.apache.maven.cli.MavenCli.main([Ljava/lang/String;Lorg/codehaus/classworlds/ClassWorld;)I+730
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+j  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+161
+j  org.codehaus.classworlds.Launcher.launchEnhanced([Ljava/lang/String;)V+50
+j  org.codehaus.classworlds.Launcher.launch([Ljava/lang/String;)V+2
+j  org.codehaus.classworlds.Launcher.mainWithExitCode([Ljava/lang/String;)I+99
+j  org.codehaus.classworlds.Launcher.main([Ljava/lang/String;)V+1
+v  ~StubRoutines::call_stub
+</pre>
+</div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

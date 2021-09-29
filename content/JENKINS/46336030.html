@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Global Build Stats Plugin - JSON &amp; REST APIs</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins_753688.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Global-Build-Stats-Plugin_42470180.html">Global Build Stats Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Global Build Stats Plugin - JSON &amp; REST APIs
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fcamblor)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View global-build-stats <a href="https://plugins.jenkins.io/global-build-stats" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-10-23/" class="external-link" rel="nofollow">CSRF and XSS vulnerabilities</a></li>
+</ul>
+
+</div></div>
+
+
+<p>This wiki entry is intended to describe <a href="Global-Build-Stats-Plugin_42470180.html">global-build-stats</a> REST API to manually gather informations about your jenkins build statistics.</p>
+
+<h1 id="GlobalBuildStatsPlugin-JSON&amp;RESTAPIs-Buildstatschart">Build stats chart</h1>
+
+<p>You can retrieve chart depending on its id, by requesting the following URL : &lt;jenkins/hudson_url&gt;/plugin/global-build-stats/showChart?buildStatId=<strong>&lt;Chart id&gt;</strong></p>
+
+<p><strong>&lt;Chart id&gt;</strong> can be retrieved on the &quot;edit chart&quot; screen (see below).</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46336030/59179014.png" data-image-src="attachments/46336030/59179014.png" data-unresolved-comment-count="0" data-linked-resource-id="59179014" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="gbs-identifier.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46336030" data-linked-resource-container-version="11"></span></p>
+
+<p><span style="text-decoration: underline;">By providing a chart id, no permission checking will be performed against current logged user.</span><br/>
+That's why it represents a perfect use case to share global build stats chart url between team members / managers.<br/>
+But beware : if, in the &quot;edit chart&quot; screen, you re-generate a new chart id, &quot;old&quot; url won't display anything (typically, useful to &quot;rollback&quot; the diffusion of chart url)</p>
+
+
+<h1 id="GlobalBuildStatsPlugin-JSON&amp;RESTAPIs-Buildstatschartoverview">Build stats chart overview</h1>
+
+<p>You can dynamically generate a new chart, by requesting the following URL : &lt;jenkins/hudson_url&gt;/plugin/global-build-stats/createChart?title=<strong>&lt;chart title&gt;</strong>&amp;buildStatWidth=<strong>&lt;chart width&gt;</strong>&amp;buildStatHeight=<strong>&lt;chart height&gt;</strong>&amp;historicScale=<strong>&lt;chart scale&gt;</strong>&amp;historicLength=<strong>&lt;chart length depending on historicScale&gt;</strong>&amp;jobFilter=<strong>&lt;job filtering&gt;</strong>&amp;nodeFilter=<strong>&lt;node filtering&gt;</strong>&amp;launcherFilter=<strong>&lt;launcher filtering&gt;</strong>&amp;successShown=<strong>&lt;displays successes ?&gt;</strong>&amp;failuresShown=<strong>&lt;displays failures ?&gt;</strong>&amp;unstablesShown=<strong>&lt;displays unstables ?&gt;</strong>&amp;abortedShown=<strong>&lt;displays aborted builds ?&gt;</strong>&amp;notBuildsShown=<strong>&lt;displays not builds&gt;</strong>&amp;buildStatusesShown=<strong>&lt;displays build statuses ?&gt;</strong>&amp;yAxisChartType=<strong>&lt;type of y axis fod build status&gt;</strong>&amp;totalBuildTimeShown=<strong>&lt;displays total build time ?&gt;</strong>&amp;averageBuildTimeShown=<strong>&lt;displays average build time ?&gt;</strong></p>
+
+<p>Only Jenkins/Hudson <strong><span style="text-decoration: underline;">ADMINISTRATORS</span></strong> will have access to this url (this url is typically used for chart overview). If you don't want to check permissions, use the previous URL.</p>
+
+<p>Detailed values for different fields are given here :</p>
+<ul>
+	<li>buildStatWidth &amp; buildStatHeight : should be number of pixels</li>
+	<li>historicScale : should be an item in { HOURLY, HOURLY_FROM_NOW, DAILY, DAILY_FROM_NOW, WEEKLY, WEEKLY_FROM_NOW, MONTHLY, MONTHLY_FROM_NOW, YEARLY, YEARLY_FROM_NOW }</li>
+	<li>historicLength : should be a number of steps in <em>historicScale</em>. For example, if historicScale is equal to DAILY, historicLenght will corresponds to &quot;number of DAYS&quot;</li>
+	<li>jobFilter : should be equal to ALL <em>or</em> fieldRegex(<strong><em>regex for job name</em></strong>)</li>
+	<li>nodeFilter : should be equal to ALL <em>or</em> fieldRegex(<strong><em>regex for node name</em></strong>). Special node regex ^master$ can be used to filter only on jobs executed on the master.</li>
+	<li>launcherFilter : should be equal to ALL <em>or</em> fieldRegex(<strong><em>regex for user name who launched the build</em></strong>). Special launcher regex ^SYSTEM$ can be used to filter only on jobs that has been launched <em>automatically</em> by jenkins/hudson.</li>
+	<li>successShown, failuresShown, unstablesShown, abortedShown, notBuildsShown, buildStatusesShown, totalBuildTimeShown, averageBuildTimeShown : should be booleans</li>
+	<li>yAxisChartType : is only used if buildStatusesShown=true. Should be an item in { COUNT, PERCENTAGE }</li>
+</ul>
+
+
+<h1 id="GlobalBuildStatsPlugin-JSON&amp;RESTAPIs-Buildstatschartconfigurationdata">Build stats chart configuration data</h1>
+
+<p>You can retrieve persisted build stat chart configuration by requesting the following URL : &lt;jenkins/hudson_url&gt;/plugin/global-build-stats/api/json?depth=2</p>
+
+<p>Here is some data sample returned by this call :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">&quot;buildStatConfigs&quot;:
+[
+  {
+    &quot;id&quot;:&quot;gdJTZ1t!vf6nvnLZcyctEY4495xkn0ep&quot;,
+    &quot;buildStatTitle&quot;:&quot;Commits build des 15 derniers jours (pas de rouge !!)&quot;,
+    &quot;buildStatWidth&quot;:800,
+    &quot;buildStatHeight&quot;:600,
+    &quot;historicLength&quot;:15,
+    &quot;historicScale&quot;:&quot;DAILY_FROM_NOW&quot;,
+    &quot;dimensionsShown&quot;: [&quot;BUILD_COUNTER&quot;,&quot;BUILD_TOTAL_DURATION&quot;,&quot;BUILD_AVERAGE_DURATION&quot;],
+    &quot;averageBuildTimeShown&quot;:true,
+    &quot;buildStatusesShown&quot;:true,
+    &quot;yAxisChartType&quot;:&quot;COUNT&quot;
+    &quot;totalBuildTimeShown&quot;:true,
+    &quot;buildFilters&quot;:
+    {
+      &quot;jobFilter&quot;:&quot;fieldRegex(.*commit\\sbuild.*)&quot;,
+      &quot;nodeFilter&quot;:&quot;ALL&quot;,
+      &quot;abortedShown&quot;:true,
+      &quot;failuresShown&quot;:true,
+      &quot;notBuildShown&quot;:false,
+      &quot;successShown&quot;:true,
+      &quot;unstablesShown&quot;:true
+    },
+  },
+  etc...
+]
+</pre>
+</div></div>
+<p>This most important information is the &quot;id&quot; field which will be useful for next section.<br/>
+jobFilter and nodeFilter values should be either &quot;ALL&quot; or &quot;fieldRegex(&lt;put here a regex&gt;)&quot;.<br/>
+yAxisChartType should be provided only if buildStatusesShown is set to true.<br/>
+dimensionsShown attribute is redundant with averageBuildTimeShown, buildStatusesShown &amp; totalBuildTimeShown attributes.</p>
+
+
+<h1 id="GlobalBuildStatsPlugin-JSON&amp;RESTAPIs-Buildstatschartdata">Build stats chart data</h1>
+
+
+<p>You can retrieve persisted build stat configuration displayed via a chart by requesting the following URL : &lt;jenkins/hudson_url&gt;/plugin/global-build-stats/api/json?depth=2&amp;buildStatConfigId=<strong>&lt;build stat chart id&gt;</strong></p>
+
+<p>Here is some data sample returned by this call :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">&quot;dimensions&quot;:
+  [
+    // Build result dimension (will appear only if &quot;display build statuses&quot; is checked on buildStatConfig)
+    {
+       // Columns represent time scales
+       &quot;columns&quot;:
+         [
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725}
+	 ],
+        // Rows represent possible build results for the buildStatConfig (statuses checked in build stat config&#39;s status filter)
+	&quot;rows&quot;:
+	 [
+	   &quot;5) Success&quot;,
+	   &quot;4) Failures&quot;,
+	   &quot;3) Unstables&quot;,
+	   &quot;2) Aborted&quot;,
+	   &quot;1) Not build&quot;,
+	   &quot;5) Success&quot;,
+	   &quot;4) Failures&quot;,
+	   &quot;3) Unstables&quot;,
+	   &quot;2) Aborted&quot;,
+	   &quot;1) Not build&quot;,
+	   &quot;5) Success&quot;,
+	   &quot;4) Failures&quot;,
+	   &quot;3) Unstables&quot;,
+	   &quot;2) Aborted&quot;,
+	   &quot;1) Not build&quot;,
+          ],
+         // Values represent cell intersections for rows &amp; columns, corresponding to current dimension (ie number/percentage of builds for [time scale, build status])
+	 &quot;values&quot;:
+	  [
+	    38,0,0,0,0,
+	    24,0,0,0,0,
+	    21,2,0,0,0
+	  ]
+    },
+    // Total build time dimension
+    {
+       // Columns represent time scales (will appear only if &quot;display total build time&quot; is checked on buildStatConfig)
+       &quot;columns&quot;:
+         [
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725}
+	 ],
+	&quot;rows&quot;:
+	 [
+	   &quot;Total build time&quot;,
+	   &quot;Total build time&quot;,
+	   &quot;Total build time&quot;
+	 ],
+         // Values represent cell intersections for rows &amp; columns, corresponding to current dimension (ie total build time of builds for every time scale)
+	 &quot;values&quot;:
+	 [
+	    1955.534,
+	    2689.148,
+	    5422.011
+	 ]
+    },
+    // Average build time dimension (will appear only if &quot;display average build time&quot; is checked on buildStatConfig)
+    {
+       // Columns represent time scales
+       &quot;columns&quot;:
+         [
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725},
+	  {&quot;end&quot;:1284413298725,&quot;start&quot;:1284326898725}
+	 ],
+	&quot;rows&quot;:
+	 [
+	   &quot;Avg build time&quot;,
+	   &quot;Avg build time&quot;,
+	   &quot;Avg build time&quot;
+	 ],
+         // Values represent cell intersections for rows &amp; columns, corresponding to current dimension (ie average build time of builds for every time scale)
+	 &quot;values&quot;:
+	 [
+	    51.46142105263158,
+	    112.04783333333333,
+	    235.73960869565218
+	 ]
+    }
+  ]
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46336030/59179014.png">gbs-identifier.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:25</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

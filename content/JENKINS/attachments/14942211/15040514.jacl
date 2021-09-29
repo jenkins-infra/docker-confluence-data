@@ -1,0 +1,272 @@
+###
+### manages the actions of install, uninstall apps to WebSphere 6.1 ND
+###
+### see the Main section below for further details
+###
+### v1.1 / 17.03.2008 - customized to deploy war archives for hudson (hudson.dev.java.net)
+###
+### Ilko Iliev
+
+proc redeployApplication { appName earName cellName nodeName serverName contextRoot webModuleName mappingHost hudsonHomeDir } {
+	undeployApplication $appName $cellName $nodeName $serverName
+	deployApplication $appName $earName $cellName $nodeName $serverName $contextRoot $webModuleName $mappingHost $hudsonHomeDir
+}
+
+proc deployApplication { appName earName cellName nodeName serverName contextRoot webModuleName mappingHost hudsonHomeDir } {
+	set rc [installApplication $appName $earName $cellName $nodeName $serverName $contextRoot $webModuleName $mappingHost $hudsonHomeDir]
+	if { $rc == 0 } {
+		listApplications $cellName $nodeName $serverName
+		startApplication $appName $nodeName $serverName
+	} else {
+		exit $rc
+	}
+}
+
+proc undeployApplication { appName cellName nodeName serverName } {
+	stopApplication $appName $nodeName $serverName
+	uninstallApplication $appName $cellName $nodeName $serverName
+	listApplications $cellName $nodeName $serverName
+}
+
+proc stopApplication { appName nodeName serverName} {
+	global AdminControl
+	set appExists [checkIfAppExists $appName]
+	if { $appExists } {
+		set appStarted [checkIfAppStarted $appName $serverName $nodeName]
+		if { $appStarted } {
+			set  appMgrID [$AdminControl queryNames type=ApplicationManager,node=$nodeName,process=$serverName,*]
+			set  length [llength $appMgrID]
+    		if { $length >= 1} {
+            	set stopped ""
+            	set temp [catch {set  stopped [$AdminControl invoke $appMgrID stopApplication $appName]}]
+            	if { $temp > 0 } {
+                    puts "stopApplication $appName FAILED: Exception trying to stop $appName $nodeName $serverName"
+            	} else {
+                    if { [llength $stopped] > 0 } {
+                            puts $stopped
+                    }
+            	}
+    		} else {
+            	puts "stopApplication $appName FAILED: appMgr ERROR, NOT ACCESSABLE, cannot stop"
+    		}
+    		puts "stopApplication $appName: DONE."
+		} else {
+			puts "stopApplication $appName FAILED: application not started."
+		}
+	} else {
+		puts "stopApplication $appName FAILED: application does not exist."
+	}
+}
+
+proc startApplication { appName nodeName serverName } {
+	global AdminControl
+	set appExists [checkIfAppExists $appName]
+	if { $appExists } {
+		set appStarted [checkIfAppStarted $appName $serverName $nodeName]
+		if { $appStarted } {
+			puts "startApplication $appName FAILED: application already started."
+		} else {
+			set  appMgrID [$AdminControl queryNames type=ApplicationManager,node=$nodeName,process=$serverName,*]
+			set  length [llength $appMgrID]
+    		if { $length >= 1} {
+    			set started ""
+            	set temp [catch {set  started [$AdminControl invoke $appMgrID startApplication $appName]}]
+            	if { $temp > 0 } {
+                    puts "startApplication $appName FAILED: Exception trying to start $appName $nodeName $serverName"
+            	} else {
+                    if { [llength $started] > 0 } {
+                            puts $started
+                    }
+            	}
+    		} else {
+            	puts "startApplication $appName FAILED: appMgr ERROR, NOT ACCESSABLE, cannot start"
+    		}
+    		puts "startApplication $appName: DONE."
+    	}
+	} else {
+		puts "startApplication $appName FAILED: application does not exist."
+	}
+}
+
+proc startServer { serverName nodeName cellName } {
+	global AdminControl
+	set server [$AdminControl completeObjectName cell=$cellName,node=$nodeName,name=$serverName,type=Server,*]
+	set serverState [$AdminControl getAttribute $server state]
+	if { serverState == "" } {
+		$AdminControl startServer $serverName $nodeName
+	}
+}
+
+proc stopServer { serverName nodeName } {
+	global AdminControl
+	$AdminControl stopServer $serverName $nodeName immediate
+	set server [$AdminControl completeObjectName cell=$cellName,node=$nodeName,name=$serverName,type=Server,*]
+	set serverState [$AdminControl getAttribute $server state]
+	if { serverState == "" } {
+	
+	}
+}
+
+proc installApplication { appName earName cellName nodeName serverName contextRoot webModuleName mappingHost hudsonHomeDir } {
+	global AdminApp
+	global AdminControl
+	global AdminConfig
+	set rc 0
+	set appExists [checkIfAppExists $appName]
+	if { $appExists } {
+		puts "installApplication $appName $nodeName $serverName FAILED: application already exists."
+		set rc -1
+	} else {
+		set opts "-cell $cellName -node $nodeName -server $serverName -appname $appName -contextroot $contextRoot -MapWebModToVH {{.*  .*  $mappingHost}}"
+		if { $hudsonHomeDir == "" } {
+			puts "Installing $appName with default home dir"
+			$AdminApp install $earName "$opts"
+		} else {
+			puts "Installing $appName with $hudsonHomeDir as home dir"
+			set hudsonOpts "-MapEnvEntryForWebMod {{\"Hudson\" $webModuleName,WEB-INF/web.xml HUDSON_HOME String null $hudsonHomeDir }}"
+			$AdminApp install $earName "$opts $hudsonOpts"
+		}
+		changeClassLoaderModeToPARENT_LAST $appName $webModuleName
+		saveConfigAndSync $nodeName
+		puts "installApplication $appName $nodeName $serverName: DONE."
+	}
+	return $rc
+}
+
+proc uninstallApplication { appName cellName nodeName serverName } {
+	global AdminApp
+	global AdminControl
+	global AdminConfig
+	set appExists [checkIfAppExists $appName]
+	if { $appExists } {
+		$AdminApp uninstall $appName "-cell $cellName -node $nodeName -server $serverName"
+		saveConfigAndSync $nodeName
+		puts "uninstallApplication $appName $nodeName $serverName: DONE."
+	} else {
+		puts "uninstallApplication $appName $nodeName $serverName FAILED: application does not exist." 
+	}
+}
+
+proc listApplications { cellName nodeName serverName } {
+	global AdminApp
+	puts "listApplications for $cellName $nodeName $serverName ..."
+	puts "--------------------------------------------------------"
+	set allapps [$AdminApp list WebSphere:cell=$cellName,node=$nodeName,server=$serverName]
+	foreach app $allapps {
+		puts $app
+	}
+	puts "--------------------------------------------------------"
+}
+
+proc checkIfAppExists { appName } {
+	global AdminConfig
+	set appExists true
+    set application [$AdminConfig  getid  /Deployment:$appName/]
+    if { [llength $application] ==0 } {
+		set appExists false
+    }
+    return $appExists
+}
+
+proc checkIfAppStarted { appName serverName nodeName } {
+	global AdminControl
+	set appID [$AdminControl completeObjectName type=Application,node=$nodeName,Server=$serverName,name=$appName,*]
+	set isRunning false
+	if { [llength $appID] > 0 } {
+		set isRunning true
+	}
+	return $isRunning
+}
+
+proc changeClassLoaderModeToPARENT_LAST { appName webModuleName } {
+	global AdminConfig
+	set app [$AdminConfig getid /Deployment:$appName/]
+	set webModules [$AdminConfig list WebModuleDeployment $app]
+	 
+	foreach webModule $webModules {
+		set uri [$AdminConfig showAttribute  $webModule uri]
+    if {$uri  == "$webModuleName"} {
+    	#modify the classloader for <WAR_NAME>
+      set cl [$AdminConfig list Classloader $webModule]
+      # check if the classloader exist 
+      if {$cl == ""} {
+      	# create a new one with the appropriate mode
+        $AdminConfig create Classloader $webModule  {{mode PARENT_LAST}}
+      } else {
+        # modify the existing one
+        $AdminConfig modify $cl {{mode PARENT_LAST}}
+      }
+  	}
+	}
+
+}
+
+proc saveConfigAndSync { nodeName } {
+	global AdminConfig
+	global AdminControl
+	$AdminConfig save
+	# if BASE server edition is used comment this line
+	$AdminControl invoke [$AdminControl completeObjectName type=NodeSync,node=$nodeName,*] sync
+}
+
+proc printUsage { } {
+	puts "Syntax: main.jacl <propertyFile> <action> [earName]"
+	puts "  where <propertyFile> is the name of the file containing"
+	puts "  configuration information, <action> is one of deploy, undeploy or redeploy "
+	puts "  and earName is the full filename (or relative) of the "
+	puts "  EAR to install (not necessary, if action is undeploy)."
+}
+
+proc loadProperties { propFileName } {
+    java::import java.io.FileInputStream
+    java::import java.util.Properties
+    
+    set fileprop [java::new Properties]
+    set fileStream [java::new FileInputStream $propFileName]
+    
+    $fileprop load $fileStream
+    return $fileprop
+}
+
+########################################
+### 
+###  Main
+###
+########################################
+
+if { $argc < 2 } {
+	printUsage
+	exit 0
+}
+
+set propsFileName [lindex $argv 0]
+set props [loadProperties $propsFileName]
+
+set appName 					[$props getProperty wasAppName]
+set cellName					[$props getProperty wasCellName]
+set nodeName					[$props getProperty wasNodeName]
+set serverName  			[$props getProperty wasServerName]
+set contextRoot				[$props getProperty contextRoot]
+set webModuleName 		[$props getProperty webModuleName]
+set mappingHost 			[$props getProperty mappingVirtualHost]
+set hudsonHomeDir 		[$props getProperty hudsonHomeDir]
+
+set action						[string tolower [lindex $argv 1]]
+
+if { $action =="deploy" || $action=="redeploy" } {
+	if { $argc < 3 } {
+		printUsage
+		exit 0
+	}
+	set earName [lindex $argv 2]
+	if { $action=="redeploy" } {
+		redeployApplication $appName $earName $cellName $nodeName $serverName $contextRoot $webModuleName $mappingHost $hudsonHomeDir
+	} else {
+		deployApplication $appName $earName $cellName $nodeName $serverName $contextRoot $webModuleName $mappingHost $hudsonHomeDir
+	}
+	puts "Application $appName installed. You have to manually restart the server $serverName before using the application!"
+} else {
+	if { $action =="undeploy" } {
+		undeployApplication $appName $cellName $nodeName $serverName
+	}
+}

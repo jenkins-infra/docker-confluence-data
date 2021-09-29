@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Installing Hudson as a Windows service (old)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins_753702.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Installing-Jenkins-as-a-Windows-service_3604487.html">Installing Jenkins as a Windows service</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Installing Hudson as a Windows service (old)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Sep 27, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Note that there is no requirement that the Hudson master server is running as a Windows service in order to run agents as a Windows service. For more information on how to set up just an agent go to <a href="#InstallingHudsonasaWindowsservice(old)-Hudsonagentservice">#Hudson agent service</a></p>
+
+<h1 id="InstallingHudsonasaWindowsservice(old)-Hudsonmasterserver">Hudson master server</h1>
+
+<p>Running Hudson master server as a windows service can be done in several ways, either through the servlet containers or using the Winstone container. This section describes how to run Hudson master server using the Winstone container.</p>
+
+<p>To run the Hudson master server as a windows service using <a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=Winstone&amp;linkCreation=true&amp;fromPageId=36111023">Winstone</a> the <a href="http://wrapper.tanukisoftware.org" class="external-link" rel="nofollow">Java Service Wrapper </a> can be used to integrate Hudson as a Windows service. The below parts will get you up and running with Hudson as a Windows service but for more information please see the JSW site.</p>
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Installation">Installation</h2>
+
+<ol>
+	<li>Download the latest <a href="https://hudson.dev.java.net/servlets/ProjectDocumentList?folderID=2761" class="external-link" rel="nofollow">Hudson.war </a> file. <em>IE users: Make sure that the file is downloaded as a .war file.</em></li>
+	<li>Download the Hudson Windows Service package from <a href="attachments/36111023/36208680.zip" data-linked-resource-id="36208680" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_master.zip" data-nice-type="Zip Archive" data-linked-resource-content-type="application/zip" data-linked-resource-container-id="36111023" data-linked-resource-container-version="4">this page</a>. <em>The package uses Wrapper 3.2.3</em></li>
+	<li>Unzip the Hudson package into an empty folder. You should now have the following layout:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Hudson
+ +- bin
+ |   +- Hudson.bat
+ |   +- InstallHudson.bat
+ |   +- UninstallHudson.bat
+ |   +- wrapper.exe
+ +- conf
+ |   +- wrapper.conf
+ +- lib
+ |   +- wrapper.jar
+ |   +- wrapper.dll
+</pre>
+</div></div></li>
+	<li>Copy the <code>Hudson.war</code> to the <code>lib</code> folder</li>
+	<li>Now the file layout is setup so Hudson can be installed as a service.</li>
+</ol>
+
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Configuration">Configuration</h2>
+
+<p>The JSW reads from the <code>conf/wrapper.conf</code> and is ready to be used. The default home path for Hudson is <code>data</code>, and if you want to change that you need to edit the configuration.</p>
+
+<p>If you don't have a java.exe on your PATH, change the wrapper.java.command in conf/wrapper.conf from just &quot;java&quot; to e.g. wrapper.java.command=C:/jdk1.6.0_03/bin/java.</p>
+
+<p>Below is a condensed version of the configuration file for the Hudson options, the <code>conf/wrapper.conf</code> will also contain options for the Wrapper library.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Change below line to change the Hudson home path
+wrapper.java.additional.1=-DHUDSON_HOME=../data
+</pre>
+</div></div>
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Servicehandling">Service handling</h2>
+
+<ul>
+	<li>To install the service run <code>bin/InstallHudson.bat</code></li>
+	<li>To uninstall the service run <code>bin/UninstallHudson.bat</code></li>
+	<li>To start the service run <code>net start hudson</code></li>
+	<li>To stop the service run <code>net stop hudson</code></li>
+</ul>
+
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Frequentlyaskedquestions">Frequently asked questions</h2>
+
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-Troubleshooting/Logs">Troubleshooting / Logs</h4>
+
+<p>If the service doesn't start, have a look at the <code>wrapper.log</code> which will be created in the <code>bin</code> directory when the service attempts to start.</p>
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-Iwanttorunonadifferentportthandefault8080.">I want to run on a different port than default 8080.</h4>
+
+<p>Open up the <code>conf/wrapper.conf</code> and add the following line.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>wrapper.app.parameter.2=--httpPort=8090
+</pre>
+</div></div>
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-WhenItrytoruntheapplicationIgetwrapper|OpenSCManagerfailed-Accessdenied?">When I try to run the application I get <code>wrapper  | OpenSCManager failed - Access denied</code>?</h4>
+
+<p>This is because you don't have the necessary permissions, please ask an administrator to install the service.</p>
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-HowcanIruntheserviceasaspecifieduser?">How can I run the service as a specified user?</h4>
+
+<p>Open up the <code>conf/wrapper.conf</code> and change the following properties</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>wrapper.ntservice.account = accountname
+wrapper.ntservice.password = password
+</pre>
+</div></div>
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-WhydoesnttheHudsonserverstartinWindows64bit?">Why doesnt the Hudson server start in Windows 64bit?</h4>
+
+<p>Unfortunately the JSW does not support 64 bits Windows (as of now, 4th november 2007). You can install a 32bits version of Java and specify the Java in the <code>conf/wrapper.conf</code>.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>wrapper.java.command=c:\program files(x86)\java\bin\java.exe
+</pre>
+</div></div>
+
+<h1 id="InstallingHudsonasaWindowsservice(old)-Hudsonagentservice">Hudson agent service</h1>
+
+<p>To install the Hudson agents as a windows service the <a href="http://wrapper.tanukisoftware.org" class="external-link" rel="nofollow">Java Service Wrapper </a> can be used for integrating with Windows and <a href="http://jnlp.sourceforge.net/netx" class="external-link" rel="nofollow">Netx </a> for starting the agent using the Hudson JNLP application. It is almost as simple installing the Hudson master server, but there is one extra configuration step for each agent machine.</p>
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Installation.1">Installation</h2>
+
+<ol>
+	<li>Download the Hudson Agent package from <a href="attachments/36111023/36208681.zip" data-linked-resource-id="36208681" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_agent.zip" data-nice-type="Zip Archive" data-linked-resource-content-type="application/zip" data-linked-resource-container-id="36111023" data-linked-resource-container-version="4">this page</a>. <em>The package uses Wrapper 3.2.3, and Netx 0.5.0.</em></li>
+	<li>Unzip the Hudson package into an empty folder. You should now have the following layout:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Hudson
+ +- bin
+ |   +- HudsonAgent.bat
+ |   +- InstallHudsonAgent.bat
+ |   +- UninstallHudsonAgent.bat
+ |   +- wrapper.exe
+ +- cache (Web start cache needed by Netx)
+ +- conf
+ |   +- wrapper.conf
+ +- lib
+ |   +- wrapper.jar
+ |   +- wrapper.dll
+ |   +- netx-no-debug.jar
+</pre>
+</div></div></li>
+</ol>
+
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Configuration.1">Configuration</h2>
+
+<p>The JSW reads from the <code>conf/wrapper.conf</code> which must be updated before service is started. When installing the above packages on each agent, you must specify the JNLP file that should be started in the service. The JNLP file is unique for each agent, and the link can be found in the agent machine page.</p>
+<ol>
+	<li>Show the Hudson main page</li>
+	<li>Click on the agent link under the build queue</li>
+	<li>Copy the Web start link from the agent page</li>
+	<li>Update the <code>wrapper.app.parameter.7</code> with the link in the <code>conf/wrapper.conf</code>.</li>
+</ol>
+
+
+<p>Below is a condensed version of the configuration file for the Hudson options, the <code>conf/wrapper.conf</code> will also contain options for the Wrapper library.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Application parameters.  Add parameters as needed starting from 1
+wrapper.app.parameter.1=netx.jnlp.runtime.Boot
+wrapper.app.parameter.2=-headless
+wrapper.app.parameter.3=-basedir
+wrapper.app.parameter.4=../cache
+wrapper.app.parameter.5=-nosecurity
+wrapper.app.parameter.6=-jnlp
+wrapper.app.parameter.7=http://akira:8090/computer/WS-1/slave-agent.jnlp
+</pre>
+</div></div>
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Servicehandling.1">Service handling</h2>
+
+<ul>
+	<li>To install the service run <code>bin/InstallHudsonAgent.bat</code></li>
+	<li>To uninstall the service run <code>bin/UninstallHudsonAgent.bat</code></li>
+	<li>To start the service run <code>net start hudson-agent</code></li>
+	<li>To start the service run <code>net stop hudson-agent</code></li>
+</ul>
+
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-Frequentlyaskedquestions.1">Frequently asked questions</h2>
+
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-Themasterserverhasbeenupdated,howdoIupdateallagents?">The master server has been updated, how do I update all agents?</h4>
+
+<p>Stopping and starting the services will initiate a download of the new JNLP agent application.</p>
+
+<h2 id="InstallingHudsonasaWindowsservice(old)-OtherServiceOptions">Other Service Options</h2>
+
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-FireDaemonLiteV1.6">FireDaemon Lite V1.6</h4>
+
+<p>Summary:</p>
+
+<p>Allows managing/creating/deleting all Windows services and using any application as a service, free of charge</p>
+
+<p><a href="http://www.google.com/search?hl=en&amp;q=FireDaemon-Lite-1_6-GA.exe&amp;btnG=Google+Search" class="external-link" rel="nofollow">http://www.google.com/search?hl=en&amp;q=FireDaemon-Lite-1_6-GA.exe&amp;btnG=Google+Search</a></p>
+
+<p>Pros:</p>
+<ul>
+	<li>GUI</li>
+	<li>Optionally restarts application after crashing</li>
+	<li>Vast advanced options, like where to send stdout, logging, debugging of starting the service, etc.</li>
+	<li>Free of charge</li>
+</ul>
+
+
+<p>Cons:</p>
+<ul>
+	<li>Didn't manage to set credentials for the service, used Windows services panel for that</li>
+	<li>Didn't see mechanism to run service shutdown program/script for graceful shutdown</li>
+	<li>Unsupported by vendor</li>
+</ul>
+
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-ServiceAllSvc">ServiceAllSvc</h4>
+
+<p>Summary:</p>
+
+<p>Installs/removes any program as a service, free of charge</p>
+
+<p><a href="http://home.arcor.de/blackwell/current.html" class="external-link" rel="nofollow">http://home.arcor.de/blackwell/current.html</a></p>
+
+<p>Pros:</p>
+<ul>
+	<li>Supports service stop script/program</li>
+	<li>Free of charge</li>
+	<li>Open source</li>
+</ul>
+
+
+<p>Cons:</p>
+<ul>
+	<li>Written in Delphi (4)</li>
+	<li>Unsupported by vendor</li>
+</ul>
+
+
+<p> Example:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+cd c:\hudson
+copy c:\ServiceAllSvc\ServiceAllSvc.exe MyHudsonService.exe
+MyHudsonService.exe -install &quot;Hudson Build System&quot; &quot;cmd.exe /c c:\hudson\start.cmd&quot; &quot;cmd.exe /c c:\hudson\stop.cmd&quot;
+</pre>
+</div></div>
+
+<h4 id="InstallingHudsonasaWindowsservice(old)-sc.exe(includedinWindowsXP)">sc.exe (included in Windows XP)</h4>
+
+<p>Summary:</p>
+
+<p>Installs/removes/manages services, runs any program as a service</p>
+
+<p>Pros:</p>
+<ul>
+	<li>Built-in to Windows XP</li>
+	<li>Allows configuring various service options</li>
+</ul>
+
+
+<p>Cons:</p>
+<ul>
+	<li>Perhaps not as easy to use as it could be</li>
+</ul>
+
+
+<p>Example:</p>
+
+<p><a href="http://makemsi-manual.dennisbareis.com/cmdasuser_exe.htm" class="external-link" rel="nofollow">http://makemsi-manual.dennisbareis.com/cmdasuser_exe.htm</a> 
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111023/36208680.zip">hudson_master.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36111023/36208681.zip">hudson_agent.zip</a> (application/zip)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,96 @@
+Thread Dump
+Channel reader thread: channel
+
+"Channel reader thread: channel" Id=9 Group=main RUNNABLE (in native)
+	at java.io.FileInputStream.readBytes(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:199)
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:218)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:237)
+	-  locked java.io.BufferedInputStream@1e492d8
+	at java.io.ObjectInputStream$PeekInputStream.peek(ObjectInputStream.java:2249)
+	at java.io.ObjectInputStream$BlockDataInputStream.peek(ObjectInputStream.java:2542)
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:2552)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1297)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:351)
+	at hudson.remoting.Channel$ReaderThread.run(Channel.java:856)
+
+
+main
+
+"main" Id=1 Group=main WAITING on hudson.remoting.Channel@10f11b8
+	at java.lang.Object.wait(Native Method)
+	-  waiting on hudson.remoting.Channel@10f11b8
+	at java.lang.Object.wait(Object.java:485)
+	at hudson.remoting.Channel.join(Channel.java:646)
+	at hudson.remoting.Launcher.main(Launcher.java:416)
+	at hudson.remoting.Launcher.runWithStdinStdout(Launcher.java:365)
+	at hudson.remoting.Launcher.run(Launcher.java:205)
+	at hudson.remoting.Launcher.main(Launcher.java:167)
+
+
+Ping thread for channel hudson.remoting.Channel@10f11b8:channel
+
+"Ping thread for channel hudson.remoting.Channel@10f11b8:channel" Id=10 Group=main TIMED_WAITING
+	at java.lang.Thread.sleep(Native Method)
+	at hudson.remoting.PingThread.run(PingThread.java:75)
+
+
+pool-1-thread-4
+
+"pool-1-thread-4" Id=15 Group=main TIMED_WAITING on java.util.concurrent.SynchronousQueue$TransferStack@8d41f2
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.SynchronousQueue$TransferStack@8d41f2
+	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:198)
+	at java.util.concurrent.SynchronousQueue$TransferStack.awaitFulfill(SynchronousQueue.java:424)
+	at java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:323)
+	at java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:874)
+	at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:945)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:907)
+	at java.lang.Thread.run(Thread.java:619)
+
+
+pool-1-thread-5
+
+"pool-1-thread-5" Id=16 Group=main RUNNABLE
+	at sun.management.ThreadImpl.dumpThreads0(Native Method)
+	at sun.management.ThreadImpl.dumpAllThreads(ThreadImpl.java:374)
+	at hudson.Functions.getThreadInfos(Functions.java:755)
+	at hudson.util.RemotingDiagnostics$GetThreadDump.call(RemotingDiagnostics.java:75)
+	at hudson.util.RemotingDiagnostics$GetThreadDump.call(RemotingDiagnostics.java:71)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:114)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:48)
+	at hudson.remoting.Request$2.run(Request.java:270)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:441)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+	at java.lang.Thread.run(Thread.java:619)
+
+	Number of locked synchronizers = 1
+	- java.util.concurrent.locks.ReentrantLock$NonfairSync@42f64e
+
+
+Finalizer
+
+"Finalizer" Id=3 Group=system WAITING on java.lang.ref.ReferenceQueue$Lock@164de59
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.ReferenceQueue$Lock@164de59
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:134)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:159)
+
+
+Reference Handler
+
+"Reference Handler" Id=2 Group=system WAITING on java.lang.ref.Reference$Lock@141b736
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.Reference$Lock@141b736
+	at java.lang.Object.wait(Object.java:485)
+	at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:116)
+
+
+Signal Dispatcher
+
+"Signal Dispatcher" Id=4 Group=system RUNNABLE
+

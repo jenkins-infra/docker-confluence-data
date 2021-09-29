@@ -1,0 +1,38 @@
+[Pipeline] stage
+[Pipeline] { (Security Tests)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withMaven
+09:36:02  [withMaven] Options: []
+09:36:02  [withMaven] Available options: 
+09:36:02  [withMaven] using JDK installation provided by the build agent
+09:36:02  [withMaven] using Maven installation 'MAVEN_3.6'
+[Pipeline] {
+[Pipeline] sh
+09:36:02  + mvn --version
+09:36:02  ----- withMaven Wrapper script -----
+09:36:02  Picked up JAVA_TOOL_OPTIONS: -Dmaven.ext.class.path="/home/ubuntu/workspace/test_job@tmp/withMavend272613c/pipeline-maven-spy.jar" -Dorg.jenkinsci.plugins.pipeline.maven.reportsFolder="/home/ubuntu/workspace/test_job@tmp/withMavend272613c" 
+09:36:02  Apache Maven 3.6.0 (97c98ec64a1fdfee7767ce5ffb20918da4f719f3; 2018-10-24T18:41:47Z)
+09:36:02  Maven home: /home/ubuntu/tools/hudson.tasks.Maven_MavenInstallation/MAVEN_3.6
+09:36:02  Java version: 1.8.0_202, vendor: Oracle Corporation, runtime: /home/ubuntu/tools/hudson.model.JDK/JDK8/jre
+09:36:02  Default locale: en, platform encoding: UTF-8
+09:36:02  OS name: "linux", version: "4.15.0-1034-aws", arch: "amd64", family: "unix"
+[Pipeline] snykSecurity
+09:36:03  Snyk installation is UP-TO-DATE
+09:36:03  Testing for known issues...
+09:36:03  > /home/ubuntu/tools/io.snyk.jenkins.tools.SnykInstallation/SNYK_LATEST/snyk-linux test --json --severity-threshold=medium --org=myOrg
+09:36:03  Error result: /bin/sh: 1: mvn: not found
+09:36:03  
+09:36:03  
+09:36:03  Please make sure that Apache Maven Dependency Plugin version 2.2 or above is installed, and that `mvn dependency:tree -DoutputType=dot --file="pom.xml"` executes successfully on this project.
+09:36:03  
+09:36:03  If the problem persists, collect the output of `mvn dependency:tree -DoutputType=dot --file="pom.xml"` and contact support@snyk.io
+09:36:03  
+[Pipeline] }
+[Pipeline] // withMaven
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage

@@ -1,0 +1,108 @@
+- job:
+    name: 'example-unittest'
+    properties:
+      - delivery-pipeline:
+          stage: Build
+          task: Unittest
+    wrappers:
+        - delivery-pipeline:
+            version-template: 1.0.0-${BUILD_NUMBER}
+            set-display-name: true
+    publishers:
+      - trigger:
+          project: example-quality-scope
+- job:
+    name: 'example-quality-scope'
+    properties:
+      - delivery-pipeline:
+          stage: Build
+          task: QualityScope
+    publishers:
+      - trigger:
+          project: example-deploy-acceptance
+- job:
+    name: 'example-deploy-acceptance'
+    properties:
+      - delivery-pipeline:
+          stage: Build
+          task: Deploy Acceptance
+    publishers:
+      - trigger:
+          project: example-test-acceptance
+- job:
+    name: 'example-test-acceptance'
+    properties:
+      - delivery-pipeline:
+          stage: Acceptance
+          task: Acceptance Test
+    publishers:
+      - trigger:
+          project: example-deploy-integration
+- job:
+    name: 'example-deploy-integration'
+    properties:
+      - delivery-pipeline:
+          stage: Acceptance
+          task: Deploy to integration
+    publishers:
+      - trigger:
+          project: example-test-integration
+- job:
+    name: 'example-test-integration'
+    properties:
+      - delivery-pipeline:
+          stage: Integration
+          task: Integration Test
+    publishers:
+      - trigger:
+          project: example-deploy-performance,example-deploy-UAT
+- job:
+    name: 'example-deploy-performance'
+    properties:
+      - delivery-pipeline:
+          stage: Integration
+          task: Deploy to Performance
+    publishers:
+      - trigger:
+          project: example-test-performance
+- job:
+    name: 'example-deploy-UAT'
+    properties:
+      - delivery-pipeline:
+          stage: Integration
+          task: Deploy to UAT
+    publishers:
+      - trigger:
+          project: example-test-UAT
+- job:
+    name: 'example-test-performance'
+    properties:
+      - delivery-pipeline:
+          stage: Performance
+          task: Performance Test
+- job:
+    name: 'example-test-UAT'
+    properties:
+      - delivery-pipeline:
+          stage: UAT
+          task: UAT Test
+    publishers:
+      - trigger:
+          project: example-deploy-public
+- job:
+    name: 'example-deploy-public'
+    properties:
+      - delivery-pipeline:
+          stage: UAT
+          task: Deploy to Public
+    publishers:
+      - trigger:
+          project: example-test-public
+- job:
+    name: 'example-test-public'
+    properties:
+      - delivery-pipeline:
+          stage: Public
+          task: Smoke Test
+
+

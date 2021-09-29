@@ -1,0 +1,77 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww26800\viewh14080\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 pipeline \{\
+  agent \{\
+    node \{\
+      label 'mac-os'\
+    \}\
+  \}  \
+ stages \{\
+    stage('build') \{\
+	environment \{\
+        GIT = credentials(my_git_credentials)\
+        \}\
+      steps \{\
+        checkout scm\
+        dir(path: \'91my_dir\'92) \{\
+          sh '/usr/local/bin/pod install'\
+        xcodeBuild(xcodeName: 'Xcode',\
+	    allowFailingBuildResults: false,\
+            appURL: '',\
+            assetPackManifestURL: '',\
+            buildDir: './BuildOutput',\
+            buildIpa: true,\
+            bundleID: '',\
+            bundleIDInfoPlistPath: '',\
+            cfBundleShortVersionStringValue: '',\
+            cfBundleVersionValue: '',\
+            changeBundleID: false,\
+            cleanBeforeBuild: true,\
+            cleanTestReports: false,\
+            compileBitcode: true,\
+            configuration: 'Release',\
+            developmentTeamID: \'91my_team-Id\'92,\
+            developmentTeamName: \'91my-team-name\'92,\
+            displayImageURL: '',\
+            embedOnDemandResourcesAssetPacksInBundle: true,\
+            fullSizeImageURL: '',\
+            generateArchive: true,\
+            interpretTargetAsRegEx: false,\
+            ipaExportMethod: 'app-store',\
+            ipaName: \'91some_name\'92,\
+            ipaOutputDirectory: '',\
+            keychainName: 'login.keychain-db',\
+            keychainPath: '$\{HOME\}/Library/Keychains/login.keychain-db',\
+            keychainPwd: \'91my_pwd\'92,\
+            logfileOutputDirectory: '',\
+            manualSigning: false,\
+            noConsoleLog: false,\
+            onDemandResourcesAssetPacksBaseURL: '',\
+            provideApplicationVersion: false,\
+            provisioningProfiles: [[provisioningProfileAppId: \'91my_app_bundleId\'92,\
+            provisioningProfileUUID: \'91my_profile_uuid\'92]],\
+            sdk: '',\
+            symRoot: '',\
+            target: \'91my_target\'92,\
+            thinning: 'none',\
+            unlockKeychain: true,\
+            uploadBitcode: false,\
+            uploadSymbols: true,\
+            xcodeProjectFile: '',\
+            xcodeProjectPath: '',\
+            xcodeSchema: \'91my-Schema-name\'92,\
+            xcodeWorkspaceFile: \'91./my_workspacename\'92,\
+            xcodebuildArguments: ''\
+	   )\
+	\}\
+      \}\
+    \}\
+  \}\
+\}\
+\
+}
