@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : IntelliJ IDEAでHudsonを開発する</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins_28934151.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MISC-INFORMATION_36111470.html">MISC INFORMATION</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : IntelliJ IDEAでHudsonを開発する
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (masanobuimai)</span>, last modified on Nov 24, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>IntelliJ IDEA 7からMavenサポートが組み込まれたので， pom.xml をプロジェクトとして開くことができます（以前のように，<code>mvn idea:idea</code> を実行する必要はありません）。<br/>
+'<strong>Open Project</strong>' で任意の pom.xml （図では './hudson/main/pom.xml'）を開くだけで完了します。</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/25591821/25886722.png" data-image-src="attachments/25591821/25886722.png" data-unresolved-comment-count="0" data-linked-resource-id="25886722" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="idea-open.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span></p>
+
+<p>依存ライブラリのソースコードやJavadocの取得も，IntelliJから実行できます。この操作は非常に時間がかかりますので，ご注意を！</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/25591821/25886723.png" data-image-src="attachments/25591821/25886723.png" data-unresolved-comment-count="0" data-linked-resource-id="25886723" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="download-artifact.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span></p>
+
+<h2 id="IntelliJIDEAでHudsonを開発する-IntelliJからHudsonをビルドする">IntelliJからHudsonをビルドする</h2>
+
+<p>コマンドラインと同様にMaven projectsツールウィンドウから installゴールを実行することができます。</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<ul>
+	<li>Hudson main module
+	<ul>
+		<li>Lifecycle
+		<ul>
+			<li><strong>install</strong></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div></div>
+<p>おそらく，IntelliJのビルドボタン（Make Project）を押しても，同様の効果が得られると思います。</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/25591821/25886727.png" data-image-src="attachments/25591821/25886727.png" data-unresolved-comment-count="0" data-linked-resource-id="25886727" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-hudson.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>もしかしたらウソ言ってるかも。<br/>
+あとMavenまわりがややこしくて，川口さんがプラグイン作っているので，これもきっと役に立つハズ。</p>
+<ul>
+	<li><a href="http://plugins.intellij.net/plugin/?id=1807" class="external-link" rel="nofollow">Maven build-this-module plugin</a></li>
+</ul>
+</div></div>
+
+<h2 id="IntelliJIDEAでHudsonを開発する-IntelliJからHudsonを実行する">IntelliJからHudsonを実行する</h2>
+
+<p>Maven projectsツールウィンドウから hudson:run ゴールを実行すると良いことはないので止めとくこと。<br/>
+その代わりに，MavenのRun Configurationを構成して，hudson:runを実行させます。</p>
+
+<p>Run Configurationの作り方は，何通りかありますが，次の手順が最短だと思います。</p>
+
+<p>Maven projectsツールウィンドウから「Hudson main module→Modules→Hudson war→hudson→<strong>hudson:run</strong>」を選びます。コンテキストメニューから '<strong>Create &quot;hudson-war [hudson:run]&quot;...</strong>' を選び，Run Configurationを構成します。</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/25591821/25886726.png" data-image-src="attachments/25591821/25886726.png" data-unresolved-comment-count="0" data-linked-resource-id="25886726" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="create-run-config-1.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span> </p></th>
+<th class="confluenceTh"><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/25591821/25886725.png" data-image-src="attachments/25591821/25886725.png" data-unresolved-comment-count="0" data-linked-resource-id="25886725" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="create-run-config-2.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span> </p></th>
+</tr>
+</tbody></table></div>
+
+<p>あとは，作成したRun Configurationを実行するだけです。必要に応じてデバッガを起動することも，プロファイラを起動することもできます。</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/25591821/25886724.png" data-image-src="attachments/25591821/25886724.png" data-unresolved-comment-count="0" data-linked-resource-id="25886724" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="run-config.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="25591821" data-linked-resource-container-version="8"></span></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>プロファイラ（YourKit Profiler）は，IntelliJ IDEAとは別の製品です。 </p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886722.png">idea-open.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886723.png">download-artifact.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886724.png">run-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886725.png">create-run-config-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886726.png">create-run-config-1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/25591821/25886727.png">build-hudson.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="comments" class="pageSectionTitle">Comments:</h2>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-26574855"></a>
+                                    <font class="smallfont"><p>あとで転記する。</p>
+<ul>
+	<li><a class="external-link" href="http://d.hatena.ne.jp/masanobuimai/20080402#1207143262" rel="nofollow">http://d.hatena.ne.jp/masanobuimai/20080402#1207143262</a></li>
+	<li><a class="external-link" href="http://d.hatena.ne.jp/masanobuimai/20080508#1210226264" rel="nofollow">http://d.hatena.ne.jp/masanobuimai/20080508#1210226264</a></li>
+</ul></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by masanobuimai at May 18, 2008 06:35
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    </div>
+                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>
