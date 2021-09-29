@@ -1,0 +1,844 @@
+Create Extended Choice Param, with 'JSON Parameter Type' as type.
+Name this param as CONFIG (important as the JSONEditor object is referenced with this name in code!)
+
+--------------------------------------
+JSON Parameter Config Groovy Script:
+>>>
+import org.boon.Boon;
+
+def jsonEditorOptions = Boon.fromJson(/{
+   theme: "bootstrap3",
+   iconlib: "foundation3",
+   schema: {}
+}/);
+
+return jsonEditorOptions;
+<<<
+
+--------------------------------------
+JSON Parameter Config Javascript:
+>>>
+var schemas_map = new Map();
+
+schemas_map.set ('none', {
+    theme: "bootstrap3",
+    iconlib: "foundation3",
+    show_errors: "always",
+    disable_array_add: true,
+    disable_array_delete: true,
+    disable_array_reorder: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    no_additional_properties: true,
+    schema: {
+      title: "Seed configurations",
+      description: "",
+      type: "object",
+      properties: {
+
+		  SERVER_CONFIG_CHOICE: {
+			type: "string",
+			description: "Select config to edit and build",
+			enum: ["custom", "bulk_unittests", "unittests_master", "unittests_audio", "unittests_media", "doxygen"],
+			required: true
+		  },
+
+		  SERVER_CONFIG_CUSTOM_TEXT: {
+			type: "string",
+			format: "textarea",
+			description: "You can copy here your whole configuration in text form to be parsed and press TAB",
+			options: {
+			  hidden: true
+			}
+		  },
+	  
+		  SERVER_CONFIG_TYPE: {
+			type: "string",
+			description: "Type of generated seed job, used to customize it's behaviour",
+			enum: ["none", "unittests", "doxygen", "bulk_trigger"],
+			required: true
+		  },
+		
+		  TRIGGER_SEED_STAGE3: {
+			type: "string",
+			description: "Choose in which situation seed stage3 should be triggered",
+			enum: ["none", "cron", "webhook(push)", "webhook(push)+status", "webhook(tag)"],
+			options: {
+			  enum_titles: ["disabled", "by cron schedule", "by Gitlab webhook", "by Gitlab webhook + publish build status", "by Gitlab webhook tag event"],
+			},
+			required: true
+		  },
+		
+		  CRON_FOR_SEED_STAGE3: {
+			type: "string",
+			description: "Schedule configuration for stage3 job",
+			required: true
+		  },
+		
+		  RECIPES_REPO: {
+			type: "string",
+			description: "Repo with build recipes",
+			required: true
+		  },
+		
+		  RECIPES_BRANCH: {
+			type: "string",
+			description: "Branch in with recipes repo",
+			required: true
+		  },
+		
+		  ROOT_RECIPES__SOURCE: {
+			type: "array",
+			format: "selectize",
+			default: ["main_recipe", "doxygen" ],
+			options: {
+			  hidden: true
+			},
+			required: true
+		  },
+		  ROOT_RECIPES: {
+			type: "array",
+			format: "selectize",
+			description: "Root recipe(s) that should be built",
+			enumSource: "source",
+			watch: {
+			  source: "root.ROOT_RECIPES__SOURCE"
+			},
+			required: true
+		  },
+		
+		  JOB_PREFIX: {
+			type: "string",
+			description: "Prefix for generated job names",
+			required: true
+		  },
+		
+		  ENABLE_SNAPSHOT: {
+			type: "boolean",
+			format: "checkbox",
+			description: "Enable creation of snapshot",
+			required: true
+		  },
+		
+		  SNAPSHOT_REPO: {
+			type: "string",
+			description: "Repo for pushing a snapshot of recipes",
+			required: true
+		  },
+          
+          SERVER_CONFIG_DUMP: {
+            type: "string",
+            format: "textarea",
+            description: "Dump of current config for copying purposes",
+            options: {
+              expand_height: true
+            },
+            required: true
+          }
+
+      }
+    }
+});
+
+schemas_map.set ('unittests', {
+    theme: "bootstrap3",
+    iconlib: "foundation3",
+    show_errors: "always",
+    disable_array_add: true,
+    disable_array_delete: true,
+    disable_array_reorder: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    no_additional_properties: true,
+    schema: {
+      title: "Seed configurations",
+      description: "",
+      type: "object",
+      properties: {
+
+          SERVER_CONFIG_CHOICE: {
+            type: "string",
+            description: "Select config to edit and build",
+            enum: ["custom", "bulk_unittests", "unittests_master", "unittests_audio", "unittests_media", "doxygen"],
+            required: true
+          },
+
+          SERVER_CONFIG_CUSTOM_TEXT: {
+            type: "string",
+            format: "textarea",
+            description: "You can copy here your whole configuration in text form to be parsed and press TAB",
+            options: {
+              hidden: true
+            }
+          },
+          
+		  SERVER_CONFIG_TYPE: {
+			type: "string",
+			description: "Type of generated seed job, used to customize it's behaviour",
+			enum: ["none", "unittests", "doxygen", "bulk_trigger"],
+			required: true
+		  },
+		
+		  TRIGGER_SEED_STAGE3: {
+			type: "string",
+			description: "Choose in which situation seed stage3 should be triggered",
+			enum: ["none", "cron", "webhook(push)", "webhook(push)+status", "webhook(tag)"],
+			options: {
+			  enum_titles: ["disabled", "by cron schedule", "by Gitlab webhook", "by Gitlab webhook + publish build status", "by Gitlab webhook tag event"],
+			},
+			required: true
+		  },
+		
+		  CRON_FOR_SEED_STAGE3: {
+			type: "string",
+			description: "Schedule configuration for stage3 job",
+			required: true
+		  },
+		
+		  RECIPES_REPO: {
+			type: "string",
+			description: "Repo with build recipes",
+			required: true
+		  },
+		
+		  RECIPES_BRANCH: {
+			type: "string",
+			description: "Branch in with recipes repo",
+			required: true
+		  },
+		
+		  ROOT_RECIPES__SOURCE: {
+			type: "array",
+			format: "selectize",
+			default: ["main_recipe", "doxygen" ],
+			options: {
+			  hidden: true
+			},
+			required: true
+		  },
+		  ROOT_RECIPES: {
+			type: "array",
+			format: "selectize",
+			description: "Root recipe(s) that should be built",
+			enumSource: "source",
+			watch: {
+			  source: "root.ROOT_RECIPES__SOURCE"
+			},
+			required: true
+		  },
+		
+		  JOB_PREFIX: {
+			type: "string",
+			description: "Prefix for generated job names",
+			required: true
+		  },
+		
+		  ENABLE_SNAPSHOT: {
+			type: "boolean",
+			format: "checkbox",
+			description: "Enable creation of snapshot",
+			required: true
+		  },
+		
+		  SNAPSHOT_REPO: {
+			type: "string",
+			description: "Repo for pushing a snapshot of recipes",
+			required: true
+		  },
+	  
+		  VALGRIND_ENABLE: {
+			type: "boolean",
+			format: "checkbox",
+			description: "Add Valgrind configuration to job",
+			required: true
+		  },
+            
+          SERVER_CONFIG_DUMP: {
+            type: "string",
+            format: "textarea",
+            description: "Dump of current config for copying purposes",
+            options: {
+              expand_height: true
+            },
+            required: true
+          }
+
+      }
+    }
+});
+
+schemas_map.set ('doxygen', {
+    theme: "bootstrap3",
+    iconlib: "foundation3",
+    show_errors: "always",
+    disable_array_add: true,
+    disable_array_delete: true,
+    disable_array_reorder: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    no_additional_properties: true,
+    schema: {
+      title: "Seed configurations",
+      description: "",
+      type: "object",
+      properties: {
+
+          SERVER_CONFIG_CHOICE: {
+            type: "string",
+            description: "Select config to edit and build",
+            enum: ["custom", "bulk_unittests", "unittests_master", "unittests_audio", "unittests_media", "doxygen"],
+            required: true
+          },
+
+          SERVER_CONFIG_CUSTOM_TEXT: {
+            type: "string",
+            format: "textarea",
+            description: "You can copy here your whole configuration in text form to be parsed and press TAB",
+            options: {
+              hidden: true
+            }
+          },
+          
+		  SERVER_CONFIG_TYPE: {
+			type: "string",
+			description: "Type of generated seed job, used to customize it's behaviour",
+			enum: ["none", "unittests", "doxygen", "bulk_trigger"],
+			required: true
+		  },
+		
+		  TRIGGER_SEED_STAGE3: {
+			type: "string",
+			description: "Choose in which situation seed stage3 should be triggered",
+			enum: ["none", "cron", "webhook(push)", "webhook(push)+status", "webhook(tag)"],
+			options: {
+			  enum_titles: ["disabled", "by cron schedule", "by Gitlab webhook", "by Gitlab webhook + publish build status", "by Gitlab webhook tag event"],
+			},
+			required: true
+		  },
+		
+		  CRON_FOR_SEED_STAGE3: {
+			type: "string",
+			description: "Schedule configuration for stage3 job",
+			required: true
+		  },
+		
+		  RECIPES_REPO: {
+			type: "string",
+			description: "Repo with build recipes",
+			required: true
+		  },
+		
+		  RECIPES_BRANCH: {
+			type: "string",
+			description: "Branch in with recipes repo",
+			required: true
+		  },
+		
+		  ROOT_RECIPES__SOURCE: {
+			type: "array",
+			format: "selectize",
+			default: ["main_recipe", "doxygen" ],
+			options: {
+			  hidden: true
+			},
+			required: true
+		  },
+		  ROOT_RECIPES: {
+			type: "array",
+			format: "selectize",
+			description: "Root recipe(s) that should be built",
+			enumSource: "source",
+			watch: {
+			  source: "root.ROOT_RECIPES__SOURCE"
+			},
+			required: true
+		  },
+		
+		  JOB_PREFIX: {
+			type: "string",
+			description: "Prefix for generated job names",
+			required: true
+		  },
+		
+		  ENABLE_SNAPSHOT: {
+			type: "boolean",
+			format: "checkbox",
+			description: "Enable creation of snapshot",
+			required: true
+		  },
+		
+		  SNAPSHOT_REPO: {
+			type: "string",
+			description: "Repo for pushing a snapshot of recipes",
+			required: true
+		  },
+          
+          SERVER_CONFIG_DUMP: {
+            type: "string",
+            format: "textarea",
+            description: "Dump of current config for copying purposes",
+            options: {
+              expand_height: true
+            },
+            required: true
+          }
+
+      }
+    }
+});
+
+schemas_map.set ('bulk_trigger', {
+    theme: "bootstrap3",
+    iconlib: "foundation3",
+    show_errors: "always",
+    disable_array_add: true,
+    disable_array_delete: true,
+    disable_array_reorder: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    no_additional_properties: true,
+    schema: {
+      title: "Seed configurations",
+      description: "",
+      type: "object",
+      properties: {
+
+		  SERVER_CONFIG_CHOICE: {
+			type: "string",
+			description: "Select config to edit and build",
+			enum: ["custom", "bulk_unittests", "unittests_master", "unittests_audio", "unittests_media", "doxygen"],
+			required: true
+		  },
+
+		  SERVER_CONFIG_CUSTOM_TEXT: {
+			type: "string",
+			format: "textarea",
+			description: "You can copy here your whole configuration in text form to be parsed and press TAB",
+			options: {
+			  hidden: true
+			}
+		  },
+
+		  SERVER_CONFIG_TYPE: {
+			type: "string",
+			description: "Type of generated seed job, used to customize it's behaviour",
+			enum: ["none", "unittests", "doxygen", "bulk_trigger"],
+			
+			required: true
+		  },
+		
+		  SERVER_CONFIGS__SOURCE: {
+			type: "array",
+			format: "selectize",
+			default: ["unittests_master", "unittests_audio", "unittests_media"],
+			options: {
+			  hidden: true
+			},
+			required: true
+		  },
+		  SERVER_CONFIGS: {
+			type: "array",
+			format: "selectize",
+			description: "Select existing configs to be triggered in given order",
+			enumSource: "source",
+			watch: {
+			  source: "root.SERVER_CONFIGS__SOURCE"
+			},
+			required: true
+		  },
+		
+		  SERVER_CONFIG_DUMP: {
+			type: "string",
+			format: "textarea",
+			description: "Dump of current config for copying purposes",
+			options: {
+			  expand_height: true
+			},
+			required: true
+		  }
+      }
+    }
+});
+
+
+var seed_configs = []
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"none","TRIGGER_SEED_STAGE3":"none","CRON_FOR_SEED_STAGE3":"","RECIPES_REPO":"git@aaa:bbb.git","RECIPES_BRANCH":"","ROOT_RECIPES":"","JOB_PREFIX":"","ENABLE_SNAPSHOT":false,"SNAPSHOT_REPO":"git@aaa:snapshot.git","SERVER_CONFIG_CHOICE":"custom"});
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"bulk_trigger","SERVER_CONFIGS":["unittests_master","unittests_audio","unittests_media"],"SERVER_CONFIG_CHOICE":"bulk_unittests"});
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"unittests","TRIGGER_SEED_STAGE3":"webhook(tag)","CRON_FOR_SEED_STAGE3":"","RECIPES_REPO":"git@aaa:bbb.git","RECIPES_BRANCH":"master","ROOT_RECIPES":["main_recipe"],"JOB_PREFIX":"master","ENABLE_SNAPSHOT":false,"SNAPSHOT_REPO":"git@aaa:snapshot.git","VALGRIND_ENABLE":false,"SERVER_CONFIG_CHOICE":"unittests_master"});
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"unittests","TRIGGER_SEED_STAGE3":"none","CRON_FOR_SEED_STAGE3":"","RECIPES_REPO":"git@aaa:bbb.git","RECIPES_BRANCH":"master","ROOT_RECIPES":["main_recipe"],"JOB_PREFIX":"audio","ENABLE_SNAPSHOT":false,"SNAPSHOT_REPO":"git@aaa:snapshot.git","VALGRIND_ENABLE":false,"SERVER_CONFIG_CHOICE":"unittests_audio"});
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"unittests","TRIGGER_SEED_STAGE3":"none","CRON_FOR_SEED_STAGE3":"","RECIPES_REPO":"git@aaa:bbb.git","RECIPES_BRANCH":"master","ROOT_RECIPES":["main_recipe"],"JOB_PREFIX":"media","ENABLE_SNAPSHOT":false,"SNAPSHOT_REPO":"git@aaa:snapshot.git","VALGRIND_ENABLE":false,"SERVER_CONFIG_CHOICE":"unittests_media"});
+
+seed_configs.push ({"SERVER_CONFIG_TYPE":"doxygen","TRIGGER_SEED_STAGE3":"none","CRON_FOR_SEED_STAGE3":"","RECIPES_REPO":"git@aaa:bbb.git","RECIPES_BRANCH":"master","ROOT_RECIPES":["doxygen"],"JOB_PREFIX":"DOXYGEN","ENABLE_SNAPSHOT":false,"SNAPSHOT_REPO":"git@aaa:snapshot.git","SERVER_CONFIG_CHOICE":"doxygen"});
+
+var changed_configs = [];
+
+var special_fields = ['SERVER_CONFIG_CHOICE', 'SERVER_CONFIG_CUSTOM_TEXT', 'SERVER_CONFIG_DUMP'];
+
+// alias for accessing global variables
+var window = this;
+
+if ('myspace' in window == false) {
+    // set initial values
+    window.myspace = {};
+    window.myspace.values = seed_configs;
+    window.myspace.current_config = 'custom';
+    window.myspace.current_schema = getSchema (window.myspace.current_config);
+    // dump current config so user can copy/paste it
+    refreshConfigDump();
+
+    console.log ('Creating new editor and replacing original one');
+    window.editor_CONFIG = editor;
+    switchSchema();
+}
+
+function getSchema (config_name) {
+    for (item of window.myspace.values) {
+        if (item.SERVER_CONFIG_CHOICE == config_name) {
+            return schemas_map.get (item.SERVER_CONFIG_TYPE);
+        }
+    }
+};
+
+function getNewSchema (config_name) {
+    var item = window.editor_CONFIG.getValue();
+    return schemas_map.get (item.SERVER_CONFIG_TYPE);
+};
+
+function getValue (config_name) {
+    for (item of window.myspace.values) {
+        if (item.SERVER_CONFIG_CHOICE == config_name) {
+            return item;
+        }
+    }
+};
+
+function getNewValue (config_name) {
+    return window.editor_CONFIG.getValue();
+};
+
+function recreateJSONEditor() {
+    window.editor_CONFIG.destroy();
+    window.editor_CONFIG = new JSONEditor (document.getElementById('editor_CONFIG_holder'), window.myspace.current_schema);
+    window.editor_CONFIG.setValue (getValue (window.myspace.current_config));
+    // install onchange callback, once editor is ready
+    window.editor_CONFIG.on ('change', onchange);
+};
+
+function replaceEditorContent() {
+    console.log ('replaceEditorContent():', window.editor_CONFIG.getValue());
+    document.getElementById ('editor_CONFIG_value').value = JSON.stringify (window.editor_CONFIG.getValue());
+};
+
+function getWarningText (text) {
+    if (!text.includes ('<div')) {
+        return `<div class="alert-warning">${text}</div>`
+    }
+    return ''
+};
+
+function getErrorText (text) {
+    if (!text.includes ('<div')) {
+        return `<div class="alert-danger">${text}</div>`
+    }
+    return ''
+};
+
+function clearDescription (text) {
+    return text.replace (/<div.+<\/div>/, '')
+};
+
+function switchSchema() {
+    // we expect that window.myspace.current_schema will already contain new schema
+    console.log ('Switching schema');
+
+    // make custom text field visible only for custom config
+    if (window.myspace.current_config == 'custom') {
+        window.myspace.current_schema.schema.properties.SERVER_CONFIG_CUSTOM_TEXT.options.hidden = false;
+        window.myspace.current_schema.schema.properties.SERVER_CONFIG_CUSTOM_TEXT.required = true;
+    } else {
+        window.myspace.current_schema.schema.properties.SERVER_CONFIG_CUSTOM_TEXT.options.hidden = true;
+        window.myspace.current_schema.schema.properties.SERVER_CONFIG_CUSTOM_TEXT.required = false;
+    }
+
+    // display warning if current config has been changed
+    if (changed_configs.includes (window.myspace.current_config)) {
+        window.myspace.current_schema.schema.description = getWarningText ('This config has been already changed either manually or because of validation errors!');
+    } else {
+        window.myspace.current_schema.schema.description = '';
+    }
+
+    var value = getValue (window.myspace.current_config);
+    var properties = window.myspace.current_schema.schema.properties;
+    var is_valid = true;
+
+    for (field of Object.keys (properties)) {            
+        // clear any previous errors
+        if (properties [field].description) {
+            properties [field].description = clearDescription (properties [field].description);
+        }
+    }
+
+    for (field of Object.keys (properties)) {
+        // render selected items as enabled/disabled depending on the state of other params
+
+        if (field == 'ENABLE_SNAPSHOT') {
+            if (value.ENABLE_SNAPSHOT) {
+                properties.SNAPSHOT_REPO.readOnly = false;
+            } else {
+                properties.SNAPSHOT_REPO.readOnly = true;
+            }
+        }
+
+        if (field == 'TRIGGER_SEED_STAGE3') {
+            if (value.TRIGGER_SEED_STAGE3 == 'cron') {
+                properties.CRON_FOR_SEED_STAGE3.readOnly = false;
+            } else {
+                properties.CRON_FOR_SEED_STAGE3.readOnly = true;
+            }
+        }
+
+        // validate all fields
+
+        if (field == 'JOB_PREFIX') {
+            if (!value.JOB_PREFIX) {
+                properties.JOB_PREFIX.description += getErrorText ('JOB_PREFIX cannot be empty');
+                is_valid = false;
+            }
+        }
+
+        if (field == 'RECIPES_REPO') {
+            if (!/^git@.+\.git$/.test (value.RECIPES_REPO)) {
+                properties.RECIPES_REPO.description += getErrorText ('Invalid git repository address');
+                is_valid = false;
+            }
+        }
+
+        if (field == 'RECIPES_BRANCH') {
+            if (!value.RECIPES_BRANCH) {
+                properties.RECIPES_BRANCH.description += getErrorText ('RECIPES_BRANCH cannot be empty');
+                is_valid = false;
+            }
+        }
+
+        if (field == 'ROOT_RECIPES') {
+            // JSONEditor automatically creates an array with empty item
+            if ('ROOT_RECIPES' in value && ((value.ROOT_RECIPES.length == 0) || (value.ROOT_RECIPES.length == 1 && value.ROOT_RECIPES [0] == ''))) {
+                properties.ROOT_RECIPES.description += getErrorText ('ROOT_RECIPES list cannot be empty');
+                is_valid = false;
+            }
+        }
+
+        if (field == 'ENABLE_SNAPSHOT') {
+            if (value.ENABLE_SNAPSHOT) {
+                if (!/^git@.+\.git$/.test (value.SNAPSHOT_REPO)) {
+                    properties.SNAPSHOT_REPO.description += getErrorText ('Invalid git repository address');
+                    is_valid = false;
+                }
+            }
+        }
+
+        if (field == 'SERVER_CONFIGS') {
+            // JSONEditor automatically creates an array with empty item
+            if ('SERVER_CONFIGS' in value && ((value.SERVER_CONFIGS.length == 0) || (value.SERVER_CONFIGS.length == 1 && value.SERVER_CONFIGS [0] == ''))) {
+                properties.SERVER_CONFIGS.description += getErrorText ('SERVER_CONFIGS list cannot be empty');
+                is_valid = false;
+            }
+        }
+
+    }
+
+    // display general validation error
+    if (!is_valid) {
+        window.myspace.current_schema.schema.description += getErrorText ('This config has some validation errors');
+    }
+
+    // in order to replace schema, editor must be destroyed and created again
+    recreateJSONEditor();
+}
+
+function onchange() {
+    console.log ('on change()');
+    var new_value = getNewValue (window.myspace.current_config);
+    var value = getValue (window.myspace.current_config);
+    var new_valid_fields = getValidFields (getNewSchema (window.myspace.current_config));
+    var valid_fields = getValidFields (getSchema (window.myspace.current_config));
+
+    // if no important change was made by user, no special handling for this event
+    if (window.myspace.current_config == new_value.SERVER_CONFIG_CHOICE) {
+        if (getConfigDump (new_value, new_valid_fields) == getConfigDump (value, valid_fields) && !new_value.SERVER_CONFIG_CUSTOM_TEXT) {
+            console.log ('on change(): equal configs so return');
+            replaceEditorContent (window.editor_CONFIG);
+            return true;
+        }
+    }
+
+    if (window.myspace.current_config == 'custom') {
+        // user pasted custom text config
+        if (new_value.hasOwnProperty ('SERVER_CONFIG_CUSTOM_TEXT') && trim (new_value.SERVER_CONFIG_CUSTOM_TEXT)) {
+            var custom_text = trim (new_value.SERVER_CONFIG_CUSTOM_TEXT);
+        } else {
+            var custom_text = '';
+        }
+        if (custom_text != '') {
+            // clean up existing object
+            for (field of Object.keys (value)) {
+                if (!special_fields.includes (field)) {
+                    delete value [field];
+                }
+            }
+            // parse custom config
+            lines = custom_text.split ('\n');
+            for (line of lines) {
+                var parts = line.split ('=')
+                if (parts.size() < 2) {
+                    console.log ('Warning: malformed line!:', parts);
+                    break;
+                }
+                // join the rest in case value of parameter contains also '='
+                if (parts.size() > 2) {
+                    parts [1] = parts.slice (1).join ('=');
+                }
+                var k = trim (parts [0]);
+                var v = trim (parts [1]);
+                // convert to boolean
+                if (v == 'true' || v == 'false') {
+                    v = (v == 'true');
+                }
+                // convert to list of strings
+                if (['SERVER_CONFIGS', 'ROOT_RECIPES'].includes (k)) {
+                    v = v.split (',');
+                }
+                value [k] = v;
+            }
+            value.SERVER_CONFIG_CUSTOM_TEXT = '';
+            // dump current config so user can copy/paste it
+            refreshConfigDump();
+            // set new schema from parsed config
+            window.myspace.current_schema = getSchema (window.myspace.current_config);
+            console.log ('onchange(): custom pasted config');
+            switchSchema();
+            // show changes
+            replaceEditorContent();
+            return true;
+        }
+    }
+    if (window.myspace.current_config != new_value.SERVER_CONFIG_CHOICE) {
+        // switch to other config
+        window.myspace.current_config = new_value.SERVER_CONFIG_CHOICE;
+        // refresh config dump for new config
+        refreshConfigDump();
+        // change schema
+        window.myspace.current_schema = getSchema (window.myspace.current_config);
+        console.log ('onchange(): switch to other config');
+        switchSchema();
+        // show changes
+        replaceEditorContent();
+        return true;
+    }
+
+    // update list of changed configs
+    updateChangedState();
+    // preserve all changes made by user in this config
+    mergeChanges();
+    // dump current config so user can copy/paste it
+    refreshConfigDump();
+
+    // Usually change of param does not influence other params, editor.setValue() is enough.
+    // However because of below 2 cases it is needed.
+    // 1. user changed config type (SERVER_CONFIG_TYPE), we must update schema
+    // 2. parameter changed that influences other's parameters state (eg. ENABLE_SNAPSHOT)
+    window.myspace.current_schema = getSchema (window.myspace.current_config);
+    console.log ('onchange(): change of param');
+    switchSchema();
+    replaceEditorContent();
+    return true;
+};
+
+function mergeChanges() {
+    // preserve all changes made by user in this config
+    var new_value = getNewValue (window.myspace.current_config);
+    var value = getValue (window.myspace.current_config);
+    for (field of Object.keys (new_value)) {
+        if (!special_fields.includes (field)) {
+            value [field] = new_value [field];
+        }
+    }
+};
+
+function getConfigDump (value, valid_fields) {
+    var out = '';
+    for (field of Object.keys(value).sort()) {
+        if (valid_fields.includes (field)) {
+             out = out + field + '=' + value [field].toString() + '\n';
+        }
+    }
+    return out;
+};
+
+function refreshConfigDump() {
+    var value = getValue (window.myspace.current_config);
+    var valid_fields = getValidFields (getSchema (window.myspace.current_config));
+    value.SERVER_CONFIG_DUMP = getConfigDump (value, valid_fields);
+};
+
+function getValidFields (schema) {
+    var valid_fields = [];
+    for (field of Object.keys(schema.schema.properties)) {
+        if (!isSpecialField (field)) {
+            valid_fields.push (field);
+        }
+    }
+    return valid_fields;
+};
+
+function isSpecialField (field) {
+    if (special_fields.includes (field) || field.endsWith ('__SOURCE')) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+function updateChangedState() {
+    // update list of changed configs
+    var new_value = getNewValue (window.myspace.current_config);
+    var value = getValue (window.myspace.current_config);
+    var valid_fields = getValidFields (getNewSchema (window.myspace.current_config));
+    var new_config_dump = getConfigDump (new_value, valid_fields);
+    var config_dump = value.SERVER_CONFIG_DUMP;
+
+    if (config_dump != undefined && config_dump != new_config_dump) {
+        if (window.myspace.current_config != 'custom') {
+            if (!(changed_configs.includes (window.myspace.current_config))) {
+                changed_configs.push (window.myspace.current_config);
+            }
+        }
+    }
+};
+
+function trim (s) {
+    // why? because str.trim() function does not behave correctly!
+    return s.trimLeft().trimRight();
+};
+
+<<<
+--------------------------------------
+
+Groovy part requires script approval (by security plugin), as unfortunately ECP plugin does not support using sandbox=true + permissive plugin for that purpose. Fortunately one can achieve this by
+utilizing ScriptApproval API like this (best to run it as part of seed job that generates JSONEditor job):
+>>>
+// approve all pending scripts for JSONEditor before user try to execute it
+for (script in scriptsToApprove) {
+    def ScriptApproval = Jenkins.getInstance().getExtensionList ('org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval') [0]
+    ScriptApproval.approveScript (ScriptApproval.hash (script, 'groovy'))
+}
+<<<

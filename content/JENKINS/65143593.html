@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Using Jenkins for C++ Projects</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins_753702.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Using Jenkins for C++ Projects
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stibbons)</span>, last modified by <span class='editor'> Unknown User (clement_igonet)</span> on Mar 01, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><strong><em>(Please do not publish this page, I'll update it regularly until it reaches a certains quality to be publically available)</em></strong></p>
+
+<h1 id="UsingJenkinsforC++Projects-UsingJenkinsinyourC++Project">Using Jenkins in your C++ Project</h1>
+
+<p>Jenkins can be used for non-java projects without any knowledge of the Java languages and tools, especially C++.</p>
+
+<p>Jobs can do the following tasks without any problem:</p>
+
+
+
+
+
+<ul>
+	<li>Checkout</li>
+	<li>Build</li>
+	<li>Execute automated Tests</li>
+	<li>Publish Tests Results</li>
+	<li>Concatenate Tests Results</li>
+	<li>Analyze the source</li>
+	<li>Build documentation </li>
+</ul>
+
+
+<h2 id="UsingJenkinsforC++Projects-CheckoutandBuild">Checkout and Build</h2>
+
+<p>The most part of C++ projects uses fairly different approach than java. You could use maven for your C++ project, however you have access to various builder inside jenkins, through its rich set of plugins: bash, python, cmake.</p>
+
+<p>I would recommend to stick with bash (on Linux) or the Batch (on windows), eventually used with the Conditional Executor plugin, since most of the time, each platform has their own specificity (how deependencies are handled, ...). I usually work with a set of in-VCS build script (bash) that will execute all the commands needed to build the sources.</p>
+
+<p>For simple projet, using the cmake executor can allow multiple platform support.</p>
+
+<p>Jenkins can watch over CVS or SVN or GIT without any problem. Please considere dropping CVS since Jenkins need to look at every file individually, and this consume lot of resources. SVN is perfectly integrated inside Jenkins. Simply forget CVS.</p>
+
+<p>Once built, publish the exe/dll using the Publish Artifact.</p>
+
+<h3 id="UsingJenkinsforC++Projects-JobSplitting">Job Splitting</h3>
+
+<p>I usually split the build job in two jobs:</p>
+
+<ol>
+	<li>Prepare job : it performs a complete wipe out of the workspace. It checkout all the source and perform a build from scratch. Executed daily.</li>
+	<li>Build job : incremential build. Executed everytime a modification is done in the source (so potentially several times a day)</li>
+</ol>
+
+
+<p>Of course, the Prepare job triggers the Build job. The trigger plugin can be used to trigger the &quot;Prepare&quot; job in case of a failing &quot;Build&quot;.<br/>
+Both jobs need to share the same workspace or the same slave (node), or you have to deal with the publish/copy workspace cleverly. I prefere to stick these two jobs on the same node and share the same workspace.</p>
+
+<h3 id="UsingJenkinsforC++Projects-JobMatrix">Job Matrix</h3>
+
+<p>I use Matrix job to trigger the build on different platform, on different configuration (debug, release). So at the end, you have all binaries always available.</p>
+
+
+
+<h2 id="UsingJenkinsforC++Projects-TestsExecution">Tests Execution</h2>
+
+<p>TBD</p>
+
+<h2 id="UsingJenkinsforC++Projects-TestConcatenationandPublication">Test Concatenation and Publication</h2>
+
+<p>TBD</p>
+
+<h2 id="UsingJenkinsforC++Projects-SourceAnalysis">Source Analysis</h2>
+
+<p>TBD</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,227 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.project__inheritance.projects.InheritanceProject plugin="project-inheritance@2.0.0">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>7</daysToKeep>
+        <numToKeep>10</numToKeep>
+        <artifactDaysToKeep>14</artifactDaysToKeep>
+        <artifactNumToKeep>14</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <org.biouno.unochoice.ChoiceParameter plugin="uno-choice@2.1">
+          <name>A_ProductType</name>
+          <description>Tipo de Producto</description>
+          <randomName>choice-parameter-191681744142949</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script>return [
+&apos;FLIGHT:selected&apos;,
+&apos;HOTEL&apos;,
+&apos;TOUR&apos;,
+&apos;TICKET&apos;,
+&apos;TRANSFER&apos;,
+&apos;CAR&apos;,
+&apos;INSURANCE&apos;
+]</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script>return [&quot;error en seleccion de producto&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.ChoiceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.1">
+          <name>B_prodProps</name>
+          <description>Propiedades seleccionadas para el producto (en caso de ser necesario)</description>
+          <randomName>choice-parameter-191789410885443</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script>if (A_ProductType.contains(&quot;FLIGHT&quot;)) 
+ return [&apos;&quot;FEE:PRIMARY_FEE&quot;&apos;,&apos;&quot;FEE:SECONDARY_FEE&quot;&apos;]
+
+else if (A_ProductType.contains(&quot;HOTEL&quot;))
+ return [&apos;&quot;PAYMENT:PAYINADVANCE&quot;:selected&apos;, &apos;&quot;PAYMENT:PAYATDESTINATION&quot;&apos;, &apos;&quot;PAYMENT:PAYWITHPREPAYMENT&quot;&apos;,
+           &apos;&quot;REFUND:REFUNDABLE&quot;:selected&apos;, &apos;&quot;REFUND:NON_REFUNDABLE&quot;&apos;,
+           &apos;&quot;PREBOOKING:PREBOOKABLE&quot;&apos;, &apos;&quot;PREBOOKING:NON_PREBOOKABLE&quot;&apos;]
+           
+//&apos;&quot;GUARANTEE_PAYMENT&quot;&apos;, &apos;&quot;NON_GUARANTEE_PAYMENT&quot;&apos;]
+
+else if (A_ProductType.contains(&quot;INSURANCE&quot;))
+ return [&apos;&quot;FORCE_INSURANCE&quot;:selected&apos;, &apos;&quot;ADD_INSURANCE_CHK&quot;&apos;]
+
+else if (A_ProductType.contains(&quot;TICKET&quot;))
+ return [&apos;&quot;RANDOM&quot;&apos;, &apos;&quot;DISNEY&quot;:selected&apos;, &apos;&quot;UNIVERSAL&quot;&apos;, &apos;&quot;BUSH_GARDENS&quot;&apos;, &apos;&quot;DPTPM&quot;&apos;, &apos;&quot;BG&quot;&apos;]
+
+else if (A_ProductType.contains(&quot;TRANSFER&quot;))
+ return [&apos;&quot;ONE_WAY_HOTEL_AIRPORT&quot;&apos;, &apos;&quot;ONE_WAY_AIRPORT_HOTEL&quot;&apos;, &apos;&quot;ROUNDTRIP&quot;:selected&apos;]
+
+else if (A_ProductType.contains(&quot;CAR&quot;))
+ return [&apos;&quot;PAYMENT:PAYATDESTINATION&quot;&apos;, &apos;&quot;PAYMENT:PREPAYMENT_COMMISSION&quot;&apos;, &apos;&quot;PAYMENT:PREPAYMENT&quot;:selected&apos;, &apos;&quot;PAYMENT:HIBRID&quot;&apos;, &apos;&quot;PAYMENT:PREPAYMENT_AND_PAD&quot;&apos;, &apos;&quot;PAYMENT:PREPAYMENT_AND_PRE_COMMISSION&quot;&apos;, &apos;&quot;PAYMENT:PRE_COMMISSION_AND_PAD&quot;&apos;, &apos;&quot;PAYMENT:RANDOM&quot;&apos;,
+           &apos;&quot;PROVIDER:RENTALCARS&quot;:selected&apos;, &apos;&quot;PROVIDER:PAM&quot;&apos;, &apos;&quot;PROVIDER:NOT_PAM&quot;&apos;, &apos;&quot;PROVIDER:RANDOM&quot;&apos;,
+           &apos;&quot;LOCATION:AIRPORT&quot;&apos;, &apos;&quot;LOCATION:CITY&quot;&apos;, &apos;&quot;LOCATION:ANY&quot;:selected&apos;]</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script>return [&quot;error en seleccion de propiedades del producto&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>A_ProductType</referencedParameters>
+          <choiceType>PT_CHECKBOX</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.1">
+          <name>C_PaymentMultimodal</name>
+          <description>Propiedades de Multimodalidad seleccionadas para el producto (en caso de ser necesario)</description>
+          <randomName>choice-parameter-352721445398413</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script>if (A_ProductType.contains(&quot;CAR&quot;) &amp;&amp; (B_prodProps.contains(&quot;PREPAYMENT_AND_PAD&quot;)||B_prodProps.contains(&quot;PREPAYMENT_AND_PRE_COMMISSION&quot;)||B_prodProps.contains(&quot;PRE_COMMISSION_AND_PAD&quot;)))
+return [&apos;&quot;PAYATDESTINATION&quot;&apos;,&apos;&quot;PAYINADVANCE&quot;:selected&apos;,&apos;&quot;PREPAYMENT_COMMISSION&quot;&apos;]</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script>return [&quot;Error en seleccion de propiedades de pagos multimodalidad en producto/s&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>A_ProductType, B_prodProps</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.DynamicReferenceParameter plugin="uno-choice@2.1">
+          <name>D_SelectedConfig</name>
+          <description></description>
+          <randomName>choice-parameter-285714470949822</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script> if (C_PaymentMultimodal!=&quot;&quot;){
+   return &quot;{\&quot;product_type\&quot;: \&quot;&quot;+A_ProductType+&quot;\&quot;, \&quot;product_properties\&quot;: [&quot;+B_prodProps.replaceAll(&quot;(\\w+:)&quot;,&quot;&quot;)+&quot;,&quot;+C_PaymentMultimodal+&quot;]},&quot;}
+ else if (B_prodProps!=&quot;&quot;){ return  &quot;{\&quot;product_type\&quot;: \&quot;&quot;+A_ProductType+&quot;\&quot;, \&quot;product_properties\&quot;: [&quot;+B_prodProps.replaceAll(&quot;(\\w+:)&quot;,&quot;&quot;)+&quot;]},&quot;}
+ else { return &quot;{\&quot;product_type\&quot;: \&quot;&quot;+A_ProductType+&quot;\&quot;},&quot;}</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script>return [&quot;error&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>A_ProductType, B_prodProps, C_PaymentMultimodal, E_AddProduct</referencedParameters>
+          <choiceType>ET_FORMATTED_HTML</choiceType>
+          <omitValueField>false</omitValueField>
+        </org.biouno.unochoice.DynamicReferenceParameter>
+        <org.biouno.unochoice.CascadeChoiceParameter plugin="uno-choice@2.1">
+          <name>E_AddProduct</name>
+          <description>Add selected product to the group</description>
+          <randomName>choice-parameter-355674516864238</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script>return [&quot;Add Product&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>D_SelectedConfig</referencedParameters>
+          <choiceType>PT_RADIO</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+        <org.biouno.unochoice.DynamicReferenceParameter plugin="uno-choice@2.1">
+          <name>F_FINAL</name>
+          <description></description>
+          <randomName>choice-parameter-368798988419236</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.43">
+              <script>def newMessage = &quot;&quot;
+if (!F_FINAL.endsWith(D_SelectedConfig))
+  {newMessage = F_FINAL+&quot; &quot;+D_SelectedConfig }
+else
+  {newMessage = F_FINAL }
+
+return newMessage</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.43">
+              <script>return [&quot;error in parameter F_FINAL&quot;]</script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>FAS QA Automation - { Parent Project para Jobs Expuestos - Prueba Concepto Nuevo BasicData }</projectName>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>D_SelectedConfig, E_AddProduct, F_FINAL</referencedParameters>
+          <choiceType>ET_FORMATTED_HTML</choiceType>
+          <omitValueField>false</omitValueField>
+        </org.biouno.unochoice.DynamicReferenceParameter>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.28">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>fas-qa</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders/>
+  <publishers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
+      <installationName>Xvfb</installationName>
+      <screen></screen>
+      <debug>true</debug>
+      <timeout>0</timeout>
+      <displayNameOffset>100</displayNameOffset>
+      <additionalOptions></additionalOptions>
+      <shutdownWithBuild>false</shutdownWithBuild>
+      <autoDisplayName>true</autoDisplayName>
+      <assignedLabels></assignedLabels>
+      <parallelBuild>false</parallelBuild>
+    </org.jenkinsci.plugins.xvfb.Xvfb>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.19">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes>6</timeoutMinutes>
+      </strategy>
+      <operationList/>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+  </buildWrappers>
+  <isTransient>false</isTransient>
+  <isAbstract>true</isAbstract>
+  <creationClass></creationClass>
+  <compatibleProjects/>
+  <parentReferences/>
+</hudson.plugins.project__inheritance.projects.InheritanceProject>

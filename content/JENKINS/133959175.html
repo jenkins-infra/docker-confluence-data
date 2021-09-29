@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : 1&amp;1 Cloud Server Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins_753688.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : 1&amp;1 Cloud Server Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (aajdinov)</span>, last modified on Aug 21, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><span style="color: rgb(36,41,46);">Jenkins plugin for 1&amp;1 Cloud Server</span></p><h2 id="id-1&amp;1CloudServerPlugin-Description">Description</h2><p><span style="color: rgb(36,41,46);">This plugin allows Jenkins to start nodes on the </span><a href="https://cloudpanel-api.1and1.com/documentation/index_en.html" class="external-link" rel="nofollow">1&amp;1 Cloud Server API</a><span style="color: rgb(36,41,46);"> on demand, and delete them when they are unused.</span></p><h2 id="id-1&amp;1CloudServerPlugin-GettingStarted">Getting Started</h2><p>Jenkins plugin for 1&amp;1 Cloud Server has the following requirements:</p><ul><li>1&amp;1 account (API key)</li></ul><p>Before you begin, you need to have a 1&amp;1 account.</p><p>To enable the API token:</p><ol><li>Log in to your 1&amp;1 Control Panel and select the relevant package.</li><li>Click <span>1&amp;1 Cloud Panel</span> from the Cloud Server section of the control panel.</li><li>Select <span>Users</span> from the <span>Management</span> section of the <span>Infrastructure</span> menu.</li><li>Select the user.</li><li>In the API section in the lower part of the screen, click <span>Disabled</span> next to the API KEY.</li><li>Click <span>OK</span> to activate the API key.</li></ol><h2 id="id-1&amp;1CloudServerPlugin-Usage">Usage</h2><p>After the plugin is installed, navigate to the main <span>Manage Jenkins &gt; Configure System</span> page, and scroll down to the <span>Cloud</span>section. Click <span>Add a new cloud</span> and select the <span>1&amp;1</span> option. This will display the UI for configuring the 1&amp;1 Cloud Server plugin.</p><h4 id="id-1&amp;1CloudServerPlugin-CloudOptionReference">Cloud Option Reference</h4><p>The following table lists the cloud options and their brief descriptions:</p><div class="table-wrap"><table class="confluenceTable"><colgroup><col/><col/><col/></colgroup><thead><tr><th class="confluenceTh">Name</th><th class="confluenceTh">Required</th><th class="confluenceTh">Description</th></tr></thead><tbody><tr><td class="confluenceTd">Unique name</td><td class="confluenceTd">yes</td><td class="confluenceTd">The unique name for the cloud</td></tr><tr><td class="confluenceTd">API Token</td><td class="confluenceTd">yes</td><td class="confluenceTd">The 1&amp;1 authentication key</td></tr><tr><td class="confluenceTd">SSH public key</td><td class="confluenceTd">yes</td><td class="confluenceTd">A valid public SSH Key to be copied into the server during creation</td></tr><tr><td class="confluenceTd">SSH private key</td><td class="confluenceTd">yes</td><td class="confluenceTd">A valid private SSH key to permit SSHing into the instances that are started</td></tr><tr><td class="confluenceTd">Instance cap</td><td class="confluenceTd">yes</td><td class="confluenceTd">The upper limit to the number of 1&amp;1 servers that Jenkins is allowed to launch</td></tr><tr><td class="confluenceTd">Timeout in minutes</td><td class="confluenceTd">yes</td><td class="confluenceTd">Time reserved for the operations on this cloud to complete before triggering a timeout, expressed in minutes</td></tr></tbody></table></div><p>Fill out the options fields, then use <span>Test Connection</span> to verify that Jenkins can successfully connect to the 1&amp;1 Cloud Server API.</p><p>After verifying the API connection, a new node template can be added by clicking <span>Add</span> button. Node templates will be used to create servers and launch them as nodes.</p><h4 id="id-1&amp;1CloudServerPlugin-ServerOptionReference"><span style="color: rgb(210,73,57);">Server Option Reference</span></h4><p>The following table lists the server options and their brief descriptions:</p><div class="table-wrap"><table class="confluenceTable"><colgroup><col/><col/><col/></colgroup><thead><tr><th class="confluenceTh">Name</th><th class="confluenceTh">Required</th><th class="confluenceTh">Description</th></tr></thead><tbody><tr><td class="confluenceTd">Unique name</td><td class="confluenceTd"><span>yes</span></td><td class="confluenceTd">An unique name for the node template/server. Note that no two node templates should have the same name within a Cloud. Each node template name must be unique. As the node template name is used in generating the server, name, only the characters A-Z, a-z. 0-9 and . can be used in the name.</td></tr><tr><td class="confluenceTd">Fixed instance size</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">The size used for provisioning new servers from this template.</td></tr><tr><td class="confluenceTd">Run as user</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">Jekins will SSH into the server as the user provided in this field. If you specify anything other than <code>root</code>, make sure that the user exists and that Jenkins will be able to SSH using the SSH private key specified for this Cloud.</td></tr><tr><td class="confluenceTd">Jenkins workspace directory path</td><td class="confluenceTd">Yes</td><td class="confluenceTd">Absolute path to a directory in which Jenkins will put the workspace directory. Make sure that the user Jenkins runs as has enough permissions to write into that directory.</td></tr><tr><td class="confluenceTd">SSH port</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">The port at which the SSH daemon is listening for the incoming SSH connections.</td></tr><tr><td class="confluenceTd">Labels</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">Labels (also called &quot;tags&quot;) are used for grouping multiple nodes into one logical group. Use spaces between each label. For instance 'regression centos7' will assign a node the labels 'regression' and 'centos7'. For example, if you have multiple CentOS 7 nodes and you have jobs that require CentOS 7, then you can configure all your CentOS 7 nodes to have the label 'centos7', then tie the job to the 'centos7' label. This allows your job to run on any of your CentOS 7 nodes but not anywhere else.</td></tr><tr><td class="confluenceTd">Number of executors</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">Determines how many executors can run on the node. Should be an integer greater than zero.</td></tr><tr><td class="confluenceTd">Idle termination time</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">Determines how long nodes can remain idle before being terminated and the server destroyed.<br/><br/>Times are expressed in minutes. A value of 0 indicates that idle nodes should never be terminated.<br/><br/>As Jenkins doesn't check the idle status of nodes every minute even if you tell it to (it might skip checks for a few minutes), Jenkins might terminate the node a few minutes later than what you specify in this field.</td></tr><tr><td class="confluenceTd">Instance cap</td><td class="confluenceTd"><span>Yes</span></td><td class="confluenceTd">The upper limit to the number of 1&amp;1 servers that Jenkins is allowed to launch for this node template.</td></tr><tr><td class="confluenceTd">Init script</td><td class="confluenceTd">No</td><td class="confluenceTd">Initialization script used for node setup.</td></tr><tr><td class="confluenceTd">Allow jobs with no label restriction</td><td class="confluenceTd">No</td><td class="confluenceTd">If a non-empty set of labels is specified and this <span>is</span> checked, jobs that are not restricted to run on any specific node <span>will</span> trigger creation of a server based on this node template.<br/><br/>If a non-empty set of labels is specified and this <span>is not</span> checked, jobs that are not restricted to run on any specific node <span>will not</span> trigger creation of a server based on this node Template.<br/><br/>If <span>no</span> labels for this node template are specified, then regardless of whether this option is checked or not, jobs that are not restricted to run on any specific node <span>will</span> trigger creation of a server based on this node Template.</td></tr></tbody></table></div><h2 id="id-1&amp;1CloudServerPlugin-Support">Support</h2><p>You are welcome to contact us with questions or comments using the <strong>Community</strong> section of the <a href="https://www.1and1.com/cloud-community" class="external-link" rel="nofollow">1&amp;1 Cloud Community</a>. Please report any feature requests or issues using GitHub issue tracker.</p><ul><li>Ask a question or discuss at <a href="https://www.1and1.com/cloud-community" class="external-link" rel="nofollow">1&amp;1 Cloud Community</a>.</li><li>Report an <a href="https://github.com/jenkinsci/oneandone-cloudserver-plugin/issues" class="external-link" rel="nofollow">issue here</a>.</li></ul><h2 id="id-1&amp;1CloudServerPlugin-Contributing">Contributing</h2><ol><li>Fork the repository (<a href="https://github.com/jenkinsci/oneandone-cloudserver-plugin/fork" class="external-link" rel="nofollow">https://github.com/jenkinsci/oneandone-cloudserver-plugin/fork</a>)</li><li>Create your feature branch (git checkout -b my-new-feature)</li><li>Commit your changes (git commit -am 'Add some feature')</li><li>Push to the branch (git push origin my-new-feature)</li><li>Create a new Pull Request</li></ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

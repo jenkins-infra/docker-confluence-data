@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : I&#39;m getting OutOfMemoryError</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins_753702.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : I&#39;m getting OutOfMemoryError
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jglick)</span> on Nov 05, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If your Jenkins started choking with <code>OutOfMemoryError</code>, there are four possibilities.</p>
+
+<ol>
+	<li>Your Jenkins is growing in data size, requiring a bigger heap space. In this case you just want to give it a bigger heap.</li>
+	<li>Your Jenkins is temporarily processing a large amount of data (like test reports), requring a bigger head room in memory. In this case you just want to give it a bigger heap.</li>
+	<li>Your Jenkins is leaking memory, in which case we need to fix that.</li>
+	<li>The Operating System kernel is running out of virtual memory.</li>
+</ol>
+
+
+<p>Which category your <code>OutOfMemoryError</code> falls into is not always obvious, but here are a few useful techniques to diagnose the problem.</p>
+
+<ol>
+	<li>Use <a href="http://visualvm.java.net/" class="external-link" rel="nofollow">VisualVM</a>, attach to the running instance, and observe the memory usage. Does the memory max out while loading Jenkins? If so, it probably just needs a bigger memory space. Or is it slowing creeping up? If so, maybe it is a memory leak.</li>
+	<li>Do you consistently see OOME around the same phase in a build? If so, maybe it just needs a bigger memory.</li>
+	<li>In cases where virtual memory is running short the kernel OOM (Out of Memory) killer may forcibly kill Jenkins or individual builds. If this occurs on Linux you may see builds terminate with exit code 137 (128 + signal number for SIGKILL). The dmesg command output will show log messages that will confirm the action that the kernel took.</li>
+</ol>
+
+
+<p>If you think it's a memory leak, the Jenkins team needs to get the heap dump to be able to fix the problem. There are several ways to go about this.</p>
+
+<ul>
+	<li>Run JVM with <code>-XX:+HeapDumpOnOutOfMemoryError</code> so that JVM will automatically produce a heap dump when it hits <code>OutOfMemoryError</code>.</li>
+	<li>You can run <code>jmap -dump:live,file=/tmp/jenkins.hprof pid</code> where pid is the process ID of the target Java process.</li>
+	<li>Use <a href="http://visualvm.java.net/" class="external-link" rel="nofollow">VisualVM</a>, attach to the running instance, and obtain a heap dump</li>
+	<li>If your Jenkins runs at <code>http:</code><code>//server/jenkins/</code>, request <code>http:</code><code>//server/jenkins/heapDump</code> with your browser and you'll get the heap dump downloaded. (1.395 and newer)</li>
+	<li>If you are familiar with one of many Java profilers, they normally offer this capability, too.</li>
+</ul>
+
+
+<p>Once you obtain the heap dump, please post it somewhere, then open an issue (or look for a duplicate issue), and attach a pointer to it. Please be aware that heap dumps may contain confidential information of various sorts.</p>
+
+<p>If the full heap dump is too big, please try to get us the heap histogram (<code>jmap -histo:live pid</code>).</p>
+
+<p>In the past, the distributed build support has often been a source of leakage (as this involves in a distributed garbage collection.) To check for this possibility, visit links like <code>http:</code><code>//yourserver/jenkins/computer/YOURSLAVENAME/dumpExportTable</code>. If this show too many objects, they may be leaks.</p>
+
+<h1 id="I&#39;mgettingOutOfMemoryError-Analyzingtheheapdumpyourself">Analyzing the heap dump yourself</h1>
+
+<p>If you cannot let us inspect your heap dump, we need to ask you to diagnose the leak.</p>
+
+<ul>
+	<li>First, find the objects with biggest retention size. Often they are various Maps, arrays, or buffers.</li>
+	<li>Next, find the path from that object to GC root, so that you can see which Jenkins object owns those big objects.</li>
+</ul>
+
+
+<p>Report the summary of those findings to the list and we'll take it from there.</p>
+
+<h2 id="I&#39;mgettingOutOfMemoryError-UsingVisualVM">Using VisualVM</h2>
+
+<p>Unless you already have a preferred memory profiling tool, VisualVM is recommended for analyzing heap dumps. It is a standalone version of the NetBeans profiler, distributed with the Oracle JDK.</p>
+
+<p>Run <code>jvisualvm</code> and use <em>File » Load</em> and select the heap dump. In the <em>Classes</em> tab, look for a class with a suspiciously large number of instances, if not already identified by <code>jmap -histo</code>. For example, to debug a Groovy script leak, type <code>GroovyClassLoader</code> in the filter field and double-click the line with no <code>$</code> in it (just <code>groovy.lang.GroovyClassLoader</code>).</p>
+
+<p>In the <em>Instances</em> tab you should now see all instances. Click on some at random. (If there are more than 500, they will be broken into groups of 500, with the first expanded; so to get a representative instance “from the middle”, collapse the first group, expand a group in the middle, and select some instance from that group.)</p>
+
+<p>Under <em>References</em>, right-click <code>this</code> and select <em>Show Nearest GC Root</em>. Right-click the selected item in the tree and select <em>Copy Path From Root</em>. Paste this text, for several examples, into a text file and attach it to a bug report—or continue your investigation into plugin source code.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

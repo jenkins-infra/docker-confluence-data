@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Hudson Speaks! Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins_753688.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Hudson Speaks! Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (edward@hurst-frost.net)</span>, last modified by <span class='editor'> Unknown User (oxcafebabe)</span> on Dec 23, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-10-11/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+This plugin gives Jenkins a voice using <a href="http://freetts.sourceforge.net/" class="external-link" rel="nofollow">FreeTTS</a>.</p><h1 id="HudsonSpeaks!Plugin-Prerequisites">Prerequisites</h1><p>This plugin requires that:</p><ul><li>Hudson's server machine has a working sound card and speaker.</li><li>Hudson's server machine's speaker is not in a remote server room where there's no one around to hear it. Preferably in audible range of the development team Hudson is working for.</li></ul><p><span style="color: red;">IMPORTANT:</span> Please use the 'Test speech' button in the global preferences before using Hudson Speaks! as a build notifier. If the test does not complete, or no sound is heard, you should not use Hudson Speaks! as a build notifier, and check your audio hardware.</p><p>During testing it has been found that if a linux machine does not have a correctly configured audio device, the FreeTTS library call can hang trying to speak. This will cause your build executor to hang too, and result in Hudson failing.</p><h1 id="HudsonSpeaks!Plugin-Configuration">Configuration</h1><p>Hudson Speaks! is configured using a Jelly XML Script (just like a lot of the internals of Hudson itself).</p><p>The context that the Jelly script runs in is pre-configured with these variables:</p><ul><li><code>${build</code>} - the current build</li><li><code>${duration</code>} - the duration of the build formatted for speech.</li></ul><h6 id="HudsonSpeaks!Plugin-Examplescript(thedefault):">Example script (the default):</h6><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:choose&gt;
+    &lt;j:when test=&quot;${build.result!=&#39;SUCCESS&#39; || build.project.lastBuild.result!=&#39;SUCCESS&#39;}&quot;&gt;
+        Your attention please. Project ${build.project.name}, build number ${build.number}: ${build.result} in ${duration}.
+        &lt;j:if test=&quot;${build.result!=&#39;SUCCESS&#39;}&quot;&gt; Get fixing those bugs team!&lt;/j:if&gt;
+    &lt;/j:when&gt;
+    &lt;j:otherwise&gt;&lt;!-- Say nothing --&gt;&lt;/j:otherwise&gt;
+&lt;/j:choose&gt;
+</pre>
+</div></div><p>This means an announcement will only be made if the current build, or the previous build was not a success. In other words the project was broken by this build, the project is still broken, or the project was fixed by this build.</p><p>The script can be specified at the global level, and also overridden at the project level.</p><h1 id="HudsonSpeaks!Plugin-Troubleshooting">Troubleshooting</h1><p>This Plugin should work out-of-the-box on Windows, but often under Linux the sound device is not accessible.</p><p>If Hudson refuses to talk on Linux, but the 'Test speech' says success, check that the sound device (often <code>/dev/dsp</code>) is writable by your Hudson user:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ ls -l /dev/dsp
+crw-rw-rw- 1 root root 14, 3 Oct 22 16:35 /dev/dsp
+</pre>
+</div></div><p>If not, get someone with sufficient system privileges to change it for you:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ chmod +rw /dev/dsp
+</pre>
+</div></div><h1 id="HudsonSpeaks!Plugin-Alternatives">Alternatives</h1><p>An alternative to this is to use the CCTray app that comes with CruiseControl.NET and have it monitor your Hudson server. You can set this up on a shared machine or on individual developer machines. To have CCTray monitor Hudson, set it up to monitor a custom URL that looks like <a href="http://hudsonserverhudsonport" class="external-link" rel="nofollow">http://hudsonserver:hudsonport/hudsonpath/cc.xml</a>. See <a href="Monitoring-Jenkins_4161578.html#MonitoringJenkins-CCXml-compatibletools">Monitoring Jenkins</a> for more details.</p><p>Basically, appending cc.xml to almost any Hudson URL (project, view, etc.) will return an XML document that CCTray can parse. You can then use CCTray to play .wav files, speak, or even control X10 devices.</p><p>CCTray is available at <a href="http://sourceforge.net/projects/ccnet/files/" class="external-link" rel="nofollow">http://sourceforge.net/projects/ccnet/files/</a></p><h1 id="HudsonSpeaks!Plugin-Changelog">Changelog</h1><ul><li>Version 0.1.1 (2nd December 2009)<ul><li>Repackaged with Hudson 1.324 (no functional changes)</li></ul></li><li>Version 0.1 (29th November 2009)<ul><li>Initial release</li></ul></li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:27</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

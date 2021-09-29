@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : How to setup Hudson with Subversion and mod_auth_sspi (NTLM)</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins_753702.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : How to setup Hudson with Subversion and mod_auth_sspi (NTLM)
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (flm)</span>, last modified by <span class='editor'> Unknown User (mindless)</span> on Jul 29, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This mini HOW-TO is for those who are in the urge of using a Subversion server behind a windows based Apache secured by <a href="http://sourceforge.net/projects/mod-auth-sspi" class="external-link" rel="nofollow">mod_auth_sspi</a>.</p>
+
+<p>Since it this authentication scheme causes some trouble with Hudson (see <a href="http://www.nabble.com/Problem-with-svn-credentials-td17501860.html" class="external-link" rel="nofollow">here</a>and <a href="http://www.nabble.com/Problems-connecting-to-SVN-(propfind%2C-500-internal-server-error)-to17226169.html#a17226169" class="external-link" rel="nofollow">here</a>) and I ran into the same trouble too here is my setup and solution to get mod_auth_sspi working with Hudson.</p>
+
+<h1 id="HowtosetupHudsonwithSubversionandmod_auth_sspi(NTLM)-Setup">Setup</h1>
+
+<p>Suppose you have a similar environment for your Subversion. The Hudson part is irrelevant in this context.</p>
+<ul>
+	<li>Apache 2.2.9 running on a Windows 2008 Server (DAV/2 mod_ssl/2.2.9 OpenSSL0.9.8h SVN/1.5.5 mod_auth_sspi/1.0.4)</li>
+	<li>Subversion mounted to Apache 2.2.9 with webdav</li>
+	<li>Apache Authentication Module: mod_auth_sspi</li>
+	<li>Hudson (Release 1.300) on a different machine (Linux or Windows does not matter), served by Tomcat6 and Sun Java6</li>
+</ul>
+
+
+<h1 id="HowtosetupHudsonwithSubversionandmod_auth_sspi(NTLM)-Synopsis">Synopsis</h1>
+
+<p>When you try to setup your project with Subversion then Hudson refuses to connect to the svn repository declared in your hudson job when the access to the repository is protected by mod_auth_sspi. You get this kind of exception from Hudson (lines wrapped for better readability):</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+org.tmatesoft.svn.core.SVNAuthenticationException: svn: Authentication failed
+for http://geonosis/repos/projects/helloWorld/trunk/printHelloWorld
+        at
+org.tmatesoft.svn.core.internal.wc.SVNErrorManager.error(SVNErrorManager.java:67)
+[...]
+Caused by: org.tmatesoft.svn.core.SVNAuthenticationException: svn: Authentication failed
+for http://geonosis/repos/projects/helloWorld/trunk/printHelloWorld
+        at
+org.tmatesoft.svn.core.internal.wc.SVNErrorManager.authenticationFailed(SVNErrorManager.java:36)
+</pre>
+</div></div>
+
+<h1 id="HowtosetupHudsonwithSubversionandmod_auth_sspi(NTLM)-Cause">Cause</h1>
+
+<p>My guess is that the mod_auth_sspi (NTLM) does not understand what the svnkit (Basic Authentication) of Hudson says to authenticate. (It is my assumption because I am not a Microsoft-Techie - I prefer open standards and sources.) The credentials you enter in Hudson do not make their way <em>into</em> the mod_auth_sspi. Side note: They get send from Hudson: you will see them when you disable ssl and sniff the packets on the wire.</p>
+
+<p>In your Apache error.log you will see an empty user, even when you provided a user name in Hudson. Note the &quot;user unknown&quot; text in the end of the log entry:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+[Thu May 29 09:13:33 2008] [error] [client 192.168.0.15] (OS 1326)Logon failure: unknown user name or
+bad password.  : authentication failure for &quot;/repos/projects/helloWorld/trunk/printHelloWorld&quot;: user unknown
+</pre>
+</div></div>
+<p>Lets solve this...</p>
+
+<h1 id="HowtosetupHudsonwithSubversionandmod_auth_sspi(NTLM)-Workaround/Solution">Workaround/Solution</h1>
+
+<p>The idea is to enforce the mod_auth_sspi to offer Basic Authentication and to challenge Basic Authentication first and NTLM second. By default the mod_auth_sspi challenges NTLM first and does not offer Basic Authentication at all.</p>
+
+<p>Locate your section for /svn in the httpd.conf (it should look like this):
+<br class="atl-forced-newline"/></p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;Location /svn&gt;
+  DAV svn
+  SVNParentPath C:\repo
+  AuthName &quot;Subversion&quot;
+  AuthType SSPI
+  SSPIAuth On
+  SSPIAuthoritative On
+  SSPIDomain yourWindowsDomain
+  require valid-user
+&lt;/Location&gt;
+</pre>
+</div></div>
+<p>Then add or change these two switches in the section to:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+  SSPIOfferBasic On
+  SSPIBasicPreferred On
+</pre>
+</div></div>
+<p>See <a href="http://dotnet.org.za/trumpi/archive/2007/04/07/installing-subversion-with-windows-authentication-the-easy-way.aspx" class="external-link" rel="nofollow">here</a> for their meaning. Make sure to edit the httpd.conf as Administrator (Windows UAC is another PITA). Save the file. Restart the Apache service. Connect to Subversion via your Hudson job. Sm:)e.</p>
+
+<h1 id="HowtosetupHudsonwithSubversionandmod_auth_sspi(NTLM)-Remarks">Remarks</h1>
+
+<p>NTLM is awkward, if you can avoid it, don't use it! It may even be a security breach when your Apache with mod_auth_sspi serves the internet <a href="http://www.webappsec.org/lists/websecurity/archive/2005-07/msg00006.html" class="external-link" rel="nofollow">behind a proxy</a>. If you (or your sysadmins) can't (or won't) bail out Microsoft products consider to use the <a href="http://httpd.apache.org/docs/2.2/mod/mod_authnz_ldap.html" class="external-link" rel="nofollow">mod_authnz_ldap</a> from apache with Microsoft Active Directory, since the mod_auth_sspi discussed here seems to be discontinued by the developer(s) since 2006.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,996 @@
+@echo off
+
+echo %1 %2 %3 %4
+
+SETLOCAL
+
+rem check arguments
+
+if not "%1" == "" goto setup
+
+ 
+
+echo Usage: %0 [qac^|qacpp] ^<full_short_path_to_project_file^>[?full_path_to_single_source_file] [[[full_path_to_source_root] [append]] ^| qav_upload [solo]]
+
+echo   supply ^<full_path_to_source_root^> to generate baseline
+
+echo   optional ^<append^> flag will append to an existing baseline suppression file
+
+echo qav_upload will upload the analysis data to QAV server
+
+goto end
+
+ 
+
+:setup
+
+rem call the project settings script along side this one
+
+set LOC=%~dp0
+
+if EXIST "%LOC%\script_settings.bat" goto script_set
+
+echo Script settings file "%LOC%\script_settings.bat does not exist, check installation
+
+goto end
+
+ 
+
+:script_set
+
+call "%LOC%\script_settings.bat"
+
+ 
+
+ 
+
+rem See if single file to analyse is also passed in
+
+set IDE_PROJ=
+
+set IDE_FILE=
+
+rem check to see if this batch file is called with an environment
+
+rem variable set to the project file: this is the case where the IDE
+
+rem cannot pass this to an external tool (e.g. GHS Multi)
+
+if ["%PRQA_IDE_PROJECT%"] == [""] goto passed_in
+
+ 
+
+rem ide project file specified in environment var
+
+set IDE_PROJ=%PRQA_IDE_PROJECT%
+
+rem remove quotes from command line parameter
+
+for /f "useback tokens=*" %%a in ('%2') do set IDE_FILE=%%~a
+
+goto done_get_proj_file
+
+ 
+
+:passed_in
+
+rem passed in as normal
+
+rem remove quotes from command line parameter
+
+for /f "useback tokens=*" %%a in ('%2') do set CMD2=%%~a
+
+rem if %3 starts with ?, strip quotes and combine with CMD2
+
+for /f "useback tokens=*" %%a in ('%3') do set CMD3=%%~a
+
+set FIRST=%CMD3:~0,1%
+
+set DO_SHIFT=0
+
+if "%FIRST%" == "?" (
+
+        rem combine args
+
+    set CMD2=%CMD2%%CMD3%
+
+    set DO_SHIFT=1
+
+)
+
+rem and shift to put subsequent args in the correct place
+
+rem note we lose ide project name(%2), but we are done with that
+
+if %DO_SHIFT% == 1 shift /2
+
+rem divide up parameter on '?' token
+
+for /f "tokens=1,2 delims=?" %%a in ("%CMD2%") do set IDE_PROJ=%%a&set IDE_FILE=%%b
+
+:done_get_proj_file
+
+ 
+
+rem set up settings for this project: copy default if no settings file
+
+call:GetDrivePath "%IDE_PROJ%"
+
+set PROJ_SET_LOC=%DRIVE_PATH%
+
+if EXIST "%PROJ_SET_LOC%\project_settings.bat" goto proj_set
+
+echo No project settings file: copying default project_settings.bat from %LOC% to %PROJ_SET_LOC%
+
+echo This file may need customising for this project
+
+copy "%LOC%\project_settings.bat" "%PROJ_SET_LOC%" >NUL
+
+ 
+
+:proj_set
+
+call "%PROJ_SET_LOC%\project_settings.bat"
+
+ 
+
+rem set up product
+
+set PRODUCT=none
+
+if /I "%1" == "qacpp" (
+
+    call "%PRQA_INSTALL_DIR%\%QACPP_DIR%\bin\qacppconf.bat"
+
+    set PRODUCT=qacpp
+
+    set EXTENSIONS=%CPP_EXTENSIONS%
+
+    set PROD_DIR=%QACPP_DIR%
+
+    set MESSAGE_PERSON=%CPP_MESSAGE_PERSON%
+
+    set ANALYSER_PERSON=%CPP_ANALYSER_PERSON%
+
+    set IDE_COMPILER_PERSON=%CPP_IDE_COMPILER_PERSON%
+
+    set VS6_EXTENSIONS=cpp
+
+    if "%COMPILER_VARIABLE%" == "" (
+
+        set COMPILER_VARIABLE=CXX
+
+    )
+
+)
+
+if /I "%1" == "qac" (
+
+    call "%PRQA_INSTALL_DIR%\%QAC_DIR%\bin\qacconf.bat"
+
+    set PRODUCT=qac
+
+    set EXTENSIONS=%C_EXTENSIONS%
+
+    set PROD_DIR=%QAC_DIR%
+
+    set MESSAGE_PERSON=%C_MESSAGE_PERSON%
+
+    set ANALYSER_PERSON=%C_ANALYSER_PERSON%
+
+    set IDE_COMPILER_PERSON=%C_IDE_COMPILER_PERSON%
+
+    set VS6_EXTENSIONS=c
+
+    if "%COMPILER_VARIABLE%" == "" (
+
+        set COMPILER_VARIABLE=CC
+
+    )
+
+)
+
+if %PRODUCT% == "none" (
+
+    echo "Invalid product: %1"
+
+    goto end
+
+)
+
+rem Add QAW, QAR and QAV locations to path
+
+set path=%QAW_DIR%;%QAR_DIR%;%PATH%;%QAV_DIR%
+
+ 
+
+ 
+
+ 
+
+ 
+
+rem setup an output filename - use the same name as IDE project passed in
+
+call:GetName "%IDE_PROJ%"
+
+set PROJECT_NAME=%NAME%
+
+set outproj=%PROJECT_DIR%\%PROJECT_NAME%.prj
+
+if exist "%outproj%" del /F "%outproj%"
+
+ 
+
+rem determine project file extension
+
+call:GetExtension "%IDE_PROJ%"
+
+set ext=%EXTENSION%
+
+set FIRST_TWO=%ext:~0,3%
+
+rem do some extra checking for 'pre' extension for CW .xml
+
+rem   though CW doesn't seem to add the .xml ....
+
+set TMP_BUF=%IDE_PROJ:~0,-4%
+
+call:GetExtension "%TMP_BUF%"
+
+ 
+
+rem in the case of an existing .prj file, we don't need to do any conversion
+
+rem and must use the actual project file because of relative paths
+
+if /I "%ext%" == ".prj" (
+
+    rem QAC/QAC++ project - conversion is just a copy
+
+    set outproj="%IDE_PROJ%"
+
+)
+
+ 
+
+rem set up project analysis: no CMA or reports for single file analysis
+
+if ["%IDE_FILE%"] == [""] (
+
+    set QAW_CMD=qaw %PRODUCT% "%outproj%"
+
+    set MASEQ_OPTIONS=pal %%Q %%L+ %%P+
+
+) else (
+
+    set QAW_CMD=qaw %PRODUCT% "%outproj%#:%IDE_FILE%"
+
+    set MASEQ_OPTIONS=
+
+)
+
+ 
+
+rem check third parameter - it may be a path in quotes or a simple qav_upload command
+
+rem for the qav_upload, turn off the -view option so the MB doesn't popup
+
+rem actually turn it off for baseline generation as well
+
+set PARAM3=%3
+
+for /f "useback tokens=*" %%a in ('%PARAM3%') do set PARAM3=%%~a
+
+if not "%PARAM3%" == "" (
+
+    if "%VIEW_OPTIONS%" == "" goto no_remove_view
+
+    set VIEW_OPTIONS=%VIEW_OPTIONS:-view=%
+
+)
+
+:no_remove_view
+
+ 
+
+rem see if a specific project converter has been chosen
+
+if not ["%PRQA_PROJECT_CONVERTER%"] == [""] (
+
+   set IDE_CONVERTER="%PRQA_PROJECT_CONVERTER%"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+rem if the project is called Makefile, then we need to run
+
+rem wrapper to create a prqa project, and then proceed with
+
+rem the created project
+
+rem need to isolate filename only
+
+if /I not "%PROJECT_NAME%" == "makefile" goto not_makefile
+
+rem remove master wqpo and run wrapper to get project settings
+
+if exist "%TEMP%\master.wqp" del /F "%TEMP%\master.wqp"
+
+if exist "%TEMP%\prqamakefile.prj" del /F "%TEMP%\prqamakefile.prj"
+
+rem add wrapper dir to path since it has spaces
+
+PATH=%BIN_DIR%\wrapper;%PATH%
+
+make -k clean
+
+make -k -j %NUM_CORES% -f %MAKEFILE_NAME% %COMPILER_VARIABLE%="wrapper -set \"ANALYSER=%PRODUCT%\" -set \"ANALYSER_BASE=%PRQA_INSTALL_DIR%\%PROD_DIR%\" -set MODE=PROJECT_CREATOR_MODE -set \"WQP_OUTPUT_DIR=%TEMP%\" %COMPILER_COMMAND%"
+
+create_project_back_end.exe -wqp "%TEMP%\master.wqp" -prjf "%TEMP%\Makefile.prj" -p_c %IDE_COMPILER_PERSON%  -p_s %MESSAGE_PERSON%
+
+set IDE_PROJ=%TEMP%\Makefile.prj
+
+if not exist "%IDE_PROJ%" (
+
+    echo Project create failed, exiting
+
+    goto end
+
+)
+
+set ext=.prj
+
+:not_makefile
+
+if /I "%ext%" == ".prj" (
+
+    rem QAC/QAC++ project - nothing needs doing
+
+    goto qaw
+
+)
+
+ 
+
+if /I "%ext%" == ".xml" (
+
+    if not "%EXTENSION%" == "" set ext=%EXTENSION%%ext%
+
+)
+
+if /I "%ext%" == ".vcproj" (
+
+   set VS_SLNPROJ=--vc
+
+   goto vs
+
+  )
+
+if /I "%ext%" == ".vcxproj" (
+
+   set VS_SLNPROJ=--vc
+
+   goto vs
+
+  )
+
+if /I "%ext%" == ".sln" (
+
+   set VS_SLNPROJ=--sln
+
+   goto vs
+
+)
+
+ 
+
+if /I "%ext%" == ".gpj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\GHSPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".bpr" (
+
+   set IDE_CONVERTER="%BIN_DIR%\BBPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+rem must export mcp project first
+
+if /I "%ext%" == ".mcp.xml" (
+
+   set IDE_CONVERTER="%BIN_DIR%\CWPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%" "%CW_INSTALL_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".eww" (
+
+   set IDE_CONVERTER="%BIN_DIR%\IARPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%" "%IAR_INSTALL_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".ewp" (
+
+   set IDE_CONVERTER="%BIN_DIR%\IARPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%" "%IAR_INSTALL_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".uv2" (
+
+   set IDE_CONVERTER="%BIN_DIR%\UvPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".uvproj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\KeilUv4PrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".cws" (
+
+   set IDE_CONVERTER="%BIN_DIR%\CVIPrjCvtr.exe"
+
+   set IDE_OPTIONS="%LABWIN_INSTALL_DIR%" "%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".prj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\CVIPrjCvtr.exe"
+
+   set IDE_OPTIONS="%LABWIN_INSTALL_DIR%" "%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".mcp" (
+
+   set IDE_CONVERTER="%BIN_DIR%\MPLPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+  goto ide
+
+)
+
+if /I "%ext%" == ".pjt" (
+
+   set IDE_CONVERTER="%BIN_DIR%\TIPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".dpj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\VDSPPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%" "%VDSP_INSTALL_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".project" (
+
+   set IDE_CONVERTER="%BIN_DIR%\WRPrjCvtr.exe"
+
+   set IDE_OPTIONS="%WINDRIVER_PRJ_FILE%" "%WINDRIVER_WS_DIR%" "%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".cbproj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\CPPBPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".groupproj" (
+
+   set IDE_CONVERTER="%BIN_DIR%\CPPBPrjCvtr.exe"
+
+   set IDE_OPTIONS="%PROJECT_DIR%"
+
+   goto ide
+
+)
+
+if /I "%ext%" == ".dsp" (
+
+   goto vs6
+
+)
+
+ 
+
+echo Invalid project file %IDE_PROJ% (%ext%)
+
+echo Must be either (.vcproj, .gpj, .bpr, .mcp.xml, .eww/.ewp, .uv*, .cws, .mcp, .pjt, .dpj, .project, ,cbproj, .groupproj)
+
+goto end
+
+ 
+
+:vs
+
+if "%VS_VERSION%" == "2010" (
+
+   set VS_INSTALL_DIR=%VS10_INSTALL_DIR%
+
+   set VS_CONVERTER=%VS10_CONVERTER%
+
+)
+
+if "%VS_VERSION%" == "2008" (
+
+   set VS_INSTALL_DIR=%VS08_INSTALL_DIR%
+
+   set VS_CONVERTER=%VS08_CONVERTER%
+
+)
+
+if "%VS_VERSION%" == "2005" (
+
+   set VS_INSTALL_DIR=%VS05_INSTALL_DIR%
+
+   set VS_CONVERTER=%VS05_CONVERTER%
+
+)
+
+ 
+
+echo Convert Visual Studio Solution/Project %IDE_PROJ% to %outproj%
+
+echo "%VS_INSTALL_DIR%\%VS_CONVERTER%" %PRODUCT% %VS_SLNPROJ% "%IDE_PROJ%" --name %outproj% --addopt %ANALYSER_PERSON% --cfg "%IDE_CONFIGURATION%" --mp %MESSAGE_PERSON%
+
+"%VS_INSTALL_DIR%\%VS_CONVERTER%" %PRODUCT% %VS_SLNPROJ% "%IDE_PROJ%" --name %outproj% --addopt %ANALYSER_PERSON% --cfg "%IDE_CONFIGURATION%" --mp %MESSAGE_PERSON%
+
+goto qaw
+
+ 
+
+:ide
+
+rem set slashes the right way round
+
+set IDE_PROJ=%IDE_PROJ:/=\%
+
+set IDE_COMPILER_PERSON=%IDE_COMPILER_PERSON:/=\%
+
+set MESSAGE_PERSON=%MESSAGE_PERSON:/=\%
+
+set ANALYSER_PERSON=%ANALYSER_PERSON:/=\%
+
+echo Convert Project %IDE_PROJ% to %outproj%
+
+echo Using %IDE_CONFIGURATION% configuration
+
+echo %IDE_CONVERTER% "%IDE_PROJ%" %IDE_OPTIONS% --cp %IDE_COMPILER_PERSON% --mp %MESSAGE_PERSON% --ap %ANALYSER_PERSON% --pn "%PROJECT_NAME%" --cfg "%IDE_CONFIGURATION%" %EXTENSIONS%
+
+%IDE_CONVERTER% "%IDE_PROJ%" %IDE_OPTIONS% --cp %IDE_COMPILER_PERSON% --mp %MESSAGE_PERSON% --ap %ANALYSER_PERSON% --pn "%PROJECT_NAME%" --cfg "%IDE_CONFIGURATION%" %EXTENSIONS%
+
+rem orig settings "%BIN_DIR%\%IDE_CONVERTER%" "%IDE_PROJ%" %IDE_OPTIONS% -cp %IDE_COMPILER_PERSON% -mp %MESSAGE_PERSON% -ap %ANALYSER_PERSON% -pn "%PROJECT_NAME%" -tn "%IDE_CONFIGURATION%" %EXTENSIONS%
+
+goto qaw
+
+ 
+
+:vs6
+
+echo Convert Visual Studio 6 Project %IDE_PROJ% to %outproj%
+
+"%VS6_INSTALL_DIR%\ProjectConverter.exe" --pn "%PROJECT_NAME%" --via %ANALYSER_PERSON% --mp %MESSAGE_PERSON% --cp %IDE_COMPILER_PERSON% --cf "%IDE_CONFIGURATION%" --ext %VS6_EXTENSIONS% --lf "%TEMP%\%PROJECT_NAME%_vs6_log.txt" "%IDE_PROJ%" %PROJECT_DIR%
+
+goto qaw
+
+ 
+
+:qaw
+
+if "%REPORTS%" == "" goto no_reports
+
+rem don't generate reports for single file analysis
+
+if not ["%IDE_FILE%"] == [""] goto no_reports
+
+rem set up generate report option for qaw
+
+set MASEQ_OPTIONS=%MASEQ_OPTIONS%#%REPORTS%
+
+rem Set up general report settings in qar.via
+
+echo -po "qar::project_name=%PROJECT_NAME%" > "%QAR_VIA%"
+
+call:WriteRepSet "%QAR_VIA%" %QAR_FORMAT%
+
+call:WriteRepSet "%QAR_VIA%" %QAR_VIEWER%
+
+call:WriteRepSet "%QAR_VIA%" %QAR_LOGO%
+
+call:WriteRepSet "%QAR_VIA%" %QAR_DATE_FORMAT%
+
+call:WriteRepSet "%QAR_VIA%" %QAR_APP_VER%
+
+rem setup report settings to via files
+
+rem Quality
+
+call:WriteRepSet "%QUAL_REPORT_VIA%" %QUAL_FUNCTION_METRICS%
+
+call:WriteRepSet "%QUAL_REPORT_VIA%" %QUAL_FILE_METRICS%
+
+call:WriteRepSet "%QUAL_REPORT_VIA%" %QUAL_STYLE%
+
+call:WriteRepSet "%QUAL_REPORT_VIA%" %QUAL_NAMES%
+
+if "%PRODUCT%" == "qacpp" call:WriteRepSet "%QUAL_REPORT_VIA%" %QUAL_CLASS_METRICS%
+
+rem Code Review
+
+call:WriteRepSet "%CR_REPORT_VIA%" %CR_FUNCTION_METRICS%
+
+call:WriteRepSet "%CR_REPORT_VIA%" %CR_FILE_METRICS%
+
+call:WriteRepSet "%CR_REPORT_VIA%" %CR_VISUALISATION%
+
+if "%PRODUCT%" == "qacpp" call:WriteRepSet "%CR_REPORT_VIA%" %CR_CLASS_METRICS%
+
+rem Compliance
+
+call:WriteRepSet "%CMPL_REPORT_VIA%" %CMPL_DISPLAY%
+
+rem Suppression
+
+call:WriteRepSet "%SUPP_REPORT_VIA%" %SUPP_DETAILS%
+
+call:WriteRepSet "%SUPP_REPORT_VIA%" %SUPP_DISPLAY%
+
+ 
+
+:no_reports
+
+if not ["%MASEQ_OPTIONS%"] == [""] set MASEQ_OPTIONS=-maseq "%MASEQ_OPTIONS%"
+
+rem note -mode depend not used as this doesn't work well with baselining
+
+echo done bye PRAQMA.....
+goto:eof
+
+echo %QAW_CMD% %MASEQ_OPTIONS% %VIEW_OPTIONS%
+
+%QAW_CMD% %MASEQ_OPTIONS% %VIEW_OPTIONS%
+
+ 
+
+rem if no third parameter, we are done after analysis so end script
+
+if ["%PARAM3%"] == [""] goto end
+
+ 
+
+rem do either qav upload or baseline generation
+
+if not "%PARAM3%" == "qav_upload" goto genbaseline
+
+ 
+
+rem QAV upload: set up options for normal/solo use
+
+if "%4" == "solo" (
+
+    set QAV_VCS_CFG="%QAV_DIR%\vcs\single.xml"
+
+    set MODE_OPTION=-single
+
+) else (
+
+    set MODE_OPTION=
+
+)
+
+echo Uploading to QAV
+
+echo Performing import...
+
+rem run phase one of upload - the qaimport process
+
+set NOSP=%LOC%qavimport.bat
+
+set NOSP=%NOSP: =\ %
+
+set QAV_IMPORT=-maseq "%NOSP% %%Q %%L+"
+
+echo %QAW_CMD% %QAV_IMPORT% -sfba
+
+%QAW_CMD% %QAV_IMPORT% -sfba
+
+ 
+
+rem set up option parameters for non-blank options
+
+if not [%QAV_SNAPSHOT%] == [] set QAV_SNAPSHOT=-ssname %QAV_SNAPSHOT%
+
+if not [%QAV_PARENT_SNAPSHOT%] == [] set QAV_PARENT_SNAPSHOT=-ssparent %QAV_PARENT_SNAPSHOT%
+
+if not [%QAV_CONFIG%] == [] set QAV_CONFIG=-config %QAV_CONFIG%
+
+echo Performing upload...
+
+echo upload.exe -host %QAV_HOST% -port %QAV_PORT% -user %QAV_USER% -pass %QAV_PASSWORD% -db %PROJECT_NAME% %QAV_SNAPSHOT% %QAV_PARENT_SNAPSHOT% %QAV_CONFIG% -prod %PRODUCT% -log "%TEMP%\%PROJECT_NAME%_qav_upload.txt" %MODE_OPTION% "%PROJECT_DIR%\%PROJECT_NAME%.qav"
+
+upload.exe -host %QAV_HOST% -port %QAV_PORT% -user %QAV_USER% -pass %QAV_PASSWORD% -db %PROJECT_NAME% %QAV_SNAPSHOT% %QAV_PARENT_SNAPSHOT% %QAV_CONFIG% -prod %PRODUCT% -log "%TEMP%\%PROJECT_NAME%_qav_upload.txt" %MODE_OPTION% "%PROJECT_DIR%\%PROJECT_NAME%.qav"
+
+goto end
+
+ 
+
+:genbaseline
+
+echo Generating Baseline
+
+rem Baseline suppression file
+
+if [%BASELINE_LOCATION%] == [] goto default_bl_location
+
+ 
+
+for /f "useback tokens=*" %%a in ('%BASELINE_LOCATION%') do set BASELINE_LOCATION=%%~a
+
+set BL_SUPP_FILE=%BASELINE_LOCATION%\%PROJECT_NAME%.sup
+
+set BASELINE_LOCATION="%BASELINE_LOCATION%"
+
+goto check_append
+
+ 
+
+:default_bl_location
+
+set BL_SUPP_FILE=%PROJECT_DIR%\%PROJECT_NAME%.sup
+
+ 
+
+:check_append
+
+if "%4" == "append" goto baseline
+
+rem delete the sup file if not appending.
+
+if exist "%BL_SUPP_FILE%" del /F "%BL_SUPP_FILE%"
+
+ 
+
+:baseline
+
+rem note that sop may not exist: baseline doesn't warn at present: CR 13634
+
+rem remove any surronding quotes and trailing backslashes from sop
+
+set SOP=%3
+
+for /f "useback tokens=*" %%a in ('%SOP%') do set SOP=%%~a
+
+set last=%SOP:~-1%
+
+if "%last%" == "\" set SOP=%SOP:~0,-1%
+
+rem VS2005 adds an extra backslash when you use $(ProjectDir)!!!
+
+set last=%SOP:~-1%
+
+if "%last%" == "\" set SOP=%SOP:~0,-1%
+
+ 
+
+rem Generate Baseline Process - sop is the project root path
+
+set NOSP=%LOC%genbase.bat
+
+set NOSP=%NOSP: =\ %
+
+set BASELINE_OPTIONS=-maseq "%NOSP% %%Q %%L+ -sf \"%BL_SUPP_FILE%\" -sop \"%SOP%\""
+
+echo %QAW_CMD% %BASELINE_OPTIONS% -sfba
+
+%QAW_CMD% %BASELINE_OPTIONS% -sfba
+
+ 
+
+rem setup suppressiondifftool option for patching (used only if using a VCS)
+
+set SDT_OPTION=
+
+set VCS_CFG=%PRQAVCS_CFG%
+
+if "%VCS_CFG%" == "copy_src" goto no_vcs
+
+if "%VCS_CFG%" == "" goto no_cfg_file
+
+set VCS_CFG=-config "%VCS_CFG%"
+
+:no_cfg_file
+
+set SDT_OPTION=-sdt "prqavcs %VCS_CFG% -diff %%%%BT %%%%BF"
+
+:no_vcs
+
+ 
+
+rem Now create a batch file that should be configured as the SA process
+
+rem in the Message Personality to match this generated baselines settings
+
+set OP=%PROJ_SET_LOC%%PROJECT_NAME%_patch.bat
+
+ 
+
+echo @echo off > "%OP%"
+
+echo set BL_SUPP_FILE="%BL_SUPP_FILE%" >> "%OP%"
+
+echo set SOURCE_PATH="%SOP%" >> "%OP%"
+
+echo "%PRQA_INSTALL_DIR%\%PROD_DIR%\bin\patchTransform.exe" %%1 %%2 -sf %%BL_SUPP_FILE%% -sop %%SOURCE_PATH%% %SDT_OPTION% -po baseline::log="%%TEMP%%\%%%%Bf_log.txt" >> "%OP%"
+
+ 
+
+echo Set the following in the Message Personality:
+
+echo -rem "EnablePostAnalysis=1"
+
+echo -rem "ShellExe=%OP%"
+
+echo -rem "ShellParams=%%Q %%F"
+
+echo.
+
+if not "%PRQAVCS_CFG%" == "copy_src" goto end
+
+rem copy source if location set (make dir if it doesn't exist)
+
+if not [%BASELINE_LOCATION%] == [] (
+
+    echo Copying source from "%SOP%" to %BASELINE_LOCATION%...
+
+    xcopy /Y /S /C /I "%SOP%\*.*" %BASELINE_LOCATION% >NUL 2>NUL
+
+) else (
+
+    echo You also need to set up a reference copy of the source code with
+
+    echo the Baseline Suppression File %BL_SUPP_FILE%
+
+    echo at the root of the project source. When you have copied the source
+
+    echo and Baseline Suppression File, edit %OP%
+
+    echo and set the BL_SUPP_FILE variable to the location of the Suppression File
+
+)
+
+rem You may need to pause here to see the output
+
+:end
+
+rem pause
+
+echo All Done
+
+goto:eof
+
+ 
+
+rem WriteRepSet <file> [options to write]
+
+rem only write the options to the file if some have been given.
+
+:WriteRepSet
+
+if [%2] == [] goto not_set
+
+set FILE=%1
+
+shift
+
+set OPT=
+
+:loop
+
+if [%1]==[] goto continue
+
+set OPT=%OPT% %1
+
+shift
+
+goto loop
+
+:continue
+
+echo %OPT% >> %FILE%
+
+:not_set
+
+ENDLOCAL
+
+goto:eof
+
+ 
+
+rem GetName <filespec>
+
+rem returns just the basename of the full file spec
+
+:GetName
+
+set NAME=%~n1
+
+goto:eof
+
+ 
+
+rem GetDrivePath <filespec>
+
+rem returns just the drive and path of the full file spec
+
+:GetDrivePath
+
+set DRIVE_PATH=%~dp1
+
+goto:eof
+
+ 
+
+rem GetExtension <filespec>
+
+rem returns just the files extension the full file spec
+
+:GetExtension
+
+set EXTENSION=%~x1
+
+goto:eof

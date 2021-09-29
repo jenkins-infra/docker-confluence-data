@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Git Bisect</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Git Bisect
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dorav)</span> on Sep 17, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="contentLayout2">
+<div class="columnLayout single" data-layout="single">
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Git Bisect <a href="https://plugins.jenkins.io/git-bisect" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Git  bisect is a tool for running binary searches over a git repository. If you want to read more about git bisect, you can<a href="https://git-scm.com/docs/git-bisect" class="external-link" rel="nofollow"> do it here</a>.</p><p>This plugin helps with running git-bisect automatically in Jenkins.</p><h1 id="GitBisect-TableOfContents">Table Of Contents</h1><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631023441329 {padding: 0px;}
+div.rbtoc1631023441329 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631023441329 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631023441329'>
+<ul class='toc-indentation'>
+<li><a href='#GitBisect-TableOfContents'>Table Of Contents</a></li>
+<li><a href='#GitBisect-Pre-Requirements'>Pre-Requirements</a></li>
+<li><a href='#GitBisect-Howtousethisplugin'>How to use this plugin</a></li>
+<li><a href='#GitBisect-ExampleConfiguration'>Example Configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#GitBisect-BisectProject'>Bisect Project</a></li>
+<li><a href='#GitBisect-TesterProject'>Tester Project</a></li>
+</ul>
+</li>
+<li><a href='#GitBisect-Parameters'>Parameters</a></li>
+<li><a href='#GitBisect-Runninginapipeline'>Running in a pipeline</a></li>
+</ul>
+</div></p><h1 id="GitBisect-Pre-Requirements">Pre-Requirements</h1><p>You need to:</p><ul><li>Be able to determine for each commit whether it's broken or not - in a <strong>single jenkins</strong> job<ul><li>If your build is separated to two projects - build &amp; test, you can use a pipeline <br/>and use that pipeline as a single build</li></ul></li><li>Use Git SCM, or be able to run arbitrary git commands in the workspace</li></ul><h1 id="GitBisect-Howtousethisplugin">How to use this plugin</h1><p>You need to have 2 Projects, let's call them <strong>&quot;Tester Project&quot;</strong> and <strong>&quot;Bisect Project&quot;</strong></p><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 100.0%;"><colgroup><col style="width: 16.0939%;"/><col style="width: 38.0298%;"/><col style="width: 45.8763%;"/></colgroup><tbody><tr><th style="text-align: center;" class="confluenceTh"> </th><th colspan="1" class="confluenceTh"><strong>Bisect Project</strong></th><th colspan="1" class="confluenceTh"><strong>Tester Project</strong></th></tr><tr><td style="text-align: center;" class="confluenceTd">GitSCM</td><td colspan="1" class="confluenceTd"><ul style="list-style-type: square;"><li>Define it using the same git repository</li><li>Must not be a shallow copy</li></ul></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>be able to checkout a revision using a parameter:</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="400" src="attachments/135464590/135464588.png" data-image-src="attachments/135464590/135464588.png" data-unresolved-comment-count="0" data-linked-resource-id="135464588" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 21:29:55.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p></div></td></tr><tr><td style="text-align: center;" class="confluenceTd">Parameterized Build</td><td colspan="1" class="confluenceTd"><ul><li>Any parameters defined will bubble down to the Tester Project</li></ul></td><td colspan="1" class="confluenceTd"><ul><li>Must support a parameter for the choosing the revision, the default name is 'REVISION'. It's configurable in the &quot;Git Bisect&quot; Build Step in the Bisect Project</li></ul></td></tr><tr><td style="text-align: center;" class="confluenceTd">Job Type</td><td colspan="1" class="confluenceTd"><p><span>Can be either FreeStyleProject or a Pipeline Project</span></p><p> </p><p>Use gitbisect in Pipeline projects.</p></td><td colspan="1" class="confluenceTd"><p style="text-align: center;">Can be either FreeStyleProject or a Pipeline Project</p></td></tr></tbody></table></div></div>
+</div>
+</div>
+<div class="columnLayout single" data-layout="single">
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h1 id="GitBisect-ExampleConfiguration">Example Configuration</h1></div>
+</div>
+</div>
+<div class="columnLayout two-equal" data-layout="two-equal">
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="GitBisect-BisectProject">Bisect Project</h2><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/135464590/135464587.png" data-image-src="attachments/135464590/135464587.png" data-unresolved-comment-count="0" data-linked-resource-id="135464587" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 21:56:41.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="500" src="attachments/135464590/135464584.png" data-image-src="attachments/135464590/135464584.png" data-unresolved-comment-count="0" data-linked-resource-id="135464584" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 22:1:4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="500" src="attachments/135464590/135464585.png" data-image-src="attachments/135464590/135464585.png" data-unresolved-comment-count="0" data-linked-resource-id="135464585" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 22:0:9.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p><p> </p></div>
+</div>
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="GitBisect-TesterProject">Tester Project</h2><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="500" src="attachments/135464590/135464583.png" data-image-src="attachments/135464590/135464583.png" data-unresolved-comment-count="0" data-linked-resource-id="135464583" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 22:1:59.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="200" src="attachments/135464590/135464582.png" data-image-src="attachments/135464590/135464582.png" data-unresolved-comment-count="0" data-linked-resource-id="135464582" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-17 22:2:46.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135464590" data-linked-resource-container-version="1"></span></p></div>
+</div>
+</div>
+<div class="columnLayout single" data-layout="single">
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h1 id="GitBisect-Parameters">Parameters</h1><h5 id="GitBisect-Goodstartrevision:">Good start revision: </h5><p>Used to specify a known good commit where the thing you are testing was working properly. </p><h5 id="GitBisect-Badendrevision:">Bad end revision: </h5><p>Used to specify a revision where you know the thing you are testing stopped working.</p><h5 id="GitBisect-Projecttobuild:">Project to build: </h5><p>The project that is used to test each commit. If this project fails, the revision will be marked as &quot;bad&quot;. If this project succeeds, the revision will be marked &quot;good&quot;.</p><h5 id="GitBisect-RevisionParameterName:">Revision Parameter Name: </h5><p>The parameter name used to pass the revision to the Tester Project. Defaults to &quot;REVISION&quot;, other common usage might be &quot;COMMIT&quot; or &quot;VERSION&quot;. </p><h5 id="GitBisect-SearchIdentifier:">Search Identifier:</h5><p>This parameter is used to distinguish between two different bisections. If the bisection stopped it can be resumed based on this identifier. </p><p><u><strong>Note:</strong></u><strong> </strong> This is used as a file name inside the jenkins master. You can interfere with the decisions this job makes, or add revisions to ignore by editing this file. It can be found under the project directory in jenkins, for example - </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">/var/jenkins/jobs/PROJECT_NAME/SEARCH_IDENTIFIER_1</pre>
+</div></div><h5 id="GitBisect-RetryNumber:">Retry Number:</h5><p>This parameter can be used if you have a flaky test or a flaky build system. The revision won't be defined as 'bad' until it had failed this number of times. Defaults to 0.</p><h5 id="GitBisect-MinSuccessfulruns:">Min Successful runs:</h5><p>This parameter can be used if you are looking for a flaky test. For example, you are looking for a commit that causes your build to fail 1 out of 5 times. So you want to increase this number accordingly. Defaults to 1.</p><h5 id="GitBisect-Runasasinglecontinuesbuild">Run as a single continues build</h5><p>If this is unchecked, the test job will only run once every build. This gives you time to investigate between each run. Defaults to true.</p><h5 id="GitBisect-OverrideGitCommand">Override Git Command</h5><p>On some systems, git might not be defined in PATH or it's aliased to a different command. You can tell the job where to find it.</p><h1 id="GitBisect-Runninginapipeline">Running in a pipeline</h1><p>Running in a pipeline currently works, but it's harder to configure.</p><p>Make sure that before the gitbisect command is used, a &quot;checkout&quot; or &quot;git&quot; command is present to set the repository.</p></div>
+</div>
+</div>
+</div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464582.png">image2017-9-17 22:2:46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464583.png">image2017-9-17 22:1:59.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464584.png">image2017-9-17 22:1:4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464585.png">image2017-9-17 22:0:9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464586.png">image2017-9-17 21:58:8.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464587.png">image2017-9-17 21:56:41.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464588.png">image2017-9-17 21:29:55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135464590/135464589.png">image2017-9-17 21:24:34.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

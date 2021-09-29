@@ -1,0 +1,254 @@
+#!/bin/ksh
+#
+# clone-workspace.sh
+# Script to clone Jenkins a workspace.
+# Intended usage is to archive the workspace at the end of a build
+# and clone it at the start of the next step in the pipeline.
+# Written because the clone-workspace plugin is too slow and unreliable.
+#
+# Usage:
+# 1) Define these environment variables in the global Jenkins config:
+#    JENKINS_BIN=/home/hudson/bin
+#    JOBS_ARCHIVE=/home/hudson-local/jobs-archive
+# (The JOBS_ARCHIVE dir is on the master node; Ensure there is enough disk space).
+#
+# 2) In the first job in the pipeline, execute this script as the last task in the job:
+#    ${JENKINS_BIN}/clone-workspace.sh PACK [${BUILD_TAG}]
+# This job should then trigger the first downstream job using the parameters:
+#    P4_CHANGELIST=${P4_CHANGELIST}
+#    UPSTREAM_BUILD_TAG=${BUILD_TAG}
+#
+# 3) Downstream jobs should execute this script as its FIRST task in the job:
+#    ${JENKINS_BIN}/clone-workspace.sh UNPACK "${UPSTREAM_BUILD_TAG}"
+# The downstream job should accept parameters P4_CHANGELIST and UPSTREAM_BUILD_TAG.
+# It should trigger subsequent downstream jobs using "Current build parameters".
+#
+
+
+# Convert BUILD_TAG to an archive filename .tgz
+function archiveFilename {
+    typeset NAME="$1"
+    print "${NAME}.tgz" | sed -e 's/[ 	]+/_/g'
+}
+
+
+# check environment
+function checkJenkinsEnvironment {
+    for VAR in JOBS_ARCHIVE WORKSPACE JENKINS_URL
+    do
+        eval V=\$${VAR}
+        if [[ -z "${V}" ]] ; then
+            print -u2 "Environment not set: ${VAR}"
+            return 1
+        fi
+    done
+
+    if [[ ! -d "${WORKSPACE}" ]] ; then
+        print -u2 "Directory WORKSPACE not found: \"${WORKSPACE}\""
+        return 2
+    fi
+
+    if [[ ! "$(pwd)" -ef "${WORKSPACE}" ]] ; then
+        print -u2 "Not in WORKSPACE dir: \"${WORKSPACE}\" but: \"$(pwd)\""
+        return 3
+    fi
+
+    JENKINS_MASTER=${JENKINS_URL##*://}
+    JENKINS_MASTER=${JENKINS_MASTER%%:*}
+    if [[ -z "${JENKINS_MASTER}" ]] ; then
+        print -u2 "Could not determine host JENKINS_MASTER: \"${JENKINS_MASTER}\""
+        return 4
+    fi
+
+    if ${SSH} ${JENKINS_MASTER} "[[ ! -d \"${JOBS_ARCHIVE}\" ]]" ; then
+        print -u2 "Directory JOBS_ARCHIVE not found on ${JENKINS_MASTER}: \"${JOBS_ARCHIVE}\""
+        return 5
+    fi
+}
+
+
+function packWorkspace {
+    typeset TAG="$1"
+    typeset -i STATUS
+    typeset ZFILE
+
+    if [[ -z "${TAG}" ]] ; then
+        print -u2 "packWorkspace: missing build tag."
+        return 7
+    fi
+
+    ZFILE=$(archiveFilename "${TAG}")
+    print "$(date) Archiving $(pwd) to ${JENKINS_MASTER}:${JOBS_ARCHIVE}/${ZFILE} ..."
+    if [[ -z "${INCLUDE_FILTER}" ]] ; then
+        INCLUDE_FILTER="cat -"
+    else
+        print "    INCLUDE=${INCLUDE_FILTER}"
+        INCLUDE_FILTER="${EGREP} ${INCLUDE_FILTER}"
+    fi
+    if [[ -z "${EXCLUDE_FILTER}" ]] ; then
+        EXCLUDE_FILTER="cat -"
+    else
+        print "    EXCLUDE=${EXCLUDE_FILTER}"
+        EXCLUDE_FILTER="${EGREP} -v ${EXCLUDE_FILTER}"
+    fi
+    ${FIND} . -print | ${INCLUDE_FILTER} | ${EXCLUDE_FILTER} | ${CPIO} -oa -H ustar | ${GZIP} -c | ${SSH} ${JENKINS_MASTER} "cat - >${JOBS_ARCHIVE}/${ZFILE}"
+    STATUS=$?
+    print "$(date) archive complete."
+    return ${STATUS}
+}
+
+
+function unpackWorkspace {
+    typeset -i STATUS
+    typeset TAG="$1"
+
+    ZFILE=$(archiveFilename "${TAG}")
+    if ${SSH} ${JENKINS_MASTER} "[[ ! -f \"${JOBS_ARCHIVE}/${ZFILE}\" ]]" ; then
+        print -u2 "Workspace archive: ${ZFILE} not found in \"${JENKINS_MASTER}:${JOBS_ARCHIVE}\""
+        return 6
+    fi
+    print "$(date) Cleaning workspace dir $(pwd) ..."
+    rm -rf *
+    print "$(date) Unpacking ${JENKINS_MASTER}:${JOBS_ARCHIVE}/${ZFILE} to $(pwd) ..."
+    ( ${SSH} ${JENKINS_MASTER} "cat ${JOBS_ARCHIVE}/${ZFILE}" ) | ${GZIP} -d -c | ${TAR} -xf -
+    STATUS=$?
+    print "$(date) unpack complete."
+    return ${STATUS}
+}
+
+
+function removeArchive {
+    typeset -i STATUS
+    typeset TAG="$1"
+
+    ZFILE=$(archiveFilename "${TAG}")
+    print "$(date) Removing ${JENKINS_MASTER}:${JOBS_ARCHIVE}/${ZFILE} ..."
+    ${SSH} ${JENKINS_MASTER} "rm \"${JOBS_ARCHIVE}/${ZFILE}\""
+    STATUS=$?
+    return ${STATUS}
+}
+
+
+function cleanupArchives {
+    typeset -i STATUS=1
+
+    if [[ -n "${JOBS_ARCHIVE}" && -d "${JOBS_ARCHIVE}" ]] ; then
+        rm ${JOBS_ARCHIVE}/*.tgz
+        STATUS=$?
+    fi
+
+    return ${STATUS}
+}
+
+
+# Locations of tools
+# avoiding GNU tar vs Solaris tar conflicts etc.
+function setupTools {
+    CPIO=/usr/bin/cpio
+    EGREP=/usr/bin/egrep
+    FIND=/usr/bin/find
+    GZIP=/usr/bin/gzip
+    TAR=/usr/bin/tar
+    SSH=ssh
+}
+
+
+
+
+# Main prog starts here
+print -- '---------- ---------- ---------- ----------'
+
+typeset PROG=${0##*/}
+typeset PROGDIR=${0%/*}
+PROGDIR=${PROGDIR:-.}
+
+setupTools
+
+# Jenkins master server
+typeset JENKINS_MASTER
+
+# Archive dir on JENKINS_MASTER where archives are stored
+typeset JOBS_ARCHIVE
+
+
+typeset INCLUDE_FILTER
+typeset EXCLUDE_FILTER
+
+typeset -u CMD
+
+# param to CMD - UNPACK {workspace_name}, CLEAN {workspace_name}, PURGE {jobs_archive_dir}
+typeset PARAM
+
+
+typeset ARG
+typeset -u ARGU
+for ARG in $*
+do
+    ARGU="${ARG}"
+    case ${ARGU} in
+        PACK|UNPACK|CLEAN|PURGE)
+            CMD="${ARG}"
+            ;;
+
+        INCLUDE=*)
+            INCLUDE_FILTER="${ARG#INCLUDE=}"
+            ;;
+
+        EXCLUDE=*)
+            EXCLUDE_FILTER="${ARG#EXCLUDE=}"
+            ;;
+
+        *)
+            if [[ -z "${CMD}" ]] ; then
+                print -u2 "${PROG}: unrecognized command: \"${ARG}\""
+            elif [[ -z "${PARAM}" ]] ; then
+                PARAM="${ARG}"
+            else
+                print -u2 "${PROG}: ${CMD} ${PARAM} encountered additional parameter: \"${ARG}\""
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+
+
+typeset -i STATUS=1
+case "${CMD}" in
+    PACK)
+        checkJenkinsEnvironment || exit $?
+        [[ -z "${PARAM}" ]] && PARAM="${BUILD_TAG}"
+        packWorkspace "${PARAM}"
+        STATUS=$?
+        ;;
+
+    UNPACK)
+        checkJenkinsEnvironment || exit $?
+        unpackWorkspace "${PARAM}"
+        STATUS=$?
+        ;;
+
+    CLEAN) # Dispose of workspace archive after build pipeline is complete
+           # NB won't happen if a job fails - use "cron" to clean up overnight
+        checkJenkinsEnvironment || exit $?
+        removeArchive "${PARAM}"
+        STATUS=$?
+        ;;
+
+    PURGE) # Remove all workspace archives
+           # Intended to be run from "cron" overnight on the "JENKINS_MASTER" host
+        [[ -z "${JOBS_ARCHIVE}" ]] && JOBS_ARCHIVE="${PARAM}"
+        cleanupArchives
+        STATUS=$?
+        ;;
+    *)
+        print -u2 "${PROG}: unrecognized command: \"${CMD}\""
+        ;;
+
+esac
+
+print -- '---------- ---------- ---------- ----------'
+exit ${STATUS}
+
+# EOF
+

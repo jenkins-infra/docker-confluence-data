@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Why use Conditional step (single)?</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home_327684.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins_753688.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Conditional-BuildStep-Plugin_58002645.html">Conditional BuildStep Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Why use Conditional step (single)?
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Bap bap2000</span>, last modified on Nov 15, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h3 id="WhyuseConditionalstep(single)?-TheConditionalstep(single)keepsthebuildflexibleattheexpenseofscreenspaceandextraconfiguration">The Conditional step (single) keeps the build flexible at the expense of screen space and extra configuration</h3>
+
+<h4 id="WhyuseConditionalstep(single)?-Belowaresomeprosandcons">Below are some pros and cons</h4>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This is just one man's point of view (me, Bap)<br/>
+IMHO, the reduction in space in the GUI is a very compelling reason to use multiple build steps with the same condition - but, is it worth losing the flexibility?<br/>
+If you only ever put one build step into the Conditional step (multiple), the result is exactly the same as using the Conditional step (single), and the pros and cons below will stand.<br/>
+Of course, if we provide more utils/ scripts to move the configured build steps around, then we could make the multiple steps more flexible (tho. not directly from the job config page).<br/>
+2¢</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Always use always</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>As with the <a href="Flexible-Publish-Plugin_59506930.html">Flexible Publish Plugin</a>, if you always add your build steps inside a Conditional step, then you can easily disable and re-enable the build step without losing the configuration (switch between Always and Never).<br/>
+<strong>If you have more than one build step within the conditional step, then you will not be able to disable a single build step independantly.</strong></p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Freedom to re-order</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>As there is only one build step within the builder, they can all be re-ordered independantly - in the multiple step, they can only be re-ordered within that step.<br/>
+This also gives the ability to add build steps in the middle of the current list of steps, where the new step may run on every build, or use a different condition from the steps surrounding it.<br/>
+Obviously, the Conditional step (multiple) itself can be moved around.</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Move a step from one condition to another</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If you have several steps that are controlled by two conditions (via EnvInject), then you can easily swith the boolean condition for a single step to use the other condition.<br/>
+With the multiple, all contained steps use the same condition, so again the step would have to be deleted and then added to the other conditional step.</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Multiple steps can still be controlled by a single condition (EnvInject)</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>You can still run multiple build steps based on the result of a single evaluation of a run condition.<br/>
+Configure a run condition and in the action choose 'Inject environment variables' provied by the <a href="EnvInject-Plugin_57999800.html">EnvInject Plugin</a>.<br/>
+In the 'Properties Content' set a variable that will evaluate to true by the Boolean run condition e.g. <code>CONDITION_X=y</code><br/>
+Now, for all the build steps that you want to run depending on that condition, use the Boolean run condition with ${ENV,var=&quot;CONDITION_X&quot;}</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Multiple steps can still be controlled by a single condition (EnvInject)</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This still requires extra configuration, and even an extra build step.</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><p class="title">GUI space</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Many Conditional step (single) build steps will take up a very large area of the configure page which can make the configuration more difficult to read.</p></div></div>
+
+
+
+
+<p><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<h3 id="WhyuseConditionalstep(single)?-Movecurrentbuildstepsinsideconditionalsteps">Move current buildsteps inside conditional steps</h3>
+
+<p>To move all of the current build steps within a freestyle project into Conditional step (single) you can call a utility method from the script console.<br/>
+The project build will not be affected in any way (other than some extra text in the build console), as the order of the build steps is preserved, and all of the run conditions will be 'Always'.<br/>
+Build steps that cannot be moved into a conditional step will not be moved.</p>
+
+<p>From Manage Jenkins, Script console, enter the following to update a project called 'My Project'</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+import static org.jenkinsci.plugins.conditionalbuildstep.singlestep.JobUpdater.*
+
+def job = hudson.model.Hudson.instance.getItem(&#39;My Project&#39;)
+updateBuilders job
+</pre>
+</div></div>
+<p><strong>After running, go to the configure page, check everything looks ok, then save the configuration.</strong></p>
+
+<p>You can now easily enable and disable the build steps without losing the configuration.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

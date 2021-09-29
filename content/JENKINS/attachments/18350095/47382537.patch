@@ -1,0 +1,15 @@
+Index: src/main/java/hudson/plugins/promoted_builds/Promotion.java
+===================================================================
+--- src/main/java/hudson/plugins/promoted_builds/Promotion.java	(revision 37151)
++++ src/main/java/hudson/plugins/promoted_builds/Promotion.java	(working copy)
+@@ -65,6 +65,10 @@
+     @Override
+     public EnvVars getEnvironment(TaskListener listener) throws IOException, InterruptedException {
+         EnvVars e = super.getEnvironment(listener);
++        
++        e.put("ORIG_BUILD_NUMBER", new Integer(targetBuildNumber).toString());
++        e.put("ORIG_BUILD_ID", getTarget().getId());
++        
+         String rootUrl = Hudson.getInstance().getRootUrl();
+         if(rootUrl!=null)
+             e.put("PROMOTED_URL",rootUrl+getTarget().getUrl());
