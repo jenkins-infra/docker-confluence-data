@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins CLI</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins CLI
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (cleclerc)</span> on Jan 17, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>More up-to-date information is available in the Jenkins documentation at <a href="https://jenkins.io/doc/book/managing/cli/" class="external-link" rel="nofollow">https://jenkins.io/doc/book/managing/cli/</a></p></div></div><p>Jenkins has a built-in command line interface that allows you to access Jenkins from a script or from your shell. This is convenient for automation of routine tasks, bulk updates, trouble diagnosis, and so on.</p><p>This interface is accessed via the Jenkins CLI client, which is a Java JAR file distributed with Jenkins.</p><h2 id="JenkinsCLI-ObtainingtheCLIclient">Obtaining the CLI client</h2><p>You can download the JAR file for the client from the URL &quot;<code>/</code><a href="https://jenkins.example.com/jnlpJars/jenkins-cli.jar" class="external-link" rel="nofollow">jnlpJars/jenkins-cli.jar</a>&quot; on your Jenkins server, e.g. <code><a href="https://jenkins.example.com/jnlpJars/jenkins-cli.jar" class="external-link" rel="nofollow">https://jenkins.example.com/jnlpJars/jenkins-cli.jar</a></code><br/> In theory, the CLI JAR is dependent on the version of Jenkins, but in practice, we expect to be able to retain compatibility between different versions of Jenkins. In case of problems, just re-download the latest JAR from your Jenkins server.</p><h2 id="JenkinsCLI-RunningaCLIcommand">Running a CLI command</h2><p>The general syntax is as follows (the design is similar to tools like svn/git):</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -jar jenkins-cli.jar [-s JENKINS_URL] command [options...] [arguments...]
+</pre>
+</div></div><p><code>JENKINS_URL</code> can be specified via the environment variable <code>$JENKINS_URL</code>. This environment variable is automatically set when Jenkins fork a process during builds, which allows you to use Jenkins CLI from inside the build without explicitly configuring the URL.</p><p>For details on authentication methods (&quot;<code>-auth</code>&quot; parameter or <code>JENKINS_USER_ID</code> and <code>JENKINS_API_TOKEN</code> environment variables), see <a href="https://jenkins.io/doc/book/managing/cli/#http-connection-mode" class="external-link" rel="nofollow">Jenkins CLI &gt; Client connection modes &gt; HTTP connection mode</a>.</p><h2 id="JenkinsCLI-Gettinghelp">Getting help</h2><p>The list of the available commands depends on the server you are talking to. Visit <code><a href="https://jenkins.example.com/cli" class="external-link" rel="nofollow">https://jenkins.example.com/cli</a></code> or use '<code>help</code>' command to list them all:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -jar jenkins-cli.jar -s https://jenkins.example.com help [command]</pre>
+</div></div><p>More detailed help for individiual commands can be found by adding the command name after <code>help</code> (e.g. <code>help build</code>).<br/> The same information is available via the web UI, by clicking on a command name on the Jenkins CLI page.</p><h2 id="JenkinsCLI-ExtendingtheCLI">Extending the CLI</h2><p>Plugins installed on Jenkins server can add custom CLI commands. See <a href="Writing-CLI-commands.html">Writing CLI commands</a> for more details.</p><h2 id="JenkinsCLI-WorkingwithCredentials">Working with Credentials</h2><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Jenkins accounts must have the Overall/Read account permission to access the CLI.</p></div></div><h3 id="JenkinsCLI-1.576andlater">1.576 and later</h3><p>Whenever the CLI tries to to connect to the Jenkins server, it offers the before mentioned SSH keys. When the user has those keys but doesn't want to use them to authenticate, it's possible to use the <code>-noKeyAuth</code> argument to skip being prompted for the key's password. This way the CLI will never try to use available SSH keys.</p><h3 id="JenkinsCLI-1.419andlater">1.419 and later</h3><p>If your Jenkins requires authentication, you should set up public key authentication. Login from the web UI and go to <code>http:</code><code>//yourserver.com/me/configure</code>, then set your public keys in the designated text area. When connecting to the server, the CLI will look for <code>~/.ssh/identity</code>, <code>~/.ssh/id_dsa</code>, <code>~/.ssh/id_rsa</code> and use those to authenticate itself against the server. Alternatively, the <code>-i</code> option can be used to explicitly specify the location of the private key.</p><p>See the middle of <a href="https://help.github.com/articles/generating-ssh-keys" class="external-link" rel="nofollow">this guide</a> for how to generate SSH key pair, if you don't have one yet.</p><p>If you have used PuttyGen to generate your keys, you will have to <a href="http://stackoverflow.com/questions/2224066/how-to-convert-ssh-keypairs-generated-using-puttygenwindows-into-key-pairs-use" class="external-link" rel="nofollow">convert them to openssh format</a>. Otherwise Jenkins might silently ignore your keys and you will be <em>Authenticated as: anonymous</em>.</p><p>To use the <code>-i</code> option the syntax is as follows:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -jar jenkins-cli.jar [-s JENKINS_URL] [-i PRIVATE_KEY] command [options...] [arguments...]</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>For compatibility reasons, unless you use the <code>-i</code> option, failure to authenticate by itself does not constitute a fatal error. It will instead try to execute the command anyway, as the anonymous user.</p></div></div><h3 id="JenkinsCLI-Before1.419">Before 1.419</h3><p>If your Jenkins requires authentication, use <code>--username</code> and <code>--password</code> or <code>--password-file</code> options to specify the credentials. To avoid doing this for every command, you can also use the <code>login</code> CLI command once (with the same credentials parameters), and after that you may use other commands without specifying credentials.<br/> Note that not every authentication type supports these parameters for credentials. Prior to version 1.373, only authentication in Jenkins' own database was supported. As of 1.373, LDAP is also supported. If the CLI reports these are invalid parameters, file an issue for your authentication type and ask them to extend <code>AbstractPasswordBasedSecurityRealm</code> instead of directly from <code>SecurityRealm</code> to get support for these parameters.</p><p>Change History: Note that a security hole in CLI commands was fixed in version 1.371, and that CLI <code>login</code> did not work properly for many commands until 1.375.</p><h2 id="JenkinsCLI-Connectionmechanism">Connection mechanism</h2><p>Jenkins CLI clients and Jenkins server establishes the communication in the following fashion.</p><ol><li>Jenkins listens on a TCP/IP port configured under &quot;TCP port for JNLP agents&quot; in the system configuration page. This single port is used for both agents and CLI.</li><li>Jenkins advertises this port number as a special HTTP header (if disabled, this header will not be present).</li><li>CLI client will make an HTTP request to the top page of Jenkins, looking for this header.</li><li>If the header is found and the TCP/IP port is identified, the client will attempt to connect to this URL.</li><li>If that fails (for example, if there's a reverse proxy and Jenkins runs on a different host, or if a firewall blocks access to this TCP/IP port), or if the header is not found, it will fall back to the communication mechanism that uses two simultaenous HTTP connections.</li></ol><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Use 1.427 for the fallback behavior</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Up until 1.426, if the server advertises a separate TCP/IP port, then a client failure to connect to this port was fatal. Since 1.427, the client is improved to fall back to HTTP-based mechanism. See <a href="https://issues.jenkins-ci.org/browse/JENKINS-10611">JENKINS-10611</a></p></div></div><h3 id="JenkinsCLI-ConfiguringTCP/IPportforCLIandagents.">Configuring TCP/IP port for CLI and agents. </h3><p>You have to configure global security in order to select the port (rather than system configuration). Using a fixed port allows you to configure your firewall more easily.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/37324149/72613979.png" data-image-src="attachments/37324149/72613979.png" data-unresolved-comment-count="0" data-linked-resource-id="72613979" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2014-04-18 at 11.18.01 AM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324149" data-linked-resource-container-version="50"></span></p><h2 id="JenkinsCLI-Commonsproblems">Commons problems</h2><h3 id="JenkinsCLI-Operationtimedout">Operation timed out</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ java -jar jenkins-cli.jar -s YOUR_SERVER_URL help
+Exception in thread &quot;main&quot; java.net.ConnectException: Operation timed out
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:351)
+	at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:213)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:200)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:432)
+	at java.net.Socket.connect(Socket.java:529)
+	at java.net.Socket.connect(Socket.java:478)
+	at java.net.Socket.&lt;init&gt;(Socket.java:375)
+	at java.net.Socket.&lt;init&gt;(Socket.java:189)
+	at hudson.cli.CLI.&lt;init&gt;(CLI.java:97)
+	at hudson.cli.CLI.&lt;init&gt;(CLI.java:82)
+	at hudson.cli.CLI._main(CLI.java:250)
+	at hudson.cli.CLI.main(CLI.java:199)
+</pre>
+</div></div><p>Check that the JNLP port is opened if you are using a firewall on your server. You can configure its value in Jenkins configuration. By default it is set to use a random port.</p><h3 id="JenkinsCLI-java.io.EOFException">java.io.EOFException</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ java -jar jenkins-cli.jar -s YOUR_SERVER_URL login
+Exception in thread &quot;main&quot; java.io.EOFException
+	at java.io.DataInputStream.readBoolean(DataInputStream.java:227)
+	at hudson.cli.Connection.readBoolean(Connection.java:90)
+	at hudson.cli.CLI.authenticate(CLI.java:360)
+	at hudson.cli.CLI._main(CLI.java:255)
+	at hudson.cli.CLI.main(CLI.java:199)
+</pre>
+</div></div><p>If on the server side you have such logs (perhaps with another security manager)</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">INFO: Accepted connection #54 from /88.171.115.235:60876
+Exception in thread &quot;Thread-3518&quot; java.lang.UnsupportedOperationException: Not giving you the password
+	at com.atlassian.crowd.integration.acegi.user.CrowdUserDetails.getPassword(CrowdUserDetails.java:52)
+	at hudson.model.User.impersonate(User.java:250)
+	at org.jenkinsci.main.modules.cli.auth.ssh.SshCliAuthenticator.authenticate(SshCliAuthenticator.java:44)
+	at hudson.cli.CliManagerImpl$1.run(CliManagerImpl.java:99)
+</pre>
+</div></div><p>This issues was fixed in Jenkins 1.424</p><h3 id="JenkinsCLI-WARNING:Noheader&#39;X-SSH-Endpoint&#39;returnedbyJenkins">WARNING: No header 'X-SSH-Endpoint' returned by Jenkins</h3><p>You may get this error, which usually prevents you from using SSH CLI due to 
+<span class="jira-issue resolved" data-jira-key="JENKINS-45651" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-45651?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-45651</a>
+                            -
+            <span class="summary">X-SSH-Endpoint is not provided on top page when 401/403 are returned</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ but if you are using nginx as a proxy you could trick it to add this information instead of Jenkins. </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">add_header &#39;X-SSH-Endpoint&#39; &#39;jenkins.example.com:50022&#39; always;</pre>
+</div></div><p>If you hit this, please be sure you add a comment on that bug in order to assure that it is reopened and fixed correctly.</p><h3 id="JenkinsCLI-java.io.IOException/javax.net.ssl.SSLHandshakeException(SSLcertificateissue)">java.io.IOException / javax.net.ssl.SSLHandshakeException (SSL certificate issue)</h3><p>You may face this issue if the certificate is not trusted, e.g. self-signed certificate.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">bash-4.1$ java -jar jenkins-cli.jar -s https://jenkins.example.com/ help
+Exception in thread &quot;main&quot; java.io.IOException: Failed to connect to https://jenkins.example.com/
+	at hudson.cli.CLI.getCliTcpPort(CLI.java:274)
+	at hudson.cli.CLI.&lt;init&gt;(CLI.java:134)
+	at hudson.cli.CLIConnectionFactory.connect(CLIConnectionFactory.java:72)
+	at hudson.cli.CLI._main(CLI.java:469)
+	at hudson.cli.CLI.main(CLI.java:384)
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: \
+PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: \
+unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1682)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:257)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:251)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1168)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:609)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:545)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:930)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1175)
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1202)
+	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1186)
+	at sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:440)
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:185)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:153)
+	at hudson.cli.CLI.getCliTcpPort(CLI.java:272)
+	... 4 more
+Caused by: sun.security.validator.ValidatorException: \
+PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: \
+unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:324)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:224)
+	at sun.security.validator.Validator.validate(Validator.java:235)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:147)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:230)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1147)
+	... 15 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: \
+unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:197)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:255)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:319)
+	... 21 more
+
+</pre>
+</div></div><p>see <a href="https://issues.jenkins-ci.org/browse/JENKINS-12629" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-12629</a> for a way to trust a self-signed certificate (rather than using <code>-noCertificateCheck</code> option)</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">JENKINS_HOST=jenkins.example.com
+JENKINS_PORT=443
+JENKINS_URL=https://${JENKINS_HOST}:${JENKINS_PORT}
+KEYSTOREFILE=myKeystore
+KEYSTOREPASS=changeme
+
+# get the SSL certificate
+openssl s_client -connect ${JENKINS_HOST}:${JENKINS_PORT} &lt;/dev/null | sed -ne &#39;/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p&#39; &gt; ${JENKINS_HOST}.cer
+# create a keystore and import certificate
+keytool -import -noprompt -trustcacerts -alias ${JENKINS_HOST} -file ${JENKINS_HOST}.cer -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
+# verify that the certificate is listed
+keytool -list -v -keystore ${KEYSTOREFILE} -storepass ${KEYSTOREPASS}
+# get jenkins-cli
+wget --no-check-certificate ${JENKINS_URL}/jnlpJars/jenkins-cli.jar
+# test access
+alias jcli=&quot;java -Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS} -jar jenkins-cli.jar -s ${JENKINS_URL,,}&quot;
+jcli help
+# ... or set this in your ~/.bashrc
+export JAVA_TOOL_OPTIONS=&quot;-Djavax.net.ssl.trustStore=${KEYSTOREFILE} -Djavax.net.ssl.trustStorePassword=${KEYSTOREPASS}&quot;
+java -jar jenkins-cli.jar -s ${JENKINS_URL} help
+</pre>
+</div></div><h3 id="JenkinsCLI-java.io.IOException:NoX-Jenkins-CLI2-Port">java.io.IOException: No X-Jenkins-CLI2-Port</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">java.io.IOException: No X-Jenkins-CLI2-Port among [X-Jenkins, null, Server, X-Content-Type-Options, Connection, X-You-Are-In-Group, X-Hudson, X-Permission-Implied-By, Date, X-Jenkins-Session, X-You-Are-Authenticated-As, X-Required-Permission, Set-Cookie, Expires, Content-Length, Content-Type]
+	at hudson.cli.CLI.getCliTcpPort(CLI.java:284)
+	at hudson.cli.CLI.&lt;init&gt;(CLI.java:128)
+	at hudson.cli.CLIConnectionFactory.connect(CLIConnectionFactory.java:72)
+	at hudson.cli.CLI._main(CLI.java:473)
+	at hudson.cli.CLI.main(CLI.java:384)
+	Suppressed: java.io.IOException: Server returned HTTP response code: 403 for URL: http://citest.gce.px/cli
+		at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1840)
+		at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+		at hudson.cli.FullDuplexHttpStream.&lt;init&gt;(FullDuplexHttpStream.java:78)
+		at hudson.cli.CLI.connectViaHttp(CLI.java:152)
+		at hudson.cli.CLI.&lt;init&gt;(CLI.java:132)
+		... 3 more
+</pre>
+</div></div><p>Solution: Go to Manage Jenkins -&gt; Configure Global Security -&gt; &quot;TCP port for JNLP agents&quot;: choose fixed or random</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324149/72613979.png">Screen Shot 2014-04-18 at 11.18.01 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324149/85753916.png">was_server_error.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324149/85753915.png">was_server_error.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324149/106496032.png">Screen Shot 2017-03-10 at 1.37.10 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

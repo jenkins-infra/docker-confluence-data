@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Pipeline CPS method mismatches</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Pipeline CPS method mismatches
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jglick)</span>, last modified by <span class='editor'> Unknown User (indefire)</span> on Aug 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro" style="width:70%;min-width:70%;max-width:70%;"><h1 id="PipelineCPSmethodmismatches-Introduction">Introduction</h1><p>Jenkins Pipeline uses a library called Groovy CPS to run Pipeline scripts. While Pipeline uses the Groovy parser and compiler, unlike a regular Groovy environment it runs most of the program inside a special interpreter. This uses a continuation-passing style (CPS) transform to turn your code into a version that can save its current state to disk (a file called <code>program.dat</code>  inside your build directory) and continue running even after Jenkins has restarted. (You can get some more technical background on the <a href="https://github.com/jenkinsci/workflow-cps-plugin/blob/master/README.md" class="external-link" rel="nofollow">plugin page</a> and the <a href="https://github.com/cloudbees/groovy-cps/blob/master/README.md" class="external-link" rel="nofollow">library page</a>.)</p><p>While the CPS transform is usually transparent to users, there are limitations to what Groovy language constructs can be supported, and in some circumstances it can lead to counterintuitive behavior. 
+<span class="jira-issue resolved" data-jira-key="JENKINS-31314" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-31314?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-31314</a>
+                            -
+            <span class="summary">Running asynchronous code inside a @NonCPS method should fail cleanly</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ makes the runtime try to detect the most common mistake: calling CPS-transformed code from non-CPS-transformed code. The following kinds of things are CPS-transformed:</p><ul><li>Almost all of the Pipeline script you write (including in libraries).</li><li>Most Pipeline steps, including all those which take a block.</li></ul><p>The following kinds of things are <em>not</em> CPS-transformed:</p><ul><li>Compiled Java bytecode, including<ul><li>the Java Platform</li><li>Jenkins core and plugins</li><li>the runtime for the Groovy language</li></ul></li><li>Constructor bodies in your Pipeline script.</li><li>Any method in your Pipeline script marked with the <code>@NonCPS</code>  annotation.</li><li>A few Pipeline steps which take no block and act instantaneously, such as <code>echo</code> or <code>properties</code>.</li></ul><p>CPS-transformed code may call non-CPS-transformed code or other CPS-transformed code, and non-CPS-transformed code may call other non-CPS-transformed code, but it is impossible for non-CPS-transformed code to call CPS-transformed code. If you try, there will be a mismatch between the method that the CPS interpreter thought it was calling and the method that it actually got a return value from.</p></div><div class="columnMacro" style="width:30%;min-width:30%;max-width:30%;"><h3 id="PipelineCPSmethodmismatches-TableofContents">Table of Contents</h3><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631023419143 {padding: 0px;}
+div.rbtoc1631023419143 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631023419143 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631023419143'>
+<ul class='toc-indentation'>
+<li><span class='TOCOutline'>1</span> <a href='#PipelineCPSmethodmismatches-Introduction'>Introduction</a>
+<ul class='toc-indentation'>
+<li><span class='TOCOutline'>1.1</span> <a href='#PipelineCPSmethodmismatches-TableofContents'>Table of Contents</a></li>
+</ul>
+</li>
+<li><span class='TOCOutline'>2</span> <a href='#PipelineCPSmethodmismatches-Commonproblemsandsolutions'>Common problems and solutions</a>
+<ul class='toc-indentation'>
+<li><span class='TOCOutline'>2.1</span> <a href='#PipelineCPSmethodmismatches-UseofPipelinestepsfrom@NonCPS'>Use of Pipeline steps from @NonCPS </a></li>
+<li><span class='TOCOutline'>2.2</span> <a href='#PipelineCPSmethodmismatches-Callingnon-CPS-transformedmethodswithCPS-transformedarguments'>Calling non-CPS-transformed methods with CPS-transformed arguments</a></li>
+<li><span class='TOCOutline'>2.3</span> <a href='#PipelineCPSmethodmismatches-Constructors'>Constructors</a></li>
+<li><span class='TOCOutline'>2.4</span> <a href='#PipelineCPSmethodmismatches-Overridesofnon-CPS-transformedmethods'>Overrides of non-CPS-transformed methods</a></li>
+<li><span class='TOCOutline'>2.5</span> <a href='#PipelineCPSmethodmismatches-ClosuresinsideGString'>Closures inside GString </a></li>
+</ul>
+</li>
+<li><span class='TOCOutline'>3</span> <a href='#PipelineCPSmethodmismatches-FalsePositives'>False Positives</a>
+<ul class='toc-indentation'>
+<li><span class='TOCOutline'>3.1</span> <a href='#PipelineCPSmethodmismatches-Directinvocationofclosuresstoredinobjectfieldsormaps'>Direct invocation of closures stored in object fields or maps</a></li>
+</ul>
+</li>
+</ul>
+</div></p></div></div></div></div><h1 id="PipelineCPSmethodmismatches-Commonproblemsandsolutions">Common problems and solutions</h1><h2 id="PipelineCPSmethodmismatches-UseofPipelinestepsfrom@NonCPS">Use of Pipeline steps from <code>@NonCPS</code> </h2><p>Sometimes users will apply the <code>@NonCPS</code>  annotation to a method definition, which bypasses the CPS transform inside that method. This can be done to work around limitations in Groovy language coverage (since the body of the method will execute using the native Groovy semantics), or to get better performance (the interpreter imposes a substantial overhead). However such methods must not call CPS-transformed code such as Pipeline steps. For example, the following will not work:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">@NonCPS
+def compileOnPlatforms() {
+  [&#39;linux&#39;, &#39;windows&#39;].each {arch -&gt;
+    node(arch) {
+      sh &#39;make&#39;
+    }
+  }
+}
+compileOnPlatforms()</pre>
+</div></div><p>Using the <code>node</code>  or <code>sh</code>  steps from this method is illegal, and the behavior will be anomalous. The warning in the logs from running this script looks like this:</p><blockquote><p>expected to call WorkflowScript.compileOnPlatforms but wound up catching node</p></blockquote><p>To fix this case, simply remove the annotation—it was not needed. (Longtime Pipeline users might have thought it was, prior to the fix of 
+<span class="jira-issue resolved" data-jira-key="JENKINS-26481" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-26481?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-26481</a>
+                            -
+            <span class="summary">Mishandling of binary methods accepting Closure</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+.)</p><h2 id="PipelineCPSmethodmismatches-Callingnon-CPS-transformedmethodswithCPS-transformedarguments">Calling non-CPS-transformed methods with CPS-transformed arguments</h2><p>Some Groovy and Java methods take complex types as parameters to support dynamic behavior. A common case is sorting methods that allow callers to specify a method to use for comparing objects (
+<span class="jira-issue" data-jira-key="JENKINS-44924" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-44924?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-44924</a>
+                            -
+            <span class="summary">pipeline groovy script - Sort a list with custom comparator or closure not sorting</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+     jira-macro-single-issue-export-pdf">In Progress</span>
+                </span>
+). Many methods in the Groovy standard library similar to this work correctly after the fix for 
+<span class="jira-issue resolved" data-jira-key="JENKINS-26481" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-26481?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-26481</a>
+                            -
+            <span class="summary">Mishandling of binary methods accepting Closure</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+, but some methods remain unfixed. For example, the following will not work:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def sortByLength(List&lt;String&gt; list) { 
+  list.toSorted { a, b -&gt; Integer.valueOf(a.length()).compareTo(b.length()) }
+}
+def sorted = sortByLength([&#39;333&#39;, &#39;1&#39;, &#39;4444&#39;, &#39;22&#39;])
+echo(sorted.toString())</pre>
+</div></div><p>The closure passed to <code>Iterable.toSorted</code> is CPS-transformed, but <code>Iterable.toSorted</code> itself is not CPS-transformed internally, so this will not work as intended. The current behavior is that the return value of the method will be the return value of the first call to the closure. In the example, this results in <code>sorted</code> being set to <code>-1</code>, and the warning in the logs looks like this:</p><blockquote><p class="console-output">expected to call java.util.ArrayList.toSorted but wound up catching org.jenkinsci.plugins.workflow.cps.CpsClosure2.call</p></blockquote><p>To fix this case, any argument passed to these methods must not be CPS-transformed. This can be accomplished by encapsulating the problematic method (<code>Iterable.toSorted</code> in the example) inside another method, and annotating the outer method with <code>@NonCPS</code>, or by creating an explicit class for the argument and annotating the relevant methods on that class with <code>@NonCPS</code>.</p><h2 id="PipelineCPSmethodmismatches-Constructors">Constructors</h2><p>Occasionally, users may attempt to use CPS-transformed code such as Pipeline steps inside of a constructor in a Pipeline script. Unfortunately, the construction of objects via the <code>new</code> operator in Groovy is not something that can be CPS-transformed (
+<span class="jira-issue resolved" data-jira-key="JENKINS-26313" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-26313?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-26313</a>
+                            -
+            <span class="summary">Workflow script fails if CPS-transformed methods are called from constructors</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+), and so this will not work. Here is an example that calls a CPS-transformed method in a constructor:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">class Test {
+  def x
+  public Test() {
+	setX()
+  }
+  private void setX() {
+    this.x = 1;
+  }
+}
+def x = new Test().x
+echo &quot;${x}&quot;</pre>
+</div></div><p>The construction of <code>Test</code> will fail when the constructor calls <code>Test.setX</code> because <code>setX</code> is a CPS-transformed method. The warning in the logs from running this script looks like this:</p><blockquote><p class="console-output">expected to call Test.&lt;init&gt; but wound up catching Test.setX</p></blockquote><p>To fix this case, ensure that any methods defined in a Pipeline script that are called from inside of a constructor are annotated with <code>@NonCPS</code> and that constructors do not call any Pipeline steps.</p><h2 id="PipelineCPSmethodmismatches-Overridesofnon-CPS-transformedmethods">Overrides of non-CPS-transformed methods</h2><p>Users may create a class in a Pipeline Script that extends a preexisting class defined outside of the Pipeline script, for example from the Java or Groovy standard libraries. When doing so, the subclass must ensure that any overriding methods are annotated with <code>@NonCPS</code> and do not use any CPS-transformed code internally. Otherwise, the overriding methods will fail if called from a non-CPS context. For example, the following will not work:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">class Test {
+  @Override
+  public String toString() {
+    return &quot;Test&quot;
+  }
+}
+def builder = new StringBuilder()
+builder.append(new Test())
+echo(builder.toString())</pre>
+</div></div><p>Calling the CPS-transformed override of <code>toString</code> from non-CPS-transformed code such as <code>StringBuilder.append</code> is not permitted and will not work as expected in most cases. The warning in the logs from running this script looks like this:</p><blockquote><p class="console-output">expected to call java.lang.StringBuilder.append but wound up catching Test.toString</p></blockquote><p>To fix this case, add the <code>@NonCPS</code> annotation to the overriding method, and remove any uses of CPS-transformed code such as Pipeline steps from the method.</p><h2 id="PipelineCPSmethodmismatches-ClosuresinsideGString">Closures inside <code>GString</code> </h2><p>In Groovy, it is possible to use a closure in a <code>GString</code> so that the closure is evaluated every time the <code>GString</code> is used as a <code>String</code>. However, in Pipeline scripts, this will not work as expected, because the closure inside of the GString will be CPS-transformed. Here is an example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def x = 1
+def s = &quot;x = ${-&gt; x}&quot;
+x = 2
+echo(s)</pre>
+</div></div><p>Using a closure inside of a <code>GString</code>  as in this example will not work. The warning from the logs when running this script looks like this:</p><blockquote><p class="console-output">expected to call WorkflowScript.echo but wound up catching org.jenkinsci.plugins.workflow.cps.CpsClosure2.call</p></blockquote><p>To fix this case, replace the original GString with a closure that returns a GString that uses a normal expression rather than a closure, and then call the closure where you would have used the original <code>GString</code> as follows:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def x = 1
+def s = { -&gt; x = &quot;${x}&quot; }
+x = 2
+echo(s())</pre>
+</div></div><h1 id="PipelineCPSmethodmismatches-FalsePositives">False Positives</h1><p>Unfortunately, some expressions may incorrectly trigger this warning even though they execute correctly. If you run into such a case, please <a href="https://issues.jenkins-ci.org/" class="external-link" rel="nofollow">file a new issue </a>(after first checking for duplicates) and set the component to workflow-cps. Here are some of the known false positives and their workarounds.</p><h2 id="PipelineCPSmethodmismatches-Directinvocationofclosuresstoredinobjectfieldsormaps">Direct invocation of closures stored in object fields or maps</h2><p>In Groovy, an expression like <code>object.fn()</code> is statically ambiguous and could be one of a few things. For example, It could be invocation a method named <code>fn</code> as in the following example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">class Test {
+  def fn() { 1 }
+}
+def object = new Test()
+object.fn()</pre>
+</div></div><p>It could be syntactic sugar for calling <code>Closure.call</code> on one of the object's fields (as in 
+<span class="jira-issue resolved" data-jira-key="JENKINS-58407" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58407?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58407</a>
+                            -
+            <span class="summary">Fail to call a Closure stored as a class attribute/field</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+): </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">class Test {
+  def fn
+}
+def object = new Test()
+object.fn = {-&gt; 1 }
+object.fn() // Syntactic sugar for object.fn.call()</pre>
+</div></div><p>And it could even be syntax sugar for <code>Map.get</code> followed by <code>Closure.call</code>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">def object = [fn: {-&gt; 1}]
+object.fn() // Syntactic sugar for object.get(&#39;fn&#39;).call()</pre>
+</div></div><p>The code that detects CPS method mismatches cannot currently distinguish between these cases, and so the second two examples issue a warning even though they are correct (the first example works correctly with no warning). As a workaround, when you are invoking a closure, you can explicitly call <code>Closure.call</code> rather than using Groovy syntactic sugar. Here are examples of the workaround applied to the previous two examples:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">class Test {
+  def fn
+}
+def object = new Test()
+object.fn = {-&gt; 1 }
+object.fn.call()</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">def object = [fn: {-&gt; 1}]
+object.fn.call()</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

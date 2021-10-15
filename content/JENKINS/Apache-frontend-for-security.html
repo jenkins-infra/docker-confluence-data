@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Apache frontend for security</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Apache frontend for security
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (orev)</span> on Aug 07, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>See <a href="Running-Jenkins-behind-Apache.html">Running Jenkins behind Apache</a> for general information about running Jenkins on Apache. This page only covers the security aspect of it.</p></div></div>
+
+<p>It is possible to use an apache in front of your tomcat instance that runs Jenkins. You will need to compile apache-2.2 with mod_proxy enabled. The example below shows an invocation of apache-2.2 configure script with parameters that enable mod_proxy, mod_proxy_ajp, LDAP and SSL.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+[ root@buildhost# ]sudo ./configure --enable-proxy \
+--enable-ldap \
+--enable-vhost \
+--enable-ssl \
+--enable-suexec \
+--enable-rewrite \
+--enable-proxy-ajp \
+--enable-authnz-ldap \
+--enable-mods-shared=all \
+--with-ssl \
+--with-ldap \
+--with-ldap-include=/usr/include/ \
+--prefix=/opt/apache/httpd-2.2.6
+</pre>
+</div></div>
+<p>Edit the httpd-vhosts.conf file that resides in ${APACHE_HOME}/conf/extras to make apache aware of your tomcat server.</p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The location of the file is different depending on how/where you install Apache from</p></div></div>
+
+<h2 id="Apachefrontendforsecurity-Apachebasicauthentication">Apache basic authentication</h2>
+
+<p>The example below shows a virtual host configuration for an apache that runs on the same machine as Jenkins. Jenkins here is configured to run an AJP connector on port 8102. This virtual host is also configured to rely on basic authentication (htpasswd) to protect certain resources, such as project(s) configuration, Jenkins management, and project(s) deletion. See the apache manual for examples of basic, and other, authentication scheme configuration.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;VirtualHost *:80&gt;
+    ServerAdmin your@email.address.com
+    DocumentRoot &quot;/opt/apache/httpd/htdocs&quot;
+    ServerName jenkins.yourdomain.com
+    ErrorLog &quot;logs/jenkins-error_log&quot;
+
+    ProxyPass /jenkins/ ajp://127.0.0.1:8102/jenkins/
+    ProxyPassReverse /jenkins/ ajp://127.0.0.1:8102/jenkins/
+    ProxyRequests Off
+    &lt;Location /&gt;
+        Order allow,deny
+        Allow from all
+    &lt;/Location&gt;
+    &lt;Location /jenkins/&gt;
+         AuthType basic
+         AuthName &quot;jenkins&quot;
+         AuthUserFile &quot;/opt/apache/httpd/conf/.htpasswd&quot;
+         Require valid-user
+ &lt;/Location&gt;
+&lt;/VirtualHost&gt;
+</pre>
+</div></div>
+
+<p>This approach is suitable if the access control need is simplistic (such as hiding Jenkins from everyone but a few people), but it tends to break down if you start doing more complex set up (such as making Jenkins visible to anonymous users but only allowing a few people to modify the settings.)</p>
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you do access control in Apache, do not enable security in Jenkins, as those two things will interfere with each other.</p></div></div>
+
+<h2 id="Apachefrontendforsecurity-Apacheauthenticationagainstx509/SSL">Apache authentication against x509/SSL</h2>
+
+<p>Above requires the maintenance of an .htpassword file. If your organisation has issued certs (or relies on third party client certs such as issued by Thawte or Verisign) - below can be used to remove the need to maintain such a .htpassword file and not have any people 'secret's on the machine.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    # Ensure that on top level SSL is active; along with
+    # authentication.
+    #
+    # SSLEngine       On
+    # SSLVerifyClient Require
+    # SSLVerifyDepth  3
+    # SSLCertificateFile    /etc/XXXX.pem
+    # SSLCertificateKeyFile /etc/XXXX.key
+
+    # 1) Expose CN and other variables to PHP, Perl, CGI
+    #    as SSL_CLIENT_S_DN, SSL_CLIENT_S_DN_CN, SSL_CLIENT_S_DN_emailAddress
+    #    (see http://httpd.apache.org/docs/2.2/mod/mod_ssl.html)
+    #
+    SSLOptions FakeBasicAuth
+
+    # 2) Next do a dirty trick to accept any users; yet rely on the
+    #    SSL SSLVerifyClient Require to make sure it is kosher.
+    #
+    #    Anyting in ZZZ will have the enivronment variable REMOTE_USER set.
+    &lt;Location /jenkins/&gt;
+	    AuthType Basic
+	    AuthName Jenkins
+	    AuthBasicProvider anon
+	    Anonymous *
+	    Require valid-user
+    &lt;/Location&gt;
+</pre>
+</div></div>
+
+<p>This will make request look to Jenkins just like those of the .htpassword sample of above.</p>
+
+<h1 id="Apachefrontendforsecurity-RunningJenkinswithAJP">Running Jenkins with AJP</h1>
+
+<p>Jenkins can be then run as the following to only listen to AJP connection on port 8102 without any HTTP listener. The 127.0.0.1 address also ensures that the external hosts cannot directly talk to Jenkins without going through Apache:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -jar jenkins.war --httpPort=-1 --ajp13Port=8102 --ajp13ListenAddress=127.0.0.1
+</pre>
+</div></div>
+
+<p>If you are running Jenkins inside a servlet container, refer to its documentation about how to prevent direct connection from outside to Jenkins. For example, in Tomcat, this is done by setting the <strong>address</strong> attribute in the tomcat connector definition. See <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/ajp.html#Standard%20Implementation" class="external-link" rel="nofollow">http://tomcat.apache.org/tomcat-5.5-doc/config/ajp.html#Standard%20Implementation</a>. For above localhost setting, use <strong>address=&quot;127.0.0.1&quot;</strong>.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

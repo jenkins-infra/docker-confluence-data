@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JMS Messaging Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JMS Messaging Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (scoheb)</span>, last modified by <span class='editor'> Unknown User (akostadinov)</span> on Sep 24, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>The JMS Messaging Plugin provides the following functionality:</p><ul><li>A build trigger to submit jenkins jobs upon receipt of a matching message.</li><li>A post-build action that may be used to submit a message to the topic upon the completion of a job</li></ul><p>JMS Messaging Providers</p><ul><li>This plugin supports the following JMS Message Provider types<ul><li>ActiveMQ</li><li>FedMsg</li></ul></li></ul><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View JMS Messaging <a href="https://plugins.jenkins.io/jms-messaging" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-02-19/#SECURITY-1033" class="external-link" rel="nofollow">SSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+<p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021394570 {padding: 0px;}
+div.rbtoc1631021394570 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021394570 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021394570'>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-SetUp'>Set Up</a>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-GlobalConfiguration'>Global Configuration</a></li>
+</ul>
+</li>
+<li><a href='#JMSMessagingPlugin-Triggering'>Triggering</a></li>
+<li><a href='#JMSMessagingPlugin-MessageTypes'>Message Types</a></li>
+<li><a href='#JMSMessagingPlugin-BuildSteps'>Build Steps</a>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-CINotifier'>CI Notifier</a></li>
+<li><a href='#JMSMessagingPlugin-CISubscriber'>CI Subscriber</a></li>
+</ul>
+</li>
+<li><a href='#JMSMessagingPlugin-Post-buildsteps'>Post-build steps</a>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-CINotifier.1'>CI Notifier</a></li>
+</ul>
+</li>
+<li><a href='#JMSMessagingPlugin-PipelineSupport'>Pipeline Support</a>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-Triggers'>Triggers</a></li>
+<li><a href='#JMSMessagingPlugin-Steps'>Steps</a></li>
+</ul>
+</li>
+<li><a href='#JMSMessagingPlugin-ChangeLog'>Change Log</a>
+<ul class='toc-indentation'>
+<li><a href='#JMSMessagingPlugin-Version1.1.9(July16,2019)'>Version 1.1.9 (July 16, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.8(June5,2019)'>Version 1.1.8 (June 5, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.7(May21,2019)'>Version 1.1.7 (May 21, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.6(Mar05,2019)'>Version 1.1.6 (Mar 05, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.5(Feb27,2019)'>Version 1.1.5 (Feb 27, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.4(Feb21,2019)'>Version 1.1.4 (Feb 21, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.3(Feb15,2019)'>Version 1.1.3 (Feb 15, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.2(Feb11,2019)'>Version 1.1.2 (Feb 11, 2019) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.1(June20,2018)'>Version 1.1.1 (June 20, 2018) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.1.0(June12,2018)'>Version 1.1.0 (June 12, 2018) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.40(May25,2018)'>Version 1.0.40 (May 25, 2018)</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.39(May17,2018)'>Version 1.0.39 (May 17, 2018) </a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.38'>Version 1.0.38</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.37'>Version 1.0.37</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.36'>Version 1.0.36</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.35'>Version 1.0.35</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.34'>Version 1.0.34</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.32'>Version 1.0.32</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.31'>Version 1.0.31</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.30'>Version 1.0.30</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.29'>Version 1.0.29</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.28'>Version 1.0.28</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.27'>Version 1.0.27</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.26'>Version 1.0.26</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.25'>Version 1.0.25</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.24'>Version 1.0.24</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.23'>Version 1.0.23</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.22'>Version 1.0.22</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.21'>Version 1.0.21</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.20'>Version 1.0.20</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.19'>Version 1.0.19</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.18'>Version 1.0.18</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.17'>Version 1.0.17</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.16'>Version 1.0.16</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.15'>Version 1.0.15</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.14'>Version 1.0.14</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.13'>Version 1.0.13</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.12'>Version 1.0.12</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.11'>Version 1.0.11</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.10'>Version 1.0.10</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.9'>Version 1.0.9</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.8'>Version 1.0.8</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.7'>Version 1.0.7</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.6'>Version 1.0.6</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.5'>Version 1.0.5</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.4'>Version 1.0.4</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.3'>Version 1.0.3</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.2'>Version 1.0.2</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.1'>Version 1.0.1</a></li>
+<li><a href='#JMSMessagingPlugin-Version1.0.0'>Version 1.0.0</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h2 id="JMSMessagingPlugin-SetUp">Set Up</h2><h3 id="JMSMessagingPlugin-GlobalConfiguration">Global Configuration</h3><p>Before the plugin may be used, you must add a JMS Messaging Provider. This will provide the ability to send and receive messages. Below is a list of currently supported JMS Message Providers:</p><ul><li>ActiveMQ</li><li>FedMsg</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/103088201/103940117.png" data-image-src="attachments/103088201/103940117.png" data-unresolved-comment-count="0" data-linked-resource-id="103940117" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="jms-messaging-screenshot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="103088201" data-linked-resource-container-version="71"></span></p><h2 id="JMSMessagingPlugin-Triggering">Triggering</h2><p>To enable the CI trigger, go to the job configuration page and add click the check box &quot;CI Event&quot; under the Build Triggers section. Enabling the trigger on a job requires two additional pieces of information:</p><ul><li>Provider Name</li><li>JMS Selector</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/103088201/103940098.png" data-image-src="attachments/103088201/103940098.png" data-unresolved-comment-count="0" data-linked-resource-id="103940098" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="trigger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="103088201" data-linked-resource-container-version="71"></span><br/>The complete documentation for JMS selectors can be found here: <a href="http://activemq.apache.org/selectors.html" class="external-link" rel="nofollow">http://activemq.apache.org/selectors.html</a></p><h2 id="JMSMessagingPlugin-MessageTypes">Message Types</h2><p>In the image above, the selector contains <strong>CI_TYPE = '&lt;message-type&gt;'</strong></p><p>The valid values for <strong>'&lt;message-type&gt;'</strong> can be found in the &quot;<strong>Type</strong>&quot; column in the table below:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Message</p></th><th class="confluenceTh"><p>Description</p></th><th class="confluenceTh"><p>Type</p></th></tr><tr><td class="confluenceTd"><p>Code quality checks done</p></td><td class="confluenceTd"><p>Indicate that static analysis covering code quality is complete.</p></td><td class="confluenceTd"><p>code-quality-checks-done</p></td></tr><tr><td class="confluenceTd"><p>Component build done</p></td><td class="confluenceTd"><p>Indicate that a component has been built.</p></td><td class="confluenceTd"><p>component-build-done</p></td></tr><tr><td class="confluenceTd"><p>Component functional test coverage done</p></td><td class="confluenceTd"><p>Indicate that test coverage for component tests is complete.</p></td><td class="confluenceTd"><p>functional-test-coverage-done</p></td></tr><tr><td colspan="1" class="confluenceTd">Custom</td><td colspan="1" class="confluenceTd">Indicate a custom event not covered by the other message types.</td><td colspan="1" class="confluenceTd">custom</td></tr><tr><td class="confluenceTd"><p>Early performance testing done</p></td><td class="confluenceTd"><p>Indicate that early automated performance testing is complete.</p></td><td class="confluenceTd"><p>early-performance-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Early security testing done</p></td><td class="confluenceTd"><p>Indicate that early automated security testing is complete.</p></td><td class="confluenceTd"><p>early-security-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Engineering product build accepted for release testing</p></td><td class="confluenceTd"><p>Indicate that engineering product build has been accepted as a release candidate.</p></td><td class="confluenceTd"><p>product-accepted-for-release-testing</p></td></tr><tr><td class="confluenceTd"><p>Engineering product build in staging environment</p></td><td class="confluenceTd"><p>Indicate that engineering product build has been pushed to staging environment.</p></td><td class="confluenceTd"><p>product-build-in-staging</p></td></tr><tr><td class="confluenceTd"><p>Functional testing done</p></td><td class="confluenceTd"><p>Indicate that all planned functional testing is complete.</p></td><td class="confluenceTd"><p>functional-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Image Uploaded</p></td><td class="confluenceTd"><p>Indicate that a cloud image has been uploaded</p></td><td class="confluenceTd"><p>image-uploaded</p></td></tr><tr><td class="confluenceTd"><p>Nonfunctional testing done</p></td><td class="confluenceTd"><p>Indicate that all planned nonfunctional testing is complete.</p></td><td class="confluenceTd"><p>nonfunctional-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Out of the box testing done</p></td><td class="confluenceTd"><p>Indicate that end user testing is complete.</p></td><td class="confluenceTd"><p>ootb-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Peer review done</p></td><td class="confluenceTd"><p>Indicate that development has completed peer review of the code change.</p></td><td class="confluenceTd"><p>peer-review-done</p></td></tr><tr><td class="confluenceTd"><p>Product build done</p></td><td class="confluenceTd"><p>Indicate that a new product build is complete.</p></td><td class="confluenceTd"><p>product-build-done</p></td></tr><tr><td class="confluenceTd"><p>Product test coverage done</p></td><td class="confluenceTd"><p>Indicate that test coverage for functional product tests is complete.</p></td><td class="confluenceTd"><p>product-test-coverage-done</p></td></tr><tr><td class="confluenceTd"><p>Pull request submitted</p></td><td class="confluenceTd"><p>Indicate that a code change needs to be reviewed and tested.</p></td><td class="confluenceTd"><p>pull-request</p></td></tr><tr><td class="confluenceTd"><p>Security checks done</p></td><td class="confluenceTd"><p>Indicate that static analysis covering security issues is complete.</p></td><td class="confluenceTd"><p>security-checks-done</p></td></tr><tr><td class="confluenceTd"><p>Tier 0 testing done</p></td><td class="confluenceTd"><p>Indicate that tier 0 (unit) testing has completed.</p></td><td class="confluenceTd"><p>tier-0-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Tier 1 testing done</p></td><td class="confluenceTd"><p>Indicate that tier 1 (component) testing is complete.</p></td><td class="confluenceTd"><p>tier-1-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Tier 2 build validation done</p></td><td class="confluenceTd"><p>Indicate that the build validation is complete.</p></td><td class="confluenceTd"><p>tier-2-validation-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Tier 2 integration testing done</p></td><td class="confluenceTd"><p>Indicate that tier 2 (functional product) automated testing is complete.</p></td><td class="confluenceTd"><p>tier-2-integration-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Tier 3 testing done</p></td><td class="confluenceTd"><p>Indicate that tier 3 testing is complete.</p></td><td class="confluenceTd"><p>tier-3-testing-done</p></td></tr><tr><td class="confluenceTd"><p>Unit test coverage done</p></td><td class="confluenceTd"><p>Indicate that test coverage for unit tests is complete.</p></td><td class="confluenceTd"><p>unit-test-coverage-done</p></td></tr><tr><td class="confluenceTd"><p>Update defect status</p></td><td class="confluenceTd"><p>Indicate a code change to resolve a defect has been reviewed and tested and the defect status needs to be updated.</p></td><td class="confluenceTd"><p>update-defect-status</p></td></tr></tbody></table></div><h2 id="JMSMessagingPlugin-BuildSteps">Build Steps</h2><h3 id="JMSMessagingPlugin-CINotifier">CI Notifier</h3><p>This plugin provides a build step for publishing messages to the topic upon job completion. To add the CI Notifier build step, go to the job configuration page and select the &quot;CI Notifier&quot; option.</p><p>Adding the step to the job requires some additional information:</p><ul><li>Provider name</li><li>Message type</li><li>Message properties</li><li>Message content.</li></ul><p>The full list of message types available in the drop-down menu can be found in the Message Type table above.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/103088201/103940099.png" data-image-src="attachments/103088201/103940099.png" data-unresolved-comment-count="0" data-linked-resource-id="103940099" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ci-notifier.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="103088201" data-linked-resource-container-version="71"></span></p><h3 id="JMSMessagingPlugin-CISubscriber">CI Subscriber</h3><p>This plugin provides a build step to wait for a specific message. To add the CI Subscriber build step, go to the job configuration page and select the &quot;CI Subscriber&quot; option.</p><p>Adding the step to the job requires some additional information:</p><ul><li>Provider name</li><li>JMS Selector</li><li>Variable</li><li>Timeout</li></ul><p>The build step will set an environment variable with the name from Variable with a value of the message content.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/103088201/103940100.png" data-image-src="attachments/103088201/103940100.png" data-unresolved-comment-count="0" data-linked-resource-id="103940100" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ci-subscriber-build.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="103088201" data-linked-resource-container-version="71"></span></p><h2 id="JMSMessagingPlugin-Post-buildsteps">Post-build steps</h2><h3 id="JMSMessagingPlugin-CINotifier.1">CI Notifier</h3><p>See above.</p><h2 id="JMSMessagingPlugin-PipelineSupport">Pipeline Support</h2><h3 id="JMSMessagingPlugin-Triggers">Triggers</h3><p>The CI trigger is available via properties in the root of a Jenkins declarative pipeline (outside the `pipeline` block):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">properties([
+  pipelineTriggers([
+    [
+      $class: &#39;CIBuildTrigger&#39;,
+      noSquash: false,
+      providerData: [
+        $class: &#39;ActiveMQSubscriberProviderData&#39;,
+        checks: [
+          [
+            expectedValue: &#39;^foo.*bar$&#39;,
+            field: &#39;$.msg.tag&#39;
+          ]
+        ],
+        name: &#39;Red Hat UMB&#39;,
+        overrides: [
+          topic: &#39;Consumer.rh-jenkins-ci-plugin.da3c13a1-021d-4629-81a1-5f522dc1a9e3.VirtualTopic.qe.ci.&gt;&#39;
+        ],
+        selector: &#39;name = \&#39;my-job\&#39;&#39;,
+        timeout: 30
+      ]
+    ]
+  ])
+])</pre>
+</div></div><h3 id="JMSMessagingPlugin-Steps">Steps</h3><p>This plugin provides the steps when using the Jenkins Pipeline feature:</p><ul><li>sendCIMessage<ul><li>This is the Freestyle CI Notifier Build and Publisher step sibling.</li></ul></li><li>waitForCIMessage<ul><li>This is the Freestyle CI Subscriber Build step sibling.</li></ul></li></ul><p>Here are some examples:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node(&#39;master&#39;) {
+   // Send a message that CodeQualityChecksDone
+    def sendResult = sendCIMessage \
+        providerName: &#39;default&#39;, \
+        messageContent: &#39;some content&#39;, \
+        messageProperties: &#39;CI_STATUS = passed&#39;, \
+        messageType: &#39;CodeQualityChecksDone&#39;
+	// echo sent message id and content
+	echo sendResult.getMessageId()
+	echo sendResult.getMessageContent()
+}
+</pre>
+</div></div><p>and</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node(&#39;master&#39;) {
+    // Wait for message and store message content in variable
+    def msgContent = waitForCIMessage \
+         providerName: &#39;default&#39;, \
+         selector: &quot;CI_TYPE = &#39;code-quality-checks-done&#39; and CI_STATUS = &#39;passed&#39;&quot;
+    echo &quot;msgContent = &quot; + msgContent
+}
+</pre>
+</div></div><h2 id="JMSMessagingPlugin-ChangeLog">Change Log</h2><h4 id="JMSMessagingPlugin-Version1.1.9(July16,2019)">Version 1.1.9 (July 16, 2019) </h4><ul><li>Ensure default values are used for build parameters when triggering builds (#138)</li><li>Support Boolean Parameters (#135)</li><li>Issue #133: Message properties should do variable substitution on entire set of properties, not by line. (#136)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.8(June5,2019)">Version 1.1.8 (June 5, 2019) </h4><ul><li>Support Multi-line String parameter for CI_MESSAGE definition (#124)<ul><li>Fixes JENKINS-57642</li></ul></li><li>Ensure timestamp is set when sending FedMsg (#131)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.7(May21,2019)">Version 1.1.7 (May 21, 2019) </h4><ul><li>add pipeline syntax support for CIBuildTrigger (#106)</li><li>waitForCIMessage does not work correctly with message checks (#114)</li><li>sendCIMessage gets stuck running when given nonexistent provider (#116)</li><li>&quot;CI event&quot; build trigger keeps creating threads on Jenkins when given invalid client name (#118)</li><li>Give users some sort of notification when a trigger has a fatal error (#121)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.6(Mar05,2019)">Version 1.1.6 (Mar 05, 2019) </h4><ul><li>Trigger on multiple topics. (#111)</li><li>Fix pipeline snippet generator (#113)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.5(Feb27,2019)">Version 1.1.5 (Feb 27, 2019) </h4><ul><li>Fix fedmsg topic override problem and test (#108)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.4(Feb21,2019)">Version 1.1.4 (Feb 21, 2019) </h4><ul><li><p>Bump jackson-databind to address security issues (#105)</p></li></ul><h4 id="JMSMessagingPlugin-Version1.1.3(Feb15,2019)">Version 1.1.3 (Feb 15, 2019) </h4><ul><li><p>getMsgId() for Fedmsg in jms-messaging plugin discrepancy.  (#103)</p></li></ul><h4 id="JMSMessagingPlugin-Version1.1.2(Feb11,2019)">Version 1.1.2 (Feb 11, 2019) </h4><ul><li><p>Ensure only admins can perform testConnection() (#104)</p></li><li>The jms-messaging-plugin defaults to org.fedoraproject if no topic override is specified (#101)</li><li>Trigger thread is dying with an unhandled exception. (#100)</li><li>Do not override PATH variable (#88)</li></ul><h4 id="JMSMessagingPlugin-Version1.1.1(June20,2018)">Version 1.1.1 (June 20, 2018) </h4><ul><li><p>Fix defaults to work. Remove obsolete code. Some general cleanup. (#87)</p></li><li><p>MESSAGE_HEADERS should include all message headers. (#82)</p></li><li><p>Update pom to new parent and fix deps (#86)</p></li></ul><h4 id="JMSMessagingPlugin-Version1.1.0(June12,2018)">Version 1.1.0 (June 12, 2018) </h4><ul><li><p>MESSAGE_HEADERS should include all message headers. (#83)</p></li><li>Change provider selection to use a dropdownDescriptorSelector. (#79)</li></ul><h4 id="JMSMessagingPlugin-Version1.0.40(May25,2018)">Version 1.0.40 (May 25, 2018)</h4><ul><li>Correct possible empty CI_MESSAGE using ActiveMQ.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.39(May17,2018)">Version 1.0.39 (May 17, 2018) </h4><p><br/></p><div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Breaking change</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>WARNING: Version 1.0.39 no longer supports a JMS selector for the FedMsg Messaging Provider. You must update your jobs to add a Message Check to specify what you want to trigger on.</strong></p></div></div><p><br/></p><ul><li>Fully implement message checks for AMQ messages.</li><li>Remove JMS selector and message properties from Fedmsg messages.</li><li>Only support JSON path for all message checks.</li><li>Fix issue where plugin was overwriting CI_MESSAGE while jobs are queued. </li></ul><h4 id="JMSMessagingPlugin-Version1.0.38">Version 1.0.38</h4><ul><li>not released</li></ul><h4 id="JMSMessagingPlugin-Version1.0.37">Version 1.0.37</h4><ul><li>not released</li></ul><h4 id="JMSMessagingPlugin-Version1.0.36">Version 1.0.36</h4><ul><li>Support global node properties in topics names for triggers (#62)</li></ul><h4 id="JMSMessagingPlugin-Version1.0.35">Version 1.0.35</h4><ul><li>Force trigger thread to be stopped on trigger removal, project disable, and project delete. (#61)</li></ul><h4 id="JMSMessagingPlugin-Version1.0.34">Version 1.0.34</h4><div><ul><li>Add @Whitelisted to MessagingProviderOverrides constructor. (#60)</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.32">Version 1.0.32</h4><div><ul><li>Update CIMessageSendStep code to use CIMessageNotifier. Add methods to allow calls from pipeline code.</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.31">Version 1.0.31</h4><div><ul><li>Improve interrupt waitforcimessage (#51)</li><li>add extra logging for waitForCIMessage (#50)</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.30">Version 1.0.30</h4><div><ul><li>Fix SendResult to not require it to be Serializable</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.29">Version 1.0.29</h4><div><ul><li>sendCIMessage now returns SendResult (#48)</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.28">Version 1.0.28</h4><div><ul><li>Add msgchecks to waitForMsg and fix timeout (#47)</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.27">Version 1.0.27</h4><div><ul><li>added MsgCheck equals() to fix thread restart issue.</li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.26">Version 1.0.26</h4><div><ul><li><p class="commit-title">Add support for JsonPath in MessageChecks (only FedMsg)</p></li></ul><h4 id="JMSMessagingPlugin-Version1.0.25">Version 1.0.25</h4><div><ul><li><p class="commit-title">Fix trigger thread not being restarted on JMS messaging provider change.</p></li></ul></div></div><h4 id="JMSMessagingPlugin-Version1.0.24">Version 1.0.24</h4><div><ul><li><p class="commit-title">Fix width of topic text boxes for overrides</p></li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.23">Version 1.0.23</h4><div><ul><li><p class="commit-title">Add ability to use queues in AMQ messaging provider. (#38)</p></li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.22">Version 1.0.22</h4><div><ul><li><p class="commit-title">&lt;not released&gt;</p></li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.21">Version 1.0.21</h4><div><ul><li><p class="commit-title">Rework to support quick and frequent stop/start of triggers with properties in Multibranch jobs</p></li></ul></div><h4 id="JMSMessagingPlugin-Version1.0.20">Version 1.0.20</h4><ul><li>Do not block Jenkins load when previous plugin's ancestor's descriptor has been detected.</li><li><p>Improve interpolation of environment variables in messages</p></li><li><p>Add logging for pipeline steps</p></li><li><p>Add failOnError support for sending messages</p></li><li><p>Add support for replacing tokens using previously defined properties</p></li><li><p>Refactor pipeline steps so logging and aborting works properly.</p></li></ul><h4 id="JMSMessagingPlugin-Version1.0.19">Version 1.0.19</h4><ul><li><p>fix missing fillProviderMethod for waitForCIMessage</p></li><li><p>fix NPE for GlobalCIConfiguration.getFirstProviderOverrides</p></li></ul><h4 id="JMSMessagingPlugin-Version1.0.18">Version 1.0.18</h4><ul><li><p>Improve interruptions of connection threads by ensuring that provider is connected before trying to interrupt and join trigger thread.</p></li></ul><h4 id="JMSMessagingPlugin-Version1.0.17">Version 1.0.17</h4><ul><li>Add topic provider.</li><li>Fix Tests for new selections</li></ul><h4 id="JMSMessagingPlugin-Version1.0.16">Version 1.0.16</h4><ul><li><p>Variable expansion now supported for override topics.</p></li></ul><h4 id="JMSMessagingPlugin-Version1.0.15">Version 1.0.15</h4><ul><li>(ActiveMQ) Improve resiliency by better cleanup failed connections.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.14">Version 1.0.14</h4><ul><li>Upgrade ActiveMQ client to version 5.14.5.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.13">Version 1.0.13</h4><ul><li>Allow a job to re-subscribe if job was previously disabled.</li><li>Fix migration steps to ensure null providers are fixed on startup.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.12">Version 1.0.12</h4><ul><li>Fix for double-quotes in FedMsg selectors</li><li>Add MESSAGE_HEADERS to the env for triggered jobs.</li><li>Allow topic configuration at build steps</li></ul><h4 id="JMSMessagingPlugin-Version1.0.11">Version 1.0.11</h4><ul><li>(JENKINS-42401) Enable trigger to work with Pipeline jobs</li></ul><h4 id="JMSMessagingPlugin-Version1.0.10">Version 1.0.10</h4><ul><li>Added Message Check support.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.9">Version 1.0.9</h4><ul><li>Deleting project does not unsubscribe job nor shutdown subscriber thread.</li><li>Renaming project does not stop/start subscriber thread.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.8">Version 1.0.8</h4><ul><li>Correct migration bug when plugins are installed that implement SaveableListener.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.7">Version 1.0.7</h4><ul><li>Improve persistence of Keystore and Truststore config values.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.6">Version 1.0.6</h4><ul><li>Support variable expansion in Keystore and Truststore config values.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.5">Version 1.0.5</h4><ul><li>Introduction of SSL Certificate Authentication for ActiveMQ.</li></ul><h4 id="JMSMessagingPlugin-Version1.0.4">Version 1.0.4</h4><ul><li>FedMsg Message Provider<ul><li>Supports triggering</li><li>Supports sending and receiving</li><li>Signing of messages not yet implemented.</li></ul></li></ul><h4 id="JMSMessagingPlugin-Version1.0.3">Version 1.0.3</h4><ul><li>Remove un-necessary dependencies</li></ul><h4 id="JMSMessagingPlugin-Version1.0.2">Version 1.0.2</h4><ul><li>Reduce required version of Jenkins Core</li></ul><h4 id="JMSMessagingPlugin-Version1.0.1">Version 1.0.1</h4><ul><li>Fix startup crash for project types Project and MatrixProject</li></ul><h4 id="JMSMessagingPlugin-Version1.0.0">Version 1.0.0</h4><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940097.png">globalconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940098.png">trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940099.png">ci-notifier.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940100.png">ci-subscriber-build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940118.png">jms-messaging-screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940119.png">jms-messaging-screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/108331550.png">jms-messaging-screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088201/103940117.png">jms-messaging-screenshot.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

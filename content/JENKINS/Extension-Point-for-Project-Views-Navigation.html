@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Extension Point for Project Views Navigation</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Extension Point for Project Views Navigation
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (winston.prakash@gmail.com)</span>, last modified on Oct 04, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If you have many views, the TabBar that displays the view names becomes  very large. The solution would be to use alternate  UI for the the Project View List such as</p>
+<ul>
+	<li>Multi-line TabBar</li>
+	<li>Scrollling TabBar</li>
+	<li>TabBar with dropdown List</li>
+	<li>..</li>
+</ul>
+
+
+<p>The best solution would be to provide some kind of Extension mechanism so that plugin developer can provide their own Views Tab Bar UI.</p>
+
+<p>Such an Extension Point (ViewsTabBar) is introduced now (in a branch as of 1.378) and plugin developers can provide their own UI by extending the Extension Point. The alternate UI provided by plugin developers would appear in a DropDown list in the main Hudson Configuration page as</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46336202/46563441.png" data-image-src="attachments/46336202/46563441.png" data-unresolved-comment-count="0" data-linked-resource-id="46563441" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="TabBarSelection.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46336202" data-linked-resource-container-version="25"></span><br class="atl-forced-newline"/></p>
+
+<p>On selecting the Default Views TabBar, the Dashboard would show the tabs with the default UI.</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46336202/46563443.png" data-image-src="attachments/46336202/46563443.png" data-unresolved-comment-count="0" data-linked-resource-id="46563443" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="DefaultTabBar.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46336202" data-linked-resource-container-version="25"></span><br class="atl-forced-newline"/></p>
+
+<p>I have implemented a simple plugin that enables displaying the tabs in a muti-row fashion. The alternate UI looks like</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46336202/46563442.png" data-image-src="attachments/46336202/46563442.png" data-unresolved-comment-count="0" data-linked-resource-id="46563442" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MultiRowTabBar.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46336202" data-linked-resource-container-version="25"></span><br class="atl-forced-newline"/></p>
+
+<hr/>
+<h3 id="ExtensionPointforProjectViewsNavigation-ExtendingViewsTabBarExtensionPoint">Extending <code>ViewsTabBar</code> Extension Point</h3>
+
+<p>To provide alternate UI for TabBar extend the <strong><em>ViewsTabBar</em></strong> in your plugin as</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence"> public class MultilineViewsTabBar extends ViewsTabBar {
+    @DataBoundConstructor
+    public MultilineViewsTabBar() {
+    }
+
+    @Extension
+    public static class DescriptorImpl extends ViewsTabBarDescriptor {
+
+        @Override
+        public String getDisplayName() {
+            return &quot;Multi-row Views TabBar&quot;;
+        }
+    }
+ }
+</pre>
+</div></div>
+<p>The value returned by getDisplayName() would be displayed in the DropDown List.</p>
+
+
+<p>The UI itself is provided via a page named &quot;viewTabs.jelly&quot;. To this page three attributes are passed in</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;%@ attribute name=&quot;it&quot; required=&quot;true&quot; type=&quot;&lt;Your Plugin Class&gt;&quot; %&gt;
+&lt;%@ attribute name=&quot;views&quot; required=&quot;true&quot; type=&quot;java.util.Collection&lt;hudson.model.View&gt;&quot; %&gt;
+&lt;%@ attribute name=&quot;currentView&quot; required=&quot;true&quot; type=&quot;hudson.model.View&quot; %&gt;
+</pre>
+</div></div>
+<p>viewTabs.jelly may look something like</p>
+
+
+<p><strong><span style="text-decoration: underline;">viewTabs.jelly</span></strong></p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:st=&quot;jelly:stapler&quot; xmlns:d=&quot;jelly:define&quot; xmlns:lc=&quot;/lib/layout/tabbar&quot; &gt;
+  &lt;!-- view tab bar --&gt;
+    &lt;lc:tabBar&gt;
+        &lt;j:forEach var=&quot;v&quot; items=&quot;${views}&quot;&gt;
+            &lt;lc:tab name=&quot;${v.viewName}&quot; active=&quot;${v==currentView}&quot; href=&quot;${rootURL}/${v.url}&quot; /&gt;
+        &lt;/j:forEach&gt;
+        &lt;j:if test=&quot;${currentView.hasPermission(currentView.CREATE)}&quot;&gt;
+            &lt;lc:tab name=&quot;+&quot; href=&quot;${rootURL}/${currentView.owner.url}newView&quot; active=&quot;false&quot;
+             title=&quot;${%New View}&quot; /&gt;
+        &lt;/j:if&gt;
+    &lt;/lc:tabBar&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div>
+<p>For Multi-Row Tabbar I wrote the TabBar.jelly and Tab.jelly as</p>
+
+<p><br class="atl-forced-newline"/>
+<strong><span style="text-decoration: underline;">TabBar.jelly</span></strong></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence"> &lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:d=&quot;jelly:define&quot; xmlns:st=&quot;jelly:stapler&quot;&gt;
+
+    &lt;style type=&quot;text/css&quot;&gt;
+
+            /* CSS Tabs */
+            #tabBarContainer {
+                background: #E6E6E6;
+                margin: 10px auto 0;
+                padding: 3px;
+                border: 1px solid #BBBBBB;
+            }
+
+            /* to stretch the container div to contain floated list */
+            #tabBarContainer:after {
+                content: &quot;.&quot;;
+                display: block;
+                line-height: 1px;
+                font-size: 1px;
+                clear: both;
+            }
+
+            ul#tabList {
+                list-style: none;
+                padding: 0;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            ul#tabList li {
+                display: block;
+                float: left;
+                /*width: 10%;*/
+                margin: 0;
+                padding: 0;
+                text-align: center
+            }
+
+            ul#tabList li a {
+                display: block;
+                width: 100%;
+                padding: 6px;
+                border-width: 1px;
+                border-color: #ffe #aaab9c #ccc #fff;
+                border-style: solid;
+                color: #777;
+                text-decoration: none;
+                background: #FEFEEE;
+            }
+
+            #tabBarContainer&gt;ul#tabList li a { width: auto; }
+
+            ul#tabList li#active a {
+                background: #E0E0F0;
+                color: #800000;
+            }
+
+            ul#tabList li a:hover, ul#tabList li#active a:hover {
+                color: #800000;
+                background: transparent;
+                border-color: #aaab9c #fff #fff #ccc;
+            }
+
+    &lt;/style&gt;
+
+    &lt;div id=&quot;tabBarContainer&quot;&gt;
+        &lt;ul id=&quot;tabList&quot;&gt;
+            &lt;j:set var=&quot;tab&quot; value=&quot;${tabs}&quot; /&gt;
+            &lt;d:invokeBody /&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+
+&lt;/j:jelly&gt;
+</pre>
+</div></div>
+
+<p><br class="atl-forced-newline"/>
+<strong><span style="text-decoration: underline;">Tab.jelly</span></strong></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;!--
+&lt;%@ attribute name=&quot;name&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot; %&gt;
+&lt;%@ attribute name=&quot;href&quot; required=&quot;true&quot; type=&quot;java.lang.String&quot; %&gt;
+&lt;%@ attribute name=&quot;active&quot; required=&quot;true&quot; type=&quot;java.lang.Boolean&quot; %&gt;
+&lt;%@ attribute name=&quot;title&quot; required=&quot;false&quot; type=&quot;java.lang.String&quot; %&gt;
+--&gt;
+
+&lt;j:jelly xmlns:j=&quot;jelly:core&quot;&gt;
+
+    &lt;j:choose&gt;
+        &lt;j:when test=&quot;${active}&quot;&gt;
+            &lt;li id=&quot;active&quot;&gt;
+                &lt;a id=&quot;current&quot; href=&quot;${href}&quot; title=&quot;${attrs.title}&quot;&gt;${name}&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/j:when&gt;
+        &lt;j:otherwise&gt;
+            &lt;li&gt;
+                &lt;a href=&quot;${href}&quot; title=&quot;${attrs.title}&quot;&gt;${name}&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/j:otherwise&gt;
+    &lt;/j:choose&gt;
+
+&lt;/j:jelly
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46336202/46563441.png">TabBarSelection.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46336202/46563442.png">MultiRowTabBar.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46336202/46563443.png">DefaultTabBar.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

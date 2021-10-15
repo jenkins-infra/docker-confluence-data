@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : MobileCloud for Jenkins Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : MobileCloud for Jenkins Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (hagzag)</span>, last modified by <span class='editor'> Unknown User (perfectomobile)</span> on Jul 14, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-1061" class="external-link" rel="nofollow">Perfecto Mobile Plugin stores credentials in plain text</a></li>
+</ul>
+
+</div></div>
+
+
+<p><br class="atl-forced-newline"/></p>
+
+<p>
+<p>The MobileCloud for Jenkins plugin enables  mobile apps to automatically upload from within the Jenkins build “job” to the MobileCloud Platform, where the app is installed on real mobile devices. It then launches a pre-defined Perfecto Mobile script and generates a detailed report, allowing developers to get early warnings of bugs and correct them prior to the QA stage. By using the MobileCloud Jenkins plugin, organizations can streamline the release cycle by delivering more mature and robust mobile apps to QA for a full mobile application test cycle (functional, performance, UI  testing).</p></p>
+
+<h1 id="MobileCloudforJenkinsPlugin-AboutThisPlugin">About This Plugin</h1>
+
+<p>This plugin runs MobileCloud™ scripts written in the Perfecto Mobile Native Automation as a build step.</p>
+<ul>
+	<li>Executes the whole build cycle, including running the script and generating a report including video</li>
+	<li>Uploads files to 	the MobileCloud </li>
+	<li>Upload artifacts from another project to the MobileCloud </li>
+</ul>
+
+
+<h1 id="MobileCloudforJenkinsPlugin-HowtoUse">How to Use</h1>
+
+
+<h2 id="MobileCloudforJenkinsPlugin-Prerequisites">Prerequisites</h2>
+
+<p>The Jenkins machine, or the slave running the job, needs to access the MobileCloud via https (port 443).</p>
+
+<p><span style="color: rgb(0,0,0);"><strong>Checking your connectivity</strong></span></p>
+
+<p>Enter the following URL on the machine:</p>
+
+<p>, substituting <span style="color: rgb(255,102,0);">MyCloud</span>, <span style="color: rgb(255,102,0);">MyUsername</span>, and <span style="color: rgb(255,102,0);">MyPassword</span> as appropriate. </p>
+
+
+
+
+
+
+<p>Users on the <strong>www.perfectomobile.com</strong> can use the below URL:</p>
+
+<p>, substituting <span style="color: rgb(255,102,0);">MyUsername</span> and <span style="color: rgb(255,102,0);">MyPassword </span>as appropriate.</p>
+
+
+
+
+
+
+
+<p><strong>Getting a response</strong></p>
+
+<p>The reply should be an XML confirming a successful connection. For Example:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/71696525.jpg" data-image-src="attachments/71436380/71696525.jpg" data-unresolved-comment-count="0" data-linked-resource-id="71696525" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="1.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></p>
+
+<h2 id="MobileCloudforJenkinsPlugin-Proxy">Proxy</h2>
+
+<p>For Jenkins or slaves that will be running the job that are behind a proxy, enter the proxy information in the <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em> &gt; <em>Advanced</em> page.</p>
+
+<p>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/71696526.jpg" data-image-src="attachments/71436380/71696526.jpg" data-unresolved-comment-count="0" data-linked-resource-id="71696526" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></p>
+
+<h2 id="MobileCloudforJenkinsPlugin-ConfiguringyourMobileCloud">Configuring your MobileCloud</h2>
+
+<p>Before using the plug-in, provide your Perfecto MobileCloud credentials in the <em>Manage Jenkins</em> &gt; <em>Configure System</em> page.</p>
+
+
+<p>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/72974363.png" data-image-src="attachments/71436380/72974363.png" data-unresolved-comment-count="0" data-linked-resource-id="72974363" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsCloud1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span><br/>
+Click on <em>Test Connection</em> to verify your MobileCloud credentials.</p>
+
+
+<p><strong>Note</strong>: The MobileCloud name does not need to contain http/https.</p>
+
+<p><strong>Note</strong>: The username being used with the plugin must have an Automation role. </p>
+
+
+
+<p><span style="color: rgb(210,73,57);"><strong>Job Setup</strong></span></p>
+
+<ol>
+	<li>Click <em>New Item.</em></li>
+	<li>Enter Item name.</li>
+	<li>Select <strong><em>Build a free-style software project</em></strong></li>
+	<li>Click <strong>OK</strong>.<strong><em> </em></strong></li>
+</ol>
+
+
+<h3 id="MobileCloudforJenkinsPlugin-Configuringyourjob">Configuring your job</h3>
+
+<p>There are three possible build steps:</p>
+
+<p><strong>Execute MobileCloud script</strong> - Executes the whole build cycle, including running the script and generating a report. <br/>
+<strong>Upload files to MobileCloud</strong> - Access files easily.  <br/>
+<strong>Upload artifacts from another project to MobileCloud</strong> - Enables flexibility between projects. </p>
+
+<h5 id="MobileCloudforJenkinsPlugin-ExecuteMobileCloudscript:"><strong>Execute MobileCloud script</strong>:</h5>
+
+<ol>
+	<li>Enter a project description (Optional).</li>
+	<li>Under <strong>Build</strong> &gt; <strong>Add Build Step</strong>, select the build step: <strong>Execute MobileCloud script.</strong></li>
+	<li>Under <strong>Automation Script</strong>, enter the Perfecto Mobile repository path name. For example, to find a script called <em>AndroidScript</em> located in the my scripts folder, in the <em>PRIVATE</em> subarea,enter <em>PRIVATE:my scripts/AndroidScript</em>. <br/>
+For more information on the MobileCloud repository click <a href="http://help.perfectomobile.com/article/AA-00929" class="external-link" rel="nofollow">here</a>. </li>
+	<li>Script Parameters - Click the <strong>Refresh parameters</strong> button to display the runtime parameters defined in the script.</li>
+</ol>
+
+
+
+
+<p><em>Fill in the parameter values as specified below for each type. </em></p>
+
+
+
+<p><strong>String/integer</strong>: simply type them<br/>
+For example, “appIdentifier(string)=Perfecto Mobile OSE”</p>
+
+<p><strong>Device parameter</strong>: The value should be the device id of the required device.<br/>
+Use the &quot;Device and Media parameter value assistance&quot; to find the id. For example: &quot;DUT(Device)=TA8830NFLG&quot;</p>
+
+<p><strong>Media/Data table parameters</strong>: Type in the repository path where to upload to and the workspace location of the file to upload from, separated by a semicolon.<br/>
+For example, &quot;PRIVATE:myfolder/TestApp.apk;TestApp.apk&quot;<br/>
+Use the &quot;Device and Media parameter value assistance&quot; to find the repository path.</p>
+
+
+
+<p><strong>How to use the &quot;Device and Media parameter value assistance&quot;:</strong></p>
+
+<p><span style="color: rgb(243,81,11);"><strong>NOTICE</strong></span>: It is not recommended to use runtime parameter of type Handset (Device) ; the specified device may be unavailable at runtime. Instead, use the <a href="http://help.perfectomobile.com/article/AA-02265" class="external-link" rel="nofollow">Select device</a> command within your script to select an available device at runtime. </p>
+
+<p>Device: Scroll and select the required device. Click on &quot;Copy to clipboard&quot; and then copy the id and paste into the parameter. </p>
+
+<p>Media: Find the repository path by typing the path in the field. Select an item from the list, then use the clipboard to copy/paste the value into the parameter.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/72974381.png" data-image-src="attachments/71436380/72974381.png" data-unresolved-comment-count="0" data-linked-resource-id="72974381" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins9.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></p>
+
+
+
+<h5 id="MobileCloudforJenkinsPlugin-UploadFilestoMobileCloud">Upload Files to MobileCloud</h5>
+
+<ol>
+	<li>Specify the path of the file relative to the workspace. </li>
+	<li>Type or select the repository item path.</li>
+</ol>
+
+
+<p>           <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/73597018.png" data-image-src="attachments/71436380/73597018.png" data-unresolved-comment-count="0" data-linked-resource-id="73597018" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Jenkins_UploadFiles2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></p>
+
+<h5 id="MobileCloudforJenkinsPlugin-UploadArtifactsfromanotherprojecttoMobileCloud">Upload Artifacts from another project to MobileCloud</h5>
+
+<ol>
+	<li>Enter the name of the source project. Once entered, validate the project name.  <br/>
+<strong>Note</strong>: If a project name is not entered or validated an error message appears.</li>
+	<li>Select build.</li>
+	<li>Enter paths to upload artifacts or leave blank to upload all artifacts. </li>
+	<li>Type or select the item path in the media repository. </li>
+	<li>Enter parameter filters. <br/>
+<strong>Note</strong>: Jobs can be filtered to select only builds matching particular parameters or other build variables.     <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/71436380/73597019.png" data-image-src="attachments/71436380/73597019.png" data-unresolved-comment-count="0" data-linked-resource-id="73597019" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsUploadArtifacts.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></li>
+</ol>
+
+
+
+
+
+<h3 id="MobileCloudforJenkinsPlugin-RuntheJob">Run the Job</h3>
+
+<ol>
+	<li><strong>Run the job</strong></li>
+	<li>*View the Perfecto Mobile report - *Click on the <em>View Report</em> link, in the <em>Console Output</em> page, once the script run is complete<br/>
+<span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="844" width="682" src="attachments/71436380/72220682.png" data-image-src="attachments/71436380/72220682.png" data-unresolved-comment-count="0" data-linked-resource-id="72220682" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="report.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></li>
+	<li><strong>View the device video</strong></li>
+</ol>
+
+
+<p>           <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="510" width="497" src="attachments/71436380/71696531.jpg" data-image-src="attachments/71436380/71696531.jpg" data-unresolved-comment-count="0" data-linked-resource-id="71696531" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="7.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="71436380" data-linked-resource-container-version="55"></span></p>
+
+
+
+<h1 id="MobileCloudforJenkinsPlugin-Limitations">Limitations</h1>
+
+<ol>
+	<li>Plugin supports one MobileCloud 	only.</li>
+	<li>UFT Mobile Scripts are not 	supported.</li>
+</ol>
+
+
+<h2 id="MobileCloudforJenkinsPlugin-VersionHistory">Version History</h2>
+
+
+<h3 id="MobileCloudforJenkinsPlugin-2.41(Jul10,2015)">2.41 (Jul 10, 2015)</h3>
+
+<ul>
+	<li>Support for Jenkins Environment Variables</li>
+	<li>Compatible with Copy Artifacts plugin. Includes support of copying software artifacts between projects.</li>
+</ul>
+
+
+
+
+
+<h3 id="MobileCloudforJenkinsPlugin-2.20(Jun20,2014)">2.20 (Jun 20, 2014)</h3>
+
+<ul>
+	<li>GA version</li>
+</ul>
+
+
+
+<h3 id="MobileCloudforJenkinsPlugin-1.0(Feb19,2014)">1.0 (Feb 19, 2014)</h3>
+
+<ul>
+	<li>Beta version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696524.xcf">1.xcf</a> (image/x-xcf)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696525.jpg">1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696526.jpg">2.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696527.jpg">3.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696528.jpg">4.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696529.jpg">5.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696530.jpg">6.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/71696531.jpg">7.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72220681.jpg">Clipboard01.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72220682.png">report.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974362.png">JenkinsCloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974361.png">JenkinsCloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974363.png">JenkinsCloud1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974364.png">Jenkins6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974379.png">Jenkins7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974380.png">Jenkins8.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/72974381.png">jenkins9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/73596950.png">JenkinsUploadtoCloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/73597018.png">Jenkins_UploadFiles2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71436380/73597019.png">JenkinsUploadArtifacts.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

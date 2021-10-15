@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : VncRecorder Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : VncRecorder Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tbaum)</span>, last modified on Aug 20, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View VncRecorder <a href="https://plugins.jenkins.io/vncrecorder" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-07-02/#SECURITY-1728%20(2)" class="external-link" rel="nofollow">Reflected XSS vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2020-07-02/#SECURITY-1728%20(1)" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin records screen of current build or other configured VNC session as Shock Wave Flash (swf) file during a build and stores it as an artifact. This plugin can be used in combination with <a href="VncViewer-Plugin.html">VncViewer </a> and <a href="Xvnc-Plugin.html">Xvnc plugin</a>.</p></p>
+
+<p>After the build, the video file gets also published as a HTTP link in the &quot;Console output&quot; of the build. The generated HTML file embeds a video and makes it possible to navigate within a recorded video directly in browser.</p>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631023041347 {padding: 0px;}
+div.rbtoc1631023041347 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631023041347 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631023041347'>
+<ul class='toc-indentation'>
+<li><a href='#VncRecorderPlugin-Requirements'>Requirements</a></li>
+<li><a href='#VncRecorderPlugin-Howyouusetheplugininajob'>How you use the plugin in a job</a>
+<ul class='toc-indentation'>
+<li><a href='#VncRecorderPlugin-ExampleforusagetogetherwithXvncplugin'>Example for usage together with Xvnc plugin</a></li>
+</ul>
+</li>
+<li><a href='#VncRecorderPlugin-Result:videoinyourBrowser'>Result: video in your Browser</a>
+<ul class='toc-indentation'>
+<li><a href='#VncRecorderPlugin-Linkin&quot;Consoleoutput&quot;'>Link in &quot;Console output&quot;</a></li>
+<li><a href='#VncRecorderPlugin-Storeasbuildartifact'>Store as build artifact</a></li>
+</ul>
+</li>
+<li><a href='#VncRecorderPlugin-Pathofvnc2swf'>Path of vnc2swf</a></li>
+<li><a href='#VncRecorderPlugin-JIRAissues'>JIRA issues</a></li>
+</ul>
+</div>
+
+<h1 id="VncRecorderPlugin-Requirements">Requirements</h1>
+
+<ul>
+	<li>Linux on Jenkins master node</li>
+	<li><a href="http://rpm.pbone.net/index.php3?stat=3&amp;limit=1&amp;srodzaj=3&amp;dl=80&amp;search=pyvnc2swf" class="external-link" rel="nofollow">vnc2swf</a> on Jenkins master node</li>
+</ul>
+
+
+<h1 id="VncRecorderPlugin-Howyouusetheplugininajob">How you use the plugin in a job</h1>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74055684/76054582.png" data-image-src="attachments/74055684/76054582.png" data-unresolved-comment-count="0" data-linked-resource-id="76054582" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="recordVncSession.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70"></span></p>
+
+
+<h2 id="VncRecorderPlugin-ExampleforusagetogetherwithXvncplugin">Example for usage together with <a href="Xvnc-Plugin.html">Xvnc plugin</a></h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74055684/74285072.png" data-image-src="attachments/74055684/74285072.png" data-unresolved-comment-count="0" data-linked-resource-id="74285072" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Xvnc.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70"></span></p>
+
+<h1 id="VncRecorderPlugin-Result:videoinyourBrowser">Result: video in your Browser</h1>
+
+
+<h2 id="VncRecorderPlugin-Linkin&quot;Consoleoutput&quot;">Link in &quot;Console output&quot;</h2>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74055684/74285059.png" data-image-src="attachments/74055684/74285059.png" data-unresolved-comment-count="0" data-linked-resource-id="74285059" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="vncrecorder3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70"></span></p>
+
+<hr/>
+<h2 id="VncRecorderPlugin-Storeasbuildartifact">Store as build artifact</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74055684/74285060.png" data-image-src="attachments/74055684/74285060.png" data-unresolved-comment-count="0" data-linked-resource-id="74285060" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="vncrecorder4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70"></span></p>
+
+<p>The generated HTML file <a href="attachments/74055684/74285062.html" data-linked-resource-id="74285062" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MyTest.html" data-nice-type="HTML Document" data-linked-resource-content-type="text/html" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70">MyTest.html</a> embeds video <a href="attachments/74055684/74285061.swf" data-linked-resource-id="74285061" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MyTest_2.swf" data-nice-type="Multimedia" data-linked-resource-content-type="application/x-shockwave-flash" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70">MyTest_2.swf</a> and makes it possible to navigate within a video directly in browser.</p>
+
+<h1 id="VncRecorderPlugin-Pathofvnc2swf">Path of vnc2swf</h1>
+
+<p>Path of used vnc2swf can be customized under &quot;Jenkins System configuration / Global settings&quot;. Default is the vnc2swf found in the PATH variable.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74055684/76054581.png" data-image-src="attachments/74055684/76054581.png" data-unresolved-comment-count="0" data-linked-resource-id="76054581" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="globalSettings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055684" data-linked-resource-container-version="70"></span></p>
+
+<h1 id="VncRecorderPlugin-JIRAissues">JIRA issues</h1>
+ <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20%20%22Closed%22,%20%22Resolved%22,%20Reopened%29%20AND%20component%20=%20vncrecorder-plugin%20ORDER%20BY%20issuetype%20ASC,%20priority%20DESC,%20key%20ASC&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285057.png">vncrecorder1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74711086.png">vncrecorder2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285059.png">vncrecorder3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285060.png">vncrecorder4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285061.swf">MyTest_2.swf</a> (application/x-shockwave-flash)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285062.html">MyTest.html</a> (text/html)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285072.png">Xvnc.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74285058.png">vncrecorder2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74711087.xcf">vncrecorder2_new.xcf</a> (image/x-xcf)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/74711088.png">vncrecorder2_new.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/76054581.png">globalSettings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055684/76054582.png">recordVncSession.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:57</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Manage global settings and tools installations</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="58002791.html">Developer&#39;s Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Manage global settings and tools installations
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (batmat)</span> on Jan 26, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is the 2nd part of the <a href="58002791.html">Plugin Developer tutorial</a>.</p>
+
+<p>Our plugin introduced a new build step to be configured on FreeStyle jobs. We will now add global, system-wide configuration (i.e. Jenkins &gt; Manage Jenkins &gt; Configure)</p>
+
+<h4 id="Manageglobalsettingsandtoolsinstallations-Globalconfiguration">Global configuration</h4>
+
+<p>Do you know GRaveN can run your builds on the Cloud ? We will let user enable this option as a global setting. In our hudson.plugins.graven.GravenBuilder resource package we add a global.jelly view file. As the name suggest, such file will be used to configure global settings for the plugin component, that are managed by the Descriptor. This one then acts as a metadata container.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;?jelly escape-by-default=&#39;true&#39;?&gt;
+&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+
+  &lt;f:section title=&quot;${%GRaveN}&quot; name=&quot;graven&quot;&gt;
+      &lt;f:entry title=&quot;${%Send builds to the Cloud}&quot; field=&quot;enableCloud&quot;&gt;
+        &lt;f:checkbox/&gt;
+      &lt;/f:entry&gt;
+  &lt;/f:section&gt;
+
+&lt;/j:jelly&gt;
+</pre>
+</div></div>
+<p>Noticed in this global view that the section is set with a <strong>name=&quot;graven&quot;</strong>. As our form fields may collide with other plugin, especially if we use common names like <em>name</em> or <em>path,</em> we use a dedicated <em>namespace</em> to isolate plugin attributes form other plugins. The effect is that all form elements will be packaged in a dedicated graven JSON structure when sent back to the server, so we can easily filter the form data that match our component. </p>
+
+<p>As for config.jelly, we can define help tooltips as companion html files and support i18n with a bundle.</p>
+
+<p>The Descriptor will get populated by this view if we override the configure method to retrieve data from the global configuration form submission</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    @Extension
+    public static class Descriptor extends BuildStepDescriptor&lt;Builder&gt; {
+
+        private boolean enableCloud;
+
+        public Descriptor() {
+            load();
+        }
+
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+            json = json.getJSONObject(&quot;graven&quot;);
+            enableCloud = json.getBoolean(&quot;enableCloud&quot;);
+            save();
+            return true;
+        }
+
+        public boolean isEnableCloud() {
+            return enableCloud;
+        }
+(...)
+</pre>
+</div></div>
+<p>We can also use DataBinding, as we did with DataBoundConstructors, to avoid picking all form fields using a <strong>json.getXXX</strong> call, but for this to happen we have to either create setter method for the enableCloud attribute or declare it as public :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+            req.bindJSON(this, json.getJSONObject(&quot;graven&quot;));
+            save();
+            return true;
+        }
+
+        public void setEnableCloud(boolean enableCloud) {...}
+</pre>
+</div></div>
+
+<h3 id="Manageglobalsettingsandtoolsinstallations-Persistconfiguration">Persist configuration</h3>
+
+<p>Just after binding the form submission to Descriptor attributes, we call the <strong>save</strong> method so that Jenkins will store the data in a dedicated XML file hudson.plugins.graven.GravenBuilder.xml in JENKINS_HOME. XStream is used to serialize data to configuration files, compared to other Java to XML binding solution, it has the benefits to be very flexible, so that we can easily support legacy configuration file when some attribute name have been refactored. To retrieve the saved data on Jenkins startup, we call the <strong>load</strong> method from the default constructor.</p>
+
+<p>For GravenBuilder instances to access metadata in a simple way, we will use Java 5 covariant return type and override <strong>getDescriptor</strong> so that we can simply access our Descriptor singleton :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    public boolean isEnableCloud() {
+        return getDescriptor().isEnableCloud();
+    }
+
+    @Override
+    public Descriptor getDescriptor() {
+        return (Descriptor) super.getDescriptor();
+    }
+</pre>
+</div></div>
+
+<h3 id="Manageglobalsettingsandtoolsinstallations-ToolsInstallation">Tools Installation</h3>
+
+<p>We could use this global configuration to manage GRaveN installation, so that user can choose the GRaveN version they want to build project with. This is such a common case in Jenkins, that there is already a pre-define canvas to support configuring installation and even auotmatic installation from a downloadable package.</p>
+
+<p>We create a new Jenkins component to support GRaveN installation, with the adequate Descriptor :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+/**
+ * @author &lt;a href=&quot;mailto:nicolas.deloof@cloudbees.com&quot;&gt;Nicolas De loof&lt;/a&gt;
+ */
+public class GravenInstallation extends ToolInstallation {
+
+    @DataBoundConstructor
+    public GravenInstallation(String name, String home, List&lt;? extends ToolProperty&lt;?&gt;&gt; properties) {
+        super(name, home, properties);
+    }
+
+    @Extension
+    public static final class Descriptor extends ToolDescriptor&lt;GravenInstallation&gt; {
+
+        public Descriptor() {
+            setInstallations();
+            load();
+        }
+
+        @Override
+        public String getDisplayName() {
+            return &quot;GRaveN&quot;;
+        }
+
+        @Override
+        public GravenInstallation newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+            return (GravenInstallation) super.newInstance(req, formData.getJSONObject(&quot;gravenInstallation&quot;));
+        }
+    }
+}
+</pre>
+</div></div>
+<p>Notice the call to <strong>setInstallation</strong> on Descriptor constructor to initialize a default empty installation set for new Jenkins instance, followed by a call to <strong>load</strong> to retrieve persisted configuration.</p>
+
+<p>The <strong>newInstance</strong> method - that would by default search for a DataBoundConstructor to match the JSON form data - is overridden to extract the subset that matches our global configuration namespace for tool installation.</p>
+
+<p><span style="color: rgb(255,102,0);">QUESTION : is there a way to only declare the namespace ? maybe this could be a valuable improvement to only override some JSONObject getJsonDataRoot(formData) or even just return the &quot;namespace&quot;</span></p>
+
+<p>The associated view for this component is a config.jelly file. You may wonder this is not a global.jelly one, but note our Descriptor inherit from <a href="http://javadoc.jenkins-ci.org/hudson/tools/ToolDescriptor.html" class="external-link" rel="nofollow">ToolDescriptor</a>; Stapler view inherit from their parent view, and our descriptor will automatically be integrated in the ToolInstallation canvas that handles multiple (&quot;repeatable&quot;) entries, additional properties, and more...</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+
+  &lt;f:entry title=&quot;${%Name}&quot; field=&quot;name&quot;&gt;
+    &lt;f:textbox/&gt;
+  &lt;/f:entry&gt;
+
+  &lt;f:entry title=&quot;${%Home directory}&quot; field=&quot;home&quot;&gt;
+      &lt;f:textbox /&gt;
+  &lt;/f:entry&gt;
+
+&lt;/j:jelly&gt;
+</pre>
+</div></div>
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/58002875/58196203.png" data-image-src="attachments/58002875/58196203.png" data-unresolved-comment-count="0" data-linked-resource-id="58196203" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2011-10-07 à 10.32.43.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58002875" data-linked-resource-container-version="10"></span><br/>
+Do you notice the &quot;install automatically&quot; link ? This is a benefit from reusing ToolInstallation : as much tools can be installed from a downloadable zip and/or using some scripting, this configuration is provided by default, with extension point to provide your own <a href="http://javadoc.jenkins-ci.org/?hudson/tools/ToolInstaller.html" class="external-link" rel="nofollow">ToolInstaller</a> strategy when required. You can for example extend <a href="https://wiki.jenkins-ci.org/display/JENKINS/Adding+tool+auto-installer" class="external-link" rel="nofollow">DownloadFromURLInstaller</a> so that the tool will be downloaded from it's distribution site and installed on demand.</p>
+
+<h3 id="Manageglobalsettingsandtoolsinstallations-Pathonslave">Path on slave</h3>
+
+<p>How to configure our tool installation if we distribute builds on slave executors ? They may use distinct location for tools or maybe even distinct Operatin Systems. As described in ToolInstallation javadoc, you are encouraged (but not required) to implement NodeSpecific and EnvironmentSpecific to help Jenkins translate the configured path to match the node/environment where the build will be executed. Let's do :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public class GravenInstallation extends ToolInstallation
+       implements NodeSpecific&lt;GravenInstallation&gt;, EnvironmentSpecific&lt;GravenInstallation&gt; {
+
+    public GravenInstallation forEnvironment(EnvVars environment) {
+        return new GravenInstallation(getName(), environment.expand(getHome()), getProperties().toList());
+    }
+
+    public GravenInstallation forNode(Node node, TaskListener log) throws IOException, InterruptedException {
+        return new GravenInstallation(getName(), translateFor(node, log), getProperties().toList());
+    }
+(...)
+</pre>
+</div></div>
+<p>Those two methods allow to use environment variable and let Jenkins &quot;expand&quot; them at runtime to get execution path, as well as to translate path for a node, using node specific properties. This will aslo be used by automatic ToolInstaller to install the tools on node where it is not yet available.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002875/58196203.png">Capture d’écran 2011-10-07 à 10.32.43.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

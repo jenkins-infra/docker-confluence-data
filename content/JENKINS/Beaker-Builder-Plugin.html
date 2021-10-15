@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Beaker Builder Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Beaker Builder Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vjuranek)</span>, last modified on May 30, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Beaker builder <a href="https://plugins.jenkins.io/beaker-builder" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-09-12/#SECURITY-1545" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin ingrates Jenkins with <a href="http://beaker-project.org/" class="external-link" rel="nofollow">Beaker</a>.</p><br class="atl-forced-newline"/></p>
+
+<p>Beaker is open-source software for managing and automating labs of test computers. Plugin allows you to submit a job definition to Beaker and get back the result.</p>
+
+<p>Current plugin capabilities are</p>
+
+<ul>
+	<li>schedule a job (includeing matrix job) in Beaker based on provided job XML definition, job definition can be provided   
+	<ul>
+		<li>directly in Jenkins job configuration</li>
+		<li>as a path to a file in workspace (e.g. previously checked out from SCM)</li>
+	</ul>
+	</li>
+	<li>expand parameters in job XML definition based on Jenkins job parameters or environment variables</li>
+	<li>monitor the Beaker job and sets the job status according to Beaker job result</li>
+	<li>add link to Beaker job on build page</li>
+	<li>export job ID as an environment variable for further usage (e.g. in subsequent shell build step)</li>
+	<li>download job files from Beaker into workspace</li>
+</ul>
+
+
+<h1 id="BeakerBuilderPlugin-Configuration">Configuration</h1>
+
+<p>In the main Jenkins configuration page you have to setup URL to Beaker and also credential (login/password) under which Jenkins logs-in into the Beaker. Kerberos authentication is currently not supported (will be hopefully in next versions). <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402631.png" data-image-src="attachments/69271732/69402631.png" data-unresolved-comment-count="0" data-linked-resource-id="69402631" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<h3 id="BeakerBuilderPlugin-Dealingwithcertificateandkeystore">Dealing with certificate and keystore</h3>
+
+<p>Usually XML-RPC calls which this plugin uses for communication with Beaker are sent over https protocol. If you use <strong>https protocol</strong>, make sure you have set up java <strong>keystore with valid certificate</strong>, it means you have added Beaker certificate into you java keystore and provide path and password of the keystore to webserver. To add certificate into java keystore, save the certificate (e.g. export the certificate from your web browser) and run</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+keytool -import -keystore my_java_keystore.jks -file beaker_cert.pem -alias beaker-server
+</pre>
+</div></div>
+
+<p>To verify that the certificate was imported you can run following command which will list all entries in the keystore</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+keytool -list -keystore my_java_keystore.jks
+</pre>
+</div></div>
+
+<p>Now add following java options to your Jenkins java options (or server JVM options when running on different container than Winstone)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+-Djavax.net.ssl.trustStore=/path/to/keystore.jks -Djavax.net.ssl.trustStorePassword=&lt;passwd&gt;
+</pre>
+</div></div>
+
+<h3 id="BeakerBuilderPlugin-Configurationissues">Configuration issues</h3>
+
+<p>When you use Java 7, you may observe following issue in the log:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+Jul 31, 2013 12:21:59 AM org.apache.commons.httpclient.HttpMethodDirector executeWithRetry
+INFO: I/O exception (javax.net.ssl.SSLProtocolException) caught when processing request: handshake alert:  unrecognized_name
+Jul 31, 2013 12:21:59 AM org.apache.commons.httpclient.HttpMethodDirector executeWithRetry
+INFO: Retrying request
+</pre>
+</div></div>
+<p>To avoid it, turn off <a href="http://en.wikipedia.org/wiki/Server_Name_Indication" class="external-link" rel="nofollow">SNI</a> by adding java option <em>-Djsse.enableSNIExtension=false</em> so that java options which needs to be add to Jenkins cofing are following:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+-Djavax.net.ssl.trustStore=/path/to/keystore.jks -Djavax.net.ssl.trustStorePassword=&lt;passwd&gt; -Djsse.enableSNIExtension=false
+</pre>
+</div></div>
+
+
+
+
+<h1 id="BeakerBuilderPlugin-Usage">Usage</h1>
+
+<p>Add &quot;Beaker buidler&quot;  build step: <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402632.png" data-image-src="attachments/69271732/69402632.png" data-unresolved-comment-count="0" data-linked-resource-id="69402632" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_usage1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<p>Define job XML or provide path to job XML definition file. Job XML definition can contain parameters which will be expanded before submitting job XML to Beaker:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402633.png" data-image-src="attachments/69271732/69402633.png" data-unresolved-comment-count="0" data-linked-resource-id="69402633" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_usage2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<p>You can also specify path to job XML, which can include job parameters or env. variables. This is useful e.g. in cases when you job definition is different for various architectures or OS distributions. This is especially useful in case of matrix jobs, when values of matrix axes are exported as env. variables, so you can take advantage of matrix jobs even if you job definition is different for each matrix combination.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69959753.png" data-image-src="attachments/69271732/69959753.png" data-unresolved-comment-count="0" data-linked-resource-id="69959753" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_param_path.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+
+<p>In subsequent tasks you can use BEAKER_JOB_ID parameter which will contain submitted job ID in Beaker:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402634.png" data-image-src="attachments/69271732/69402634.png" data-unresolved-comment-count="0" data-linked-resource-id="69402634" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_usage3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span><br/>
+ <br/>
+ Once you schedule a build and job is successfully submitted to the Beaker server, new link pointing to the job will appear in build menu:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402635.png" data-image-src="attachments/69271732/69402635.png" data-unresolved-comment-count="0" data-linked-resource-id="69402635" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_usage4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<p>Plugin will monitor th execution of Beaker job periodically, will send notification to the Jenkins build console and will set the job result according to Beaker job result:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69402636.png" data-image-src="attachments/69271732/69402636.png" data-unresolved-comment-count="0" data-linked-resource-id="69402636" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_usage5.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<h3 id="BeakerBuilderPlugin-Additionalactions">Additional actions</h3>
+
+<p>You can also configure additional actions, currently only downloading job files from Beaker:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69959815.png" data-image-src="attachments/69271732/69959815.png" data-unresolved-comment-count="0" data-linked-resource-id="69959815" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_download_files_cfg.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+<p>The files are downloaded into $WORKSPACE/beaker/J_$BEAKER_JOB_ID:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69271732/69959816.png" data-image-src="attachments/69271732/69959816.png" data-unresolved-comment-count="0" data-linked-resource-id="69959816" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="beaker_download_files.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69271732" data-linked-resource-container-version="26"></span></p>
+
+
+
+<h1 id="BeakerBuilderPlugin-TODO">TODO</h1>
+
+<ul>
+	<li>Kerberos support for authentication on Beaker server </li>
+</ul>
+
+
+
+<h1 id="BeakerBuilderPlugin-Changelog">Changelog</h1>
+
+<h3 id="BeakerBuilderPlugin-Upcomingchanges">Upcoming changes<br class="atl-forced-newline"/></h3>
+
+<h3 id="BeakerBuilderPlugin-Release1.8(2015-05-30)">Release 1.8 (2015-05-30)</h3>
+
+<ul>
+	<li>Tmp files with Beaker recipes are not created any more (<a href="https://github.com/jenkinsci/beaker-builder-plugin/pull/3" class="external-link" rel="nofollow">pull3</a>)</li>
+	<li>Improved test coverage (<a href="https://github.com/jenkinsci/beaker-builder-plugin/pull/2" class="external-link" rel="nofollow">pull2</a>)</li>
+	<li>Beaker client and identity are now created only when need, not during saving global configuration (<a href="https://github.com/jenkinsci/beaker-builder-plugin/pull/1" class="external-link" rel="nofollow">pull1</a>)</li>
+	<li>Removed unused <code>Job name</code> field</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.7(2015-01-18)">Release 1.7 (2015-01-18)</h3>
+
+<ul>
+	<li>Fixed NPE when resolving variables (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27003">JENKINS-27003</a>)</li>
+	<li>Improved logging</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.6(2014-11-24)">Release 1.6 (2014-11-24)</h3>
+
+<ul>
+	<li>XML escaping when substituting variables into Beaker job XML (<a href="https://github.com/vjuranek/beaker-builder-plugin/pull/1" class="external-link" rel="nofollow">pull1</a>)</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.5(2013-11-13)">Release 1.5 (2013-11-13)</h3>
+
+<ul>
+	<li>Fixed inconsistent authentication behavior (e.g. misleading message return by &quot;Test connection&quot; button in global configuration)</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.4and1.4.1(2013-10-23)">Release 1.4 and 1.4.1 (2013-10-23)</h3>
+
+<ul>
+	<li>Added possibility download job files from Beaker</li>
+	<li>Release 1.4.1 fixes possible NPE when downloading files</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.3(2013-10-08)">Release 1.3 (2013-10-08)</h3>
+
+<ul>
+	<li>Added possibility to use build parameters and build env. variables in path to job XML definition</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.2(2013-10-04)">Release 1.2 (2013-10-04)</h3>
+
+<ul>
+	<li>Fixed NPE during first startup and allow to change Beaker URL without restart</li>
+</ul>
+
+
+
+<h3 id="BeakerBuilderPlugin-Release1.1.1(2013-08-16)">Release 1.1.1 (2013-08-16)</h3>
+
+<ul>
+	<li>Fixed problem with expired Beaker client credentials</li>
+</ul>
+
+
+<h3 id="BeakerBuilderPlugin-Release1.0(2013-07-26)">Release 1.0 (2013-07-26)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402631.png">beaker_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402632.png">beaker_usage1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402633.png">beaker_usage2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402634.png">beaker_usage3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402635.png">beaker_usage4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69402636.png">beaker_usage5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69959753.png">beaker_param_path.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69959815.png">beaker_download_files_cfg.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69271732/69959816.png">beaker_download_files.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

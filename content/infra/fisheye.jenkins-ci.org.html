@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins Infrastructure : fisheye.jenkins-ci.org</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins Infrastructure</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins Infrastructure : fisheye.jenkins-ci.org
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (rtyler)</span> on Dec 16, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This service has been turned off.</p></div></div>
+
+<h1 id="fisheye.jenkins-ci.org-Login">Login</h1>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ssh -p 224 fisheye@fisheye.jenkins-ci.org</pre>
+</div></div>
+
+<h1 id="fisheye.jenkins-ci.org-Servicesthatrun">Services that run</h1>
+<p>This host runs FishEye/Crucible and MySQL, which is used as the backend for FishEye.</p>
+
+<h1 id="fisheye.jenkins-ci.org-Starting/stoppingFishEye">Starting/stopping FishEye</h1>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>/etc/init.d/fisheye [start|stop|restart]</pre>
+</div></div>
+
+<h1 id="fisheye.jenkins-ci.org-AdministeringFishEye">Administering FishEye</h1>
+<p>FishEye admin password is in <code>~/password.txt</code> of the fisheye user.</p>
+
+<h1 id="fisheye.jenkins-ci.org-AdministeringMySQL">Administering MySQL</h1>
+<p>MySQL has <code>fisheye</code> database accessible by the <code>fisheye</code> user. The password is the same as FishEye admin password.</p>
+
+<h1 id="fisheye.jenkins-ci.org-IncidentRecords">Incident Records</h1>
+<h3 id="fisheye.jenkins-ci.org-Hang2011Aug30">Hang 2011 Aug 30</h3>
+<p>Heap dump indicates oldgen &amp; permgen full. Strangely, there's no attempt to grow permgen to the alloted 256MB. Obtained heap dump, modified the boot script to <a href="http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html#remote" class="external-link" rel="nofollow">enable the JMX remote port</a>, and restarted.</p>
+
+<p>For whatever reason, remote JMX connectoin isn't working, but <code>XAUTHORITY=/home/kohsuke/.Xauthority sudo jconsole</code> seems to let me run jconsole remote and forward the display. This incident is filed as <a href="https://support.atlassian.com/browse/FSH-6709" class="external-link" rel="nofollow">FSH-6709</a></p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>root@cucumber:/var/log/apache2/fisheye.jenkins-ci.org# jmap -heap 24386
+Attaching to process ID 24386, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 19.1-b02
+
+using thread-local object allocation.
+Parallel GC with 2 thread(s)
+
+Heap Configuration:
+   MinHeapFreeRatio = 40
+   MaxHeapFreeRatio = 70
+   MaxHeapSize      = 1073741824 (1024.0MB)
+   NewSize          = 1310720 (1.25MB)
+   MaxNewSize       = 134217728 (128.0MB)
+   OldSize          = 5439488 (5.1875MB)
+   NewRatio         = 2
+   SurvivorRatio    = 8
+   PermSize         = 21757952 (20.75MB)
+   MaxPermSize      = 268435456 (256.0MB)
+
+Heap Usage:
+PS Young Generation
+Eden Space:
+   capacity = 44826624 (42.75MB)
+   used     = 44826624 (42.75MB)
+   free     = 0 (0.0MB)
+   100.0% used
+From Space:
+   capacity = 42074112 (40.125MB)
+   used     = 0 (0.0MB)
+   free     = 42074112 (40.125MB)
+   0.0% used
+To Space:
+   capacity = 43384832 (41.375MB)
+   used     = 0 (0.0MB)
+   free     = 43384832 (41.375MB)
+   0.0% used
+PS Old Generation
+   capacity = 939524096 (896.0MB)
+   used     = 939479216 (895.9571990966797MB)
+   free     = 44880 (0.0428009033203125MB)
+   99.99522311346871% used
+PS Perm Generation
+   capacity = 120127488 (114.5625MB)
+   used     = 119802960 (114.25300598144531MB)
+   free     = 324528 (0.3094940185546875MB)
+   99.729847010536% used
+</pre>
+</div></div>
+
+<h3 id="fisheye.jenkins-ci.org-Hang2011Aug27">Hang 2011 Aug 27</h3>
+<p>Heap dump indicates permgen full. Strangely, <code>ps</code> indicates that VM was running with MaxPermSize=256m. It appears that the boot sequence uses a script to tweak FISHEYE_OPTS and ignores our value:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>cucumber% sudo jmap -heap 16168    
+Attaching to process ID 16168, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 19.1-b02
+
+using thread-local object allocation.
+Parallel GC with 2 thread(s)
+
+Heap Configuration:
+   MinHeapFreeRatio = 40
+   MaxHeapFreeRatio = 70
+   MaxHeapSize      = 1073741824 (1024.0MB)
+   NewSize          = 1310720 (1.25MB)
+   MaxNewSize       = 134217728 (128.0MB)
+   OldSize          = 5439488 (5.1875MB)
+   NewRatio         = 2
+   SurvivorRatio    = 8
+   PermSize         = 21757952 (20.75MB)
+   MaxPermSize      = 268435456 (256.0MB)
+
+Heap Usage:
+PS Young Generation
+Eden Space:
+   capacity = 80740352 (77.0MB)
+   used     = 65356520 (62.328834533691406MB)
+   free     = 15383832 (14.671165466308594MB)
+   80.94653835544338% used
+From Space:
+   capacity = 6160384 (5.875MB)
+   used     = 2162896 (2.0626983642578125MB)
+   free     = 3997488 (3.8123016357421875MB)
+   35.10975939162234% used
+To Space:
+   capacity = 5963776 (5.6875MB)
+   used     = 0 (0.0MB)
+   free     = 5963776 (5.6875MB)
+   0.0% used
+PS Old Generation
+   capacity = 939524096 (896.0MB)
+   used     = 690782352 (658.7813873291016MB)
+   free     = 248741744 (237.21861267089844MB)
+   73.5247084072658% used
+PS Perm Generation
+   capacity = 119603200 (114.0625MB)
+   used     = 119478504 (113.9435806274414MB)
+   free     = 124696 (0.11891937255859375MB)
+   99.89574191994863% used
+</pre>
+</div></div>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ ps -ef | grep fisheye
+fisheye  16168     1  7 Aug09 ?        1-08:21:22 /usr/bin/java -Xmx1024m -XX:MaxNewSize=128m -XX:MaxPermSize=256m -Dfisheye.library.path= -Dfisheye.inst=/srv/fisheye/FISHEYE_INST -Djava.awt.headless=true -Djava.endorsed.dirs=/srv/fisheye/current/lib/endorsed -jar /srv/fisheye/current/fisheyeboot.jar start
+</pre>
+</div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

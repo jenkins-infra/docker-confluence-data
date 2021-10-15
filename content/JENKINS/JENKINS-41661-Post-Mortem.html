@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JENKINS-41661 Post-Mortem</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JENKINS-41661 Post-Mortem
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (recampbell)</span>, last modified on Feb 03, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>On February 2nd, CloudBees released several plugins which required a synchronized release. To achieve this synchronization, we <a href="https://github.com/jenkinsci/backend-update-center2/pull/105" class="external-link" rel="nofollow">preemptively blocked</a> those releases from the public update center. </p>
+
+<p>Unfortunately, there were typos in the premeptive block which allowed the github-branch-source 2.0.1 and cloudbees-bitbucket-branch-source 2.0.2 and  release to still be visible in the update center. We didn't realize this until more than 18 hours after the release.</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Bug </p></th>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-41661" class="external-link" rel="nofollow">JENKINS-41661</a> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Severity </p></th>
+<td class="confluenceTd"><p> Severe - Unable to use Jenkins </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Executive Summary </p></th>
+<td class="confluenceTd"><p> GitHub Branch Source 2.0.1 and BitBucket Source 2.0.2 were available in the update center, but dependencies were not. As a result, Jenkins would not completely start. </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> User Impact </p></th>
+<td class="confluenceTd"><p> 25 watches on the ticket. Jenkins does not fully load. </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> How did we find out? </p></th>
+<td class="confluenceTd"><p> User reports </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Incident Type </p></th>
+<td class="confluenceTd"><p> Regression <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Mitigation efforts </p></th>
+<td class="confluenceTd"><p> We removed the plugin from the update center and proactively scrubbed the metadata from mirrors. We also provided a zip file of all the needed dependencies on the ticket. </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> How did this bug escape? </p></th>
+<td class="confluenceTd"><p> We failed to test the update center after releasing the plugins. However, the Jenkins update center does not protect against this problem, but has enough data to do so. <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+So while we should have tested this, Jenkins should do a better job of protecting users from this situation. </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Actions to prevent this  <br class="atl-forced-newline"/>
+from happening in the future </p></th>
+<td class="confluenceTd"><p> If we put an update center block, we should test it once the releases are available. However, this generally seems to be a fragile approach and I think it should be avoided. <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+CloudBees should instead use a staging server like Nexus to perform coordinated releases (when necessary) so that they can be pushed to the Jenkins infrastructure as a whole. <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+Finally, we should fix the Jenkins update center so that it doesn't screw the user if the update center is broken like this.(<a href="https://issues.jenkins-ci.org/browse/JENKINS-23757" class="external-link" rel="nofollow">JENKINS-23757</a>) </p></td>
+</tr>
+</tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

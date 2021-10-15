@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Hierarchical projects support</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Hierarchical projects support
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified on Apr 06, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020162098 {padding: 0px;}
+div.rbtoc1631020162098 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020162098 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020162098'>
+<ul class='toc-indentation'>
+<li><a href='#Hierarchicalprojectssupport-Introduction'>Introduction</a>
+<ul class='toc-indentation'>
+<li><a href='#Hierarchicalprojectssupport-Expansionofabstraction:fullname'>Expansion of abstraction: full name</a></li>
+<li><a href='#Hierarchicalprojectssupport-Expansionofabstraction:contextualnameresolution'>Expansion of abstraction: contextual name resolution</a></li>
+</ul>
+</li>
+<li><a href='#Hierarchicalprojectssupport-CallforAction'>Call for Action</a></li>
+<li><a href='#Hierarchicalprojectssupport-Howtomodernizethecode'>How to modernize the code</a>
+<ul class='toc-indentation'>
+<li><a href='#Hierarchicalprojectssupport-Frombuildsandprojects'>From builds and projects</a></li>
+<li><a href='#Hierarchicalprojectssupport-FromDescriptor'>From Descriptor</a></li>
+<li><a href='#Hierarchicalprojectssupport-FromconstructorsofDescribable'>From constructors of Describable</a></li>
+<li><a href='#Hierarchicalprojectssupport-Whenthere&#39;snocontext'>When there&#39;s no context</a></li>
+<li><a href='#Hierarchicalprojectssupport-Oops,I&#39;veused&#39;/&#39;already'>Oops, I&#39;ve used &#39;/&#39; already</a></li>
+<li><a href='#Hierarchicalprojectssupport-Examples'>Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="Hierarchicalprojectssupport-Introduction">Introduction</h1>
+
+
+<h3 id="Hierarchicalprojectssupport-Expansionofabstraction:fullname">Expansion of abstraction: full name</h3>
+
+<p>Jenkins Item model long allowed a hierarchical structure for projects. This started around 1.312, about 3 years ago. Because the use of hierarchy was limited to small corners (such as matrix projects and Maven projects), it's been often treated as second class citizens.</p>
+
+<p>This initial support for a hierarchical project structure mostly meant differenciating a name of an <a href="http://javadoc.jenkins-ci.org/byShortName/Item">Item</a> (<code>getName()</code>) (or short name) from its full name (<code>getFullName()</code>). A full name is just a '/'-separated concatanation of the short names in the path, such as &quot;foo/bar/zot&quot;. There are a bunch of methods that deal with full names, such as jenkins.<a href="http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html#getItemByFullName(java.lang.String)" class="external-link" rel="nofollow">getItemByFullName</a>(name). <a href="http://javadoc.jenkins-ci.org/byShortName/ItemGroup">ItemGroup</a> and <a href="http://javadoc.jenkins-ci.org/byShortName/Item">Item</a> is the key abstraction for building a hierarchy.</p>
+
+<p>Plugins that do not distinguish full names from short names weren't too big of an issue, because there are not many occasions where you need to refer to a specific module in a Maven project, or a specific configuration in a matrix project.</p>
+
+<h3 id="Hierarchicalprojectssupport-Expansionofabstraction:contextualnameresolution">Expansion of abstraction: contextual name resolution</h3>
+
+<p>Then starting around 1.406, which is about a year ago, we made more improvements in this area to make hierarchical projects more useful. Namely, the introduction of <em>contextual name resolution</em>. That is, just like &quot;foo.txt&quot; in the file system would resolve to different file depending on your current directory, we'd like the job name &quot;foo&quot; to resolve to a different <a href="http://javadoc.jenkins-ci.org/byShortName/AbstractProject">AbstractProject</a> depending on the current job we are talking about, which we call the context.</p>
+
+<p>So several methods are added to enable this contextual name resolution. They all take <a href="http://javadoc.jenkins-ci.org/byShortName/ItemGroup">ItemGroup</a> as a context — think of it as a current directory. The notion of &quot;item path name&quot; is introduced, which is the equivalent of file path name. An item path name can be resolved to the actual <a href="http://javadoc.jenkins-ci.org/byShortName/Item">Item</a> by supplying a context <a href="http://javadoc.jenkins-ci.org/byShortName/ItemGroup">ItemGroup</a>.</p>
+
+<p>The syntax of item path name is also modeled after the file system path name. Paths like &quot;foo/bar/zot&quot; or &quot;foo&quot; are relative from the current context, and paths like &quot;/foo/bar/zot&quot; are interpreted as absolute. The only difference is that if a relative &quot;foo/bar/zot&quot; doesn't resolve to anything, the system attempts to resolve &quot;/foo/bar/zot&quot; for backward compatibility.</p>
+
+<h1 id="Hierarchicalprojectssupport-CallforAction">Call for Action</h1>
+
+<p>Today, most plugins do require minimum of 1.424 (the previous LTS base release), but when it comes to proper hierarchical project support, they are built with pre-1.312 assumptions. This prevents more modern plugins, such as cloudbees folder plugin, to take advantages of the expanded abstractions.</p>
+
+<p>This page is created to call an attention to this, and to discuss how you can migrate away from those deprecated methods.</p>
+
+<h1 id="Hierarchicalprojectssupport-Howtomodernizethecode">How to modernize the code</h1>
+
+<p>To retrieve a list of projects from names, use Items.<a href="http://javadoc.jenkins-ci.org/hudson/model/Items.html#fromNameList(hudson.model.ItemGroup, java.lang.String, java.lang.Class)" class="external-link" rel="nofollow">fromNameList</a>(itemGroup, names, type).</p>
+
+<p>To retrieve a project from a name use jenkins.<a href="http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html#getItem(java.lang.String, hudson.model.Item, java.lang.Class)" class="external-link" rel="nofollow">getItem</a>(relativeName, itemGroup, type). First parameter name may look confusing, but this method  supports path names in general, including absolute names like &quot;/foo/bar&quot;.</p>
+
+<p>In both cases, the main question is to think what your contextual <code>ItemGroup</code> is, and where to get it from. Here are typical ways you do it:</p>
+
+<h3 id="Hierarchicalprojectssupport-Frombuildsandprojects">From builds and projects</h3>
+
+<p>If you are in the context of a build, the project that owns that build is the right context: <code>build.getProject().</code><code><a href="http://javadoc.jenkins-ci.org/hudson/model/AbstractItem.html#getParent()" class="external-link" rel="nofollow">getParent</a></code><code>()</code></p>
+
+<h3 id="Hierarchicalprojectssupport-FromDescriptor">From Descriptor</h3>
+
+<p>If you are writing AJAX method, form validation methods, and so on on your <a href="http://javadoc.jenkins-ci.org/byShortName/Descriptor">Descriptor</a>, you can access the contextual ItemGroup by adding <code>@AncestorInPath ItemGroup context</code> to your parameter list.</p>
+
+<p>(<code>@AncestorInPath</code> annotation refers to the nearest ancestor object of the given type in the URL that led to the call to your method, so for example you can instead do <code>@AncestorInPath AbstractProject project</code>)</p>
+
+<h3 id="Hierarchicalprojectssupport-FromconstructorsofDescribable">From constructors of Describable</h3>
+
+<p>Most <a href="http://javadoc.jenkins-ci.org/byShortName/Describable">Describable</a>s (such as <a href="http://javadoc.jenkins-ci.org/byShortName/Builder">Builder</a> or <a href="http://javadoc.jenkins-ci.org/byShortName/JobProperty">JobProperty</a>) are long-running instances. Therefore it is not a good idea to resolve names to <a href="http://javadoc.jenkins-ci.org/byShortName/Item">Item</a> in your constructor. The job that the name refers to might get renamed, or might not be created/loaded yet.</p>
+
+<p>Instead, keep the name as name, then attempt to resolve it later when you actually need it.</p>
+
+<h3 id="Hierarchicalprojectssupport-Whenthere&#39;snocontext">When there's no context</h3>
+
+<p>In some places, there really are no contextual <a href="http://javadoc.jenkins-ci.org/byShortName/ItemGroup">ItemGroup</a>. A good example of this is a CLI <code>build</code> command. In those cases, you should supply the root <code>Jenkins</code> object as the context, to make all relative path names resolve like absolute path names.</p>
+
+<h3 id="Hierarchicalprojectssupport-Oops,I&#39;veused&#39;/&#39;already">Oops, I've used '/' already</h3>
+
+<p>Some plugins have already used '/' as a separator between item name and something else. For example, copy-artifacts plugin had used '/' to separate the job name from extra information one can attach to it (<a href="https://github.com/jenkinsci/copyartifact-plugin/blob/fc2737c1b8b99088abf654a093cb7e95a622eb80/src/main/java/hudson/plugins/copyartifact/CopyArtifact.java#L266" class="external-link" rel="nofollow">see this</a>)</p>
+
+<p>In this case, you should choose a different delimiter (':' is a good delimiter. Any other characters that's not allowed in file system would do, too), then define a separate field to store the value that uses the new delimiter. For example,</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>class Foo {
+    /*
+     * this is where you used to store &quot;foo/N&quot;
+     * @deprecated
+     */
+    private transient String data;
+
+    // this is where you now store &quot;foo:N&quot;
+    private String newData;
+
+    protected Object readResolve() {
+        if (data!=null &amp;&amp; newData==null)
+            newData = data.replace(&#39;/&#39;,&#39;#&#39;);
+        return this;
+    }
+}
+</pre>
+</div></div>
+
+<p>The <code>readResolve</code> method gets called when you are resurrected from the persisted state, so you do the data conversion there. In this way, you can change the delimiter without breaking existing configurations. See <a href="Hint-on-retaining-backward-compatibility.html">Hint on retaining backward compatibility</a> for more details.</p>
+
+<h3 id="Hierarchicalprojectssupport-Examples">Examples</h3>
+
+<p>Here are some samples of changes done to support hierarchical projects:</p>
+
+<ul>
+	<li><a href="https://github.com/jenkinsci/downstream-ext-plugin/commit/a8f9889a91bc8f0ea4ac1bf64a09ef296d454eb1" class="external-link" rel="nofollow">downstream-ext-plugin</a></li>
+	<li><a href="https://github.com/jenkinsci/parameterized-trigger-plugin/commit/693c20eb1140d77e7dd1075fa52a0164fc4667f1" class="external-link" rel="nofollow">parameterized-trigger-plugin</a></li>
+	<li><a href="https://github.com/jenkinsci/join-plugin/commit/059b2345d10b648462bf384861a44e94b4e38760" class="external-link" rel="nofollow">join-plugin</a></li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

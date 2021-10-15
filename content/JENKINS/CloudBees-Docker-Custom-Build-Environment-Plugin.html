@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : CloudBees Docker Custom Build Environment Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : CloudBees Docker Custom Build Environment Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (jonhermansen)</span> on Feb 17, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View CloudBees Docker Custom Build Environment <a href="https://plugins.jenkins.io/docker-custom-build-environment" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin allows the definition of a build environment for a job using a Docker container.</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/78676506/80412720.png" data-image-src="attachments/78676506/80412720.png" data-unresolved-comment-count="0" data-linked-resource-id="80412720" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="docker-jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676506" data-linked-resource-container-version="32"></span></h3><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Introduction">Introduction</h3><p>A major requirements for a Jenkins-based Continuous Integration/Delivery setup are:</p><ul><li>Ensure the build/test environment is exactly reproducible from a pre-defined setup.</li><li>Ensure the build/test environment is well isolated from other builds executed on the same infrastructure.</li></ul><p>Docker is a great way to bootstrap reproducible and isolated environments. Compared to a virtual machine, it's faster to launch and lighter to use. Another benefit is the Docker image can be defined both as a binary image pulled from repository, or as a plain text Dockerfile you can store in SCM along side the project source code, so that the source and environment are always in sync and recorded.</p><p>CloudBees Docker Custom Build Environment Plugin has been designed to make Docker Images / <a href="https://docs.docker.com/reference/builder/" class="external-link" rel="nofollow">Dockerfile</a> a first class citizen in a continuous delivery setup, which allows the simplest way for a development team to manage the exact bits of the build environment whilst the infrastructure team only has to focus on available resources hosting arbitrary docker containers.</p><h2 id="CloudBeesDockerCustomBuildEnvironmentPlugin-UserGuide"><span style="color: rgb(210,73,57);"><strong>User Guide</strong></span></h2><p>CloudBees Docker Custom Build Environment Plugin can be used from any job type, it appears in the &quot;build environment&quot; section and let you configure your build to run inside a Docker container.</p><p>You can :</p><ul><li>Select the Docker image to run the build as a <strong>Docker image</strong> to be pulled. This is comparable to the <a href="Docker-Plugin.html">docker-plugin</a> approach to offer docker slaves within Jenkins, but without any prerequisites on the Docker image nor need for Administrator privileges to configure the adequate slave template.</li><li>Configure the plugin to build a container image <strong>from a Dockerfile</strong> stored in project repository. With this setup, you get both the project source code and build environment defined in SCM. This is my preferred way to use this plugin.</li></ul><p>SCM checkout will run within a classic Jenkins slave execution context - this is required to access the project Dockerfile then build and run the required container.</p><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-UsingDockerimage">Using Docker image</h4><p>CloudBees Docker Custom Build Environment let you use arbitrary docker image to host the build. You can use such an image you build on your own (or using <a href="Docker-build-publish-Plugin.html">CloudBees Docker Build and Publish</a> plugin) to define the set of prerequisites for your project and share with the development team, as well as reuse for your CI job. In following sample, maven+jdk8 image available on DockerHub is used as a reference environment to host a maven build.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="1000" src="attachments/78676506/80412722.png" data-image-src="attachments/78676506/80412722.png" data-unresolved-comment-count="0" data-linked-resource-id="80412722" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2015-06-25 à 18.07.49.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676506" data-linked-resource-container-version="32"></span></p><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-UsingaDockerfile"><span style="color: rgb(210,73,57);"><strong>Using a Dockerfile</strong></span></h4><p>You also can have a Dockerfile and context stored in your project SCM aside your source code, so team can maintain them together and/or use distinct Dockerfile per branch. If you use this option, CloudBees Docker Custom Build Environment will build the image on first build and then will compare your Dockerfile with the one used on previous build to check a rebuild is necessary.</p><p>As for Docker images, there's no requirement on the Dockerfile you're using.</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Advancedoptions"><span style="color: rgb(210,73,57);"><strong>Advanced options</strong></span></h3><p>CloudBees Docker Custom Build Environment integrates with <a href="Docker-Commons-Plugin.html">Docker-commons</a> plugin so you can define the docker cli executable to be used to interact with Docker daemon, as well as select TLS credentials to be used to access a secured infrastructure (which is highly recommended)</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676506/82280512.png" data-image-src="attachments/78676506/82280512.png" data-unresolved-comment-count="0" data-linked-resource-id="82280512" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2015-08-11 à 14.28.31.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676506" data-linked-resource-container-version="32"></span></p><ul><li><strong>Verbose</strong> option allows to dump on build log the docker-cli command output. This is mostly designed for diagnostic purpose.</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Volumes">Volumes</h4><p>The build container is ran with <span style="text-decoration: line-through;">Project workspace</span> entire Jenkins Home mounted inside container, so your build tools can access the SCM working copy and produce binaries / reports. The temporary directory is also mounted as many plugin do rely on this one to pass commands or credentials files that get deleted on build completion. </p><p>You can configure extra directories to be mounted into container, a common use-case is to have the dependency manager local cache storing artifacts on executor host so you don't have to download them again and again for every build. </p><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-UserGroup">User Group</h4><p>Plugin design do require the user running build commands to be the same as jenkins slave agent user, so jenkins can manage files created in Workspace without hitting permission issues. As Docker does not (yet) support user namespace, there's no way to use a distinct user without breaking workspace at some point. For some use cases this is a major issue, as the container is designed with some specific permission set to a user.</p><p>As a workaround, you can define the group for the user running commands during the build, and setup this group inside your container with adequate permissions.</p><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-DockerinDocker">Docker in Docker</h4><p>Sometime your build will require to create some other Docker containers, for sample to bootstrap a test database used by your integration tests.</p><p>Docker allows to host a docker daemon inside a docker container, known as &quot;<a href="https://github.com/jpetazzo/dind" class="external-link" rel="nofollow">Docker in Docker</a>&quot;. You can use jpetazzo/dind docker image (or a derived one) but will need to run container with escalated permission (&quot;privileged mode&quot;) which you should consider twice as this has some significant security impacts. This also require some tweak in plugin configuration, so the command used to bootstrap the container do setup the docker daemon :</p><ul><li>run in privileged mode</li><li>set startup command to run wrapdocker </li><li>configure plugin to run within the 'docker' group so you can access the docker socket. </li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676506/82280511.png" data-image-src="attachments/78676506/82280511.png" data-unresolved-comment-count="0" data-linked-resource-id="82280511" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2015-08-11 à 14.26.36.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676506" data-linked-resource-container-version="32"></span></p><p>An alternative to Docker in Docker is to let the docker container hosting the build communicate with the host docker daemon so it can start other container, aside the build container. To achieve this, you can configure your Build container to run with docker daemon unix socket mounted, so you can run docker commands within your build. Use the &quot;volumes&quot; advanced option for this purpose</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676506/82280509.png" data-image-src="attachments/78676506/82280509.png" data-unresolved-comment-count="0" data-linked-resource-id="82280509" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2015-08-11 à 14.18.58.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676506" data-linked-resource-container-version="32"></span></p><p>Please note : this is your responsibility to get the docker cli executable in your container. Simplest option is to include those lines in your Dockerfile :</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">RUN wget https://get.docker.io/builds/Linux/x86_64/docker-latest -O /bin/docker
+RUN chmod +x /bin/docker
+</pre>
+</div></div><p>Within a build step in your job you can then run docker containers as you would from command line. If the container you're starting need to share files with the build, you can configure it to mount the same volumes used by your build container. Let's say for sample you have a docker image for application server which expect as launch parameter the path to your application WAR package. You can then run :</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">docker run --volumes-form $BUILD_CONTAINER_ID application_server_docker_image $WORKSPACE/dist/myapp.war
+</pre>
+</div></div><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Environmentvariables">Environment variables</h4><p>plugin do expose BUILD_CONTAINER_ID variable during the build so you can make reference to the container hosting the build when needed.</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-OpenJIRAissues">Open JIRA issues</h3><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20docker-custom-build-environment-plugin%20ORDER%20BY%20issuetype%20ASC,%20priority%20DESC,%20key%20ASC&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Prerequisites">Prerequisites</h3><p>The slave executor(s) running jobs need to have docker installed and the daemon running. We suggest you use a &quot;docker&quot; label for such slaves, so you benefit from Jenkins slave management and cloud capabilities.</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-History">History</h3><p>This plugin was already known as &quot;Oki-Docki&quot; but this name made it difficult for people to discover it within update center :-\</p><p>It has been created as part of DockerCon hackathon by Nicolas and Yoann. We ended as #2 team on the challenge :D</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Developertips">Developer tips</h3><p>If you want to run this plugin on Windows / OSX for development, please note the plugin will bind mount the temporary directory inside container, so you probably will have to run jenkins JVP with -Djava.io.tmpDir=$HOME/tmp as only the users home directory is accessible when using boot2docker.</p><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Futureplans">Future plans</h3><ul><li>support docker-compose</li></ul><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Versions">Versions</h3><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Notreleasedyet">Not released yet</h4><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.6.4">1.6.4</h4><ul><li>Fixed a NPE for jobs created prior to 1.6.2 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-31220" class="external-link" rel="nofollow">JENKINS-31220</a>)</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.6.3">1.6.3</h4><ul><li>Fixed a regression introduced in 1.6.2, corrupting environment variables (<a href="https://issues.jenkins-ci.org/browse/JENKINS-31166" class="external-link" rel="nofollow">JENKINS-31166</a>)</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.6.2">1.6.2</h4><ul><li>Support bridge 'net' flag (<a href="https://github.com/jenkinsci/docker-custom-build-environment-plugin/commit/8acce61132bca9d3c1c1838fe551dcbd8453decd" class="external-link" rel="nofollow">commit</a>)</li><li>Do not append command if not set (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30692" class="external-link" rel="nofollow">JENKINS-30692</a>) (<a href="https://github.com/jenkinsci/docker-custom-build-environment-plugin/pull/33" class="external-link" rel="nofollow">#33</a>)</li><li>Added an option to force pull the image</li><li>Expose build wrappers contributed environment variables</li><li>Ensure docker0 is up before trying to resolve it</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.6.1">1.6.1</h4><ul><li>Use the Java API to lookup docker0 ip (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30512" class="external-link" rel="nofollow">JENKINS-30512</a>) (<a href="https://github.com/jenkinsci/docker-custom-build-environment-plugin/pull/32" class="external-link" rel="nofollow">#32</a>)</li><li>Add buildwrapper environment variables to the docker context</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.6">1.6</h4><ul><li>support maven job type</li><li>expose dockerhost IP as &quot;dockerhost&quot; in /etc/host </li><li>configure container with a subset of build environment, as slave node environment doesn't make sense inside container.</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.5"><strong>1.5</strong></h4><ul><li>Option to configure volumes</li><li>plugin now can run docker-in-docker and comparable advanced use-cases</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.4"><span style="color: rgb(210,73,57);"><strong>1.4</strong></span></h4><ul><li>Support Node Properties environment variables (to define DOCKER_HOST per node for example)</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.3"><span style="color: rgb(210,73,57);"><strong>1.3</strong></span></h4><ul><li>Support use of alternate Dockerfile</li><li>Allows to run containers from the container hosting the build (see &quot;Docker in Docker&quot;)</li><li>Expose build container identifier as BUILD_CONTAINER_ID environment variable </li><li>Code cleanup</li></ul><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-1.2"><span style="color: rgb(210,73,57);"><strong>1.2</strong></span></h4><ul><li>Initial release as &quot;CloudBees Docker Custom Build Environment Plugin&quot; (plugin was previously known as &quot;<em>Oki-Docki</em>&quot;).</li></ul><h3 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Notes">Notes</h3><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Implementationdetails">Implementation details</h4><p>The docker container is ran after SCM has been checked-out into a slave workspace, then all later build commands are executed within the container thanks to <a href="https://blog.docker.com/2014/10/docker-1-3-signed-images-process-injection-security-options-mac-shared-directories/" class="external-link" rel="nofollow">docker exec</a> introduced in Docker 1.3. When configured to build container from a Dockerfile, the plugin computes the Dockerfile checksum and uses it as container ID, so it can detect if the image exists on a slave and so only build it the first time it is requested.</p><h4 id="CloudBeesDockerCustomBuildEnvironmentPlugin-Comparison">Comparison</h4><p>Compared to <a href="Docker-Plugin.html">docker plugin</a>,</p><ul><li>This plugin can use arbitrary docker images, there is NO prerequisite to get a specific user set, ssh daemon, or even JDK available in docker container you use for the build - no need for CI-specific docker image, can use the exact same docker image you use on developer workstation to run/test your project.</li><li>Changes to the project that require new tools / version upgrades can be reflected in the Dockerfile within an atomic commit. No need to reconfigure the job or wait for the adequate slave to be setup. You can also use a distinct Dockerfile per project branch.</li><li>The user doesn't need Administrator privileges to setup a docker-slave template, you just need to commit a Dockerfile to your source repository.</li><li>Docker-plugin abuses the Jenkins Cloud API. i.e. you have to define a fixed IP address and can't benefit from a Cloud slave provider, or a pool of generic slaves. CloudBees Docker Custom Build Environment only relies on slaves which have docker installed, and Jenkins will provision/pick-up available ones using all available slaves provider plugins.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/80412720.png">docker-jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/80412721.png">Capture d’écran 2015-06-25 à 18.02.27.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/80412722.png">Capture d’écran 2015-06-25 à 18.07.49.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/80412723.png">Capture d’écran 2015-06-25 à 18.10.39.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/80412724.png">Capture d’écran 2015-06-25 à 18.15.10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/82280509.png">Capture d’écran 2015-08-11 à 14.18.58.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/82280510.png">Capture d’écran 2015-08-11 à 14.22.43.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/82280511.png">Capture d’écran 2015-08-11 à 14.26.36.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676506/82280512.png">Capture d’écran 2015-08-11 à 14.28.31.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

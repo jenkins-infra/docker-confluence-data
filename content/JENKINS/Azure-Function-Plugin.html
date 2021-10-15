@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure Function Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure Function Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (arieshout)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Jan 07, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Azure Function <a href="https://plugins.jenkins.io/azure-function" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<span style="color: rgb(36,41,46);">A Jenkins plugin to deploy an Azure Function.</span></p><h2 id="AzureFunctionPlugin-Prerequisites">Prerequisites</h2><p>To use this plugin to deploy to Azure Function, first you need to have an Azure Service Principal in your Jenkins instance.</p><ol><li>Create an Azure Service Principal through <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json" class="external-link" rel="nofollow">Azure CLI</a> or <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal" class="external-link" rel="nofollow">Azure portal</a>.</li><li>Open Jenkins dashboard, go to Credentials, add a new Microsoft Azure Service Principal with the credential information you just created.</li></ol><p>Then create a Function in Azure portal or through Azure CLI.</p><h2 id="AzureFunctionPlugin-Deploy">Deploy</h2><p>You can deploy your project to Azure Function by uploading your build artifacts using <a href="https://docs.microsoft.com/en-us/azure/app-service/deploy-local-git" class="external-link" rel="nofollow">GIT</a> or <a href="https://docs.microsoft.com/en-us/azure/app-service/deploy-zip" class="external-link" rel="nofollow">ZIP</a>.</p><ol><li>Create a new freestyle project in Jenkins, add necessary build steps to build your code.</li><li>Add a post-build action 'Publish an Azure Function'.</li><li>Select your Azure credential in Azure Profile Configuration section.</li><li>In App Configuration section, choose the resource group and function app in your subscription, and also fill in the files you want to deploy (for example, a jar package if you're using Java).</li><li>There are two optional parameters Source Directory and Target Directory that allows you to specify source and target folders when uploading files.</li><li>Save the project and build it, your function app will be deployed to Azure when build is completed.</li></ol><h2 id="AzureFunctionPlugin-DeployusingPipeline">Deploy using Pipeline</h2><p>You can also use this plugin in pipeline (Jenkinsfile). Here are some samples to use the plugin in pipeline script:</p><p>To deploy a NodeJS function app:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">azureFunctionAppPublish azureCredentialsId: &#39;&lt;credential_id&gt;&#39;,
+                        resourceGroup: &#39;&lt;resource_group_name&gt;&#39;, appName: &#39;&lt;app_name&gt;&#39;,
+                        filePath: &#39;**/*.js,**/*.json&#39;</pre>
+</div></div><p>For advanced options, you can use Jenkins Pipeline Syntax tool to generate a sample script.</p><h2 id="AzureFunctionPlugin-Data/Telemetry">Data/Telemetry</h2><p>Azure Function Plugin collects usage data and sends it to Microsoft to help improve our products and services. Read our <a href="http://go.microsoft.com/fwlink/?LinkId=521839" class="external-link" rel="nofollow">privacy statement</a> to learn more.</p><p>You can turn off usage data collection in Manage Jenkins -&gt; Configure System -&gt; Azure -&gt; Help make Azure Jenkins plugins better by sending anonymous usage statistics to Azure Application Insights.</p><h2 id="AzureFunctionPlugin-Changelog">Changelog</h2><h3 id="AzureFunctionPlugin-Version0.3.0,2019-01-07">Version 0.3.0, 2019-01-07</h3><ul><li><pre>Deploy Java function with zip deployment instead of ftp deployment</pre></li></ul><h3 id="AzureFunctionPlugin-Version0.2.1,2018-04-03">Version 0.2.1, 2018-04-03</h3><ul><li><p>Support for credentials lookup in <a rel="nofollow" href="https://plugins.jenkins.io/cloudbees-folder" class="external-link">Folders</a></p></li></ul><h3 id="AzureFunctionPlugin-Version0.2.0,2018-01-09">Version 0.2.0, 2018-01-09</h3><ul><li>Support MSI</li></ul><h3 id="AzureFunctionPlugin-Version0.1.2,2017-11-07">Version 0.1.2, 2017-11-07</h3><ul><li>Specify refspec explicitly when doing git push</li><li>Add Third Party Notice</li></ul><h3 id="AzureFunctionPlugin-Version0.1.1,2017-10-18">Version 0.1.1, 2017-10-18</h3><ul><li>Remove runtime licenses</li></ul><h3 id="AzureFunctionPlugin-Version0.1.0,2017-10-04">Version 0.1.0, 2017-10-04</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

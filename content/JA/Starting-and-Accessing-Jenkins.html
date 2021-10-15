@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Starting and Accessing Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Starting and Accessing Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (akiko)</span>, last modified by <span class='editor'> Unknown User (irof)</span> on Mar 03, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Starting+and+Accessing+Jenkins">Starting and Accessing Jenkins</a></p>
+
+<h1 id="StartingandAccessingJenkins-Jenkinsの起動">Jenkinsの起動</h1>
+
+<p>Jenkinsを起動する一番簡単な方法は、組込みのサーブレットコンテナであるWinstoneを使用することです。以下のようにして起動することができます:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+$ java -jar jenkins.war
+</pre>
+</div></div>
+<p>もちろん、Jenkinsの出力をログファイルに出力したいと思うでしょう。Unixであれば、<code><strong>nohup</strong></code>を使えばできます。</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+$ nohup java -jar jenkins.war &gt; $LOGFILE 2&gt;&amp;1
+</pre>
+</div></div>
+
+<h1 id="StartingandAccessingJenkins-Jenkinsにアクセスする">Jenkinsにアクセスする</h1>
+
+<p>Jenkinsの画面を見るには、ブラウザを立ち上げて、<code><strong>http</strong></code><code><strong>://</strong></code><span style="color: rgb(0,128,0);"><code><strong>myServer</strong></code></span><code><strong>:8080</strong></code> にアクセスしてください。<span style="color: green;">myServer</span>はJenkinsが動作しているサーバーの名称です。</p>
+
+<p><a href="#StartingandAccessingJenkins-top"><em>Top of page</em></a></p>
+
+<h2 id="StartingandAccessingJenkins-コマンドライン・パラメータ">コマンドライン・パラメータ</h2>
+
+<p>Jenkinsは通常ポート番号8080を使用して起動しますが、他のWebサービスを起動している場合には、このポート番号が既に使用中かもしれません。<br/>
+その場合は、<code>--httpPort=</code><span style="color: green;"><code>$HTTP_PORT</code></span> (<span style="color: green;"><code>$HTTP_PORT</code></span>はJenkinsが使用するポート番号)で、違うポート番号を指定することができます。他のコマンドライン・パラメータは次の通りです。</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> コマンドライン・パラメータ </p></th>
+<th class="confluenceTh"><p> 説明 </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --javaHome=$JAVA_HOME </p></td>
+<td class="confluenceTd"><p> JavaやAntが必要なビルドを実行するときに使用する$JAVA_HOMEをJenkinsに渡します。これはJenkinsを起動するJREではありません(Jenkins上で使用するJREを指定します)。デフォルトは、Jenkinsを実行するのに使用したJREです。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --httpPort=$HTTP_PORT </p></td>
+<td class="confluenceTd"><p> Jenkinsが使用するHTTPプロトコルのポート番号を指定します。デフォルトは8080です。これを使用しない(_HTTPS_を使用)ようにするには、<code>-1</code>を指定します。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --httpListenAddress=$HTTP_HOST </p></td>
+<td class="confluenceTd"><p> このパラメータで、Jenkinsがリクエストを受け付けるIPアドレスを指定できます。環境変数$HTTP_HOSTが指定されていれば、それを利用します。デフォルトでは 0.0.0.0 です。--- この場合、すべての有効なインタフェース上で(httpPortで指定された)ポートをリスンします。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --httpsPort=$HTTP_PORT </p></td>
+<td class="confluenceTd"><p> HTTPSプロトコルで使用するポート番号を指定します。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --httpsListenAddress=$HTTPS_HOST </p></td>
+<td class="confluenceTd"><p> JenkinsがHTTPSプロトコルでリクエストを受け付けるIPアドレスを指定できます。環境変数$HTTPS_HOSTが指定されていれば、それを利用します。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --ajp13Port=$AJP_PORT </p></td>
+<td class="confluenceTd"><p> 標準のAJP13プロトコルを使う場合、$AJP_PORTRを利用して、Jenkinsがリスンするポートを指定できます。デフォルトは8009です。(_HTTPS_を使用するため)　これを使用しないようにするには、<code>-1</code>を指定します。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --ajp13ListenAddress=$AJP_HOST </p></td>
+<td class="confluenceTd"><p> JenkinsがAJP13プロトコルのリクエストを受け付ける、IPアドレスを指定できます。デフォルトでは 0.0.0.0 です。 --- i.e. この場合、すべての有効なインタフェース上で(ajpPortで指定された) ポートをリスンします。 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --argumentsRealm.passwd.$ADMIN_USER=<em>password</em> </p></td>
+<td class="confluenceTd"><p> ユーザー $ADMIN_USERのパスワードを設定します。Jenkinsのセキュリティが有効化されている場合、Jenkinsやプロジェクトを設定するために、$ADMIN_USERでログインする必要があります。注意: 管理者権限を持つユーザーも指定しなければなりません。(以下を参照してください) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> --argumentsRealm.roles.$ADMIN_USER=admin </p></td>
+<td class="confluenceTd"><p> $ADMIN_USERを管理者として設定し、Jenkinsのセキュリティが有効化されていれば、Jenkinsを設定できるようにします。詳しくは<a href="Securing-Jenkins.html">Jenkinsのセキュリティ</a>を参照してください。 </p></td>
+</tr>
+</tbody></table></div>
+
+<p>Jenkinsはすべてのコマンドライン・パラメータをWinstoneサーブレットコンテナに渡しますので、詳しくは<a href="http://winstone.sourceforge.net/#commandLine" class="external-link" rel="nofollow">Winstone コマンドライン・パラメータ　リファレンス</a>を参考にしてください。</p>
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">コマンドライン・パラメータに注意</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Jenkinsは間違ったコマンドライン・パラメータはエラーを出さずに無視します。コマンドライン・パラメータを使う際には注意深く、スペルミスなどがないようにしてください。例えば、Jenkinsの管理者ユーザーを定義するのは、<code><strong>--argumentRealm</strong></code>ではなく<code><strong>--argument</strong></code><code><strong><span style="text-decoration: underline;">s</span></strong></code><code><strong>Realm</strong></code>です。</p></div></div>
+
+
+<h2 id="StartingandAccessingJenkins-非常に簡単な起動用スクリプト">非常に簡単な起動用スクリプト</h2>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>このスクリプトは、Ubuntuベースのシステム用です。Red Hat向けの適切な起動/停止スクリプトは、こちら <a href="http://www.wakaleo.com/component/content/article/206" class="external-link" rel="nofollow">http://www.wakaleo.com/component/content/article/206</a> をご覧ください。</p></div></div>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#!/bin/sh
+
+DESC=&quot;Jenkins CI Server&quot;
+NAME=jenkins
+PIDFILE=/var/run/$NAME.pid
+RUN_AS=jenkins
+COMMAND=/usr/bin/java -- -jar /home/jenkins/jenkins.war
+
+d_start() {
+	start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $RUN_AS --exec $COMMAND
+}
+
+d_stop() {
+	start-stop-daemon --stop --quiet --pidfile $PIDFILE
+	if [ -e $PIDFILE ]
+		then rm $PIDFILE
+	fi
+}
+
+case $1 in
+	start)
+	echo -n &quot;Starting $DESC: $NAME&quot;
+	d_start
+	echo &quot;.&quot;
+	;;
+	stop)
+	echo -n &quot;Stopping $DESC: $NAME&quot;
+	d_stop
+	echo &quot;.&quot;
+	;;
+	restart)
+	echo -n &quot;Restarting $DESC: $NAME&quot;
+	d_stop
+	sleep 1
+	d_start
+	echo &quot;.&quot;
+	;;
+	*)
+	echo &quot;usage: $NAME {start|stop|restart}&quot;
+	exit 1
+	;;
+esac
+
+exit 0
+</pre>
+</div></div>
+<p><br class="atl-forced-newline"/></p>
+
+<p><span style="color: rgb(210,73,57);"><strong>HTTPSを、既存の証明書とともに利用する</strong></span></p>
+
+<p>Jenkinsをビルトインの Winstoneサーバを使って起動させ、かつ、HTTPS (443) で起動し、既存のHTTPS用の証明書も利用したい場合は、このようにします:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">--httpPort=-1 --httpsPort=443 --httpsKeyStore=path/to/keystore --httpsKeyStorePassword=keystorePassword</pre>
+</div></div>
+
+
+<p>キーストアはJKSフォーマット (JDKの'keytool'として作成されたもの) でないといけません。また、keystore とターゲットの鍵は、同じパスワードでなければいけません。(keystoreの引数をJenkinsの専用のパラメータの後に指定すると、うまく動作しないようです。Winstoneにきちんと渡されない、もしくは、Winstone側で知らないパラメータが指定されると無視してしまうようです。このため、httpsPortの引数の近くにせっていされていて、正しく動作しているかを確認して下さい)</p>
+
+
+<p><a href="#StartingandAccessingJenkins-top"><em>Top of page</em></a></p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

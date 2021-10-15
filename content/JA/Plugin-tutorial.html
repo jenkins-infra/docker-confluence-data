@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Plugin tutorial</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Plugin tutorial
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (kohsuke)</span> on Apr 30, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Plugin+tutorial">Plugin Tutorial</a></p>
+
+<p>このドキュメントでは <a href="https://github.com/jenkinsci/hello-world-plugin" class="external-link" rel="nofollow">hello-worldプラグイン</a> とともにプラグイン開発の始め方を示しています。</p>
+
+<h1 id="Plugintutorial-プラグインは何ができるの？">プラグインは何ができるの？</h1>
+
+<p>Jenkins では拡張ポイントを定義しています。それはビルドシステムのある側面をモデル化したインターフェースもしくは抽象クラスです。これらのインターフェースでは実装する必要があるものを定めており、Jenkins ではプラグインがこの実装にコントリビュートすることを許可しています。拡張ポイントについてもっと知りたい場合は<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Extension+points">このドキュメント</a>を見てください。</p>
+
+<p>このドキュメントでは、<a href="http://javadoc.jenkins-ci.org/byShortName/hudson.tasks.Builder">ビルダー</a> を実装してhelloと出力します。（ビルトインのビルダーはAnt, Maven, シェルスクリプトを含みます。ビルダーはプロジェクトをビルドします。）</p>
+
+<h2 id="Plugintutorial-他のリソース">他のリソース</h2>
+
+<p>このチュートリアル以外にも他のチュートリアルや例を下記から参照することができます。</p>
+
+<ul>
+	<li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-1.html" class="external-link" rel="nofollow">Stephen Connolly's 7 part tutorial</a> (Writing a Hudson plugin)
+	<ul>
+		<li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-1.html" class="external-link" rel="nofollow">Part 1 - Preparation</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-2.html" class="external-link" rel="nofollow">Part 2 - Understanding m2 and freestyle projects</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-3.html" class="external-link" rel="nofollow">Part 3 - Subcontracting for Publisher and MavenReporter</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/02/writing-hudson-plug-in-part-4-abstract.html" class="external-link" rel="nofollow">Part 4 - Abstract Publishers and MavenReporters</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/02/writing-hudson-plug-in-part-5-reporting.html" class="external-link" rel="nofollow">Part 5 - Reporting</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/03/writing-hudson-plugin-part-5-typos.html" class="external-link" rel="nofollow">Part 5½ - Typos corrected</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/04/writing-hudson-plugin-part-6-parsing.html" class="external-link" rel="nofollow">Part 6 - Parsing the results</a></li>
+		<li><a href="http://javaadventure.blogspot.com/2008/06/writing-hudson-plugin-part-7-putting-it.html" class="external-link" rel="nofollow">Part 7 - Putting it all together</a></li>
+		<li>yet not finished: health reports</li>
+	</ul>
+	</li>
+	<li><a href="http://d.hatena.ne.jp/fits/20080502/1209726765" class="external-link" rel="nofollow">日本語でのクイックスタートガイド</a></li>
+	<li>﻿<a class="unresolved" href="#">The JenkinsPluginTotallySimpelGuide</a> by martinO</li>
+</ul>
+
+
+<h1 id="Plugintutorial-環境の準備">環境の準備</h1>
+
+<p>プラグインを開発するためには <a href="http://maven.apache.org/" class="external-link" rel="nofollow">Maven 2</a> (<a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=Why+Maven2%3F&amp;linkCreation=true&amp;fromPageId=36602667">なぜ?</a>) と JDK 6.0以降が必要です。もしMavenを使うのが初めてなら<a href="http://maven.apache.org/guides/mini/guide-proxies.html" class="external-link" rel="nofollow">インターネットから資料をダウンロードして確認してみてください。</a>.</p>
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Nexus ユーザーの場合：</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><a href="http://nexus.sonatype.org" class="external-link" rel="nofollow">Nexus Maven Repository Manager</a> を利用している場合、この手順をする必要はありません。そのかわりに、<a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=HudsonWithNexus&amp;linkCreation=true&amp;fromPageId=36602667">こちら</a> に従って、事前準備と適切な <code>settings.xml</code> を用意してください。</p></div></div>
+<p>比較的新しいMaven（つまり2.0.9以降）で下記の記述を <code>~/.m2/settings.xml</code> (Windowsユーザなら <code>%USERPROFILE%\.m2\settings.xml</code> です)に追加してください。</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;settings&gt;
+  &lt;pluginGroups&gt;
+    &lt;pluginGroup&gt;org.jenkins-ci.tools&lt;/pluginGroup&gt;
+  &lt;/pluginGroups&gt;
+
+  &lt;profiles&gt;
+    &lt;!-- Give access to Jenkins plugins --&gt;
+    &lt;profile&gt;
+      &lt;id&gt;jenkins&lt;/id&gt;
+      &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt; &lt;!-- change this to false, if you don&#39;t like to have it on per default --&gt;
+      &lt;/activation&gt;
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;repo.jenkins-ci.org&lt;/id&gt;
+          &lt;url&gt;http://repo.jenkins-ci.org/public/&lt;/url&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+      &lt;pluginRepositories&gt;
+        &lt;pluginRepository&gt;
+          &lt;id&gt;repo.jenkins-ci.org&lt;/id&gt;
+          &lt;url&gt;http://repo.jenkins-ci.org/public/&lt;/url&gt;
+        &lt;/pluginRepository&gt;
+      &lt;/pluginRepositories&gt;
+    &lt;/profile&gt;
+  &lt;/profiles&gt;
+&lt;/settings&gt;
+</pre>
+</div></div>
+
+<p>ここではJenkins Mavenプラグインの略称を使います（つまりorg.jenkins-ci.tools:maven-hpi-plugin:1.61:createの代わりにhpi:create）。</p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Maven2.0.9より古いバージョンを使っている場合は、さらに <a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=Workarounds+in+Plugin+Tutorial&amp;linkCreation=true&amp;fromPageId=36602667">追加のステップ</a>が必要です。</p></div></div>
+
+<h1 id="Plugintutorial-新規プラグインの作成">新規プラグインの作成</h1>
+
+<p>新規プラグインを作るためには以下のようにmavenコマンドを実行します。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn -cpu hpi:create
+</pre>
+</div></div>
+<p>ここでいくつか質問されます。それはgroupId（これはmaven用語でパッケージ名です）やartifactId（これはmaven用語でプロジェクト名です）といったものです。そして開発するプラグインのスケルトンが生成されます。これをビルドして確認してみましょう。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ cd newly-created-directory
+$ mvn package
+</pre>
+</div></div>
+<p>説明:</p>
+
+<p><em>-cpu</em> 関連あるMavenプラグインをすべて更新します。<br/>
+<em>hpi:</em> プラグイン開発を支援するJenkins HPIプラグインの一部を起動する次に示すゴールを特定するサフィックス<br/>
+<em>create</em> ディレクトリレイアウトと新規Jenkinsプラグインのpomを生成しモジュールリストに加えるゴール<br/>
+<em>package</em> すべてのソースをコンパイルし、テストをはしらせ、パッケージを作る( *.hpiを作ってHPIプラグインによって上書きされます) 標準的なゴールです。</p>
+
+<h1 id="Plugintutorial-プラグインのビルド">プラグインのビルド</h1>
+
+<p>下記のように、 <code>mv install</code> コマンドを利用して、プラグインがビルドできます。この結果、 <code>./target/pluginname.hpi</code> というファイルが出来ます。こちらはJenkinsへのDeployの際に利用します。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn install</pre>
+</div></div>
+
+
+<h1 id="Plugintutorial-IDEでの生産的な環境の作り方">IDEでの生産的な環境の作り方</h1>
+
+<h3 id="Plugintutorial-NetBeans">NetBeans</h3>
+
+<p>NetBeansユーザはプロジェクトディレクトリを開くことによりIDEのMavenサポートを受けることができます（6.7以降にバンドルされています。6.5ではプラグインマネージャから利用可能です）。アーキタイプも新規プロジェクトダイアログから利用可能です。</p>
+
+<h3 id="Plugintutorial-IntelliJIDEA">IntelliJ IDEA</h3>
+
+<p>IntelliJ7.0以降のユーザはIDEからpom.xmlをロードすることができます。ライブラリやJenkins coreのコードを隅々まで見るとよいでしょう。</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>IntelliJのMavenはデフォルトでソースとJavaDocをオンデマンドにダウンロードします。だからソースを見るためには <code>Maven Projects</code> タブにある <code>Download artifacts</code> ボタンをクリックする必要があります。</p></div></div>
+
+<h3 id="Plugintutorial-Eclipse">Eclipse</h3>
+
+<p><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=163807" class="external-link" rel="nofollow">Eclipse 3.2にはバグ</a> (<a href="https://hudson.dev.java.net/servlets/ReadMsg?list=users&amp;msgNo=337" class="external-link" rel="nofollow">詳細</a>.)があるのでEclipse3.3以降を使いましょう。<br/>
+Eclipseユーザは以下のMavenコマンドを走らせることによってEclipseのプロジェクトファイル（カスタムのoutputDirectoryパラメータはEclipseでのJSR-269のアノテーションプロセッササポートの欠如に対処するために使われる）を生成することができます。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn -DdownloadSources=true -DdownloadJavadocs=true -DoutputDirectory=target/eclipse-classes eclipse:eclipse</pre>
+</div></div>
+<p>代替策として、Eclilpseユーザは <a href="http://m2eclipse.codehaus.org/" class="external-link" rel="nofollow">maven2 eclipse プラグイン</a>をインストールしてIDEでMavenプロジェクトディレクトリを開くこともできます。</p>
+
+<p>もし <strong>Unable to find a plugin class. Did you put @plugin in javadoc?</strong> というエラーメッセージに遭遇したら、これはEclipseとMavenの両方がビルドの出力ディレクトリを使うことが原因です。mavenでビルドする前に <strong>mvn clean</strong> を実行するか出力先を変更してください。</p>
+
+<h1 id="Plugintutorial-プラグインのワークスペースのレイアウト">プラグインのワークスペースのレイアウト</h1>
+
+<p>プラグインのワークスペースは以下に示す主要なものから成り立っています。</p>
+
+<h4 id="Plugintutorial-pom.xml">pom.xml</h4>
+
+<p>Mavenはプラグインをビルドするためにこれを使います。</p>
+
+<h4 id="Plugintutorial-src/main/java">src/main/java</h4>
+
+<p>プラグインのJavaソースファイル</p>
+
+<h4 id="Plugintutorial-src/main/resources">src/main/resources</h4>
+
+<p>プラグインのJelly/Groobyビュー　詳細は<a href="Architecture.html">このドキュメント</a> を見てください。</p>
+
+<h4 id="Plugintutorial-src/main/webapp">src/main/webapp</h4>
+
+<p>イメージやHTMLファイルなどプラグインの静的なリソース</p>
+
+<h1 id="Plugintutorial-ソースコード">ソースコード</h1>
+
+<p>ソースコードを見てみましょう。プラグインのメインエントリポイントは <a href="http://javadoc.jenkins-ci.org/byShortName/Plugin">Plugin</a>を継承したPluginImplクラスです。Jenkinsは ( <code>Plugin</code> から継承関係を経由して)プラグインクラスを検出すると、インスタンスを作成しメソッドを呼び出します。</p>
+
+<p>多くの場合プラグインクラスは単に <a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=Extension+points&amp;linkCreation=true&amp;fromPageId=36602667">拡張ポイント</a>を登録してるだけです。あなたのメインの仕事は拡張ポイントを実装することです。詳しくは <code>ビルダー</code> がどう実装されているか何をしているかソースコードを読んでみてください。</p>
+
+<h1 id="Plugintutorial-プラグインのデバッグ">プラグインのデバッグ</h1>
+
+<p>NetBeans 6.7以降のユーザは単に*デバッグ*と押すだけです。他の人はあなたのプラグイン付きのJenkinsを起動するために以下のコマンドを実行してください。<br/>
+簡易版:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>mvnDebug hpi:run
+</pre>
+</div></div>
+<p>Unix:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ export MAVEN_OPTS=&quot;-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n&quot;
+$mvn hpi:run
+</pre>
+</div></div>
+<p>Windows:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&gt; set MAVEN_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n
+&gt; mvn hpi:run
+</pre>
+</div></div>
+<p>ブラウザで <code><a href="http://localhost:8080/" class="external-link" rel="nofollow">http://localhost:8080/</a></code> にアクセスすればJetty上のJenkinsページを見れるはずです。 <code>MAVEN_OPTS</code> の役割はデバッガポート8000ですべてを起動するためのものです。こうすればIDEからこのポートへデバッグセッションを開始することができます。</p>
+
+<p>いったん起動したら実行しつづけます。Jettyは変更を自動的に検知します。</p>
+
+<ol>
+	<li><code>src/main/resources</code> にあるビューファイルや <code>src/main/webapp</code> のリソースファイルを変更した場合は, ブラウザでF5を押して変更を見てください。</li>
+	<li>Javaソースファイルを変更した場合は、IDE でコンパイル(NetBeans 6.7+: <strong>デバッグ &gt; コードの変更の適用</strong>)してください。Jettyは変更を検知して自動的に再デプロイします。 <code>mvn</code> を実行する必要はありません。
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>MAVEN_OPTSは <code>-Xmx</code> のような他のJVMパラメータを指定するのに使用することができます。</p></div></div></li>
+</ol>
+
+
+<h3 id="Plugintutorial-ポートの変更">ポートの変更</h3>
+
+<p>Jenkinsを8080以外のポートで起動する必要があるならシステムプロパティ <code>port</code> にセットしてください。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn hpi:run -Djetty.port=8090
+</pre>
+</div></div>
+
+<h3 id="Plugintutorial-コンテキストパスの設定">コンテキストパスの設定</h3>
+
+<p>maven-hpi-plugin 1.65 以降 (parent pom が 1.401 以降) では、system propertyを利用して、コンテキストパスを指定できます。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn hpi:run -Dhpi.prefix=/jenkins
+</pre>
+</div></div>
+
+<h3 id="Plugintutorial-プラグインの配布">プラグインの配布</h3>
+
+<p>プラグインの配布イメージを作るには以下のようにMavenゴールを実行してください。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn package
+</pre>
+</div></div>
+<p>これにより <code>target/*.hpi</code> ファイルを作成できます。他のユーザはJenkinsのweb UIを使ってこのプラグインをJenkinsにアップロードすることができます。 (もしくは <code>$JENKINS_HOME/plugins</code> に配置してください。)</p>
+
+<h1 id="Plugintutorial-プラグインのjenkins-ci.orgへのホスティング">プラグインのjenkins-ci.orgへのホスティング</h1>
+
+<p>ここまできたらあなたのプラグインをjenkins-ci.orgにホスティングすることを考えるべきでしょう。やり方は <a href="Hosting-plugins.html">このドキュメント</a>をみるといいでしょう。</p>
+
+<h1 id="Plugintutorial-他のtips">他のtips</h1>
+
+<ol>
+	<li>毎回リポジトリにアクセスするのをさけるために <code>mvn -o ...</code> のようにMavenを実行することを考えましょう。そうすれば操作が早くなって快適になります。</li>
+	<li><a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=Mailing+Lists&amp;linkCreation=true&amp;fromPageId=36602667">ここ</a>からたどれる users を購読しましょう。そうすれば我々も君にアクセスできます。</li>
+	<li>あなたが依存しているJenkinsのバージョンがあがった場合は、いったん <code>mvn clean</code> を実行しましょう。そしてjettyが使っている <code>target/work</code> を削除しましょう。<em>新しいバージョンはworkを使います。target/workは使いません。</em>　そうしないとjettyが古い残ったjarファイルを使い続けるかもしれないです。</li>
+</ol>
+                    </div>
+
+                    
+                                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="comments" class="pageSectionTitle">Comments:</h2>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-47480894"></a>
+                                    <font class="smallfont"><p>Not tolerance of others, is unworthy of tolerance by others,<a href="http://www.louisvuittonforsale.com/" class="external-link" rel="nofollow">louis vuitton outlet</a> but who can say oneself is not to need tolerant?</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 07, 2010 17:23
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    </div>
+                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

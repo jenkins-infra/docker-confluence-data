@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure Dev Spaces Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure Dev Spaces Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jieshe)</span>, last modified on Jun 10, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Azure Dev Spaces Plugin helps to manage dev spaces in <a href="https://docs.microsoft.com/en-us/azure/dev-spaces/" class="external-link" rel="nofollow">Azure Dev Spaces</a>.</p><h2 id="AzureDevSpacesPlugin-HowtoInstall">How to Install</h2><p>You can install/update this plugin in Jenkins update center (Manage Jenkins -&gt; Manage Plugins, search Azure Dev Spaces Plugin).</p><p>You can also manually install the plugin if you want to try the latest feature before it's officially released.<br/>To manually install the plugin:</p><ol><li><p>Clone the repo and build:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">mvn package</pre>
+</div></div></li><li>Open your Jenkins dashboard, go to Manage Jenkins -&gt; Manage Plugins.</li><li>Go to Advanced tab, under Upload Plugin section, click Choose File.</li><li>Select `azure-dev-spaces.hpi` in `target` folder of your repo, click Upload.</li><li>Restart your Jenkins instance after install is completed.</li></ol><h2 id="AzureDevSpacesPlugin-Prerequisites">Prerequisites</h2><p>To use this plugin to manage dev spaces, first you need to have an Azure Service Principal in your Jenkins instance.</p><ol><li>Create an Azure Service Principal through <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json" class="external-link" rel="nofollow">Azure CLI</a> or <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal" class="external-link" rel="nofollow">Azure Portal</a>.</li><li>Open Jenkins dashboard, go to Credentials, add a new Microsoft Azure Service Principal with the credential information you just created.</li></ol><h2 id="AzureDevSpacesPlugin-Createadevspace">Create a dev space</h2><h3 id="AzureDevSpacesPlugin-Freestylejob">Freestyle job</h3><ol><li>Choose to add a `Build` action 'Create dev spaces'.</li><li>Select your Azure credential in Azure credential section.</li><li>Select the resource group and Azure kubernetes service in your subscription.</li><li>Set value for your parent dev space name and dev space name.</li><li>In the &quot;Kubeconfig&quot; dropdown, select the kubeconfig stored in Jenkins. You can click the &quot;Add&quot; button on the right to add new kubeconfig (Kind: Kubernetes configuration (kubeconfig)). You can enter the kubeconfig content directly in it.</li></ol><h3 id="AzureDevSpacesPlugin-Pipeline">Pipeline</h3><p>Pipeline step command is like below, follow freestyle job to fill variables.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">devSpacesCreate aksName: &#39;&#39;, azureCredentialsId: &#39;&#39;, resourceGroupName: &#39;&#39;, sharedSpaceName: &#39;&#39;, spaceName: &#39;&#39;</pre>
+</div></div><h2 id="AzureDevSpacesPlugin-Cleanupadevspace">Clean up a dev space</h2><h3 id="AzureDevSpacesPlugin-Freestylejob.1">Freestyle job</h3><ol><li>Choose to add a `Post-build Actions` action 'Cleanup dev spaces'.</li><li>Select your Azure credential in Azure credential section.</li><li>Select the resource group and Azure kubernetes service in your subscription.</li><li>Set value for dev space name needed to be cleaned up.</li><li>In the &quot;Kubeconfig&quot; dropdown, select the kubeconfig stored in Jenkins. You can click the &quot;Add&quot; button on the right to add new kubeconfig (Kind: Kubernetes configuration (kubeconfig)). You can enter the kubeconfig content directly in it.</li><li>Save the project and build it.</li></ol><h3 id="AzureDevSpacesPlugin-Pipeline.1">Pipeline</h3><p>Pipeline step command is like below, follow freestyle job to fill variables.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">devSpacesCleanup aksName: &#39;&#39;, azureCredentialsId: &#39;&#39;, devSpaceName: &#39;&#39;, resourceGroupName: &#39;&#39;</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

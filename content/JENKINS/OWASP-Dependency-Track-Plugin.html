@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OWASP Dependency-Track Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OWASP Dependency-Track Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sspringett)</span>, last modified on Jan 23, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><br/></p><p><br/><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View OWASP Dependency-Track <a href="https://plugins.jenkins.io/dependency-track" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-03-30/#SECURITY-2250" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allow capturing credentials</a></li>
+</ul>
+
+</div></div>
+</p><h1 id="OWASPDependency-TrackPlugin-Introduction"><br/>Introduction</h1><p>Dependency-Track is an intelligent Software Composition Analysis (SCA) platform that allows organizations to identify and reduce risk from the use of third-party and open source components. </p><p>It integrates with multiple vulnerability databases including the <a rel="nofollow" style="letter-spacing: 0.0px;" href="https://nvd.nist.gov/" class="external-link">National Vulnerability Database</a> (NVD), <a style="letter-spacing: 0.0px;" href="https://www.npmjs.com/advisories" class="external-link" rel="nofollow">NPM Public Advisories</a>, <a rel="nofollow" href="https://ossindex.sonatype.org/" style="letter-spacing: 0.0px;" class="external-link">Sonatype OSS Index</a>, and <a href="https://vulndb.cyberriskanalytics.com/" style="letter-spacing: 0.0px;" rel="nofollow" class="external-link">VulnDB</a> from <a href="https://www.riskbasedsecurity.com/" style="letter-spacing: 0.0px;" rel="nofollow" class="external-link">Risk Based Security</a>. Dependency-Track monitors all applications in its portfolio in order to proactively identify vulnerabilities in components that are placing your applications at risk. Use of Dependency-Track can play a vital role in an overall <a style="letter-spacing: 0.0px;" href="https://csrc.nist.gov/Projects/Supply-Chain-Risk-Management" rel="nofollow" class="external-link">Cyber Supply Chain Risk Management</a> (C-SCRM) program by fulfilling many of the recommendations laid out by <a rel="nofollow" style="letter-spacing: 0.0px;" href="https://www.safecode.org/wp-content/uploads/2017/05/SAFECode_TPC_Whitepaper.pdf" class="external-link">SAFECode</a>.</p><p>Dependency-Track is designed to be used in an automated DevOps environment where software bill-of-material (S-BoM) formats are automatically ingested during CI/CD. Use of this plugin is highly recommended for this purpose and is well suited for use in <a style="letter-spacing: 0.0px;" rel="nofollow" href="https://jenkins.io/solutions/pipeline" class="external-link">Jenkins Pipeline</a>. In such an environment, Dependency-Track enables your DevOps teams to accelerate while still keeping tabs on component usage and any inherited risk.</p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="700" src="https://raw.githubusercontent.com/stevespringett/dependency-track/master/docs/images/integrations.png" data-image-src="https://raw.githubusercontent.com/stevespringett/dependency-track/master/docs/images/integrations.png"></span></p><p><br/></p><h1 id="OWASPDependency-TrackPlugin-PluginDescription">Plugin Description</h1><p>The Dependency-Track Jenkins plugin aids in publishing <a rel="nofollow" href="https://cyclonedx.org/" class="external-link">CycloneDX</a> and <a rel="nofollow" href="https://spdx.org/" class="external-link">SPDX</a> BoMs as well as Dependency-Check XML reports to the Dependency-Track platform.</p><p>Publishing BoMs can be performed asynchronously or synchronously.</p><p>Asynchronous publishing simply uploads the BoM to Dependency-Track and the job continues. Synchronous publishing waits for Dependency-Track to process the BoM after being uploaded. Synchronous publishing has the benefit of displaying interactive job trends and per build findings.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="700" src="attachments/161022058/165578798.png" data-image-src="attachments/161022058/165578798.png" data-unresolved-comment-count="0" data-linked-resource-id="165578798" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-job-trend.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="161022058" data-linked-resource-container-version="12"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="700" src="attachments/161022058/165578799.png" data-image-src="attachments/161022058/165578799.png" data-unresolved-comment-count="0" data-linked-resource-id="165578799" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-job-findings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="161022058" data-linked-resource-container-version="12"></span></p><h1 id="OWASPDependency-TrackPlugin-JobConfiguration">Job Configuration</h1><p>Once configured with a valid URL and API key, simply configure a job to publish the artifact.</p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="176" width="700" src="attachments/161022058/165578800.png" data-image-src="attachments/161022058/165578800.png" data-unresolved-comment-count="0" data-linked-resource-id="165578800" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-job-publish.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="161022058" data-linked-resource-container-version="12"></span></p><p><strong><br/></strong></p><p><strong>Dependency-Track project</strong>: Specifies the unique project ID to upload scan results to. This dropdown will be automatically populated with a list of projects.</p><p><strong>Artifact</strong>: Specifies the file to upload. Paths are relative from the Jenkins workspace.</p><p><strong>Artifact Type</strong>: Options are:</p><ul><li>Software Bill of Material (CycloneDX or SPDX)</li><li>Dependency-Check Scan Result (XML)</li></ul><p><strong>Synchronous mode</strong>: Uploads a BoM to Dependency-Track and waits for Dependency-Track to process and return results. The results returned are identical to the auditable findings but exclude findings that have previously been suppressed. Analysis decisions and vulnerability details are included in the response. Synchronous mode is possible with Dependency-Track v3.3.1 and higher.</p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/161022058/168919045.png" data-image-src="attachments/161022058/168919045.png" data-unresolved-comment-count="0" data-linked-resource-id="168919045" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-job-thresholds.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="161022058" data-linked-resource-container-version="12"></span></p><p><br/></p><p>When Synchronous mode is enabled, thresholds can be defined which can optionally put the job into an UNSTABLE or FAILURE state.</p><p><strong>Total Findings</strong>: Sets the threshold for the total number of critical, high, medium, or low severity findings allowed. If the number of findings equals or is greater than the threshold for any one of the severities, the job status will be changed to UNSTABLE or FAILURE.</p><p><strong>New Findings</strong>: Sets the threshold for the number of new critical, high, medium, or low severity findings allowed. If the number of new findings equals or is greater than the previous builds finding for any one of the severities, the job status will be changed to UNSTABLE or FAILURE.</p><h1 id="OWASPDependency-TrackPlugin-GlobalConfiguration">Global Configuration</h1><p>To setup, navigate to <strong>Jenkins &gt; System Configuration</strong> and complete the Dependency-Track section.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/161022058/165578801.png" data-image-src="attachments/161022058/165578801.png" data-unresolved-comment-count="0" data-linked-resource-id="165578801" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-global-odt.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="161022058" data-linked-resource-container-version="12"></span></p><h1 id="OWASPDependency-TrackPlugin-ExternalResources">External Resources</h1><p><a href="https://dependencytrack.org/" class="external-link" rel="nofollow">https://dependencytrack.org/</a></p><p><a href="https://docs.dependencytrack.org/" class="external-link" rel="nofollow">https://docs.dependencytrack.org/</a></p><p><a href="https://github.com/DependencyTrack" class="external-link" rel="nofollow">https://github.com/DependencyTrack</a></p><p><a href="https://hub.docker.com/r/owasp/dependency-track/" class="external-link" rel="nofollow">https://hub.docker.com/r/owasp/dependency-track/</a></p><p><br/></p><h1 id="OWASPDependency-TrackPlugin-VersionHistory">Version History</h1><h4 id="OWASPDependency-TrackPlugin-Version2.1.0(January22,2019)">Version 2.1.0 (January 22, 2019)</h4><ul><li>Added support for risk gate thresholds which can optionally put the job into an UNSTABLE or FAILURE state upon meeting the defined threshold</li><li>Fixed issue that could lead to infinite polling in synchronous mode</li><li>Added configurable polling timeout defaulting to 5 minutes</li><li>Fixed drop-down bug which could result in BOMs being uploaded to the wrong project</li><li>Minor enhancements to console output</li></ul><h4 id="OWASPDependency-TrackPlugin-Version2.0.2(November22,2018)">Version 2.0.2 (November 22, 2018)</h4><ul><li>Corrected issue that ignored the suppression state of findings resulting in suppressed findings being treated as non-suppressed findings</li></ul><h4 id="OWASPDependency-TrackPlugin-Version2.0.1(November14,2018)">Version 2.0.1 (November 14, 2018)</h4><ul><li>Corrected issue that resulted in a JSON exception when uploading Dependency-Check XML reports or when uploading to Dependency-Track v3.3.0 and earlier</li><li>Added check that will display the trending chart only if there is history to display</li><li>Added additional console logging if synchronous mode was enabled but the artifact was not a supported BoM format</li></ul><h4 id="OWASPDependency-TrackPlugin-Version2.0.0(November13,2018)">Version 2.0.0 (November 13, 2018)</h4><ul><li>Added support for synchronous publishing mode, interactive findings, graphs, and trends (requires Dependency-Track v3.3.1 or higher)</li></ul><h4 id="OWASPDependency-TrackPlugin-Version1.1.1(October25,2018)">Version 1.1.1 (October 25, 2018)</h4><ul><li>Fixed issue that prevented project dropdown from displaying more than 100 projects</li></ul><h4 id="OWASPDependency-TrackPlugin-Version1.1.0(October18,2018)">Version 1.1.0 (October 18, 2018)</h4><ul><li>Added global option to auto-create project on upload. Requires Dependency-Track v3.1.0 or higher and the PROJECT_CREATION_UPLOAD permission.</li><li>Enhanced global configuration with Test Connection functionality to confirm network and authentication and authorization validity</li></ul><h4 id="OWASPDependency-TrackPlugin-Version1.0.0(September17,2018)">Version 1.0.0 (September 17, 2018)</h4><ul><li>Initial public release - Previous versions were bundled with the <a href="OWASP-Dependency-Check-Plugin.html">OWASP Dependency-Check Plugin</a>.</li></ul><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/165578798.png">jenkins-job-trend.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/165578799.png">jenkins-job-findings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/168919044.png">jenkins-job-publish.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/165578801.png">jenkins-global-odt.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/165578800.png">jenkins-job-publish.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161022058/168919045.png">jenkins-job-thresholds.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

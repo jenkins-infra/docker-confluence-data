@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : LTS 1.447.x RC Testing</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Release-Process.html">Release Process</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-Release-Line.html">LTS Release Line</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-RC-Testing.html">LTS RC Testing</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : LTS 1.447.x RC Testing
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vjuranek)</span>, last modified on Jun 10, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="LTS1.447.xRCTesting-ManualTests(LTS1.447.x)">Manual Tests (LTS 1.447.x)</h1>
+
+<p>Test results:</p>
+<ul>
+	<li><span style="color: rgb(0,192,0);">1.447.1 / OK</span> - test passed without any problem</li>
+	<li><span style="color: rgb(255,165,0);">1.447.1 / WARN</span> - there was some problem, functionality doesn't do what is expected, but it doesn't cause failure of whole Jenkins or any other significant problems</li>
+	<li><span style="color: rgb(204,0,0);">1.447.1 / FAIL</span> - cause failure of whole Jenkins or similar critical issue which affects all jobs (e.g. when plugin is installed, it's not possible to start Jenkins or save configuration of any job)</li>
+</ul>
+
+
+
+
+<h3 id="LTS1.447.xRCTesting-Installation,upgrade">Installation, upgrade </h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from RPM <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Install Jenkins from RPM package <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Jenkins is installed without error and runs <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> FC16, RHEL 6.2 <br class="atl-forced-newline"/>
+FC17, RHEL 6.2 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from .deb <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Install Jenkins from Debian package <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Jenkins is installed without error and runs <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p>   <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from war on Tomcat </p></td>
+<td class="confluenceTd"><p> Install Jenkins from war by deploying on Tomcat </p></td>
+<td class="confluenceTd"><p> Jenkins is deployed and runs </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Tomcat7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from war on JBoss AS </p></td>
+<td class="confluenceTd"><p> Install Jenkins from war by deploying on JBoss AS </p></td>
+<td class="confluenceTd"><p> Jenkins is deployed and runs </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, AS7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install plugins from update center with restart </p></td>
+<td class="confluenceTd"><p> Install some plugins from update center with restart </p></td>
+<td class="confluenceTd"><p> Selected plugins are installed after restart </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install plugins from update center without restart <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Install some plugins from update center without restart <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Selected plugins are installed after restart <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Restart after plugin upgrade <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Launch &quot;Restart when no jobs are running&quot; after plugin upgrade/install <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Jenkins restarts when no jobs are running <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Reload config from disk </p></td>
+<td class="confluenceTd"><p> Make some changes directly on disk and launch &quot;Reload Configuration from Disk&quot; </p></td>
+<td class="confluenceTd"><p> Made changes are reflected </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="LTS1.447.xRCTesting-Corefunctionality">Core functionality </h3>
+
+<h5 id="LTS1.447.xRCTesting-Globalconfiguration">Global configuration </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> JDK auto install </p></td>
+<td class="confluenceTd"><p> Add JDK, select &quot;Install automatically&quot; <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> JDK is installed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p>  RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(255,165,0);">1.447.1 / WARN</span> jdk.sh contains html page insted of script <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Add ant installation </p></td>
+<td class="confluenceTd"><p> Add existing ant installation </p></td>
+<td class="confluenceTd"><p> Ant installation is added </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Ant auto install <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add Ant, select &quot;Install automatically&quot; <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Ant version is installed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Add maven installation </p></td>
+<td class="confluenceTd"><p> Add existing maven installation </p></td>
+<td class="confluenceTd"><p> Maven installation is added </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Maven auto install <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add Maven, select &quot;Install automatically&quot; <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Maven is installed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Setup email notification <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup SMTP server, admin email and send test email <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> SMTP is setup, test email is sent and delivered  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Copy job config <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Create job by copying existing on <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Job is created with config same as already existing job <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Freestylejobs">Freestyle jobs </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create freestyle job </p></td>
+<td class="confluenceTd"><p> Create freestyle job </p></td>
+<td class="confluenceTd"><p> Freestyle job is created </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Build rotation </p></td>
+<td class="confluenceTd"><p> Setup &quot;Discard Old Builds&quot; and specify number of build to be kept </p></td>
+<td class="confluenceTd"><p> Old builds are deleted </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Parametrized build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup parametrized build and check the parameter value <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> The appropriate variable is setup and contains right value <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Disable build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure project as diabled <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Project is diabled <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Concurrent builds <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Allow &quot;Execute concurrent builds&quot; in project config and schedule two or more builds <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Builds are executed concurently <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Tie project to a label <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tie project to a label and schedule a build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Build is executed on slave with given label <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> SVN checkout <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure SVN repository and schedule build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Project is checkout from SVN <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Ant build step <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add ant build step and configure ant targets <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Ant targets are executed and finish with success </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Maven build step <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add maven build step and configure maven goals <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Maven goals are executed and finish with success <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Shell builds step <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add shell build step and setup simple shell script <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Shell script is executed and finish with success <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Archive artifacts <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup &quot;Archive artifacts&quot; post-build action <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Artifacts are archived <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid  <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish JavaDoc </p></td>
+<td class="confluenceTd"><p> Setup JavaDoc publishing <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> JavaDocs are published <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish JUnit results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup publishing of JUnit results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> JUnit results are published <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Email notification <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup email notification and schedule build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Notification email is sent and delivered <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair  <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Periodical build triggers </p></td>
+<td class="confluenceTd"><p> Setup periodical triggers </p></td>
+<td class="confluenceTd"><p> Build is launched in given time </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Mavenjobs">Maven jobs </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create maven job </p></td>
+<td class="confluenceTd"><p> Create maven job </p></td>
+<td class="confluenceTd"><p> Maven job is created </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Build maven project </p></td>
+<td class="confluenceTd"><p> Schedule maven job </p></td>
+<td class="confluenceTd"><p> Maven build succedded </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Matrixjobs">Matrix jobs </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create matrix job </p></td>
+<td class="confluenceTd"><p> Create matrix job </p></td>
+<td class="confluenceTd"><p> Matrix job is created </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Combination filter <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup combination filter <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Only jobs which pass the filter are build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="LTS1.447.xRCTesting-Plug-ins">Plug-ins </h3>
+
+
+<h5 id="LTS1.447.xRCTesting-SSHslaves(0.21)">SSH slaves (0.21)</h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Connect ssh slave </p></td>
+<td class="confluenceTd"><p> Connect ssh slave by providing login/passwd </p></td>
+<td class="confluenceTd"><p> Slave is connected </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-SVN(1.34,1.40)">SVN (1.34, 1.40) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Simple checkout <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup SVN SCM and do checkout <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Sources are checked out <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Maven(1.447.1)">Maven (1.447.1) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Maven2 build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Build maven2 project <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Build is executed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Maven3 build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Build maven3 project </p></td>
+<td class="confluenceTd"><p> Build is executed </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Greenballs(1.11,1.12)">Green balls (1.11, 1.12) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Success results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Success results </p></td>
+<td class="confluenceTd"><p> Success results are marke as green <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Git(1.1.16,1.1.18)">Git (1.1.16, 1.1.18) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Simple checkout <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add Git SCM and chekcout project <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Project is checked out <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Checkstyle(3.24)">Checkstyle (3.24) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish check-style result <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure project to publish check-style result <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Results are published <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>
+<span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+<h5 id="LTS1.447.xRCTesting-Cobertura(1.3,1.5)">Cobertura (1.3, 1.5) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish cobertura results </p></td>
+<td class="confluenceTd"><p> Configure project to publish cobertura results </p></td>
+<td class="confluenceTd"><p> Results are published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Findbugs(4.36,4.40)">Findbugs (4.36, 4.40) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish find-bugs results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure project to publish find-bugs results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Results are published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-PMD(3.25,3.28)">PMD (3.25, 3.28) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish PDM results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure project to publish PDM results </p></td>
+<td class="confluenceTd"><p> Results are published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Warnings(4.5)">Warnings (4.5) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish warnings <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure project to publish warnings <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Warnings are published <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Sonar(1.8)">Sonar (1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Sonar analysis </p></td>
+<td class="confluenceTd"><p> Setup sonar analysis </p></td>
+<td class="confluenceTd"><p> Analysis is executed and published on sonar server </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Diskusage(0.15,0.17)">Disk usage (0.15, 0.17)</h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Show values and graphs </p></td>
+<td class="confluenceTd"><p> Enable &quot;Show disk usage trend graph on the project page&quot; on global config </p></td>
+<td class="confluenceTd"><p> Disk usage number and graphs are shown on project page </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Reflect changes on disk correctly <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Made some changes on disk (e.g. delete workspace) and launch disk usage <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Changes on disk will be reflected in disk usage number <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Violations(0.7.10)">Violations (0.7.10) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish violations report </p></td>
+<td class="confluenceTd"><p> Setup findbug, pmd etc reports and violations reports </p></td>
+<td class="confluenceTd"><p> Violations reports are published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>
+<span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-ChuckNorris()">Chuck Norris () </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Activate Chuck Norris </p></td>
+<td class="confluenceTd"><p> Self-describing </p></td>
+<td class="confluenceTd"><p> Chuck Norris rules </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p>   <br class="atl-forced-newline"/> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Analysiscollector(1.20,1.27)">Analysis collector (1.20, 1.27) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Collects and show results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup collection of checkstyle, findbugs, pdm and warnings results collection <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Results are collected and shown <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>
+<span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Dashboardview(2.2)">Dashboard view (2.2) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create dashboard view <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Create dashboard view and some portlets </p></td>
+<td class="confluenceTd"><p> View as well as portlets are created and shown <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-HTMLpublisher(0.7)">HTML publisher (0.7) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Record HTML report </p></td>
+<td class="confluenceTd"><p> Setup directory containing HTML report </p></td>
+<td class="confluenceTd"><p> HTML report is published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Email-ext(2.18,2.21)">Email-ext (2.18, 2.21) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Email notification </p></td>
+<td class="confluenceTd"><p> Setup email notification and schedule build </p></td>
+<td class="confluenceTd"><p> Notification email is sent and delivered </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+<h5 id="LTS1.447.xRCTesting-Batchtasks(1.14,1.16)">Batch tasks (1.14, 1.16) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Execute batch task </p></td>
+<td class="confluenceTd"><p> Define batch task in project1, setup executions of this tast in project 2 and schedule a build </p></td>
+<td class="confluenceTd"><p> Batch task of project1 is executed </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Jira(1.29,1.33)">Jira (1.29, 1.33) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Update JIRA issue <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Update JIRA issue which is related to changes contained in the build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> JIRA is updated and on build page is a link to appropriate JIRA </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.1 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Deploy(1.8)">Deploy (1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Deploy on Tomcat 7 </p></td>
+<td class="confluenceTd"><p> Build war app and deploy it on Tomcat 7 </p></td>
+<td class="confluenceTd"><p> App is successfully deployed and running </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Dry(2.24,2.27)">Dry (2.24, 2.27) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish DRY analysis results </p></td>
+<td class="confluenceTd"><p> Setup CPD analysis and publish analysis results </p></td>
+<td class="confluenceTd"><p> Results are published </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.1 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Backup(1.6.1)">Backup (1.6.1) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Backup Jenkins configuration </p></td>
+<td class="confluenceTd"><p> Setup backup dir and run Jenkins baskup </p></td>
+<td class="confluenceTd"><p> Once no builds run, backup is performed </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(255,165,0);">1.447.2 / WARN</span>(failed with various &quot;Failed to read filesystem attributes for: /some/random/file&quot;) </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-XUnit()">XUnit () </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish testing tools <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Create Test Result Trend graph <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Buildtimeout(1.8)">Build timeout (1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Build time out <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Configure build with shorter time out that the duration of the build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Build is aborted <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Scppublisher(1.6,1.8)">Scp publisher (1.6, 1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish artifact over scp </p></td>
+<td class="confluenceTd"><p> Setup remote destination and artifact to be archived over scp </p></td>
+<td class="confluenceTd"><p> Artifact is archived on remote machine in speficied dir </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+
+<h5 id="LTS1.447.xRCTesting-Gradle(1.12,1.16)">Gradle (1.12, 1.16) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Gradle build step </p></td>
+<td class="confluenceTd"><p> Setup gradle build step </p></td>
+<td class="confluenceTd"><p> Gradle build step is executed </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Gradle auto install <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add Gradle, select &quot;Install automatically&quot; <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Gradle is installed </p></td>
+<td class="confluenceTd"><p>  RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Groovy(1.12)">Groovy (1.12) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Groovy build step <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup Groovy build step </p></td>
+<td class="confluenceTd"><p> Groovy build step is executed </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Systyem Groovy build step </p></td>
+<td class="confluenceTd"><p> Setup system Groovy build step </p></td>
+<td class="confluenceTd"><p> System Groovy build step is executed </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Groovy auto install <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Add Groovy, select &quot;Install automatically&quot; <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Groovy is installed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p>  RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Audittrail(1.7)">Audit trail (1.7) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Log operations  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup audit trail plugin  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Operations like changes job config are logged in audit log <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Jobconfighistory(1.13)">Job config history (1.13) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Record changes <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Record changes in job config <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Changes are recored and shown <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Nestedview(1.8)">Nested view (1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create nested view <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Create nested view <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Nested view is created <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-IRC(2.18)">IRC (2.18) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Send IRC notification </p></td>
+<td class="confluenceTd"><p> Setup IRC notification and schedule a build </p></td>
+<td class="confluenceTd"><p> Notification is send to appropriate IRC channel </p></td>
+<td class="confluenceTd"><p> RHEL6, HotSpot, Winstone </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Run jenkins bot command <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Run bot command on IRC channel <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Command is executed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p>  RHEL6, HotSpot, Winstone <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> vjuranek <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.447.xRCTesting-Workspacecleanup(0.8)">Workspace clean up (0.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete workspace before build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup delete workspace before build </p></td>
+<td class="confluenceTd"><p> Workspace is deleted before build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete workspace after build </p></td>
+<td class="confluenceTd"><p> Setup delete workspace after build </p></td>
+<td class="confluenceTd"><p> Workspace is deleted after build </p></td>
+<td class="confluenceTd"><p> Tomcat/HotSpot on Ubuntu lucid <br class="atl-forced-newline"/>
+RHEL6, HotSpot, Winstone  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.447.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.447.2 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ragesh_nair <br class="atl-forced-newline"/>
+vjuranek </p></td>
+</tr>
+</tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

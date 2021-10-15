@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Drupal Developer Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Drupal Developer Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fengtan)</span>, last modified on Aug 13, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Drupal Developer <a href="https://plugins.jenkins.io/drupal-developer" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<br class="atl-forced-newline"/></p>
+
+<p>
+<p>A plugin to review code and run tests on Drupal.</p></p>
+
+<h1 id="DrupalDeveloperPlugin-Screenshots">Screenshots</h1>
+
+
+<h3 id="DrupalDeveloperPlugin-Plotingresults">Ploting results</h3>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82019769/82280596.png" data-image-src="attachments/82019769/82280596.png" data-unresolved-comment-count="0" data-linked-resource-id="82280596" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="trends.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82019769" data-linked-resource-container-version="19"></span></p>
+
+<h3 id="DrupalDeveloperPlugin-Administrationinterface">Administration interface</h3>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82019769/82280597.png" data-image-src="attachments/82019769/82280597.png" data-unresolved-comment-count="0" data-linked-resource-id="82280597" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="admin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82019769" data-linked-resource-container-version="19"></span></p>
+
+
+<h1 id="DrupalDeveloperPlugin-Quickstart">Quick start</h1>
+
+<ul>
+	<li>Install <a href="http://docs.drush.org/en/master/install/" class="external-link" rel="nofollow">drush 7+</a> globally or configure the path to Drush on <code>http://&lt;jenkins-server&gt;/configure</code></li>
+	<li>Install <a href="https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin" class="external-link" rel="nofollow">Checkstyle</a>, <a href="https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin" class="external-link" rel="nofollow">JUnit</a> and <a href="https://wiki.jenkins-ci.org/display/JENKINS/PHP+Built-in+Web+Server+Plugin" class="external-link" rel="nofollow">PHP Built-in Web Server</a></li>
+	<li>Create a local database: <code>CREATE DATABASE db;</code></li>
+	<li>Create a Freestyle project that looks like <a href="https://github.com/jenkinsci/drupal-developer-plugin/blob/master/img/config.png" class="external-link" rel="nofollow">this</a>, or create a Drupal project</li>
+	<li>Under 'Build a Drupal instance', update the database URL</li>
+</ul>
+
+
+<h1 id="DrupalDeveloperPlugin-Usage">Usage</h1>
+
+
+<h3 id="DrupalDeveloperPlugin-1.CreateLocalDatabase">1. Create Local Database</h3>
+
+<ul>
+	<li><code>CREATE DATABASE db;</code></li>
+</ul>
+
+
+<h3 id="DrupalDeveloperPlugin-2.Installdrush7+">2. Install drush 7+</h3>
+
+<ul>
+	<li><code>git clone</code> <code><a href="https://github.com/drush-ops/drush.git" class="external-link" rel="nofollow">https://github.com/drush-ops/drush.git</a></code> <code>/var/lib/jenkins/tools/drush</code></li>
+	<li><code>cd /var/lib/jenkins/tools/drush</code></li>
+	<li><code>git checkout tags/7.0.0-rc2</code></li>
+	<li><code>curl -sSL</code> <code><a href="https://getcomposer.org/installer" class="external-link" rel="nofollow">https://getcomposer.org/installer</a></code> <code>| php</code></li>
+	<li><code>php composer.phar install</code></li>
+	<li>Go to <code>http://&lt;jenkins-server&gt;/configure</code></li>
+	<li>Under 'Drush installations', set 'Path to Drush home' to <code>/var/lib/jenkins/tools/drush</code></li>
+</ul>
+
+
+<h3 id="DrupalDeveloperPlugin-3.Createproject">3. Create project</h3>
+
+<p>Create a new 'Freestyle' project.</p>
+
+<p>Alternatively you may create a 'Drupal' project which generates a  ready-to-use job to review code and run tests on a vanilla Drupal core.  If you use this option then you may skip most of the instrutions below:  just update the database URL and possibly set up a web server.</p>
+
+<h3 id="DrupalDeveloperPlugin-4.ConfigureSourceCodeManagement">4. Configure Source Code Management</h3>
+
+<p>Configure the Source Code Management section to fetch a full Drupal code base. Here are a few options:</p>
+
+<ol>
+	<li>If you just want to run tests on a Drupal core, you may use <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin" class="external-link" rel="nofollow">Git</a>:
+	<ul>
+		<li>Repository: <code><a href="http://git.drupal.org/project/drupal.git" class="external-link" rel="nofollow">http://git.drupal.org/project/drupal.git</a></code></li>
+		<li>Branch Specifier: <code>tags/7.38</code></li>
+	</ul>
+	</li>
+	<li>If your own code repository includes a Drupal core, then just pull it</li>
+	<li>If it does not, then you may combine your own repo with the drupal.org repo using <a href="https://wiki.jenkins-ci.org/display/JENKINS/Multiple+SCMs+Plugin" class="external-link" rel="nofollow">Multiple SCMs</a></li>
+	<li>Alternatively you may use a Drush Makefile source</li>
+</ol>
+
+
+<p>By default Jenkins pulls code into the workspace root but you might want  to put Drupal into a subdirectory to keep things clean (e.g. <code>$WORKSPACE/drupal</code>):</p>
+<ul>
+	<li>If using <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin" class="external-link" rel="nofollow">Git</a>: set option 'Additional Behaviours / Check out to a sub-directory' to <code>drupal</code></li>
+	<li>If using <a href="https://wiki.jenkins-ci.org/display/JENKINS/Subversion+Plugin" class="external-link" rel="nofollow">Subversion</a>: set option 'Local module directory' to <code>drupal</code></li>
+	<li>If using a Drush Makefile: set option 'Drupal root directory' to <code>drupal</code></li>
+</ul>
+
+
+<p>Note that a Drush Makefile source will fetch the code every time a  new build runs. Using a regular source like Git or Subversion is  probably more efficient.</p>
+
+<p>Also only Drupal 7 code is supported.</p>
+
+<h3 id="DrupalDeveloperPlugin-5.ConfigureLocalWebServer">5. Configure Local Web Server</h3>
+
+<p>Some tests fail if Drupal does not run behind a web server. Here are a couple of solutions:</p>
+<ul>
+	<li>Either install <a href="https://wiki.jenkins-ci.org/display/JENKINS/PHP+Built-in+Web+Server+Plugin" class="external-link" rel="nofollow">PHP Built-in Web Server</a> (requires PHP &gt;= 5.4.0) e.g.:
+	<ul>
+		<li>Port: <code>8000</code></li>
+		<li>Host: <code>localhost</code></li>
+		<li>Document root: <code>drupal</code> (or leave empty if the Drupal root is the workspace root)</li>
+	</ul>
+	</li>
+	<li>Or install Apache locally and make it point at the Drupal root (e.g. <code>/var/lib/jenkins/jobs/myproject/workspace/drupal</code>)</li>
+</ul>
+
+
+<h3 id="DrupalDeveloperPlugin-6.ConfigureBuilds">6. Configure Builds</h3>
+
+<p>Add build steps:</p>
+<ul>
+	<li>'Build a Drupal instance'</li>
+	<li>'Review code on Drupal'</li>
+	<li>'Run tests on Drupal'</li>
+</ul>
+
+
+<p>The default values should work though you need to update a few things:</p>
+<ul>
+	<li>Update the database URL in step 'Build a Drupal instance' to point at your database</li>
+	<li>If you have checked out Drupal into a subdirectory (e.g. <code>drupal</code>) then update the Drupal root directory of every step accordingly ; otherwise, just leave it empty</li>
+	<li>The URI of step Run tests on Drupal should match what you have configured on your webserver (e.g. <code><a href="http://localhost:8000" class="external-link" rel="nofollow">http://localhost:8000</a></code>)</li>
+</ul>
+
+
+<p>Note that if your code base does not include a copy of the Coder module, then step Review code on Drupal will automatically download it into <code>$DRUPAL/modules/</code>.</p>
+
+<h3 id="DrupalDeveloperPlugin-7.Plotresults">7. Plot results</h3>
+
+<p>Plot Code Review results using <a href="https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin" class="external-link" rel="nofollow">Checkstyle</a>:</p>
+<ul>
+	<li>Create a post-build action 'Publish Checkstyle analysis results'</li>
+	<li>If the logs directory for the code review is <code>logs_codereview</code> then set 'Checkstyle results' to <code>logs_codereview/**</code></li>
+	<li>You might want to set the unstable threshold to 0 normal warning, and the failed threshold to 0 high warning</li>
+</ul>
+
+
+<p>Plot Test results using <a href="https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin" class="external-link" rel="nofollow">JUnit</a>:</p>
+<ul>
+	<li>Create a post-build action 'Publish JUnit test result report'</li>
+	<li>If the logs directory for the tests is <code>logs_tests</code> then set 'Test report XMLs' to <code>logs_tests/**</code></li>
+</ul>
+
+
+<h3 id="DrupalDeveloperPlugin-8.BuildtheProject">8. Build the Project</h3>
+
+<ul>
+	<li>Click on 'Build Now': Jenkins should start reviewing and testing the code base</li>
+	<li>After a few builds complete, trend graphs should show up</li>
+</ul>
+
+
+<h1 id="DrupalDeveloperPlugin-Dependencies">Dependencies</h1>
+
+<ul>
+	<li><a href="http://www.drush.org/en/master/install/" class="external-link" rel="nofollow">drush 7+</a></li>
+	<li><a href="https://wiki.jenkins-ci.org/display/JENKINS/SCM+API+Plugin" class="external-link" rel="nofollow">SCM API</a></li>
+	<li><a href="https://wiki.jenkins-ci.org/display/JENKINS/Checkstyle+Plugin" class="external-link" rel="nofollow">Checkstyle</a>, <a href="https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin" class="external-link" rel="nofollow">JUnit</a> and <a href="https://wiki.jenkins-ci.org/display/JENKINS/PHP+Built-in+Web+Server+Plugin" class="external-link" rel="nofollow">PHP Built-in Web Server</a> (or Apache) are not required but are relevant</li>
+</ul>
+
+
+<h1 id="DrupalDeveloperPlugin-ChangeLog">Change Log</h1>
+
+<h4 id="DrupalDeveloperPlugin-0.8(release2016-08-12)">0.8 (release 2016-08-12)</h4>
+
+<ul>
+	<li>JENKINS-35544 Fix NPE when module has no version.</li>
+</ul>
+
+
+<h4 id="DrupalDeveloperPlugin-0.6(release2015-09-05)">0.6 (release 2015-09-05)</h4>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82019769/82280596.png">trends.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82019769/82280597.png">admin.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:21</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

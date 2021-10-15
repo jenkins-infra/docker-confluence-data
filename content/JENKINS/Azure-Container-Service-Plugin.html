@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure Container Service Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure Container Service Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (chenkennt)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Aug 14, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Azure Container Service <a href="https://plugins.jenkins.io/azure-acs" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-03-25/#SECURITY-1732" class="external-link" rel="nofollow">RCE vulnerability</a></li>
+</ul>
+
+</div></div>
+<p>A Jenkins Plugin to deploy configurations to Azure Container Service (AKS).</p><p>It also supports deployment to the legacy Azure Container Service (ACS) with the following orchestrator:</p><ul><li><a href="https://kubernetes.io/" rel="nofollow" class="external-link">Kubernetes</a></li><li><a href="https://dcos.io/" rel="nofollow" class="external-link">DC/OS</a> with <a rel="nofollow" href="https://mesosphere.github.io/marathon/" class="external-link">Marathon</a></li><li><a rel="nofollow" href="https://docs.docker.com/engine/swarm/" class="external-link">Docker Swarm</a></li></ul><p>It also supports deployments on <a rel="nofollow" href="https://review.docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app?branch=release-aks" class="external-link">Azure Kubernetes Service</a>.</p><p>It provides the following main functionality:</p><ul><li>Integration with ACS. Allow you to select existing ACS clusters and manages the authentication credentials.</li><li>Unified configure interface for all the supported orchestrator.</li><li>Variable substitution for configurations, which enables dynamic deployment in CI/CD.</li><li>Docker login credentials management for pulling images from private repository.</li></ul><h2 id="AzureContainerServicePlugin-Pre-requirements">Pre-requirements</h2><ul><li><p>AKS cluster, or an ACS cluster with the supported orchestrator</p><ul><li><a rel="nofollow" href="https://docs.microsoft.com/en-us/azure/container-service/kubernetes/" class="external-link">Azure Container Service with Kubernetes</a></li><li><a href="https://docs.microsoft.com/en-us/azure/container-service/dcos-swarm/" rel="nofollow" class="external-link">Azure Container Service with DC/OS and Swarm</a></li></ul></li><li style="list-style-type: none;"><p>A Azure service principal that can be used to manage the ACS cluster</p><ul><li><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects" rel="nofollow" class="external-link">Application and service principal objects in Azure Active Directory (Azure AD)</a></li><li><a rel="nofollow" href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal" class="external-link">Use portal to create an Azure Active Directory application and service principal that can access resources</a></li><li><a href="https://wiki.jenkins.io/display/JENKINS/Azure+Credentials+plugin" rel="nofollow">Azure Credentials Plugin</a></li></ul></li><li><p>Configurations for the target ACS cluster orchestrator, this can be</p><ul><li>Kubernetes resource configurations of the following kinds:<ul><li>Deployment</li><li>Replica Set</li><li>Replication Controller - No rolling-update support. If that's required, consider using <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment" class="external-link" rel="nofollow">Deployment</a>.</li><li>Daemon Set</li><li>Pod</li><li>Job</li><li>Service</li><li>Ingress</li><li>Secret - The plugin also provides secrets configuration.</li></ul></li><li>Marathon application configurations</li><li>Docker compose configurations</li></ul><p>In the context of container deployment, normally we should build a Docker image from the project artifacts, and push the image to a repository. This can be done with some existing plugins such as <a href="https://wiki.jenkins.io/display/JENKINS/CloudBees+Docker+Build+and+Publish+plugin" rel="nofollow">CloudBees Docker Build and Publish plugin</a>.</p></li></ul><h2 id="AzureContainerServicePlugin-Configuretheplugin">Configure the plugin</h2><p><a href="https://github.com/jenkinsci/azure-acs-plugin/blob/dev/img/screenshot.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="screenshot" src="https://github.com/jenkinsci/azure-acs-plugin/raw/dev/img/screenshot.png" data-image-src="https://github.com/jenkinsci/azure-acs-plugin/raw/dev/img/screenshot.png"></span></a></p><ol><li>Within the Jenkins dashboard, Select a Job then select Configure</li><li>Scroll to the &quot;Add post-build action&quot; drop down.</li><li>Select &quot;Deploy to Azure Container Service&quot;</li><li>Select the service principal from &quot;Azure Credentials&quot; dropdown. If no credentials are configured, create one.</li><li>All resource group names will be loaded into the &quot;Resource Group&quot; dropdown. Select the one containing your ACS cluster.</li><li>All the container service available in the selected resource group will be loaded into the &quot;Container Service&quot; dropdown. Select your target ACS cluster. (It's suggested that we use a standalone resource group to manage an ACS cluster, and do not add other resources or ACS clusters into the resource group.)</li><li>Select the &quot;Master Node SSH Credentials&quot;. This should be the credentials of type &quot;SSH Username with private key&quot;, where username is the login name you specified when you create the ACS cluster (<code>azureuser</code> by default), and private key is the one matching the public key you specified on the ACS cluster creation (by default that may be <code>$HOME/.ssh/id_rsa</code> on Linux and <code>%USERPROFILE%\.ssh\id_rsa</code> on Windows).</li><li>Enter the &quot;Config Files&quot; path of the configurations you want to deploy, in the form of <a href="https://ant.apache.org/manual/dirtasks.html#patterns" class="external-link" rel="nofollow">Ant glob syntax</a>. Use comma (,) to separate multiple patterns.</li><li>If you want to dynamically update the configurations on each build, for example, use the <code>$BUILD_NUMBER</code> as the tag name of the image being pulled, you can tick the &quot;Enable Variable Substitution in Config&quot; option and the variables (in the pattern <code>$VARIABLE</code> or <code>${VARIABLE}</code>) in the configurations will be substituted with the corresponding value if they exists in the environment variables.</li><li>If the configurations needs to pull images from private repository, click the &quot;Docker Container Registry Credentials...&quot; button and add them one by one.<ul><li><p>For Kubernetes, you can enter the secret name and the namespace where the secret will be created based on the credentials configured. The credentials you provided will be consolidated into a Secret resource in your Kubernetes cluster with the name you provided. You can use that secret in your Kubernetes configuration.</p><p>You can use variables in the secret name (e.g., <code>$BUILD_NUMBER</code>), to generate a secret specific to a build. The name will be exposed as environment variable <code>KUBERNETES_SECRET_NAME</code> and you can use that in your Kubernetes resource configurations if the &quot;Enable Variable Substitution in Config&quot; option is turned on.</p><div class="highlight highlight-source-yaml"><pre><span class="pl-ent" style="color: rgb(34,134,58);">apiVersion</span>: <span class="pl-s" style="color: rgb(3,47,98);">extensions/v1beta1</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">kind</span>: <span class="pl-s" style="color: rgb(3,47,98);">Deployment</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">metadata</span>:
+  <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-deployment</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">spec</span>:
+  <span class="pl-ent" style="color: rgb(34,134,58);">replicas</span>: <span class="pl-c1" style="color: rgb(0,92,197);">1</span>
+  <span class="pl-ent" style="color: rgb(34,134,58);">template</span>:
+    <span class="pl-ent" style="color: rgb(34,134,58);">metadata</span>:
+      <span class="pl-ent" style="color: rgb(34,134,58);">labels</span>:
+        <span class="pl-ent" style="color: rgb(34,134,58);">app</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-app</span>
+    <span class="pl-ent" style="color: rgb(34,134,58);">spec</span>:
+      <span class="pl-ent" style="color: rgb(34,134,58);">containers</span>:
+      - <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-app-container</span>
+        <span class="pl-ent" style="color: rgb(34,134,58);">image</span>: <span class="pl-s" style="color: rgb(3,47,98);">&lt;username or registry URL&gt;/&lt;image_name&gt;:&lt;tag(maybe, $BUILD_NUMBER)&gt;</span>
+        <span class="pl-ent" style="color: rgb(34,134,58);">ports</span>:
+        - <span class="pl-ent" style="color: rgb(34,134,58);">containerPort</span>: <span class="pl-c1" style="color: rgb(0,92,197);">8080</span>
+      <span class="pl-ent" style="color: rgb(34,134,58);">imagePullSecrets</span>:
+      - <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">$KUBERNETES_SECRET_NAME</span></pre></div></li><li><p>For Marathon on DC/OS, you can specify the &quot;DC/OS Docker Credentials Path&quot;, the credentials you provided will be archived into a file <code>docker.tar.gz</code>, and uploaded to the agent nodes in the path you filled. You can use it to construct the <a href="https://mesosphere.github.io/marathon/docs/native-docker-private-registry.html" class="external-link" rel="nofollow">URI in your Marathon config</a>:</p><pre><code>file://&lt;absolute_path_you_filled&gt;/docker.tar.gz
+</code></pre><p>If this path is left blank, a unique path will be generated under <code>$HOME/acs-plugin-dcos.docker</code>.</p><p>The URI will be exported to the environment variable <code>MARATHON_DOCKER_CFG_ARCHIVE_URI</code> which you can use in your Marathon configuration.</p><div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>id<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>marathon-demo-app<span class="pl-pds">&quot;</span></span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>cmd<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">null</span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>cpus<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">1</span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>mem<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">512</span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>disk<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">0</span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>instances<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">1</span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>container<span class="pl-pds">&quot;</span></span>: {
+    <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>docker<span class="pl-pds">&quot;</span></span>: {
+      <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>image<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>&lt;username or registry URL&gt;/&lt;image_name&gt;:&lt;tag(maybe, $BUILD_NUMBER)&gt;<span class="pl-pds">&quot;</span></span>,
+      <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>network<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>BRIDGE<span class="pl-pds">&quot;</span></span>,
+      <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>portMappings<span class="pl-pds">&quot;</span></span>: [
+        {
+          <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>containerPort<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">8080</span>,
+          <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>hostPort<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">80</span>,
+          <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>protocol<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>tcp<span class="pl-pds">&quot;</span></span>,
+          <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>name<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>80<span class="pl-pds">&quot;</span></span>,
+          <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>labels<span class="pl-pds">&quot;</span></span>: <span class="pl-c1" style="color: rgb(0,92,197);">null</span>
+        }
+      ]
+    },
+    <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>type<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>DOCKER<span class="pl-pds">&quot;</span></span>
+  },
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>acceptedResourceRoles<span class="pl-pds">&quot;</span></span>: [
+    <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>slave_public<span class="pl-pds">&quot;</span></span>
+  ],
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>uris<span class="pl-pds">&quot;</span></span>: [
+    <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>$MARATHON_DOCKER_CFG_ARCHIVE_URI<span class="pl-pds">&quot;</span></span>
+  ]
+}</pre></div></li><li><p>Add a credentials entry for each of the private Docker registries involved in your configuration. If it is hosted on DockerHub, you can leave the URL as empty; otherwise for other private registries, you need to specify the &quot;Docker registry URL&quot;.</p></li></ul></li><li>You may verify the static configuration by clicking &quot;Verify Configuration&quot;. This will give you basic result of the configuration quality. You need to run a sample build to verify it works as some of the contents has to be loaded at build time.</li></ol><h2 id="AzureContainerServicePlugin-PipelineSupport">Pipeline Support</h2><p>To use the plugin in pipeline, go to the <span>Pipeline Syntax</span> page when you configure the pipeline job, and choose <span>acsDeploy: Deploy to Azure Container Service</span> from the <span>Sample Step</span> dropdown. You can configure it and click <span>Generate Pipeline Script</span>which will give you</p><div class="highlight highlight-source-groovy"><pre>acsDeploy(<span class="pl-c1" style="color: rgb(0,92,197);">azureCredentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;azure-credential-id&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">resourceGroupName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;resource-group-name&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">containerService</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;acs-name&gt; | &lt;acs-type&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">sshCredentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;ssh-credentials-id&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">configFilePaths</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;configuration-file-paths&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">enableConfigSubstitution</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+          
+          <span class="pl-c" style="color: rgb(106,115,125);"><span class="pl-c">//</span> Kubernetes</span>
+          <span class="pl-c1" style="color: rgb(0,92,197);">secretName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-name&gt;<span class="pl-pds">'</span></span>,
+          <span class="pl-c1" style="color: rgb(0,92,197);">secretNamespace</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-namespace&gt;<span class="pl-pds">'</span></span>,
+          
+          <span class="pl-c" style="color: rgb(106,115,125);"><span class="pl-c">//</span> Docker Swarm</span>
+          <span class="pl-c1" style="color: rgb(0,92,197);">swarmRemoveContainersFirst</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+          
+          <span class="pl-c" style="color: rgb(106,115,125);"><span class="pl-c">//</span> DC/OS Marathon</span>
+          <span class="pl-c1" style="color: rgb(0,92,197);">dcosDockerCredentialsPath</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;dcos-credentials-path&gt;<span class="pl-pds">'</span></span>,
+          
+          <span class="pl-c1" style="color: rgb(0,92,197);">containerRegistryCredentials</span>: [
+              [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credentials-id&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">url</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;docker-registry-url&gt;<span class="pl-pds">'</span></span>]
+          ])</pre><h2 id="AzureContainerServicePlugin-Data/Telemetry">Data/Telemetry</h2><p>Azure Container Service Plugin collects usage data and sends it to Microsoft to help improve our products and services. Read our <a href="http://go.microsoft.com/fwlink/?LinkId=521839" class="external-link" rel="nofollow">privacy statement</a> to learn more.</p><p>You can turn off usage data collection in Manage Jenkins -&gt; Configure System -&gt; Azure -&gt; Help make Azure Jenkins plugins better by sending anonymous usage statistics to Azure Application Insights.</p></div><h2 id="AzureContainerServicePlugin-Changelog">Changelog</h2><h3 id="AzureContainerServicePlugin-Version1.0.0,2019-08-14">Version 1.0.0, 2019-08-14</h3><ul><li>Bump Jenkins version to 2.60.3</li><li>Upgrade Kubernetes cd plugin to 2.0.1</li></ul><h3 id="AzureContainerServicePlugin-Version0.2.4,2019-04-09">Version 0.2.4, 2019-04-09</h3><ul><li>Fix exception in generic resource interface</li></ul><h3 id="AzureContainerServicePlugin-Version0.2.3,2018-04-03">Version 0.2.3, 2018-04-03</h3><ul><li>Support for credentials lookup in <a href="https://plugins.jenkins.io/cloudbees-folder" rel="nofollow" class="external-link">Folders</a></li></ul><h3 id="AzureContainerServicePlugin-Version0.2.2,2018-02-09">Version 0.2.2, 2018-02-09</h3><ul><li>Abort the build flow if the deployment failed</li></ul><h3 id="AzureContainerServicePlugin-Version0.2.1,2018-01-09">Version 0.2.1, 2018-01-09</h3><ul><li>Fix AKS deployment after AKS resource API change (<a href="https://github.com/jenkinsci/azure-acs-plugin/issues/10" class="external-link" rel="nofollow">#10</a>)</li></ul><h3 id="AzureContainerServicePlugin-Version0.2.0,2018-01-05">Version 0.2.0, 2018-01-05</h3><ul><li>Support MSI</li></ul><h3 id="AzureContainerServicePlugin-Version0.1.5,2017-11-27">Version 0.1.5, 2017-11-27</h3><ul><li>Fix typo in AI reporting</li></ul><h3 id="AzureContainerServicePlugin-Version0.1.4,2017-11-07">Version 0.1.4, 2017-11-07</h3><ul><li>Support for Azure Kubernetes Service (AKS)</li><li>Add Third Party Notice</li></ul><h3 id="AzureContainerServicePlugin-Version0.1.3,2017-10-18">Version 0.1.3, 2017-10-18</h3><ul><li>Remove EULA</li><li>Remove &quot;Run On&quot; check</li></ul><h3 id="AzureContainerServicePlugin-Version0.1.2,2017-09-29">Version 0.1.2, 2017-09-29</h3><ul><li><div>Fixed a stream closed issue when variable substitution is disabled</div></li></ul><h3 id="AzureContainerServicePlugin-Version0.1.1,2017-09-28">Version 0.1.1, 2017-09-28</h3><ul><li>Fixed an issue that plugin crashes on fastxml load</li></ul><h3 id="AzureContainerServicePlugin-Version0.1.0,2017-09-27">Version 0.1.0, 2017-09-27</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Unit Test</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Unit Test
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (aeoris)</span> on Nov 18, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="UnitTest-TableofContents">Table of Contents</h1><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020180304 {padding: 0px;}
+div.rbtoc1631020180304 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020180304 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020180304'>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-TableofContents'>Table of Contents</a></li>
+<li><a href='#UnitTest-Overview'>Overview</a></li>
+<li><a href='#UnitTest-Example'>Example</a>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-Howtosetenvironmentvariables'>How to set environment variables</a></li>
+</ul>
+</li>
+<li><a href='#UnitTest-Debugging'>Debugging</a></li>
+<li><a href='#UnitTest-VariousTestTechniques'>Various Test Techniques</a>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-Stubbing'>Stubbing</a></li>
+<li><a href='#UnitTest-HTMLscraping'>HTML scraping</a></li>
+<li><a href='#UnitTest-Submittingforms'>Submitting forms</a></li>
+<li><a href='#UnitTest-DealingwithproblemsinJavaScript'>Dealing with problems in JavaScript</a></li>
+<li><a href='#UnitTest-Configurationround-triptesting'>Configuration round-trip testing</a></li>
+<li><a href='#UnitTest-Webpageassertions'>Web page assertions</a></li>
+<li><a href='#UnitTest-DoingthingsdifferentlyinJavaScriptwhenitrunsasunittest'>Doing things differently in JavaScript when it runs as unit test</a></li>
+<li><a href='#UnitTest-TestCaseasaRootAction'>TestCase as a RootAction</a></li>
+<li><a href='#UnitTest-Testingauthorizationbehaviours'>Testing authorization behaviours</a></li>
+<li><a href='#UnitTest-Custombuilder'>Custom builder</a></li>
+<li><a href='#UnitTest-RegisteringExtensionsduringtests'>Registering Extensions during tests</a></li>
+<li><a href='#UnitTest-ProblemsandhacksforrunningtestsinWindows'>Problems and hacks for running tests in Windows</a></li>
+</ul>
+</li>
+<li><a href='#UnitTest-Testharnessannotations'>Test harness annotations</a>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-Informationalannotations'>Informational annotations</a>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-@Issue(&quot;JENKINS-12345&quot;)'>@Issue(&quot;JENKINS-12345&quot;)</a></li>
+<li><a href='#UnitTest-@For(FooBar.class)'>@For(FooBar.class)</a></li>
+<li><a href='#UnitTest-@Url(http://internet.org)'>@Url(http://internet.org)</a></li>
+<li><a href='#UnitTest-@Email(http://....)'>@Email(http://....)</a></li>
+</ul>
+</li>
+<li><a href='#UnitTest-Testenvironmentannotations'>Test environment annotations</a>
+<ul class='toc-indentation'>
+<li><a href='#UnitTest-@Recipe(SetupClass)'>@Recipe(SetupClass)</a></li>
+<li><a href='#UnitTest-@LocalData'>@LocalData</a></li>
+<li><a href='#UnitTest-@PresetData(SecurityPreset)'>@PresetData(SecurityPreset)</a></li>
+<li><a href='#UnitTest-@WithPlugin(NameOfPlugin)'>@WithPlugin(NameOfPlugin)</a></li>
+<li><a href='#UnitTest-@WithoutJenkins'>@WithoutJenkins</a></li>
+<li><a href='#UnitTest-@WithTimeout(TimeoutInSeconds)'>@WithTimeout(TimeoutInSeconds)</a></li>
+<li><a href='#UnitTest-HudsonTestCase(JUnit3)'>HudsonTestCase (JUnit 3)</a></li>
+<li><a href='#UnitTest-pom.xml'>pom.xml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="UnitTest-Overview">Overview</h1><p>Jenkins comes with a test harness built around JUnit to make test development simpler. This harness provides the following features:</p><ol><li>Starts an embedded servlet container so that the test code can exercise user interaction through HTTP and assert based on the outcome.</li><li><a href="http://htmlunit.sourceforge.net/" class="external-link" rel="nofollow">HtmlUnit</a> with a bit of enhancements allows you to productively test HTTP/UI interaction.</li><li>Prepares and tears down a fresh Jenkins instance for each test case. So each test method will run in a fresh environment, isolated from other tests.</li><li>Test code can also directly access Jenkins object model. This allows tests to assert directly against the internal state of Jenkins, as well as perform some operations directly, as opposed to doing so only through the HTML scraping.</li><li>Declarative annotations to specify the environment in which a test will be run. For example, your test method can request that Jenkins shall be started with a certain <code>HUDSON_HOME</code> contents.</li><li>Declarative annotations to maintain association between tests and bugs/discussions.</li></ol><p>If you are using the Plugin Parent POM 2.3 or later the version of the Jenkins Test Harness (which starting in version 2.0 is an artifact independent from Jenkins Core) to be used for the tests can be configured using the <code>jenkins-test-harness.version</code>. For 1.x versions of the Plugin POM the version used is the same of the parent POM which is equal to the Jenkins baseline version. The recommended version of Jenkins Test Harness is 2.1 or above unless your plugin depends on Jenkins &lt; 1.580.</p><h1 id="UnitTest-Example">Example</h1><p>The following code shows a very simple test case. Your test will use <a href="http://javadoc.jenkins-ci.org/byShortName/JenkinsRule">JenkinsRule</a> to provide test fixtures for some of those features outlined above.</p><p>Each test method will start with a fresh temporary installation of Jenkins. The <code>first</code> method doesn't request any particular Jenkins data set to seed Jenkins, so it will start from an empty installation.</p><p>The test then proceeds to create a new project and set it up. As you can see, the code directly talks to the in-memory Jenkins object model. (There is the <code>jenkins</code> variable defined in <code>JenkinsRule</code> that you can use for access.) While you can do the same by emulating the user HTTP interaction through HtmlUnit, this way is often a convenient way to prepare an environment for the code that you want to test.</p><p>The test code in this example then switch to HtmlUnit to emulate the UI interaction and verify that we get results that we expect.</p><p>When a test completes, the temporary Jenkins installation will be destroyed.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import org.jvnet.hudson.test.JenkinsRule;
+import org.apache.commons.io.FileUtils;
+import hudson.model.*;
+import hudson.tasks.Shell;
+import org.junit.Test;
+import org.junit.Rule;
+public class AppTest {
+  @Rule public JenkinsRule j = new JenkinsRule();
+  @Test public void first() throws Exception {
+    FreeStyleProject project = j.createFreeStyleProject();
+    project.getBuildersList().add(new Shell(&quot;echo hello&quot;));
+    FreeStyleBuild build = project.scheduleBuild2(0).get();
+    System.out.println(build.getDisplayName() + &quot; completed&quot;);
+    // TODO: change this to use HtmlUnit
+    String s = FileUtils.readFileToString(build.getLogFile());
+    assertThat(s, contains(&quot;+ echo hello&quot;));
+  }
+}
+</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Tip</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can use <code>@ClassRule</code> to speed up the test suite if you are <em>positive</em> that the test cases will not interfere with each other.</p></div></div><h2 id="UnitTest-Howtosetenvironmentvariables">How to set environment variables</h2><p>When preparing your virtual test environment, you may wish to simulate Jenkins environment variables that can be set on the Jenkins configuration page. Adding environment variables to a Jenkins instance before a test is simple, as the example below demonstrates.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public void setEnvironmentVariables() throws IOException {
+    EnvironmentVariablesNodeProperty prop = new EnvironmentVariablesNodeProperty();
+    EnvVars envVars = prop.getEnvVars();
+    envVars.put(&quot;sampleEnvVarKey&quot;, &quot;sampleEnvVarValue&quot;);
+    j.jenkins.getGlobalNodeProperties().add(prop);
+}
+</pre>
+</div></div><h1 id="UnitTest-Debugging">Debugging</h1><p>Your IDE will most likely have the ability to select a single JUnit test and execute it in the debugger. Otherwise you can run <code>mvn -Dmaven.surefire.debug -Dtest=hudson.SomeTest test</code> to accomplish this.</p><p>To debug slaves launched by Jenkins, set <code>-Dorg.jvnet.hudson.test.HudsonTestCase.slaveDebugPort=PORT</code> to the system property, or from your test case set <code>JenkinsRule.SLAVE_DEBUG_PORT</code> to a non-0 value.</p><h1 id="UnitTest-VariousTestTechniques">Various Test Techniques</h1><h2 id="UnitTest-Stubbing">Stubbing</h2><p>Sometimes you want to have quick tests which don't start up a 'full' Jenkins instance - as <code>JenkinsRule</code> does - as this can take some time. In that case you shouldn't have your test classes use <code>JenkinsRule</code>. (Or you can use <code>@WithoutJenkins</code> on certain methods.)</p><p>As creating most Jenkins core classes without a Jenkins instance is unfortunately not easy, <em>stubbing</em> can come in handy. One excellent stubbing and mocking framework is e.g. <a href="http://mockito.org/" class="external-link" rel="nofollow">Mockito</a>. For example, if you want to stub a build with a certain result you could do:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">AbstractBuild build = Mockito.mock(AbstractBuild.class);
+Mockito.when(build.getResult()).thenReturn(Result.FAILURE);
+</pre>
+</div></div><p>See <a href="Mocking-in-Unit-Tests.html">Mocking in Unit Tests</a> for more info.</p><h2 id="UnitTest-HTMLscraping">HTML scraping</h2><p>If you'd like to test the HTML generated by Jenkins, XPath test is often convenient.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlPage page = j.createWebClient().goTo(&quot;computer/test/&quot;);
+HtmlElement navbar = page.getElementById(&quot;left-top-nav&quot;);
+assertEquals(1,navbar.selectNodes(&quot;.//a&quot;).size());
+</pre>
+</div></div><h2 id="UnitTest-Submittingforms">Submitting forms</h2><p>Submitting a form through HtmlUnit in Jenkins is a bit trickier than it should be. This is because <a href="Structured-Form-Submission.html">Structured Form Submission</a> is done in JavaScript at the form submission time, and the submit button is usually decorated by YUI, which internally converts <code><code>&lt;input type=&quot;submit&quot;&gt;</code></code> to <code>&lt;button&gt;</code>.</p><p>So you'd have to look for the corresponding HtmlButton element, then use that to call the submit method, like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlPage configPage = j.createWebClient().goTo(&quot;configure&quot;);
+HtmlForm form = configPage.getFormByName(&quot;config&quot;);
+form.submit((HtmlButton)last(form.getHtmlElementsByTagName(&quot;button&quot;)));
+</pre>
+</div></div><h2 id="UnitTest-DealingwithproblemsinJavaScript">Dealing with problems in JavaScript</h2><p>When JavaScript throws an exception and causes a test to fail, it will often print a long chain of nested exceptions. Notice that the stack trace includes synthesized stack frames for JavaScript, which is different from the actual Java execution stack.</p><p>The original HtmlUnit doesn't really do a good job of chaining all exceptions together, so we are patching HtmlUnit to make sure it retains the full stack trace leading up to the root cause. If you found a case where this chain is broken, please file a bug.</p><p>If you set a break point in Java code, and if your execution suspends while its directly/indirectly invoked through JavaScript, you can use <code>JenkinsRule.jsDebugger</code> to introspect JavaScript call stack and its local variables. This is often very useful in identifying where in JavaScript things went wrong.</p><h2 id="UnitTest-Configurationround-triptesting">Configuration round-trip testing</h2><p>One of the very useful test idioms for <a href="http://javadoc.jenkins-ci.org/byShortName/Builder">Builder</a>, <a href="http://javadoc.jenkins-ci.org/byShortName/Publisher">Publisher</a>, and anything that has configuration forms is the round-trip testing. This test goes like this:</p><ol><li>Programmatically construct a fully populated instance</li><li>Request a configuration page via HtmlUnit</li><li>Submit the config page without making any changes</li><li>Verify that you still have the identically configured instance</li></ol><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">FreeStyleProject p = j.createFreeStyleProject();
+YourBuilder before = new YourBuilder(&quot;a&quot;,&quot;b&quot;,true,100);
+p.getBuildersList().add(before);
+
+j.submit(j.createWebClient().getPage(p,&quot;configure&quot;).getFormByName(&quot;config&quot;));
+
+YourBuilder after = p.getBuildersList().get(YourBuilder.class);
+
+j.assertEqualBeans(before,after,&quot;prop1,prop2,prop3,...&quot;);
+</pre>
+</div></div><p>This test ensures that your configuration page is properly pre-populated with the current setting of your model object, and it also makes sure that the submitted values are correctly reflected on the constructed model object. To be really sure, do this twice with different actual values — for example, you should try a non-null string and null string, true and false, etc., to exhaust representative cases.</p><h2 id="UnitTest-Webpageassertions">Web page assertions</h2><p>HtmlUnit has a <code><a href="http://htmlunit.sourceforge.net/apidocs/com/gargoylesoftware/htmlunit/WebAssert.html" class="external-link" rel="nofollow">WebAssert</a></code> class that can be used for simple assertions on HTML pages.</p><p>To assert that the System configuration page contains the CVS SCM configuration entry:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlPage page = j.createWebClient().goTo(&quot;configure&quot;);
+WebAssert.assertElementPresent(page, &quot;hudson-scm-CVSSCM&quot;);
+
+</pre>
+</div></div><p>To find Elements by name= vs. id=, use <code>page.getElementsByName</code>.</p><p>An example from the ironmqNotifier plugin.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlPage page = j.createWebClient().goTo(&quot;configure&quot;);
+assertEquals(&quot;Expect to find one instance of this name&quot;, page.getElementsByName(&quot;ironmqNotifier&quot;).size(), 1);
+assertEquals(&quot;Expect to find one instance of this name&quot;, page.getElementsByName(&quot;org-jenkinsci-plugins-ironmqnotifier-IronMQNotifier&quot;).size(), 1);
+
+</pre>
+</div></div><p>See note on <strong>pom.xml</strong> below if this example gives you <code>ClassNotFound</code> errors.</p><p>When changing from <strong>1.625.1</strong> to <strong>1.625.2</strong>, there appears to be a difference in the support library for HtmlPage.</p><p>When parsing pages for Number (Long or Integer), you may get the following error:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">java.lang.ClassCastException: com.gargoylesoftware.htmlunit.html.HtmlNumberInput cannot be cast to com.gargoylesoftware.htmlunit.html.HtmlTextInput
+</pre>
+</div></div><p>The supporting library appears to need <code>HtmlNumberInput</code> instead of <code>HtmlTextInput</code> to function correctly with numbers.  </p><p>Make the following change...</p><p>Before</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlTextInput inputElement = page.getElementByName(&quot;_.defaultExpirySeconds&quot;);
+</pre>
+</div></div><p>After</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">HtmlNumberInput inputElement = page.getElementByName(&quot;_.defaultExpirySeconds&quot;);
+</pre>
+</div></div><p>Note; If you wish to move back to a version prior to 1.625.2, you will need to modify your Tests as the previous library associated with HtmlPage will not recognize HtmlNumberInput as part of the class.</p><h2 id="UnitTest-DoingthingsdifferentlyinJavaScriptwhenitrunsasunittest">Doing things differently in JavaScript when it runs as unit test</h2><p>JavaScript in Jenkins can test whether it's running in the unit test or not by checking the global <code>isRunAsTest</code> variable defined in <code>hudson-behavior.js</code>, which is included in all the pages. This can be used to disable some ajax operations, for example. Obviously, this has to be used with caution so that tests will continue to test the real thing as much as possible.</p><h2 id="UnitTest-TestCaseasaRootAction">TestCase as a <a href="http://javadoc.jenkins-ci.org/byShortName/RootAction">RootAction</a></h2><p>An instance of the test case being executed is added to Jenkins' URL space as <code>/self</code> because <code>JenkinsRule</code> is itself a <code><a href="http://javadoc.jenkins-ci.org/byShortName/RootAction">RootAction</a></code>. Among other things, this enables your test class to define Jelly views, and invoke it like <code>j.createWebClient().goTo(&quot;self/myview&quot;)</code>.</p><h2 id="UnitTest-Testingauthorizationbehaviours">Testing authorization behaviours</h2><p>Unit test harness contains a <a href="http://javadoc.jenkins-ci.org/byShortName/SecurityRealm">SecurityRealm</a> implementation suitable for unit tests. This can be installed to as follows:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">j.jenkins.setSecurityRealm(j.createDummySecurityRealm());</pre>
+</div></div><p>This virtual security realm allows login attempts by any user name so long as its password is exactly the same as the user name. <code>WebClient.login</code> method provides a convenient method that allows you to login a session object.</p><h2 id="UnitTest-Custombuilder">Custom builder</h2><p>You can extend <a href="http://javadoc.jenkins-ci.org/byShortName/TestBuilder">TestBuilder</a> to write a one-off builder that can coordinate with your test. This is often convenient to stage things up for testing your <a href="http://javadoc.jenkins-ci.org/byShortName/Publisher">Publisher</a>, for example by placing files in the workspace, etc.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">FreeStyleProject project = j.createFreeStyleProject();
+project.getBuildersList().add(new TestBuilder() {
+    public boolean perform(AbstractBuild&lt;?, ?&gt; build, Launcher launcher,
+        BuildListener listener) throws InterruptedException, IOException {
+        build.getWorkspace().child(&quot;abc.txt&quot;).write(&quot;hello&quot;,&quot;UTF-8&quot;);
+        return true;
+    }
+});
+
+project.scheduleBuild2(0);
+</pre>
+</div></div><p><a href="http://javadoc.jenkins-ci.org/byShortName/OneShotEvent">OneShotEvent</a> is also often an useful companion so that the thread that runs your test method and the thread that runs the build can coordinate — for example, the following program blocks the main thread until the build starts.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">final OneShotEvent buildStarted = new OneShotEvent();
+
+FreeStyleProject project = j.createFreeStyleProject();
+project.getBuildersList().add(new TestBuilder() {
+    public boolean perform(AbstractBuild&lt;?, ?&gt; build, Launcher launcher,
+        BuildListener listener) throws InterruptedException, IOException {
+        buildStarted.signal();
+        ...
+        return true;
+    }
+});
+
+project.scheduleBuild2(0);
+buildStarted.block(); // wait for the build to really start
+</pre>
+</div></div><h2 id="UnitTest-RegisteringExtensionsduringtests">Registering Extensions during tests</h2><p>During the test, one might want to register extensions just during that particular test, for example to assist the test scenario. You can do this by defining such extension as a nested type of your test case class and put <a href="http://javadoc.jenkins-ci.org/byShortName/TestExtension">TestExtension</a> instead of <a href="http://javadoc.jenkins-ci.org/byShortName/Extension">Extension</a>.</p><p>It lets you tie an extension to just one test method, or all test methods on the same class.</p><h2 id="UnitTest-ProblemsandhacksforrunningtestsinWindows">Problems and hacks for running tests in Windows</h2><p>See <a href="Unit-Test-on-Windows.html">Unit Test on Windows</a>.</p><h1 id="UnitTest-Testharnessannotations">Test harness annotations</h1><p>There are several annotations in the Jenkins test framework.</p><h2 id="UnitTest-Informationalannotations">Informational annotations</h2><h4 id="UnitTest-@Issue(&quot;JENKINS-12345&quot;)">@Issue(&quot;JENKINS-12345&quot;)</h4><p>Related issue id in tracker.</p><h4 id="UnitTest-@For(FooBar.class)">@For(FooBar.class)</h4><p>Production classes that tests are related to. Useful when the relationship between the test class name and the test target class is not obvious.</p><h4 id="UnitTest-@Url(http://internet.org)">@Url(<a href="http://internet.org" class="external-link" rel="nofollow">http://internet.org</a>)</h4><p>URL to the web page indicating a problem related to this test case.</p><h4 id="UnitTest-@Email(http://....)">@Email(http://....)</h4><p>URL to the e-mail archive. Look for the e-mail in <a href="http://jenkins.361315.n4.nabble.com/Jenkins-users-f361316.html" class="external-link" rel="nofollow">http://jenkins.361315.n4.nabble.com/Jenkins-users-f361316.html</a> or <a href="http://jenkins.361315.n4.nabble.com/Jenkins-dev-f387835.html" class="external-link" rel="nofollow">http://jenkins.361315.n4.nabble.com/Jenkins-dev-f387835.html</a></p><h2 id="UnitTest-Testenvironmentannotations">Test environment annotations</h2><h4 id="UnitTest-@Recipe(SetupClass)">@Recipe(SetupClass)</h4><p>The specified class will be used to set up the test environment using <code>HudsonTestCase</code>.</p><h4 id="UnitTest-@LocalData">@LocalData</h4><p>Runs a test case with a data set local to test method or the test class.</p><p>This recipe allows your test case to start with the preset <code>HUDSON_HOME</code> data loaded either from your test method or from the test class.<br/> For example, if the test method is <code>org.acme.FooTest.bar()</code>, then you can have your test data in one of the following places in resources folder (typically <code>src/test/resources</code>):</p><ul><li>Under <code>org/acme/FooTest/bar</code> directory (that is, you'll have <code>org/acme/FooTest/bar/config.xml</code>), in the same layout as in the real <code>JENKINS_HOME</code> directory.</li><li>In <code>org/acme/FooTest/bar.zip</code> as a zip file.</li><li>Under <code>org/acme/FooTest</code> directory (that is, you'll have <code>org/acme/FooTest/config.xml</code>), in the same layout as in the real <code>JENKINS_HOME</code> directory.</li><li>In <code>org/acme/FooTest.zip</code> as a zip file.</li></ul><p>Search is performed in this specific order. The fall back mechanism allows you to write one test class that interacts with different aspects of the same data set, by associating the dataset with a test class, or have a data set local to a specific test method.</p><p>The choice of zip and directory depends on the nature of the test data, as well as the size of it.</p><h4 id="UnitTest-@PresetData(SecurityPreset)">@PresetData(SecurityPreset)</h4><p>Runs a test case with one of the preset <code>HUDSON_HOME</code> data set:</p><ul><li><code>NO_ANONYMOUS_READACCESS</code> - Secured Jenkins that has no anonymous read access. Any logged in user can do anything.</li><li><code>ANONYMOUS_READONLY</code> - Secured Jenkins where anonymous user is read-only, and any logged in user has a full access.</li></ul><h4 id="UnitTest-@WithPlugin(NameOfPlugin)">@WithPlugin(NameOfPlugin)</h4><p>Installs the specified plugin before launching Jenkins in the test. For now, this has to be one of the plugins statically available in resources <code>&quot;/plugins/NAME&quot;</code>.</p><h4 id="UnitTest-@WithoutJenkins">@WithoutJenkins</h4><p>Runs a test case without create and tear down a Jenkins instance.<br/> This Recipe has to be used in test methods that do not use a 'full' Jenkins instance, but are part of a test class that uses <code>JenkinsRule</code> or <code>HudsonTestCase</code> to prevent performance issues.</p><h4 id="UnitTest-@WithTimeout(TimeoutInSeconds)">@WithTimeout(TimeoutInSeconds)</h4><p>Runs a test case with the given timeout expressed in seconds.</p><h4 id="UnitTest-HudsonTestCase(JUnit3)">HudsonTestCase (JUnit 3)</h4><p><code>HudsonTestCase</code> is available for JUnit 3 tests. The functionality is similar to <code>JenkinsRule</code>.</p><h4 id="UnitTest-pom.xml">pom.xml</h4><p>When seeing the following error : java.lang.NoClassDefFoundError: org/hamcrest/MatcherAssert when running mvn:test if you are using WebPage Assertions per the above example.</p><p>It may be necessary to add org.hamcrest / hamcrest-all to your pom.xml file to avoid a matcher error. The cause is not yet known but this workaround will allow you to continue to learn how to create appropriate tests.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">   &lt;dependency&gt;
+            &lt;groupId&gt;org.hamcrest&lt;/groupId&gt;
+            &lt;artifactId&gt;hamcrest-library&lt;/artifactId&gt;
+            &lt;version&gt;1.2.1&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.hamcrest&lt;/groupId&gt;
+            &lt;artifactId&gt;hamcrest-core&lt;/artifactId&gt;
+            &lt;version&gt;1.2.1&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.hamcrest&lt;/groupId&gt;
+            &lt;artifactId&gt;hamcrest-all&lt;/artifactId&gt;
+            &lt;version&gt;1.3&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+</pre>
+</div></div><p><span style="color: rgb(210,73,57);"><strong>TODO</strong></span></p><ul><li>Host test harness javadoc and link from this article.</li><li>define <code>HtmlPage</code> subclass to define more convenience methods.HtmlNumberInput inputElement = page.getElementByName(&quot;_.defaultExpirySeconds&quot;);</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

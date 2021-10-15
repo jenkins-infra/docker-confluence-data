@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Libvirt Slaves Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Libvirt Slaves Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mmornati)</span>, last modified by <span class='editor'> Unknown User (bjoern_martin)</span> on Aug 18, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Libvirt Agents <a href="https://plugins.jenkins.io/libvirt-slave" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1014%20(1)" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allowed capturing credentials</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1014%20(2)" class="external-link" rel="nofollow">Users with Overall/Read access could enumerate credential IDs</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-03-18/#SECURITY-1764" class="external-link" rel="nofollow">CSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+
+<p>Add Libvirt Hypervisor slave support to Jenkins</p>
+
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>libvirt-slaves 1.8 uses a newer libvirt java binding. If you are upgrading from an earlier version of this plugin, you will have to reconfigure your hypervisor settings and thus also all libvirt-controlled nodes!<br/>
+The least painful approach (especially for larger setups) is to properly set up the Hypervisor first, followed by editing each node, pointing it to the reconfigured Hypervisor. It is not necessary to delete node configurations!</p></div></div>
+
+
+<h3 id="LibvirtSlavesPlugin-Description">Description</h3>
+
+<p>This plugin for Jenkins CI adds a way to control guest domains hosted on Xen or QEMU/KVM. You configure a Jenkins Slave, selecting the guest domain and hypervisor. When you need to build a job on a specific Slave, its guest domain is started, then the job is run. When the build process is finished, the guest domain is shut down, ready to be used again as required.</p>
+
+<h3 id="LibvirtSlavesPlugin-Requirements">Requirements</h3>
+
+<p>For a communication with Hypervisors you need to install <strong>libvirt</strong> library on Jenkins machine. This plugin comes with libvirt java binding, but is just an interface to the &quot;real&quot; C libvirt library. In your distribution you should have a package to install libvirt (ie <em>yum install libvirt</em> on RedHat/Fedora/Centos distributions).</p>
+
+
+<h3 id="LibvirtSlavesPlugin-Configuration">Configuration</h3>
+
+
+<h5 id="LibvirtSlavesPlugin-Hypervisor">Hypervisor</h5>
+
+
+<p>The first step is the Hypervisor configuration. To create a new Hypervisor you need to add a new &quot;Cloud&quot; in the Jenkins &quot;Manage Jenkins&quot; menu.</p>
+
+<p>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42470710/67043437.png" data-image-src="attachments/42470710/67043437.png" data-unresolved-comment-count="0" data-linked-resource-id="67043437" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hypervisor-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470710" data-linked-resource-container-version="27"></span></p>
+
+<p>The required parameters to setup are:</p>
+<ul>
+	<li><strong>Hypervisor Type</strong>: QEMU / XEN to respect the Hypervisor you have in your system</li>
+	<li><strong>Hypervisor Host</strong>: Hostname or IP address to contact your hypervisor</li>
+	<li><strong>Username</strong>: username to use for connection.</li>
+	<li><strong>Port</strong>: ssh port, if in your hypervisor machine is different than 22</li>
+	<li><strong>URI parameter</strong>: by default xen and kvm expose the control API using <em>system</em>. If, for any reasons, you don't have this default value or need to provide further parameters, you can set those here</li>
+	<li><strong>Concurrent Slaves Capacity</strong>: If you are running a setup where slaves are being shut down once they are idling and you want to control how many concurrent slave can be run by Jenkins on the particular hypervisor, you can set this threshold here. Providing 0, the default value, disables the threshold. Please note that a threshold will not fail build jobs, Jenkins will simply reissue the slave commissioning once the hypervisor is again running below its threshold, thus delaying the start up of slaves</li>
+</ul>
+
+
+<p>The connection to Hypervisor will be done using ssh, so you don't need to setup libvirt, exposing your services on tcp that could be a security hole in your infrastructure. Here an example of connection string will be used by Libvirt Slaves Plugin to create a connection with the hypervisor:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre> xen+ssh://username@hostname:port/system
+</pre>
+</div></div>
+<p>you can test you connection typing, from your Jenkins Server:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre> virsh connect xen+ssh://username@hostname:port/system
+</pre>
+</div></div>
+<p>An important thing is the RSA public key exchange between Jenkins Server and Hypervisor Machine: you need to add to .ssh/known_hosts file the rsa.pub file of your jenkins user. This because, for an actual limitation in libvirt java library, it's impossible to provide via code the ssh password, that means Jenkins could not establish a connection if password request will be prompted.</p>
+
+<p>To verify all you parameters you can click on <em>Test Connection</em> button and check the output reported.</p>
+
+<h5 id="LibvirtSlavesPlugin-Slaves">Slaves</h5>
+
+<p>Now you can setup your nodes in Jenkins and use them to build your projects.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42470710/82280551.png" data-image-src="attachments/42470710/82280551.png" data-unresolved-comment-count="0" data-linked-resource-id="82280551" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="libvirt-node-creation.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470710" data-linked-resource-container-version="27"></span></p>
+
+<p>Once the node is created, you'll see the configuration page as shown below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42470710/67043438.png" data-image-src="attachments/42470710/67043438.png" data-unresolved-comment-count="0" data-linked-resource-id="67043438" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="node-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470710" data-linked-resource-container-version="27"></span></p>
+
+<p>Here you can configure the following details:</p>
+<ul>
+	<li><strong>Hypervisor</strong>: here you select one of the clouds that you configuration at the central Configure Jenkins page</li>
+	<li><strong>Virtual Machine</strong>: select one of the virtual machines that you want to use as a slave</li>
+	<li><strong>Revert Snapshot</strong>: optionally you can select an existing snapshot of the virtual machine that you want the slave to be reverted to once it is being shut down</li>
+	<li><strong>Startup Idle</strong>: this optional value (default is 60) allows you specify an idle timer in seconds. Once the virtual machine has been started, Jenkins will wait that long before starting the actual slave service on the virtual host. If your hypervisor is super quick, set a low value, if it takes a while to get that VM up, increase the timer.</li>
+</ul>
+
+
+<h3 id="LibvirtSlavesPlugin-ChangeLog">Change Log</h3>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.8.5(Apr01,2015)">Version 1.8.5 (Apr 01, 2015)</h5>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-12523" class="external-link" rel="nofollow">JENKINS-12523</a>: Could not initialize class org.libvirt.Connect</li>
+</ul>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.8.1(Mar21,2013)">Version 1.8.1 (Mar 21, 2013)</h5>
+
+<ul>
+	<li>Increased robustness of the hypervisor session handling: explicit disconnect upon Jenkins shutdown, auto-reconnect upon libvirtd restarts</li>
+	<li>Various minor improvements to the logging, chattiness decreased</li>
+</ul>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.8(Mar20,2013)">Version 1.8 (Mar 20, 2013)</h5>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-16889" class="external-link" rel="nofollow">JENKINS-16889</a>: Fixed Hypervisor session management</li>
+	<li>Feature <a href="https://issues.jenkins-ci.org/browse/JENKINS-17293" class="external-link" rel="nofollow">JENKINS-17293</a>: Concurrent slave threshold, configurable per Hypervisor (Big thanks to Bryan Dagnin for his contribution!)</li>
+	<li>Feature <a href="https://issues.jenkins-ci.org/browse/JENKINS-16583" class="external-link" rel="nofollow">JENKINS-16583</a>: Support for libvirt snapshot mechanism</li>
+	<li>Feature <a href="https://issues.jenkins-ci.org/browse/JENKINS-16581" class="external-link" rel="nofollow">JENKINS-16581</a>: Modernized maven groupId to org.jenkins-ci.plugins</li>
+	<li>Various minor improvements, mostly help/documentation related</li>
+	<li>Latest libvirt java binding. Note: upgrading users will have to reconfigure their hypervisor and node settings!</li>
+</ul>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.7(Jan31,2013)">Version 1.7 (Jan 31, 2013)</h5>
+
+<ul>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-14617" class="external-link" rel="nofollow">JENKINS-14617</a></li>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-14468" class="external-link" rel="nofollow">JENKINS-14468</a></li>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-12523" class="external-link" rel="nofollow">JENKINS-12523</a></li>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-9471" class="external-link" rel="nofollow">JENKINS-9471</a></li>
+	<li>Improved JavaDoc</li>
+	<li>Various minor improvements</li>
+	<li>Bumped required core to 1.420</li>
+</ul>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.6(Apr2,2010)">Version 1.6 (Apr 2, 2010)</h5>
+
+<ul>
+	<li>Fixed problems with Libvirt on RedHat / Centos operating System</li>
+	<li>Added control for machine without libvirt library installed</li>
+</ul>
+
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.5(Mar30,2010)">Version 1.5 (Mar 30, 2010)</h5>
+
+<ul>
+	<li>Fixed problem on Null object after Hypervisor reconnection</li>
+</ul>
+
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.4(Mar25,2010)">Version 1.4 (Mar 25, 2010)</h5>
+
+<ul>
+	<li>Improvements in Hypervisor connection using libvirt</li>
+	<li>Added a missing help file</li>
+</ul>
+
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.3(Mar20,2010)">Version 1.3 (Mar 20, 2010)</h5>
+
+<ul>
+	<li>Fixed problem with hypervisor reconnection after Hudson restart</li>
+	<li>Add a wait time before launching slave agent</li>
+</ul>
+
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.2(Mar10,2010)">Version 1.2 (Mar 10, 2010)</h5>
+
+<ul>
+	<li>Fixed problem in contextual help files-</li>
+	<li>Catch exception on machine without libvirt installed</li>
+</ul>
+
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.1(Mar08,2010)">Version 1.1 (Mar 08, 2010)</h5>
+
+<ul>
+	<li>No change in sources. A version just to fix a problem during release process.</li>
+</ul>
+
+
+<h5 id="LibvirtSlavesPlugin-Version1.0(Mar07,2010)">Version 1.0 (Mar 07, 2010)</h5>
+
+<ul>
+	<li>First version published</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/42631383.jpg">libvirt-simple-conf.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/42631384.jpg">libvirt-advanced-conf.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/42631385.jpg">libvirt-node-creation.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/42631386.jpg">libvirt-node-configuration.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/67043437.png">hypervisor-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/67043438.png">node-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470710/82280551.png">libvirt-node-creation.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:31</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

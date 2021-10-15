@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Running Jenkins behind Squid</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Running Jenkins behind Squid
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jrottenberg)</span>, last modified by <span class='editor'> Unknown User (mindless)</span> on Feb 23, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In situations where you want a user friendly url to access Jenkins (Not port 8080), it makes sense to have Jenkins runs behind Squid, so that you can access Jenkins on port 80 or 443. This document discusses some of the approaches for doing this.</p>
+
+<h1 id="RunningJenkinsbehindSquid-Squid2.6">Squid 2.6</h1>
+
+<p>Using Squid 2.6 (default on Centos 5.3):</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+acl all src 0.0.0.0/0.0.0.0
+acl localhost src 127.0.0.1/255.255.255.255
+acl manager proto cache_object
+acl to_localhost dst 127.0.0.0/8
+acl valid_dst dstdomain .YOUR_DOMAIN ci
+
+
+
+cache_replacement_policy heap LFUDA
+memory_replacement_policy heap GDSF
+
+cache_dir ufs /var/spool/squid 512 16 256
+cache_mem 512 MB
+maximum_object_size 12000 KB
+
+## http --&gt; https redirect
+## don&#39;t forget to update &quot;Jenkins URL&quot; on https://ci.YOUR_DOMAIN/configure
+#acl httpPort myport 80
+#http_access deny httpPort
+#deny_info https://ci.YOUR_DOMAIN/ httpPort
+
+
+cache_peer localhost parent 8080 0 originserver name=myAccel
+coredump_dir /var/spool/squid
+hierarchy_stoplist cgi-bin
+http_access allow localhost
+http_access allow manager localhost
+http_access allow valid_dst
+http_access deny all
+http_access deny manager
+
+## mkdir /etc/squid/ssl/ &amp;&amp; cd /etc/squid/ssl/ # to generate your self-signed certificate
+## openssl genrsa -out jenkins.key 1024
+## openssl req -new -key jenkins.key -x509 -out jenkins.crt -days 999
+http_port 80 vhost
+#https_port 443 cert=/etc/squid/ssl/jenkins.crt key=/etc/squid/ssl/jenkins.key vhost
+
+http_reply_access allow all
+icp_access allow all
+
+refresh_pattern -i \.jp(e?g|gif|png|ico)   300  20%  600 override-expire
+
+
+logformat combined %&gt;a %ui %un \[%tl\] &quot;%rm %ru HTTP/%rv&quot; %Hs %&lt;st &quot;%{Referer}&gt;h&quot; &quot;%{User-Agent}&gt;h&quot; %Ss:%Sh
+strip_query_terms off
+access_log /var/log/squid/access.log combined
+
+visible_hostname ci.YOUR_DOMAIN
+</pre>
+</div></div>
+<p>This assumes that you run Jenkins on localhost port 8080. But you can have it on an other server / different port (adjust line starting with cache_peer)
+<br class="atl-forced-newline"/></p>
+
+<p>Of course replace  YOUR_DOMAIN with your domain.
+<br class="atl-forced-newline"/></p>
+
+<h2 id="RunningJenkinsbehindSquid-Withssl">With ssl</h2>
+
+<p>Remove one level of comment</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ sed s/^#// /etc/squid/squid.conf
+</pre>
+</div></div>
+<p>/!\ If you use the swarm client plugin , the nodes will complain about :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+        at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:285)
+        at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:191)
+        at sun.security.validator.Validator.validate(Validator.java:218)
+        at com.sun.net.ssl.internal.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:126)
+        at com.sun.net.ssl.internal.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:209)
+        at com.sun.net.ssl.internal.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:249)
+        at com.sun.net.ssl.internal.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1014)
+        ... 13 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+</pre>
+</div></div>
+<p><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Fix :<br/>
+<a href="http://www.nabble.com/Re:-Getting-hudson-slaves-to-connect-to-https-hudson-with-self-signed-certificate-p21061658.html" class="external-link" rel="nofollow">http://www.nabble.com/Re:-Getting-hudson-slaves-to-connect-to-https-hudson-with-self-signed-certificate-p21061658.html</a></p>
+
+<h2 id="RunningJenkinsbehindSquid-Notes">Notes</h2>
+
+<p>We use Active Directory internally to authenticate our users, it was mandatory to allow https access only. </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

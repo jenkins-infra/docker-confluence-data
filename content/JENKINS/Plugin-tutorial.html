@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Plugin tutorial</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Plugin tutorial
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jsoref)</span> on May 15, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This document, together with the <a href="http://github.com/jenkinsci/hello-world-plugin" class="external-link" rel="nofollow">hello-world plugin</a>, shows you how to get started with the plugin development.</p><h1 id="Plugintutorial-Important!">Important!</h1><p>Please first read the &quot;<a href="Before-starting-a-new-plugin.html">before writing a plugin</a>&quot; page.</p><p>There are a <strong>lot</strong> of existing Jenkins plugins and a lot of people with Jenkins plugin development experience that you can take advantage of!</p><p>Check whether there is an existing plugin you can already use, or contribute to, then get in touch via the <a href="http://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">jenkinsci-dev mailing list</a>, or <a href="https://jenkins-ci.org/content/chat" class="external-link" rel="nofollow">IRC</a> and explain your plugin idea.<br/>Either we can point you towards an existing plugin, useful APIs, or code snippets that would be helpful.</p><h1 id="Plugintutorial-TableofContents">Table of Contents</h1><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020173186 {padding: 0px;}
+div.rbtoc1631020173186 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020173186 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020173186'>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-Important!'>Important!</a></li>
+<li><a href='#Plugintutorial-TableofContents'>Table of Contents</a></li>
+<li><a href='#Plugintutorial-WhatCanPluginsDo?'>What Can Plugins Do?</a></li>
+<li><a href='#Plugintutorial-SettingUpEnvironment'>Setting Up Environment</a></li>
+<li><a href='#Plugintutorial-CreatingaNewPlugin'>Creating a New Plugin</a></li>
+<li><a href='#Plugintutorial-BuildingaPlugin'>Building a Plugin</a></li>
+<li><a href='#Plugintutorial-SettingupaproductiveenvironmentwithyourIDE'>Setting up a productive environment with your IDE</a>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-NetBeans'>NetBeans</a></li>
+<li><a href='#Plugintutorial-IntelliJIDEA'>IntelliJ IDEA</a></li>
+<li><a href='#Plugintutorial-Eclipse'>Eclipse</a></li>
+</ul>
+</li>
+<li><a href='#Plugintutorial-PluginWorkspaceLayout'>Plugin Workspace Layout</a>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-pom.xml'>pom.xml</a></li>
+<li><a href='#Plugintutorial-src/main/java'>src/main/java</a></li>
+<li><a href='#Plugintutorial-src/main/resources'>src/main/resources</a></li>
+<li><a href='#Plugintutorial-src/main/webapp'>src/main/webapp</a></li>
+</ul>
+</li>
+<li><a href='#Plugintutorial-SourceCode'>Source Code</a>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-PluginImplapproach'>PluginImpl approach</a></li>
+<li><a href='#Plugintutorial-Extensionpointsapproach'>Extension points approach</a></li>
+</ul>
+</li>
+<li><a href='#Plugintutorial-DebuggingaPlugin'>Debugging a Plugin</a>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-Changingport'>Changing port</a></li>
+<li><a href='#Plugintutorial-Settingcontextpath'>Setting context path</a></li>
+<li><a href='#Plugintutorial-Changingcodewhiledebugging'>Changing code while debugging</a></li>
+</ul>
+</li>
+<li><a href='#Plugintutorial-DistributingaPlugin'>Distributing a Plugin</a></li>
+<li><a href='#Plugintutorial-ReleasingaPluginandHostingaPluginonjenkins-ci.org'>Releasing a Plugin and Hosting a Plugin on jenkins-ci.org</a></li>
+<li><a href='#Plugintutorial-UsingcustombuildsofpluginsincludedintheJenkinsWAR'>Using custom builds of plugins included in the Jenkins WAR</a>
+<ul class='toc-indentation'>
+<li><a href='#Plugintutorial-Deployingacustombuildofacoreplugin'>Deploying a custom build of a core plugin</a></li>
+</ul>
+</li>
+<li><a href='#Plugintutorial-Othertips'>Other tips</a></li>
+<li><a href='#Plugintutorial-Otherresources'>Other resources</a></li>
+</ul>
+</div></p><h1 id="Plugintutorial-WhatCanPluginsDo?">What Can Plugins Do?</h1><p>Jenkins defines extensibility points, which are interfaces or abstract classes that model an aspect of a build system. Those interfaces define contracts of what needs to be implemented, and Jenkins allows plugins to contribute those implementations. See <a href="Extension-points.html">this document</a> for more about extension points.</p><p>In this document, we'll be implementing a <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.tasks.Builder">Builder</a> that says hello. (built-in builders include Ant, Maven, and shell script. Builders build a project.)</p><h1 id="Plugintutorial-SettingUpEnvironment">Setting Up Environment</h1><p>To develop a plugin, you need <a href="http://maven.apache.org/" class="external-link" rel="nofollow">Maven 3</a> (<a href="3309681.html">why?</a>) and JDK 6.0 or later. If this is the first time you are using Maven, <a href="http://maven.apache.org/guides/mini/guide-proxies.html" class="external-link" rel="nofollow">make sure Maven can download stuff over the internet</a>.</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Nexus Users</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are using the <a href="http://nexus.sonatype.org" class="external-link" rel="nofollow">Nexus Maven Repository Manager</a>, you can ignore these instructions, and instead, click <a href="Jenkins-Development-Environment-with-Nexus.html">here</a> for instructions on how to add Jenkins build prerequisites and the proper <code>settings.xml</code> entries.</p></div></div><p>It may be helpful to add the following to your <code>~/.m2/settings.xml</code> (Windows users will find them in <code>%USERPROFILE%\.m2\settings.xml</code>):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;settings&gt;
+  &lt;pluginGroups&gt;
+    &lt;pluginGroup&gt;org.jenkins-ci.tools&lt;/pluginGroup&gt;
+  &lt;/pluginGroups&gt;
+
+  &lt;profiles&gt;
+    &lt;!-- Give access to Jenkins plugins --&gt;
+    &lt;profile&gt;
+      &lt;id&gt;jenkins&lt;/id&gt;
+      &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt; &lt;!-- change this to false, if you don&#39;t like to have it on per default --&gt;
+      &lt;/activation&gt;
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;repo.jenkins-ci.org&lt;/id&gt;
+          &lt;url&gt;https://repo.jenkins-ci.org/public/&lt;/url&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+      &lt;pluginRepositories&gt;
+        &lt;pluginRepository&gt;
+          &lt;id&gt;repo.jenkins-ci.org&lt;/id&gt;
+          &lt;url&gt;https://repo.jenkins-ci.org/public/&lt;/url&gt;
+        &lt;/pluginRepository&gt;
+      &lt;/pluginRepositories&gt;
+    &lt;/profile&gt;
+  &lt;/profiles&gt;
+  &lt;mirrors&gt;
+    &lt;mirror&gt;
+      &lt;id&gt;repo.jenkins-ci.org&lt;/id&gt;
+      &lt;url&gt;https://repo.jenkins-ci.org/public/&lt;/url&gt;
+      &lt;mirrorOf&gt;m.g.o-public&lt;/mirrorOf&gt;
+    &lt;/mirror&gt;
+  &lt;/mirrors&gt;
+&lt;/settings&gt;
+</pre>
+</div></div><p>This will let you use short names for Jenkins Maven plugins (i.e. hpi:create instead of org.jenkins-ci.tools:maven-hpi-plugin:1.61:create),<br/>though this is unnecessary once you are already working in a plugin project (only useful for initial hpi:create).<br/>Note that adding the Jenkins repositories in a profile like this is not really necessary since most (all?) plugins already define these repositories.<br/>And the mirror declaration is probably unnecessary.</p><h1 id="Plugintutorial-CreatingaNewPlugin">Creating a New Plugin</h1><p>To start developing a new Jenkins plugin, use an IDE (below), or if you are more comfortable with Maven, run the following command:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn archetype:generate -Dfilter=io.jenkins.archetypes:empty-plugin</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>To create a plugin skeleton for <a href="https://jenkins.io/projects/blueocean/" class="external-link" rel="nofollow">Blue Ocean</a>, please see the <a href="https://www.npmjs.com/package/generator-blueocean-usain" class="external-link" rel="nofollow">generator-blueocean-usain</a> Yeoman generator.</p></div></div><p>This will ask you a few questions, like the groupId (the Maven jargon for the package name) and the artifactId (the Maven jargon for your project name), then create a skeleton plugin from which you can start with.</p><p>Make sure you can build this:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ cd newly-created-directory
+$ mvn package
+</pre>
+</div></div><h1 id="Plugintutorial-BuildingaPlugin"><span style="color: rgb(210,73,57);">Building a Plugin</span></h1><p>To build a plugin, run <code>mvn install</code>. This will create the file <code>./target/pluginname.hpi</code> that you can deploy to Jenkins.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn install</pre>
+</div></div><h1 id="Plugintutorial-SettingupaproductiveenvironmentwithyourIDE">Setting up a productive environment with your IDE</h1><h3 id="Plugintutorial-NetBeans">NetBeans</h3><p>NetBeans users can use the IDE's Maven support to open the project directly.</p><p>As you navigate through the code, you can tell NetBeans to attach source code JAR files by clicking the &quot;Attach&quot; button that appears in the top of the main content window. This allows you to read the Jenkins core source code as you develop plugins. (Or just select <em>Download Sources</em> on the <em>Dependencies</em> node.)</p><p>You are advised to use the <a href="https://github.com/stapler/netbeans-stapler-plugin" class="external-link" rel="nofollow">NetBeans plugin for Jenkins/Stapler development</a>. This offers many Jenkins-specific features. Most visibly, create a new plugin using <em>New Project » Maven » Jenkins Plugin</em>, and use <em>Run project</em> to test it.</p><h3 id="Plugintutorial-IntelliJIDEA">IntelliJ IDEA</h3><p>IntelliJ 7.0 (or later) users can load pom.xml directly from IDE, and you should see all the source code of libraries and Jenkins core all the way to the bottom. Consider installing the <a href="IntelliJ-IDEA-plugin-for-Stapler.html">IntelliJ IDEA plugin for Stapler</a> to make the development easier.</p><p>Alternatively,emtpy create a new Maven project using <em>Create from archetype</em> and <em>Add an Archetype. </em>Select the GroupId and ArtifactId as above and choose RELEASE as version. In the next screen select <em>io.jenkins.plugins</em> as groupID and choose an artifactId (Project name) and Version to your liking. This will automatically create a maven project based on the specified artifact (e.g. empty-plugin).</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>IntelliJ defaults to downloading sources and JavaDocs on demand. So, to see the source, you may need to click the <code>Download artifacts</code> button in the <code>Maven Projects</code> tab.</p></div></div><h3 id="Plugintutorial-Eclipse">Eclipse</h3><p>Use Eclipse Juno (4.2) or later for the best experience.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Eclipse versions between 4.5 and &lt; 4.6.2 contain a bug that causes errors such as <strong>&quot;Only a type can be imported. hudson.model.Job resolves to a package&quot;</strong>.<br/>If you encounter this error please upgrade to Eclipse Neon.2 (4.6.2) or higher (<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=495598" class="external-link" rel="nofollow">Bug 495598</a>).</p></div></div><p>As Jenkins plugins are Maven projects, Eclipse users have two ways to load a Jenkins plugin project. One is to use <a href="http://eclipse.org/m2e/" class="external-link" rel="nofollow">m2e</a>, which tries to make Eclipse understand Maven &quot;natively&quot;, and the other is to use theusing maven, but <a href="http://maven.apache.org/plugins/maven-eclipse-plugin/" class="external-link" rel="nofollow">Maven Eclipse plugin</a>, which makes Maven generate Eclipse project definitions. At the moment, unless you have some prior experience with m2e, we currently recommend plugin developers to go with the Maven Eclipse plugin.</p><p>Eclipse users can run the following Maven command to generate Eclipse project files (the custom outputDirectory parameter is used to work around the lack of JSR-269 annotation processor support in Eclipse:)</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn -DdownloadSources=true -DdownloadJavadocs=true -DoutputDirectory=target/eclipse-classes -Declipse.workspace=/path/to/workspace eclipse:eclipse eclipse:configure-workspace</pre>
+</div></div><p>Where /path/to/workspace is the path to your Eclipse workspace.</p><p>Once this command completes successfully, use &quot;Import...&quot; (under the File menu in Eclipse) and select &quot;General&quot; &gt; &quot;Existing Projects into Workspace&quot;.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Do not select &quot;Existing Maven Projects&quot;, which takes you to the m2e route</p></div></div><p>See <a href="Jenkins-plugin-development-with-Eclipse.html">Jenkins plugin development with Eclipse</a> for gotchas and other known Eclipse/Maven related issues with Jenkins plugin development.</p><p>See <a href="Eclipse-alternative-build-setup.html">Eclipse alternative build setup</a> for an alternative way of setting up the Eclipse build environment, that is a bit more technically involved than using Maven but can give faster build times.</p><h1 id="Plugintutorial-PluginWorkspaceLayout">Plugin Workspace Layout</h1><p>The plugin workspace consists of the following major pieces, described in additional detail at <a href="Plugin-Structure.html">Plugin Structure</a>:</p><h4 id="Plugintutorial-pom.xml">pom.xml</h4><p>Maven uses the pom.xml file to build your Jenkins plugin. All Jenkins plugins should be based on the Plugin Parent POM:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;parent&gt;
+    &lt;groupId&gt;org.jenkins-ci.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.2&lt;/version&gt;
+&lt;/parent&gt;
+</pre>
+</div></div><p>If the project is created using the provided archetype, everything is already set up. Up to Jenkins 1.645 the Plugin Parent POM was part of the main Jenkins project and the POM version was the baseline Jenkins version to be used for the plugin.</p><p>When using Parent POM version 2.2 or later, the baseline version is selection using the <code>jenkins.version</code> property, e.g.:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;properties&gt;
+    &lt;jenkins.version&gt;1.609.1&lt;/jenkins.version&gt;
+&lt;/properties&gt;
+</pre>
+</div></div><h4 id="Plugintutorial-src/main/java">src/main/java</h4><p>Java source files of the plugin.</p><h4 id="Plugintutorial-src/main/resources">src/main/resources</h4><p>Jelly/Groovy views of the plugin. See <a href="Architecture.html">this document</a> for more about it.</p><h4 id="Plugintutorial-src/main/webapp">src/main/webapp</h4><p>Static resources of the plugin, such as images and HTML files.</p><h1 id="Plugintutorial-SourceCode">Source Code</h1><h3 id="Plugintutorial-PluginImplapproach">PluginImpl approach</h3><p>(deprecated in favor of the Extension points approach below)</p><p>A plugin's main entry point may be a PluginImpl class that extends from <a href="http://javadoc.jenkins-ci.org/byShortName/Plugin">Plugin</a>. Once Jenkins detects this plugin class (via its inheritance relationship from <code>Plugin</code>), it will create an instance, and invoke methods.</p><h3 id="Plugintutorial-Extensionpointsapproach">Extension points approach</h3><p>A Plugin class is optional; a plugin may simply implement <a href="https://jenkins.io/doc/developer/extensions/" class="external-link" rel="nofollow">extension points</a>, registering them with the <a href="http://javadoc.jenkins-ci.org/index.html?hudson/Extension.html" class="external-link" rel="nofollow">@hudson.Extension</a> annotation for automatic detection by Jenkins.</p><p>The bulk of work in the plugin consists of implementing those extension points. See the sample source code for more information about how a <code>Builder</code> is implemented and what it does.</p><p>Here are a few things about extension:</p><ul><li>in general, a plugin extension should extend an existing extension point (a class that implements <a href="http://javadoc.jenkins-ci.org/index.html?hudson/ExtensionPoint.html" class="external-link" rel="nofollow">ExtensionPoint</a>), and define an inner static class extending the corresponding descriptor (a class extending <a href="http://javadoc.jenkins-ci.org/index.html?hudson/model/Descriptor.html" class="external-link" rel="nofollow">hudson.model.Descriptor</a>)</li><li>the @Extension annotation must be placed on the inner descriptor class to let Jenkins know about this extension</li><li>the descriptor handles the global configuration of the extension while the extension class itself handles the individual configuration of the extension. For instance, the Setting context path<br/>in a plugin defining a class extending LabelAtomProperty, an object of this class is instantiated for each LabelAtom (provided that the plugin is activated by the user in the label's configuration page). If configuration parameters for each individual instance are required, they're handled via a config.jelly file stored in a resource package named after the extension class. When the configuration form is saved, Jenkins calls the extension constructor marked with the @<a href="http://stapler.kohsuke.org/apidocs/index.html?org/kohsuke/stapler/DataBoundConstructor.html" class="external-link" rel="nofollow">org.kohsuke.stapler.DataBoundConstructor</a> annotation, matching parameters by name</li></ul><h1 id="Plugintutorial-DebuggingaPlugin">Debugging a Plugin</h1><p>NetBeans 6.7+ users can just hit <strong>Debug</strong>. For all others, run the following command to launch Jenkins with your plugin:<br/>Convenient:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>mvnDebug hpi:run
+</pre>
+</div></div><p>Unix:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ export MAVEN_OPTS=&quot;-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n&quot;
+$ mvn hpi:run
+</pre>
+</div></div><p>Windows:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&gt; set MAVEN_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n
+&gt; mvn hpi:run
+</pre>
+</div></div><p>If you open <code><a href="http://localhost:8080/jenkins" class="external-link" rel="nofollow">http://localhost:8080/jenkins</a></code> in your browser, you should see the Jenkins page running in Jetty. The <code>MAVEN_OPTS</code> portion launches this whole thing with the debugger port 8000, so you should be able to start a debug session to this port from your IDE.</p><p>Once this starts running, keep it running. Jetty will pick up all the changes automatically.</p><ol><li>When you make changes to view files in <code>src/main/resources</code> or resource files in <code>src/main/webapp</code>, just hit F5 in your browser to see the changes.</li><li><p>When you change Java source files, compile them in your IDE (NetBeans 6.7+: <strong>Debug &gt; Apply Code Changes</strong>) and Jetty should automatically redeploy Jenkins to pick up those changes. There is no need to run <code>mvn</code> at all.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>MAVEN_OPTS can be used to specify all sorts of other JVM parameters, like <code>-Xmx</code></p></div></div></li></ol><h3 id="Plugintutorial-Changingport">Changing port</h3><p>If you need to launch the Jenkins on a different port than 8080, set the port through the system property <code>jetty.port</code>.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn hpi:run -Djetty.port=8090
+</pre>
+</div></div><h3 id="Plugintutorial-Settingcontextpath">Setting context path</h3><p>maven-hpi-plugin 1.65 or later (used by parent POM 1.401 or later) can set the context path by using a system property. On more recent versions of Jenkins, the &quot;/jenkins&quot; prefix is added automatically.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn hpi:run -Dhpi.prefix=/jenkins
+</pre>
+</div></div><h3 id="Plugintutorial-Changingcodewhiledebugging">Changing code while debugging</h3><p>Depending on what you change, you can see it in the running instance without restarting the whole Maven process:</p><ul><li>Views: Groovy/Jelly views are re-compiled every time a browser requests a page, so just reload a page in the browser and you'll see the changes. This is also true for help files you write.</li><li>Java code: If you are debugging, JVM's hot swap feature can be used to reload code so long as you do not touch the method signature. (For example, from NetBeans use <strong>Debug » Apply Code Changes</strong>.) Beyond that, you can hit ENTER in the Maven process and it'll reload the Jenkins webapp, though generally, it is better to stop the process and start again. See <a href="Developing-with-JRebel.html">Developing with JRebel</a> for how to get a JRebel license for OSS projects to improve this experience.</li><li>POM: If you change POM, you'll have to stop and restart Maven to see the changes.</li></ul><p>If you are using version 1.120 or later of <code>maven-hpi-plugin</code>, which would be the default when using version 2.16 or later of the plugin parent POM, you can use the same features to debug changes spanning multiple plugins, or even a custom build of Jenkins core. Just make sure you have <code>SNAPSHOT</code> dependencies set up between the associated Maven modules (<code>&lt;scope&gt;test&lt;/scope&gt;</code> suffices), and that the upstream module(s) have been built (e.g., <code>mvn -DskipTests clean install</code>). Now <code>hpi:run</code> on the downstream plugin and you should be able to reload views defined in any of the linked modules.</p><h1 id="Plugintutorial-DistributingaPlugin">Distributing a Plugin</h1><p>To create a distribution image of your plugin, run the following Maven command:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ mvn package
+</pre>
+</div></div><p>This should create <code>target/*.hpi</code> file. Other users can use Jenkins' web UI to upload this plugin to Jenkins (or place it in <code>$JENKINS_HOME/plugins</code>.)</p><h1 id="Plugintutorial-ReleasingaPluginandHostingaPluginonjenkins-ci.org">Releasing a Plugin and Hosting a Plugin on jenkins-ci.org</h1><p>If you got to this point, you should definitely consider hosting your plugin on jenkins-ci.org. Move on to <a href="Hosting-Plugins.html">this document</a> for how to do that. This includes the instructions for releasing the plugin.</p><h1 id="Plugintutorial-UsingcustombuildsofpluginsincludedintheJenkinsWAR">Using custom builds of plugins included in the Jenkins WAR</h1><p>If you are building a patched version of one of the plugins in the Jenkins core, the deployment process is a bit different. This is because Jenkins will itself manage these plugins <em>unless you tell it not to</em>.</p><h2 id="Plugintutorial-Deployingacustombuildofacoreplugin">Deploying a custom build of a core plugin</h2><ol><li>Stop Jenkins</li><li>Copy the custom HPI file to $JENKINS_HOME/plugins</li><li>Remove the previously expanded plugin directory</li><li>Create an empty file called &lt;plugin&gt;.hpi.pinned - e.g. maven-plugin.hpi.pinned</li><li>Start Jenkins</li></ol><h1 id="Plugintutorial-Othertips">Other tips</h1><ol><li>Consider running Maven like this <code>mvn -o ...</code> to avoid hitting repositories every time. This will make various operations considerably faster.</li><li>Subscribe to the users' alias from <a href="Mailing-Lists.html">here</a> so that we can get in touch with you.</li><li>When you bump up the version of Jenkins you depend on, make sure to run <code>mvn clean</code> once, in particular, to delete <code>target/work</code> that Jetty uses. <em>Newer versions may just use work, not target/work.</em> Otherwise, your Jetty may continue to pick up old left-over JAR files.</li><li>If you have a high latency network connection to the Maven repository, you might find it faster to first run the build once on a server near to the maven repository, then rsync the .m2/repository folder across to your local computer</li><li>The 'package' and 'install' targets will by default run many tests. You can add '-DskipTests' on the command-line to skip these (of course you should run the tests before committing any changes)</li><li>The 'compiler:compile' goal is faster than 'compile', because it is a goal, rather than a lifecycle event, and therefore avoids certain earlier goals, such as setting up resources</li></ol><h1 id="Plugintutorial-Otherresources">Other resources</h1><p>Besides this tutorial, there are other tutorials and examples available online:</p><ul><li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/DEVGUIDE.md" class="external-link" rel="nofollow">Making your plugin compatible with Pipeline</a></li><li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-1.html" class="external-link" rel="nofollow">Stephen Connolly's 7 part tutorial</a> (Writing a Hudson plugin)<ul><li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-1.html" class="external-link" rel="nofollow">Part 1 - Preparation</a></li><li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-2.html" class="external-link" rel="nofollow">Part 2 - Understanding m2 and freestyle projects</a></li><li><a href="http://javaadventure.blogspot.com/2008/01/writing-hudson-plug-in-part-3.html" class="external-link" rel="nofollow">Part 3 - Subcontracting for Publisher and MavenReporter</a></li><li><a href="http://javaadventure.blogspot.com/2008/02/writing-hudson-plug-in-part-4-abstract.html" class="external-link" rel="nofollow">Part 4 - Abstract Publishers and MavenReporters</a></li><li><a href="http://javaadventure.blogspot.com/2008/02/writing-hudson-plug-in-part-5-reporting.html" class="external-link" rel="nofollow">Part 5 - Reporting</a></li><li><a href="http://javaadventure.blogspot.com/2008/03/writing-hudson-plugin-part-5-typos.html" class="external-link" rel="nofollow">Part 5½ - Typos corrected</a></li><li><a href="http://javaadventure.blogspot.com/2008/04/writing-hudson-plugin-part-6-parsing.html" class="external-link" rel="nofollow">Part 6 - Parsing the results</a></li><li><a href="http://javaadventure.blogspot.com/2008/06/writing-hudson-plugin-part-7-putting-it.html" class="external-link" rel="nofollow">Part 7 - Putting it all together</a></li><li>yet not finished: health reports</li></ul></li><li><a href="http://d.hatena.ne.jp/fits/20080502/1209726765" class="external-link" rel="nofollow">Quick start guide in Japanese</a></li><li><a class="unresolved" href="#">~martino:/2011/10/27/The JenkinsPluginTotallySimpleGuide</a> by martinO</li><li><a href="http://code.dblock.org/implementing-my-first-jenkins-plugin-ansicolor" class="external-link" rel="nofollow">Implementing My First Jenkins Plugin: AnsiColor</a> by Daniel Doubrovkine</li><li><a href="http://blog.codecentric.de/en/2012/08/tutorial-create-a-jenkins-plugin-to-integrate-jenkins-and-nexus-repository/" class="external-link" rel="nofollow">Tutorial: Create a Jenkins Plugin to integrate Jenkins and Nexus Repository</a> by Marcel Birkner</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753741/64913409.xml">settings.xml</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753741/67043481.png">mvn project Error.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OSLC CM Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OSLC CM Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mdhar)</span>, last modified on Jun 20, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>
+<p>Connects to different remote bug trackers via the OSLC protocol</p></p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View OSLC CM <a href="https://plugins.jenkins.io/oslc-cm" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h4 id="OSLCCMPlugin-Code">Code</h4>
+
+<p>The source code is at <a href="https://github.com/jenkinsci/oslc-cm-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/oslc-cm-plugin</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h4 id="OSLCCMPlugin-Configuration">Configuration</h4>
+
+<p>The plugin uses OAuth as mode of authentification. Jenkins thus has to be registered as an OAuth consumer with the concerned bug-tracker. The corresponding Customer key and secret are to be entered in the Global Configuration page as below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409588.jpg" data-image-src="attachments/57180782/57409588.jpg" data-unresolved-comment-count="0" data-linked-resource-id="57409588" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="global_settings.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></p>
+
+<p>With the above, we can now request an access token and secret from the bugtracker. A sample script which does so, is available <a href="https://github.com/jenkinsci/oslc-cm-plugin/tree/master/OAuth/src/com/coclico/oauth" class="external-link" rel="nofollow">here</a>.  The token and secret are to be entered in the configuration page for the corresponding job.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409608.jpg" data-image-src="attachments/57180782/57409608.jpg" data-unresolved-comment-count="0" data-linked-resource-id="57409608" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="access_token.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></p>
+
+<h4 id="OSLCCMPlugin-BugCreation">Bug Creation</h4>
+
+<p>This can be done in two ways.</p>
+
+
+<h6 id="OSLCCMPlugin-AutomaticCreation">Automatic Creation</h6>
+
+
+<h6 id="OSLCCMPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409609.jpg" data-image-src="attachments/57180782/57409609.jpg" data-unresolved-comment-count="0" data-linked-resource-id="57409609" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="automatic_bug_create.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></h6>
+
+<p>On each build failure (depending on the preferences chosen by the user), the plugin does an HTTP POST to the URL specified (as in the screenshot above) on the job configuration page.</p>
+
+<p>The content of the POST request is in json and is configurable.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409789.png" data-image-src="attachments/57180782/57409789.png" data-unresolved-comment-count="0" data-linked-resource-id="57409789" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="bugreportadd.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></p>
+
+
+<p>Clicking on 'Add' opens up textboxes, where the name/value pair of all attributes of the bug report can be added, separated by a '::' sign, as shown below. Quotes are not allowed in the textboxes.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409790.png" data-image-src="attachments/57180782/57409790.png" data-unresolved-comment-count="0" data-linked-resource-id="57409790" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="bugreportproperty.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></p>
+
+
+<p>If no attributes are specified, the content of the bug report will be as follows (in json):</p>
+
+<p>{<br/>
+    &quot;dcterms:title&quot;:&quot;Hudson Build Failure&quot;,<br/>
+    &quot;dcterms:description&quot;:&quot;&lt;Link to the Build Failure page&gt;&quot;,<br/>
+    &quot;oslc_cm:status&quot;:&quot;Open&quot;,<br/>
+    &quot;helios_bt:priority&quot;:&quot;3&quot;,<br/>
+    &quot;helios_bt:assigned_to&quot;:&quot;Nobody&quot;<br/>
+}</p>
+
+
+
+<h6 id="OSLCCMPlugin-ManualCreation(DelegatedCreation)">Manual Creation (Delegated Creation)</h6>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57180782/57409610.jpg" data-image-src="attachments/57180782/57409610.jpg" data-unresolved-comment-count="0" data-linked-resource-id="57409610" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="manual_bug_create.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="57180782" data-linked-resource-container-version="39"></span></p>
+
+<p>This creates a link on the build page which takes us to an embedded iframe containing the content of the url specified (as in the screenshot above) on the job configuration page.</p>
+
+<p>To be done: Support for creating links to newly-created bugs.</p>
+
+<p><strong>See also</strong> : a screencast of a demo made with FusionForge trackers : <a href="http://vimeo.com/23480321" class="external-link" rel="nofollow">http://vimeo.com/23480321</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409588.jpg">global_settings.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409589.jpg">project_settings.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409608.jpg">access_token.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409609.jpg">automatic_bug_create.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409610.jpg">manual_bug_create.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409788.png">Screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409789.png">bugreportadd.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180782/57409790.png">bugreportproperty.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

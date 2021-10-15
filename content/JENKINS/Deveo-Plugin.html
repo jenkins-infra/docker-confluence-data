@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Deveo Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Deveo Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vellu)</span>, last modified on Feb 03, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Deveo <a href="https://plugins.jenkins.io/deveo" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>This plugin integrates Jenkins with <a href="https://deveo.com" class="external-link" rel="nofollow">Deveo</a>.</p>
+
+<p>The plugin creates events to Deveo from Jenkins builds. The events can then be seen in the activity feeds of Deveo projects. The plugin supports Git, Subversion, and Mercurial.</p>
+
+<h5 id="DeveoPlugin-Successfulbuildevent">Successful build event</h5>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/71435629/83558410.png" data-image-src="attachments/71435629/83558410.png" data-unresolved-comment-count="0" data-linked-resource-id="83558410" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-23 at 12.48.33.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71435629" data-linked-resource-container-version="21"></span></p>
+
+<h5 id="DeveoPlugin-Failedbuildevent">Failed build event</h5>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/71435629/83558411.png" data-image-src="attachments/71435629/83558411.png" data-unresolved-comment-count="0" data-linked-resource-id="83558411" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-23 at 12.49.07.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71435629" data-linked-resource-container-version="21"></span></p>
+
+<h2 id="DeveoPlugin-Configuringtheplugin">Configuring the plugin</h2>
+
+<p>To allow Jenkins to send notifications to Deveo, you'll need to configure two Deveo API keys for your Jenkins instance, namely Plugin Key and Company Key. To do this, open up Jenkins System Configuration (Manage Jenkins -&gt; Configure System). There you'll find the Deveo notifier section and under it inputs for the two keys. For Plugin Key you can use the following: 3c94d47d6257ca0d3bc54a9b6a91aa64. You'll find your Company Key from your Deveo User Preferences (User dropdown menu -&gt; Preferences) under API keys. Lastly, fill in the hostname of your Deveo instance.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/71435629/83558408.png" data-image-src="attachments/71435629/83558408.png" data-unresolved-comment-count="0" data-linked-resource-id="83558408" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-23 at 12.39.25.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71435629" data-linked-resource-container-version="21"></span></p>
+
+<p>After you're done with the global plugin configuration, you'll need to specify which Deveo account each job should utilize. To do this, open up Job Configuration (Job -&gt; Configure) and add a new Deveo Notification Post-build Action. There you'll need to give the Account Key of the Deveo account you want the job to utilize. This account is usually a bot account. To create a bot, navigate to your Deveo project and click on Settings and bot accounts. Now click on New bot to create a new bot. Once you've created the bot, its details will be shown to you and you'll find the bot's Account Key under API keys.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/71435629/83558409.png" data-image-src="attachments/71435629/83558409.png" data-unresolved-comment-count="0" data-linked-resource-id="83558409" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-23 at 12.40.53.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="71435629" data-linked-resource-container-version="21"></span></p>
+
+<h2 id="DeveoPlugin-Changelog">Changelog</h2>
+
+<h5 id="DeveoPlugin-Version1.1.2(released18Dec,2015)">Version 1.1.2 (released 18 Dec, 2015)</h5>
+
+<ul>
+	<li>Added support for repositories with slashes in their names.</li>
+</ul>
+
+
+<h5 id="DeveoPlugin-Version1.1.1(released29Oct,2015)">Version 1.1.1 (released 29 Oct, 2015)</h5>
+
+<ul>
+	<li>Fixed SSH repository URL support.</li>
+	<li>Fixed a bug that would cause Deveo authorization to fail due to missing account key.</li>
+	<li>Deveo API hostname now defaults to <a href="https://app.deveo.com" class="external-link" rel="nofollow">https://app.deveo.com</a>.</li>
+</ul>
+
+
+<h5 id="DeveoPlugin-Version1.1.0(released28Oct,2015)">Version 1.1.0 (released 28 Oct, 2015)</h5>
+
+<ul>
+	<li>The plugin is now built against Jenkins version 1.627.</li>
+	<li>Added support for builds with Mercurial as their primary SCM.</li>
+	<li>Build events now map to matching Deveo code reviews (Git only).</li>
+	<li>API version can no longer be configured in Jenkins' global settings.</li>
+	<li>You no longer need to configure Deveo project and repository on a job-basis.</li>
+</ul>
+
+
+<h5 id="DeveoPlugin-Version1.0.2(released14Mar,2014)">Version 1.0.2 (released 14 Mar, 2014)</h5>
+
+<ul>
+	<li>Added more detailed help texts for configuration fields.</li>
+</ul>
+
+
+<h5 id="DeveoPlugin-Version1.0.1(released27Feb,2014)">Version 1.0.1 (released 27 Feb, 2014)</h5>
+
+<ul>
+	<li>Added job name to Deveo build event payload.</li>
+	<li>Fixed loading global config on Jenkins startup.</li>
+</ul>
+
+
+<h5 id="DeveoPlugin-Version1.0.0(released14Feb,2014)">Version 1.0.0 (released 14 Feb, 2014)</h5>
+
+<ul>
+	<li>Initial release.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/71696487.png">jenkins-deveo-plugin-global-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/71696488.png">jenkins-deveo-plugin-job-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/71696535.png">build_completed.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/71696536.png">build_failed.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/73597097.jpg">Screen Shot 2014-09-05 at 15.03.49.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/73597098.jpg">Screen Shot 2014-09-05 at 15.03.34.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/83558408.png">Screen Shot 2015-10-23 at 12.39.25.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/83558409.png">Screen Shot 2015-10-23 at 12.40.53.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/83558410.png">Screen Shot 2015-10-23 at 12.48.33.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/71435629/83558411.png">Screen Shot 2015-10-23 at 12.49.07.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

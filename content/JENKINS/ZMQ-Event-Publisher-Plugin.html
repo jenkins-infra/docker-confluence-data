@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ZMQ Event Publisher Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ZMQ Event Publisher Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (nibalizer)</span>, last modified by <span class='editor'> Unknown User (batmat)</span> on Feb 17, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Event Publisher (via ZMQ PUB SUB) <a href="https://plugins.jenkins.io/zmq-event-publisher" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p><br class="atl-forced-newline"/>
+This is a Jenkins plugin that will publish Jenkins Job run events<br/>
+(start, complete, finish) to a ZMQ PUB socket. By default the PUB<br/>
+socket is on TCP port 8888 and no Job events will be published.<br/>
+You can choose to enable event publishing for all jobs in the<br/>
+Jenkins' global config or enable the plugin on a per job basis.</p>
+
+<p>This plugin uses jeromq to satisfy the dependency on ZMQ. It is<br/>
+possible to use jzmq instead if you need the features that jeromq<br/>
+is lacking; however, it is a pain to get jzmq built and is less<br/>
+portable. If you really really want jzmq look back in the git<br/>
+history and you will find the old versions of this plugin that<br/>
+depended on jzmq.</p>
+
+<p>TODO:</p>
+<ul class="alternate">
+	<li>Avoid reading in the global config for each event if possible.</li>
+	<li>Need to allow ZMQRunnable thread to die if something truly<br/>
+unexpected happens. The RunListener should then start a new<br/>
+DaemonThread to handle further events.</li>
+	<li>Cleanup config.jelly for the non global Job config.</li>
+</ul>
+
+
+<p>This plugin borrows heavily from the Jenkins Notification Plugin<a href="https://github.com/jenkinsci/notification-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/notification-plugin</a>. That plugin<br/>
+does much of the same work and where applicable I have gone the<br/>
+easy route and copied the work they have done.</p>
+
+<p>Contributing<br/>
+------------</p>
+
+<p>To browse the latest code, see:<a href="https://git.openstack.org/cgit/openstack-infra/zmq-event-publisher/tree/" class="external-link" rel="nofollow">https://git.openstack.org/cgit/openstack-infra/zmq-event-publisher/tree/</a><br/>
+To clone the latest code, use<br/>
+`git clone git://git.openstack.org/openstack-infra/zmq-event-publisher`</p>
+
+<p>Bugs are handled at: <a href="https://storyboard.openstack.org/#!/project/750" class="external-link" rel="nofollow">https://storyboard.openstack.org/#!/project/750|https://storyboard.openstack.org/#!/project/750</a></p>
+
+
+
+
+<p>Code reviews are handled by gerrit. The gerrit in<br/>
+use is <a href="http://review.openstack.org" class="external-link" rel="nofollow">http://review.openstack.org</a></p>
+
+
+<p>Developer docs: <a href="http://docs.openstack.org/infra/manual/developers.html" class="external-link" rel="nofollow">http://docs.openstack.org/infra/manual/developers.html</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387650.png">changes.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387651.png">changes-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387652.png">gconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387653.png">ghserver-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387654.png">secret-text.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/95224687/95387655.png">manage-token.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:02</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

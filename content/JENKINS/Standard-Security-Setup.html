@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Standard Security Setup</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Standard Security Setup
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jmcgeheeiv)</span> on Mar 04, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Immediately after installation, Jenkins will allow anyone to run anything as user jenkins, which is bad.  This page shows you how to set up basic security using the <em>Configure Global Security</em> page.</p>
+
+<p>The <em>Configure Global Security</em> page has two sections in which you:</p>
+
+<ul>
+	<li>Set the security realm to determine who is allowed access</li>
+	<li>Set the authorization to determine what each user is allowed to do</li>
+</ul>
+
+
+<h2 id="StandardSecuritySetup-SecurityRealm">Security Realm</h2>
+
+<p>First, establish the user authentication method.  For smaller, more informal installations, you can use Jenkins' own user database.  For enterprise installations, you will want to use your corporate service, which allows users to log in to Jenkins with their usual username and password.</p>
+
+<h3 id="StandardSecuritySetup-Jenkins&#39;OwnUserDatabase">Jenkins' Own User Database</h3>
+
+<p>This is the simplest authentication scheme--Jenkins maintains its own independent user database.  People can sign up for their own accounts, and you as the administrator decide who can do what in Jenkins.</p>
+
+<ol>
+	<li><span style="color: rgb(51,51,51);">Go to the </span>Jenkins dashboard, usually http://_server_:8080 or http://_server_/jenkins:8080, where <em>server</em> is the host on which Jenkins is running</li>
+	<li><span style="color: rgb(51,51,51);">Select </span><span style="color: rgb(51,51,51);"><em>Manage Jenkins</em></span><span style="color: rgb(51,51,51);">, then </span><em>Configure Global Security</em></li>
+	<li><span style="color: rgb(51,51,51);">Click </span><span style="color: rgb(51,51,51);"><em>Enable Security</em></span><span style="color: rgb(51,51,51);">.  The page will expand to offer a choice of access control.</span></li>
+	<li>Select <span style="color: rgb(51,51,51);"><em>Jenkins’ own user database</em></span></li>
+	<li>Place a check mark next to <em>Allow users to sign up</em></li>
+	<li>Continue with <em>Authorization</em>, below.  In particular, do not forget to press the <em>Save</em> button at the bottom of the page.</li>
+</ol>
+
+
+<h3 id="StandardSecuritySetup-ActiveDirectoryOnLinuxServer">Active Directory On Linux Server</h3>
+
+
+<p><span style="color: rgb(0,0,0);">If Jenkins is running on a Windows server then it is better to install the</span> <a href="Active-Directory-plugin.html">Active Directory plugin</a><span style="color: rgb(0,0,0);">.</span></p>
+
+<p>On a Linux host you have an option to either use the <a href="Active-Directory-plugin.html">Active Directory plugin</a> or an LDAP based authentication. To configure the LDAP to work with Active Directory, provide the following:</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Server </p></th>
+<td class="confluenceTd"><p> <em>mydomaincontroller</em>.<em>mycompnay</em>.com:389 </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Root DN </p></th>
+<td class="confluenceTd"><p> dc=<em>mycompnay</em>,dc=com </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> User Search Filter </p></th>
+<td class="confluenceTd"><p> sAMAccountName={0} </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Manager DN </p></th>
+<td class="confluenceTd"><p> cn=<em>mymanageruser</em>,ou=users,ou=na,ou=<em>mycompany</em>,dc=<em>mycompany</em>,dc=com </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Manager Password </p></th>
+<td class="confluenceTd"><p> ***** </p></td>
+</tr>
+</tbody></table></div>
+
+
+<p>Note that the correct Manager DN value can vary greatly depending on your Active Directory set up.</p>
+
+<h3 id="StandardSecuritySetup-UNIXNIS">UNIX NIS</h3>
+
+<p>To set up Network Information System:</p>
+
+<ol>
+	<li><span style="color: rgb(51,51,51);">Go to the </span>Jenkins dashboard, usually http://_server_:8080 or http://_server_/jenkins:8080, where <em>server</em> is the host on which Jenkins is running</li>
+	<li><span style="color: rgb(51,51,51);">Select </span><span style="color: rgb(51,51,51);"><em>Manage Jenkins</em></span><span style="color: rgb(51,51,51);">, then </span><em>Configure Global Security</em></li>
+	<li><span style="color: rgb(51,51,51);">Click </span><span style="color: rgb(51,51,51);"><em>Enable Security</em></span><span style="color: rgb(51,51,51);">.  The page will expand to offer a choice of access control</span></li>
+	<li><span style="color: rgb(51,51,51);">Select </span><span style="color: rgb(51,51,51);"><em>Unix user/group database</em></span>#* <span style="color: rgb(51,51,51);">Push the </span><span style="color: rgb(51,51,51);"><em>Test</em></span><span style="color: rgb(51,51,51);"> button (on the extreme right)</span>
+	<ul>
+		<li><span style="color: rgb(51,51,51);">If </span><span style="color: rgb(51,51,51);"><em>Success</em></span><span style="color: rgb(51,51,51);"> is displayed, everything is set up properly</span></li>
+		<li><span style="color: rgb(51,51,51);">If not, follow the instructions to fix the problem and repeat</span></li>
+		<li><span style="color: rgb(51,51,51);">If you still do not succeed, push the </span><span style="color: rgb(51,51,51);"><em>Advanced</em></span><span style="color: rgb(51,51,51);"> button and specify </span><span style="color: rgb(51,51,51);"><em>Service Name </em></span>sshd<span style="color: rgb(51,51,51);"> and repeat</span></li>
+	</ul>
+	</li>
+	<li>Continue with <em>Authorization</em>, below.  In particular, do not forget to press the <em>Save</em> button at the bottom of the page.</li>
+</ol>
+
+
+<h3 id="StandardSecuritySetup-LDAP">LDAP</h3>
+
+
+<p><span style="color: rgb(0,0,0);">See </span><a href="LDAP-Plugin.html">LDAP Plugin</a><span style="color: rgb(0,0,0);">.  Then continue with </span><span style="color: rgb(0,0,0);"><em>Authorization</em></span><span style="color: rgb(0,0,0);">, below.  In particular, do not forget to press the </span><span style="color: rgb(0,0,0);"><em>Save</em></span><span style="color: rgb(0,0,0);"> button at the bottom of the page.</span></p>
+
+<h2 id="StandardSecuritySetup-Authorization">Authorization</h2>
+
+
+<p><span style="color: rgb(0,0,0);">The </span><span style="color: rgb(0,0,0);"><em>Authorization</em></span><span style="color: rgb(0,0,0);"> section of the </span><span style="color: rgb(0,0,0);"><em>Configure Global Security</em></span><span style="color: rgb(0,0,0);"> page allows you to configure what users are allowed to do once authenticated.</span></p>
+
+<h3 id="StandardSecuritySetup-Matrix-basedSecurity">Matrix-based Security</h3>
+
+<p><a href="Matrix-based-security.html">Matrix-based security</a> offers the most precise control over user privileges.</p>
+<ol>
+	<li>Select <em>Matrix-based security</em> as the <em>Authorization</em></li>
+	<li>Give the <em>Anonymous</em> user only <em>Overall Read</em> access</li>
+	<li>In the text box below the matrix, type your user name (or the user name you plan to use when you register as a new Jenkins user) and click <em>Add</em></li>
+	<li>Give yourself full access by checking the entire row for your user name</li>
+	<li>Repeat for other users who deserve full access.  The configuration should look like the picture below: <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/10059796/10289154.png" data-image-src="attachments/10059796/10289154.png" data-unresolved-comment-count="0" data-linked-resource-id="10289154" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="owndb.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="10059796" data-linked-resource-container-version="28"></span></li>
+	<li>Click <em>Save</em> at the bottom of the page.  You will be taken back to the top page.  Now Jenkins is successfully secured.</li>
+	<li>Restart Jenkins (service jenkins restart on Linux)</li>
+</ol>
+
+
+<p>If you set up a service like NIS, Active Directory or LDAP, you can now log in to Jenkins using your network credentials.  If you are using Jenkins' own user database, create a user account for yourself: </p>
+
+<ol>
+	<li>Click the <em>Login</em> link at the top right portion of the page</li>
+	<li>Choose <em>Create an account</em></li>
+	<li>Specify the user name you used in the above step, and fill in the rest</li>
+</ol>
+
+
+<p>If everything works smoothly, you are now logged on as yourself with full permissions. If something goes wrong, follow <a href="Disable-security.html">this</a> to reset the security setting.</p>
+
+<h2 id="StandardSecuritySetup-TBD"><span style="color: rgb(210,73,57);">TBD</span></h2>
+
+<p>More docs to come. Suggestions on what needs to be written are greatly appreciated.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/10059796/10289154.png">owndb.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/10059796/39256105.jpg">hudson_settings.jpg</a> (image/pjpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/10059796/72974377.png">problem.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

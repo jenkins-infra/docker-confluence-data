@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Hudson Monitor for Chumby</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Hudson Monitor for Chumby
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fabiane)</span>, last modified by <span class='editor'> Unknown User (loganl)</span> on Apr 18, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Monitor and display the status of your builds on your Chumby.<br/>
+The <a href="http://www.chumby.com/" class="external-link" rel="nofollow">Chumby</a> is a device that can connect to the internet and run many applications.</p>
+
+<p>HudsonMonitor is a Chumby application created by <a href="http://www.toolscloud.com/" class="external-link" rel="nofollow">ToolsCloud</a> to monitor your <a href="http://hudson-ci.org/" class="external-link" rel="nofollow">Hudson Continuous Integration</a> server builds. The application is open sourced under the GPL license and the source code can be found <a href="http://main.toolscloud.com/doc/hudson-docs/chumby/hudsonMonitor.zip" class="external-link" rel="nofollow">here</a>. The application is provided as-is and there is no warranty for this free software.</p>
+
+<p>You can find the HudsonMonitor application at the <a href="http://www.chumby.com/guide/widget/Hudson%20Monitor" class="external-link" rel="nofollow">Chumby App Store</a> and install it on your Chumby for free.</p>
+
+<p>The first step to use the HudsonMonitor in your Chumby is to get the URL  for just the latest builds RSS from your Hudson server, that can be found at the bottom of the Hudson server main page.</p>
+
+
+<p>Before setting this URL in the Chumby application, note that since  HudsonMonitor is a Flash application, the server that is providing the  RSS *must* allow Flash access to  that feed by using a &quot;crossdomain.xml&quot; file - you can read more about  this at:</p>
+<ul>
+	<li><a href="http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=tn_14213" class="external-link" rel="nofollow">External data not accessible outside a Macromedia Flash movie's domain</a></li>
+	<li><a href="http://www.adobe.com/devnet/flash/articles/fplayer_security.html" class="external-link" rel="nofollow">Security Changes in Macromedia Flash Player 7</a></li>
+</ul>
+
+
+<p>The crossdomain.xml file should be at the root of your http server. So,  in order to allow your Chumby to access the Jenkins RSS you have to put a  crossdomain.xml file <a href="http://main.toolscloud.com/doc/hudson-docs/chumby/crossdomain.xml" class="external-link" rel="nofollow">like this one</a> in your Jenkins server.<br/>
+When you have set your Hudson server, go to the configuration screen of  the HudsonMonitor in your Chumby web page and set the URL of the RSS you  got for the latest builds.</p>
+
+<p>Done! Now, when a build is broken, your Chumby will let you know.</p>
+
+<p>You don't own a Chumby? You can still use the version of the HudsonMonitor hosted <a href="http://main.toolscloud.com/doc/hudson-docs/chumby/hudsonMonitorNoChumby.swf" class="external-link" rel="nofollow">here</a>.  Just grab an old computer and let it act as your build monitor. And  don't forget to add the toolscloud.com domain to your crossdomain.xml  file, if you are going to use this version.</p>
+
+<p>Additional information about this tool can be found on the <a href="http://main.toolscloud.com/doc/hudson-docs/chumby/hudsonMonitor" class="external-link" rel="nofollow">Hudson Monitor for Chumby web site</a> .</p>
+
+
+<h3 id="HudsonMonitorforChumby-Additionalinstructions:">Additional instructions:</h3>
+
+<p>If your Jenkins requires authentication to access the RSS or if you run  your Jenkins server through HTTPS, the Hudson monitor will not be able to  get the RSS feed directly from Jenkins.  One possible solution for this  is to copy the RSS from time to time to a security free area that is  accessible via HTTP. You can even do this using Jenkins! Here is how to  do it:</p>
+<ol>
+	<li>Create a new build in Jenkins that is executed from time to time, or, better yet, is fired when any other build finishes;</li>
+	<li>In the command field of this build, type something like this:</li>
+</ol>
+
+
+<p>wget --no-check-certificate --save-cookies  /temp/hudson-authentication-cookie \<br/>
+         ‐‐output‐document &quot;-&quot; \<br/>
+        'https://your.server.com/hudson/j_acegi_security_check?j_username=a_user&amp;j_password=a_password&amp;remember_me=true'  &gt;/dev/null</p>
+
+<p>wget --no-check-certificate --load-cookies /temp/hudson-authentication-cookie \<br/>
+         -O  /var/www/rss/rssLatest <a href="https://your.server.com/hudson/rssLatest" class="external-link" rel="nofollow">https://your.server.com/hudson/rssLatest</a></p>
+
+
+<p>Note that you have to adapt these commands to your environment, setting the right server address, folders, user and password.</p>
+
+<p>These commands will copy the RSS from your secure server to an unsecure  area, so it can be accessed by the flash application. Use the unsecure  URL in your Chumby's Hudson Monitor and you can make it work with a  secure Hudson server.
+<br class="atl-forced-newline"/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:27</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

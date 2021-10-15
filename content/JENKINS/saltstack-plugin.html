@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : saltstack-plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : saltstack-plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mchugh19)</span>, last modified on Dec 14, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View SaltStack <a href="https://plugins.jenkins.io/saltstack" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-07-30/#SECURITY-1009" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allowed capturing credentials</a></li>
+</ul>
+
+</div></div>
+This plugin sends a SaltStack API message as a build step<h1 id="saltstack-plugin-Basicusage">Basic usage</h1><h2 id="saltstack-plugin-Components">Components</h2><p>Installing this plugin contributes following:</p><ul><li><strong>Send a message to Salt API</strong> - Build step</li></ul><p>There are a few options for how to run a salt job:</p><h3 id="saltstack-plugin-local">local</h3><p>This is the standard way to run a salt command. If command returns quickly, the results will be returned. Otherwise, if the command is long running, jenkins will not wait.<br/> If you wish to have jenkins wait for a long running command to finish, check the &quot;Wait for completion&quot; checkbox.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Salt syntax: &quot;salt -N nodegroup webservers state.sls apache test=True&quot;
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="900" src="attachments/73534062/80871487.png" data-image-src="attachments/73534062/80871487.png" data-unresolved-comment-count="0" data-linked-resource-id="80871487" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="local.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span></p><h3 id="saltstack-plugin-local_batch">local_batch</h3><p>Similar to the local operation, but allows for only running the command on a few minions at a time. Jenkins will always wait for all minions to return before finishing, so long running commands will always block the build until finished.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Salt syntax: &quot;salt -b &#39;25%&#39; -N nodegroup webservers state.sls deploy.websites test=True&quot;
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="900" src="attachments/73534062/105676807.png" data-image-src="attachments/73534062/105676807.png" data-unresolved-comment-count="0" data-linked-resource-id="105676807" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="local_batch.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span></p><h3 id="saltstack-plugin-subset">subset</h3><p>Also similar to the local operation, but allows for only running the command on a subset of the target match. Jenkins will always wait for all minions to return before finishing, so long running commands will always block the build until finished.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Salt syntax: salt --subset=4 &#39;*&#39; service.stop zabbix-agent
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="900" src="attachments/73534062/105676811.png" data-image-src="attachments/73534062/105676811.png" data-unresolved-comment-count="0" data-linked-resource-id="105676811" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="subset.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span></p><h3 id="saltstack-plugin-runner">runner</h3><p>This allows you to run salt-run commands. It was intended to be used to kick off salt orchestration jobs</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Salt syntax: salt-run state.orchestrate orchestration.refresh-apache pillar=&#39;{&quot;target&quot;:testserver1.domain.com}&#39;
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="900" src="attachments/73534062/105676808.png" data-image-src="attachments/73534062/105676808.png" data-unresolved-comment-count="0" data-linked-resource-id="105676808" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="runner.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span></p><h3 id="saltstack-plugin-hook">hook</h3><p>This publishes a message to the salt event bus. Useful for integrating with reactors from Jenkins</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Curl syntax: curl -sS localhost:8000/hook/jenkins/notify/slack \
+    -H &#39;Content-type: application/json&#39; \
+    -d &#39;{&quot;message&quot;: &quot;Build ran&quot;}&#39;
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="900" src="attachments/73534062/105676810.png" data-image-src="attachments/73534062/105676810.png" data-unresolved-comment-count="0" data-linked-resource-id="105676810" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hook.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span></p><h2 id="saltstack-plugin-Pipeline">Pipeline</h2><p>As of the 2.0 release, Jenkins pipeline is supported</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>import groovy.json.*
+
+node() {
+  saltresult = salt authtype: &#39;pam&#39;, clientInterface: local(arguments: &#39;&quot;ls -la&quot;&#39;, blockbuild: true,
+    function: &#39;cmd.run&#39;, jobPollTime: 16, target: &#39;*&#39;, targettype: &#39;glob&#39;),
+    credentialsId: &#39;a3d814c2-84ed-4752-94a8-271791bb5375&#39;, servername: &#39;http://localhost:8000&#39;
+  def prettyJson = JsonOutput.prettyPrint(saltresult)
+  println(prettyJson)
+}
+</pre>
+</div></div><h2 id="saltstack-plugin-DeclarativePipeline">Declarative Pipeline</h2><p>Declarative pipelines are supported and function with the blueocean pipeline editor. As of blueocean 1.3 the pipeline editor does not fully render the input fields and requires some adjustments.</p><h4 id="saltstack-plugin-Addastep&quot;SendamessagetotheSaltAPI&quot;">Add a step &quot;Send a message to the SaltAPI&quot;</h4><h4 id="saltstack-plugin-"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/73534062/135466519.png" data-image-src="attachments/73534062/135466519.png" data-unresolved-comment-count="0" data-linked-resource-id="135466519" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2017-10-14 at 7.33.15 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73534062" data-linked-resource-container-version="52"></span> </h4><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 63.9263%;"><colgroup><col style="width: 12.4306%;"/><col style="width: 87.5694%;"/></colgroup><tbody><tr><td class="confluenceTd">Servername</td><td class="confluenceTd"><span class="nolink">http://master.local:8000</span></td></tr><tr><td class="confluenceTd">Authtype</td><td class="confluenceTd">pam</td></tr><tr><td class="confluenceTd">ClientInterface</td><td class="confluenceTd">${local(arguments: '&quot;sleep 3; ls -la&quot;', blockbuild: true, function: 'cmd.run', jobPollTime: 6, target: '*', targettype: 'glob')}</td></tr><tr><td class="confluenceTd">CredentialsId</td><td class="confluenceTd">b5f40401-01b9-4b27-a4e8-8ae94bc90250</td></tr><tr><td class="confluenceTd">Checkboxes</td><td class="confluenceTd">SaveFile</td></tr></tbody></table></div><h4 id="saltstack-plugin-Addasecondstep&quot;RunarbitraryPipelinescript&quot;toprintresults">Add a second step &quot;Run arbitrary Pipeline script&quot; to print results </h4><pre>env.WORKSPACE = pwd()<br/>def output = readFile &quot;${env.WORKSPACE}/saltOutput.json&quot;<br/>echo output</pre><p><br/></p><p>All together this will create a declarative pipeline Jenkinsfile that looks something like:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>JenkinsFile</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {
+  agent {
+    node {
+      label &#39;agent1&#39;
+    }
+    
+  }
+  stages {
+    stage(&#39;saltcommand&#39;) {
+      steps {
+        salt(authtype: &#39;pam&#39;, clientInterface: local(arguments: &#39;&quot;sleep 3; ls -la&quot;&#39;, blockbuild: true, function: &#39;cmd.run&#39;, jobPollTime: 6, target: &#39;*&#39;, targettype: &#39;glob&#39;), credentialsId: &#39;b5f40401-01b9-4b27-a4e8-8ae94bc90250&#39;, saveFile: true, servername: &#39;http://master.local:8000&#39;)
+        script {
+          env.WORKSPACE = pwd()
+          def output = readFile &quot;${env.WORKSPACE}/saltOutput.json&quot;
+          echo output
+        }
+        
+      }
+    }
+  }
+}</pre>
+</div></div><h2 id="saltstack-plugin-Configuration"><br/>Configuration</h2><h5 id="saltstack-plugin-Jenkins">Jenkins</h5><p>Simply fill out the connection details on the build page.</p><p>If using the wait for long commands to finish option, then you may want to adjust either the poll interval or the minion timeout. The default for both options are set on in the Jenkins configuration page or the default can be overwritten from on the individual job.</p><ul><li>poll interval - controls how often jenkins will check in with the saltapi during a long running job. This can be set to something short (like 5 seconds) if you have a job that completes somewhat quickly. If you have a job that you know will run for an hour, checking every 5 seconds is a bit too frequent.</li><li>minion timeout - If you have a job that should be run on multiple minions but only some minions return, the minion timeout will set how long to wait for the remaining minions to come back before assuming them offline and marking the build as a failure. This is helpful as without the timeout, the jenkins salt plugin will wait forever for the possibly non-existent minions to return.</li></ul><p>Allow the user accessing the salt api to have permission to the necessary salt modules. Also grant access for the @runner returner.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>external_auth:
+  pam:
+    jenkins:
+      - test.*
+      - pkg.*
+      - cmd.*
+      - state.*
+      - &#39;@runner&#39;
+</pre>
+</div></div><p>This jenkins module was written to use SaltStack's <a href="https://salt-api.readthedocs.org/en/latest/ref/netapis/all/saltapi.netapi.rest_cherrypy.html" class="external-link" rel="nofollow">cherrypy api</a> and <a href="https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_tornado.html" class="external-link" rel="nofollow">tornado</a> (as of 3.0.0). You will need to add something like the following to your salt master's configuration</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>rest_cherrypy:
+  port: 8000
+  ssl_crt: /etc/pki/tls/certs/localhost.crt
+  ssl_key: /etc/pki/tls/certs/localhost.key
+  expire_responses: False
+
+rest_timeout: 7200
+</pre>
+</div></div><p><em>Note: some long running jobs may require increasing the rest_timeout or setting the expire_responses options.</em></p><p>You can test if you can access the API with the following command (changing the user and password to the right values).</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ curl -sSk https://&lt;salt-master&gt;:8000/login \
+     -H &#39;Accept: application/x-yaml&#39; \
+     -d username=jenkins \
+     -d password=jenkins \
+     -d eauth=pam
+</pre>
+</div></div><p>Which would give you something similar to the following output.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>return:
+- eauth: pam
+  expire: 1458563520.558709
+  perms:
+  - .*
+  - test.*
+  - pkg.*
+  - cmd.*
+  - state.*
+  - &#39;@runner&#39;
+  start: 1458520320.558709
+  token: 634c66d581806e5e9dacefbdc721cba45b78f63c
+  user: jenkins
+</pre>
+</div></div><h2 id="saltstack-plugin-LoggingConfiguration">Logging Configuration</h2><p>To see what is sent/received from the salt-api create a jenkins logger:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Name: salt logs
+Logger: com.waytta.saltstack
+Log level: ALL
+</pre>
+</div></div><p>To see what http requests are being sent:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Name: http
+Logger: sun.net.www.protocol.http.HttpURLConnection
+log level: ALL
+</pre>
+</div></div><p><em>To get any output from http, you may also need to add a default FINEST Jenkins logger on /jenkins/log/levels</em></p><h1 id="saltstack-plugin-Changelog">Changelog</h1><h4 id="saltstack-plugin-Version3.2.1(December14,2018)">Version 3.2.1 (December 14, 2018)</h4><ul><li>Fix github issue 131: ignore non-boolean &quot;success&quot; keys</li></ul><h4 id="saltstack-plugin-Version3.2.0(August7,2018)">Version 3.2.0 (August 7, 2018)</h4><ul><li>Add file and auto auth types. Note: As mentioned in <a href="https://docs.saltstack.com/en/latest/ref/auth/all/salt.auth.auto.html" class="external-link" rel="nofollow">upstream documentation</a>, auto is only for testing and not to be used in production!</li><li>Define global configuration option to specify saltapi version used. This enables:<ul><li>Support tgt_type updates from 2017.7</li><li><p>Add full_return to cmd.* modules</p></li><li><p>Validate &quot;success&quot; key if it exists</p></li></ul></li><li>Support batch_wait option</li><li>Only pass arg or kwarg when not empty (corrects issues with some modules such as saltutil.refresh_grains)</li></ul><h4 id="saltstack-plugin-Version3.1.7(July30,2018)">Version 3.1.7 (July 30, 2018)</h4><ul><li><a href="https://jenkins.io/security/advisory/2018-07-30/#SECURITY-1009" class="external-link" rel="nofollow">Fix security issue</a></li></ul><h4 id="saltstack-plugin-Version3.1.6(March16,2018)">Version 3.1.6 (March 16, 2018)</h4><ul><li>Runner mods key will only be passed to salt-api when not empty</li></ul><h4 id="saltstack-plugin-Version3.1.5(Feb1,2018)">Version 3.1.5 (Feb 1, 2018)</h4><ul><li>Add option to skip validation of salt return</li></ul><h4 id="saltstack-plugin-Version3.1.4(Jan16,2018)">Version 3.1.4 (Jan 16, 2018)</h4><ul><li>Fix for JEP-200</li></ul><h4 id="saltstack-plugin-Version3.1.3(Oct14,2017)">Version 3.1.3 (Oct 14, 2017)</h4><ul><li>Increase timeout for saltapi response, which improves detection of large results</li><li>Better error message when minion target matches no minions</li></ul><h4 id="saltstack-plugin-Version3.1.2(Aug20,2017)">Version 3.1.2 (Aug 20, 2017)</h4><div><ul><li>Don't force = inside of quotes to be kwargs</li></ul></div><h4 id="saltstack-plugin-Version3.1.1(July24,2017)">Version 3.1.1 (July 24, 2017)</h4><ul><li>Correct an issue with hook pipeline jobs</li></ul><h4 id="saltstack-plugin-Version3.1.0(June20,2017)">Version 3.1.0 (June 20, 2017)</h4><ul><li>Fix runner jobs with recent SaltAPI</li><li>Correct Jenkins timeout on long running jobs</li><li>Support pre 2.0 job import<ul><li><p>Due to human error, there is a manual step necessary to fully import pre 2.0 build configs. If the Jenkins migrate old data page at administrativeMonitor/OldData/manage shows the error <code>ConversionException: Cannot construct com.waytta.clientinterface.BasicClient</code> then delete the <code>&lt;clientInterface&gt;*&lt;/clientInterface&gt;</code> line from the config. This can be done with:<br/><code>sed -i'.bak' '/&lt;clientInterface&gt;.*&lt;\/clientInterface&gt;/d' jenkinshome/jobs/jobname/config.xml</code></p><p>At this point reloading configs should restore the job data.</p></li></ul></li></ul><h4 id="saltstack-plugin-Version3.0.0(April28,2017)">Version 3.0.0 (April 28, 2017)</h4><ul><li>Supports the Tornado SaltAPI<ul><li>Version bump due to the changes in the return<br/>Former Cherrypy results<br/><pre><span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;</span>return<span class="pl-pds">&quot;</span></span>: [{
+  <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;</span>minionid<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;Results and output</span><span class="pl-pds">&quot;</span></span>
+}]</pre><p>Tornado and Cherrypy as of this release</p><pre><span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;</span>Result<span class="pl-pds">&quot;</span></span>: {
+  <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;minionid</span><span class="pl-pds">&quot;</span></span>: {
+    <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;</span>return<span class="pl-pds">&quot;</span></span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">&quot;Results and output</span><span class="pl-pds">&quot;</span></span>
+  }
+}</pre></li></ul></li><li>Support setting a minion timeout that does not fail the build</li><li>Display http errors from SaltAPI rather than showing a parsing problem</li><li>Add ability to save SaltAPI return to a file - useful for large output or declarative pipeline syntax</li><li>Retry http connections on timeout</li><li>Only raise exceptions on errors, don't mark build as failed. This allows for try/catch blocks in pipeline</li></ul><h4 id="saltstack-plugin-Version2.1.0(March30,2017)">Version 2.1.0 (March 30, 2017)</h4><ul><li>Support running from Jenkins agents</li><li>Allow minion timeout to be configured per job</li></ul><h4 id="saltstack-plugin-Version2.0.1(March11,2017)">Version 2.0.1 (March 11, 2017)</h4><ul><li>Correct issue where build always waits for minion timeout</li></ul><h4 id="saltstack-plugin-Version2.0.0(Feb11,2017)">Version 2.0.0 (Feb 11, 2017)</h4><ul><li>Support Jenkins pipeline</li><li>Support folder level credentials</li><li>Simplify args and kwargs to single input</li><li>Split on spaces rather than commas in args input to closer match salt cli syntax</li><li>Salt subset support</li><li>Salt hook support</li><li>Detect minion timeouts in order to fail build</li><li>Allow parameterized batch size</li></ul><h4 id="saltstack-plugin-Version1.7.1(May6,2016)">Version 1.7.1 (May 6, 2016)</h4><ul><li>Properly handle missing environment variables</li><li>Use jenkins logging to record messages to/from salt-api (see above)</li></ul><h4 id="saltstack-plugin-Version1.7.0(February29,2016)">Version 1.7.0 (February 29, 2016)</h4><ul><li>Convert from username/password fields to using jenkins credentials</li><li>Detect additional salt failures</li><li>Support saving salt return into SALTBUILDOUTPUT environment variable</li><li>Support JSON pillar data in orchestrate calls</li></ul><h4 id="saltstack-plugin-Version1.6.1(February1,2016)">Version 1.6.1 (February 1, 2016)</h4><ul><li>Properly detect salt runners that only return a boolean (fileserver.update)</li><li>Display a proper error message for runners that return a string (failure of fileserver.update <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/> )</li></ul><h4 id="saltstack-plugin-Version1.6.0(January5,2016)">Version 1.6.0 (January 5, 2016)</h4><ul><li>Correct quote handling of arguments and keyword arguments to support both single and double quotes.</li><li>Add configuration option to output yaml or json to console</li><li>Improve failure detection</li><li>Allow paramoized servername</li></ul><h4 id="saltstack-plugin-Version1.5.0(July10,2015)">Version 1.5.0 (July 10, 2015)</h4><ul><li>Break out salt kwargs into a separate text input. Resolves issues detecting args including &quot;=&quot; as kwargs.</li></ul><h4 id="saltstack-plugin-Version1.4.0(Nov24,2014)">Version 1.4.0 (Nov 24, 2014)</h4><ul><li>Support SaltStack batch jobs</li><li>Reconfigure GUI to support both &quot;local&quot; and &quot;local_batch&quot;</li><li>Support arguments containing python lists</li></ul><h4 id="saltstack-plugin-Version1.3.0(Nov7,2014)">Version 1.3.0 (Nov 7, 2014)</h4><ul><li>Now use JSON when speaking to SaltAPI instead of URL encoding. This fixes some issues with kwarg handling.</li><li>Improve error detection</li></ul><h4 id="saltstack-plugin-Version1.2.1(Oct30,2014)">Version 1.2.1 (Oct 30, 2014)</h4><ul><li>Clean up space detection around argument separator. Fixes problem of too aggressively removing whitespace in arguments list.</li></ul><h4 id="saltstack-plugin-Version1.2(Oct4,2014)">Version 1.2 (Oct 4, 2014)</h4><ul><li>Allow comma separated arguments</li></ul><h4 id="saltstack-plugin-Version1.1(Sep7,2014)">Version 1.1 (Sep 7, 2014)</h4><ul><li>Include blocking support</li></ul><h4 id="saltstack-plugin-Version1.0(Sep4,2014)">Version 1.0 (Sep 4, 2014)</h4><ul><li>Initial Version</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676806.png">local.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/80871488.png">batch.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/80871489.png">batch1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/80871490.png">orchestration1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/95813647.png">jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/80871487.png">local.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676807.png">local_batch.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676809.png">runner.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676808.png">runner.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676810.png">hook.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/105676811.png">subset.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534062/135466519.png">Screen Shot 2017-10-14 at 7.33.15 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:44</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

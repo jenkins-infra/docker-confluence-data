@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Slave To Master Access Control</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Slave To Master Access Control
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (markewaite)</span> on Nov 08, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020136214 {padding: 0px;}
+div.rbtoc1631020136214 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020136214 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020136214'>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-Whatisthis?'>What is this?</a></li>
+<li><a href='#SlaveToMasterAccessControl-MyJenkinsisbroken,help!'>My Jenkins is broken, help!</a>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-Checkiftheupdatestopluginsareavailable'>Check if the updates to plugins are available</a>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-CredentialsPlugin'>Credentials Plugin</a></li>
+<li><a href='#SlaveToMasterAccessControl-SSHCredentialsPlugin'>SSH Credentials Plugin</a></li>
+<li><a href='#SlaveToMasterAccessControl-GitClientPlugin'>Git Client Plugin</a></li>
+</ul>
+</li>
+<li><a href='#SlaveToMasterAccessControl-Enabletheaccesscontrolmechanism'>Enable the access control mechanism</a></li>
+<li><a href='#SlaveToMasterAccessControl-Disabletheaccesscontrolmechanismaltogether'>Disable the access control mechanism altogether</a></li>
+</ul>
+</li>
+<li><a href='#SlaveToMasterAccessControl-Whitelisting'>Whitelisting</a>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-Commandwhitelisting'>Command whitelisting</a></li>
+<li><a href='#SlaveToMasterAccessControl-Fileaccessrules'>File access rules</a>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-Pathmatching'>Path matching</a></li>
+</ul>
+</li>
+<li><a href='#SlaveToMasterAccessControl-WhitelistingfromGUI'>Whitelisting from GUI</a></li>
+</ul>
+</li>
+<li><a href='#SlaveToMasterAccessControl-I&#39;maplugindeveloper.WhatshouldIdo?'>I&#39;m a plugin developer. What should I do?</a>
+<ul class='toc-indentation'>
+<li><a href='#SlaveToMasterAccessControl-VettingSlaveToMasterCallable/SlaveToMasterFileCallable'>Vetting SlaveToMasterCallable/SlaveToMasterFileCallable</a></li>
+<li><a href='#SlaveToMasterAccessControl-FixingpluginswithoutrequiringnewerJenkins'>Fixing plugins without requiring newer Jenkins</a></li>
+<li><a href='#SlaveToMasterAccessControl-Fileaccessfromagenttomaster'>File access from agent to master</a></li>
+<li><a href='#SlaveToMasterAccessControl-I&#39;mnotsurehowtoadaptmyplugin,Ineedhelp'>I&#39;m not sure how to adapt my plugin, I need help</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="SlaveToMasterAccessControl-Whatisthis?">What is this?</h1><p>Historically, Jenkins master and agents behaved as if they all together form a single distributed process. This means an agent can ask a master to do just about anything within the confinement of the operating system, such as accessing files on the master or trigger other jobs on Jenkins.</p><p>This has increasingly become problematic, as larger enterprise deployments have developed more sophisticated trust separation model, where the administrators of a master might take agents owned by other teams. In such an environment, agents are less trusted than the master.</p><p>Starting 1.587 (and 1.580.1), Jenkins added a subsystem to put a wall between a master and an agent to safely allow less trusted agents to be connected to a master. Since Jenkins 2.0, this subsystem is enabled for all new installations of Jenkins. If you fit the &quot;larger enterprise deployment&quot; description above, then we highly recommend you turn this mode on. The following are examples of deployments that fit this profile:</p><ul><li>You took agents that are managed by another person who is not Jenkins administrator because they have special requirement for their build jobs</li><li>You have some jobs that are configured to run on a specific agent because it is sensitive</li></ul><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>To turn this switch on, go to &quot;Manage Jenkins&quot; &gt; &quot;Configure Global Security&quot;, and check &quot;Enable Agent → Master Access Control&quot;</p></div></div><p>On the other hand, if all your agents are trusted to the same degree as your master, then it is safe to leave this subsystem off. The following are examples of deployments that fit this profile:</p><ul><li>You have set up your Jenkins master and all the agents by yourself</li><li>All the users of your Jenkins have the same access to all the jobs</li></ul><p>For this subsystem to function, it needs cooperation from plugins. And until plugins get updated to work in this new environment, this may cause seemingly legitimate operations to fail, resulting in broken builds and other failures.</p><p>This Wiki page is intended to be the one-stop shop for those who are experiencing problems due to this subsystem.</p><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-user"></span></p><h1 id="SlaveToMasterAccessControl-MyJenkinsisbroken,help!">My Jenkins is broken, help!</h1><p>If you see an exception like the following in console output, logs, etc., then you are affected by this access control mechanism:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java.lang.SecurityException: agent may not create /var/lib/jenkins/foo/bar/...
+See http://jenkins-ci.org/security-144 for more details
+
+java.lang.SecurityException: Sending org.jenkinsci.plugins.gitclient.CliGitAPIImpl$GetPrivateKeys from agent to master is prohibited.
+See http://jenkins-ci.org/security-144 for more details
+</pre>
+</div></div><p>The first message indicates that an agent tried to access a file on the master, and Jenkins has blocked that. It is possible that this indicates an active attack, but it is also possible that plugins that haven't yet upgraded to work with SECURITY-144 is doing something legitimate.</p><p>The second message indicates that an agent has asked the master to execute a command, and Jenkins has blocked that because the command isn't classified by plugin developers whether it is safe to be executed from the agent.</p><p>To resolve this problem, you have the following options:</p><ul><li><a href="#SlaveToMasterAccessControl-update-plugins">Check if the updates to plugins are available</a></li><li><a href="#SlaveToMasterAccessControl-kill-switch">Disable the access control mechanism altogether</a></li><li><a href="#SlaveToMasterAccessControl-whitelist">Whitelist the access</a></li></ul><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-update-plugins"></span></p><h2 id="SlaveToMasterAccessControl-Checkiftheupdatestopluginsareavailable">Check if the updates to plugins are available</h2><p>During the testing of this feature, the following plugins and their versions have been known to interfere with this subsystem. If you are using one of those, upgrading those plugins will resolve the problem. This section will be updated as we discover affected plugins.</p><h3 id="SlaveToMasterAccessControl-CredentialsPluginCredentials-Plugin.html"><a href="Credentials-Plugin.html">Credentials Plugin</a></h3><p>This plugin should be upgraded to 1.17. Earlier versions have command implementations that are vulnerable to malicious agents.</p><h3 id="SlaveToMasterAccessControl-SSHCredentialsPluginSSH-Credentials-Plugin.html"><a href="SSH-Credentials-Plugin.html">SSH Credentials Plugin</a></h3><p>This plugin should be upgraded to 1.10. Earlier versions have command implementations that are vulnerable to malicious agents.</p><h3 id="SlaveToMasterAccessControl-GitClientPluginGit-Client-Plugin.html"><a href="Git-Client-Plugin.html">Git Client Plugin</a></h3><p>Versions up to 1.10.2 expose vulnerabilities in credentials plugin and SSH credentials plugin (see above). Upgrading those plugins will fix the problem, but there's also <a href="https://github.com/jenkinsci/git-client-plugin/pull/147" class="external-link" rel="nofollow">a separate fix</a> in git-client plugin 1.11.0 itself that addresses this problem.</p><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-kill-switch"></span></p><h2 id="SlaveToMasterAccessControl-Enabletheaccesscontrolmechanism">Enable the access control mechanism</h2><p>There are essentially three ways of enabling the access control mechanism:</p><ol><li>Through web UI, go to <span class="nolink">http://jenkins/configureSecurity</span>and check &quot;Enable Agent → Master Access Control&quot; option.</li><li>Through file system, create or edit the file <code>$JENKINS_HOME/secrets/slave-to-master-security-kill-switch</code> so that it contains <code>false</code>.</li><li><p>Using a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script" class="external-link" rel="nofollow">Groovy Hook Script</a><a href="https://wiki.jenkins-ci.org/display/JENKINS/Groovy+Hook+Script" class="external-link" rel="nofollow"> and doing something like this:</a></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import jenkins.security.s2m.AdminWhitelistRule
+import jenkins.model.Jenkins
+Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class)
+.setMasterKillSwitch(false)</pre>
+</div></div></li></ol><h2 id="SlaveToMasterAccessControl-Disabletheaccesscontrolmechanismaltogether">Disable the access control mechanism altogether</h2><p>If all your agents are trusted to the same degree as your master, then it is safe to disable this subsystem completely. See the top of this page for a discussion of who can safely do this vs who should avoid doing this.</p><p>If you convinced yourself that this is the right thing to do, you can go to <span class="nolink">http://jenkins/configureSecurity</span> and uncheck &quot;Enable Agent → Master Access Control&quot; option. This setting is remembered by <code>$JENKINS_HOME/secrets/slave-to-master-security-kill-switch</code>. The file should either contain <code>true</code> or <code>false</code> as the content (when the <em>kill-switch</em> is set to <code>false</code>, it means that <em>Agent → Master Access Control</em> is enabled). If you do not want this be configurable by an administrator, you can make this file read-only for Jenkins.</p><p>For instances that have no agents and instances that do not enable security, we do not expose this configuration switch as it is pointless.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Your Jenkins deployment may grow over time and start accepting less trusted agents. It's too easy for that to happen without you remembering this flag. So be careful when you do this. Please revisit this later to see if you should enable this subsystem.</p></div></div><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-whitelist"></span></p><h1 id="SlaveToMasterAccessControl-Whitelisting">Whitelisting</h1><p>Jenkins allows administrators to whitelist specific commands and file accesses on their Jenkins instances. This configuration consists of two pieces.</p><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-command-whitelist"></span></p><h2 id="SlaveToMasterAccessControl-Commandwhitelisting">Command whitelisting</h2><p>Commands in Jenkins and its plugins are identified by their fully-qualified class names. Majority of those commands are intended to be executed on agents by a request of a master, but some of them are intended to be executed on a master by a request of an agent. Plugins not yet updated for this subsystem does not classify which category each command falls into. So when an agent requests a master to execute a command and if it is not classified explicitly as intended for agent → master, Jenkins will err on the side of caution and refuses to execute the command.</p><p>Until all such plugins are properly updated, administrators can mark specific commands as intended to be executed on a master. We call this &quot;whitelisting&quot;.</p><p>Administrators can whitelist classes by writing <code>$JENKINS_HOME/secrets/whitelisted-callables.d/*.conf</code> and listing command names in separate lines. All such files are read and the result gets combined. Jenkins by itself generates <code>default.conf</code> in this directory, which lists known safe commands. This file gets always overwritten by Jenkins every time it starts, but if you do not want to whitelist these classes for some reasons, you can do so by placing a file that's not writable by Jenkins.</p><p>Jenkins also manages <code>gui.conf</code> in this directory, which is editable through GUI as discussed later. If you do not want to allow Jenkins admins to whitelist anything, create an empty file that's not writable by Jenkins.</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Whitelisting has to be done carefully</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Whitelisting a command requires not only verifying that the command is intended to be used in this direction, but also that the command implementation is not exploitable by malicious agents. This requires careful analysis of the source code, taking such things into account as all possible serializable fields. As a user, you should just report those commands, and wait for project developers to perform this vetting process. Once we verified that they are safe, you can whitelist them by using this mechanism.</p></div></div><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-filepath-rules"></span></p><h2 id="SlaveToMasterAccessControl-Fileaccessrules">File access rules</h2><p>File access request from agents is tested against the rules you specify. Each rule is a tuple that consists of:</p><ul><li><strong>allow/deny</strong>: if the following two parameters match the current request being considered, an &quot;allow&quot; entry would allow the request to be carried out and a &quot;deny&quot; entry would deny the request to be rejected, regardless of what later rules might say.</li><li><strong>operation</strong>: the type of the operation requested. The following 6 values exist. You can also list them separating with ',' or use &quot;all&quot; to indicate a match for all operations:<ul><li>read: read file content or list directory entries</li><li>write: write file content</li><li>mkdirs: create a new directory</li><li>create: create a file in an existing directory</li><li>delete: delete a file or directory</li><li>stat: read metadata of a file/directory, such as timestamp, length, file access modes.</li></ul></li><li><strong>file path</strong>: regular expression that specifies file paths that match this rule. In addition to <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html" class="external-link" rel="nofollow">the base regexp syntax</a>, it supports the following tokens:<ul><li><code>&lt;JENKINS_HOME&gt;</code> can be used as a prefix to match your $JENKINS_HOME directory</li><li><code>&lt;BUILDDIR&gt;</code> can be used as a prefix to match your build record directory, such as <code>/var/lib/jenkins/job/foo/builds/2014-10-17_12-34-56</code></li><li><code>&lt;BUILDID&gt;</code> matches the timestamp-formatted build IDs, like <code>2014-10-17_12-34-56</code>.</li></ul></li></ul><p>The rules are ordered and applied in that order. The earliest match wins. So for example, the following rules allow access to <code>$JENKINS_HOME</code> except its <code>secrets</code> folders:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># To avoid hassle of escaping every &#39;\&#39; on Windows, you can use / everywhere, even on Windows.
+deny all &lt;JENKINS_HOME&gt;/secrets/.*
+allow all &lt;JENKINS_HOME&gt;/.*
+</pre>
+</div></div><p>The following rules are incorrectly written because the 2nd rule will never match:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>allow all &lt;JENKINS_HOME&gt;/.*
+deny all &lt;JENKINS_HOME&gt;/secrets/.*
+</pre>
+</div></div><p>Rules are read from <code>$JENKINS_HOME/secrets/filepath-filters.d/*.conf</code> after sorting these files in alphabetical order.</p><p>Jenkins by itself generates <code>30-default.conf</code> in this directory, which lists rules that the Jenkins core developers currently think are the best balance between compatibility and security. This file gets overwritten by Jenkins every time it starts, but if you do not want to whitelist these classes for some reasons, you can do so by placing a file with that name that's not writable by Jenkins.</p><p>Jenkins also manages <code>50-gui.conf</code> in this directory, which is editable through GUI as discussed later. If you do not want to allow Jenkins admins to whitelist anything, create an empty file that's not writable by Jenkins.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Unlike command whitelisting, file access rule decisions can be made individually based on common sense.</p></div></div><h3 id="SlaveToMasterAccessControl-Pathmatching">Path matching</h3><p>When a file access is checked, the path of a file being considered is absolutized (i.e., can be <code>/foo/bar/zot</code> but not <code>./zot</code>). It is also normalized to remove all intermediate &quot;.&quot; and &quot;..&quot;. So a regular expression <code>/foo/bar/zot.*</code> will never match <code>/foo/bar/zot/../../../etc/passwd</code>, and likewise a regular expression <code>/foo/bar/../zot/.+</code> will never match <code>/foo/zot/bar</code>.</p><p>A path is not always canonicalized. So if you have a symlink in <code>/var/lib/jenkins/passwd</code> that points to <code>/etc/passwd</code>, and if you allow read access to <code>/var/lib/jenkins/.*</code>, then <code>/etc/passwd</code> can be read.</p><p>The following Groovy script can be used from <span class="nolink">http://jenkins/script</span> to test the rules:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import jenkins.security.admin.*;
+import jenkins.security.s2m.AdminWhitelistRule;
+
+String op = &quot;write&quot;; // or any other operation like &quot;read&quot;
+File f = new File(&quot;/userContent/some-path&quot;);
+Jenkins.instance.injector.getInstance(AdminWhitelistRule.class).checkFileAccess(op,f)
+// true means whitelisted. false or SecurityException means rejected
+</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>More precisely, <code>FilePath</code> always internally normalize paths, and while it allows relative paths, no legitimate code will ever use it, so it shouldn't have to be factored in when writing rules. It isn't that the access checking subsystem does normalization/absolutization.</p></div></div><h2 id="SlaveToMasterAccessControl-WhitelistingfromGUI">Whitelisting from GUI</h2><p>On Jenkins, you can go to <span class="nolink">http://jenkins/administrativeMonitor/slaveToMasterAccessControl/</span> to edit whitelist rules from GUI and have them reflected right away in the running instance. It consists of the following three sections:</p><ul><li><strong>Currently whitelisted commands</strong>: See <a href="#SlaveToMasterAccessControl-command-whitelist">above</a> for what this field means.</li><li><strong>Currently rejected commands</strong>: This section lists unclassified commands that Jenkins has actually rejected. You can check boxes and submit them to have Jenkins write them into the &quot;currently whitelisted commands&quot; section. Be careful when you do this, though. See <a href="#SlaveToMasterAccessControl-command-whitelist">the command whitelisting discussion</a> above for the implications.</li><li><strong>File access rules</strong>: See <a href="#SlaveToMasterAccessControl-filepath-rules">above</a> for what this field means.</li></ul><p>When submitted, these changes are written back to disk and then re-read right away into Jenkins, including all <code>whitelisted-callables.d/*</code><code>.conf</code> and <code>filepath-filters.d/*</code><code>.conf</code> files.</p><p><span class="confluence-anchor-link" id="SlaveToMasterAccessControl-dev"></span></p><h1 id="SlaveToMasterAccessControl-I&#39;maplugindeveloper.WhatshouldIdo?">I'm a plugin developer. What should I do?</h1><p>For the access control to work without requiring manual intervention by users, plugins need to classify their <code>Callable</code> and <code>FileCallable</code> objects whether they are meant to be run on a master or on an agent.</p><p>For this purpose, the <code>remoting</code> library has added the <code>RoleSensitive</code> interface with a <code>checkRoles()</code> method. <code>Callable</code>, <code>FileCallable</code>, and other similar interfaces extend from this interface. So if you are directly implementing <code>Callable</code> you will get an error saying that you have unimplemented abstract methods.</p><p>The easiest way to fix this is by extending from <code>MasterToSlaveCallable</code>, to indicate that your <code>Callable</code> is only meant to be sent from a master to an agent, or <code>SlaveToMasterCallable</code>, to indicate that your <code>Callable</code> is meant to be sent from an agent to a master. Note that <code>SlaveToMasterCallable</code> can still be executed on an agent, as agents do not perform this access control check. <code>FileCallable</code> similarly has <code>MasterToSlaveFileCallable</code> and <code>SlaveToMasterFileCallable</code>.</p><h2 id="SlaveToMasterAccessControl-VettingSlaveToMasterCallable/SlaveToMasterFileCallable">Vetting <code>SlaveToMasterCallable</code>/<code>SlaveToMasterFileCallable</code></h2><p>When marking <code>Callable</code> for agent → master, care has to be taken to ensure that the implementation is not exploitable by malicious agents.</p><ul><li>A malicious agent controls the Java serialization payload, so when your <code>Callable</code> gets deserialized on the master, all the serialized fields are controlled by the agent.</li><li>An agent does not control class definitions on the master, so you can trust all the classes and methods to behave as it is written. It is not possible for a malicious agent to change the code executed on the master.</li></ul><p>For example, the following <code>SlaveToMasterCallable</code> is exploitable. Callable itself is not public, but a malicious agent can send in arbitrary <code>path</code>, so it can be used to read any file on the master:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">// UNSAFE
+class SomeCodeThatRunsOnAgent {
+    void readBackSomeFileFromMaster() {
+        final String path = &quot;...&quot;;
+        channel.call(new SlaveToMasterCallable&lt;String,IOException&gt;() {
+            public String call() {
+                return FileUtils.readFileToString(new File(path));
+            }
+        });
+    }
+}
+</pre>
+</div></div><p><code>Callable</code> that delegates execution to a deserialized object is dangerous and needs to be carefully examined, because a malicious agent can designate unintended <code>Runnable</code> object:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">// UNSAFE
+class MyCallable extends SlaveToMasterCallable&lt;Void&gt; {
+    Runnable r;
+    public Void call() {
+        r.run();
+        return null;
+    }
+}
+</pre>
+</div></div><p>To avoid this hassle entirely, consider rewriting your code not to call back to a master from an agent. Instead, when a master first sends a command to an agent, you can carry all the data you'll need with you. This may not be always possible or practical, but it's a lot easier to secure.</p><h2 id="SlaveToMasterAccessControl-FixingpluginswithoutrequiringnewerJenkins">Fixing plugins without requiring newer Jenkins</h2><p>Classifying <code>Callable</code>/<code>FileCallable</code> requires new classes added to Jenkins 1.587/1.580.1. This poses a challenge if you want to retain backward compatibility with earlier versions of Jenkins.</p><p>To solve this problem, we've developed <a href="https://github.com/jenkinsci/SECURITY-144-compat" class="external-link" rel="nofollow">SECURITY-144-compat</a> module. This module let you classify <code>Callable</code>, while still functioning correctly on earlier versions of Jenkins. See the <a href="https://github.com/jenkinsci/SECURITY-144-compat/blob/master/README.md" class="external-link" rel="nofollow">documentation of <code>SECURITY-144-compat</code></a> for details.</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Note</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>As of version 1.1, this library is deprecated, as its use caused some unresolved problems (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25625">JENKINS-25625</a>).<br/>Anyway 1.580.1 is now a fairly conservative choice of baseline: you will not exclude so many users by requiring it for new plugin releases.</p></div></div><h2 id="SlaveToMasterAccessControl-Fileaccessfromagenttomaster">File access from agent to master</h2><p>To avoid getting affected by file access rules, have the master work on files of an agent, instead of the other way around.</p><p>The following code example shows how the code that used to write a file from an agent now avoids that:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">// PROBLEMATIC
+class MySCM extends SCM {
+    ...
+    public void checkout( ..., FilePath workspace, File _changelogFile ) {
+        FilePath changelogFile = new FilePath(_changelogFile);
+        workspace.act(new Callable&lt;Void,IOException&gt;() {
+            public Void call() {
+                // this results in an agent asking the master to open a file for write
+                try (OutputStream os = changelogFile.write()) {
+                    writeStuffTo(os);
+                }
+            }
+        });
+    }
+}
+
+// GOOD
+class MySCM extends SCM {
+    ...
+    public void checkout( ..., FilePath workspace, File _changelogFile ) {
+        try (final OutputStream out = new RemoteOutputStream(_changelogFile)) {
+            workspace.act(new Callable&lt;Void,IOException&gt;() {
+                public Void call() {
+                    // agent is just writing to a pipe to the master. Quite safe
+                    writeStuffTo(out);
+                }
+            });
+        }
+    }
+}
+</pre>
+</div></div><p>See <code>RemoteInputStream</code>, <code>RemoteOutputStream</code>, <code>RemoteWriter</code>, and <code>Pipe</code> for ways to do this.</p><h2 id="SlaveToMasterAccessControl-I&#39;mnotsurehowtoadaptmyplugin,Ineedhelp">I'm not sure how to adapt my plugin, I need help</h2><p>If you have questions, please write to jenkinsci-dev@googlegroups.com, or talk to us on <a href="http://jenkins-ci.org/content/chat" class="external-link" rel="nofollow">IRC</a>.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

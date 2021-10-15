@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Yammer Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Yammer Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (matthewriley)</span>, last modified on Aug 21, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>NO LONGER SUPPORTED.</p><p><br/><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Yammer <a href="https://plugins.jenkins.io/yammer" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Sends build notifications to Yammer.</p><h1 id="YammerPlugin-YammerPluginforJenkins">Yammer Plugin for Jenkins</h1><p>The Yammer Plugin for Jenkins enables notifications to be sent to a Yammer group on the success or failure of a build.<br/><a href="https://wiki.jenkins-ci.org/display/JENKINS/Yammer+Plugin" class="external-link" rel="nofollow">Yammer Plugin on jenkins-ci.org</a>.</p><p>This is an example of a successful build notification sent to the <strong>Build Notifications</strong> group:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/success_notification_in_yammer.png" data-image-src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/success_notification_in_yammer.png"></span></p><h2 id="YammerPlugin-Installation">Installation</h2><h3 id="YammerPlugin-Easyinstall">Easy install</h3><p>Install the plugin from the Jenkins Plugin Manager. It should be listed as <strong>Yammer Plugin</strong> under <strong>Build Notifiers</strong>.</p><h3 id="YammerPlugin-Manualinstall">Manual install</h3><ul class="alternate"><li>Install the ruby-runtime plugin.</li></ul><ul class="alternate"><li>Install the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin" class="external-link" rel="nofollow">Token Macro Plugin</a>. It may already be installed.</li></ul><ul class="alternate"><li>Download the latest Yammer Plugin .hpi file from: <a href="http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/ruby-plugins/yammer" class="external-link" rel="nofollow">http://maven.jenkins-ci.org/content/repositories/releases/org/jenkins-ci/ruby-plugins/yammer</a>.</li></ul><ul class="alternate"><li>Upload the .hpi file into Jenkins from Plugin Manager &gt; Advanced.</li></ul><ul class="alternate"><li>Restart Jenkins.</li></ul><h2 id="YammerPlugin-ObtaininganAccessToken">Obtaining an Access Token</h2><p>See: <a href="https://github.com/yammer/yam/blob/aa2a851db06d7821f7641c5557f925be42b0c2e5/README.md#obtaining-an-access-token" class="external-link" rel="nofollow">Obtaining an Access Token</a></p><h2 id="YammerPlugin-EnablingYammerNotifications">Enabling Yammer Notifications</h2><p>In the job configuration, under Post-build Actions, select <strong>Yammer Notification</strong>:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/enable_yammer_notifications_for_job.png" data-image-src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/enable_yammer_notifications_for_job.png"></span></p><p>The Access Token defaults to an environment variable named YAMMER_ACCESS_TOKEN under the assumption that the same access token will likely be the same for many, if not all jobs.<br/>For example, you might create a Yammer user representing Jenkins that will act as the source of all Yammer notifications from Jenkins.</p><p>Global environment variables can be set from Jenkins at Manage Jenkins &gt; Configure System &gt; Global Properties:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/oauth_environment_variables.png" data-image-src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/oauth_environment_variables.png"></span></p><p>With the Access Token set, select whether to send success and/or failure notifications:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/enable_success_notifications.png" data-image-src="https://raw.github.com/jenkinsci/yammer-plugin/49f2905714a463a290254c5603d30ff03a54e80f/readme/enable_success_notifications.png"></span></p><p>Both success and failure notifications require a message and a group name. Environment variables are also allowed.</p><p>Please ensure that the Yammer user associated with the OAuth token has been added to the specified groups,<br/>otherwise the post will result in a HTTP 403 Unauthorised error.</p><h2 id="YammerPlugin-ConfigFile">Config File</h2><p>The same settings specified in the job configuration can be provided as a JSON file that can be generated during the build. By default, the file should be named <code>yammer.json</code> under the workspace root.</p><p>Example file:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+    &quot;success&quot;: {
+        &quot;message&quot;: &quot;This success message was generated by the build.&quot;,
+        &quot;group&quot;: &quot;Build Notifications&quot;
+    },
+    &quot;failure&quot;: {
+        &quot;message&quot;: &quot;This failure message was generated by the build.&quot;,
+        &quot;group&quot;: &quot;Build Notifications&quot;
+    }
+}
+</pre>
+</div></div><p>The file path can be changed in the 'Advanced' section of the job configuration.</p><p>Please note that the settings specified in the job configuration will be merged with the config file. Any duplicate settings will overidden by the config file.</p><h2 id="YammerPlugin-Support">Support</h2><p><a href="https://github.com/jenkinsci/yammer-plugin/issues" class="external-link" rel="nofollow">Raise an issue</a></p><h2 id="YammerPlugin-Changelog">Changelog</h2><h3 id="YammerPlugin-Version1.1.0(July19,2013)">Version 1.1.0 (July 19, 2013)</h3><ul class="alternate"><li>Add config file so that settings can be generated during the build.</li></ul><h3 id="YammerPlugin-Version1.0.0(March15,2013)">Version 1.0.0 (March 15, 2013)</h3><ul class="alternate"><li>Upgrade to OAuth 2.0 requiring only an access token.</li></ul><ul class="alternate"><li>Yammer group name replaces group ID.</li></ul><h3 id="YammerPlugin-Version0.1.1(March15,2013)">Version 0.1.1 (March 15, 2013)</h3><ul class="alternate"><li>Add support for Jenkins version 1.505. Thanks <a href="https://github.com/jwendland" class="external-link" rel="nofollow">Jörg Wendland</a>.</li></ul><ul class="alternate"><li>Use better OAuth terminology (consumer instead of client). Thanks <a href="https://github.com/mikec-bullhorn" class="external-link" rel="nofollow">mikec-bullhorn</a>.</li></ul><h3 id="YammerPlugin-Version0.1.0(June24,2012)">Version 0.1.0 (June 24, 2012)</h3><ul class="alternate"><li>Initial release.</li></ul><p>Last updated: 2013-07-19 19:44:41 +1000</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:00</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

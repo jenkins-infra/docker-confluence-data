@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Using Artifactory for Configuring a Jenkins Build Environment</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Building-Jenkins.html">Building Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Using Artifactory for Configuring a Jenkins Build Environment
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jbaruch@jfrog.com)</span>, last modified on Jun 24, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="UsingArtifactoryforConfiguringaJenkinsBuildEnvironment-ThispagewillhelpyousettingupportableenvironmentforbuildingJenkins">This page will help you setting up portable environment for building Jenkins</h2>
+
+
+<h3 id="UsingArtifactoryforConfiguringaJenkinsBuildEnvironment-Thissetupisalsosuitableformeet-upsandhackathons"><span style="color: rgb(0,0,0);">This setup is also suitable for meet-ups and hackathons</span></h3>
+
+
+
+
+
+<h4 id="UsingArtifactoryforConfiguringaJenkinsBuildEnvironment-SettingupArtifactory"><span style="color: rgb(34,34,34);">Setting up Artifactory</span></h4>
+
+
+
+
+<p><span style="color: rgb(34,34,34);">Since we are aiming to portable installation the best option to install Artifactory will be the zip archive. It sets up the</span> <span style="color: rgb(34,34,34);"><code>$ARTIFACTORY_HOME</code></span> <span style="color: rgb(34,34,34);">directory (with all the settings and data) to be the installation folder. Naturally, Java is required to run Artifactory.</span></p>
+
+<p><span style="color: rgb(34,34,34);">For portable setup it is also recommended to disable all backup configurations:</span></p>
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="600" src="attachments/62062936/62291975.png" data-image-src="attachments/62062936/62291975.png" data-unresolved-comment-count="0" data-linked-resource-id="62291975" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2012-06-21_155914.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="62062936" data-linked-resource-container-version="10"></span></p>
+
+<h4 id="UsingArtifactoryforConfiguringaJenkinsBuildEnvironment-SettingupMaventoworkwithArtifactoryandpre-populatingthecacheforofflineaccess"><span style="color: rgb(34,34,34);">Setting up Maven to work with Artifactory and pre-populating the cache for offline access</span></h4>
+
+
+
+
+<p><span style="color: rgb(34,34,34);">Generate user</span> <span style="color: rgb(34,34,34);"><code>settings.xml</code></span> <span style="color: rgb(34,34,34);">from</span> <span style="color: rgb(34,34,34);"><a href="http://wiki.jfrog.org/confluence/display/RTF/Configuring+Artifacts+Resolution" class="external-link" rel="nofollow">Artifactory UI</a></span><span style="color: rgb(34,34,34);">:</span></p>
+
+<p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" width="600" src="http://wiki.jfrog.org/confluence/download/attachments/11141201/Screen+shot+2011-05-08+at+10.29.26+PM.png?version=1&amp;modificationDate=1304883056000" data-image-src="http://wiki.jfrog.org/confluence/download/attachments/11141201/Screen+shot+2011-05-08+at+10.29.26+PM.png?version=1&amp;modificationDate=1304883056000"></span><br/>
+<span style="color: rgb(34,34,34);">Build Jenkins as described on</span> <span style="color: rgb(34,34,34);"><a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+Jenkins" class="external-link" rel="nofollow">this page</a></span><span style="color: rgb(34,34,34);">, using the generated</span> <span style="color: rgb(34,34,34);"><code>settings.xml</code></span><span style="color: rgb(34,34,34);">. Applying the settings file can be done in one of the following ways:</span></p>
+
+<ul>
+	<li><span style="color: rgb(34,34,34);">Override the default settings with the generated ones (by saving the generated file under</span> <span style="color: rgb(34,34,34);"><code>$USER_HOME/.m2</code></span><span style="color: rgb(34,34,34);">)</span></li>
+	<li><span style="color: rgb(34,34,34);">Instruct maven to use dedicated</span> <span style="color: rgb(34,34,34);"><code>settings.xml</code></span> <span style="color: rgb(34,34,34);">file (by using </span><span style="color: rgb(34,34,34);"><code>-s</code></span> <span style="color: rgb(34,34,34);">or</span> <span style="color: rgb(34,34,34);"><code>--settings</code></span><span style="color: rgb(34,34,34);"> argument with path to the generated file when running Maven). </span><span style="color: rgb(34,34,34);">After successful build Artifactory will be populated with all the needed dependencies.</span></li>
+</ul>
+
+
+
+<h4 id="UsingArtifactoryforConfiguringaJenkinsBuildEnvironment-It&#39;sportable"><span style="color: rgb(34,34,34);">It's portable</span></h4>
+
+
+
+
+<p><span style="color: rgb(34,34,34);">Just copy the entire Artifactory folder to portable storage. You can then run Artifactory directly from it (once there is enough free space) by executing</span> <span style="color: rgb(34,34,34);"><code>artifactory.bat</code></span> <span style="color: rgb(34,34,34);">/</span> <span style="color: rgb(34,34,34);"><code>artifactory.sh</code></span><span style="color: rgb(34,34,34);">. Once Artifactory is up, everyone on the LAN can build Jenkins by generating settings file as instructed above. No internet access required.</span></p>
+
+
+<div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><span style="color: rgb(34,34,34);">Please remember that once the IP address of the machine running Artifactory has changed, the settings file should be changed, or regenerated.</span></p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062936/62291975.png">2012-06-21_155914.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

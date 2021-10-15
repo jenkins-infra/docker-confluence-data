@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Launch Java Web Start slave agent via Windows Scheduler</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Launch Java Web Start slave agent via Windows Scheduler
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dmacbride)</span>, last modified on Jul 26, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="LaunchJavaWebStartslaveagentviaWindowsScheduler-TableOfContents">Table Of Contents</h1>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020128879 {padding: 0px;}
+div.rbtoc1631020128879 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020128879 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020128879'>
+<ul class='toc-indentation'>
+<li><a href='#LaunchJavaWebStartslaveagentviaWindowsScheduler-TableOfContents'>Table Of Contents</a></li>
+<li><a href='#LaunchJavaWebStartslaveagentviaWindowsScheduler-Steps'>Steps</a></li>
+</ul>
+</div>
+
+<h1 id="LaunchJavaWebStartslaveagentviaWindowsScheduler-Steps">Steps</h1>
+
+<p>If you are having trouble getting the Java Web Start agent installed as a Windows service (ie, you followed <a href="Installing-Jenkins-as-a-Windows-service.html">the instructions on installing the slave as a service here</a> but it didn't work), an alternative method of starting the service automatically when Windows starts is to use the Windows Scheduler. </p>
+
+<p>We take advantage of the Windows Scheduler's ability to run command at system startup</p>
+<ol>
+	<li>Configure your node to use the &quot;Launch slave agents via Java Web Start&quot; launch method
+	<ul>
+		<li>Click Save</li>
+	</ul>
+	</li>
+	<li>Note the command required to launch the slave
+	<ul>
+		<li>On the new slave node's Jenkins page, note the slave command line shown. 
+		<ul>
+			<li>It  will be like: java -jar slave.jar -jnlpUrl   http://&lt;JenkinsHostName&gt;:8080/computer/&lt;nodeName&gt;/slave-agent.jnlp   -secret &lt;some_long_hex_string&gt;</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>Obtain the slave.jar file and copy it to your new Windows slave node
+	<ul>
+		<li>In the command line noted in the last step, the &quot;slave.jar&quot; is a hyperlink. Click it to download the slave.jar file.</li>
+		<li>Copy the slave.jar file to a permanent location on your slave machine</li>
+	</ul>
+	</li>
+	<li>Ensure that you have a java version available on your slave machine
+	<ul>
+		<li>If not, obtain and install a copy of Java</li>
+	</ul>
+	</li>
+	<li>Run the command manually from a CMD window on your slave to confirm that it works
+	<ul>
+		<li>Open the CMD window</li>
+		<li>Run the command (the one like java -jar slave.jar -jnlpUrl   http://&lt;JenkinsHostName&gt;:8080/computer/&lt;nodeName&gt;/slave-agent.jnlp   -secret &lt;some_long_hex_string&gt;)</li>
+		<li>Go back to the node's web page in Jenkins.  If everything works then page should say &quot;Connected via JNLP agent&quot;</li>
+		<li>Stop the command (control-c)</li>
+	</ul>
+	</li>
+	<li>Register a new scheduled job to run the same command
+	<ul>
+		<li>Open &quot;Task Scheduler&quot; on your windows machine
+		<ul>
+			<li>Start -&gt; Run:  task Scheduler</li>
+		</ul>
+		</li>
+		<li>Create a basic task (Menu: Action -&gt; Create Basic Task)
+		<ul>
+			<li>First page of the wizard:
+			<ul>
+				<li>Name:  Jenkins Slave</li>
+				<li>Description (optional)</li>
+				<li>Click Next</li>
+			</ul>
+			</li>
+			<li>Next page of the wizard
+			<ul>
+				<li>When do you want the task to start:  select &quot;When the computer starts&quot;</li>
+				<li>Click Next</li>
+			</ul>
+			</li>
+			<li>Next page of the wizard
+			<ul>
+				<li>What action do you want the task to perform:  select &quot;Start a program&quot;</li>
+				<li>Click Next</li>
+			</ul>
+			</li>
+			<li>Next page of the wizard
+			<ul>
+				<li>Program/Script:  enter &quot;java.exe&quot; (or the full path to your java.exe)</li>
+				<li>Add arguments:  enter the rest of the command, like &quot; -jar slave.jar -jnlpUrl   http://&lt;JenkinsHostName&gt;:8080/computer/&lt;nodeName&gt;/slave-agent.jnlp   -secret &lt;some_long_hex_string&gt;&quot;</li>
+				<li>eg: -jar D:\Scripts\jenkins\slave.jar -jnlpUrl <span class="nolink">http://jenkinshost.example.com:8080/computer/buildNode1/slave-agent.jnlp</span> -secret d6a84df1fc4f45ddc9c6ab34b08f13391983ffffffffffb3488b7d5ac77fbc7</li>
+				<li>Click Next</li>
+			</ul>
+			</li>
+			<li>Next page of the wizard
+			<ul>
+				<li>Click the check box &quot;Open the Properties dialog for this task when I click Finish</li>
+				<li>Click Finish</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Update the task's properties
+		<ul>
+			<li>On the General tab
+			<ul>
+				<li>Select the user to run the task as</li>
+				<li>Select &quot;Run whether use is logged on or not&quot;</li>
+			</ul>
+			</li>
+			<li>On the settings tab
+			<ul>
+				<li>Uncheck &quot;Stop the task if it runs longer than&quot;</li>
+				<li>Check &quot;Run the task as soon as possible after a scheduled start is missed&quot;</li>
+				<li>Check &quot;If the task failed, restart every: 10 minutes&quot;, and &quot;Attempt to restart up to: 3 times&quot;</li>
+			</ul>
+			</li>
+			<li>Click OK</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>Start the scheduled task and again check that Jenkins can connect
+	<ul>
+		<li>Go back to the node's web page in Jenkins.  If everything works then page should say &quot;Connected via JNLP agent&quot;</li>
+	</ul>
+	</li>
+</ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

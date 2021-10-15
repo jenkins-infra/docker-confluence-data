@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Global Post Script Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Global Post Script Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (orctom)</span>, last modified on Feb 13, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Execute a global configured groovy script after each build of each job managed by the Jenkins.<br/> This is typical for cases when you need to do something based on a shared set of parameters, such as triggering downstream jobs managed by the same Jenkins or remote ones based on the parameters been passed to the parameterized jobs.</p><p><strong>Notice: jython script support removed since 1.1.0</strong><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Global Post Script <a href="https://plugins.jenkins.io/global-post-script" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1073" class="external-link" rel="nofollow">Missing permission check allowed obtaining configuration data</a></li>
+</ul>
+
+</div></div>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021149679 {padding: 0px;}
+div.rbtoc1631021149679 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021149679 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021149679'>
+<ul class='toc-indentation'>
+<li><a href='#GlobalPostScriptPlugin-GlobalConfigure'>Global Configure</a></li>
+<li><a href='#GlobalPostScriptPlugin-Variablesthatcouldbeusedinthescriptfile'>Variables that could be used in the script file</a>
+<ul class='toc-indentation'>
+<li><a href='#GlobalPostScriptPlugin-JenkinsBuilt-inVariables'>Jenkins Built-in Variables</a></li>
+<li><a href='#GlobalPostScriptPlugin-Extravariables'>Extra variables</a></li>
+<li><a href='#GlobalPostScriptPlugin-themanagerobject'>the manager object</a></li>
+<li><a href='#GlobalPostScriptPlugin-3rd-partylibrariesforgroovyscript'>3rd-party libraries for groovy script</a></li>
+</ul>
+</li>
+<li><a href='#GlobalPostScriptPlugin-SupportedScripts'>Supported Scripts</a>
+<ul class='toc-indentation'>
+<li><a href='#GlobalPostScriptPlugin-Groovy'>Groovy</a></li>
+<li><a href='#GlobalPostScriptPlugin-bat/sh'>bat/sh</a></li>
+</ul>
+</li>
+<li><a href='#GlobalPostScriptPlugin-OpenIssues'>Open Issues</a></li>
+<li><a href='#GlobalPostScriptPlugin-Changes'>Changes</a>
+<ul class='toc-indentation'>
+<li><a href='#GlobalPostScriptPlugin-1.1.4'>1.1.4</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.1.3'>1.1.3</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.1.2'>1.1.2</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.1.1.1'>1.1.1.1</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.1.1'>1.1.1</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.1.0'>1.1.0</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.0.12'>1.0.12</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.0.11'>1.0.11</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.0.10'>1.0.10</a></li>
+<li><a href='#GlobalPostScriptPlugin-1.0.9'>1.0.9</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="GlobalPostScriptPlugin-GlobalConfigure">Global Configure</h1><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875701/80412713.png" data-image-src="attachments/74875701/80412713.png" data-unresolved-comment-count="0" data-linked-resource-id="80412713" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="global-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875701" data-linked-resource-container-version="32"></span><br/> <em>Default</em>: the script will be executed when the build result is <em>better or equal to <code>UNSTABLE</code></em></p><h1 id="GlobalPostScriptPlugin-Variablesthatcouldbeusedinthescriptfile">Variables that could be used in the script file</h1><h2 id="GlobalPostScriptPlugin-JenkinsBuilt-inVariables">Jenkins Built-in Variables</h2><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Variable</p></th><th class="confluenceTh"><p>Description</p></th><th class="confluenceTh"><p>Sample Data</p></th></tr><tr><td class="confluenceTd"><p>BUILD_ID</p></td><td class="confluenceTd"><p>Build timestamp as ID</p></td><td class="confluenceTd"><p>2014-06-26_07-16-51</p></td></tr><tr><td class="confluenceTd"><p>BUILD_NUMBER</p></td><td class="confluenceTd"><p>Build No#</p></td><td class="confluenceTd"><p>16</p></td></tr><tr><td class="confluenceTd"><p>BUILD_RESULT</p></td><td class="confluenceTd"><p>Build result</p></td><td class="confluenceTd"><p>SUCCESS / UNSTABLE / FAILURE ...</p></td></tr><tr><td class="confluenceTd"><p>BUILD_TAG</p></td><td class="confluenceTd"><p>Job Name + Build No#</p></td><td class="confluenceTd"><p>jenkins-test-job-16</p></td></tr><tr><td class="confluenceTd"><p>BUILD_URL</p></td><td class="confluenceTd"><p>The URL of this build</p></td><td class="confluenceTd"><p><a href="http://localhost:8080/job/test-job/16/" class="external-link" rel="nofollow">http://localhost:8080/job/test-job/16/</a></p></td></tr><tr><td class="confluenceTd"><p>JENKINS_HOME</p></td><td class="confluenceTd"><p>The path of the root folder of Jenkins</p></td><td class="confluenceTd"><p>~/workspace-idea/global-post-script-plugin/./work</p></td></tr><tr><td class="confluenceTd"><p>JENKINS_URL</p></td><td class="confluenceTd"><p>The root URL of Jenkins</p></td><td class="confluenceTd"><p><a href="http://localhost:8080/" class="external-link" rel="nofollow">http://localhost:8080/</a></p></td></tr><tr><td class="confluenceTd"><p>JOB_NAME</p></td><td class="confluenceTd"><p>Name of the job</p></td><td class="confluenceTd"><p>test-job</p></td></tr><tr><td class="confluenceTd"><p>JOB_URL</p></td><td class="confluenceTd"><p>URL of the job</p></td><td class="confluenceTd"><p><a href="http://localhost:8080/job/test-job/" class="external-link" rel="nofollow">http://localhost:8080/job/test-job/</a></p></td></tr><tr><td class="confluenceTd"><p>MAVEN_CMD_LINE_ARGS</p></td><td class="confluenceTd"><p>Maven command args</p></td><td class="confluenceTd"><p>clean install</p></td></tr><tr><td class="confluenceTd"><p>NODE_LABELS</p></td><td class="confluenceTd"><p>Lables of the nodes where the build could be executed</p></td><td class="confluenceTd"><p>master</p></td></tr><tr><td class="confluenceTd"><p>NODE_NAME</p></td><td class="confluenceTd"><p>Name of the node where the build executed</p></td><td class="confluenceTd"><p>master</p></td></tr><tr><td class="confluenceTd"><p>SVN_REVISION</p></td><td class="confluenceTd"><p>SVN revision</p></td><td class="confluenceTd"><p>185214</p></td></tr><tr><td class="confluenceTd"><p>SVN_URL</p></td><td class="confluenceTd"><p>SVN URL</p></td><td class="confluenceTd"><p> </p></td></tr><tr><td class="confluenceTd"><p>WORKSPACE</p></td><td class="confluenceTd"><p>The path of the workspace</p></td><td class="confluenceTd"><p>~/workspace-idea/global-post-script-plugin/work/workspace/LOGANALYZE</p></td></tr><tr><td class="confluenceTd"><p>GIT_BRANCH</p></td><td class="confluenceTd"><p>Git branch</p></td><td class="confluenceTd"><p>origin/master</p></td></tr><tr><td class="confluenceTd"><p>GIT_COMMIT</p></td><td class="confluenceTd"><p>Git commit ID</p></td><td class="confluenceTd"><p>ddaf9c4576e375b42b6bc7c73daa12cb28a92031</p></td></tr><tr><td class="confluenceTd"><p>GIT_URL</p></td><td class="confluenceTd"><p>Git repo URL</p></td><td class="confluenceTd"><a class="external-link" href="https://github.com/jenkinsci/global-post-script-plugin.git" rel="nofollow">https://github.com/jenkinsci/global-post-script-plugin.git</a></td></tr></tbody></table></div><h2 id="GlobalPostScriptPlugin-Extravariables">Extra variables</h2><p>Parameters of <code>parameterized build</code> or parameters been passed in by <code>-Dparameter_name=parameter_value</code> are also available</p><h2 id="GlobalPostScriptPlugin-themanagerobject">the <code>manager</code> object</h2><p>An extra object is available as groovy variables: <code>manager</code>, provided 4 methods:</p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Method</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td class="confluenceTd"><p><code>isVar(String name)</code></p></td><td class="confluenceTd"><p>Check if a variable is defined and usable in the script</p></td></tr><tr><td class="confluenceTd"><p><code>isNotBlankVar(String name)</code></p></td><td class="confluenceTd"><p>Check if a variable is defined and usable in the script, and with a non-blank value</p></td></tr><tr><td class="confluenceTd"><p><code>addBadge(String icon, String text)</code></p></td><td class="confluenceTd"><p>Add a badge to the build</p></td></tr><tr><td class="confluenceTd"><p><code>addShortText(String text)</code></p></td><td class="confluenceTd"><p>Add a text label to the build</p></td></tr><tr><td class="confluenceTd"><p><code>triggerJob(String jobName)</code></p></td><td class="confluenceTd"><p>Trigger a job managed by the same Jenkins</p></td></tr><tr><td class="confluenceTd"><p><code>triggerRemoteJob(String url)</code></p></td><td class="confluenceTd"><p>Trigger a job by URL</p></td></tr></tbody></table></div><h2 id="GlobalPostScriptPlugin-3rd-partylibrariesforgroovyscript">3rd-party libraries for groovy script</h2><p>If your groovy script have dependencies that not shipped with Jenkins, you can put them into <code>$JENKINS_HOME/global-post-script/lib</code>.</p><h1 id="GlobalPostScriptPlugin-SupportedScripts">Supported Scripts</h1><h2 id="GlobalPostScriptPlugin-Groovy">Groovy</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Groovy Sample</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">out.println(&quot;dropdeploy to: $dropdeploy_targets&quot;)
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Groovy Sample</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">out.println(&quot;dropdeploy to: &quot; + dropdeploy_targets)
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Groovy Sample</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">if (manager.isVar(&quot;variable_name&quot;)) {
+    ...
+}
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Groovy Sample</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">job = hudson.model.Hudson.instance.getItem(&quot;demo2&quot;)
+build = job.getLastBuild()
+println build
+def action = build.getAction(hudson.plugins.claim.ClaimBuildAction.class)
+print action.getReason()
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Groovy Sample</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def triggers = [
+        wwwsqs8: {
+            def params = [
+                PARENT_BUILD_NUMBER: &#39;$BUILD_NUMBER&#39;,
+                PARENT_JOB_NAME: &#39;$JOB_NAME&#39;,
+                any_param_name: &#39;$deploy_targets&#39;
+            ]
+            manager.triggerJob(&quot;WWW_JBEHAVE_TEST&quot;, params)
+            manager.triggerJob(&quot;WWW_MOBILE_API_TEST&quot;)
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_WWW_SQS_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        wwwsqm8: {
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_WWW_SQM_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        bsdsqs8: {
+            manager.triggerJob(&quot;BSD_JBEHAVE_TEST&quot;)
+            manager.triggerJob(&quot;BSD_MOBILE_API_TEST&quot;)
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_BSD_SQS_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        bsdsqm8: {
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_BSD_SQM_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        gmlsqs8: {
+            manager.triggerJob(&quot;GMIL_JBEHAVE_TEST&quot;)
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_GMIL_SQS_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        gmlsqm8: {
+            manager.triggerRemoteJob(&quot;http://localhost/job/Dev_Launch_GMIL_SQM_REGRESSION/build?token=88e4b5fd1d28949710a9c4924775ce40&amp;delay=1800sec&quot;)
+        },
+        basepom: {
+            manager.triggerJob(&quot;basepom&quot;)
+        }
+]
+
+if (manager.isVar(&quot;deploy&quot;) &amp;&amp; manager.isNotBlankVar(&quot;deploy_targets&quot;) &amp;&amp; &quot;true&quot; == deploy) {
+    dropped = false
+    deploy_targets.split(&#39;,&#39;).each {
+        trigger = triggers[it]
+        if (trigger) {
+            trigger()
+            dropped = true
+        }
+    }
+    if (dropped) {
+        manager.addBadge(&quot;server.png&quot;, &quot;[SQ: &quot; + deploy_targets + &quot;]&quot;)
+    }
+}
+</pre>
+</div></div><h2 id="GlobalPostScriptPlugin-bat/sh">bat/sh</h2><p><strong>NO</strong> variables will passed into the script</p><h1 id="GlobalPostScriptPlugin-OpenIssues">Open Issues</h1><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20%28component%20=%20global-post-script-plugin%29&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h1 id="GlobalPostScriptPlugin-Changes">Changes</h1><h2 id="GlobalPostScriptPlugin-1.1.4">1.1.4</h2><ul><li>Added support for `pipeline`<a href="https://issues.jenkins-ci.org/browse/JENKINS-44647" class="external-link" rel="nofollow">JENKINS-44647</a></li></ul><h2 id="GlobalPostScriptPlugin-1.1.3">1.1.3</h2><ul><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-37796" class="external-link" rel="nofollow">JENKINS-37796</a> Loading jars in <code>global-post-script/lib</code> (if exist) as classpath entries when running groovy script.</li></ul><h2 id="GlobalPostScriptPlugin-1.1.2">1.1.2</h2><ul><li>Not the cache the parsed GroovyShell</li></ul><h2 id="GlobalPostScriptPlugin-1.1.1.1">1.1.1.1</h2><ul><li>*<strong>Do NOT use this version</strong>*</li><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-34056" class="external-link" rel="nofollow">JENKINS-34056</a></li></ul><h2 id="GlobalPostScriptPlugin-1.1.1">1.1.1</h2><ul><li>*<strong>Do NOT use this version</strong>*</li><li>Parsing and caching the groovy script, to make a smaller footprint. <a href="https://issues.jenkins-ci.org/browse/JENKINS-33358" class="external-link" rel="nofollow">JENKINS-33358</a></li></ul><h2 id="GlobalPostScriptPlugin-1.1.0">1.1.0</h2><ul><li>Added `aborted` condition, to allow triggering the script even the build is aborted.</li><li>Removed support for jython scripts. (jython dependency is too big, and Groovy is much better supported by Jenkins.)</li></ul><h2 id="GlobalPostScriptPlugin-1.0.12">1.0.12</h2><ul><li>Fixed issue about script been executed for each sub-module of Maven multi-module projects.</li></ul><h2 id="GlobalPostScriptPlugin-1.0.11">1.0.11</h2><ul><li>Fixed issue about groovy script works in <em><code>script console</code></em> but fails as <em><code>global post script</code></em></li></ul><h2 id="GlobalPostScriptPlugin-1.0.10">1.0.10</h2><ul><li>Allow to run also for failed builds (Global configure).</li><li>Added BUILD_RESULT to script.</li></ul><h2 id="GlobalPostScriptPlugin-1.0.9">1.0.9</h2><ul><li>Supports parameters when triggering local jobs (parameterized downstream jobs)</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875701/80412715.png">global-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875701/80412714.png">Screenshot from 2015-06-23 20:46:28.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875701/80412716.png">global-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875701/86900737.png">global-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875701/80412713.png">global-config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:25</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

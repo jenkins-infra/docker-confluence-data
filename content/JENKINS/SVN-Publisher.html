@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SVN Publisher</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SVN Publisher
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (ygtmie)</span> on Jun 14, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'svnpublisher' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin allows you to upload artifacts to a subversion repository. This is done via a delete/import of the items requested.
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p> <strong>This plugin is in its infancy and should be used with caution.</strong>
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image image-left" src="attachments/37323234/37519386.png" data-image-src="attachments/37323234/37519386.png" data-unresolved-comment-count="0" data-linked-resource-id="37519386" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="svn-publisher-v2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323234" data-linked-resource-container-version="12"></span></p>
+
+<p><br class="atl-forced-newline"/></p>
+
+
+
+<h2 id="SVNPublisher-SVNURL">SVN URL</h2>
+
+<p>The SVN URL is the location you wish to upload the items to.</p>
+
+<h2 id="SVNPublisher-TargetPath">Target Path</h2>
+
+<p>The target path is the location of the target directory in hudson, if the project is not a maven project this can be the root location for the items to be imported.</p>
+
+<h2 id="SVNPublisher-ImportItems">Import Items</h2>
+
+<p>Each import item consists of 3 parts:</p>
+<ul>
+	<li><strong>Pattern</strong>: A java regular expression pattern used to match the item as is exists in the target directory.</li>
+	<li><strong>Name:</strong> If name is not left blank the item will be renamed upon import.</li>
+	<li><strong>Path:</strong> If the item is to be imported into a directory other then the one given by the SVN URL this field can be used, this should always end with a forwardslash and it is always based off the location given in the SVN URL.</li>
+</ul>
+
+
+<h2 id="SVNPublisher-POMPath">POM Path</h2>
+
+<p>The pom path is, if using a maven project, the location of the project's pom.xml. This is required if the following variable are to be used.</p>
+
+<h3 id="SVNPublisher-_MAJOR_/_MINOR_/_PATCH_Paths">_MAJOR_ / _MINOR_ / _PATCH_ Paths</h3>
+
+<p>The _MAJOR_, _MINOR_, and _PATCH_ variables all require paths to their values from within the pom.xml's project node.</p>
+
+<p>These paths are given in dot notation with index values available.
+<br class="atl-forced-newline"/></p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;project&gt;
+&lt;versionA&gt;1&lt;/versionA&gt;
+&lt;properties&gt;
+&lt;minor&gt;2&lt;/minor&gt;
+&lt;deep&gt;
+&lt;patchBuild&gt;3.456&lt;/patchBuild&gt;
+
+&lt;/deep&gt;
+
+&lt;/properties&gt;
+
+&lt;/project&gt;
+</pre>
+</div></div>
+<p>Using the above example the following paths and their results could be used:</p>
+
+<p>versionA  -&gt; 1</p>
+
+<p>properties.minor  -&gt; 2</p>
+
+<p>properties.deep.patchBuild[0]  -&gt; 3</p>
+
+<p>properties.deep.patchBuild[1] -&gt; 456
+<br class="atl-forced-newline"/></p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p><img class="emoticon emoticon-warning" src="images/icons/emoticons/warning.svg" data-emoticon-name="warning" alt="(warning)"/> Currently only dot separated version numbers can be indexed.</p>
+</div></div>
+
+
+
+<h3 id="SVNPublisher-ChangeLog">Change Log</h3>
+
+<h5 id="SVNPublisher-Version0.1(Jan10,2010)">Version 0.1 (Jan 10, 2010)</h5>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323234/37519385.png">svn-publisher.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323234/37519384.png">svn-publisher.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323234/37519386.png">svn-publisher-v2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323234/57409818.svnpatch">svnPub0.2.svnpatch</a> (application/octet-stream)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

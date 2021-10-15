@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Monitoring Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Monitoring Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (canhuth)</span>, last modified by <span class='editor'> Unknown User (icemac)</span> on Mar 21, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="MonitoringJenkins-CatLight">CatLight</h2><p><a href="https://catlight.io" class="external-link" rel="nofollow">CatLight build monitor</a> can show build notifications on the desktop. This app runs on Windows, Mac OS X and Linux.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/4161578/106496023.png" data-image-src="attachments/4161578/106496023.png" data-unresolved-comment-count="0" data-linked-resource-id="106496023" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-notification-success-jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161578" data-linked-resource-container-version="11"></span></p><p>Application tray icon will change color depending on the job status. <br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/4161578/106496025.png" data-image-src="attachments/4161578/106496025.png" data-unresolved-comment-count="0" data-linked-resource-id="106496025" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-tray-white.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161578" data-linked-resource-container-version="11"></span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/4161578/106496026.png" data-image-src="attachments/4161578/106496026.png" data-unresolved-comment-count="0" data-linked-resource-id="106496026" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-tray-yellow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161578" data-linked-resource-container-version="11"></span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/4161578/106496027.png" data-image-src="attachments/4161578/106496027.png" data-unresolved-comment-count="0" data-linked-resource-id="106496027" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-tray-red.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161578" data-linked-resource-container-version="11"></span></p><p>Since this app uses Jenkins API directly, it supports organizational folders and shows separate history for each Git branch on the dashboard.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/4161578/106496024.png" data-image-src="attachments/4161578/106496024.png" data-unresolved-comment-count="0" data-linked-resource-id="106496024" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-branched-builds.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161578" data-linked-resource-container-version="11"></span></p><p>When build is broken, developers can volunteer to fix it, and CatLight will tell the team that this developer is investigating the build.</p><p>You can download <a href="https://catlight.io/downloads" class="external-link" rel="nofollow">CatLight for Windows, Mac OS X or Linux</a></p><h2 id="MonitoringJenkins-CCXml-compatibletools">CCXml-compatible tools</h2><p>To monitor automated build systems the following XML format has been specified by the vendor of the CruiseControl build system: <a href="https://web.archive.org/web/20090830044629/http://confluence.public.thoughtworks.org/display/CI/Multiple+Project+Summary+Reporting+Standard" class="external-link" rel="nofollow">https://web.archive.org/web/20090830044629/http://confluence.public.thoughtworks.org/display/CI/Multiple+Project+Summary+Reporting+Standard</a></p><p>Build systems may provide a report using this XML format.</p><p>Monitoring software signals the state of the jobs on the build system in different ways. Typical is the use of tray icons and balloon popup messages.</p><p>In Jenkins the URL to this report is <code>http:</code><code>//jenkins-server:port/cc.xml</code></p><p>Please be aware that the cc.xml file does not contain the job from subfolders, only the jobs from the root directory so jobs like those generated by the GitHub Organization Folder are not listed inside the root cc.xml file.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>In Jenkins 2.85 and newer, adding a query parameter named <code>recursive</code> will cause all jobs to be exported recursively in subfolders: <code>http:</code><code>//jenkins-server:port/cc.xml?recursive</code></p></div></div><p><br/>In theory you can use any monitoring that supports CruiseControl to monitor Jenkins too. Here is a small list of tools:</p><p>Written in Java: <a href="http://jcctray.sourceforge.net/" class="external-link" rel="nofollow">JCCTray</a> (uses SWT; configuration to use: Server Name: &quot;My Buildsystem&quot;, Server Type: &quot;CruiseControl&quot;, Server URL: &quot;http://jenkins-server/cc.xml?&quot; the trailing question mark must be there!)</p><p>For Windows: <a href="http://www.google.com/search?hl=en&amp;q=cctray+download&amp;btnG=Google+Search" class="external-link" rel="nofollow">CCTray</a> </p><p>For OS X: <a href="http://ccmenu.org" class="external-link" rel="nofollow">CCMenu</a></p><p>Other monitoring tools:<a href="http://www.google.com/search?hl=en&amp;q=cruisecontrol+widget&amp;btnG=Search" class="external-link" rel="nofollow">Other monitoring tools</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161578/106496023.png">screen-notification-success-jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161578/106496024.png">screen-branched-builds.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161578/106496025.png">screen-tray-white.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161578/106496026.png">screen-tray-yellow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161578/106496027.png">screen-tray-red.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

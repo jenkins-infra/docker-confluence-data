@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : HudsonUbuntuLinuxStartupScript</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Installing-Jenkins-as-a-Unix-daemon.html">Installing Jenkins as a Unix daemon</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : HudsonUbuntuLinuxStartupScript
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified on Apr 14, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Save the text below on /etc/init.d/hudson</p>
+
+<p>Change the value of these variables to match your settings:</p>
+
+<p>HUDSON_HOME=/home/html/discovery/hudson/root<br/>
+DAEMON=&quot;$HUDSON_HOME/../jre1.6.0_12/bin/java&quot;<br/>
+DAEMON_ARGS=&quot;-jar &quot;$HUDSON_HOME/hudson.war&quot; --httpPort=-1 --ajp13Port=8102 --ajp13ListenAddress=127.0.0.1 --prefix=/hudson&quot;</p>
+
+<p>Hudson will be started has www-data user.</p>
+
+<p>The HUDSON_HOME directory should be set to user www-data and group www-data.</p>
+
+<h1 id="HudsonUbuntuLinuxStartupScript-Shellscript">Shell script</h1>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          hudson
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: Hudson initscript
+# Description:       Hudson Continuous Integration System
+### END INIT INFO
+
+# Author: Luis Alves &lt;luis DOT alves AT lafaspot DOT com&gt;
+
+# Do NOT &quot;set -e&quot;
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+HUDSON_HOME=/home/html/discovery/hudson/root
+#LOG=&quot;$HUDSON_HOME/log/hudson.log&quot;
+DESC=&quot;Hudson Continous Build Integration&quot;
+NAME=hudson
+DAEMON=&quot;$HUDSON_HOME/../jre1.6.0_12/bin/java&quot;
+DAEMON_ARGS=&quot;-jar &quot;$HUDSON_HOME/hudson.war&quot; --httpPort=-1 --ajp13Port=8102 --ajp13ListenAddress=127.0.0.1 --prefix=/hudson&quot;
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+export HUDSON_HOME
+
+# Exit if the package is not installed
+# [ -x &quot;$DAEMON&quot; ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] &amp;&amp; . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+[ -f /etc/default/rcS ] &amp;&amp; . /etc/default/rcS
+
+# Define LSB log_* functions.
+# Depend on lsb-base (&gt;= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+
+pid_of_hudson() {
+    cat &quot;$PIDFILE&quot;
+}
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+        #[ -e &quot;$LOG&quot; ] &amp;&amp; cnt=`wc -l &quot;$LOG&quot; | awk &#39;{ print $1 }&#39;` || cnt=1
+	# Return
+	#   0 if daemon has been started
+	#   1 if daemon was already running
+	#   2 if daemon could not be started
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test &gt; /dev/null \
+		|| return 1
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --background --chuid www-data --exec $DAEMON -- \
+		$DAEMON_ARGS \
+		|| return 2
+	# Add code here, if necessary, that waits for the process to be ready
+	# to handle requests from services started subsequently which depend
+	# on this one.  As a last resort, sleep for some time.
+        #while { pid_of_hudson &gt; /dev/null ; } &amp;&amp;
+        #        ! { tail +$cnt &quot;$LOG&quot; | grep -q &#39;Winstone Servlet Engine .* running&#39; ; } ; do
+        #      sleep 1
+        #done
+
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+	# Return
+	#   0 if daemon has been stopped
+	#   1 if daemon was already stopped
+	#   2 if daemon could not be stopped
+	#   other if a failure occurred
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	RETVAL=&quot;$?&quot;
+	[ &quot;$RETVAL&quot; = 2 ] &amp;&amp; return 2
+	# Wait for children to finish too if this is a daemon that forks
+	# and if the daemon is only ever run from this initscript.
+	# If the above conditions are not satisfied then add some other code
+	# that waits for the process to drop all resources that could be
+	# needed by services started subsequently.  A last resort is to
+	# sleep for some time.
+	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
+	[ &quot;$?&quot; = 2 ] &amp;&amp; return 2
+	# Many daemons don&#39;t delete their pidfiles when they exit.
+	rm -f $PIDFILE
+	return &quot;$RETVAL&quot;
+}
+
+#
+# Function that sends a SIGHUP to the daemon/service
+#
+do_reload() {
+	#
+	# If the daemon can reload its configuration without
+	# restarting (for example, when it is sent a SIGHUP),
+	# then implement that here.
+	#
+	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
+	return 0
+}
+
+case &quot;$1&quot; in
+  start)
+	[ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_daemon_msg &quot;Starting $DESC&quot; &quot;$NAME&quot;
+	do_start
+	case &quot;$?&quot; in
+		0|1) [ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_end_msg 0 ;;
+		2) [ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_daemon_msg &quot;Stopping $DESC&quot; &quot;$NAME&quot;
+	do_stop
+	case &quot;$?&quot; in
+		0|1) [ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_end_msg 0 ;;
+		2) [ &quot;$VERBOSE&quot; != no ] &amp;&amp; log_end_msg 1 ;;
+	esac
+	;;
+  #reload|force-reload)
+	#
+	# If do_reload() is not implemented then leave this commented out
+	# and leave &#39;force-reload&#39; as an alias for &#39;restart&#39;.
+	#
+	#log_daemon_msg &quot;Reloading $DESC&quot; &quot;$NAME&quot;
+	#do_reload
+	#log_end_msg $?
+	#;;
+  restart|force-reload)
+	#
+	# If the &quot;reload&quot; option is implemented then remove the
+	# &#39;force-reload&#39; alias
+	#
+	log_daemon_msg &quot;Restarting $DESC&quot; &quot;$NAME&quot;
+	do_stop
+	case &quot;$?&quot; in
+	  0|1)
+		do_start
+		case &quot;$?&quot; in
+			0) log_end_msg 0 ;;
+			1) log_end_msg 1 ;; # Old process is still running
+			*) log_end_msg 1 ;; # Failed to start
+		esac
+		;;
+	  *)
+	  	# Failed to stop
+		log_end_msg 1
+		;;
+	esac
+	;;
+  *)
+	#echo &quot;Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}&quot; &gt;&amp;2
+	echo &quot;Usage: $SCRIPTNAME {start|stop|restart|force-reload}&quot; &gt;&amp;2
+	exit 3
+	;;
+esac
+
+:
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

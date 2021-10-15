@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Selection Tasks Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Selection Tasks Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (nzhelyakov)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 07, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Selection tasks <a href="https://plugins.jenkins.io/selection-tasks-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-09-16/#SECURITY-1967" class="external-link" rel="nofollow">System command execution vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin adds new variable. You may select several tasks (for example, Selenium tests) for run.</p></p>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Hudson 1.366 or later.</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This  plugin was created for Hudson 1.366. It might not work with earlier versions of  Hudson.</p></div></div>
+
+
+
+<h1 id="SelectionTasksPlugin-Userguide">User guide</h1>
+
+<p>1. Add &quot;Script Selection task&quot; variable to your project. You need to specify the path to executable file and several delimeters. See the picture below.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54723315/54951974.jpg" data-image-src="attachments/54723315/54951974.jpg" data-unresolved-comment-count="0" data-linked-resource-id="54951974" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="54723315" data-linked-resource-container-version="6"></span></p>
+
+<p>2. Our idea is quite simple. We have a folder with Selenium tests. We want to select some of them using Hudson UI. Executable file knows the structure of the directory with Selenium tests.</p>
+
+<p>Executable file writes directory structure to standard output stream. So, plugin runs the executable file and reads standard output stream. Example of executable file</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54723315/54951975.jpg" data-image-src="attachments/54723315/54951975.jpg" data-unresolved-comment-count="0" data-linked-resource-id="54951975" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="54723315" data-linked-resource-container-version="6"></span></p>
+
+<p>3. If you press &quot;Build now&quot; button you will see the tree like this</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54723315/54951976.jpg" data-image-src="attachments/54723315/54951976.jpg" data-unresolved-comment-count="0" data-linked-resource-id="54951976" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="5.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="54723315" data-linked-resource-container-version="6"></span></p>
+
+<p>4. Select several tests and press &quot;Build&quot; button. For example</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54723315/54951977.jpg" data-image-src="attachments/54723315/54951977.jpg" data-unresolved-comment-count="0" data-linked-resource-id="54951977" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="6.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="54723315" data-linked-resource-container-version="6"></span></p>
+
+<p>5. In build parameters you may see</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54723315/54951978.jpg" data-image-src="attachments/54723315/54951978.jpg" data-unresolved-comment-count="0" data-linked-resource-id="54951978" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="7.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="54723315" data-linked-resource-container-version="6"></span></p>
+
+<p>6. You may use this variable in your Linux or Windows scripts. And you may use selected value as default value for this type of variable.</p>
+
+
+<h1 id="SelectionTasksPlugin-Changelog">Changelog</h1>
+
+<h5 id="SelectionTasksPlugin-Version1.0(February28,2011)">Version 1.0 (February 28, 2011)<br class="atl-forced-newline"/></h5>
+
+<ul>
+	<li>Initial release.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723315/54951974.jpg">3.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723315/54951975.jpg">4.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723315/54951976.jpg">5.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723315/54951977.jpg">6.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723315/54951978.jpg">7.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

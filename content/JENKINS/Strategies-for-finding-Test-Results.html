@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Strategies for finding Test Results</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="TestLink-Plugin.html">TestLink Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Strategies for finding Test Results
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kinow)</span>, last modified on Mar 13, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>After your automated tests are executed the plug-in has to look for <span style="text-decoration: underline;">Test Results</span>. This way it will know whether an automated test was executed correctly or not and then update the test status in TestLink.</p>
+
+
+<h6 id="StrategiesforfindingTestResults-TestNGresultseekingstrategies">TestNG result seeking strategies</h6>
+
+<p><strong>TestNG class name</strong>: The plug-in matches the TestNG class name (e.g.: org.tap4j.TestParser) and the key custom field value.</p>
+
+<p><strong>TestNG method name</strong>: The plug-in matches the TestNG method name (e.g.: org.tap4j.TestParser#testTokenizer) and the key custom field value.</p>
+
+<p><strong>TestNG suite name</strong>: The plug-in matches the TestNG suite name (e.g.: functional tests) and the key custom field value.</p>
+
+<h6 id="StrategiesforfindingTestResults-JUnitresultseekingstrategies">JUnit result seeking strategies</h6>
+
+<p><strong>JUnit case class name</strong>: The plug-in matches the JUnit case class name (e.g.: org.tap4j.TestParser) and the key custom field value.</p>
+
+<p><strong>JUnit case name</strong>: The plug-in matches the JUnit case class name (e.g.: testTokenizer) and the key custom field value.</p>
+
+<p><strong>JUnit method name</strong>: The plug-in matches the JUnit case class name (e.g.: org.tap4j.TestParser#testTokenizer) and the key custom field value.</p>
+
+<p><strong>JUnit suite name</strong>: The plug-in matches the JUnit suite name (e.g.:functional tests) and the key custom field value.</p>
+
+<h6 id="StrategiesforfindingTestResults-TAPresultseekingstrategies">TAP result seeking strategies</h6>
+
+<p><strong>TAP file name</strong>: The plug-in matches the TAP file name (e.g.: testFtpProtocol.tap) and the key custom field value. </p>
+
+<p><span style="text-decoration: line-through;">New proposal</span></p>
+
+<p><span style="text-decoration: line-through;">Oliver Merkel and Yury Kryazhev proposed changes to JUnit and TestNG result seeking process. I will try to organize them here for open discussion. Everybody is invited to comment, add suggestions or ideas, even if you are not using the plug-in :</span>)-</p>
+
+<h5 id="StrategiesforfindingTestResults-1.Combinesuitenameandtestcasewhilelookingfortestresults"><span style="text-decoration: line-through;">1. Combine suite name and test case while looking for test results</span></h5>
+
+<p><span style="text-decoration: line-through;">If a test case is used in different test suites. It may cause the plug-in to report a test result twice in some situations. We could use the following format: &quot;testSuiteName&quot;.&quot;testCaseNameOrClass&quot;.</span></p>
+
+
+<h5 id="StrategiesforfindingTestResults-2.Addthepossibilitytousetestmethods"><span style="text-decoration: line-through;">2. Add the possibility to use test methods</span></h5>
+
+<p><span style="text-decoration: line-through;">This proposal would add an extra option in the plug-in to match custom field values against test method names. I hadn't implemented it in version 1.0 for thinking that the method name could repeat inside other classes and that a test case in TestLink usually would be related to a test case or test suite. However, by adding this option to the plug-in we extend the possibilities of how to use it in different build pipelines. Perhaps this option could be implemented as in #1.</span></p>
+
+<h5 id="StrategiesforfindingTestResults-3.Addanoptiontodefinewhethertheplug-inshouldlookfortestcaseortestclassname"><span style="text-decoration: line-through;">3. Add an option to define whether the plug-in should look for test case or test class name</span></h5>
+
+<p><span style="text-decoration: line-through;">In JUnit, some tools use test case name, and others the test class name attribute. At present, the plug-in tries to find a class name, and if not present then it uses the test case name. We could let the user decide which option the plug-in must utilize. This way we prevent the plug-in from running in situations where it uses test class name while it should be using the test case name. Below is an example which could cause wrong assertions in the plug-in.</span></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;testsuites tests=&quot;…&quot; failures=&quot;…&quot; disabled=&quot;0&quot; errors=&quot;…&quot; time=&quot;…&quot; name=&quot;AllTests&quot;&gt;
+
+  &lt;testsuite name=&quot;MyClass&quot; tests=&quot;…&quot; failures=&quot;…&quot; disabled=&quot;0&quot; errors=&quot;0&quot; time=&quot;0&quot;&gt;
+
+    &lt;testcase name=&quot;MethodOne&quot; status=&quot;run&quot; time=&quot;0&quot; classname=&quot;MyClass&quot; /&gt;
+
+    &lt;testcase name=&quot;MethodTwo&quot; status=&quot;run&quot; time=&quot;0&quot; classname=&quot;MyClass&quot; /&gt;
+
+…
+
+  &lt;/testsuite&gt;
+
+&lt;/testsuites&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:53</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : YAML Project Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : YAML Project Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mattmoor)</span>, last modified by <span class='editor'> Unknown User (astroilov)</span> on Oct 26, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'yaml-project' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="YAMLProjectPlugin-YAMLProjectsupportforJenkinsplugin">YAML Project support for Jenkins plugin</h1>
+<p>
+<p>This plugin introduces a YAML project for Jenkins, which loads a declarative specification of the project from a checked in YAML file.</p><br/>
+The format of this YAML file, and its processing is entirely based on Jenkins' <a href="Structured-Form-Submission.html">Structured Form Submission</a></p>
+
+<p>For example, the following YAML file, will get turned into a simple Freestyle Project with a single shell build step that echos “Hello World”:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+kind: !freestyle
+builder:
+  kind: !shell
+  command: echo Hello World
+</pre>
+</div></div>
+
+<p>This new project type relies on the simple property that YAML 1.2 is a superset of JSON, so any structured form submission can be parsed as YAML; and that we can serialize the objects parsed from YAML back into JSON with relative ease.</p>
+
+<h2 id="YAMLProjectPlugin-AdvantagesofYAML">Advantages of YAML</h2>
+
+<p>By using YAML instead of raw JSON, we get nice some properties, like the ability to comment your configuration:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+kind: !freestyle
+builder:
+  kind: !shell
+  # Print a greeting.
+  command: echo Hello World
+</pre>
+</div></div>
+
+<p>As well as the ability to replace what would be raw class names (e.g. hudson.tasks.Shell) with friendlier names (e.g. !shell).  While these special short tags require plugins to annotate themselves with, by default we allow users to reference plugins based on their display name.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+kind: !freestyle
+builder:
+  kind: !by-name Execute shell
+  # print a greeting
+  command: echo Hello World
+</pre>
+</div></div>
+
+
+<h2 id="YAMLProjectPlugin-GettingStarted">Getting Started</h2>
+
+<p>To facilitate getting started with the YAML project, or to learn to use it with a new plugin, we have added an extension that annotates new projects with the YAML that would be used to generate them.  If we created the previous “Hello World” example through the UI normally, we would see:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/73534186/73597105.jpg" data-image-src="attachments/73534186/73597105.jpg" data-unresolved-comment-count="0" data-linked-resource-id="73597105" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AsYaml.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="73534186" data-linked-resource-container-version="6"></span></p>
+
+
+<p><strong><em>NOTE:</em></strong> <em>we try to scrub out a lot of superfluous form data, but it is imperfect/incomplete, which is why this example contains additional fields.</em></p>
+
+<p>Check this YAML into your repository, e.g. as .jenkins.yaml, and create a new “YAML Project” that syncs the repository and reads your chosen filename.  It’s that easy.</p>
+
+
+<h2 id="YAMLProjectPlugin-GettingAround">Getting Around</h2>
+
+<p>Once you have run your YAML project, you will see a new index page:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/73534186/73597106.jpg" data-image-src="attachments/73534186/73597106.jpg" data-unresolved-comment-count="0" data-linked-resource-id="73597106" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JobHistory.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="73534186" data-linked-resource-container-version="6"></span></p>
+
+
+<p>On the right side of the page, there is an embedded view of the projects that have been instantiated from the YAML file.  A new version is created whenever you change your YAML, so you can view prior versions of your project by simply browsing the job history.<br/>
+Embedded in the center of the page, we include the index page for the latest version of the project.  This should match what you would see if you were to click on the latest version in the “Job History” pane.</p>
+
+
+
+
+<h1 id="YAMLProjectPlugin-VersionHistory"><strong>Version History</strong></h1>
+
+<h3 id="YAMLProjectPlugin-VersionTBD(TBD)">Version TBD (TBD)</h3>
+
+<ul>
+	<li>TBD</li>
+</ul>
+
+
+
+
+
+
+<h1 id="YAMLProjectPlugin-Notesforadvancedusersandplugindevelopers">Notes for advanced users and plugin developers</h1>
+
+<h2 id="YAMLProjectPlugin-Curatingyourplugin’ssub-grammar">Curating your plugin’s sub-grammar</h2>
+
+<p>The grammar of your plugin is entirely guided by your contribution to the structure form submission.  In order to change your plugin’s contribution, you simply need to rename your Jelly form fields, take for instance an older <a href="Google-Cloud-Storage-Plugin.html">Google Cloud Storage Plugin</a>'s jelly:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+  &lt;a:credentials title=&quot;${%Google Credentials}&quot; field=&quot;credentialsId&quot; /&gt;
+  &lt;f:block&gt;
+    &lt;f:hetero-list name=&quot;uploads&quot; hasHeader=&quot;true&quot;
+      descriptors=&quot;${descriptor.getUploads()}&quot;
+      items=&quot;${instance != null ? instance.uploads : descriptor.getDefaultUploads()}&quot;
+      addCaption=&quot;Add Operation&quot;
+      deleteCaption=&quot;Delete Operation&quot; /&gt;
+  &lt;/f:block&gt;
+</pre>
+</div></div>
+
+<p>This is coupled with its @DataBoundConstructor:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@DataBoundConstructor
+public GoogleCloudStorageUploader(
+  String credentialsId, @Nullable List&lt;AbstractUpload&gt; uploads) {
+</pre>
+</div></div>
+
+<p>To produce the top-level grammar:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+publisher:
+- kind: !by-name Google Cloud Storage Uploader
+  credentialsId: {project-id}
+  uploads:
+    ...
+</pre>
+</div></div>
+
+<p>For the elements of the list of uploads, since AbstractUpload is a abstract Describable, the grammar depends on the implementation, e.g.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+- stapler-class: !by-name Build Log Upload
+  # Variant-specific field
+  logName: build-log.txt
+  # Common fields
+  bucketNameWithVars: gs://ma-bucket/$GIT_COMMIT
+  forFailedJobs: true
+- stapler-class: !by-name *Classic Upload*
+  # Variant-specific field
+  sourceGlobWithVars: &#39;**/target/*.hpi&#39;
+  # Common fields
+  bucketNameWithVars: gs://ma-bucket/$GIT_COMMIT
+</pre>
+</div></div>
+
+<p>We can improve these field names with a simple rename in the Jelly and on the pertinent @DataBoundConstructor.</p>
+
+
+
+<h2 id="YAMLProjectPlugin-Backwardscompatibility">Backwards compatibility</h2>
+
+<p>One of the risks, as you change the grammar of your plugin, is that if people have a dependency on the old grammar that you will break them.  <br/>
+There a few tricks that can avoid this:</p>
+<ol>
+	<li>Leave your previous @DataBoundConstructor arguments in place, and handle marshalling from a particular set of arguments to your object in the constructor.  <em>This is useful if you are simply renaming arguments without naming collisions.</em></li>
+	<li>Implement custom newInstance processing on your Descriptor that dispatches to different implementations.  This is useful if, depending on version, the same name is shared by distinct types.</li>
+</ol>
+
+
+<p>You can either deduce which version of your grammar is being used by null checking multiple flavors of argument, or with an explicit version argument.  It is also possible to explicitly version your grammar through a hidden ‘version: ’ field in your form data, which guides either of the above to the appropriate argument handling.<br/>
+For example, consider the new ‘ClassicUpload’ @DataBoundConstructor:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@DataBoundConstructor
+public ClassicUpload(String bucket, boolean sharedPublicly,
+   boolean forFailedJobs, @Nullable UploadModule module,
+   String pattern,
+   // Legacy arguments for backwards compatibility
+   @Deprecated @Nullable String bucketNameWithVars,
+   @Deprecated @Nullable String sourceGlobWithVars) {
+  super(Objects.firstNonNull(bucket, bucketNameWithVars), sharedPublicly,
+    forFailedJobs, module);
+
+  this.sourceGlobWithVars =
+    Objects.firstNonNull(pattern, sourceGlobWithVars);
+}
+</pre>
+</div></div>
+
+<p><strong>NOTE:</strong> the new Jelly only specifies ‘bucket’ and ‘pattern’, however, we accept the old names to avoid breaking users of the previous syntax.</p>
+
+<p>This style allows us to simultaneously support both grammars, while only directing users to the latest grammar via the “<em>YAML Project</em>” action that we annotate on jobs created via the UI.</p>
+
+
+
+<h2 id="YAMLProjectPlugin-!your-name-here">!your-name-here</h2>
+
+<p>If you aren’t satisfied with your plugin being accessed via:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+!by-name Your Display Name
+</pre>
+</div></div>
+
+<p>You have the option to annotate your plugin with a custom yaml tag.  On your Describable, simply annotate either:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTag(tag = “!your-name-here”)
+</pre>
+</div></div>
+
+<p>If you want to reserve multiple pseudonyms, you can use:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTags({@YamlTag(tag = “!name1”), @YamlTag(tag = “!name2”)})
+</pre>
+</div></div>
+
+<p>If there are multiple plugins that occupy a space, you might also want a qualified name.  Some example of this would be:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTag(tag = “!storage”, arg=“gcs”)
+</pre>
+</div></div>
+<p>and</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTag(tag = “!storage”, arg=“s3”)
+</pre>
+</div></div>
+
+<p>Or in the DSL space:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTag(tag = “!dsl”, arg=“yaml”)
+</pre>
+</div></div>
+<p>and</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@YamlTag(tag = “!dsl”, arg=“groovy”)
+</pre>
+</div></div>
+
+
+<h2 id="YAMLProjectPlugin-Verbosemode">Verbose mode</h2>
+
+<p>For diagnostic output, consider enabling verbose output in Jenkins’ global configuration.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534186/73597105.jpg">AsYaml.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73534186/73597106.jpg">JobHistory.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:00</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

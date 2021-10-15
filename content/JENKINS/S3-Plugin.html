@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : S3 Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : S3 Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mikewatt)</span>, last modified by <span class='editor'> Unknown User (jimilian)</span> on Jan 05, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View S3 publisher <a href="https://plugins.jenkins.io/s3" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-02-12/#SECURITY-1684" class="external-link" rel="nofollow">Credential transmitted in plain text</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-11/#SECURITY-2201" class="external-link" rel="nofollow">Missing permission check</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-11/#SECURITY-2200" class="external-link" rel="nofollow">Missing permission checks allow obtaining metadata about artifacts</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2018-04-16/#SECURITY-730" class="external-link" rel="nofollow">Cross-site scripting vulnerability in artifact file names</a></li>
+</ul>
+
+</div></div>
+
+<p>Upload build artifacts to Amazon S3</p>
+
+<h2 id="S3Plugin-Makingartifactspublic">Making artifacts public</h2>
+
+<p>If you'd like to have all of your artifacts be publicly downloadable, see <a href="http://ariejan.net/2010/12/24/public-readable-amazon-s3-bucket-policy/" class="external-link" rel="nofollow">http://ariejan.net/2010/12/24/public-readable-amazon-s3-bucket-policy/</a>.</p>
+
+<h2 id="S3Plugin-UsagewithIAM">Usage with IAM</h2>
+
+<p>If you used IAM to create a separate pair of access credentials for this plugin, you can lock down its AWS access to simply listing buckets and writing to a specific bucket. Add the following custom policy to the user in the IAM console, replacing occurrences of &quot;my-artifact-bucket&quot; with your bucket name, which you'll have to create first:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+  &quot;Statement&quot;: [
+    {
+      &quot;Action&quot;: [
+        &quot;s3:ListAllMyBuckets&quot;
+      ],
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:s3:::*&quot;
+    },
+    {
+      &quot;Action&quot;: &quot;s3:*&quot;,
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Resource&quot;: [&quot;arn:aws:s3:::my-artifact-bucket&quot;, &quot;arn:aws:s3:::my-artifact-bucket/*&quot;]
+    }
+  ]
+}
+</pre>
+</div></div>
+
+<h1 id="S3Plugin-VersionHistory">Version History</h1>
+
+<h4 id="S3Plugin-Version0.10.11(Dec31,2016)-donotupdate-backwardcompatibilityforpipelinescriptsarebroken">Version 0.10.11 (Dec 31, 2016) - do not update - backward compatibility for pipeline scripts are broken</h4>
+
+<ul>
+	<li>Make plugin compatible with storage backends compatible with Amazon S3 (OpenStack Swift...) (JENKINS-40654, <a href="https://github.com/jenkinsci/s3-plugin/pull/100" class="external-link" rel="nofollow">PR-100</a>)</li>
+	<li>Add Standard - Infrequent Access storage class (<a href="https://github.com/jenkinsci/s3-plugin/pull/98" class="external-link" rel="nofollow">PR-98</a>)</li>
+	<li>Constrain build result severity (JENKINS-27284, <a href="https://github.com/jenkinsci/s3-plugin/pull/95" class="external-link" rel="nofollow">PR-95</a>)</li>
+	<li>Add job setting to suppress console logging (<a href="https://github.com/jenkinsci/s3-plugin/pull/94" class="external-link" rel="nofollow">PR-94</a>)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.10(Oct10,2016)">Version 0.10.10 (Oct 10, 2016)</h4>
+
+<ul>
+	<li>Add method for changing S3Profile via GroovyVersion</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.9(June27,2016)">Version 0.10.9 (June 27, 2016)</h4>
+
+<ul>
+	<li>Added option to open content directly in browser (JENKINS-37346)</li>
+	<li>FIXED IE and Chrome download issue when file path is window style ([PR-93|https://github.com/jenkinsci/s3-plugin/pull/93)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.8(Aug31,2016)">Version 0.10.8 (Aug 31, 2016)</h4>
+
+<ul>
+	<li>Doesn't exist (broken release because of changes in Jenkins plugin repository)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.7(July21,2016)">Version 0.10.7 (July 21, 2016)</h4>
+
+<ul>
+	<li>Handle InterruptedExceptions that no files are found (<a href="https://github.com/jenkinsci/s3-plugin/pull/92" class="external-link" rel="nofollow">PR-92</a>)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.6(July1,2016)">Version 0.10.6 (July 1, 2016)</h4>
+
+<ul>
+	<li>Don't upload on aborted build (JENKINS-25509, <a href="https://github.com/jenkinsci/s3-plugin/pull/90" class="external-link" rel="nofollow">PR-90</a>)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.5.1(June27,2016)">Version 0.10.5.1 (June 27, 2016)</h4>
+
+<ul>
+	<li>Plugin missing transitive dependencies ( JENKINS-36096 )</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.5(June17,2016)">Version 0.10.5 (June 17, 2016)</h4>
+
+<ul>
+	<li>Failed to reset the request input stream (JENKINS-34216 / PR-90 )</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.4(June10,2016)">Version 0.10.4 (June 10, 2016)</h4>
+
+<ul>
+	<li>Restore support for MatrixPlugin (JENKINS-35123)</li>
+	<li>Add new parameter on Profile level - to keep or not to folder structure. By default, plugin doesn't keep folder structure. And option to keep structure will be removed in some of next releases (JENKINS-34780)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.3(May25,2016)">Version 0.10.3 (May 25, 2016)</h4>
+
+<ul>
+	<li>Add option to keep artifacts forever</li>
+	<li>S3 Plugin switches credential profiles on-the-fly (JENKINS-14470)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.10.2(May11,2016)">Version 0.10.2 (May 11, 2016)</h4>
+
+<ul>
+	<li>Add usages to README file (<a href="https://github.com/jenkinsci/s3-plugin/pull/87" class="external-link" rel="nofollow">PR-87</a>)</li>
+	<li>Add option to set content-type on files (<a href="https://github.com/jenkinsci/s3-plugin/pull/86" class="external-link" rel="nofollow">PR-86</a>)</li>
+	<li>S3 artifacts are visible from API</li>
+</ul>
+
+
+
+
+
+<h4 id="S3Plugin-Version0.10.1(Apr25,2016)">Version 0.10.1 (Apr 25, 2016)</h4>
+
+<ul>
+	<li><strong>Parallel uploading</strong></li>
+	<li>Support uploading for unfinished builds</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.9.4(Apr23,2016)">Version 0.9.4 (Apr 23, 2016)</h4>
+
+<ul>
+	<li>Update AWS SDK to latest version</li>
+	<li>Fix credential issue</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.9.2(Apr06,2016)">Version 0.9.2 (Apr 06, 2016)</h4>
+
+<ul>
+	<li>Update AWS SDK to latest version</li>
+	<li>Fix credential issue</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.9.1(Apr05,2016)">Version 0.9.1 (Apr 05, 2016)</h4>
+
+
+
+<ul>
+	<li>Updated the aws-java-sdk dependency to support java region uploads</li>
+	<li>Uploading and downloading files more than 5GB using <a href="http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/transfer/TransferManager.html" class="external-link" rel="nofollow">TransferManager</a></li>
+	<li>Flatten directories</li>
+	<li>Excludes for downloading and uploading</li>
+	<li>Several profiles</li>
+	<li>Retries for downloading</li>
+	<li>Workflow plugin support</li>
+	<li>Using default Jenkins proxy</li>
+	<li>Now artifacts are using full name instead of project name only</li>
+</ul>
+
+
+
+
+<h4 id="S3Plugin-Version0.5(Aug09,2013)">Version 0.5 (Aug 09, 2013)</h4>
+
+<ul>
+	<li>Added Regions Support (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18839">JENKINS-18839</a>)</li>
+	<li>Update AWS SDK to latest version</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.4(Jul12,2013)">Version 0.4 (Jul 12, 2013)</h4>
+
+<ul>
+	<li>Added storage class support</li>
+	<li>Added arbitrary metadata support</li>
+	<li>Fixed the problem where the plugin messes up credential profiles upon concurrent use (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14470">JENKINS-14470</a>)</li>
+	<li>Plugin shouldn't store S3 password in clear (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14395">JENKINS-14395</a>)</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.3.1(Sept.20th,2012)">Version 0.3.1 (Sept. 20th, 2012)</h4>
+
+<ul>
+	<li>Prevent OOME when uploading large files.</li>
+	<li>Update Amazon SDK</li>
+</ul>
+
+
+<h4 id="S3Plugin-Version0.3.0(May29th,2012)">Version 0.3.0 (May 29th, 2012)</h4>
+
+<ul>
+	<li>Use AWS MimeType library to determine the Content-Type of the uploaded file.</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:44</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

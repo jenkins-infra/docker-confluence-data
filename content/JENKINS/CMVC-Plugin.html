@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : CMVC Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : CMVC Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fabito)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <at:declarations><at:string at:name="localhost" /></at:declarations><h1 id="CMVCPlugin-Introduction">Introduction</h1>
+<p>This plugin integrates <a href="http://www.redbooks.ibm.com/abstracts/gg244178.html" class="external-link" rel="nofollow">CMVC</a> to Hudson. </p>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View CMVC <a href="https://plugins.jenkins.io/cmvc" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>At the moment, it supports:</p>
+<ul>
+	<li>Polling a CMVC family to automatically start builds when changes are detected;</li>
+	<li>Ability to customize what characterizes a &quot;change&quot; by providing a custom TrackView Report where clause;</li>
+	<li>Delegating checkout/update logic to an external script.
+<br class="atl-forced-newline"/></li>
+</ul>
+
+
+<p>This plugin utilizes CMVC's Report command to query the family for changes. In the default mode, first it looks for all integrated tracks - within the specified releases - between the last build time and the current time (-view TrackView). Then it performs another query to find all files included in these tracks (-view ChangeView). The former query can be easily customized by providing a custom where clause.</p>
+
+<p>Changes and modifications details are detected by running commands similar to the following:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: false; theme: Confluence" data-theme="Confluence">
+Report -family family&lt;at:var at:name=&quot;localhost&quot; /&gt;6666 -raw -view TrackView
+-where lastUpdate between $lastBuild
+and $now and state = &#39;integrated&#39;
+and releaseName in (&#39;RC_123&#39;)
+order by defectName
+
+
+Report -family family&lt;at:var at:name=&quot;localhost&quot; /&gt;6666 -raw -view ChangeView
+-where defectName in (&#39;1&#39;,&#39;2&#39;)
+and releaseName in (&#39;RC_123&#39;)
+order by defectName
+</pre>
+</div></div>
+<p>These queries provide all the necessary information for generating a Hudson´s change log set.</p>
+
+<p>We all know CMVC is considered an obsolete SCM. However we also know there are still some people using it out there. So, why not provide them with a nice way to integrate it with Hudson and make our lives less miserable <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/> .</p>
+
+<h1 id="CMVCPlugin-Configuration">Configuration</h1>
+
+
+<h2 id="CMVCPlugin-Systemconfiguration">System configuration</h2>
+
+<p>It has only one global configuration parameter: the cmvc executables directory path.</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image image-left" src="attachments/37324230/37519484.png" data-image-src="attachments/37324230/37519484.png" data-unresolved-comment-count="0" data-linked-resource-id="37519484" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="cmvc-global-2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324230" data-linked-resource-container-version="39"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Usually this directory is already part of the PATH environment variable.</p>
+
+<h2 id="CMVCPlugin-Jobconfiguration">Job configuration</h2>
+
+<p>Jobs utilising CMVC have to define the folowing properties:</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image image-left" src="attachments/37324230/37519481.png" data-image-src="attachments/37324230/37519481.png" data-unresolved-comment-count="0" data-linked-resource-id="37519481" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="proj-config-2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324230" data-linked-resource-container-version="39"></span><br/>
+ 
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Fill in each of the settings:</p>
+<ul>
+	<li><em>Family</em> - The CMVC family. The following format is expected: family(at)host(at)port</li>
+	<li><em>Releases</em> - Release names separated by comma (,)</li>
+	<li><em>Become User</em> - User used to connect to CMVC. Usually a family superuser. If left blank the <strong>CMVC_BECOME</strong> environment variable will be used instead. This user must have permission to access the current family from within Hudson's host.</li>
+	<li><em>Checkout Script</em> - Script that will perform the checkout/update logic. Besides the default Hudson's env variables, the following environment variables are also made available to the script: <strong>CMVC_FAMILY</strong>, <strong>CMVC_BECOME</strong> and <strong>CMVC_RELEASES</strong>. This script will take a list of trackNames separated by space as the first parameter. Itn will be normally used to create a new Level containing the provided integrated tracks (which are the same tracks detected by the polling).</li>
+</ul>
+
+
+<p>Optionally, you can hit the <em>Advanced...</em> button and configure the TrackView Report where clause.</p>
+
+<p>  <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image image-left" src="attachments/37324230/37519483.png" data-image-src="attachments/37324230/37519483.png" data-unresolved-comment-count="0" data-linked-resource-id="37519483" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="proj-config-adv-3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324230" data-linked-resource-container-version="39"></span><br class="atl-forced-newline"/></p>
+
+<p>There are 3 available implicit variables that can be used in the custom where clause (prefixed by $):</p>
+<ol>
+	<li><strong>now</strong> - current time</li>
+	<li><strong>lastBuild</strong> - last build datetime</li>
+	<li><strong>releases</strong> - releases ( properly quoted to be used in &quot;IN&quot; statement )</li>
+</ol>
+
+
+<h1 id="CMVCPlugin-ReleaseNotes">Release Notes</h1>
+
+
+<h2 id="CMVCPlugin-Version0.2(09/06/2009)"><a href="https://hudson.dev.java.net/files/documents/2402/136324/cmvc.hpi" class="external-link" rel="nofollow">Version 0.2 (09/06/2009)</a></h2>
+
+<ul>
+	<li>Fixed NullPointer when saving global configuration</li>
+	<li>Added defectName to changes related pages</li>
+	<li>In the default mode the lastBuild time is the last successful build time</li>
+	<li>Fixed checkout exception handling</li>
+	<li>Upgraded pom to depend on Hudson 1.309
+<br class="atl-forced-newline"/></li>
+</ul>
+
+
+<h2 id="CMVCPlugin-Version0.1(30/05/2009)"><a href="https://hudson.dev.java.net/files/documents/2402/135805/cmvc.hpi" class="external-link" rel="nofollow">Version 0.1 (30/05/2009)</a></h2>
+
+<ul>
+	<li>Initial release;</li>
+	<li>Tested on Windows and Linux environments;</li>
+	<li>Tested only on CMVC 2.X ( won´t work with 5.X due to date format incompatibilities);</li>
+	<li>Checkout is delegated to an external script;</li>
+	<li>Lacks i18n;
+<br class="atl-forced-newline"/></li>
+</ul>
+
+
+<h1 id="CMVCPlugin-TODO">TODO</h1>
+
+<ul>
+	<li>Add support to other CMVC versions</li>
+	<li><span style="text-decoration: line-through;">Handle multiple releases</span></li>
+	<li>Properly handle CMVC´s errors</li>
+	<li><span style="text-decoration: line-through;">Alter changes sorting criteria. Order it by trackName, pathName and version</span></li>
+	<li>Improve i18n</li>
+	<li>Diferentiate features from defects in changes reports</li>
+	<li>Create levels after successfull builds (tagging logic)</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324230/37519481.png">proj-config-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324230/37519482.png">proj-config-adv-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324230/37519483.png">proj-config-adv-3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324230/37519484.png">cmvc-global-2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:17</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : HashiCorp Vault Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : HashiCorp Vault Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ptierno)</span>, last modified by <span class='editor'> Unknown User (casz)</span> on Aug 14, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View HashiCorp Vault <a href="https://plugins.jenkins.io/hashicorp-vault-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin adds a build wrapper to set environment variables from a <a href="https://www.vaultproject.io/" class="external-link" rel="nofollow">HashiCorp Vault</a> secret. Secrets are generally masked in the build log, so you can't accidentally print them.<h1 id="HashiCorpVaultPlugin-MigrationGuide">Migration Guide</h1><h2 id="HashiCorpVaultPlugin-Upgradefrom1.xto2.0">Upgrade from 1.x to 2.0</h2><p>The <em>BuildWrapper</em> did not change, so no changes to your Jenkinsfile should be necessary. However, you need to reconfigure Vault in your Jenkins instance based on the instructions above. There is no way to smoothly upgrade this, because this is a major rewrite and handling of configuration completely changed.</p><h1 id="HashiCorpVaultPlugin-VaultAuthenticationBackends">Vault Authentication Backends</h1><p>This plugin allows authenticating against Vault using the AppRole authentication backend. Hashicorp recommends using AppRole for Servers / automated workflows (like Jenkins) and using Tokens (default mechanism, Github Token, ...) for every developer's machine. Furthermore, this plugin allows using a <span style="color: rgb(36,41,46);">Github personal access token, or a </span>Vault Token - either configured directly in Jenkins or read from an arbitrary file on the Jenkins Machine.</p><h2 id="HashiCorpVaultPlugin-HowdoesAppRolework?">How does AppRole work?</h2><p>In short: you register an approle auth backend using a self-chosen name (e.g. Jenkins). This approle is identified by a `role-id` and secured with a `secret_id`. If you have both of those values you can ask Vault for a token that can be used to access vault.<br/>When registering the approle backend you can set a couple of different parameters:</p><ul><li>How long should the `secret_id` live (can be indefinite)</li><li>How often can one use a token that is obtained via this backend</li><li>Which IP addresses can obtain a token using `role-id` and `secret-id`?</li><li>many more</li></ul><p>This is just a short introduction, please refer to <a href="https://www.vaultproject.io/docs/auth/approle.html" class="external-link" rel="nofollow">HashiCorp itself</a> to get detailed information.</p><h2 id="HashiCorpVaultPlugin-Whataboutotherbackends?">What about other backends?</h2><p>Hashicorp explicitly recommends the AppRole Backend for machine-to-machine authentication. Token based auth is mainly supported for backwards compatibility.<br/>Another backend that might make much sense is the AWS EC2 backend, but we do not support it yet. Feel free to contribute!</p><p>Implementing additional authentication backends is actually quite easy:</p><p>Simply provide a class implementing <em>VaultTokenCredential</em> that contains a <em>Descriptor</em> extending <em>BaseStandardCredentialsDescriptor</em>.<br/>The <em>Descriptor</em> needs to be annotated with <em>@Extension</em>. Your credential needs to know how to authenticate with Vault and provide an authenticated Vault session.</p><p>See <a href="https://github.com/jenkinsci/hashicorp-vault-plugin/blob/master/src/main/java/com/datapipe/jenkins/vault/credentials/VaultAppRoleCredential.java" class="external-link" rel="nofollow">VaultAppRoleCredential.java</a> for an example.</p><h1 id="HashiCorpVaultPlugin-PluginUsage">Plugin Usage</h1><h2 id="HashiCorpVaultPlugin-Configuration">Configuration</h2><p>You can configure the plugin on three different levels:</p><ul><li>Global: in your global config</li><li><a href="https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Folders+Plugin" class="external-link" rel="nofollow">Folder</a>-Level: on the folder your job is running in</li><li>Job-Level: either on your freestyle project job or directly in the Jenkinsfile</li></ul><p>The lower the level the higher its priority, meaning: if you configure a URL in your global settings, but override it in your particular job, this URL will be used for communicating with Vault.</p><p>In your configuration (may it be global, folder or job) you see the following screen:</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="900" src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/configuration_screen.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/configuration_screen.png"></span></p><p>The credential you provide determines what authentication backend will be used.<br/>Currently, there are three different Credential Types you can use:</p><h3 id="HashiCorpVaultPlugin-VaultAppRoleCredential">Vault App Role Credential</h3><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="900" src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/approle_credential.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/approle_credential.png"></span></p><p>You enter your <em>role-id</em> and <em>secret-id</em> there. The description helps to find your credential later, the id is not mandatory (a UUID is generated by default), but it helps to set it if you want to use your credential inside the Jenkinsfile.</p><h3 id="HashiCorpVaultPlugin-VaultTokenCredential">Vault Token Credential</h3><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="900" src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/token_credential.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/token_credential.png"></span></p><p>Directly specify a token to be used when authenticating with vault.</p><h3 id="HashiCorpVaultPlugin-VaultTokenFileCredential">Vault Token File Credential</h3><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="900" src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/tokenfile_credential.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/tokenfile_credential.png"></span></p><p>Basically the same as the Vault Token Credential, just that the token is read from a file on your Jenkins Machine.<br/>You can use this in combination with a script that periodically refreshes your token.</p><h2 id="HashiCorpVaultPlugin-UsageinFreeStyleJobs">Usage in FreeStyle Jobs</h2><p>If you still use free style jobs (hint: you should consider migrating to <a href="https://jenkins.io/doc/book/pipeline/" class="external-link" rel="nofollow">Jenkinsfile</a>), you can configure both configuration and the secrets you need on the job level.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" width="900" src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/job_screen.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/hashicorp-vault-plugin/master/docs/images/job_screen.png"></span></p><p>The secrets are available as environment variables then.</p><h2 id="HashiCorpVaultPlugin-UsageviaJenkinsfile">Usage via Jenkinsfile</h2><p>With version 2.3.0, we added a &quot;withVault&quot; symbol and made &quot;envVar&quot; optional as shown in the second secretValue with &quot;another_test&quot; will use the vaultKey as the envVar.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Jenkinsfile</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node {
+    // define the secrets and the env variables
+    def secrets = [
+        [path: &#39;secret/testing&#39;, secretValues: [
+            [envVar: &#39;testing&#39;, vaultKey: &#39;value_one&#39;],
+            [envVar: &#39;testing_again&#39;, vaultKey: &#39;value_two&#39;]]],
+        [path: &#39;secret/another_test&#39;, secretValues: [
+            [vaultKey: &#39;another_test&#39;]]]
+    ]
+
+    // optional configuration, if you do not provide this the next higher configuration
+    // (e.g. folder or global) will be used
+    def configuration = [vaultUrl: &#39;http://my-very-other-vault-url.com&#39;,
+                         vaultCredentialId: &#39;my-vault-cred-id&#39;]
+    // inside this block your credentials will be available as env variables
+    withVault([configuration: configuration, vaultSecrets: secrets]) {
+        sh &#39;echo $testing&#39;
+        sh &#39;echo $testing_again&#39;
+        sh &#39;echo $another_test&#39;
+    }
+}</pre>
+</div></div><p>Before version 2.2.0 and below:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Jenkinsfile</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node {
+    // define the secrets and the env variables
+    def secrets = [
+        [$class: &#39;VaultSecret&#39;, path: &#39;secret/testing&#39;, secretValues: [
+            [$class: &#39;VaultSecretValue&#39;, envVar: &#39;testing&#39;, vaultKey: &#39;value_one&#39;],
+            [$class: &#39;VaultSecretValue&#39;, envVar: &#39;testing_again&#39;, vaultKey: &#39;value_two&#39;]]],
+        [$class: &#39;VaultSecret&#39;, path: &#39;secret/another_test&#39;, secretValues: [
+            [$class: &#39;VaultSecretValue&#39;, envVar: &#39;another_test&#39;, vaultKey: &#39;another_test&#39;]]]
+    ]
+
+    // optional configuration, if you do not provide this the next higher configuration
+    // (e.g. folder or global) will be used
+    def configuration = [$class: &#39;VaultConfiguration&#39;,
+                         vaultUrl: &#39;http://my-very-other-vault-url.com&#39;,
+                         vaultCredentialId: &#39;my-vault-cred-id&#39;]
+    // inside this block your credentials will be available as env variables
+    wrap([$class: &#39;VaultBuildWrapper&#39;, configuration: configuration, vaultSecrets: secrets]) {
+        sh &#39;echo $testing&#39;
+        sh &#39;echo $testing_again&#39;
+        sh &#39;echo $another_test&#39;
+    }
+}</pre>
+</div></div><p><br/></p><p>In the future we might migrate to a <a href="http://javadoc.jenkins-ci.org/hudson/tasks/BuildStep.html" class="external-link" rel="nofollow">BuildStep</a> instead of a BuildWrapper.</p><h3 id="HashiCorpVaultPlugin-CHANGELOG">CHANGELOG</h3><p><strong><a href="https://wiki.jenkins.io// excerpt from https//wiki.jenkins.io/display/JENKINS/HashiCorp+Vault+Plugin#HashiCorpVaultPlugin-UsageviaJenkinsfile" rel="nofollow">Change log moved to Github releases</a></strong></p><ul><li><strong>2016/08/02</strong> - Initial release - 1.0</li><li><strong>2016/08/11</strong> - Bugfix release - 1.1<ul><li>Refactor to allow getting multiple vault keys in a single API call (<a href="https://issues.jenkins-ci.org/browse/JENKINS-37151" class="external-link" rel="nofollow">JENKINS-37151</a>)</li></ul></li><li><strong>2016/08/15</strong> - Re-release due to failed maven release - 1.2</li><li><strong>2017/03/03</strong> - Feature Release - 1.3<ul><li>Vault Plugin should mask credentials in build log (<a href="https://issues.jenkins-ci.org/browse/JENKINS-39383" class="external-link" rel="nofollow">JENKINS-39383</a>)</li></ul></li><li><strong>2017/04/10</strong> - Feature Release - 1.4<ul><li>Support reading Vault Token from file on disk (<a href="https://issues.jenkins-ci.org/browse/JENKINS-37713" class="external-link" rel="nofollow">JENKINS-37713</a>)</li><li>Using credentials plugin for authentication token (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38646" class="external-link" rel="nofollow">JENKINS-38646</a>)</li></ul></li><li><strong>2017/04/27</strong> - Major Release - 2.0.0<ul><li>Breaking change release (AppRole auth backend, Folder ability, improved configuration, ...)</li></ul></li><li><strong><span style="color: rgb(36,41,46);">2017/05/19</span></strong><span style="color: rgb(36,41,46);"> - Bugfix Release - 2.0.1</span><ul><li><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);">Build fails if plugin is enabled for a job without secrets specified (<a href="https://issues.jenkins-ci.org/browse/JENKINS-441630" class="external-link" rel="nofollow">JENKINS-441630</a>)</span><br/></span></li></ul></li><li><strong><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);">2017/05/22</span></span></strong><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"> - Feature Release - 2.1.0</span></span><ul><li><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);">Vault Key Not Saved In Vault Error Messaging (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38647" class="external-link" rel="nofollow">JENKINS-38647</a>)</span><br/></span></span></li><li><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);">Add support github token auth (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38939" class="external-link" rel="nofollow">JENKINS-38939</a>)</span></span></span></span><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><span style="color: rgb(36,41,46);"><br/></span></span></span></span></li></ul></li><li><strong>2018/05/01 - </strong> Bugfix Release - 2.1.1<br/><ul><li>MaskingConsoleLogFilter should filter out null secrets (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38647" class="external-link" rel="nofollow">JENKINS-38647</a>)</li><li><a href="https://github.com/jenkinsci/hashicorp-vault-plugin/pull/13" class="external-link" rel="nofollow">Avoid NPE Crash</a></li><li>Switch to SimpleBuildWrapper for pipeline compatibility (<a href="https://issues.jenkins-ci.org/browse/JENKINS-48049" class="external-link" rel="nofollow">JENKINS-48049</a>)</li><li>Dynamic secrets should be revoked after build wrapper completes (<a href="https://issues.jenkins-ci.org/browse/JENKINS-46794" class="external-link" rel="nofollow">JENKINS-46794</a>)</li></ul></li></ul><h3 id="HashiCorpVaultPlugin-TODO">TODO</h3><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=resolution%20=%20Unresolved%20AND%20component%20=%20hashicorp-vault-plugin&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99909874/111805058.png">global_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99909874/100106283.png">job_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99909874/111805059.png">job_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99909874/100106256.png">global_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99909874/100106257.png">job_configuration.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:26</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Create a new Plugin with a custom build Step</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="58002791.html">Developer&#39;s Guide</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Create a new Plugin with a custom build Step
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (vrenjith)</span> on Sep 07, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h3 id="CreateanewPluginwithacustombuildStep-Setupprojectstructure">Setup project structure</h3>
+
+<p>Jenkins uses Maven for both the core and all plugins. Custom plugins are used to generate code and configuration and help developers get a productive environment.</p>
+
+<p>For this tutorial, we will <strong>not</strong> use the <strong>hpi:create</strong> maven goal that creates a plugin skeleton, so that we can better describe all elements of the plugin structure.</p>
+
+<h6 id="CreateanewPluginwithacustombuildStep-pom.xml">pom.xml</h6>
+
+<p>The project descriptor has nothing surprising if you're used to Maven. It just extends the common jenkins plugin parent POM</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; 
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;parent&gt;
+    &lt;groupId&gt;org.jenkins-ci.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.400&lt;/version&gt;
+  &lt;/parent&gt;
+
+  &lt;artifactId&gt;graven&lt;/artifactId&gt;
+  &lt;packaging&gt;hpi&lt;/packaging&gt;
+  &lt;name&gt;Jenkins GRaveN Plugin&lt;/name&gt;
+  &lt;version&gt;0.1-SNAPSHOT&lt;/version&gt;
+  &lt;url&gt;http://wiki.jenkins-ci.org/display/JENKINS/GRaveN+Plugin&lt;/url&gt;
+&lt;/project&gt;
+</pre>
+</div></div>
+<p>The <strong><em>hpi</em></strong> packaging is the custom format used by Jenkins to distribute plugins.</p>
+
+<p>The version of the parent POM defines the minimal version of Jenkins this plugin will require. Unless you require some new API features that are available with more recent Jenkins releases, you should avoid forcing users of your plugin to run bleeding-edge Jenkins releases.</p>
+
+<p>The POM <strong>&lt;url&gt;</strong> points to the plugin wiki page on the Jenkins wiki. This will be used by the update center to create a link to your plugin.</p>
+
+<h6 id="CreateanewPluginwithacustombuildStep-Directorystructure">Directory structure</h6>
+
+<p>Your project will follow the standard maven directory structure, including a <strong>src/main/webapp</strong> folder for static resources that the plugin will contribute to Jenkins UI.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+pom.xml
+|_ src
+   |_ main
+   |   |_ java
+   |   |_ resources
+   |   |_ webapp
+   |_ test        (...)
+</pre>
+</div></div>
+
+<h3 id="CreateanewPluginwithacustombuildStep-Createthepluginclass">Create the plugin class</h3>
+
+<p>Jenkins uses an auto-discovery of components, so we only have to create a class with adequate convention for Jenkins to add it to available components.</p>
+
+<h6 id="CreateanewPluginwithacustombuildStep-Builder">Builder</h6>
+
+<p>As we are designing a plugin to support a build tool, we will create a <a href="http://javadoc.jenkins-ci.org/hudson/tasks/Builder.html" class="external-link" rel="nofollow">Builder</a>. Depending on the plugin goal you may extend <a href="http://javadoc.jenkins-ci.org/hudson/tasks/Publisher.html" class="external-link" rel="nofollow">Publisher</a>, <a href="http://javadoc.jenkins-ci.org/hudson/scm/SCM.html" class="external-link" rel="nofollow">SCM</a>, or another base class of the API (TODO link).</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+package hudson.plugins.graven;
+
+import hudson.tasks.Builder;
+
+import org.kohsuke.stapler.DataBoundConstructor;
+
+/**
+ * @author &lt;a href=&quot;mailto:nicolas.deloof@cloudbees.com&quot;&gt;Nicolas De loof&lt;/a&gt;
+ */
+public class GravenBuilder extends Builder {
+
+    private final String task;
+
+    @DataBoundConstructor
+    public GravenBuilder(String task) {
+        this.task = task;
+    }
+
+    public String getTask() {...}
+}
+</pre>
+</div></div>
+<p>Our graven integration will allow user to configure a graven task to be invoked, so we define an attribute to collect the configured task. It will be populated as the user hit the &quot;save&quot; button on job configuration using the class constructor, as we have used the annotation <a href="http://stapler.kohsuke.org/apidocs/org/kohsuke/stapler/DataBoundConstructor.html" class="external-link" rel="nofollow">@DataBoundConstructor</a>. <a href="http://stapler.java.net/" class="external-link" rel="nofollow">Stapler</a>, the web framework used by Jenkins, will collect user data from configuration page, serialize that data as JSON and automagically handle data binding to convert them to java objects using the @DataBoundConstructors.</p>
+
+<h6 id="CreateanewPluginwithacustombuildStep-Descriptor">Descriptor</h6>
+
+<p>The GravenBuilder class instances will match our job build steps, we now need to declare them and give Jenkins a way to manage them. This is the role of the <a href="http://javadoc.jenkins-ci.org/hudson/model/Descriptor.html" class="external-link" rel="nofollow">Descriptor</a> which acts as a factory and as a centralized configuration to store metadata for all instances. By convention, Descriptors are declared as inner classes in the component class (but this is not a requirement). They just need an @<a href="http://javadoc.jenkins-ci.org/hudson/Extension.html" class="external-link" rel="nofollow">Extension</a> annotation for Jenkins to discover them at runtime.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public class GravenBuilder extends Builder {
+
+    (...)
+
+    @Extension
+    public static class Descriptor extends BuildStepDescriptor&lt;Builder&gt; {
+
+        @Override
+        public boolean isApplicable(Class&lt;? extends AbstractProject&gt; jobType) {
+            return FreeStyleProject.class.isAssignableFrom(jobType);
+        }
+
+        @Override
+        public String getDisplayName() {
+            return &quot;execute GRaveN task&quot;;
+        }
+    }
+}
+</pre>
+</div></div>
+<p>As we are writting a descriptor for a <a href="http://javadoc.jenkins-ci.org/hudson/tasks/Builder.html" class="external-link" rel="nofollow">Builder</a>, we extend <a href="http://javadoc.jenkins-ci.org/hudson/tasks/BuildStepDescriptor.html" class="external-link" rel="nofollow">BuildStepDescriptor</a> for convenience. We then have to implement two methods :</p>
+
+<ul>
+	<li>isApplicable will be used to ask the descriptor if the component it manages can be used by the current project. You may want your plugin to apply only to FreeStyle projects but not Maven or Matrix ones</li>
+	<li>getDisplayName allow us to declare the label used in the Build Steps select box when user will configure the job. Remember that when we will talk about internationalization bellow</li>
+</ul>
+
+
+<h6 id="CreateanewPluginwithacustombuildStep-View">View</h6>
+
+<p>We have a component, a Descriptor that will manage it's lifecycle, we now need a view for user to interact with the component (and descriptor). Jenkins uses <a href="Basic-guide-to-Jelly-usage-in-Jenkins.html">jelly</a> templating langage to build views (you can also use groovy with recent jenkins releases). For our component hudson.plugin.graven.GravenBuilder, Jenkins will search for a config.jelly file in fully qualified class name path, i.e. hudson/plugin/graven/GravenBuilder/config.jelly.</p>
+
+<p>Lets create hudson.plugin.graven.GravenBuilder package in scr/main/resources and put a simple jelly template :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+  &lt;f:entry title=&quot;${%GRaveN task}&quot; field=&quot;task&quot;&gt;
+        &lt;f:textbox/&gt;
+  &lt;/f:entry&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div>
+<p>The namespace declaration allows to include a large set of jelly tags to handle various view building requirements, either standard ones from the jelly project (jelly:core) or custom ones packaged within Jenkins or plugins as resources (&quot;/lib/form&quot;).</p>
+
+<p>The tag based approach may not feel pleasant compared to your favorite web framework, but they are simple and do the job !</p>
+
+<p>The <strong>field</strong> attribute enables data-binding with the component. When set, the textbox value will be used to populate the associated class attribute (using the matching DataBoundConstructor parameter). When editing an existing build step, the associated getter will be used to populate the textfield.</p>
+
+<p>The <strong>title</strong> attribute uses a special syntax that enables jelly internationalization, see bellow.</p>
+
+<h5 id="CreateanewPluginwithacustombuildStep-Help">Help</h5>
+
+<p>We can provide a help file for the Builder, to explain usage and constraints, by adding a help.html in our hudson.plugins.graven.GravenBuilder resource package. This file must contain definition for a &lt;div&gt; html fragment and will be included in the page as tooltip.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;div&gt;
+    This build step can be used to invoke &lt;a href=&quot;http://www.graven.org&quot;&gt;GRaveN&lt;/a&gt; tasks
+&lt;/div&gt;
+</pre>
+</div></div>
+
+<p>Adding help tips for each form input follows same pattern : we just have to provide a simple help-&lt;fieldName&gt;.html file aside the jelly file in src/main/resources, so help-task.html :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;div&gt;
+    Configure the GRaveN task to execute
+&lt;/div&gt;
+</pre>
+</div></div>
+
+<p>We can also include a general description of the plugin, that will appear in update center as a description or our plugin, using an index.jelly file at resource <strong>root</strong>. Don't miss that one, as this will be the first thing user will see about your plugin before installing ;)</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;div&gt;
+  This plugin add support for GRaveN, the most advanced build tool ever.
+&lt;/div&gt;
+</pre>
+</div></div>
+
+<h3 id="CreateanewPluginwithacustombuildStep-Runit!"><span style="color: rgb(210,73,57);"><strong>Run it!</strong></span></h3>
+
+<p>We now want to test our plugin. Jenkins offers an automated test setup that you can invoke using <strong>mvn hpi:run</strong>. This will launch Jenkins with your plugin pre-installed, using a local <strong>$basedir/work</strong> as <strong>JENKINS_HOME</strong>. In this mode, your plugin is not packaged as a HPI file and you can edit your views and test the result of changes by hitting the browser refresh button. Code changes are not dynamically reloaded anyway, until you enable <a href="https://wiki.jenkins-ci.org/display/JENKINS/Developing+with+JRebel" class="external-link" rel="nofollow">JRebel</a> support.</p>
+
+<p><span style="text-decoration: underline;">Note:</span> running <strong>hpi:run</strong> includes launching the maven build phases that are defined by the parent POM and are required to process the <a href="http://javadoc.jenkins-ci.org/hudson/Extension.html" class="external-link" rel="nofollow">@Extension</a> annotations and few other custom build steps.  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/58002803/58196196.png" data-image-src="attachments/58002803/58196196.png" data-unresolved-comment-count="0" data-linked-resource-id="58196196" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2011-10-05 à 14.45.58.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58002803" data-linked-resource-container-version="17"></span></p>
+
+<h3 id="CreateanewPluginwithacustombuildStep-Testit!"><span style="color: rgb(210,73,57);"><strong>Test it!</strong></span></h3>
+
+<p>TODO describe the testing framework</p>
+
+
+
+<h3 id="CreateanewPluginwithacustombuildStep-Internationalization(i18n)">Internationalization (i18n)</h3>
+
+<p>Jenkins uses resource bundle to support internationalization. Don't forget to configure your IDE with the adequate plugin to enable the native2ascii conversion if your language uses non ASCII characters</p>
+
+<p>To i18n our plugin, we create a new bundle Messages.properties in the plugin resources, under plugin package (hudson.plugins.graven). We will put there text messages used in our code and jelly templates.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Messages.properties</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+GravenBuilder.Task=execute GRaveN task
+</pre>
+</div></div>
+<p>During maven build process, this bundle will be converted to a Messages class that we can use from code in replacement for strings. MessageFormat patterns are also supported when the message requires dynamic parameters.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+        @Override
+        public String getDisplayName() {
+            return Messages.GravenBuilder_Task();
+        }
+</pre>
+</div></div>
+
+<p>If you are using Intellij Idea as IDE, you can use the stapler plugin to extract hard-coded message and refactor to bundle.</p>
+
+<p>The resource bundle that is associated with our View is a set of config_LOCALE.properties next to the jelly file. The message key is simply the text within the pattern, with space character escaped :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>config_fr.properties</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+GRaveN\ task=t\u00e2che Graven
+</pre>
+</div></div>
+<p>Help file can also be i18n by adding the corresponding locale extension, so help-task.html -&gt; help-task_fr.html</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002803/58196196.png">Capture d’écran 2011-10-05 à 14.45.58.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

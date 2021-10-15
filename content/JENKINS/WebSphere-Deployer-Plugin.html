@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : WebSphere Deployer Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : WebSphere Deployer Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gpeters)</span>, last modified on May 01, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View WebSphere Deployer <a href="https://plugins.jenkins.io/websphere-deployer" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-12-17/#SECURITY-1581" class="external-link" rel="nofollow">SSL/TLS certificate validation globally and unconditionally disabled</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-956" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-12-17/#SECURITY-1371" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2020-01-29/#SECURITY-1719" class="external-link" rel="nofollow">XXE vulnerability</a></li>
+</ul>
+
+</div></div>
+This is a collection of two separate plugins that provide deployment functionality to most versions of IBM WebSphere Application Server, IBM WebSphere Portal and IBM WebSphere Liberty Profile.Please add comments if your issues are addressed on your version of WebSphere, note the fixes proposed in the Change Log below.</p><h4 id="WebSphereDeployerPlugin-PluginFeatures">Plugin Features</h4><ul><li>Deployment to a running remote or local instance of WebSphere 7.0.x - 9.0.x <ul><li>Note: WebSphere 6.0.x - WebSphere 8.0.x (4/30/2018) is no longer supported by IBM</li></ul></li><li>Deployment to a running remote or local instance of WebSphere Liberty Edition 8.x.x</li><li>Support for deployments when SSL is activated on WebSphere (Global Security)</li><li>Support for most versions of WebSphere (Portal,Liberty,ND,Extreme Scale, Express, Standard, etc...)</li><li>Support for updating JSR286/JSR186 Portlets</li><li>Support for deploying to different WebSphere instances/types per build</li><li>Support for cluster, node, cell, and server level deployments</li><li>Support for pre-compiling JSPs on WebSphere during deployment (When stress testing as part of build process)</li><li>Support for disabling JSP reloading (When stress testing as part of build process)</li><li>Support for not starting application after deployment</li><li>Support for updating an existing application (to prevent losing application settings after redeployment)</li><li>Supports fully stopping, uninstalling, installing and starting an application during deployment process</li><li>Support for using a single deployment manager across multiple clusters or servers</li><li>Support for virtual hosts when deploying EAR files</li><li>Smart detection of existing deployed application state (to prevent failures when a system admin stops your application without you knowing)</li></ul><h3 id="WebSphereDeployerPlugin-FrequentlyAskedQuestions(FAQs)">Frequently Asked Questions (FAQs)</h3><p>See the most <a href="https://wiki.jenkins.io/display/JENKINS/Frequently+Asked+Questions" rel="nofollow">frequently asked questions</a> and issues</p><h1 id="WebSphereDeployerPlugin-CommonConfigurations"><strong>Common Configurations</strong></h1><p>Scenario 1: Single instance of WebSphere</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="300" src="attachments/70484281/138455434.png" data-image-src="attachments/70484281/138455434.png" data-unresolved-comment-count="0" data-linked-resource-id="138455434" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-5-4 21:43:14.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70484281" data-linked-resource-container-version="95"></span></p><p>Scenario 2: A clustered deployment on WebSphere ND</p><p>** Note: Same application with the same context root can be<br/>deployed using the same deployment manager as long as<br/>you use different application names in the job configuration **</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="300" src="attachments/70484281/138455433.png" data-image-src="attachments/70484281/138455433.png" data-unresolved-comment-count="0" data-linked-resource-id="138455433" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-5-4 21:36:48.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70484281" data-linked-resource-container-version="95"></span></p><p><br/></p><p>Deploying portlets to IBM WebSphere Portal (Updates existing deployed portlets, themes and skins are not supported)<br/>Deploying to <a href="http://wiki.jenkins-ci.org/display/JENKINS/IBM+WebSphere+Configuration" class="external-link" rel="nofollow">IBM WebSphere Application Server</a><br/>Deploying to <a href="https://wiki.jenkins-ci.org/display/JENKINS/IBM+WebSphere+Liberty+Configuration" class="external-link" rel="nofollow">IBM WebSphere Liberty Server</a></p><h3 id="WebSphereDeployerPlugin-RequiredLibrariesForDeploymentsToIBMWebSphereApplicationServer">Required Libraries For Deployments To IBM WebSphere Application Server</h3><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Jar File</p></th><th class="confluenceTh"><p>Source Location</p></th><th class="confluenceTh"><p>Destination</p></th><th class="confluenceTh"><p>Required</p></th></tr><tr><td class="confluenceTd"><p>com.ibm.ws.admin.client_*.jar</p></td><td class="confluenceTd"><p>$WAS_INSTALL_ROOT/runtimes</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes</p></td></tr><tr><td class="confluenceTd"><p>com.ibm.ws.orb_*.jar</p></td><td class="confluenceTd"><p>$WAS_INSTALL_ROOT/runtimes</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes (otherwise 'No' if running under IBM J9 JRE, WAS v7 doesn't need it either)</p></td></tr><tr><td colspan="1" class="confluenceTd">com.ibm.ws.security.crypto.jar</td><td colspan="1" class="confluenceTd">$WAS_INSTALL_ROOT/plugins</td><td colspan="1" class="confluenceTd"><span>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</span></td><td colspan="1" class="confluenceTd">Yes (for v1.6.0+ of this plugin)</td></tr><tr><td colspan="1" class="confluenceTd">com.ibm.ws.webservices.thinclient_*.jar</td><td colspan="1" class="confluenceTd">$WAS_INSTALL_ROOT/runtimes</td><td colspan="1" class="confluenceTd"><span>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</span></td><td colspan="1" class="confluenceTd">Maybe (Depends if application uses web services)</td></tr></tbody></table></div><h3 id="WebSphereDeployerPlugin-RequiredLibrariesForDeploymentsToIBMWebSphereLibertyProfile">Required Libraries For Deployments To IBM WebSphere Liberty Profile</h3><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Jar File</p></th><th class="confluenceTh"><p>Source Location</p></th><th class="confluenceTh"><p>Destination</p></th><th class="confluenceTh"><p>Required</p></th></tr><tr><td class="confluenceTd"><p>com.ibm.websphere.appserver.api.basics_*.jar</p></td><td class="confluenceTd"><p>$LIBERTY_INSTALL_ROOT/dev/api/ibm</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes</p></td></tr><tr><td class="confluenceTd"><p>com.ibm.websphere.appserver.api.endpoint_*.jar</p></td><td class="confluenceTd"><p>$LIBERTY_INSTALL_ROOT/dev/api/ibm</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes</p></td></tr><tr><td class="confluenceTd"><p>com.ibm.websphere.appserver.api.restConnector_*.jar</p></td><td class="confluenceTd"><p>$LIBERTY_INSTALL_ROOT/dev/api/ibm</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes</p></td></tr><tr><td class="confluenceTd"><p>restConnector.jar</p></td><td class="confluenceTd"><p>$LIBERTY_INSTALL_ROOT/clients</p></td><td class="confluenceTd"><p>$USER_HOME/.jenkins/plugins/websphere-deployer/WEB-INF/lib</p></td><td class="confluenceTd"><p>Yes</p></td></tr></tbody></table></div><h4 id="WebSphereDeployerPlugin-IssuesorFeatureRequests"><br/>Issues or Feature Requests</h4><p><span class="static-jira-issues_count" >
+            <a class="issue-link" href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=assignee+%3D+currentUser%28%29+AND+resolution+%3D+Unresolved++&amp;src=confmacro">
+                            0 issues
+                    </a>
+                <span class="oauth-msg"> - <a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to see issue details</span>
+    </span>
+</p><h4 id="WebSphereDeployerPlugin-Roadmap">Roadmap</h4><ul><li>Add Pipeline Support</li><li>Add support for Jenkins slaves</li><li><s>Add rollback support for install/update failures to prevent breaking applications for QA/UAT team</s><s><br/></s></li><li><s>Add promotion support for other environments (QA,STAGE,PRE-PROD, etc.) without repackaging EAR/WAR</s></li><li><s>Add support for multiple target deployments</s></li><li><span style="text-decoration: line-through;">Fix path issue when locating artifacts to deploy</span></li><li><span style="text-decoration: line-through;">Provide support for Liberty Profile (support confirmed, will be available soon)</span></li><li><span style="text-decoration: line-through;">Provide support for EAR/WAR/WAB/OSGI deployments to Liberty Profile (support confirmed, will be available soon)</span></li><li><span style="text-decoration: line-through;">Remove external dependency on client jars for each configuration (to simplify initial configuration) (not possible)</span></li><li><span style="text-decoration: line-through;">Send notifications when application fails to start (outside of build process)</span></li><li><span style="text-decoration: line-through;">Add cluster support (release v1.3)</span></li><li><span style="text-decoration: line-through;">Support for WAR deployments on WebSphere Application Servers (Full Profile)</span></li></ul><h4 id="WebSphereDeployerPlugin-ChangeLog">Change Log</h4><h6 id="WebSphereDeployerPlugin-Version1.6.0(release)">Version 1.6.0 (release)   </h6><p>Added support for earlier versions of Jenkins (version 1.608)<span style="color: rgb(233,165,157);"> <br/></span>Added support for listing server targets<br/>Fixes for multithreading to speed up deployments<br/>Includes all beta changes listed below</p><h6 id="WebSphereDeployerPlugin-Version1.4.8(beta)-WASFullProfileUpdates">Version 1.4.8 (beta) - WAS Full Profile Updates </h6><p>Option to trust SSL certificates and hostnames (fix for PKIX issues)<br/>Attempt to allow for deployment across multiple environments</p><h6 id="WebSphereDeployerPlugin-Version1.4.4(beta)-WASFullProfileUpdates"><span style="color: rgb(233,165,157);"><span style="color: rgb(233,165,157);">Version 1.4.4 (beta) - WAS Full Profile Updates</span></span></h6><p><span style="color: rgb(233,165,157);"><span style="color: rgb(233,165,157);"><span style="color: rgb(0,51,102);">Fix for virtual host configuration when deploying EAR artifacts<br/>Added support for SharedLib when deploying EAR artifacts</span></span></span></p><h6 id="WebSphereDeployerPlugin-Version1.4.3(beta)-WASFullProfileUpdates"><span style="color: rgb(233,165,157);">Version 1.4.3 (beta) - WAS Full Profile Updates</span></h6><p><span style="color: rgb(0,51,102);">Added support for virtual host configuration when deploying EAR artifacts</span></p><h6 id="WebSphereDeployerPlugin-Version1.4.1(beta)-WASFullProfileUpdates">Version 1.4.1 (beta) - WAS Full Profile Updates</h6><p>Fix for those of us who don't use global security<br/>Attempt to fix ObjectName issue (Appears to be 2 classloaders loading the ObjectName, who knows why this is happening on some machines)<br/>Support for deployments when build is unstable</p><h6 id="WebSphereDeployerPlugin-Version1.4.0(beta)-WASFullProfileUpdates">Version 1.4.0 (beta) - WAS Full Profile Updates</h6><p>Added reloading support<br/>Fixed JSP reloading issue<br/>Fixed classloader order bug<br/>Added classloader policy suppoort<br/>Added context override for generated EARs<br/>Added support for multiple target deployments (cluster or multiple nodes)<br/>Changed UI layout</p><h6 id="WebSphereDeployerPlugin-Version1.3.4(release)-WASFullProfileUpdates">Version 1.3.4 (release) - WAS Full Profile Updates</h6><p>Several bug fixes and enhancements (see details below)<br/>Added &quot;operations&quot; to allow for either updating or complete re-installation of artifacts<br/>Added support for path variables (contribution)<br/>Tested support for updating Portlets on a remote WebSphere Portal Instance</p><h6 id="WebSphereDeployerPlugin-Version1.3.3(beta)-WASFullProfileUpdates">Version 1.3.3 (beta) - WAS Full Profile Updates</h6><p>Disabled host verification for complex deployment environments.<br/>Provided option for verbose logging.</p><h6 id="WebSphereDeployerPlugin-Version1.3.2(beta)-WASFullProfileUpdates">Version 1.3.2 (beta) - WAS Full Profile Updates</h6><p>Added more connector options.<br/>Fixed SSL caching so multiple deployments to different servers should work.</p><h6 id="WebSphereDeployerPlugin-Version1.3.1(beta)-WASFullProfileUpdates">Version 1.3.1 (beta) - WAS Full Profile Updates</h6><p>Added support for updating applications instead of complete reinstallation of artifacts.</p><h6 id="WebSphereDeployerPlugin-Version1.3(beta)-WASFullProfileUpdates">Version 1.3 (beta) - WAS Full Profile Updates</h6><p>Fix for generated EARs<br/>Java EE7 support<br/>Timeout parameter for large EAR deployments (contribution)<br/>Classloader policy support<br/>Context fix for generated EAR (contribution)<br/>WebSphere ND support when deploying through Deployment Manager<br/>Cluster support (experimental)</p><h6 id="WebSphereDeployerPlugin-Version1.2-Liberty/WASFullProfileUpdates">Version 1.2 - Liberty / WAS Full Profile Updates</h6><p>Support for WebSphere Liberty Profile<br/>Fixed path issues with WebSphere Application Server (full profile)</p><h6 id="WebSphereDeployerPlugin-Version1.1">Version 1.1</h6><p>Initial release performed</p><h6 id="WebSphereDeployerPlugin-Version1.0">Version 1.0</h6><p>Beta Testing Passed for WebSphere v8.5.5 for both remote and local deployments</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/70647819.png">websphere-deployer.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/71008257.png">liberty-select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/71008258.png">liberty-deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280538.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280539.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280540.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280542.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280561.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/98598983.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280562.jpg">diagram.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135467492.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/98598985.hpi">websphere-deployer-v1.4.2.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/133956743.png">Jenkins_WDP_configuartion.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/133956742.png">Jenkins_WDP_configuartion.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/133956745.png">Wesphere_class_loader.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/82280520.hpi">websphere-deployer.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135467495.hpi">websphere-deployer-v1.4.3.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135467503.hpi">websphere-deployer-v1.4.4.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135467523.hpi">websphere-deployer-v1.4.5.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135470697.hpi">websphere-deployer-v1.4.6.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/135470713.hpi">websphere-deployer-v1.4.7.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138454717.hpi">websphere-deployer-v1.4.8.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455429.png">image2018-5-4 21:33:9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455430.png">image2018-5-4 21:34:6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455431.png">image2018-5-4 21:35:34.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455432.png">image2018-5-4 21:36:19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455433.png">image2018-5-4 21:36:48.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/138455434.png">image2018-5-4 21:43:14.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/143493360.png">deploymnetError1.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/143493361.png">deploymnetError2.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/143493362.png">deploymnetError3.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70484281/143493424.png">image2018-7-23 17:38:10.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:58</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

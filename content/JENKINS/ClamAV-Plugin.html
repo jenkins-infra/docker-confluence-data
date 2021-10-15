@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ClamAV Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ClamAV Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified on May 11, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ClamAV <a href="https://plugins.jenkins.io/clamav" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h2 id="ClamAVPlugin-Overview">Overview</h2>
+<p>
+<p>This plugin allows you to check the artifacts with <a href="http://www.clamav.net/lang/en/" class="external-link" rel="nofollow">ClamAV</a>, which is  an open source (GPL) antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats.</p>
+<br class="atl-forced-newline"/></p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183506/57409802.png" data-image-src="attachments/57183506/57409802.png" data-unresolved-comment-count="0" data-linked-resource-id="57409802" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ClamAv.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183506" data-linked-resource-container-version="27"></span><br class="atl-forced-newline"/></p>
+
+<p>The artifacts are sent to ClamAV Host and are scaned. So you have to configure your ClamAV to enable TCP port in clamd.conf as follows.</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>clamd.conf</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+:
+# TCP port address.
+# Default: no
+TCPSocket 3310
+
+# TCP address.
+# By default we bind to INADDR_ANY, probably not wise.
+# Enable the following to provide some degree of protection
+# from the outside world.
+# Default: no
+#TCPAddr 127.0.0.1
+
+# Close the connection when the data size limit is exceeded.
+# The value should match your MTA&#39;s limit for a maximum attachment size.
+# Default: 25M
+StreamMaxLength 100M
+
+:
+</pre>
+</div></div>
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Be Careful</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If you get &quot;Broken Pipe&quot;, check &quot;StreammaxLength&quot; parameter.</p></div></div>
+
+<h2 id="ClamAVPlugin-Systemconfiguration">System configuration</h2>
+
+<p><br class="atl-forced-newline"/></p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183506/57409803.png" data-image-src="attachments/57183506/57409803.png" data-unresolved-comment-count="0" data-linked-resource-id="57409803" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="system_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183506" data-linked-resource-container-version="27"></span></p>
+
+<p>When &quot;Scan arhived artifacts&quot; checkbox is selected, the artifacts of job will be scaned if &quot;Archive the artifacts&quot; option is configured in job configuration page.</p>
+
+<h2 id="ClamAVPlugin-JobConfiguration">Job Configuration</h2>
+
+<p><br class="atl-forced-newline"/></p>
+
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183506/57409804.png" data-image-src="attachments/57183506/57409804.png" data-unresolved-comment-count="0" data-linked-resource-id="57409804" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183506" data-linked-resource-container-version="27"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>To scan a workspace, you may specify &quot;Files to check&quot; option such as &quot;*<strong>/</strong>&quot;. But it will take a long time.<br/>
+you may specify &quot;Excludes&quot; such as &quot;.git/*<strong>/</strong>&quot;.</p></div></div>
+<p><br class="atl-forced-newline"/></p>
+
+<h2 id="ClamAVPlugin-JobpageandVirusreportpage">Job page and Virus report page</h2>
+
+<p><br class="atl-forced-newline"/></p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183506/57409805.png" data-image-src="attachments/57183506/57409805.png" data-unresolved-comment-count="0" data-linked-resource-id="57409805" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183506" data-linked-resource-container-version="27"></span><br class="atl-forced-newline"/></p>
+
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183506/57409806.png" data-image-src="attachments/57183506/57409806.png" data-unresolved-comment-count="0" data-linked-resource-id="57409806" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="virus_report.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183506" data-linked-resource-container-version="27"></span></p>
+
+
+<h2 id="ClamAVPlugin-TODO">TODO</h2>
+
+<ul>
+	<li>add BuildStep to check files.</li>
+</ul>
+
+
+<h2 id="ClamAVPlugin-History">History</h2>
+
+<h3 id="ClamAVPlugin-0.3(11May,2015)">0.3 (11 May, 2015)</h3>
+
+<ul>
+	<li>ensure file is closed. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27954">JENKINS-27954</a>).</li>
+	<li>skipping of PASSED in console (<a href="http://jenkins-ci.org/pull/1">pull request 1</a>).</li>
+</ul>
+
+
+
+<h3 id="ClamAVPlugin-0.2(16Oct,2011)">0.2 (16 Oct, 2011)</h3>
+
+<ul>
+	<li>validate &quot;includes&quot; option, which should be mandatory if &quot;Scan archived artifacts&quot; option is not checked.</li>
+	<li>honor &quot;Scan archived artifacts&quot; option.</li>
+	<li>show full path in the virus check list.</li>
+</ul>
+
+
+<h3 id="ClamAVPlugin-0.1.1(26Jun,2011)">0.1.1 (26 Jun, 2011)</h3>
+
+<ul>
+	<li>failed to check artifacts due to ArrayIndexexception (<a href="https://issues.jenkins-ci.org/browse/JENKINS-10103">JENKINS-10103</a>).</li>
+	<li>timeout should be longer.</li>
+	<li>added the help file of timeout.</li>
+</ul>
+
+
+<h3 id="ClamAVPlugin-0.1(26Jun,2011)">0.1 (26 Jun, 2011)</h3>
+
+<ul>
+	<li>First release.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183506/57409802.png">ClamAv.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183506/57409803.png">system_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183506/57409804.png">job_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183506/57409805.png">job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183506/57409806.png">virus_report.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Exclusive Execution Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Exclusive Execution Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mambu)</span>, last modified by <span class='editor'> Unknown User (fmiguelez)</span> on Feb 04, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Exclusive Execution <a href="https://plugins.jenkins.io/exclusive-execution" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>Allows a job to be executed when no other jobs are running.</p>
+
+<h2 id="ExclusiveExecutionPlugin-Possibleuses">Possible uses</h2>
+
+<p>Execute a backup job: because backup-plugin cannot be scheduled, then I have created my own Jenkins backup script. To run it from Jenkins I crated a 'maintenance' job that must execute when there are no other job running, so this plugin can help perform this backup procedure.</p>
+
+
+<h2 id="ExclusiveExecutionPlugin-Howitworks">How it works</h2>
+
+<p>When this option is enabled, then for every build one pre-build and one post-build steps are executed:</p>
+
+<p><strong>pre-build steps</strong>:</p>
+<ol>
+	<li>The plugin will initiate a shutdown mode which means that no other jobs can be started.</li>
+	<li>It waits until every job except this one has finished, unless it is indicated not to wait through optional flag. </li>
+	<li>Then it starts to execute the job.</li>
+</ol>
+
+
+<p><strong>post-build steps</strong> (executed always even if the build is not succesful):</p>
+<ol>
+	<li>Jenkins shutdown mode is canceled</li>
+</ol>
+
+
+<h2 id="ExclusiveExecutionPlugin-VersionHistory">Version History</h2>
+
+<h3 id="ExclusiveExecutionPlugin-Development">Development</h3>
+
+<h3 id="ExclusiveExecutionPlugin-Version0.8(Feb4,2015)">Version 0.8 (Feb 4, 2015)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-26175" class="external-link" rel="nofollow">issue #26175</a> Optional lenient mode added. If activated exclusive-execution job will not wait for currently running jobs to perform build steps (i.e. activate shutdown mode immediately).</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-26351" class="external-link" rel="nofollow">issue #26351</a> Spanish translation added.</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24854" class="external-link" rel="nofollow">issue #24854</a> Shutdown mode is interrupted now if job is canceled in pre-build phase.</li>
+	<li>Fernando Miguélez becomes maintainer of the plugin</li>
+</ul>
+
+
+<h3 id="ExclusiveExecutionPlugin-Version0.7(Jul31,2011)">Version 0.7 (Jul 31, 2011)</h3>
+
+<ul>
+	<li>Major refactoring by Sam Tavakoli</li>
+</ul>
+
+
+<h3 id="ExclusiveExecutionPlugin-Version0.6(Feb25,2011)">Version 0.6 (Feb 25, 2011)</h3>
+
+<ul>
+	<li>Improve error handling</li>
+	<li>Translation update (Japanese)</li>
+</ul>
+
+
+<h3 id="ExclusiveExecutionPlugin-Version0.2(Apr15,2010)">Version 0.2 (Apr 15, 2010)</h3>
+
+<ul>
+	<li>Removed limitation of execution on master</li>
+	<li>Removed useless dependencies from pom.xml that create a huge hpi file</li>
+</ul>
+
+
+<h3 id="ExclusiveExecutionPlugin-Version0.1(Apr13,2010)">Version 0.1 (Apr 13, 2010)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+
+
+<div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Warning</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Unfortunately the hpi file is huge (~17 MByte)... sorry</p></div></div>
+<ul>
+	<li>Job must be executed on master</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:23</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Installing Jenkins on OpenSolaris</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Installing Jenkins on OpenSolaris
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jlorenzen)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Apr 08, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><p class="title">Solaris / OpenIndiana packages have been discontinued</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Due to declining usage and lack of Solaris developers in the community, it was decided in September 2014 to <a href="http://meetings.jenkins-ci.org/jenkins/2014/jenkins.2014-09-17-18.00.html" class="external-link" rel="nofollow">shut down</a> the official Jenkins IPS repository.</p></div></div>
+
+<p>This applies to all the distributions based on Image Package System (IPS), such as Solaris 11 and OpenIndiana.</p>
+
+<p>First, you need one-time set-up to hook up Jenkins' IPS repository to your local system. The following two commands tell IPS to add <a class="external-link" href="http://ips.jenkins-ci.org/" rel="nofollow">http://ips.jenkins-ci.org/</a> with the nick name &quot;jenkins&quot; and update the local package list with this new repository. ('pfexec' is the Solaris speak for 'sudo'):</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ pfexec pkg set-authority -O http://ips.jenkins-ci.org/ips jenkins
+$ pfexec pkg refresh
+</pre>
+</div></div>
+
+<p>The IPS repository URL has four flavors. Use the one you like:</p>
+
+<ul>
+	<li><a href="http://ips.jenkins-ci.org/ips" class="external-link" rel="nofollow">http://ips.jenkins-ci.org/ips</a> for main line releases</li>
+	<li><a href="http://ips.jenkins-ci.org/ips-stable" class="external-link" rel="nofollow">http://ips.jenkins-ci.org/ips-stable</a> for <a href="LTS-Release-Line.html">LTS Release Line</a></li>
+	<li><a href="http://ips.jenkins-ci.org/ips-rc" class="external-link" rel="nofollow">http://ips.jenkins-ci.org/ips-rc</a> for release candidates of the main line releases</li>
+	<li><a href="http://ips.jenkins-ci.org/ips-stable-rc" class="external-link" rel="nofollow">http://ips.jenkins-ci.org/ips-stable-rc</a> for release candidates of the LTS release line.</li>
+</ul>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can move from one repository to another by re-executing the &quot;pkg set-authority&quot; command with different URLs</p></div></div>
+
+<p>You can then install Jenkins like this:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ pfexec pkg install jenkins
+$ pfexec /usr/sbin/svccfg import /var/svc/manifest/application/jenkins.xml
+</pre>
+</div></div>
+
+<p>The first command installs Jenkins. The second command tells SMF to manage Jenkins as a service (this is apparently not needed in recent versions of Solaris, such as OpenIndiana, but it doesn't hurt to run it.) If you then go to <code><a class="external-link" href="http://localhost:8080/" rel="nofollow">http://localhost:8080/</a></code> you should see Jenkins running. Change <code>/var/svc/manifest/application/jenkins.xml</code> and run the svccfg import if you need to change the launch parameter, such as JVM size, HTTP port number, and so on.</p>
+
+<p>To update to a newer Jenkins, you do:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ pfexec pkg refresh
+$ pfexec pkg install jenkins
+$ pfexec svcadm restart jenkins
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : GitLab API Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : GitLab API Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (baymac)</span>, last modified on Jun 08, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Gitlab API <a href="https://plugins.jenkins.io/gitlab-api" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p>This plugin is a library plugin used by other GitHub related plugins to share the same libraries. This plugin does not have any user visible feature by itself. There's no need to install this plugin manually, although you want to keep it up to date for new features and bug fixes.<h1 id="GitLabAPIPlugin-GitLabAPIPlugin">GitLab API Plugin</h1><p>This plugin wraps <a href="https://github.com/gmessner/gitlab4j-api/" class="external-link" rel="nofollow">GitLab Java Api</a> by <a href="https://github.com/gmessner" class="external-link" rel="nofollow">gmessner</a>. </p><h2 id="GitLabAPIPlugin-ReasonsfordevelopingGitLabApiPlugin:">Reasons for developing GitLab Api Plugin:</h2><p>This plugin was developed as a part of Google Summer of Code (GSoC) 2019 project under Multibranch Pipeline Support for GitLab. Inspired from <a href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+API+Plugin" class="external-link" rel="nofollow">GitHub API Plugin</a>.</p><p>The GitLab Plugin defines a set of GitLab APIs which performs build triggers and authentication and some branch source functionality. The API defined inside doesn't fully support al GitLab APIs which limits the future scope of expansion of the GitLab Plugin. One of the missing feature in the API is detecting Merge Requests which is the reason GitLab Branch Source Functionality for Multibranch Pipeline is not supported in the GitLab Plugin.</p><p><strong>Note:</strong> In Jenkins SCM Plugins, PRs/MRs are detected as new branches.</p><p>GitLab Branch Source Plugin, not released at the time of this plugin creation, can also use this API plugin to implement missing branch source functionality for GitLab and at the same time follow the 3 plugins conventions of other SCM (GitHub) Plugins, namely:</p><p>1) &lt;SCM&gt;-api-plugin: For wrapping &lt;scm&gt; API into a plugin</p><p>2) &lt;SCM&gt;-plugin: For build triggers, auth and webhooks management</p><p>3) &lt;SCM&gt;-branch-source-plugin: For branches, MRs, tags indexing and build for all jobs (Freestyle, Pipeline, Multibranch Pipeline, Folder Organisation)</p><h2 id="GitLabAPIPlugin-ReasonforwrappingtheGitLab4JApiintoaplugin:">Reason for wrapping the GitLab4J Api into a plugin:</h2><p>The main advantage to using an API plugin is to allow the library to be reused by other plugins without each plugin needing to maintain updates to the dependencies manually. Instead, the API plugin is used for those libraries which reduces maintenance burden, especially whenever CVEs are discovered. (by <a class="confluence-userlink user-mention" data-username="jvz" href="https://wiki.jenkins.io/display/~jvz" data-linked-resource-id="138454286" data-linked-resource-version="2" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (jvz)</a> )</p><p>For technical details see this: <a href="https://jenkins.io/doc/developer/plugin-development/dependencies-and-class-loading/#using-library-wrapper-plugins" class="external-link" rel="nofollow">https://jenkins.io/doc/developer/plugin-development/dependencies-and-class-loading/#using-library-wrapper-plugins</a> (by <a class="confluence-userlink user-mention" data-username="jglick" href="https://wiki.jenkins.io/display/~jglick" data-linked-resource-id="21233667" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (jglick)</a>)</p><h2 id="GitLabAPIPlugin-Reasonsforchoosinggitlab4joverotherGitLabJavaAPIs:">Reasons for choosing gitlab4j over other GitLab Java APIs: </h2><h5 id="GitLabAPIPlugin-ContributedbyGitLab4JAPIauthor">Contributed by GitLab4J API <a href="https://github.com/gmessner" class="external-link" rel="nofollow">author</a></h5><p><strong>What was motivation behind development of gitlab4j when java-gitlab-api existed?</strong></p><p><span>One thing to keep in mind is that there is a mis-perception that java-gitlab-api is the “official” Java library for the GitLab API because it uses the org.gitlab package name.  However it is not the “official” Java library, nor is there an “official” Java library for the GitLab API. The author of this library is incorrectly using the org.gitlab package name, normally the package name is the reversed domain name for the developer of the package.  </span></p><p><span>java-gitlab-api (May 20, 2013) is not much older than gitlab4j (Feb 18, 2014).  I evaluated java-gitlab-api before deciding to develop gitlab4j. What I determined is that it was not well designed and had poor code coverage. The main class for using java-gitlab-api, org.gitlab.api.GitlabAPI is &gt; 4000 lines of code and every single endpoint call goes through this single class.  java-gitlab-api also had no support for Webhooks at the time, which was one of my primary needs.</span></p><p><span>gitlab4j is quite different, it separates the API into the same sub APIs that the GitLab API documentation does.  I believe this makes it much easier for devs to consume and understand. Here is a sampling of the gitlab4j mapping to the GitLab API documentation:</span></p><p style="margin-left: 30.0px;"><span>org.gitlab4j.api.GroupApi -&gt; <a href="https://docs.gitlab.com/ce/api/groups.html" class="external-link" rel="nofollow">https://docs.gitlab.com/ce/api/groups.html</a></span></p><p style="margin-left: 30.0px;"><span>org.gitlab4j.api.MergeRequestApi -&gt; <a href="https://docs.gitlab.com/ce/api/merge_requests.html" class="external-link" rel="nofollow">https://docs.gitlab.com/ce/api/merge_requests.html</a></span></p><p style="margin-left: 30.0px;"><span>org.gitlab4j.api.ProjectApi -&gt; <a href="https://docs.gitlab.com/ce/api/projects.html" class="external-link" rel="nofollow">https://docs.gitlab.com/ce/api/projects.html</a></span></p><p style="margin-left: 30.0px;"><span>org.gitlab4j.api.UserApi -&gt; <a href="https://docs.gitlab.com/ce/api/users.html" class="external-link" rel="nofollow">https://docs.gitlab.com/ce/api/users.html</a></span></p><p><span>In addition, every single model class in gitlab4j is tested for correct JSON based on both the GitLab API documentation and the actual JSON from the GitLab API services.  Additionally, there is a significant number of integration tests being done. gitlab4j also has significant built-in support for the GitLab webhooks and system hooks.</span></p><p><strong>Is there any issues/missing features in java-gitlab-api that gitlab4j-api solves?</strong></p><p><span>The java-gitlab-api is missing many of the GitLab APIs and in many of the implemented APIs, java-gitlab-api is missing many methods.  While gitlab4j-api does not have 100% coverage of the GitLab API, it is pretty close, and if you read thru the issues and pull requests for gitlab4j-api, you will see that support for un-implemented GitLab APIs is quickly added when someone asks for it.  This is why there is a significant number of releases for gitlab4j-api, where java-gitlab-api rarely releases. GitLab releases new features quite often and gitlab4j-api tries as best as possible to keep up with those new releases, both in new features and other changes that are introduced.  I would estimate that gitlab4j-api has implemented at minimum, at least twice as many of the GitLab APIs as java-gitlab-api has. </span></p><p><span>gitlab4j-api also has complete support for Java 8 Streams and Optional, which is completly missing from java-gitlab-api.</span></p><p><strong>Is gitlab4j missing something or having issues?</strong></p><p><span>GitLab is continuously evolving and adding new APIs and additional methods to existing APIs, it is quite difficult to keep up with this.  What I have done is implement new features both when they are asked for and also when I see an interesting new feature in a new GitLab release.   I strive to cover as much of the GitLab APIs as possible, this will be a never ending commitment.</span></p><p><span>At this time,  gitlab4j-api has no known issues, but it is software, and I’m sure there are bugs in it somewhere, but any and all problems are quickly addressed when they are discovered.</span></p><p><strong>Is there any immediate future plans for improvements? </strong></p><p><span>The only thing currently in the roadmap and actively being worked on is the addition of <a href="http://fabric8.io" class="external-link" rel="nofollow">fabric8.io</a> docker support for doing the integration tests.  I am doing this so that future releases of gitlab4j-api will be fully automated using Jenkins.</span></p><p><span>There is also an issue concerning the use of Java 8+ Temporals for date/time fields (<a href="https://github.com/gmessner/gitlab4j-api/issues/261" class="external-link" rel="nofollow">https://github.com/gmessner/gitlab4j-api/issues/261</a>).  I was planning on doing that this year, but am actually reconsidering, as it will cause a lot of work for existing consumers of gitlab4j-api to make the necessary code changes that this breaking change will require.  This change has only been requested by 1 user and 2 other users that liked the request. Considering that there are over 6000 downloads of gitlab4j-api per month, this change might be a very bad idea.</span></p><h2 id="GitLabAPIPlugin-Issuessolved:">Issues solved:</h2><p>Used maven enforcer plugin to ignore javax library which targetted to Java 9 while maven java level was set to Java 8. See this <a href="https://github.com/gitlab4j/gitlab4j-api/issues/327" class="external-link" rel="nofollow">thread</a> for more info.</p><p><br/></p><p>
+
+
+
+
+
+<div id="refresh-module-1175082127" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues-1175082127" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Created</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Updated</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Due</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Assignee</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Reporter</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Status</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Resolution</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64007?src=confmacro">JENKINS-64007</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64007?src=confmacro">
+                                            Not able to connect from JENKINS to GITLAB
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64007?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14688&amp;avatarType=issuetype"
+                                                alt="Task"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Oct 22, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Oct 22, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            RAJDEEP DEVADIGA
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63435?src=confmacro">JENKINS-63435</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63435?src=confmacro">
+                                            Jenkinsfile not recognized
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63435?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 18, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 18, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            David Jakob
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62947?src=confmacro">JENKINS-62947</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62947?src=confmacro">
+                                            issue related to gitlab branch source plugin Subgroup not showing project list 
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62947?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 03, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 03, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Srishti  Suman
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60402?src=confmacro">JENKINS-60402</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60402?src=confmacro">
+                                            java.lang.LinkageError when trying to use gitlab API in a pipeline library 
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60402?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 09, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 09, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Stefan Lengauer
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57541?src=confmacro">JENKINS-57541</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57541?src=confmacro">
+                                            Issues related to community bonding period of GSoC 2019
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57541?src=confmacro"><img
+                                                src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"
+                                                alt="Epic"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 18, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Nov 30, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57540?src=confmacro">JENKINS-57540</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57540?src=confmacro">
+                                            Issues related to GitLab Branch Source plugin and GitLab Plugin
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57540?src=confmacro"><img
+                                                src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"
+                                                alt="Epic"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 18, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 30, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57538?src=confmacro">JENKINS-57538</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57538?src=confmacro">
+                                            Issues related to GitLab Blueocean plugin and GitLab Plugin
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57538?src=confmacro"><img
+                                                src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"
+                                                alt="Epic"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 18, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 22, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57445?src=confmacro">JENKINS-57445</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57445?src=confmacro">
+                                            Issues related to GitLab Branch Source Plugin
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57445?src=confmacro"><img
+                                                src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"
+                                                alt="Epic"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 14, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 30, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Parichay Barpanda
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="11">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%29+AND+%28component+%3D+gitlab-api-plugin%29+&amp;src=confmacro">
+                                                            8 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><p><br/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

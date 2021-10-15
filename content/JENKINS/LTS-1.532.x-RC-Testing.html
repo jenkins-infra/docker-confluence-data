@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : LTS 1.532.x RC Testing</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Release-Process.html">Release Process</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-Release-Line.html">LTS Release Line</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-RC-Testing.html">LTS RC Testing</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : LTS 1.532.x RC Testing
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (olivergondza)</span>, last modified on Apr 09, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="LTS1.532.xRCTesting-ManualTests(LTS1.532.x)">Manual Tests (LTS 1.532.x)</h1>
+
+<h3 id="LTS1.532.xRCTesting-Testresults">Test results</h3>
+
+<ul>
+	<li><span style="color: rgb(0,192,0);">OK</span> - test passed without any problem</li>
+	<li><span style="color: rgb(255,165,0);">WARN</span> - there was some problem, functionality doesn't do what is expected, but it doesn't cause failure of whole Jenkins or any other significant problems</li>
+	<li><span style="color: rgb(204,0,0);">FAIL</span> - cause failure of whole Jenkins or similar critical issue which affects all jobs (e.g. when plugin is installed, it's not possible to start Jenkins or save configuration of any job)</li>
+</ul>
+
+
+<h3 id="LTS1.532.xRCTesting-Seleniumtests">Selenium tests</h3>
+
+<p>Most of the test has bean automates as <a href="https://github.com/jenkinsci/selenium-tests" class="external-link" rel="nofollow">selenium tests</a>. Instead of retesting manually, feel free to run the suite and report the results.<br/>
+<a href="https://jenkins.ci.cloudbees.com/job/selenium-tests-stable/" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://jenkins.ci.cloudbees.com/buildStatus/icon?job=selenium-tests-stable" data-image-src="https://jenkins.ci.cloudbees.com/buildStatus/icon?job=selenium-tests-stable"></span></a></p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Environment <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Arch / openJDK7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(255,153,0);">1.532.3 / OK</span><span style="color: rgb(0,0,0);">*</span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<p>* Following tests are broken</p>
+
+<p>features/script.feature - ScriptTest in acceptance-test-harness <span style="color: rgb(0,128,0);">passes</span><br/>
+features/scriptler_plugin.feature:62 - ScriptlerPluginTest#create_and_run_parameterized_script in acceptance-test-harness <span style="color: rgb(0,128,0);">passes</span><br/>
+features/scriptler_plugin.feature:74 - ScriptlerPluginTest#override_default_parameters in acceptance-test-harness <span style="color: rgb(0,128,0);">passes</span></p>
+
+
+<h3 id="LTS1.532.xRCTesting-Installation,upgrade">Installation, upgrade</h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from RPM <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Install Jenkins from RPM package <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Jenkins is installed without error and runs <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> FC 19, RHEL 6.4, openJDK7 </p></td>
+<td class="confluenceTd"><p> <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from .deb </p></td>
+<td class="confluenceTd"><p> Install Jenkins from Debian package <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Jenkins is installed without error and runs <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Debian 6 x86, Oracle JDK 7 <br class="atl-forced-newline"/>
+Debian 7 x64, Oracle JDK 7 <br class="atl-forced-newline"/>
+Debian 6 x64, Oracle JDK 7 <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK </span><span style="color: rgb(0,192,0);">1.532.3 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> mwaite <br class="atl-forced-newline"/>
+mwaite <br class="atl-forced-newline"/>
+mwaite </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Install from war on Tomcat </p></td>
+<td class="confluenceTd"><p> Install Jenkins from war by deploying on Tomcat </p></td>
+<td class="confluenceTd"><p> Jenkins is deployed and runs </p></td>
+<td class="confluenceTd"><p> Arch, openJDK7, Tomcat 7 <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+Arch, openJDK7, Tomcat 6 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> JBoss AS </p></td>
+<td class="confluenceTd"><p> Install Jenkins from war by deploying on JBoss AS </p></td>
+<td class="confluenceTd"><p> Jenkins is deployed and runs </p></td>
+<td class="confluenceTd"><p> Arch, openJDK7, JBoss AS 7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><span style="color: rgb(0,192,0);"> </span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> disk </p></td>
+<td class="confluenceTd"><p> Make some changes directly on disk and launch &quot;Reload Configuration from Disk&quot; </p></td>
+<td class="confluenceTd"><p> Made changes are reflected </p></td>
+<td class="confluenceTd"><p> Arch / openJDK7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span> <span style="color: rgb(0,0,0);">: added to jenkins-test-harness</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="LTS1.532.xRCTesting-Corefunctionality">Core functionality </h3>
+
+<h5 id="LTS1.532.xRCTesting-Freestylejobs">Freestyle jobs </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Batch build step </p></td>
+<td class="confluenceTd"><p> Add a Windows batch file build step </p></td>
+<td class="confluenceTd"><p> Batch build steps are executed successfully </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>
+<span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> kohsuke <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Plug-ins">Plug-ins </h5>
+
+
+<h5 id="LTS1.532.xRCTesting-Greenballs(1.13)">Green balls (1.13) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Success results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Success results </p></td>
+<td class="confluenceTd"><p> Success results are marked as green <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Arch / openJDK7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span> <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span> <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Sonar(2.0.1,2.1)">Sonar (2.0.1, 2.1) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Sonar analysis </p></td>
+<td class="confluenceTd"><p> Setup sonar analysis </p></td>
+<td class="confluenceTd"><p> Analysis is executed and published on sonar server </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Analysiscollector(1.35,1.36)">Analysis collector (1.35, 1.36) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Collects and show results <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Setup collection of checkstyle, findbugs, pdm and warnings results collection <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Results are collected and shown <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Batchtasks(1.17)">Batch tasks (1.17) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Execute batch task </p></td>
+<td class="confluenceTd"><p> Define batch task in project1, setup executions of this task in project 2 and schedule a build </p></td>
+<td class="confluenceTd"><p> Batch task of project1 is executed </p></td>
+<td class="confluenceTd"><p> Arch / openJDK7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK </span><span style="color: rgb(0,0,0);">: added to selenium-tests</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Jira(1.35,1.37)">Jira (1.35, 1.37) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Update JIRA issue <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Update JIRA issue which is related to changes contained in the build <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> JIRA is updated and on build page is a link to appropriate JIRA </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span> : added to selenium-tests <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span> <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span> </p></td>
+<td class="confluenceTd"><p> kohsuke <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Deploy(1.9)">Deploy (1.9) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Deploy on Tomcat 7 </p></td>
+<td class="confluenceTd"><p> Build war app and deploy it on Tomcat 7 </p></td>
+<td class="confluenceTd"><p> App is successfully deployed and running </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span> : added to selenium-tests <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> kohsuke <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Dry(2.34)">Dry (2.34) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish DRY analysis results </p></td>
+<td class="confluenceTd"><p> Setup CPD analysis and publish analysis results </p></td>
+<td class="confluenceTd"><p> Results are published </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Backup(1.6.1)">Backup (1.6.1) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Backup Jenkins configuration </p></td>
+<td class="confluenceTd"><p> Setup backup dir and run Jenkins backup </p></td>
+<td class="confluenceTd"><p> Once no builds run, backup is performed </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-XUnit()">XUnit () </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish testing tools <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Create Test Result Trend graph <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><span style="color: rgb(0,0,0);"> : added to selenium-tests</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,0,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-Scppublisher(1.8)">Scp publisher (1.8) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Publish artifact over scp </p></td>
+<td class="confluenceTd"><p> Setup remote destination and artifact to be archived over scp </p></td>
+<td class="confluenceTd"><p> Artifact is archived on remote machine in speficied dir </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span> : added to selenium-tests <br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.2 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> kohsuke <br class="atl-forced-newline"/>
+ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+
+<h5 id="LTS1.532.xRCTesting-IRC(2.23)">IRC (2.23) </h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Send IRC notification </p></td>
+<td class="confluenceTd"><p> Setup IRC notification and schedule a build </p></td>
+<td class="confluenceTd"><p> Notification is send to appropriate IRC channel </p></td>
+<td class="confluenceTd"><p> Arch / openJDK7 </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.1 / OK</span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><span style="color: rgb(0,192,0);"> </span> </p></td>
+<td class="confluenceTd"><p> ogondza <br class="atl-forced-newline"/>
+ogondza </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Run jenkins bot command  <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Run bot command on IRC channel <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Command is executed <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h5 id="LTS1.532.xRCTesting-ExploratoryTests">Exploratory Tests</h5>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Test name <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Short description <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Expected result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Notes <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> LTS RC / result <br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Tested by <br class="atl-forced-newline"/> </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Stress/Load Test <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Run Xenu link checker while other interactive tests are running, and while jobs are executing </p></td>
+<td class="confluenceTd"><p> Performance slower, but still functional and reliable, memory growth reasonable <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.3 / OK</span> </p></td>
+<td class="confluenceTd"><p> mwaite </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Git plugin </p></td>
+<td class="confluenceTd"><p> Explore multiple configurations of the Git plugin, including JGit and CliGit implementations, using ssh, https, and git protocol repositories </p></td>
+<td class="confluenceTd"><p> Reasonable behavior, no detected Jenkins related regressions </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,192,0);">1.532.2 / OK </span><br class="atl-forced-newline"/>  <span style="color: rgb(0,192,0);">1.532.3 / OK</span><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> mwaite </p></td>
+</tr>
+</tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Chaos Butler Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Chaos Butler Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stephenconnolly)</span>, last modified on Sep 21, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Chaos Butler <a href="https://plugins.jenkins.io/chaos-butler" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="ChaosButlerPlugin-ChaosButlerPlugin">Chaos Butler Plugin</h1>
+
+<p>
+
+<p>A plugin that periodically wakes up and disconnects build agents in order to prove that your infrastructure is fault resilient.</p>
+</p>
+
+<p>It all started with a thought... &quot;Are Jenkins Jobs actually microservices?&quot;... they meet a lot of the definitions of microservices... so maybe the answer is yes.</p>
+
+<p>When we look at the best in class management tools for microservices, one tool that shows up a lot is <a href="http://techblog.netflix.com/2012/07/chaos-monkey-released-into-wild.html" class="external-link" rel="nofollow">Netflix's Chaos Monkey</a>. Chaos Monkey is a tool that will wake up periodically and kill one of your microservices at random in order to prove that your system as a whole can handle transient failures.</p>
+
+<p>If Jenkins is critical to you, you want your use of Jenkins to be able to handle the transient failures that any reasonably sized distributed system will face. The Chaos Butler brings Chaos Monkey's brand of proof to Jenkins:</p>
+<ul>
+	<li>Chaos Monkey does nothing until you enable it</li>
+	<li>You enable Chaos Monkey by configuring the frequency at which it injects chaos</li>
+	<li>All jobs are opted in by default (as is the case with Chaos Monkey)... any special snowflake jobs can be opted out of the Chaos Butler</li>
+</ul>
+
+
+<h2 id="ChaosButlerPlugin-ConfiguringtheChaosButler">Configuring the Chaos Butler</h2>
+
+<p>The Chaos Butler is enabled from the Manage Jenkins » Configure System screen:</p>
+
+<p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="300" src="attachments/100696793/100859953.png" data-image-src="attachments/100696793/100859953.png" data-unresolved-comment-count="0" data-linked-resource-id="100859953" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.06.46.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="300" src="attachments/100696793/100859954.png" data-image-src="attachments/100696793/100859954.png" data-unresolved-comment-count="0" data-linked-resource-id="100859954" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.06.50.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span><br/>
+There is only one option to configure, the frequency at which the Chaos Butler will run. The available options are:</p>
+<ul>
+	<li>Never <strong>(default)</strong> - the Chaos Butler is disabled</li>
+	<li>Every minute</li>
+	<li>Every 15 minutes</li>
+	<li>Every hour</li>
+	<li>Every 8 hours</li>
+	<li>Once per day</li>
+	<li>Once per week</li>
+</ul>
+
+
+<p>When the Chaos Butler is enabled, it will take each time period and pick a random time within that period for injecting chaos. For example, if you enable the Chaos Butler to run once every hour, it could pick 57 minutes into the first hour after it was enabled as its initial wake up time, and it could pick 5 minutes into the second hour as its second wake up time... this would mean that the Chaos Butler ran twice in 8 minutes, but over a long term average it will only run once every hour.</p>
+
+<h2 id="ChaosButlerPlugin-ConfiguringJobs">Configuring Jobs</h2>
+
+<p>By default, all jobs are opted into the Chaos Butler.</p>
+
+<p>Some jobs may not be ready for the Chaos Butler and need protection. You can protect these jobs from the Chaos Butler by opting them out</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859955.png" data-image-src="attachments/100696793/100859955.png" data-unresolved-comment-count="0" data-linked-resource-id="100859955" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.07.55.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+<h2 id="ChaosButlerPlugin-ConfiguringAgents">Configuring Agents</h2>
+
+<p>By default, all agents are opted into the Chaos Butler.</p>
+
+<p>Some agents may not be ready for the Chaos Butler and need protection. You can protect these agents from the Chaos Butler by opting them out</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859957.png" data-image-src="attachments/100696793/100859957.png" data-unresolved-comment-count="0" data-linked-resource-id="100859957" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.48.37.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+<h2 id="ChaosButlerPlugin-MonitoringtheChaosButler">Monitoring the Chaos Butler</h2>
+
+<p>When enabled, the Chaos Butler provides a top level information page that provides information on:</p>
+
+<ul>
+	<li>The next scheduled chaos injection</li>
+	<li>The nodes that have recently been the subject of chaos injection</li>
+</ul>
+
+
+<p>   <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859956.png" data-image-src="attachments/100696793/100859956.png" data-unresolved-comment-count="0" data-linked-resource-id="100859956" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.08.27.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+
+
+<p>The Chaos Butler also logs its actions to the main log:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Sep 21, 2016 9:08:57 AM org.jenkinsci.plugins.chaosbutler.ChaosButlerGlobalConfiguration wake
+INFO: The Chaos Butler is looking for a victim...
+Sep 21, 2016 9:08:57 AM org.jenkinsci.plugins.chaosbutler.ChaosButlerGlobalConfiguration wake
+INFO: The Chaos Butler has selected Jenkins as a victim...
+Sep 21, 2016 9:08:57 AM org.jenkinsci.plugins.chaosbutler.ChaosButlerGlobalConfiguration wake
+INFO: The Chaos Butler has killed Jenkins. Chaos reigns once more!
+
+...
+
+Sep 21, 2016 9:10:47 AM org.jenkinsci.plugins.chaosbutler.ChaosButlerGlobalConfiguration wake
+INFO: The Chaos Butler is looking for a victim...
+Sep 21, 2016 9:10:47 AM org.jenkinsci.plugins.chaosbutler.ChaosButlerGlobalConfiguration wake
+INFO: The Chaos Butler cannot find a victim!
+</pre>
+</div></div>
+
+<p>The first set of log messages above represents the case where the Chaos Butler was able to select a node.</p>
+
+<p>The second set of logs messages correspond to the case where all the available build agents were executing jobs that have opted out of the Chaos Butler. In such cases the Chaos Butler has no choice but to do nothing until next time.</p>
+
+<h2 id="ChaosButlerPlugin-Consolelogsofjobs">Console logs of jobs</h2>
+
+<p>When a job is running on an agent that has been attacked by the Chaos Butler, the console log will typically show the build as failed because the agent went offline during the build. In general the offline reason should be &quot;Killed by the Chaos Butler&quot;</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859958.png" data-image-src="attachments/100696793/100859958.png" data-unresolved-comment-count="0" data-linked-resource-id="100859958" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.46.33.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+<p>When a job is running on the master, however, we cannot &quot;disconnect&quot; the master. In those cases the Chaos Butler will instead interrupt the job, the console log will typically show the build as aborted with the attribution &quot;Killed by the Chaos Butler&quot;</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859959.png" data-image-src="attachments/100696793/100859959.png" data-unresolved-comment-count="0" data-linked-resource-id="100859959" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.46.45.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+<h2 id="ChaosButlerPlugin-Offlinereasonofagents">Offline reason of agents</h2>
+
+<p>When a agent is disconnected by the Chaos Butler, the Chaos Butler will set the reason for the node being off-line to &quot;Killed by the Chaos Butler&quot;.</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/100696793/100859960.png" data-image-src="attachments/100696793/100859960.png" data-unresolved-comment-count="0" data-linked-resource-id="100859960" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-09-21 at 09.56.53.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696793" data-linked-resource-container-version="5"></span></p>
+
+<p>As long as the agent is configured to reconnect automatically (i.e. this is the case for agents with the default retention strategy, also JNLP agents typically will attempt to reconnect every 10 seconds after a disconnect) the agent will be reconnected.</p>
+
+<p>It is recommended that agents which cannot reconnect automatically be opted out of the Chaos Butler.</p>
+
+<h2 id="ChaosButlerPlugin-VersionHistory">Version History</h2>
+
+<h3 id="ChaosButlerPlugin-Version1.0(2016-09-13)">Version 1.0 (2016-09-13)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859952.png">Screen Shot 2016-09-21 at 09.12.38.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859953.png">Screen Shot 2016-09-21 at 09.06.46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859954.png">Screen Shot 2016-09-21 at 09.06.50.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859955.png">Screen Shot 2016-09-21 at 09.07.55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859956.png">Screen Shot 2016-09-21 at 09.08.27.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859957.png">Screen Shot 2016-09-21 at 09.48.37.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859958.png">Screen Shot 2016-09-21 at 09.46.33.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859959.png">Screen Shot 2016-09-21 at 09.46.45.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696793/100859960.png">Screen Shot 2016-09-21 at 09.56.53.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:15</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

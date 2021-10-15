@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Clover PHP Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Clover PHP Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (madmuffin)</span> on Oct 25, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Clover PHP <a href="https://plugins.jenkins.io/cloverphp" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin allows you to capture code coverage reports from <strong>PHPUnit</strong>. For more information on how to set up PHP projects with Jenkins have a look at the <a href="http://jenkins-php.org/" class="external-link" rel="nofollow">Template for Jenkins Jobs for PHP Projects</a>.</p><h2 id="CloverPHPPlugin-PHPUnit">PHPUnit</h2><p>You have to use <strong>&quot;--coverage-clover&quot;</strong> option to generate clover style coverage report.<br/> The following setting is for Phing.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>build.xml</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;exec dir=&quot;.&quot;
+      command=&quot;phpunit --log-junit &#39;reports/unitreport.xml&#39;
+                       --coverage-html &#39;reports/coverage&#39;
+                       --coverage-clover &#39;reports/coverage/coverage.xml&#39;
+                       test/&quot;
+/&gt;
+</pre>
+</div></div><p>Or use phpunit task with <strong>clover</strong> style formatter.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>build.xml with phpunit task</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;phpunit codecoverage=&quot;true&quot; haltonfailure=&quot;true&quot; haltonerror=&quot;true&quot;&gt;
+  &lt;formatter type=&quot;clover&quot; usefile=&quot;false&quot;/&gt;
+  &lt;batchtest&gt;
+    &lt;fileset dir=&quot;tests&quot;&gt;
+      &lt;include name=&quot;**/*Test*.php&quot;/&gt;
+    &lt;/fileset&gt;
+  &lt;/batchtest&gt;
+&lt;/phpunit&gt;
+</pre>
+</div></div><h2 id="CloverPHPPlugin-Projectconfiguration">Project configuration</h2><ul><li>the location of clover xml(required).</li><li>the location of clover html report (optional).</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57182063/57409682.png" data-image-src="attachments/57182063/57409682.png" data-unresolved-comment-count="0" data-linked-resource-id="57409682" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="cloverphp-jobconfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57182063" data-linked-resource-container-version="47"></span></p><h2 id="CloverPHPPlugin-Projectscreen">Project screen</h2><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57182063/57409683.png" data-image-src="attachments/57182063/57409683.png" data-unresolved-comment-count="0" data-linked-resource-id="57409683" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="cloverphp-project.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57182063" data-linked-resource-container-version="47"></span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57182063/57409684.png" data-image-src="attachments/57182063/57409684.png" data-unresolved-comment-count="0" data-linked-resource-id="57409684" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="cloverphp-breakdown.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57182063" data-linked-resource-container-version="47"></span></p><h2 id="CloverPHPPlugin-TODO">TODO</h2><ul><li>Make compatible with pipelines</li></ul><h2 id="CloverPHPPlugin-Changelog">Changelog</h2><h4 id="CloverPHPPlugin-0.5(20Nov,2015)">0.5 (20 Nov, 2015)</h4><ul><li><p>include namespaced classes (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26722" class="external-link" rel="nofollow">JENKINS-26722</a>)</p></li><li>pay attention to target coverage (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20233" class="external-link" rel="nofollow">JENKINS-20233</a>)</li><li>specifically publish the plugin under MIT license (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30215" class="external-link" rel="nofollow">JENKINS-30215</a>)</li></ul><h4 id="CloverPHPPlugin-0.4(6Apr,2015)">0.4 (6 Apr, 2015)</h4><ul><li>support variables for configuration.</li><li>option to generate clover report regardless of build (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21046">JENKINS-21046</a>).</li><li>The CloverPHP red/green coverage bar is too wide (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25717">JENKINS-25717</a>).</li></ul><h4 id="CloverPHPPlugin-0.3.3(21Mar,2013)">0.3.3 (21 Mar, 2013)</h4><ul><li>added message if clover xml is incompatible with clover style (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17037">JENKINS-17037</a>).</li><li>Conflict with standard clover plugin (<a href="https://issues.jenkins-ci.org/browse/JENKINS-15626">JENKINS-15626</a>).</li></ul><h4 id="CloverPHPPlugin-0.3.2(21Oct,2011)">0.3.2 (21 Oct, 2011)</h4><ul><li>NPE when Clover HTML report directory is not defined (<a href="https://issues.jenkins-ci.org/browse/JENKINS-11408">JENKINS-11408</a>).</li><li>Fixed breadcrumb.</li><li>Fixed IE6 rendering.</li></ul><h4 id="CloverPHPPlugin-0.3.1(27July,2011)">0.3.1 (27 July, 2011)</h4><ul><li>roll back the dependency to Jenkins 1.409 for 1.409.x LTS releases.(<a href="https://github.com/jenkinsci/cloverphp-plugin/commit/c768bb5f1239db297965f457700f4668081af634#commitcomment-499465" class="external-link" rel="nofollow">Comment</a>).</li><li>Report page rendering performance boost (<a href="https://github.com/jenkinsci/cloverphp-plugin/pull/1" class="external-link" rel="nofollow">pull request</a>).</li></ul><h4 id="CloverPHPPlugin-0.3(3Jun,2011)">0.3 (3 Jun, 2011)</h4><ul><li>Support FreeStyle and Matrix projects only.</li><li>NPE in Clover PHP Plugin when XML config is empty (<a href="https://issues.jenkins-ci.org/browse/JENKINS-9821">JENKINS-9821</a>).</li><li>save clover.xml and html report in builds/XX/cloverphp directory.</li></ul><h4 id="CloverPHPPlugin-0.2(28May,2011)">0.2 (28 May, 2011)</h4><ul><li>Fixed a path when built on slave.</li><li>Added breadcrumb.</li><li>Added test classes.</li><li>fixed configuration page.</li></ul><h4 id="CloverPHPPlugin-0.1(16May,2011)">0.1 (16 May, 2011)</h4><ul><li>First release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409711.png">cloverphp-jobconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409712.png">cloverphp-project.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409713.png">cloverphp-breakdown.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409682.png">cloverphp-jobconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409683.png">cloverphp-project.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57182063/57409684.png">cloverphp-breakdown.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:17</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

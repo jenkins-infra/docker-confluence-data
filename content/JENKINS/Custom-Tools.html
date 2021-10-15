@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Custom Tools</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="zap-plugin.html">zap plugin</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Configure-the-Job.html">Configure the Job</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Custom Tools
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jordangs)</span>, last modified on Apr 20, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="CustomTools-CustomTools:JenkinsConfigurations">Custom Tools: Jenkins Configurations</h1><h3 id="CustomTools-JenkinsManageJenkinsConfigureSystemCustomTool">Jenkins <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662282/102793243.png" data-image-src="attachments/102662282/102793243.png" data-unresolved-comment-count="0" data-linked-resource-id="102793243" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662282" data-linked-resource-container-version="13"></span> Manage Jenkins <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662282/102793243.png" data-image-src="attachments/102662282/102793243.png" data-unresolved-comment-count="0" data-linked-resource-id="102793243" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662282" data-linked-resource-container-version="13"></span> Configure System <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662282/102793243.png" data-image-src="attachments/102662282/102793243.png" data-unresolved-comment-count="0" data-linked-resource-id="102793243" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662282" data-linked-resource-container-version="13"></span> Custom Tool</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http://127.0.0.1:8080/configure</pre>
+</div></div><p> <br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/102662282/102793244.png" data-image-src="attachments/102662282/102793244.png" data-unresolved-comment-count="0" data-linked-resource-id="102793244" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ZAP_JENKINS_CUSTOM_TOOL.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662282" data-linked-resource-container-version="13"></span></p><ol><li><strong>Name</strong><br/>  <ul><li>A required field which will identify the tool installed.<br/>  </li></ul></li><li><strong>Download URL for binary archive</strong><br/>  <ul><li>URL from which to download the tool in binary form. Should be either a <strong>.zip</strong> or a GZip-compressed <strong>.tar</strong> file.</li><li><p>ZAP releases can be found <a href="https://github.com/zaproxy/zaproxy/releases/" class="external-link" rel="nofollow">here</a>.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Notice:</strong> Weekly releases are removed after a while (there's no fixed schedule for it).</p></div></div></li><li>The <strong>.zip</strong> of the version (2016-09-05) which was used to test this release can be found <a href="https://github.com/JordanGS/workspace/raw/master/zap-download/ZAP_WEEKLY_D-2016-09-05.zip" class="external-link" rel="nofollow">here</a>.<br/>  </li></ul></li><li><strong>Subdirectory of extracted archive</strong><br/>  <ul><li>Optional subdirectory of the downloaded and unpacked archive to use as the tool's home directory. Only required if the archive has a subdirectory.<br/>  </li></ul></li></ol><hr/><h1 id="CustomTools-CustomTools:ExtractedLocation">Custom Tools: Extracted Location</h1><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">%JENKINS_HOME%/tools/com.cloudbees.jenkins.plugins.customtools.CustomTool/${Name}/${Subdirectory of extracted archive}</pre>
+</div></div><p> </p><hr/><h1 id="CustomTools-CustomTools:JobConfiguration">Custom Tools: Job Configuration</h1><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http://localhost:8080/job/JOB_NAME/</pre>
+</div></div><p> <br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/102662282/102793245.png" data-image-src="attachments/102662282/102793245.png" data-unresolved-comment-count="0" data-linked-resource-id="102793245" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ZAP_JENKINS_CUSTOM_TOOL_SELECT.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662282" data-linked-resource-container-version="13"></span></p><ol><li><strong>Select Custom Tools Installation</strong><br/>  </li><li><strong>Specify Name</strong><br/>  <ul><li>Same as the one provided above, you can have multiple installations so be sure to pick the one you want.</li></ul></li></ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662282/102793243.png">arrow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662282/102793244.png">ZAP_JENKINS_CUSTOM_TOOL.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662282/102793245.png">ZAP_JENKINS_CUSTOM_TOOL_SELECT.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:00</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

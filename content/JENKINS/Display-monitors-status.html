@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Display monitors status</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-Script-Console.html">Jenkins Script Console</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Display monitors status
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (aheritier)</span>, last modified by <span class='editor'> Unknown User (fredg)</span> on Mar 08, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins uses monitors to validate various behaviors. If you dismiss one, Jenkins will never propose you to reactivate it. This script allows you to check the status of all monitors and to reactive them.</p>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">About Monitors</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>A monitor is <strong>activated</strong> if it has detected something, so it would show on the /manage page, unless it is not <strong>enabled</strong>.</p></div></div>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+hudson.model.Hudson.instance.administrativeMonitors.each{
+    println &quot;* Monitor : &quot;+it.id
+    println &quot;** Enabled : &quot;+it.enabled
+    println &quot;** Activated : &quot;+it.activated
+    println &quot;=========&quot;
+}
+</pre>
+</div></div>
+<p>It gives a result like that :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+* Monitor : hudsonHomeIsFull
+** Enabled : true
+** Activated : false
+=========
+* Monitor : OldData
+** Enabled : true
+** Activated : false
+=========
+* Monitor : hudson.triggers.SCMTrigger$AdministrativeMonitorImpl
+** Enabled : true
+** Activated : false
+=========
+* Monitor : hudson.node_monitors.MonitorMarkedNodeOffline
+** Enabled : true
+** Activated : false
+=========
+* Monitor : hudson.diagnosis.ReverseProxySetupMonitor
+** Enabled : true
+** Activated : true
+=========
+* Monitor : hudson.diagnosis.TooManyJobsButNoView
+** Enabled : true
+** Activated : false
+=========
+* Monitor : hudson.model.UpdateCenter$CoreUpdateMonitor
+** Enabled : true
+** Activated : false
+=========
+* Monitor : hudson.plugins.scis_ad.ScisSupportOffer
+** Enabled : true
+** Activated : false
+=========
+</pre>
+</div></div>
+<p>If one monitor is disabled and you want to enable it just launch this command :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+hudson.model.Hudson.instance.getAdministrativeMonitor(&#39;OldData&#39;).disable(false)
+</pre>
+</div></div>
+<p><code>'OldData'</code> is the monitor name returned in the list.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins Infrastructure : Ban user spamming Wiki</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins Infrastructure</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins Infrastructure : Ban user spamming Wiki
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Jan 11, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Let's say we discovered that the user 'brainstorm1' is spamming the Wiki. Here's what to do:</p>
+
+<ul>
+	<li>Delete the user from LDAP
+	<ul>
+		<li>Go to <a href="http://jenkins-ci.org/account" class="external-link" rel="nofollow">http://jenkins-ci.org/account</a> and login</li>
+		<li>Go back to <a href="http://jenkins-ci.org/account" class="external-link" rel="nofollow">http://jenkins-ci.org/account</a> again and click &quot;Administration&quot;, then type in 'brainstorm1' to locate the user.</li>
+		<li>Delete this user</li>
+	</ul>
+	</li>
+	<li>Deleting the user from LDAP by itself doesn't actually delete pages created by them. Do this manually by going to Wiki and delete pages created by them. A good starting point to do this is <a href="https://wiki.jenkins-ci.org/display/~brainstorm1" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/~brainstorm1</a></li>
+	<li>If an attack is ongoing, you can expire a spammer's HTTP session by going to <a href="https://wiki.jenkins-ci.org/tomcat-manager/html/sessions?path=/" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/tomcat-manager/html/sessions?path=/</a> (login with your Jenkins account). This is necessary because Confluence doesn't notice that the user is removed from LDAP.</li>
+	<li>You can flush the mail queue here: <a href="https://wiki.jenkins-ci.org/admin/mail/viewmailqueue.action" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/admin/mail/viewmailqueue.action</a> to make sure the spam killer bot gets the email.</li>
+	<li>You should also flush the content indexing queue <a href="https://wiki.jenkins-ci.org/admin/viewindexqueue.action" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/admin/viewindexqueue.action</a> to keep the recent pages dashboard clean (usually runs every minute)</li>
+	<li>Keeping the space's trash clean is helpful as well, it can be purged here: <a href="https://wiki.jenkins-ci.org/pages/viewtrash.action?key=JENKINS" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/pages/viewtrash.action?key=JENKINS</a></li>
+	<li>Clear out the LDAP cache here: <a class="external-link" href="https://wiki.jenkins-ci.org/admin/cachestatistics.action?showDistributions=false" rel="nofollow">https://wiki.jenkins-ci.org/admin/cachestatistics.action?showDistributions=false</a></li>
+</ul>
+
+
+<p><a href="https://github.com/jenkinsci/backend-confluence-spam-remover" class="external-link" rel="nofollow">Confluence spam remover</a> is a little GUI tool that helps you bulk delete pages.</p>
+
+<p>Another way to bulk delete pages, especially if they all have the same parent is to follow the accepted answer in <a href="https://answers.atlassian.com/questions/2883/delete-a-parent-page-and-its-child-pages" class="external-link" rel="nofollow">this</a> question on answers.atlassian.com about importing a word doc to replace page, and selecting to delete all children pages.</p>
+
+<h1 id="BanuserspammingWiki-TODOs">TODOs</h1>
+
+<ul>
+	<li>Record the IP address the spam user has signed up to see if any patterns can be detected, as often a spammer appears to be using multiple users.</li>
+	<li>When deleting an user from LDAP, blacklist the e-mail address.</li>
+</ul>
+
+
+<h1 id="BanuserspammingWiki-Historical">Historical</h1>
+
+<p>My investigation record of 2012: <a href="Tracking-down-spammers.html">Tracking down spammers</a></p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

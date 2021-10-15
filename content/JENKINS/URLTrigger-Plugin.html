@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : URLTrigger Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : URLTrigger Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gbois)</span>, last modified by <span class='editor'> Unknown User (stealthdj)</span> on Oct 07, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View URLTrigger <a href="https://plugins.jenkins.io/urltrigger" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-25/#SECURITY-2341" class="external-link" rel="nofollow">XXE vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2018-06-25/#SECURITY-819" class="external-link" rel="nofollow">Server-side request forgery vulnerability</a></li>
+</ul>
+
+</div></div>
+URLTrigger plug-in makes it possible to monitor changes of the response got from an URL invocation.</p><h1 id="URLTriggerPlugin-Features">Features</h1><p>Jenkins can be configured to poll URL changes.<br/>The plug-in makes it possible to check the last modification date response and the response content of an URL invocation.<br/>For the response content, you can check:</p><ul><li>a simple response content (the content nature is not interpreted; a MD5 is used)</li><li>a TXT response content (the returned values from the evaluation of regular expressions are checked)</li><li>an XML response content (the returned values from the evaluation of XPath expressions are checked)</li><li>a JSON response content (the returned values from the evaluation of JSONPath expressions are checked)</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57183913/59900092.png" data-image-src="attachments/57183913/59900092.png" data-unresolved-comment-count="0" data-linked-resource-id="59900092" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="urltrigger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183913" data-linked-resource-container-version="74"></span></p><p>Note: The plug-in uses only persistence in memory. There is no impact on the Jenkins infrastructure (no new files created).<br/>This plugin provides a polling typology among the <a href="XTrigger-Plugin.html">XTrigger Plugin</a>.</p><h1 id="URLTriggerPlugin-SomeUsecases">Some Use cases</h1><p>* This plugin enables users to check if new artifacts (such as binaries) have been deployed in a repository (managed for example by a repository manager such as Sonatype Nexus, JFrog Artifactory, Apache Archiva and so on).<br/>* This plugin is useful to know if a stage of a pipeline (for a continuous testing, a continous delivery or a continuous deployment) has to be executed.</p><h1 id="URLTriggerPlugin-KnownLimitations">Known Limitations</h1><p>Only http(s) and ftp URLs are supported. For non-http protocols, consider other XTrigger plugins such as the <a href="FSTrigger-Plugin.html">FSTrigger Plugin</a></p><h1 id="URLTriggerPlugin-Configuration">Configuration</h1><p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/57183913/58196070.png" data-image-src="attachments/57183913/58196070.png" data-unresolved-comment-count="0" data-linked-resource-id="58196070" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="URLTRIGGER_CONF_1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183913" data-linked-resource-container-version="74"></span></p><p><br/></p><h1 id="URLTriggerPlugin-DeclarativePipelineSyntax">Declarative Pipeline Syntax</h1><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {
+    
+    agent any
+    
+    triggers {
+    
+        URLTrigger( 
+            cronTabSpec: &#39;* * * * *&#39;,
+            entries: [
+                URLTriggerEntry( 
+                    url: &#39;http://www.mysite.com/jsoncontent&#39;,
+                    username: &#39;myuser&#39;,
+                    password: &#39;mypassword&#39;,
+                    checkETag: false,
+                    checkStatus: true,
+                    statusCode: 403,
+                    checkLastModificationDate: true,
+                    timeout: 200,
+                    requestHeaders: [
+                        RequestHeader( headerName: &quot;Accept&quot; , headerValue: &quot;application/json&quot; )
+                    ],
+                    contentTypes: [
+                        JsonContent(
+                            [
+                                JsonContentEntry( jsonPath: &#39;level1.level2.level3&#39; )
+                            ])
+                    ]
+                ),
+                URLTriggerEntry( 
+                    url: &#39;http://www.mysite.com/xmlcontent&#39;,
+                    requestHeaders: [
+                        RequestHeader( headerName: &quot;Accept&quot; , headerValue: &quot;application/xml&quot; )
+                    ],
+                    contentTypes: [
+                        XMLContent(
+                            [
+                                XMLContentEntry( xPath: &#39;level1/level2/level3&#39; )
+                            ])
+                    ]
+                ),
+                URLTriggerEntry( 
+                    url: &#39;http://www.mysite.com/textcontent&#39;,
+                    contentTypes: [
+                        TextContent(
+                            [
+                                TextContentEntry( regEx: &quot;Hello.*&quot; ),
+                                TextContentEntry( regEx: &quot;Goodbye.*&quot; )
+                            ])
+                    ]
+                ),
+                URLTriggerEntry( 
+                    url: &#39;http://www.mysite.com/generalcontent&#39;,
+                    contentTypes: [
+                        MD5Sum()
+                    ]
+                )
+            ]
+        )
+    }
+    stages {
+        stage( &quot;Default stage&quot; ) {
+            steps {
+                echo &quot;This is a stage&quot;
+            }
+        }
+    }
+}</pre>
+</div></div><p><br/></p><h1 id="URLTriggerPlugin-Comparisonwithsimilarplugins">Comparison with similar plugins</h1><p>This plugin supports all <a href="URL-Change-Trigger.html">URL Change Trigger</a> features and it includes all the fixes of the current <a href="URL-Change-Trigger.html">URL Change Trigger</a> issues.<br/>And unlike the <a href="URL-Change-Trigger.html">URL Change Trigger</a>, URLTrigger plug-in is also able to check the content nature (TEXT, XML, JSON) of a file.<br/>Additionally the plugin can be extended (in the same plugin or by an other plugin) to check other content type.</p><h1 id="URLTriggerPlugin-Changelog">Changelog</h1><h3 id="URLTriggerPlugin-Release0.47">Release 0.47</h3><p>Bugfix for the 'inspect content' checkbox being incorrectly set automatically.</p><h3 id="URLTriggerPlugin-Release0.46">Release 0.46</h3><p>Pipeline compatibility.  As well as now supporting pipeline jobs, declarative syntax for triggers is supported.</p><h3 id="URLTriggerPlugin-Release0.45">Release 0.45</h3><p>Bugfix: Triggers configured to check ETag values no longer build immediately on Jenkins startup</p><h3 id="URLTriggerPlugin-Release0.44">Release 0.44</h3><div>Bugfix: Request Header functionality was causing null pointer exceptions when old config was used (<span style="color: rgb(36,41,46);">JENKINS-51892)</span></div><h3 id="URLTriggerPlugin-Release0.42">Release 0.42</h3><p>Tidied URL verification and removed unnecessary url GET.</p><h3 id="URLTriggerPlugin-Release0.41">Release 0.41</h3><p>* allow to use jsonarray as root of input message</p><h3 id="URLTriggerPlugin-Release0.40">Release 0.40</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-28834">JENKINS-28834</a> - Declare dependency on matrix project plugin</p><h3 id="URLTriggerPlugin-Release0.39">Release 0.39</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-29610">JENKINS-29610</a> - Scheduling skipped when there is no label restriction (trigger-lib 0.33)<br/>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-20712">JENKINS-20712</a> - ETag/MTime saved in config.xml but there is no flag in job web page</p><h3 id="URLTriggerPlugin-Release0.38">Release 0.38</h3><p>* Assign meaningful name to executor thread<br/>* Be more explicit about failed content check preconditions</p><h3 id="URLTriggerPlugin-Release0.37">Release 0.37</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-20359">JENKINS-20359</a> - Monitoring URL for JSON content change not working</p><h3 id="URLTriggerPlugin-Release0.36">Release 0.36</h3><p>* Making the build compatible with Java 7</p><h3 id="URLTriggerPlugin-Release0.35">Release 0.35</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-17961">JENKINS-17961</a> - URLTrigger does not poll when URL starts with environment variable</p><h3 id="URLTriggerPlugin-Release0.34">Release 0.34</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18035">JENKINS-18035</a> - Request to support HTTPS url monitoring in URLTrigger plugin</p><h3 id="URLTriggerPlugin-Release0.33">Release 0.33</h3><p>* Fix regression on polling log from previous version</p><h3 id="URLTriggerPlugin-Release0.32">Release 0.32</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18683">JENKINS-18683</a> - Jenkins 1.522 config changes cannot be saved<br/>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18764">JENKINS-18764</a> - NPE in URLTrigger when saving project configuration</p><h3 id="URLTriggerPlugin-Release0.31">Release 0.31</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-17641">JENKINS-17641</a> - Unknown field 'logEnabled' in org.jenkinsci.lib.xtrigger.XTriggerCause</p><h3 id="URLTriggerPlugin-Release0.30">Release 0.30</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-17468">JENKINS-17468</a> - NullPointerException in URLTrigger.getFTPResponse during startup</p><h3 id="URLTriggerPlugin-Release0.29">Release 0.29</h3><p>* Add FTP Support</p><h3 id="URLTriggerPlugin-Release0.28">Release 0.28</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-16774">JENKINS-16774</a> - URLTrigger gives severe error message instead of detecting change</p><h3 id="URLTriggerPlugin-Release0.27">Release 0.27</h3><p>* warn user that only http is supported for URL protocol (added by ndeloof)</p><h3 id="URLTriggerPlugin-Release0.26">Release 0.26</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-14620">JENKINS-14620</a> - Invalid configurations</p><h3 id="URLTriggerPlugin-Release0.25">Release 0.25</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-15564">JENKINS-15564</a> - URLTrigger: Allow timeouts to be configurable</p><h3 id="URLTriggerPlugin-Release0.24">Release 0.24</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-14607">JENKINS-14607</a> - URLTrigger &quot;Polling error null&quot;</p><h3 id="URLTriggerPlugin-Release0.23">Release 0.23</h3><p>* Add the capability to check ETag response header</p><h3 id="URLTriggerPlugin-Release0.22">Release 0.22</h3><p>* Add JENKINS_URL resolution at startup check<br/>* Update to xtrigger-lib 0.17<br/>* Update to envinject-lib 1.10</p><h3 id="URLTriggerPlugin-Release0.21">Release 0.21</h3><p>* Add environment variables resolution at the trigger startup lifecycle<br/>* Update to xtrigger-lib 0.16<br/>* Update to envinject-lib 1.9</p><h3 id="URLTriggerPlugin-Release0.20">Release 0.20</h3><p>* Upgrade to xtrigger-lib 0.14 (more log)</p><h3 id="URLTriggerPlugin-Release0.19">Release 0.19</h3><p>* Restrict to successful family for URL content<br/>* Exclude polling on unavailable services</p><h3 id="URLTriggerPlugin-Release0.18">Release 0.18</h3><p>* Fix job restart when JENKINS URLs to check are unavailable at Jenkins startup</p><h3 id="URLTriggerPlugin-Release0.17">Release 0.17</h3><p>* Update to xtrigger-lib 0.12 (fix link to polling log to appear on build console)</p><h3 id="URLTriggerPlugin-Release0.16">Release 0.16</h3><p>* Fix TXT content type detection</p><h3 id="URLTriggerPlugin-Release0.15">Release 0.15</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-12912">JENKINS-12912</a> - URLTtrigger does not poll on jobs which are tied to disconnected slaves</p><h3 id="URLTriggerPlugin-Release0.14">Release 0.14</h3><p>* Update to xtrigger-lib 0.8</p><h3 id="URLTriggerPlugin-Release0.13">Release 0.13</h3><p>* Fix the hang problem (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12696">JENKINS-12696</a>)</p><h3 id="URLTriggerPlugin-Release0.11">Release 0.11</h3><p>* Update to xtrigger-lib 0.7</p><h3 id="URLTriggerPlugin-Release0.10">Release 0.10</h3><p>* Update to xtrigger-lib 0.2<br/>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-12213">JENKINS-12213</a> - Polling error org/jenkinsci/plugins/envinject/EnvInjectAction&quot; when monitoring build number url</p><h3 id="URLTriggerPlugin-Release0.9">Release 0.9</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-11859">JENKINS-11859</a> - java.io.IOException: Stream closed&quot; when monitoring a jenkins job build number</p><h3 id="URLTriggerPlugin-Release0.8">Release 0.8</h3><p>* Environment variables are taken into account</p><h3 id="URLTriggerPlugin-Release0.7">Release 0.7</h3><p>* Add proxy configuration if needed</p><h3 id="URLTriggerPlugin-Release0.6">Release 0.6</h3><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-11273">JENKINS-11273</a> - Basic Authentication support in urltrigger</p><h3 id="URLTriggerPlugin-Release0.5.1">Release 0.5.1</h3><p>* Fix TXT Content type saving</p><h3 id="URLTriggerPlugin-Release0.5">Release 0.5</h3><p>* Change 'Add Button' label<br/>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-10731">JENKINS-10731</a> - XMLContentType didn't update initial results HashMap<br/>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-10728">JENKINS-10728</a> - URLTrigger, config.jelly and checkLastModificationDate should be optionalBlock</p><h3 id="URLTriggerPlugin-Release0.4.3">Release 0.4.3</h3><p>* Add message when there are no URLs to poll</p><h3 id="URLTriggerPlugin-Release0.4.2">Release 0.4.2</h3><p>* Fix NullPointerException when there is no URL entry</p><h3 id="URLTriggerPlugin-Release0.4.1">Release 0.4.1</h3><p>* Fix a NullPointerException at Jenkins startup<br/>* Add a delete button on the configuration page to remove an entry section</p><h3 id="URLTriggerPlugin-Release0.4">Release 0.4</h3><p>* Add Text Content check</p><h3 id="URLTriggerPlugin-Release0.3">Release 0.3</h3><p>* Add JSON content check<br/>* Technical features: additional unit tests</p><h2 id="URLTriggerPlugin-Release0.2">Release 0.2</h2><p>* Add poll changes of URL contents</p><h2 id="URLTriggerPlugin-Release0.1">Release 0.1</h2><p>* Initial release</p><p><br/></p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/58195987.png">urltrigger-jenkins-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/58196070.png">URLTRIGGER_CONF_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/59900092.png">urltrigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/69402770.png">temp.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/72614022.png">URLTrigger_bamboo_config.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/72614021.png">URLTrigger_bamboo_config.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183913/165579114.png">image2018-11-15_7-56-27.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:55</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

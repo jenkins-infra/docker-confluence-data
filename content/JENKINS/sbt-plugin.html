@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : sbt plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : sbt plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (uzilan)</span>, last modified by <span class='editor'> Unknown User (padilo)</span> on Nov 16, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View sbt <a href="https://plugins.jenkins.io/sbt" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>This plugin allows building Scala projects using <a href="http://code.google.com/p/simple-build-tool/" class="external-link" rel="nofollow">sbt</a>.</p></p>
+
+
+<h2 id="sbtplugin-Configurethesbtplugin">Configure the sbt plugin</h2>
+
+<ul>
+	<li>In order to set up sbt-plugin, you need to specify the names and locations of one or more sbt launch jars. Press the <strong>Manage Jenkins</strong> link and then the <strong>Global Tool Configuration</strong>. You should now see the sbt configuration section where you will be asked to specify names and locations for your sbt launch jars.</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/51019900/54493212.png" data-image-src="attachments/51019900/54493212.png" data-unresolved-comment-count="0" data-linked-resource-id="54493212" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Skärmavbild 2011-02-12 kl. 8.42.50 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="51019900" data-linked-resource-container-version="13"></span></p>
+
+
+<h2 id="sbtplugin-Configureyourprojecttousesbt">Configure your project to use sbt</h2>
+
+<ul>
+	<li>Open your project configuration and add a <strong>Build using sbt</strong> build step</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/51019900/54493213.png" data-image-src="attachments/51019900/54493213.png" data-unresolved-comment-count="0" data-linked-resource-id="54493213" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Skärmavbild 2011-02-12 kl. 8.47.52 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="51019900" data-linked-resource-container-version="13"></span></p>
+
+<ul>
+	<li>Now, choose which sbt launcher to use, add any jvm and sbt flags you need for your build, and specify which actions you want to run. Keep the <strong>-Dsbt.log.noformat=true</strong> sbt flag to keep the console output clean.</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/51019900/54493214.png" data-image-src="attachments/51019900/54493214.png" data-unresolved-comment-count="0" data-linked-resource-id="54493214" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Skärmavbild 2011-02-12 kl. 8.49.47 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="51019900" data-linked-resource-container-version="13"></span></p>
+
+<ul>
+	<li>Once you saved the project configuration, you can run your project and watch the virtual console to see the magical sbt work.</li>
+</ul>
+
+
+<h2 id="sbtplugin-Todo">Todo</h2>
+
+<ul>
+	<li><span style="text-decoration: line-through;">Allow multiple sbt launchers</span></li>
+	<li>Allow downloading an sbt launcher</li>
+	<li>Find a way to publish test results when the project does not have a test listener which creates junit xml (see <a href="http://henkelmann.eu/2010/11/14/sbt_hudson_with_test_integration" class="external-link" rel="nofollow">Christoph Henkelmann’s Blog</a>)</li>
+</ul>
+
+
+<h2 id="sbtplugin-Changelog">Changelog</h2>
+
+<h3 id="sbtplugin-Version1.0">Version 1.0</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+
+
+<h3 id="sbtplugin-Version1.1">Version 1.1</h3>
+
+<ul>
+	<li>This release got wrong, sorry</li>
+</ul>
+
+
+<h3 id="sbtplugin-Version1.2">Version 1.2</h3>
+
+<ul>
+	<li><a href="https://github.com/jenkinsci/sbt-plugin/pull/2" class="external-link" rel="nofollow">Handle multi-word actions correctly</a> (thanks to <a href="https://github.com/ijuma" class="external-link" rel="nofollow">Ismael Juma</a>).</li>
+	<li><a href="https://github.com/jenkinsci/sbt-plugin/pull/4" class="external-link" rel="nofollow">A work-around for missing JDK path</a> (thanks to <a href="https://github.com/mmakowski" class="external-link" rel="nofollow">Maciek Makowski</a>)</li>
+	<li>Ability to define multiple sbt launchers (<a href="http://issues.jenkins-ci.org/browse/JENKINS-8661" class="external-link" rel="nofollow">Include SBT Processor, jenkins-8661</a>)</li>
+	<li>Missing jvm arguments causes build to fail (<a href="http://issues.jenkins-ci.org/browse/JENKINS-8587" class="external-link" rel="nofollow">Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError, jenkins-8587</a>)</li>
+</ul>
+
+
+<h3 id="sbtplugin-Version1.3">Version 1.3</h3>
+
+<ul>
+	<li>Added an ability to run sbt in a sub-directory (<a href="https://github.com/jenkinsci/sbt-plugin/pull/6" class="external-link" rel="nofollow">pull request #6</a></li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/51183626.png">sbt_hudson_config_.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/51183627.png">sbt_hudson_add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/51183628.png">sbt_hudson_actions.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/54493212.png">Skärmavbild 2011-02-12 kl. 8.42.50 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/54493213.png">Skärmavbild 2011-02-12 kl. 8.47.52 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/51019900/54493214.png">Skärmavbild 2011-02-12 kl. 8.49.47 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:44</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

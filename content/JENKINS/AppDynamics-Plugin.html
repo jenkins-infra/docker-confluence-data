@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : AppDynamics Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : AppDynamics Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mdonkers)</span>, last modified on Jan 02, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View AppDynamics Dashboard <a href="https://plugins.jenkins.io/appdynamics-dashboard" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-03-06/#SECURITY-1087" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin integrates with <a href="http://www.appdynamics.com" class="external-link" rel="nofollow">AppDynamics</a> to fetch measurements.</p></p>
+
+<h2 id="AppDynamicsPlugin-PluginFeatures">Plugin Features</h2>
+
+<p>This plugin makes it possible to integrate data from <a href="http://www.appdynamics.com" class="external-link" rel="nofollow">AppDynamics</a> into your Jenkins build. A performance test should be run during build time (e.g. by using <a href="http://jakarta.apache.org/jmeter/" class="external-link" rel="nofollow">JMeter</a>), and having AppDynamics connected to your application. After the build, the performance statistics will be fetched from the REST uri and shown in the Jenkins interface.<br/>
+It includes the feature of setting the final build status as good, unstable or failed, based on the reported metrics.</p>
+
+<h2 id="AppDynamicsPlugin-Changelog:">Changelog:</h2>
+
+<h4 id="AppDynamicsPlugin-v1.0.14">v1.0.14</h4>
+
+<ul>
+	<li>Better handling of custom metrics. Especially when changing the 'main' metric, it might not be always available in previous reports. Now will skip those in counting averages and creating graphs.</li>
+</ul>
+
+
+<h4 id="AppDynamicsPlugin-v1.0.13">v1.0.13</h4>
+
+<ul>
+	<li>Added possibilities for custom metrics, thanks to Volodymyr Lukashevych.</li>
+	<li>Updated to one of the later Jenkins versions, using newer dependency versions.</li>
+</ul>
+
+
+<h4 id="AppDynamicsPlugin-v1.0.3-12">v1.0.3-12</h4>
+
+<ul>
+	<li>Various releases that failed because of updates. Can be ignored.</li>
+</ul>
+
+
+<h4 id="AppDynamicsPlugin-v1.0.2">v1.0.2</h4>
+
+<ul>
+	<li>Minor fix for NPE when no metrics found.</li>
+</ul>
+
+
+<h4 id="AppDynamicsPlugin-v1.0.1">v1.0.1</h4>
+
+<ul>
+	<li>Minor fix for running and testing the plugin locally. Plugin configuration could not be opened. Solved by stepping up the Jenkins build system version.</li>
+</ul>
+
+
+<h4 id="AppDynamicsPlugin-v1.0.0">v1.0.0</h4>
+
+<ul>
+	<li>First release, working version to fetch statistics from AppDynamics REST interface and display the results</li>
+	<li>Only several default metrics available, all on 'overall application' level.</li>
+	<li>One main metric that can be selected on which basis the build is marked as successful, unstable or failed.</li>
+</ul>
+
+
+
+<h2 id="AppDynamicsPlugin-JenkinsBuildConfiguration">Jenkins Build Configuration</h2>
+
+<ul>
+	<li>Create a new build for executing the performance tests.</li>
+</ul>
+
+
+<ul>
+	<li>Add a build-step for e.g. JMeter, or a script that will generate load on your system under test.</li>
+</ul>
+
+
+<ul>
+	<li>Add the AppDynamics plugin as post-build-step to fetch actual metrics and generate reports.</li>
+</ul>
+
+
+
+<h2 id="AppDynamicsPlugin-AppDynamicsPluginusage">AppDynamics Plugin usage</h2>
+
+<h4 id="AppDynamicsPlugin-Configuration">Configuration</h4>
+
+<p>Default configuration for the AppDynamics plugin only needs the following information to connect to the AppDynamics REST api:</p>
+
+<ul>
+	<li>REST uri: The uri where AppDynamics Controller is living. Same uri as you would use for logging into the AppDynamics dashboard.</li>
+	<li>Username: Username for authentication. Don't forget the &quot;@&lt;domain&gt;&quot; part if using a multi-tenant Controller.</li>
+	<li>Password: Password for authentication.</li>
+	<li>Application Name: Name of the application that should be monitored, exactly as it appears in the Controller (possibly with spaces). Also accepts the application id (numeric value).</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670797/65863909.png" data-image-src="attachments/65670797/65863909.png" data-unresolved-comment-count="0" data-linked-resource-id="65863909" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-capture-appdynamics-configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670797" data-linked-resource-container-version="16"></span></p>
+
+<p>Furthermore, some advanced settings are available. You can configure the error percentage thresholds which would make the project unstable or failed or leave them blank to disable the feature.</p>
+
+<ul>
+	<li>Threshold Metric: The metric that will be used to determine whether the build is succeeded, unstable or failed. Normally the average response time is used.</li>
+	<li>Lower is better: Checkbox to specify whether the measurements belonging to the metric, are better when higher or better when lower values are measured.</li>
+	<li>Minimum Measure Time: The plugin will fetch measurements from the time the build started. But in case the load-generation is not directly executed within this build, it is possible to specify a minimum time for which measurements must be fetched.</li>
+	<li>Performance Threshold: Specify a percentage as to when the build is marked as unstable or failed. These values specify a boundary for the new build, for wich the performance is taken as percentage of the average.</li>
+</ul>
+
+
+
+<h4 id="AppDynamicsPlugin-Output">Output</h4>
+
+<p>The AppDynamics plugin will show output per build, and as overall statistics for the project. The following two images are two examples:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670797/65863910.png" data-image-src="attachments/65670797/65863910.png" data-unresolved-comment-count="0" data-linked-resource-id="65863910" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-capture-appdynamics-buildresult.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670797" data-linked-resource-container-version="16"></span></p>
+
+<p>Build output</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670797/65863911.png" data-image-src="attachments/65670797/65863911.png" data-unresolved-comment-count="0" data-linked-resource-id="65863911" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-capture-appdynamics-overall-responsetime.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670797" data-linked-resource-container-version="16"></span></p>
+
+<p>Overall graph for the project (and floating box on the project page)</p>
+
+
+<h2 id="AppDynamicsPlugin-Compiling">Compiling</h2>
+
+<p>To use the latest plugin release, you need to download, compile and install by hand. To do it, you need Git, Maven and Java 6 installed in your computer.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ git clone https://github.com/jenkinsci/appdynamics-plugin.git
+$ cd appdynamics-plugin
+$ mvn package
+$ cp target/appdynamics-dashboard.hpi &lt;path_to_jenkins&gt;/data/plugins
+</pre>
+</div></div>
+
+<p>Remember to restart jenkins in order to use / reload the plugin.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863909.png">screen-capture-appdynamics-configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863910.png">screen-capture-appdynamics-buildresult.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863911.png">screen-capture-appdynamics-overall-responsetime.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863912.xcf">jmeter-conf.xcf</a> (image/x-xcf)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863913.jpg">jmeter-conf.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863914.jpg">performance-conf.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863915.jpg">performance-trend-amélio.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863916.png">conf-trend-graph.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863917.png">perf-report.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863918.jpg">shot_3.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863919.jpg">shot_1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863920.jpg">shot_2.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863921.jpg">shot_4.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863922.jpg">trend_report.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863923.jpg">PerformanceTrendbyURI.JPG</a> (image/pjpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863924.jpg">PluginReport_ConfigElement_Bug.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670797/65863925">1</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

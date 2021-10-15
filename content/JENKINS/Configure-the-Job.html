@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Configure the Job</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="zap-plugin.html">zap plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Configure the Job
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jordangs)</span>, last modified on Apr 20, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><p class="title">Version 1.1.0 Documentation</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><div class="sectionMacro"><div class="sectionMacroRow"><p> </p></div></div><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><p>To ensure that you are viewing the correct documentation, the title of this Informational box should reflect the most recent version of the <strong>ZAP Jenkins Plugin</strong>.</p></div><div class="columnMacro"><h3 style="text-align: right;" id="ConfiguretheJob-LatestRelease"> <span style="color: rgb(51,102,255);"><span style="color: rgb(51,51,153);"><span style="color: rgb(0,0,128);">Latest Release</span></span> </span></h3></div></div></div></div><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><p><a href="https://github.com/jenkinsci/zap-plugin/releases" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper image-right-wrapper"><img class="confluence-embedded-image confluence-external-resource image-right" src="https://img.shields.io/github/release/jenkinsci/zap-plugin.svg" data-image-src="https://img.shields.io/github/release/jenkinsci/zap-plugin.svg"></span></a></p></div></div></div></div></div></div><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Jenkins Configuration</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><div class="sectionMacro"><div class="sectionMacroRow"><p> </p></div></div><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><p>The following steps will assume Jenkins is setup as a <strong>Master</strong> with a <strong>Slave</strong> on another machine to execute the job's build and run the <strong>ZAP Security Tool.</strong></p></div></div></div></div><div class="sectionMacro"><div class="sectionMacroRow"><p> </p></div></div></div></div><p> </p><hr/><h3 id="ConfiguretheJob-CreateaNewItem">Create a <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793226.png" data-image-src="attachments/102662258/102793226.png" data-unresolved-comment-count="0" data-linked-resource-id="102793226" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="new-package.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> New Item</h3><ol><li><p><strong>Open <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793260.png" data-image-src="attachments/102662258/102793260.png" data-unresolved-comment-count="0" data-linked-resource-id="102793260" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> Jenkins</strong></p><ul><li><p><strong><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> </strong><span style="color: rgb(255,102,0);"><code>http://127.0.0.1:8080/</code></span><strong><br/></strong></p></li></ul></li><li><p><strong>Click <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793226.png" data-image-src="attachments/102662258/102793226.png" data-unresolved-comment-count="0" data-linked-resource-id="102793226" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="new-package.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> New Item</strong></p><ul><li><p><strong><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> <span style="color: rgb(255,102,0);"> </span></strong><span style="color: rgb(255,102,0);"><code><span class="nolink">http://127.0.0.1:8080/view/All/newJob</span></code></span><strong><br/></strong></p><ul><li><strong>Name</strong>: <span style="color: rgb(255,102,0);"><code>ZAP_EXAMPLE_JOB</code></span></li><li><strong>Type</strong>: Freestyle project</li></ul></li></ul></li><li><strong>Click OK</strong></li></ol><p> </p><hr/><h3 id="ConfiguretheJob-CreatetheWorkspace">Create the <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793227.png" data-image-src="attachments/102662258/102793227.png" data-unresolved-comment-count="0" data-linked-resource-id="102793227" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="folder.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> Workspace</h3><ol><li><p><strong>Go to the Job Summary Page</strong></p><ul><li><span style="color: rgb(255,102,0);"><code><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> http://127.0.0.1:8080/job/ZAP_EXAMPLE_JOB/</code></span></li></ul></li><li><strong>Click <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793229.png" data-image-src="attachments/102662258/102793229.png" data-unresolved-comment-count="0" data-linked-resource-id="102793229" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="setting.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> Configure</strong><ul><li><span style="color: rgb(128,128,128);"><code><span class="nolink"><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> <span class="nolink" style="color: rgb(255,102,0);">http://127.0.0.1:8080/job/ZAP_EXAMPLE_JOB/configure</span></span></code></span></li></ul></li><li><p><strong>Restrict where this project can be run</strong> (True)</p><ul><li>Name of <strong>Slave</strong> where <strong>ZAP security tool</strong> is installed</li></ul></li><li><strong>Click </strong><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793230.png" data-image-src="attachments/102662258/102793230.png" data-unresolved-comment-count="0" data-linked-resource-id="102793230" data-linked-resource-version="6" data-linked-resource-type="attachment" data-linked-resource-default-alias="save.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span><strong> Save</strong></li><li><p><strong>Click </strong><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793228.png" data-image-src="attachments/102662258/102793228.png" data-unresolved-comment-count="0" data-linked-resource-id="102793228" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clock.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span><strong> Build Now</strong></p></li></ol><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>New empty workspace will be created on the <strong>Slave</strong> machine</p><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> <span style="color: rgb(255,102,0);"><code>C:\Users\&lt;USER_ID&gt;\Jenkins\workspace\ZAP_EXAMPLE_JOB</code></span></li></ul></div></div><p> </p><hr/><h3 id="ConfiguretheJob-ConfiguretheJobto"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793229.png" data-image-src="attachments/102662258/102793229.png" data-unresolved-comment-count="0" data-linked-resource-id="102793229" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="setting.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> Configure the Job to <a href="Execute-ZAP.html">Execute ZAP</a></h3><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Setup the job to run <strong>ZAP security tool</strong> with a <strong>loaded session</strong>.</p></div></div><h3 id="ConfiguretheJob-ConfiguretheJobto.1"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793229.png" data-image-src="attachments/102662258/102793229.png" data-unresolved-comment-count="0" data-linked-resource-id="102793229" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="setting.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> Configure the Job to <a href="Execute-ZAP-as-part-of-a-Selenium-Build.html">Execute ZAP as part of a Selenium Build</a></h3><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Setup the job to run a <strong>Selenium</strong> step during the executing of the <strong>ZAP security tool</strong> and <strong>persist the session</strong> afterwards.</p></div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> This will allow <strong>ZAP security tool</strong> to act as an <strong><a href="https://github.com/zaproxy/zap-core-help/wiki/HelpStartProxies#configuring-proxies" class="external-link" rel="nofollow">Intercepting Proxy</a></strong>. It will map all of the requests the <strong>Selenium script</strong> makes to a web app and all of the responses ZAP receives from it.</p></div></div><p> </p><hr/><h3 id="ConfiguretheJob-ConfiguretheJob&#39;sPostBuildActions">Configure the Job's Post Build Actions</h3><ol><li><p><strong><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793260.png" data-image-src="attachments/102662258/102793260.png" data-unresolved-comment-count="0" data-linked-resource-id="102793260" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> <a href="Summary-Display-Plugin.html">Summary Display</a></strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Documentation, how to use <strong>Summary Display</strong> in your own job configuration can be found <strong><a href="Summary-Display.html">here</a></strong>.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> This plugin allows an easy and fully customized build report display. Useful for it's Post-Build action to Archive the artifacts, thus copying over the generated report(s) and ZAP log(s) into the build's directory from the workspace.</p></div></div></li><li><p><strong><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793260.png" data-image-src="attachments/102662258/102793260.png" data-unresolved-comment-count="0" data-linked-resource-id="102793260" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> <a href="HTML-Publisher-Plugin.html">HTML Publisher</a></strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Documentation, how to use <strong>HTML Publisher</strong> in your own job configuration can be found <strong><a href="HTML-Publisher.html">here</a></strong>.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> This plugin publishes HTML reports. Useful for displaying the latest <strong>.html</strong> or <strong>.xhtml</strong> report.</p></div></div></li></ol><p> </p><hr/><h3 id="ConfiguretheJob-Save"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793230.png" data-image-src="attachments/102662258/102793230.png" data-unresolved-comment-count="0" data-linked-resource-id="102793230" data-linked-resource-version="6" data-linked-resource-type="attachment" data-linked-resource-default-alias="save.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> <strong>Save</strong></h3><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Congratulations you've successfully setup your first <strong>ZAP Jenkins</strong> Job.</p></div></div><p> </p><hr/><h3 id="ConfiguretheJob-BuildNow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662258/102793228.png" data-image-src="attachments/102662258/102793228.png" data-unresolved-comment-count="0" data-linked-resource-id="102793228" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clock.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662258" data-linked-resource-container-version="46"></span> <strong>Build Now</strong></h3><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Congratulations you should have been able to run your first successful <strong>ZAP Jenkins</strong> Build.</p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793226.png">new-package.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793227.png">folder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793228.png">clock.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793229.png">setting.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793231.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793232.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793235.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793236.png">add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793237.png">add_post_build_action.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793240.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793233.png">add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793234.png">add_post_build_action.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793239.png">arrow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793238.png">arrow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793241.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793230.png">save.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793242.png">admin_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662258/102793260.png">jenkins.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:00</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

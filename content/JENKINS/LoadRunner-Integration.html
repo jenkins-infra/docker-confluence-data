@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : LoadRunner Integration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Micro-Focus-Application-Automation-Tools.html">Micro Focus Application Automation Tools</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : LoadRunner Integration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gront)</span>, last modified by <span class='editor'> Unknown User (jay_hershko)</span> on Oct 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>The Application Automation Tools plugin for the Jenkins continuous integration server provides a mechanism for executing LoadRunner Controller scenarios as part of a build script. This plugin allows you to trigger a performance test as a build step, and present the results in the Jenkin's user interface.</p><p>You can only integrate scenarios which have service level agreements (SLAs). This allows you to quickly determine whether the test passed or failed and if performance was affected.</p><p>For additional information, see the <a href="https://admhelp.microfocus.com/lr/en/latest/help/WebHelp/Content/Controller/c_jenkins.htm" class="external-link" rel="nofollow">online help</a> or <a class="external-link" href="https://community.softwaregrp.com/t5/LoadRunner-and-Performance/Continuous-Performance-Testing-Using-Jenkins-CI-CD-Pipelines/ba-p/220264#.WjZnXN-WaUl" rel="nofollow">blog post</a> about continuous integration with LoadRunner.</p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021649911 {padding: 0px;}
+div.rbtoc1631021649911 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021649911 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021649911'>
+<ul class='toc-indentation'>
+<li><a href='#LoadRunnerIntegration-Prerequisites'>Prerequisites</a></li>
+<li><a href='#LoadRunnerIntegration-Setupajob'>Set up a job</a></li>
+<li><a href='#LoadRunnerIntegration-SetupaPipelinejob'>Set up a Pipeline job</a></li>
+<li><a href='#LoadRunnerIntegration-Setupthepost-buildactions'>Set up the post-build actions</a></li>
+<li><a href='#LoadRunnerIntegration-Runthejob'>Run the job</a></li>
+<li><a href='#LoadRunnerIntegration-ReviewtheresultsintheRunResultsViewer'>Review the results in the Run Results Viewer  </a></li>
+<li><a href='#LoadRunnerIntegration-ReviewtheresultsinJenkins'>Review the results in Jenkins  </a></li>
+</ul>
+</div></p><h1 id="LoadRunnerIntegration-Prerequisites">Prerequisites</h1><ol><li>Install one of the five latest LTS versions of Jenkins, <a href="https://jenkins.io/changelog-stable/" class="external-link" rel="nofollow">(Click here for a list</a>)</li><li>Install the Jenkins <a href="https://plugins.jenkins.io/hp-application-automation-tools-plugin" class="external-link" rel="nofollow">Micro Focus Application Automation Tools plugin</a>.</li></ol><h1 id="LoadRunnerIntegration-Setupajob"><span style="color: rgb(210,73,57);">Set up a job</span></h1><p>There are two types of jobs that you can create: <strong style="color: rgb(23,43,77);font-size: 14.0px;letter-spacing: 0.0px;">FreeStyle</strong><span style="color: rgb(23,43,77);"> or </span><strong style="color: rgb(23,43,77);font-size: 14.0px;letter-spacing: 0.0px;">Pipeline</strong><span style="color: rgb(23,43,77);">. FreeStyle is more UI friendly and Pipeline is in a form of code which is more flexible.</span></p><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>New Item </strong>link or select an existing job.</li><li>Enter an item name (for a new job).</li></ol><p><span style="color: rgb(210,73,57);font-size: 24.0px;letter-spacing: 0.0px;">Set up a Freestyle job</span></p><ol><li>Select <strong>Free-style project</strong> and click <strong>OK</strong>.</li><li>In the Project Configuration section, select <strong>Restrict where this project can be run</strong>, and select the appropriate node. For details, see <a rel="nofollow" href="https://wiki.jenkins.io/display/JENKINS/Micro+Focus+Application+Automation+Tools#MicroFocusApplicationAutomationTools-Createanexecutionnode">Create an execution node</a>.</li><li>Scroll down to the <strong>Build</strong> section.</li><li>Expand the <strong>Add build step</strong> drop-down and select <strong>Execute Micro Focus tests from file system</strong>.</li><li>Click the <strong>LoadRunner-Specific Settings</strong> button and specify the following settings:<ol><li><strong>Controller Polling Interval.</strong> The interval in seconds by which to poll the Controller for the scenario status. The default is 30 seconds.</li><li><strong>Scenario Execution Timeout</strong>. The total time in seconds to allot for the execution of all listed scenarios. After this time, the Controller process will be terminated.</li><li><strong>Errors to Ignore.</strong> You can specify which errors to ignore during the run. For example: <em>Error: CPU usage for this load generator has exceeded 80%</em>. Enter each error string on a separate line.</li><li><strong>Analysis Template.</strong> Apply a template for the build (path to a .tem file). Leave blank in order to use the default template.</li><li><strong>Display Controller.</strong> Display the Controller while the scenario is running.</li></ol></li><li>In the <strong>Tests</strong> box, enter a test with its full absolute path, or a folder or MTB containing one or more tests or LoadRunner scenarios. To specify multiple entries, click the down arrow on the right of the field and enter each test path on a separate line. Make sure that the paths are accessible from all machines in the local network.</li><li>Indicate a timeout in seconds after which the job will fail in the <strong>Timeout</strong> box (optional). </li><li>Click <strong>Apply</strong> to save your changes and continue with more build steps. Click <strong>Save</strong> when you are finished adding build steps.</li></ol><h1 id="LoadRunnerIntegration-SetupaPipelinejob">Set up a Pipeline job</h1><ol><li>Select <strong>Pipeline</strong> and click <strong>OK</strong>.</li><li><p>To restrict where this project can run, first refer to <a href="https://wiki.jenkins.io/display/JENKINS/Micro+Focus+Application+Automation+Tools#MicroFocusApplicationAutomationTools-Createanexecutionnode" rel="nofollow">Create an execution node</a> and then see <a href="https://github.com/jenkinsci/pipeline-model-definition-plugin/wiki/Controlling-your-build-environment" class="external-link" rel="nofollow">Controlling your build environment</a>.</p></li><li>Scroll down to the <strong>Pipeline</strong> section.</li><li>Click <strong>Pipeline Syntax</strong>.</li><li>In <strong style="letter-spacing: 0.0px;">Sample Step</strong> select <strong style="letter-spacing: 0.0px;">LoadRunnerTest:</strong> <strong style="letter-spacing: 0.0px;">Run LoadRunner performance scenario tests.</strong></li><li>In the <strong style="letter-spacing: 0.0px;">Tests</strong> box, enter a test with its full absolute path, or a folder or MTB containing one or more tests or LoadRunner scenarios. To specify multiple entries, click the down arrow on the right of the field and enter each test path on a separate line. Make sure that the paths are accessible from all machines in the local network.</li><li>In <strong style="letter-spacing: 0.0px;">Report archive mode</strong> follow <strong style="letter-spacing: 0.0px;">Set up the Post Build Actions</strong> section.</li><li>Follow the Free Style Job section, steps 5 through 7.</li><li>Click <strong>Generate Pipeline Script.</strong></li><li>Copy the output beneath the <strong>Generate Pipeline Script </strong>button.</li><li>Go back to the <strong>Pipeline </strong>section.</li><li>Paste the copied code into the <strong>Script</strong> block (<a href="https://jenkins.io/doc/book/pipeline/getting-started/" class="external-link" rel="nofollow">read here for how to write pipeline</a>).</li><li>Click <strong>Apply</strong> to save your changes and continue with more build steps. Click <strong>Save</strong> when you are finished adding build steps.</li></ol><h1 id="LoadRunnerIntegration-Setupthepost-buildactions">Set up the post-build actions</h1><ol><li>In the <strong>Post-build Actions</strong> section, expand the <strong>Add post-build action</strong> drop-down and select <strong>Publish test result</strong>.</li><li>Select an archiving option for the test run results:<ul><li><strong>Archive test reports for failed tests: </strong>Only save test result reports for failed tests.</li><li><strong>Always archive test reports:</strong> Always save test result reports.</li><li><strong>Always archive and publish test reports:</strong> Always save and publish test result reports.</li><li><strong>Do not archive test reports:</strong> Never save the test results.</li></ul></li></ol><h1 id="LoadRunnerIntegration-Runthejob">Run the job</h1><p>Run or schedule the job as you would with any standard Jenkins job.</p><h1 id="LoadRunnerIntegration-ReviewtheresultsintheRunResultsViewer">Review the results in the Run Results Viewer  </h1><ol><li>Extract the files from the archive file. When you when you extract the zip file contents, it creates the following folders and files:<ul><li><strong>LRR folder</strong>- The Controller raw result folder, viewable in LoadRunner Analysis.</li><li><strong>LRA folder</strong>- The Analysis session folder, viewable in LoadRunner Analysis.</li><li><strong>HTML folder</strong>- HTML reports in two subfolders, IE and Netscape, in their respective formats.</li><li><strong>SLA.xml</strong> - An XML report showing the status of the SLA in the test.</li></ul></li><li>Open the Run Results Viewer and select <strong>File</strong> &gt; <strong>Open</strong>.</li><li>In the Open dialog box, select` <strong>Results XML file</strong> and navigate to the <em>Results.xml</em> file in the folder that you extracted.</li><li>Click <strong>Open</strong> and view the results.</li></ol><p><strong>Note:</strong> The pass and fail criteria for LoadRunner scenario tests are based on the LoadRunner Service Level Agreement (SLA). If you do not define an SLA, the scenario will fail. For details, see the <a href="https://admhelp.microfocus.com/lr/" class="external-link" rel="nofollow">LoadRunner Help Center</a>.</p><h1 id="LoadRunnerIntegration-ReviewtheresultsinJenkins">Review the results in Jenkins  </h1><p>You can also view the results from the Jenkins interface, in the following modes:</p><ul><li>Per job/project</li><li>Per build/run</li></ul><p><strong>Per Job / Project (cross build / run results)</strong></p><p>Click <strong>Project performance report</strong> in the left side Job menu. This lets you review the various results from the job, per scenario. You compare the job results using an SLA.</p><p><strong>Per build / run</strong> </p><ol><li>Click <strong>Performance report</strong> to examine the performance summary report with its different results.</li><li>Click <strong>Transaction summary</strong> to open a detailed view of the transactions statistics taken directly from LoadRunner Analysis report.</li><li><p>Click <strong>Rich Report</strong> to show a high level report of the build run. (This requires you to enable <strong>Rich Reports</strong> in Analysis and generate a PDF. For details, see the <a class="external-link" rel="nofollow" href="https://admhelp.microfocus.com/lr/en/latest/help/WebHelp/Content/Analysis/102150_ui_template_dialog.htm">Edit Template dialog box</a>.</p></li><li>Click <strong>Simple Junit style SLA result</strong><ol><li>Click on “Test result”</li><li>Click on “All tests” to see the overview.</li><li>Select a scenario by clicking on its name.</li><li>Click on <strong>History</strong> in the left panel to compare the results with those from previous runs.</li></ol></li></ol><p><strong>Note:</strong> These reports might require you to perform a Security header override. For details, see <a rel="nofollow" href="https://wiki.jenkins.io/display/JENKINS/HPE+Application+Automation+Tools#HPEApplicationAutomationTools-ContentSecurityPolicyHeader">Content Security Policy Header</a>.</p><p>For additional information about the plugin, refer to the <a href="https://wiki.jenkins.io/display/JENKINS/Micro+Focus+Application+Automation+Tools" rel="nofollow">plugin’s wiki page</a>. For general questions, visit our <a style="letter-spacing: 0.0px;" href="https://groups.google.com/forum/#!forum/micro-focus-application-automation-tools-plugin" class="external-link" rel="nofollow">Google group</a>.</p><hr/><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161021961/161546258.jpg">Select_columns_UFT_CI.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161021961/161546259.jpg">LR_PC_Build_Artifacts.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161021961/161546260.png">Plot_build_data.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161021961/161546261.png">Plot_configuration_example.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/161021961/163479807.png">2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

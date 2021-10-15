@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Installing Jenkins as a Unix daemon</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Installing Jenkins as a Unix daemon
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (rodney_ricks)</span> on Mar 17, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="InstallingJenkinsasaUnixdaemon-Linuxstartupscript">Linux startup script</h1><ul><li><a href="JenkinsLinuxStartupScript.html">JenkinsLinuxStartupScript</a> - a simple shell script enabling to start, stop, and restart Jenkins from <code>/etc/init.d</code></li></ul><h1 id="InstallingJenkinsasaUnixdaemon-daemonize">daemonize</h1><p><a href="http://www.clapper.org/software/daemonize/" class="external-link" rel="nofollow">daemonize</a> is a very simple program that allows you to launch Jenkins (or any arbitrary program) as a daemon. For people without much Unix experience, this is recommended.</p><h1 id="InstallingJenkinsasaUnixdaemon-daemontools">daemontools</h1><p><a href="http://cr.yp.to/daemontools.html" class="external-link" rel="nofollow">daemontools</a> is another possibility. This is more complicated to set up and it doesn't really follow the normal Unix convention, but it offers daemon control (like start/stop), log capturing, as well as automatic restart when the service dies.</p><h1 id="InstallingJenkinsasaUnixdaemon-Shellscript">Shell script</h1><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>        # Daemonize
+        echo -n &quot;Starting $SERVICE: &quot;
+        touch /var/run/jenkins.pid
+        chown jenkins:jenkins /var/run/jenkins.pid
+        su -s /bin/sh jenkins -c &quot;
+                cd /
+                JENKINS_HOME=/var/lib/jenkins exec setsid /usr/bin/java   \
+                        -jar /usr/share/java/jenkins/jenkins.war          \
+                        $JENKINS_OPTS                                    \
+                &lt;/dev/null &gt;&gt;/var/log/jenkins/console_log 2&gt;&amp;1 &amp;
+                echo \$! &gt;/var/run/jenkins.pid
+                disown \$!
+                &quot;
+</pre>
+</div></div><p>Adjust the above for your need – it is the part of my init scripts.</p><h1 id="InstallingJenkinsasaUnixdaemon-JavaServiceWrapper">Java Service Wrapper</h1><p>The <a href="http://wrapper.tanukisoftware.org" class="external-link" rel="nofollow">The Java Service wrapper</a> is a wrapper that works both on Unix and <a href="Installing-Jenkins-as-a-Windows-service.html">Windows</a>. It requires some set up but when it is setup it can be used as any other unix service (like start/stop).</p><p>This example will install a Jenkins instance in <strong>/home/jenkins</strong> on a debian machine. The Jenkins configuration is stored in <strong>/home/jenkins/data</strong>. Jenkins will be running on port 8070 and as the <em>jenkins</em> user.</p><ol><li>Select and download a JSW package from the <a href="http://wrapper.tanukisoftware.org/doc/english/download.jsp" class="external-link" rel="nofollow">JSW wrapper download page</a>.</li><li>Unpack the package into the <strong>/home/jenkins</strong> path.</li><li>Create <strong>/home/jenkins/tmp</strong> as the temporary directory for JSW.</li><li>Download the <code>jenkins.war</code> file into <strong>/home/jenkins/lib</strong>.<ul><li>If you have plugins that you would like to use, download them into <strong>/home/jenkins/data/plugins</strong>.</li></ul></li><li><p>Copy the <strong>/home/jenkins/src/conf/wrapper.conf.in</strong> to <strong>/home/jenkins/conf/wrapper.conf</strong> and change the below configuration properties in the file.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>wrapper.java.classpath.1=../lib/jenkins.war
+wrapper.java.classpath.2=../lib/wrapper.jar
+
+wrapper.java.additional.1=-DJENKINS_HOME=../data
+wrapper.java.additional.2=-Djava.io.tmpdir=../tmp
+wrapper.java.additional.3=-server
+
+# Set directly the time zone of the JVM, by setting this we do not rely on the time zone of the server.
+# Uncomment the following line if needed.
+# wrapper.java.additional.4=-Duser.timezone=America/Los_Angeles
+
+wrapper.app.parameter.1=Main
+wrapper.app.parameter.2=--httpPort=8070
+
+wrapper.ping.timeout=300
+wrapper.jvm_exit.timeout=60
+
+wrapper.console.title=Jenkins Continuous build server
+</pre>
+</div></div></li><li>Verify the wrapper configuration by starting Jenkins through <strong>/home/jenkins/bin/testwrapper console</strong>. Jenkins should be accessible through <a href="http://localhost:8070" class="external-link" rel="nofollow">http://localhost:8070</a>, if not check the console output for errors.</li><li><p>Copy the <strong>/home/jenkins/src/bin/sh.script.in</strong> to <strong>/etc/init.d/jenkins</strong> and change the below configuration properties in the file.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>APP_NAME=&quot;Jenkins&quot;
+APP_LONG_NAME=&quot;Jenkins Continuous build server&quot;
+
+WRAPPER_CMD=&quot;/home/jenkins/bin/wrapper&quot;
+WRAPPER_CONF=&quot;/home/jenkins/conf/wrapper.conf&quot;
+
+PIDDIR=&quot;/home/jenkins/bin&quot;
+
+RUN_AS_USER=jenkins
+</pre>
+</div></div></li><li><p>Verify installation by starting the daemon through <strong>/etc/init.d/jenkins start</strong>. Make sure that <strong>/etc/init.d/jenkins</strong> has the correct permissions; normally 755 is ok for this.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Please feel free to add your suggestion here</p></div></div></li></ol><h1 id="InstallingJenkinsasaUnixdaemon-Linuxservice-systemd">Linux service - systemd</h1><p>This is another way to start Jenkins as Linux service, also on system startup.</p><h2 id="InstallingJenkinsasaUnixdaemon-Fedora">Fedora</h2><p><em>I tested it on Fedora distribution, but it should work with other too.</em> It needs some minimal experience with Linux superuser (sudo) and preferably basic Vi commands.</p><ol><li>Download jenkins.war file to any convenient destination, eg. /home/jenkins_user</li><li><p>Create service file /etc/systemd/system/jenkins.service and paste following there:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>[Unit]
+Description=Jenkins Daemon
+
+[Service]
+ExecStart=/usr/bin/java -jar /home/jenkins_user/jenkins.war
+User=jenkins_user
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+</div></div></li><li>Reload service manager: systemctl daemon-reload</li><li><p>That's it! Now manage the service:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>systemctl start jenkins.service      # starts the service manually
+systemctl stop jenkins.service
+systemctl restart jenkins.service
+systemctl enable jenkins.service     # enable the service to start with system startup;
+                                     # please note that it does not start the service instantly
+systemctl disable jenkins.service    # disable automatic start
+</pre>
+</div></div></li><li>If anything goes wrong, use journalctl command (and scroll to bottom) to see any error messages.</li><li>You may want to redirect or suppress Jenkins output, otherwise you can kill Journal log. Change jenkins.helper to eg. java -jar /home/jenkins_user/jenkins.war &gt; /dev/null &amp;</li></ol><h2 id="InstallingJenkinsasaUnixdaemon-openSUSE">openSUSE</h2><p>This variation of the Fedora steps worked for me on openSUSE 15.0. It requires some minimal experience with Linux superuser (sudo) and basic text editor commands.</p><ol><li><p>Create service file /usr/lib/systemd/system/jenkins.service and paste the following there:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>[Unit]
+Description=Jenkins Daemon
+
+[Service]
+ExecStart=/usr/bin/java -jar /usr/lib/jenkins/jenkins.war
+User=jenkins
+
+[Install]
+WantedBy=multi-user.target</pre>
+</div></div></li><li>Make a symbolic link from /etc/systemd/system/jenkins.service to /usr/lib/systemd/system/jenkins.service<br/><pre>ln -s /usr/lib/systemd/system/jenkins.service /etc/systemd/system/jenkins.service</pre></li><li><p>Reload service manager</p><pre>systemctl daemon-reload</pre></li><li><p>That's it! Now manage the service:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>systemctl start jenkins.service      # starts the service manually
+systemctl stop jenkins.service
+systemctl restart jenkins.service
+systemctl enable jenkins.service     # enable the service to start with system startup;
+                                     # please note that it does not start the service instantly
+systemctl disable jenkins.service    # disable automatic start
+</pre>
+</div></div></li><li>If anything goes wrong, use journalctl command (and scroll to bottom) to see any error messages.</li><li><p>You may want to redirect or suppress Jenkins output, otherwise you can kill Journal log. Change jenkins.helper to eg.</p><pre>java -jar /usr/lib/jenkins/jenkins.war &gt; /dev/null &amp;</pre></li></ol><h2 id="InstallingJenkinsasaUnixdaemon-FurtherConfiguration">Further Configuration</h2><p>For further systemd configuration like auto restart, please refer to <a href="http://www.freedesktop.org/software/systemd/man/systemd.service.html" class="external-link" rel="nofollow">http://www.freedesktop.org/software/systemd/man/systemd.service.html</a></p><h1 id="InstallingJenkinsasaUnixdaemon-Examples">Examples</h1><h2 id="InstallingJenkinsasaUnixdaemon-UbuntuLinux">Ubuntu Linux</h2><p><a href="HudsonUbuntuLinuxStartupScript.html">Init Script for Jenkins Continuous Integration Engine on Ubuntu Linux</a></p><h2 id="InstallingJenkinsasaUnixdaemon-SuSELinux">SuSE Linux</h2><p><a href="http://www.rekk.de/bloggy/?p=53" class="external-link" rel="nofollow">Init Script for Jenkins/Hudson Continuous Integration Engine on SuSE Linux</a></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

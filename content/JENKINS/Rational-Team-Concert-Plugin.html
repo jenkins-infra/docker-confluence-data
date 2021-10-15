@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Rational Team Concert Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Rational Team Concert Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (deluan)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Apr 27, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="RationalTeamConcertPlugin-Summary">Summary</h1>
+<p>
+<p>Deprecated since core 1.480.3.  Use <a href="https://wiki.jenkins-ci.org/display/JENKINS/Team+Concert+Plugin" class="external-link" rel="nofollow">Team Concert Plugin</a> instead.  This plugin integrates <a href="https://jazz.net/projects/rational-team-concert" class="external-link" rel="nofollow">IBM's Rational Team Concert (RTC)</a> source control to Hudson.</p></p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'rtc' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p><br class="atl-forced-newline"/></p>
+
+<p>This plugin uses the RTC's command line interface, <em>scm</em> (or <em>lscm</em>), to issue commands to the RTC Server.</p>
+
+<p>At the moment, this plugin supports:</p>
+<ul>
+	<li>Loading a workspace (checkout in RTC's lingo).</li>
+	<li>Polling a RTC Stream to automatically accept changes and start builds.</li>
+	<li>Links from the Hudson change sets to Jazz Team Server Web Access. (Also known as a repository browser)</li>
+</ul>
+
+
+<h1 id="RationalTeamConcertPlugin-Configuration">Configuration</h1>
+
+<h3 id="RationalTeamConcertPlugin-Requirements"><span style="color: rgb(210,73,57);"><strong>Requirements</strong></span></h3>
+
+<p>The plugin requires that the SCM command line tool from Rational Team Concert is installed and findable in the path of the server.</p>
+
+<h3 id="RationalTeamConcertPlugin-Systemconfiguration">System configuration</h3>
+
+<p>There will be a new &quot;Rational Team Concert&quot; section where you can configure the executable name.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59506838/59899933.png" data-image-src="attachments/59506838/59899933.png" data-unresolved-comment-count="0" data-linked-resource-id="59899933" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="sysconf.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59506838" data-linked-resource-container-version="18"></span></p>
+
+<p>This is the command line tool that will be invoked. It's advised to use <em>lscm</em> (<em>lscm.ba</em>t for Windows servers) instead of the default <em>scm</em>, because the former uses less system resources.</p>
+
+
+<h3 id="RationalTeamConcertPlugin-Jobconfiguration">Job configuration</h3>
+
+<p>In your Job configuration, select RTC as your Source Code Management option and fill the required fields:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59506838/59899934.png" data-image-src="attachments/59506838/59899934.png" data-unresolved-comment-count="0" data-linked-resource-id="59899934" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="jobconf.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59506838" data-linked-resource-container-version="18"></span></p>
+
+<p>Username and password are not required if you previously issued the following command in your system:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+scm login -r https://yourrepository/address -u username -c
+</pre>
+</div></div>
+<p>It's recommended to have a username and workspace dedicated to Jenkins.</p>
+
+<h1 id="RationalTeamConcertPlugin-Changelog">Changelog</h1>
+
+<h6 id="RationalTeamConcertPlugin-Version0.3(Dec122011)">Version 0.3 (Dec 12 2011)</h6>
+
+<p><span style="color: rgb(0,0,0);">*</span> <span style="color: rgb(0,0,0);"><a href="https://issues.jenkins-ci.org/browse/JENKINS-11981" class="external-link" rel="nofollow">Passwords are now hidden</a></span> <span style="color: rgb(0,0,0);">(in job configuration screen and config.xml)</span></p>
+
+<p><span style="color: rgb(0,0,0);">*</span> <span style="color: rgb(0,0,0);"><a href="https://issues.jenkins-ci.org/browse/JENKINS-11874" class="external-link" rel="nofollow">Now works on master/slave environment</a></span></p>
+
+<p><span style="color: rgb(0,0,0);">* Some internal changes to support a future plugin to integrate with RTC's build system</span></p>
+
+<h6 id="RationalTeamConcertPlugin-Version0.2.2(Nov292011)">Version 0.2.2 (Nov 29 2011)</h6>
+
+<p><span style="color: rgb(0,0,0);">* Fixed timeout issue with large workspaces</span></p>
+
+<p><span style="color: rgb(0,0,0);">* Initial support for chinese version of 'scm' (not fully tested yet)</span></p>
+
+<h6 id="RationalTeamConcertPlugin-Version0.2.1(Nov162011)">Version 0.2.1 (Nov 16 2011)</h6>
+
+<p><span style="color: rgb(0,0,0);">* Fixed compatibility with older 'scm' versions</span></p>
+
+<h6 id="RationalTeamConcertPlugin-Version0.2(Nov142011)">Version 0.2 (Nov 14 2011)</h6>
+
+<p><span style="color: rgb(0,0,0);">* Fixed compatibility with Unix systems</span></p>
+
+<p><span style="color: rgb(0,0,0);">* Supporting 'scm' versions older than 2.1.0 (tested with 2.0.2)</span></p>
+
+<h6 id="RationalTeamConcertPlugin-Version0.1(Nov102011)">Version 0.1 (Nov 10 2011)</h6>
+
+<p><span style="color: rgb(0,0,0);">* Initial version</span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59506838/59899933.png">sysconf.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59506838/59899935.png">jobconf.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59506838/59899936.png">jobconf.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59506838/59899934.png">jobconf.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:41</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

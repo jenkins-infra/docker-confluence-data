@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Tricentis Continuous Integration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Tricentis Continuous Integration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sergey_oplavin)</span>, last modified by <span class='editor'> Unknown User (tricentis)</span> on Aug 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>The Tricentis Continuous Integration plugin integrates Jenkins with Tricentis Tosca CI. With this plugin, you can execute Tricentis Tosca tests via Jenkins.</p><p>To configure Jenkins for the execution of Tricentis Tosca tests, perform one of the following actions:</p><ul><li><a href="#TricentisContinuousIntegration-add_build_step">Add a new Tricentis Continuous Integration build step to your project.</a></li><li><a href="#TricentisContinuousIntegration-configure_pipeline">Configure your Jenkins pipeline for Tricentis Continuous Integration</a>.</li></ul><p>Once you have configured Jenkins for Tricentis Continuous Integration, <a href="#TricentisContinuousIntegration-execute_tests">execute your tests.</a></p><p><br/></p><p>For more information on Tricentis Tosca and Tosca Continuous Integration, see the following links:</p><ul><li><a href="https://www.youtube.com/watch?v=6469lMkeMiM" class="external-link" rel="nofollow">Tricentis Tosca in 60 seconds</a></li><li><a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/concept.htm" class="external-link" rel="nofollow">Tosca Continuous Integration documentation</a></li></ul><p>You can execute your tests via <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/set_up_ci_remote.htm" class="external-link" rel="nofollow">Tosca Remote Service</a> or <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/set_up_ci_dex.htm" class="external-link" rel="nofollow">Tosca Distributed Execution</a>.</p><p><br/><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Tricentis Continuous Integration <a href="https://plugins.jenkins.io/tricentis-ci" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><h2 id="TricentisContinuousIntegration-add_build_stepAddanewTricentisContinuousIntegrationbuildstep"><span style="color: rgb(0,51,102);"><span class="confluence-anchor-link" id="TricentisContinuousIntegration-add_build_step"></span>Add a new Tricentis Continuous Integration build step<br/></span></h2><p>To execute tests in Tricentis Tosca CI, add a new Tricentis Continuous Integration build step:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/143495387/177476572.png" data-image-src="attachments/143495387/177476572.png" data-unresolved-comment-count="0" data-linked-resource-id="177476572" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="TricentisCIPlugin-1.3.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143495387" data-linked-resource-container-version="21"></span></p><p><br/></p><div class="table-wrap"><table class="wrapped relative-table confluenceTable" style="width: 99.8903%;"><colgroup><col style="width: 15.5421%;"/><col style="width: 5.3837%;"/><col style="width: 79.0742%;"/></colgroup><tbody><tr><th class="confluenceTh"><span style="color: rgb(0,51,102);">Field name [pipeline property]</span></th><th style="text-align: center;" class="confluenceTh"><span style="color: rgb(0,51,102);">Required</span></th><th class="confluenceTh"><span style="color: rgb(0,51,102);">Description</span></th></tr><tr><td class="confluenceTd"><p>Tricentis client path</p><p>[tricentisClientPath]</p></td><td style="text-align: center;" class="confluenceTd">Yes</td><td class="confluenceTd"><p>Input the path to either the ToscaCIClient.exe or the ToscaCIJavaClient.jar file. This component is responsible for sending the execution request to your execution machines.</p><p>If you use ToscaCIJavaClient.jar, you need to install JRE 1.7 or higher on the Jenkins Slave machine and set the JAVA_HOME environment variable accordingly.</p></td></tr><tr><td class="confluenceTd"><p><span>Endpoint<br/></span></p><p><span>[endpoint]</span></p></td><td style="text-align: center;" class="confluenceTd">Yes</td><td class="confluenceTd"><p>Specify the address of the webservice. This component triggers the test execution.</p><p>If you execute your tests via <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/set_up_ci_remote.htm" class="external-link" rel="nofollow">Tosca Remote Service</a>, the endpoint needs to point to the TOSCARemoteExecutionService (e.g. <span class="nolink">http://servername:8732/TOSCARemoteExecutionService/).</span></p><p>If you execute your tests via <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/set_up_ci_dex.htm" class="external-link" rel="nofollow">Tosca Distributed Execution</a>, the endpoint needs to point to the Manager Service of the Tosca Distribution Server (e.g. <span class="nolink">http://servername:8732/DistributionServerService/ManagerService.svc</span>).</p></td></tr><tr><td colspan="1" class="confluenceTd"><p>TestEvents (Distributed Execution only)</p><p>[testEvents]</p></td><td style="text-align: center;" colspan="1" class="confluenceTd">No</td><td colspan="1" class="confluenceTd"><p>Input the <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=tosca_commander/creating_events.htm" class="external-link" rel="nofollow">TestEvents</a> that you want to execute, separated by semicolons. You can identify the TestEvents with their name or their <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/configure_execution_command_dex.htm" class="external-link" rel="nofollow">system ID</a>.</p><p>This field is optional. It can only be used if you execute your tests via Tosca Distributed Execution.</p><p>If you use this setting, leave the Configuration File setting of this page empty. Otherwise, this build step fails.</p></td></tr><tr><td class="confluenceTd"><p>Configuration file</p><p>[configurationFilePath]</p></td><td style="text-align: center;" class="confluenceTd">No</td><td class="confluenceTd"><p><span>Specify the path to the Tricentis CI <a href="https://support.tricentis.com/community/manuals_detail.do?lang=en&amp;url=continuous_integration/configure_execution_command.htm#CreatetheXMLfile" class="external-link" rel="nofollow">test execution configuration XML file</a>. The </span><span>test configuration file includes more details about which items you would like to execute.<br/></span></p><p><span>If you use this setting, leave the TestEvents setting of this page empty. Otherwise, this build step fails.</span></p></td></tr></tbody></table></div><h2 id="TricentisContinuousIntegration-configure_pipelineConfiguretheJenkinspipelineforTricentisContinuousIntegration"><span style="color: rgb(0,51,102);"><span class="confluence-anchor-link" id="TricentisContinuousIntegration-configure_pipeline"></span>Configure the Jenkins pipeline for Tricentis Continuous Integration<br/></span></h2><p>If you use <a href="https://jenkins.io/doc/book/pipeline/getting-started/" class="external-link" rel="nofollow">Jenkins Pipelines,</a> specify Tricentis Tosca build logic with pipeline script:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline configuration</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {    
+    agent any
+    stages {
+       stage(&#39;Build&#39;) {
+          steps {
+             tricentisCI tricentisClientPath: &#39;$COMMANDER_HOME\\ToscaCI\\Client\\ToscaCIClient.exe&#39;, configurationFilePath: &#39;configuration.xml&#39;, endpoint: &#39;http://localhost:8732/TOSCARemoteExecutionService/&#39;
+          }
+       }
+    }
+}</pre>
+</div></div><h2 id="TricentisContinuousIntegration-execute_testsExecutetests"><span style="color: rgb(0,51,102);"><span class="confluence-anchor-link" id="TricentisContinuousIntegration-execute_tests"></span>Execute tests<br/></span></h2><p>After you configure the job, run it.</p><h3 id="TricentisContinuousIntegration-Jenkinsjoboutputexample">Jenkins job output example</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/143495387/177476573.png" data-image-src="attachments/143495387/177476573.png" data-unresolved-comment-count="0" data-linked-resource-id="177476573" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="TricentisCIPlugin-1.3-ConsoleOutput.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143495387" data-linked-resource-container-version="21"></span></p><h3 id="TricentisContinuousIntegration-TricentisreportsautomaticallypublishedtoJenkins">Tricentis reports automatically published to Jenkins</h3><p><br/></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/143495387/143495422.png" data-image-src="attachments/143495387/143495422.png" data-unresolved-comment-count="0" data-linked-resource-id="143495422" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-8-22 12:39:16.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143495387" data-linked-resource-container-version="21"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/143495385.png">image2018-8-21 22:49:31.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/143495386.png">image2018-8-21 23:4:16.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/143495419.png">image2018-8-22 12:25:21.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/143495422.png">image2018-8-22 12:39:16.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/143495543.png">image2018-8-23 20:15:44.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/149946393.png">image.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/153354241.png">image2018-9-10_13-27-39.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/177475259.png">image2019-8-6_13-25-12.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/177476572.png">TricentisCIPlugin-1.3.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143495387/177476573.png">TricentisCIPlugin-1.3-ConsoleOutput.PNG</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:54</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

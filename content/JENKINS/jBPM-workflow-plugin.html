@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : jBPM workflow plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : jBPM workflow plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jsvitak)</span>, last modified on Mar 06, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View jBPM workflow <a href="https://plugins.jenkins.io/jbpm-workflow-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin implements a jBPM 5 build step, which can be used to execute a test plan described by a business process.</p>
+
+
+
+<h2 id="jBPMworkflowplugin-WhatisjBPMworkflowplugin?">What is jBPM workflow plugin?</h2>
+
+<p>jBPM workflow plugin implements a Jenkins build step. To learn more about possibilities and benefits of integration with jBPM, take a look <a href="jBPM-Integration-with-Jenkins.html">here</a>.</p>
+
+
+
+
+
+<h2 id="jBPMworkflowplugin-Currentstatus">Current status</h2>
+
+<p>The first version 0.3 has been released. It contains jBPM workflow plugin (new build step) and is able to run business processes, also with enabled persistence. Please note, that this plugin has not been tested in production environment.</p>
+
+
+
+
+
+<h2 id="jBPMworkflowplugin-Businessprocessconfiguration">Business process configuration</h2>
+
+<p>Plugin can be used to start BPMN 2.0 compliant business process definitions, but they have to be created first. For this purpose it is recommended to install and use jBPM. This suite contains web application Guvnor, which stores and makes available your business process definitions to your Jenkins master. Guvnor is bundled with Designer, a web tool for business process draft.</p>
+
+<p>Integration of jBPM business process with Jenkins is done via service tasks (work items). So you have to save your work item definition in Guvnor which describes interface of the new service task type. Then it is possible to draft business processes and use the new tasks on the canvas of the Designer. Service tasks represent asynchronous launch of Jenkins job. Asynchronous means that you can run multiple service tasks concurrently, one task does not block the engine execution. Current <code>JenkinsJob</code> work item definition can be added in Guvnor via the item <em>New work item definition</em> in <em>Knowledge Bases</em> menu on the left panel and looks like this (can also be found ﻿<a href="https://github.com/jsvitak/jbpm-workflow-plugin/blob/master/src/main/resources/META-INF/JenkinsJobWorkItemDefinition.wid" class="external-link" rel="nofollow">here</a>):</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+import org.drools.process.core.datatype.impl.type.ListDataType;
+import org.drools.process.core.datatype.impl.type.ObjectDataType;
+[
+  [
+    &quot;name&quot; : &quot;JenkinsJob&quot;,
+    &quot;displayName&quot; : &quot;Jenkins Job&quot;,
+    &quot;parameters&quot; : [
+      &quot;jobParameters&quot; : new ListDataType(),
+    ],
+    &quot;results&quot; : [
+      &quot;jobResult&quot; : new ObjectDataType(),
+    ],
+    &quot;icon&quot; : &quot;icons/jenkins20.png&quot;,
+  ]
+]
+</pre>
+</div></div>
+
+<p>While drafting business processes you may use every jBPM feature. Tasks representing Jenkins jobs are supplied with a job name and they return a job result. So make sure, that you have</p>
+<ul>
+	<li>declared correctly all process variables</li>
+	<li>set up input and output parameters of selected service task (it is not necessary to declare all of them, only the ones which are really used)</li>
+	<li>assigned/mapped constants and process variables to parameters of selected service task</li>
+</ul>
+
+
+<p>Several examples below are provided to see how to configure most typical use cases in process designer. It is assumed that you have successfully deployed all jBPM modules into JBoss application server. Next step is to open Guvnor web page, create a package and new BPMN 2.0 business process definition. Process designer will be opened and you can quickly create a simple business process using canvas and tool palettes. You have to remember process ID of your business process definition in order to use it by the plugin in Jenkins. Small knowledge of BPMN is required, so the use cases below describe only plugin specific configuration steps.</p>
+
+
+<h3 id="jBPMworkflowplugin-Settingupajobname">Setting up a job name</h3>
+
+<p>Select your work item of <code>JenkinsJob</code> type and go to properties panel on the right. Set a work item name - it must exactly match the name of your existing Jenkins job, for example <code>hello-job</code>.</p>
+
+
+<p>Once the jBPM process is invoked (by launching Jenkins job with jBPM plugin build step) and the process flow enters <code>JenkinsJob</code> work item, which has been already configured, then Jenkins job with the name <code>hello-job</code> will be launched.</p>
+
+<h3 id="jBPMworkflowplugin-Retrievingajobresult">Retrieving a job result</h3>
+
+<p>To be able to launch a Jenkins job, you have to specify a job name first. After that you are able to retrieve a job result. First add a new import for Jenkins result representation:</p>
+
+
+<p><code>hudson.model.Result</code></p>
+
+
+<p>Add a process variable result of <em>Standard Type</em> Object in the <em>Variable Definitions</em> field of the process <em>Properties</em> panel. <em>Custom Type</em> <code>Result</code> is not necessary to fill.</p>
+
+
+<p><code>result:Object</code></p>
+
+
+<p>Select a JenkinsJob work item and open data output editor by clicking on <em>DataOutputSet</em> field in <em>More Properties</em> of <em>Properties</em> panel. Add a new data output with name <code>jobResult</code> and type <code>Object</code>.</p>
+
+
+<p><code>jobResult:Object</code></p>
+
+
+<p>Open assignments editor by clicking on <em>Assignments</em> field in <em>More properties</em> of <em>Properties</em> panel. Set <em>From Object</em> as <code>jobResult</code>, <em>Assignment Type</em> as is mapped to and <em>To Object</em> as <code>result</code>. Your final assignments might look like:</p>
+
+
+<p><code>jobResult-&gt;result</code></p>
+
+
+<p>Now you are able to evaluate results of finished Jenkins jobs. This can be done for example in constraints of gateway branches. If the constraint expression is evaluated as true, then the process flow continues in satisfied branches. This can be done in the following example ways:</p>
+
+
+<p><code>return ((Result)(kcontext.getVariable(&quot;result&quot;))).isBetterThan(Result.FAILURE);</code></p>
+
+
+<p>or</p>
+
+
+<p><code>return ((Result)(kcontext.getVariable(&quot;result&quot;))).isWorseOrEqualTo(Result.FAILURE);</code></p>
+
+
+<p>If you do not want to specify branch constraints, then you can also pass the result object for example to a human task to let the tester decide in which flow branch the engine should continue.</p>
+
+<p>Know that <a href="http://javadoc.jenkins-ci.org/hudson/model/Result.html" class="external-link" rel="nofollow">Result</a> is a Jenkins class for representing result and contains static instances of all result types - <code>SUCCESS, UNSTABLE, FAILURE, NOT_BUILT, ABORTED</code>.  Their ordering is important. You can easily compare against these result types using the following methods:</p>
+
+<p><code>public boolean isWorseThan(Result that)</code><br/>
+<code>public boolean isWorseOrEqualTo(Result that)</code><br/>
+<code>public boolean isBetterThan(Result that)</code><br/>
+<code>public boolean isBetterOrEqualTo(Result that)</code></p>
+
+<h3 id="jBPMworkflowplugin-Settingupaparameterizedjob">Setting up a parameterized job</h3>
+
+<p>In the process configuration add several imports, just click on <em>Add Import</em> button and fill in:</p>
+
+<p><code>hudson.model.StringParameterValue</code><br/>
+<code>java.util.List</code><br/>
+<code>java.util.ArrayList</code></p>
+
+
+<p>Also set process variables, at least variable parameters which is of type Object, you do not have to set <em>Custom Type</em>.</p>
+
+
+<p><code>parameters:Object</code></p>
+
+
+<p>Write a Java code which fills this parameters process variable with a data that should be supplied to a parameterized Jenkins job.</p>
+
+
+<p><code>List params = new ArrayList();</code><br/>
+<code>params.add(new StringParameterValue(&quot;VERSION&quot;, &quot;5.3.0&quot;));</code><br/>
+<code>kcontext.setVariable(&quot;parameters&quot;, params);</code></p>
+
+
+<p>Now the parameters will be a process variable of type List which can be mapped to an input of a work item which launches a Jenkins job. Since the jBPM workflow plugin uses simple Janino Java compiler, you cannot use generics, like in the example above.</p>
+
+<h3 id="jBPMworkflowplugin-Settingupapersistence">Setting up a persistence</h3>
+
+<p>Persistence can be enabled in the global configuration page in Jenkins. It has been tested only on JBoss AS 7, but any other container that supports data source, which is accessible via JNDI might be possible to use as well. Unfortunately this feature won't work now in Winstone. Persistence was one of the hardest things to implement as there were many classloading problems and conflicts. Simply said it was maybe a bad idea to integrate such large and complex applications like jBPM and Jenkins in Java code.</p>
+
+
+<h3 id="jBPMworkflowplugin-SettingupanintegrationwithLDAP">Setting up an integration with LDAP</h3>
+
+<p>Integration with LDAP matters only to jBPM suite itself. jBPM supports integration with LDAP, so that users from the LDAP can be used for jBPM authentication. The goal is that only selected people are allowed to modify selected business process packages or to claim specified human tasks (like a decision in a selected test plan).</p>
+
+
+
+
+<h2 id="jBPMworkflowplugin-Jenkinsjobconfiguration">Jenkins job configuration</h2>
+
+<p>It is assumed that you already have some jobs in your Jenkins server. To control their launching using business processes you have to create a free style Jenkins job and add a new build step <em>Invoke a jBPM business process</em>. In this build step specify a URL to your business process definition. To ease this, see the attached help icon with a sample URL, which points to Guvnor location at localhost server, but you can easily change it to your own URL. The idea is to download business processes from your jBPM server repository (Guvnor) using WebDAV protocol.</p>
+
+
+<p>It is also necessary to fill in a process identifier. It is useful to adhere a convention like: my.package.process1.</p>
+
+<p>All inputs are validated, so you'll be notified about wrong or empty URLs.</p>
+
+<h1 id="jBPMworkflowplugin-Problems">Problems</h1>
+
+<ul>
+	<li>Plugin has not been tested in production environment.</li>
+	<li>Only testing was done on JBoss AS 7 with disabled JPA subsystem (classloading issues).</li>
+	<li>Requires a container with configured data source accesible via JNDI to use benefit of business process persistence. That means no persistence available with default Winstone container.</li>
+	<li>It's necessary to create additional job for each test plan (test plan corresponds to business process).</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

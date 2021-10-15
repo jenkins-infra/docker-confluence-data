@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Choosing Jenkins version to build against</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Choosing Jenkins version to build against
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (drekbour)</span> on Dec 09, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Your plugin's POM controls which version of Jenkins it is building/testing against.</p><h3 id="ChoosingJenkinsversiontobuildagainst-Choosingaversion">Choosing a version</h3><p>You need to balance compatibility and features:</p><ul><li><strong>Keeping the Jenkins version your plugin builds against low</strong> will allow more users to install and use your plugin. In particular, the <a href="https://jenkins.io/download/lts/" class="external-link" rel="nofollow">LTS Release Line</a> is based on slightly older releases to provide a more stable experience for conservative users.</li><li><strong>Building against recent Jenkins versions</strong> allows you to use recently added core features and API from your plugin. You will also use that newer version for <code>mvn hpi:run</code>, so it may be easier to test your plugin with newer Jenkins releases. Additionally, since features are sometimes moved from core into plugins, depending on a more recent Jenkins version will make your plugin's dependencies on what used to be core features explicit, otherwise your plugin will not work.</li></ul><p>There are <a href="http://stats.jenkins.io/plugin-installation-trend/capabilities.json" class="external-link" rel="nofollow">statistics how many users have at least a specific version of Jenkins</a> that can help you decide. These are updated monthly.</p><p>There are also <a href="http://stats.jenkins.io/plugin-installation-trend/jenkins-version-per-plugin-version.json" class="external-link" rel="nofollow">statistics of core versions used by plugins</a> to help you select a popular core version.</p><p><img class="emoticon emoticon-question" src="images/icons/emoticons/help_16.svg" data-emoticon-name="question" alt="(question)"/> General tip: When upgrading, choose the newest <a href="https://jenkins.io/changelog-stable/" class="external-link" rel="nofollow">LTS version</a> that doesn't alienate the majority of users of your latest few releases (by requiring a newer Jenkins than they have).</p><h3 id="ChoosingJenkinsversiontobuildagainst-TodependonareleasedversionofJenkins">To depend on a released version of Jenkins</h3><p>If your are using the Plugin Parent POM version 2.3 or later, just set the <code>jenkins.version</code> property to the version you need to depend on. For 1.x versions of the Plugin Parent POM, change project/parent/version to the version of Jenkins/Hudson you want to depend on. For parent version 1.396 or higher use groupId <code>org.jenkins-ci.plugins</code>. Up through 1.395 the groupId was <code>org.jvnet.hudson.plugins</code>.</p><h3 id="ChoosingJenkinsversiontobuildagainst-Todependonthelatestbleeding-edgetrunk(orRC)">To depend on the latest bleeding-edge trunk (or RC)</h3><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This is probably only useful in the early stages of plugin development, or when implementing a new feature that needs a very new core feature/API.</p></div></div><p>First, you'd need to <a href="Building-Jenkins.html">build the trunk or RC of Jenkins by yourself</a>.</p><p>Then, go back to your plugin, and if your are using the Plugin Parent POM version 2.2 or later, just set the <code>jenkins.version</code> property to the version number of Jenkins you just built. It should look something like &quot;1.646-SNAPSHOT&quot;.If your are using an 1.x version copy the following fragments into your POM's &lt;dependencies&gt; section, then replace the &lt;version&gt; tag to the version number of Jenkins you just built.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;org.jenkins-ci.main&lt;/groupId&gt;
+      &lt;artifactId&gt;jenkins-war&lt;/artifactId&gt;
+      &lt;type&gt;war&lt;/type&gt;
+      &lt;version&gt;1.646-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jenkins-ci.main&lt;/groupId&gt;
+      &lt;artifactId&gt;jenkins-core&lt;/artifactId&gt;
+      &lt;version&gt;1.646-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jenkins-ci.main&lt;/groupId&gt;
+      &lt;artifactId&gt;jenkins-test-harness&lt;/artifactId&gt;
+      &lt;version&gt;1.646-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+</pre>
+</div></div><div id="expander-1563206036" class="expand-container"><div id="expander-control-1563206036" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">See for older versions pre version 1.395</span></div><div id="expander-content-1563206036" class="expand-content"><p>It should look something like &quot;1.345-SNAPSHOT&quot;.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;org.jvnet.hudson.main&lt;/groupId&gt;
+      &lt;artifactId&gt;hudson-war&lt;/artifactId&gt;
+      &lt;type&gt;war&lt;/type&gt;
+      &lt;version&gt;1.345-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jvnet.hudson.main&lt;/groupId&gt;
+      &lt;artifactId&gt;hudson-core&lt;/artifactId&gt;
+      &lt;version&gt;1.345-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jvnet.hudson.main&lt;/groupId&gt;
+      &lt;artifactId&gt;hudson-test-harness&lt;/artifactId&gt;
+      &lt;version&gt;1.345-SNAPSHOT&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+</pre>
+</div></div></div></div><p>When you do this, your parent POM version still control a few small aspects of the build, so it'd be good to keep that version as close as possible.</p><p>You should commit this change to the repository, so that others working on the same plugin would notice that they'd need to build the trunk, too. Once the new release comes along, you can delete this fragment and go back to the &quot;specify the Jenkins version by the parent version&quot; mode.</p><p>Note that while your plugin depends on a non-release version of Jenkins, Maven will refuse to let you release a plugin.</p><p>You may also need:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre> &lt;dependency&gt;
+   &lt;groupId&gt;org.jenkins-ci.main&lt;/groupId&gt;
+   &lt;artifactId&gt;maven-plugin&lt;/artifactId&gt;
+   &lt;version&gt;1.345-SNAPSHOT&lt;/version&gt;
+ &lt;/dependency&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

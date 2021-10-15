@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : MQ Notifier Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : MQ Notifier Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (t_westling)</span>, last modified by <span class='editor'> Unknown User (gustafl)</span> on Nov 16, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    
+
+<p>This plugin sends messages to an MQ, e.g. RabbitMQ whenever a build is started and finished. It also sends a message when a build enters and leaves the queue.<br/>
+By extending this plugin, developers can add events for when to send messages to MQ.</p>
+
+
+
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View MQ Notifier <a href="https://plugins.jenkins.io/mq-notifier" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-972" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks</a></li>
+</ul>
+
+</div></div>
+
+
+<h3><a name="MQNotifierPlugin-Generalinformation"></a>General information</h3>
+
+<p>The plugin connects to an MQ, e.g. RabbitMQ and sends messages during specific events. In its first version, the messages are sent when:</p>
+<ul>
+	<li>A build is added to the queue</li>
+	<li>A build leaves the queue (either to be built or is cancelled)</li>
+	<li>A build starts</li>
+	<li>A build finishes (either when the build is finished or when it is aborted)</li>
+</ul>
+
+
+<p>The basic use case is for other systems to interact with Jenkins. An example is a system that triggers a build using the rest API of Jenkins,<br/>
+then waits for the build to finish. The system wants to present information about these builds. The alternative to listening to an MQ is for the system<br/>
+to continuously poll Jenkins for information of the build status.</p>
+
+<p>Other events can be added to the plugin by extending it.</p>
+
+
+<h3><a name="MQNotifierPlugin-Messageformat"></a>Message format</h3>
+
+
+<h5><a name="MQNotifierPlugin-Enteringqueue"></a>Entering queue</h5>
+
+<p>"state":"QUEUED","url":"http://urltojenkins:port/jenkins/job/myjob/","parameters":"["parameter1":"parametervalue","parameter2":"otherparametervalue"]"</p>
+
+
+<h5><a name="MQNotifierPlugin-Leavingqueue"></a>Leaving queue</h5>
+
+<p>"state":"DEQUEUED","DEQUEUE_REASON":"BUILDING","url":"http://urltojenkins:port/jenkins/job/myjob/","parameters":{"parameter1":"parametervalue","parameter2":"otherparametervalue"}</p>
+
+
+<h5><a name="MQNotifierPlugin-Buildstarted"></a>Build started</h5>
+
+<p>"state":"STARTED","url":"http://urltojenkins:port/jenkins/job/myjob/buildnumber/","causes":{"UserIdCause", "Started by user Bunny McQueen"},"parameters":{"parameter1":"parametervalue","parameter2":"otherparametervalue"}</p>
+
+<h5><a name="MQNotifierPlugin-Buildfinished"></a>Build finished</h5>
+
+<p>"state":"COMPLETED","url":"http://urltojenkins:port/jenkins/job/myjob/buildnumber/","status":"SUCCESS","parameters":{"parameter1":"parametervalue","parameter2":"otherparametervalue"}</p>
+
+<h3><a name="MQNotifierPlugin-Settings"></a>Settings</h3>
+
+<p><span class="image-wrap" style=""><img src="attachments/98009293/98238468.png" style="border: 1px solid black"/></span></p>
+
+<p>The settings are all MQ-related. The only required settings are the MQ URI, for where to find the MQ server and Exchange name,<br/>
+for where to send the messages inside the MQ. The other settings are all optional and related to your MQ setup, you can read more<br/>
+about them at e.g. the RabbitMQ site here: <a href="https://www.rabbitmq.com/documentation.html" class="external-link" rel="nofollow">RabbitMQ docs</a></p>
+
+
+
+
+<h2><a name="MQNotifierPlugin-ChangeLog"></a>Change Log</h2>
+
+<h4><a name="MQNotifierPlugin-Version1.2.8(releasedNov16,2018)"></a>Version 1.2.8 (released Nov 16, 2018)</h4>
+
+
+<p>Pipeline Step to allow publishing of arbitrary messages</p>
+<h4><a name="MQNotifierPlugin-Version1.2.7(releasedSep25,2018)"></a>Version 1.2.7 (released Sep 25, 2018)</h4>
+
+<p><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-972" class="external-link" rel="nofollow">Fix security issue</a></p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.6(releasedMar06,2018)"></a>Version 1.2.6 (released Mar 06, 2018)</h4>
+
+<p>Refactoring some code to easier allow other plugins to easier send standalone messages to RabbitMQ.</p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.5(releasedMar06,2018)"></a>Version 1.2.5 (released Mar 06, 2018)</h4>
+<p> <br/>
+Add an option to disable/enable the plugin (Thanks Huaxing Sun)</p>
+
+<p><strong>Please note:</strong> After upgrade and initial restart the plugin will not be enabled. Go to Configure Jenkins -&gt; Enable Notifier in the 'MQ Notifier' section.</p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.4(releasedOct02,2017)"></a>Version 1.2.4 (released Oct 02, 2017)</h4>
+
+<p>Add "Build Duration" time to the published AMQP event.</p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.3(releasedJune08,2017)"></a>Version 1.2.3 (released June 08, 2017)</h4>
+
+<p>Added a null check to fix NullPointerExceptions in the CauseProvider</p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.2(releasedMay22,2017)"></a>Version 1.2.2 (released May 22, 2017)</h4>
+
+<p>Collect additional build and host data (project names, jenkins master fqdn)<br/>
+Collect data about time spent in queue and assigned label</p>
+
+<h4><a name="MQNotifierPlugin-Version1.2.1(releasedFeb16,2017)"></a>Version 1.2.1 (released Feb 16, 2017)</h4>
+<p>Added an extension point for providing data to the notifier</p>
+
+
+<h4><a name="MQNotifierPlugin-Version1.2.0(releasedDec22,2016)"></a>Version 1.2.0 (released Dec 22, 2016)</h4>
+
+<p>Support for pipeline projects</p>
+
+
+<h4><a name="MQNotifierPlugin-Version1.1.5(releasedDec09,2016)"></a>Version 1.1.5 (released Dec 09, 2016)</h4>
+
+<p>Added internal queue for when connection to MQ is down.<br/>
+Several fixes regarding saving of the configuration.<br/>
+Build parameters added to all of the existing messages.</p>
+
+<h4><a name="MQNotifierPlugin-Version1.0(releasedMay18,2016)"></a>Version 1.0 (released May 18, 2016)</h4>
+
+<p>Initial release</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009293/98238468.png">rmq.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

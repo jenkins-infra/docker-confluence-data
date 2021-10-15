@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : JBoss</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Installing-Jenkins.html">Installing Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Containers.html">Containers</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : JBoss
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (hiro345)</span>, last modified on Apr 07, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="JBoss-目次">目次</h1>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1632930777271 {padding: 0px;}
+div.rbtoc1632930777271 ul {list-style: disc;margin-left: 0px;padding-left: 20px;}
+div.rbtoc1632930777271 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1632930777271'>
+<ul class='toc-indentation'>
+<li><a href='#JBoss-目次'>目次</a></li>
+<li><a href='#JBoss-インストール'>インストール</a>
+<ul class='toc-indentation'>
+<li><a href='#JBoss-JBossApplicationserver4.2またはEAP4.2へのインストール'> JBoss Application server 4.2 または EAP 4.2 へのインストール</a></li>
+<li><a href='#JBoss-JENKINS_HOMEの設定'> JENKINS_HOME の設定</a></li>
+<li><a href='#JBoss-jenkins.warの配備'> jenkins.war の配備</a></li>
+<li><a href='#JBoss-JBossServerの起動'> JBoss Server の起動</a></li>
+<li><a href='#JBoss-JenkinsGUIへのアクセス'> Jenkins GUI へのアクセス</a></li>
+</ul>
+</li>
+<li><a href='#JBoss-追加の設定'>追加の設定</a>
+<ul class='toc-indentation'>
+<li><a href='#JBoss-JBossstartup'>JBoss startup</a></li>
+<li><a href='#JBoss-セキュアなJenkins'>セキュアな Jenkins</a>
+<ul class='toc-indentation'>
+<li><a href='#JBoss-コンテナへの権限付与委任時のログイン設定'> コンテナへの権限付与委任時のログイン設定</a></li>
+<li><a href='#JBoss-JBossASでの権限付与とセキュリティの設定'> JBoss AS での権限付与とセキュリティの設定</a></li>
+<li><a href='#JBoss-SSLへのログインリダイレクトを設定'> SSLへのログインリダイレクトを設定</a></li>
+</ul>
+</li>
+<li><a href='#JBoss-Jenkins(JBoss)HTTP用ポート'>Jenkins (JBoss) HTTP 用ポート</a></li>
+<li><a href='#JBoss-コンテキストルートとバーチャルホスト'>コンテキストルートとバーチャルホスト</a></li>
+</ul>
+</li>
+<li><a href='#JBoss-リンク'>リンク</a></li>
+</ul>
+</div>
+
+<h1 id="JBoss-インストール">インストール</h1>
+
+
+<h2 id="JBoss-JBossApplicationserver4.2またはEAP4.2へのインストール"> JBoss Application server 4.2 または EAP 4.2 へのインストール</h2>
+
+<p> <a href="http://www.jboss.org/jbossas/downloads" class="external-link" rel="nofollow">ここ</a> からダウンロードします。普通にインストールします。zipで配布されているものなら、好きなディレクトリへ展開するだけです。</p>
+
+<p>JBoss Application Server をインストールしたら、jboss-4.2.X.GA という名前のディレクトリができているはずです。ここで X は、あなたがダウンロードしたサーバのマイナーバージョンです。現時点での最新版は 4.2.1 です。
+<br class="atl-forced-newline"/>
+もし、JBoss EAP 4.2 をインストールしたのなら、jboss-eap-4.2 という名前のディレクトリができているはずです。
+<br class="atl-forced-newline"/>
+ここでは、あなたがインストールした &quot;jboss-eap-4.2/jboss-as&quot; もしくは jboss-4.2.X.GA のディレクトリを $JBOSS_HOME と表記することにします。</p>
+
+<h2 id="JBoss-JENKINS_HOMEの設定"> JENKINS_HOME の設定</h2>
+
+<p>JBoss Server を起動する前に、<em>export JENKINS_HOME=&lt;some dir&gt;</em> (UNIX) とするか <em>set JENKINS_HOME=&lt;some dir&gt;</em> (Windows) としてください。</p>
+
+<h2 id="JBoss-jenkins.warの配備"> jenkins.war の配備</h2>
+
+<p>jenkins war を &quot;$JBOSS_HOME/server/&lt;your server&gt;/deploy&quot; へコピーします。通常は &lt;your server&gt; は &quot;default&quot; を利用しますが、&quot;production&quot; も利用可能です。ただし、その場合は、JBoss EAP をインストールしていて、2G以上のメモリが必要です。</p>
+
+<h2 id="JBoss-JBossServerの起動"> JBoss Server の起動</h2>
+
+<p>cd  $JBOSS_HOME
+<br class="atl-forced-newline"/>
+bin/run.sh -b 0.0.0.0 -c  &lt;your server&gt;
+<br class="atl-forced-newline"/>
+<strong>重要!</strong> もしセキュリティの確保が必要（jenkins security を有効化にして、信頼できないネットワークに接続している場合など）なら、jmxとwebコンソールについて、サーバそれぞれの方式に従って安全になっているかの確認をしてから、サーバを起動してください。JBoss EAP はデフォルトでは安全ですが、コミュニティがリリースしている&quot;getting started&quot; に従って一通り確認するのが良いでしょう。確認できるまでは、サーバを起動するときに &quot;-b 127.0.0.1&quot; をつけて、ローカルホストからのみのアクセス許可としましょう。</p>
+
+<h2 id="JBoss-JenkinsGUIへのアクセス"> Jenkins GUI へのアクセス</h2>
+
+<p>ブラウザから http://&lt;machine name&gt;:8080/jenkins を開きます。</p>
+
+<h1 id="JBoss-追加の設定">追加の設定</h1>
+
+
+<h2 id="JBoss-JBossstartup">JBoss startup</h2>
+
+<p>JBossをjenkinsのコンテナとして起動する場合、次の2つのオプション指定を推奨します。&quot;<strong><span style="text-decoration: underline;">-Djava.awt.headless=true</span></strong>&quot; と &quot;<strong><span style="text-decoration: underline;">-Xmx&lt;some reasonable value&gt;</span></strong>&quot; を指定しましょう。<br/>
+最初のオプションは X サーバが有効となっていない UNIX環境で jenkins を利用するときに、無用なトラブルに会わないために必要です。headless モードに関する詳細情報は <a href="http://java.sun.com/developer/technicalArticles/J2SE/Desktop/headless" class="external-link" rel="nofollow">こちら。</a><br/>
+次のオプションはサーバで利用可能なメモリの設定です。これは、どんな jenkins プラグインをjobsで利用するかに依存します（原文：Then setting maximum available memory for use by the server depends on jobs that will be executed as well jenkins plug-ins that get used.）。junitレポートプラグインでメモリ不足に出会ったことがあります。巨大なレポートを出力するのに非常に大量のメモリが必要になるというものでした。スレーブとのコミュニケーションをハンドリングするために、十分なメモリが必要であることを考慮してください（原文：Keep in mind that you will need to have enough memory to handle communications with slaves. ）。そして、OOM（Out Of Memory、メモリ不足）が発生したときは、マスターで発生したのか、スレーブから発生したのか、必ず理解するようにしましょう（原文：And when getting OOM be sure to understand where does it come from - master or slave.）。jobごとの大量なjunitテストをこなせるようにするには、マスターとスレーブの両方のメモリーを増量する必要がありました。</p>
+
+<p>これらのオプションをjenkinsへ渡すために、環境変数 JAVA_OPTS を使うことができます:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Linux: export JAVA_OPTS=&quot;$JAVA_OPTS -Djava.awt.headless=true -Xmx&lt;必要と思われる値&gt;&quot;
+
+Windows: set JAVA_OPTS=%JAVA_OPTS% -Djava.awt.headless=true -Xmx&lt;必要と思われる値&gt;
+</pre>
+</div></div>
+<p>既存の環境変数設定とは別の環境変数を指定して子プロセス（job はそれらのうちのひとつ）を実行するために、run.sh/bat を修正することもできます。run.sh/batを修正しないで、私は次のような怪しいbashスクリプトを使っています:（原文：As well you can modify run.sh/bat to avoid having that environment variable set for the child processes (jobs are one of them) you run. I use the following ugly bash script to avoid modifying that:）
+<br class="atl-forced-newline"/></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#!/bin/bash
+
+if [[ `dirname &quot;$0&quot;` != &quot;.&quot; ]]; then
+   cd `dirname &quot;$0&quot;` || exit 2
+   exec $SHELL -- `basename &quot;$0&quot;` &quot;$@&quot;
+fi
+
+(
+JAVA_OPTS=&quot;$JAVA_OPTS -Djava.awt.headless=true $MAX_JAVA_MEM&quot;
+cd $JBOSS_HOME/bin
+. run.sh -c default -b 0.0.0.0 -u $MCAST_ADDR -g Jenkins
+) &amp;&gt; ~/jenkins.log &lt; /dev/null &amp;
+</pre>
+</div></div>
+<p>JBOSS_HOME と MAX_JAVA_MEM の値についても確認しておきましょう。</p>
+
+<h2 id="JBoss-セキュアなJenkins">セキュアな Jenkins</h2>
+
+
+<h3 id="JBoss-コンテナへの権限付与委任時のログイン設定"> コンテナへの権限付与委任時のログイン設定</h3>
+
+<p><strong>詳細で完全なドキュメントは次を参照すること</strong> <a href="http://www.jboss.org/community/docs/DOC-12188" class="external-link" rel="nofollow">http://www.jboss.org/community/docs/DOC-12188</a></p>
+
+<p>ここでは、簡易な方法のひとつについて解説します。ローカルインストールやJenkins専用のJBossサーバにおいては適切な方法です。もちろん、あなたが必要とする権限付与機構のどんなものでも実装をすることができます。さらなる情報は、JBossのマニュアルページを参照してください。ユーザフォーラムやメーリングリストは<a href="http://www.jboss.org" class="external-link" rel="nofollow">手助け</a>を得るための最善の場所です。
+<br class="atl-forced-newline"/></p>
+
+<p>最初にjenkinsを展開したものを配備する必要があります:</p>
+<ul>
+	<li>cd $JBOSS_HOME/server/&lt;your server&gt;/deploy/</li>
+	<li>mkdir jenkins.war</li>
+	<li>unzip &lt;path&gt;/jenkins.war</li>
+	<li>cd jenkins.war/WEB-INF</li>
+	<li>次の内容で jboss-web.xml ファイルを作成:</li>
+</ul>
+
+
+<p><em>            &lt;jboss-web&gt;</em><em>                &lt;security-domain&gt;java:/jaas/jmx-console&lt;/security-domain&gt;</em><em>            &lt;/jboss-web&gt;</em></p>
+
+<h3 id="JBoss-JBossASでの権限付与とセキュリティの設定"> JBoss AS での権限付与とセキュリティの設定</h3>
+
+
+<ul>
+	<li>JBoss Enterprise Application Platform を利用する際に必要な作業ステップのほとんどはすでにされています。</li>
+	<li>cd  $JBOSS_HOME/server/&lt;your server&gt;/conf/props</li>
+	<li>&quot;jenkins=admin&quot; を jmx-console-roles.properties ファイルへ追加</li>
+	<li>&quot;jenkins=passwd&quot; を jmx-console-users.propertiesファイルへ追加</li>
+	<li>サーバ再起動<br/>
+その後:</li>
+	<li>セキュリティを有効化</li>
+	<li>ユーザ &quot;jenkins&quot; でログイン。パスワードは &quot;passwd&quot;</li>
+</ul>
+
+
+<p>jmx と web コンソールを安全にする:</p>
+<ul>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/conf/login-config.xml を編集
+	<ul>
+		<li>&quot;&lt;application-policy name = &quot;jmx-console&quot;&gt;&quot; の行をコメントからはずし有効化</li>
+		<li>&quot;&lt;application-policy name = &quot;web-console&quot;&gt;&quot; の行をコメントからはずし有効化</li>
+	</ul>
+	</li>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/jmx-console.war/WEB-INF/jboss-web.xmlを編集
+	<ul>
+		<li>&lt;security-domain&gt; をコメントからはずし有効化</li>
+	</ul>
+	</li>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/jmx-console.war/WEB-INF/web.xmlを編集
+	<ul>
+		<li>&quot;A security constraint that restricts access...&quot; の行の後をコメントからはずし有効化</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xmlを編集
+	<ul>
+		<li>&lt;security-domain&gt;をコメントからはずし有効化</li>
+	</ul>
+	</li>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xmlを編集
+	<ul>
+		<li>&quot;A security constraint that restricts access...&quot;の行の後をコメントからはずし有効化</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>jmx-invokerを安全にする:</p>
+<ul>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/jmx-invoker-service.xmlを編集
+	<ul>
+		<li>&quot;Uncomment to require authenticated users&quot;の行の後をコメントからはずし有効化</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>HTTP-invokerを安全にする:</p>
+<ul>
+	<li>$JBOSS_HOME/server/&lt;your server&gt;/deploy/http-invoker.sar/invoker.war/WEB-INF/web.xmlを編集
+	<ul>
+		<li>&lt;web-resource-name&gt;HttpInvokers&lt;/web-resource-name&gt; を見つける</li>
+		<li>次の &lt;url-pattern&gt; 要素を追加
+		<ul>
+			<li>&lt;url-pattern&gt;/JNDIFactory/*&lt;/url-pattern&gt;</li>
+			<li>&lt;url-pattern&gt;/EJBInvokerServlet/*&lt;/url-pattern&gt;</li>
+			<li>&lt;url-pattern&gt;/JMXInvokerServlet/*&lt;/url-pattern&gt;</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>You did twice the same so now you might be able to setup a different security domain for your jenkins installation and not &quot;jmx-console&quot; what  I suggest above (see creating jboss-web.xml). See links below for more.</p>
+
+<h3 id="JBoss-SSLへのログインリダイレクトを設定"> SSLへのログインリダイレクトを設定</h3>
+
+
+<p> 最初にSSLコネクタの設定が必要です。Please refer to  <span style="color: rgb(75,117,139);">[</span><span style="color: rgb(75,117,139);"><a class="external-link" href="http://www.jboss.org/community/docs/DOC-11989" rel="nofollow">http://www.jboss.org/community/docs/DOC-11989</a></span>|http://www.jboss.org/community/docs/DOC-11989] which is a thorough resource if you cannot get it going with the commented out example configuration.<br/>
+設定したら、jenkins用 web.xml に次の記載が必要です:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">   &lt;security-constraint&gt;
+    &lt;web-resource-collection&gt;
+      &lt;web-resource-name&gt;Jenkins&lt;/web-resource-name&gt;
+      &lt;url-pattern&gt;/loginEntry&lt;/url-pattern&gt;
+      &lt;url-pattern&gt;/login&lt;/url-pattern&gt;
+      &lt;!--http-method&gt;GET&lt;/http-method--&gt;
+    &lt;/web-resource-collection&gt;
+    &lt;auth-constraint&gt;
+      &lt;role-name&gt;*&lt;/role-name&gt;
+    &lt;/auth-constraint&gt;
+    &lt;user-data-constraint&gt;
+      &lt;transport-guarantee&gt;CONFIDENTIAL&lt;/transport-guarantee&gt;
+    &lt;/user-data-constraint&gt;
+  &lt;/security-constraint&gt;
+</pre>
+</div></div>
+
+<h2 id="JBoss-Jenkins(JBoss)HTTP用ポート">Jenkins (JBoss) HTTP 用ポート</h2>
+
+<p>$JBOSS_HOME/server/&lt;your server&gt;/deploy/jboss-web.deployer/server.xml を編集して `&lt;Connector port=&quot;8080&quot;' を `&lt;Connector port=&quot;&lt;使いたいポート番号&gt;&quot;'に変更します。</p>
+
+<h2 id="JBoss-コンテキストルートとバーチャルホスト">コンテキストルートとバーチャルホスト</h2>
+
+<p>jboss-web.xmlを修正することで、&quot;/jenkins&quot;ではなく&quot;/&quot; で動作させることができます。</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;context-root&gt;/&lt;/context-root&gt; &lt;!-- コンテキストルートへ配備 - 非推奨 - 下記参照 --&gt;
+&lt;virtual-host&gt;host.example.com&lt;/virtual-host&gt; &lt;!-- 特定のバーチャルホストを指定したい場合 --&gt;
+</pre>
+</div></div>
+<p>&quot;/jenkins&quot;の下に配備されたものはそのままにしておいた方が良い。さもないといくつかのロケーションにアクセスできなくなります。両方を満たすためには、便利で使いやすいシンプルリダイレクションが使えます。そのためには、JBossサーバのデプロイディレクトリへ、次のファイルを作成してください。:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre> redirect-jenkins.war/redirect.jsp
+ redirect-jenkins.war/WEB-INF/jboss-web.xml
+ redirect-jenkins.war/WEB-INF/web.xml
+</pre>
+</div></div>
+<p> redirect.jsp に次の内容を含めること:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;%
+  response.sendRedirect(&quot;/jenkins&quot;);
+%&gt;
+</pre>
+</div></div>
+<p>jboss-web.xml に次の内容を含めること:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;jboss-web&gt;
+    &lt;context-root&gt;/&lt;/context-root&gt;
+    &lt;!-- &lt;virtual-host&gt;jenkins.example.com&lt;/virtual-host&gt; --&gt;
+&lt;/jboss-web&gt;
+</pre>
+</div></div>
+<p>web.xml は次のような内容にすること:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;web-app xmlns=&quot;http://java.sun.com/xml/ns/j2ee&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd&quot; version=&quot;2.4&quot;&gt;
+
+  &lt;display-name&gt;Redirecting to Jenkins&lt;/display-name&gt;
+  &lt;description&gt;
+     Redirecting to Jenkins.
+  &lt;/description&gt;
+
+  &lt;welcome-file-list&gt;
+     &lt;welcome-file&gt;redirect.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+
+&lt;/web-app&gt;
+</pre>
+</div></div>
+
+<h1 id="JBoss-リンク">リンク</h1>
+
+<p><br class="atl-forced-newline"/></p>
+<ul>
+	<li><a href="http://wiki.jboss.org/wiki/Wiki.jsp?page=SecureAWebApplicationInJBoss" class="external-link" rel="nofollow">http://wiki.jboss.org/wiki/Wiki.jsp?page=SecureAWebApplicationInJBoss</a></li>
+	<li><a href="http://wiki.jboss.org/wiki/Wiki.jsp?page=SecureTheJmxConsole" class="external-link" rel="nofollow">http://wiki.jboss.org/wiki/Wiki.jsp?page=SecureTheJmxConsole</a></li>
+</ul>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

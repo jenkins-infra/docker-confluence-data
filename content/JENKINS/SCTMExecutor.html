@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SCTMExecutor</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SCTMExecutor
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (sebastian_kornexl)</span> on Nov 15, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-12-17/#SECURITY-1521" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+Enables you to integrate Micro Focus Silk Central (version 17.0 or later) test executions into your Jenkins continuous integration build system.</p><h1 id="SCTMExecutor-SCTMExecutorPlugin">SCTMExecutor Plugin</h1><p>This plugin integrates Micro Focus Silk Central (version 17.0 or later) into Jenkins. You can trigger execution plans in Silk Central and collect the test results in Jenkins.</p><h2 id="SCTMExecutor-Settings">Settings</h2><h5 id="SCTMExecutor-GlobalSettings">Global Settings</h5><p>Use the global settings to configure the URL of the Silk Central web services and a valid user and password. The password is stored encrypted in the Jenkins plugin configuration on the Jenkins server.</p><h5 id="SCTMExecutor-ProjectSettings">Project Settings</h5><p>To trigger the execution of execution plans (or folders), specify the execution plan IDs in a comma separated list, and the project ID. All execution plan IDs must be in the same project, otherwise you need additional builder configurations.</p><h5 id="SCTMExecutor-Results">Results</h5><p>The see the results of the Silk Central executions in Jenkins, select &quot;Collect results&quot; in the build step and configure the post-build action &quot;Collect Silk Central Test Results&quot;.</p><h5 id="SCTMExecutor-PipelineSample">Pipeline Sample</h5><pre>node {<br/>    stage('trigger Silk') {<br/>         silkcentral buildNumberUsageOption: 4, collectResults: true, execDefIds: '3938,3939', projectId: 1<br/>     }<br/>     stage('collect results') {<br/>         silkcentralCollectResults()<br/>     }<br/>}</pre><h5 id="SCTMExecutor-Uprgadefromversions&lt;2.0">Uprgade from versions &lt; 2.0</h5><p>Re-enter the password of the specified Silk Central user under 'Silk Central Configuration' at 'Manage Jenkins -&gt; Configure System'.<br/> Remove the JUnit Test Result Publisher post-build action (if not used by other build steps) and configure the post-build action &quot;Collect Silk Central Test Results&quot;.</p><h2 id="SCTMExecutor-Changelog">Changelog</h2><div class="table-wrap"><table class="confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Version</p></th><th class="confluenceTh"><p>Comment</p></th></tr><tr><td colspan="1" class="confluenceTd">2.2</td><td colspan="1" class="confluenceTd"><p><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br/>Pipeline support</p></td></tr><tr><td class="confluenceTd"><p>2.0</p></td><td class="confluenceTd"><p><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> Support multiple Silk Central instances by specifying an alternative URL on build step level <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> Post-build action &quot;Collect Silk Central Test Results&quot; <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-28304">JENKINS-28304</a> save build step failed - Nullpointer</p></td></tr><tr><td class="confluenceTd"><p>1.5.1</p></td><td class="confluenceTd"><p><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add additional option to allow execution with a preconfigured build number on SCTM <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add execution definition name to the logs <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> documentation for build number usage options</p></td></tr><tr><td class="confluenceTd"><p>1.5</p></td><td class="confluenceTd"><p>BUGFIX: remove limit of 8 parallel executions <br class="atl-forced-newline"/> BUGFIX: Changed Webservice in SCTM 2010 needs to extands the error handling if session is lost <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> Options to execute a execution definition with a build number generated from a hudson job <br class="atl-forced-newline"/> Tested with SCTM 2010</p></td></tr><tr><td class="confluenceTd"><p>1.2</p></td><td class="confluenceTd"><p>BUGFIX: ThreadPool is now transient <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add Option to ignore Setup/Cleanup TestDefinitions in the TestResults</p></td></tr><tr><td class="confluenceTd"><p><img class="emoticon emoticon-minus" src="images/icons/emoticons/forbidden.svg" data-emoticon-name="minus" alt="(minus)"/><br class="atl-forced-newline"/> 1.1.1</p></td><td class="confluenceTd"><p>BUGFIX: Collecting results fails since version 1.1, due to an serialization error</p></td></tr><tr><td class="confluenceTd"><p><img class="emoticon emoticon-minus" src="images/icons/emoticons/forbidden.svg" data-emoticon-name="minus" alt="(minus)"/><br class="atl-forced-newline"/> 1.1</p></td><td class="confluenceTd"><p><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add optional parameter for a start delay. Starts the second and following executions with an delay to prevent resource problems on virtual machines. <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add option to ignore errors from SCTM, but log it <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> add option to activate/deactivate result collection <br class="atl-forced-newline"/> <img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/><br class="atl-forced-newline"/> some internal refactorings to prepare code for future improvements</p></td></tr><tr><td class="confluenceTd"><p>1.0</p></td><td class="confluenceTd"><p>first complete major release; You are able to trigger one or more execution definitions and record there results to visualize it in the test results graph/table. <br class="atl-forced-newline"/> Supported Test Manager: &gt; 2008 R2 <br class="atl-forced-newline"/> Tested with Test Manager 2008 R2 SP1</p></td></tr><tr><td class="confluenceTd"><p>0.6</p></td><td class="confluenceTd"><p>several improvements in collecting results, translation, tests</p></td></tr><tr><td class="confluenceTd"><p>0.5</p></td><td class="confluenceTd"><p>fix problems with dependencies to SAX (use sun implementation as a quick fix)</p></td></tr><tr><td class="confluenceTd"><p>0.4</p></td><td class="confluenceTd"><p>several improvements with test execution and result writing</p></td></tr><tr><td class="confluenceTd"><p>0.3</p></td><td class="confluenceTd"><p>First release candidate (after some problems with wagon-svn)</p></td></tr><tr><td class="confluenceTd"><p>0.1</p></td><td class="confluenceTd"><p>First try <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/><br class="atl-forced-newline"/> Execution of multiple Execution Definitions enabled.</p></td></tr></tbody></table></div><h2 id="SCTMExecutor-KnownProblems/TODOs">Known Problems / TODOs</h2><p>Please feel free to enter any issue to JIRA and set the component to 'sctmexecutor'.</p><ul><li><img class="emoticon emoticon-light-off" src="images/icons/emoticons/lightbulb.svg" data-emoticon-name="light-off" alt="(grey lightbulb)"/> Use a new result view that shows a matrix of configurations and testcases/-suites running in these configurations</li><li><img class="emoticon emoticon-light-off" src="images/icons/emoticons/lightbulb.svg" data-emoticon-name="light-off" alt="(grey lightbulb)"/> encoding for german translation</li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">documentation for build number usage options</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">use hudson build number for SCTM execution (if build number does not exists create it)</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">add option for not recording/waiting for test results (only trigger execution and finish)</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">If more than one execution definition is started the results are lost.</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">Some localization issues</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">Find a way to handle very long SCTM executions</span></li><li><img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> <span style="text-decoration: line-through;">Usability; Add some configuration check code to give the user an early preview about the configuration sets.</span></li></ul><p><img class="emoticon emoticon-light-on" src="images/icons/emoticons/lightbulb_on.svg" data-emoticon-name="light-on" alt="(lightbulb)"/> -&gt; implemented but not included in the latest available release<br/> <img class="emoticon emoticon-light-off" src="images/icons/emoticons/lightbulb.svg" data-emoticon-name="light-off" alt="(grey lightbulb)"/> -&gt; in progress or just an idea/todo<br/> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> -&gt; done and available in the latest release</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Node Sharing Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Node Sharing Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (olivergondza)</span>, last modified on Mar 26, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Node sharing executor <a href="https://plugins.jenkins.io/node-sharing-executor" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Share machines as Jenkins agents across multiple Jenkins masters.</p><h2 id="NodeSharingPlugin-Requirements">Requirements</h2><ul style="list-style-type: square;"><li>The nodes are connected to the individual Jenkins masters so builds can be executed there as if those nodes would be good old Jenkins nodes.</li><li>The node to use is determined by evaluating Jenkins labels.</li><li>Nodes are use exclusively by individual Jenkins masters.</li><li>In case there is no matching node available at the time build is scheduled the request will be queued and dispatched in FIFO fashion.</li></ul><p><span class="confluence-embedded-file-wrapper image-right-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource image-right" height="400" src="https://github.com/jenkinsci/node-sharing-plugin/raw/master/diagram.png" data-image-src="https://github.com/jenkinsci/node-sharing-plugin/raw/master/diagram.png"></span></p><h2 id="NodeSharingPlugin-Basics">Basics</h2><p>In order to facilitate fair sharing of agents, additional Jenkins master is needed to serve the role of an <em>Orchestrator</em>, leasing the <em>Nodes</em> to <em>Executor</em> Jenkinses.</p><p>The Executor Jenkins is an ordinary Jenkins with <em>Shared Nodes</em> cloud defined globally permitting it to lease, connect and utilize nodes from a shared pool. Such Jenkins can use static slaves or other clouds in the same time.</p><p>The Orchestrator Jenkins is a dedicated instance to instrument the sharing. It is expected not to have any static nodes, clouds or jobs defined as it is using the notion of computers, executors, builds and queue items to implement the sharing. It also serve the purpose of grid visualization UI for read only clients. It is not meant to be executing any other workload.</p><p>Config repository is a git based record of the current configuration of the pool the Orchestrator (and to some extend the Executors) takes as an input. Ideally, the Orchestrator should have no other user configuration except for what is in the config repository. In the name of reliability, the config repository hold the full list of Jenkins masters authorized to reserve from a particular pool. The repository, or the permission to commit there, is the access control mechanism for the pool management.</p><p>The Node is a host used for sharing. It have several representations in the Node Sharing Grid:</p><ul style="list-style-type: square;"><li>Actual Jenkins agent connected by the cloud implementation to the Executor Jenkins</li><li>The placeholder computer in Orchestrator.<ul style="list-style-type: square;"><li>Note this is not a real Jenkins computer capable of executing anything except for dummy reservation tasks. It does not even have a remoting channel open to the actual host despite it appears online.</li></ul></li><li>The record in config repository containing the node definition.</li></ul><h2 id="NodeSharingPlugin-Setup">Setup</h2><h4 id="NodeSharingPlugin-ConfigRepo">Config Repo</h4><ul><li>Create git repository cloneable from both Orchestrator and Executor Jenkinses.</li><li>Populate it with the grid definition.<ul><li>See the <a href="https://github.com/jenkinsci/node-sharing-plugin/tree/master/example-config-repo" class="external-link" rel="nofollow">example config repo</a> or use the <a href="https://github.com/jenkinsci/node-sharing-plugin/blob/master/create-config-repo.sh" class="external-link" rel="nofollow">creation script</a> to get started.</li></ul></li></ul><h4 id="NodeSharingPlugin-Orchestrator">Orchestrator</h4><ul style="list-style-type: square;"><li>Create minimalistic Jenkins deployment</li><li>Install <code>node-sharing-orchestrator</code> plugin including its dependencies<br/><ul style="list-style-type: square;"><li><a href="https://updates.jenkins.io/download/plugins/node-sharing-orchestrator/" class="external-link" rel="nofollow">https://updates.jenkins.io/download/plugins/node-sharing-orchestrator/</a></li></ul></li><li>Start Jenkins with following java properties<ul style="list-style-type: square;"><li><code>-Dcom.redhat.jenkins.nodesharingbackend.Pool.ENDPOINT=<em>cloneable_git_url_pointing_to_config_repo</em></code></li><li><code>-Dcom.redhat.jenkins.nodesharingbackend.Pool.USERNAME=<em>name_of_the_REST_user</em></code></li><li><code>-Dcom.redhat.jenkins.nodesharingbackend.Pool.PASSWORD=<em>password_of_the_REST_user</em></code></li></ul></li><li>Verify no Administrative Monitor warnings are issued once Jenkins is started</li><li>Configure dedicated automation account to receive incoming REST calls granting it permission named <code>NodeSharing.Reserve</code>. No real user should be granted this permission. How to do this is specific to particular authorization strategy used.<ul style="list-style-type: square;"><li><p>Example <a href="https://jenkins.io/projects/jcasc/" class="external-link" rel="nofollow">Jenkins Configuration as Code</a> definition:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>unclassified:
+  location:
+    # Needs to be set correctly so orchestrator knows its own url
+    url: https://ci.example.com/orchestrator
+
+jenkins:
+  numExecutors: 0
+  quietPeriod: 0
+  slaveAgentPort: -1
+  securityRealm:
+    local:
+      users:
+        - id: &quot;admin&quot;
+          password: &quot;secret&quot;
+        - id: &quot;nodesharing&quot;
+          password: &quot;secret too&quot;
+  # Set necessary permission for &#39;nodesharing&#39; account as well for anonymous
+  # user so executor users can use orchestrator as a dashboard
+  authorizationStrategy:
+    globalMatrix:
+      grantedPermissions:
+      - &quot;Overall/Administer:admin&quot;
+      - &quot;Overall/Read:anonymous&quot;
+      - &quot;Job/Read:anonymous&quot;
+      - &quot;Overall/Read:nodesharing&quot;
+      - &quot;Job/Read:nodesharing&quot;
+      - &quot;NodeSharing/Reserve:nodesharing&quot;
+</pre>
+</div></div><p>(Note it requires <code>configuration-as-code</code> and <code>configuration-as-code-support</code> plugins installed to execute, plus all the plugins needed by the declaration itself)</p></li></ul></li></ul><h4 id="NodeSharingPlugin-Executors">Executors</h4><ul><li>Install <code>node-sharing-executor</code> plugin including its dependencies on instances to utilize the pool<ul><li><a href="https://updates.jenkins.io/download/plugins/node-sharing-executor/" class="external-link" rel="nofollow">https://updates.jenkins.io/download/plugins/node-sharing-executor/</a></li></ul></li><li>Note that node definitions in config repo can refer to further plugins that needs to be installed on executors too.</li><li>Add <em>Shared Nodes</em> cloud specifying cloneable git url pointing to config repo and credentials for the rest user.</li><li>Create SSH credentials used to connect the machines. Their ids needs to match those in config repo nodes.</li><li>Configure dedicated automation account to receive incoming REST calls granting it permission named <code>NodeSharing.Reserve</code>. No real user should be granted this permission. How to do this is specific to particular authorization strategy used</li><li><p>Example <a href="https://jenkins.io/projects/jcasc/" class="external-link" rel="nofollow">Jenkins Configuration as Code</a> definition:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>unclassified:
+  location:
+    # Needs to be set correctly to executor knows its own url
+    url: https://ci.example.com/jenkins
+
+jenkins:
+  # Dedicated user needed to receive REST calls from orchestrator
+  securityRealm:
+    local:
+      users:
+        - id: &quot;nodesharing&quot;
+          password: &quot;nodesharing&quot;
+  authorizationStrategy:
+    globalMatrix:
+      grantedPermissions:
+      - &quot;Overall/Read:nodesharing&quot;
+      - &quot;Job/Read:nodesharing&quot;
+      - &quot;NodeSharing/Reserve:nodesharing&quot;
+
+  # Cloud hooking executor to the pool
+  clouds:
+    - nodeSharing:
+        configRepoUrl: https://git.example.com/team/node-sharing-config-repo.git
+        orchestratorCredentialsId: &quot;node-sharing-rest-password-id&quot;
+
+credentials:
+  system:
+    # Any credentials we are referring to from node definitions
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          scope: SYSTEM
+          id: &quot;node-sharing-rest-password-id&quot;
+          username: &quot;nodesharing&quot;
+          password: &quot;secret&quot;
+          description: &quot;Rest credential for node sharing&quot;
+</pre>
+</div></div><p>(Note it requires <code>configuration-as-code</code> and <code>configuration-as-code-support</code> plugins installed to execute, plus all the plugins needed by the declaration itself)</p></li></ul><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450838/138455230.png">diagram.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450838/138455229.png">diagram.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:35</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Before starting a new plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Before starting a new plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rseguy)</span>, last modified by <span class='editor'> Unknown User (drewbug)</span> on Jul 20, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>One of Jenkins' main strengths is its plugins (and their openness). Over a <em>thousand</em> are already available, and brand new plugins become available every week or so. As such, there's quite likely one or more plugins which cover your needs.</p>
+
+<p>In case some existing plugins <em>partly</em> cover your needs, we encourage you to contribute directly to these plugins rather than starting new ones from scratch. Profusion of plugins is good, profusion of plugins doing the same thing or so is not as good <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/></p>
+
+<p>What does this mean? Well, two things:</p>
+<ol>
+	<li>That plugin maintainers should do their best to <strong>welcome contributions</strong> on their plugins (see <a href="#Beforestartinganewplugin-maintainer">below</a>);</li>
+	<li>That people with specific needs should try to <strong>work on existing plugins</strong> preferably to creating brand new ones, when applicable, of course (see <a href="#Beforestartinganewplugin-contributor">below</a>).</li>
+</ol>
+
+
+<h1 id="Beforestartinganewplugin-Whatifmyideaseemsunique?">What if my idea seems unique?</h1>
+
+<p>Even if, having read the sections below, you believe that you have a unique need to write a plugin, consider the following:</p>
+<ol>
+	<li>Search the <a href="Plugins.html">plugin list</a> here or inside Jenkins for something that could potentially be <a href="#Beforestartinganewplugin-contributor">similar</a></li>
+	<li>Search the list of <a href="https://github.com/jenkinsci" class="external-link" rel="nofollow">plugin repositories</a> for something possibly <a href="#Beforestartinganewplugin-contributor">similar</a></li>
+	<li>Search Google for people discussing similar ideas; perhaps there's a plugin not published in the update centre that someone could share</li>
+	<li>Search the users' and developers' <a href="https://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">mailing list archives</a> for similar ideas</li>
+	<li>Talk to us! Many people start writing plugins, then ask us for hosting, only to find out that there <em>was</em> another plugin they had missed; or we may be able to recommend a good approach to use when writing your plugin.<br/>
+Get in touch via the <a href="http://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">jenkinsci-dev mailing list</a>, or stop by <a href="https://jenkins-ci.org/content/chat" class="external-link" rel="nofollow">IRC</a></li>
+</ol>
+
+
+<p><span class="confluence-anchor-link" id="Beforestartinganewplugin-maintainer"></span></p>
+
+<h1 id="Beforestartinganewplugin-Pluginmaintainers:Welcomechangesfromcontributors!">Plugin maintainers: Welcome changes from contributors!</h1>
+
+<p>Maintainers, have you read the two following sections in <a href="Hosting-Plugins.html">Hosting Plugins</a>?</p>
+<ul>
+	<li><a href="Hosting-Plugins.html#HostingPlugins-HostingPlugins-AddingMaintainerInformation">Adding maintainer information</a></li>
+	<li><a href="Hosting-Plugins.html#HostingPlugins-HostingPlugins-AddingaWikipage">Adding a wiki page</a></li>
+</ul>
+
+
+<p>These two sections are really important as they allow potential contributors to quickly have an access to your plugin's source code and documentation in order to contribute to it.</p>
+
+<p>Apart from that, we also recommend applying the following best practices (if you see any other, please add them):</p>
+<ul>
+	<li><strong>Document your code</strong>:<br/>
+Nothing special to say here, having documented code helps people contributing to it. Would you imagine writing a plugin without having Jenkins' javadoc? The same applies for your plugin <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/></li>
+	<li><strong>Clearly identify the license(s) which applies to your plugin</strong>:<br/>
+Licensing is really important when it comes to contributing code. As such, we encourage you to follow one or several of the following practices:<br/>
+(1) Add a license header at the top of each of your source code files;<br/>
+(2) Add a LICENSE file at the root of your Maven project;<br/>
+(3) Fill the <a href="http://maven.apache.org/pom.html#Licenses" class="external-link" rel="nofollow"><code>&lt;licenses&gt;</code> section</a> of your POM.<br/>
+If nothing is defined, your code will be assumed to fall under the <a href="http://en.wikipedia.org/wiki/MIT_License" class="external-link" rel="nofollow">MIT license</a> terms.</li>
+	<li><strong>Welcome change</strong>:<br/>
+Well, nothing to say here also... Avoid the &quot;NoDeByMe&quot; (not developed by me) phobia. Jenkins would not be what it is today if it was reluctant to changes <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/></li>
+	<li><strong>Emphasize the fact that your plugin gets orphan</strong>:<br/>
+If you don't maintain your plugin anymore, emphasize it in the wiki. We're sure many people will be happy to take over for you.</li>
+	<li>Finally, <strong>answer e-mails</strong>:<br/>
+This principle actually goes along with welcoming changes. If somebody sends you a mail to contribute to your plugin, pay attention to it, and welcome it.</li>
+</ul>
+
+
+<p><span class="confluence-anchor-link" id="Beforestartinganewplugin-contributor"></span></p>
+
+<h1 id="Beforestartinganewplugin-Peoplewithdifferentneeds:Workonexistingplugins!">People with different needs: Work on existing plugins!</h1>
+
+<p>Before starting a brand new plugin, we encourage you to do the following:</p>
+<ol>
+	<li>Search for <a href="https://wiki.jenkins-ci.org/display/JENKINS/Plugins" class="external-link" rel="nofollow">existing plugins</a> that cover your needs.</li>
+	<li>If some plugins partly cover your needs:
+	<ul>
+		<li>Check if the licensing terms are compliant with what you expect (note: most of Jenkins' plugins are covered by the MIT license);</li>
+		<li>Take a look at the plugin's source code/documentation to see if you can, technically speaking, bring in the changes you need;</li>
+		<li>Contact the maintainer (<span style="text-decoration: underline;">both</span> directly and through the <a href="Mailing-Lists.html">Jenkins developer discussion list</a>) to engage a discussion on how to contribute the changes you need. Some of the maintainers will just say &quot;go ahead and bring in your changes&quot;, some will be happy to provide you with more help, some will even possibly code for you.<br/>
+If you don't get an answer from the maintainer after a few days, contact him/her/them again and be patient for a few more days as he/she/they might simply be away for some time.<br/>
+If you really don't get an answer (or a negative one), well, it might be time for you to start your own plugin.</li>
+	</ul>
+	</li>
+	<li>If you cannot find a plugin that looks similar to what you need, drop an email to the <a href="Mailing-Lists.html">Jenkins developer list</a> to see if:
+	<ul>
+		<li>There is a plugin, but it was not obvious that it could help you</li>
+		<li>Someone already has a &quot;private&quot; version of a plugin that they are using, that they may want to share now they know that someone else has a similar need</li>
+		<li>There are developers that want to help you write and/ or test your new plugin</li>
+	</ul>
+	</li>
+	<li>If no plugins cover your needs, well, <a href="Plugin-tutorial.html">go ahead</a> and happy coding!</li>
+</ol>
+
+
+<p>NB: Yes, this is some kind of decision matrix for plugin developers <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

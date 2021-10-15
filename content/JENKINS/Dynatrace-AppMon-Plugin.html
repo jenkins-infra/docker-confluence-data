@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Dynatrace AppMon Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Dynatrace AppMon Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (wgottesheim)</span>, last modified by <span class='editor'> Unknown User (dynatrace)</span> on Nov 03, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Dynatrace Application Monitoring <a href="https://plugins.jenkins.io/dynatrace-dashboard" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1483%20(2)" class="external-link" rel="nofollow">Missing permission check</a></li>
+</ul>
+
+</div></div>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1477" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1483%20(1)" class="external-link" rel="nofollow">CSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+This plugin helps integrate <a href="https://www.dynatrace.com/" class="external-link" rel="nofollow">Dynatrace AppMon</a> with CI environment. It registers a Test Run to the AppMon Server, retrieves Test Automation data and display it through charts and tables on the project and build level.</p><ul><li>Improve your delivery cycle and reduce the amount spent firefighting issues later in the release by addressing problems earlier in the development cycle. </li><li>Extend your delivery pipeline with architectural metrics captured on top of your functional/integration tests (such as Unit Test based Framework or HTTP based tests) to get the functionality and architectural confidence to deploy in production. </li><li>Trend Key Architectural Metrics per Build: look behind the scenes and trend key architectural metrics per tests such as number of SQL queries, external API calls, exceptions and log messages for every single build.</li></ul><h2 id="DynatraceAppMonPlugin-Overview">Overview</h2><p>The Dynatrace AppMon plugin displays an overview on recent builds from a performance perspective on the <strong>project overview page</strong> and it displays individual performance metrics on a <strong>build level.</strong></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/74417710/100106272.png" data-image-src="attachments/74417710/100106272.png" data-unresolved-comment-count="0" data-linked-resource-id="100106272" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="DT_lifecycle_02_b.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74417710" data-linked-resource-container-version="22"></span>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/74417710/100106273.png" data-image-src="attachments/74417710/100106273.png" data-unresolved-comment-count="0" data-linked-resource-id="100106273" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="DT_lifecycle_03.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74417710" data-linked-resource-container-version="22"></span></p><p>More information: <a href="https://community.dynatrace.com/community/display/DL/Test+Automation+Plugin+for+Jenkins" class="external-link" rel="nofollow">https://community.dynatrace.com/community/display/DL/Test+Automation+Plugin+for+Jenkins</a></p><h2 id="DynatraceAppMonPlugin-Configuration">Configuration</h2><p>Release 2.1.0 adds support for Pipelines. Configuration and usage examples are described here: <a href="https://github.com/jenkinsci/dynatrace-plugin/blob/master/pipeline-steps-explained.MD" class="external-link" rel="nofollow">https://github.com/jenkinsci/dynatrace-plugin/blob/master/pipeline-steps-explained.MD</a></p><p>See also <a href="https://github.com/jenkinsci/dynatrace-plugin/blob/master/README.md#configuration" class="external-link" rel="nofollow">https://github.com/jenkinsci/dynatrace-plugin/blob/master/README.md#configuration</a></p><p>Here you can enter the connection details as well as the name of the dashboard containing the Test Automation dashlet, and you can test the connection.<br/> In the advanced settings, you have the following options:</p><ul><li>You can change whether the build result from the Dynatrace Server should also affect the Jenkins build result - if this is enabled, tests that are considered as volatile or failed (from a functional or performance perspective) by Dynatrace will cause the Jenkins build to be marked as unstable or failed. By default, this feature is enabled.</li><li>Depending on Dynatrace Server load and the number of tests, it might take a while until the test results are available through the REST interface. By default, the Jenkins plugin will try to get data 3 times, 10 seconds apart. If necessary, you can increase the number of tries here. Please keep in mind that this increases the build duration.</li></ul><h2 id="DynatraceAppMonPlugin-Integration">Integration</h2><p>See also <a href="https://github.com/jenkinsci/dynatrace-plugin/blob/master/README.md#examples" class="external-link" rel="nofollow">https://github.com/jenkinsci/dynatrace-plugin/blob/master/README.md#examples</a></p><p><strong>Option 1: Test Run Registration from Jenkins</strong></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/74417710/100106277.png" data-image-src="attachments/74417710/100106277.png" data-unresolved-comment-count="0" data-linked-resource-id="100106277" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="process_test_run_registration_jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74417710" data-linked-resource-container-version="22"></span></p><p><strong>Option 2: Test Run Registration from Maven/Ant/...</strong></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/74417710/100106278.png" data-image-src="attachments/74417710/100106278.png" data-unresolved-comment-count="0" data-linked-resource-id="100106278" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="process_test_run_registration_plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74417710" data-linked-resource-container-version="22"></span></p><h2 id="DynatraceAppMonPlugin-Additionalresources">Additional resources</h2><p><strong>AppMon Production Documentation:</strong></p><ul><li><a href="https://community.dynatrace.com/community/pages/viewpage.action?pageId=215161284" class="external-link" rel="nofollow">Continuous Delivery &amp; Test Automation</a></li><li><a href="https://community.dynatrace.com/community/display/DOCDT63/Capture+Performance+Data+from+Tests" class="external-link" rel="nofollow">Capture Performance Data from Tests</a></li><li><a href="https://community.dynatrace.com/community/display/DOCDT63/Integrate+Dynatrace+in+Continuous+Integration+Builds" class="external-link" rel="nofollow">Integrate Dynatrace in Continuous Integration Builds</a></li></ul><p><strong>Blog:</strong></p><ul><li><a href="http://apmblog.dynatrace.com/2013/11/27/continuous-performance-validation-in-continuous-integration-environments/" class="external-link" rel="nofollow">Continuous Performance Validation in Continuous Integration Environments</a></li><li><a href="http://apmblog.dynatrace.com/2014/03/13/software-quality-metrics-for-your-continuous-delivery-pipeline-part-i/" class="external-link" rel="nofollow">Software Quality Metrics for your Continuous Delivery Pipeline – Part I</a></li><li><a href="http://apmblog.dynatrace.com/2014/04/23/database-access-quality-metrics-for-your-continuous-delivery-pipeline/" class="external-link" rel="nofollow">Software Quality Metrics for your Continuous Delivery Pipeline – Part II: Database</a></li><li><a href="http://apmblog.dynatrace.com/2014/06/17/software-quality-metrics-for-your-continuous-delivery-pipeline-part-iii-logging/" class="external-link" rel="nofollow">Software Quality Metrics for your Continuous Delivery Pipeline – Part III – Logging</a></li><li><a href="http://apmblog.dynatrace.com/2014/12/23/automated-performance-analysis-web-api-tests/" class="external-link" rel="nofollow">Automated Performance Analysis for Web API Tests</a></li></ul><p><strong>Recorded Webinar:</strong></p><ul><li><a href="https://youtu.be/p4Vh6BWlPjg" class="external-link" rel="nofollow">Online Perf Clinic - Eclipse and Jenkins Integration</a></li><li><a href="https://youtu.be/TXPSDpy7unw" class="external-link" rel="nofollow">Online Perf Clinic - Metrics-Driven Continuous Delivery with Dynatrace Test Automation</a></li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/75071489.png">configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/75071533.png">testAutomation-ProjectLevel.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/75071534.png">testAutomation-BuildLevel.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106272.png">DT_lifecycle_02_b.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106274.png">DT_lifecycle_03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106273.png">DT_lifecycle_03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106275.png">global_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106276.png">build_environment.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106277.png">process_test_run_registration_jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74417710/100106278.png">process_test_run_registration_plugin.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:22</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

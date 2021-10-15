@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : RabbitMQ Build Trigger Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : RabbitMQ Build Trigger Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rin_ne)</span>, last modified on Oct 12, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View RabbitMQ Build Trigger <a href="https://plugins.jenkins.io/rabbitmq-build-trigger" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><h1 id="RabbitMQBuildTriggerPlugin-Description">Description</h1><p>This plugin triggers build using remote build message in RabbitMQ queue.</p><h1 id="RabbitMQBuildTriggerPlugin-Usage">Usage</h1><p>This plugin needs <a href="RabbitMQ-Consumer-Plugin.html">RabbitMQ Consumer Plugin</a>. It would be installed by dependency for this plugin. Then you need to configure it before using this plugin.</p><p>If you install this, <strong>RabbitMQ Build Trigger</strong> setting is added into your job project's build trigger section. please enable it then set your token. So build would be triggered if appropriate application message arrives.</p><p>Also adds <strong>Publish build result to RabbitMQ</strong> to Post-build Actions in your job's configuration. If you set this action, build result message is published to your specified exchange or queue in RabbitMQ. Published message is the below:</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>A published message has 3 properties.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">content_type: application/json
+app_id: remote-build
+routingkey: ROUTINGKEY or org.jenkinsci.plugins.rabbitmqbuildtrigger
+</pre>
+</div></div><p>And has 1 key in message header.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">jenkins-url: JENKINS_ROOT_URL
+</pre>
+</div></div></div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">{
+    &quot;project&quot;: &quot;PROJECTNAME&quot;,
+    &quot;number&quot;: &quot;BUILDNUMBER&quot;,
+    &quot;status&quot;: &quot;SUCCESS|FAILURE|UNSTABLE..&quot;
+}
+</pre>
+</div></div><h1 id="RabbitMQBuildTriggerPlugin-ApplicationMessageFormat">Application Message Format</h1><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>A message must have two properties.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">content_type: application/json
+app_id: remote-build
+</pre>
+</div></div></div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">{
+  &quot;project&quot;: &quot;RPROJECTNAME&quot;,
+  &quot;token&quot;: &quot;TOKEN&quot;,
+  &quot;parameter&quot;: [
+    {
+      &quot;name&quot;: &quot;PARAMETERNAME&quot;,
+      &quot;value&quot;: &quot;VALUE&quot;
+    },
+    {
+      &quot;name&quot;: &quot;PARAMETERNAME2&quot;,
+      &quot;value&quot;: &quot;VALUE2&quot;
+    }
+  ]
+}
+</pre>
+</div></div><p>name in each parameters is compared with existing parameter name by case-insensitive.</p><h1 id="RabbitMQBuildTriggerPlugin-License">License</h1><p>MIT License.</p><h1 id="RabbitMQBuildTriggerPlugin-Versionhistory">Version history</h1><h2 id="RabbitMQBuildTriggerPlugin-Version2.5(10/12/2017)">Version 2.5 (10/12/2017)</h2><div><ul><li><a href="https://github.com/jenkinsci/rabbitmq-build-trigger-plugin/pull/5" class="external-link" rel="nofollow">PR#5</a>: Add NullPointerException protection to the getProjectName in RemoteBuildTrigger</li><li><a href="https://github.com/jenkinsci/rabbitmq-build-trigger-plugin/pull/7" class="external-link" rel="nofollow">PR#7</a>: Workflow Job compatibility</li></ul></div><h2 id="RabbitMQBuildTriggerPlugin-Version2.4(10/12/2017)">Version 2.4 (10/12/2017)</h2><div><ul><li>Deployment failed. skip.</li></ul></div><h2 id="RabbitMQBuildTriggerPlugin-Version2.3(08/19/2014)">Version 2.3 (08/19/2014)</h2><ul><li>Add tests</li><li>Bump rabbitmq-consumer to 2.5</li><li>Bump maven-release-plugin to 2.5</li><li>Add dependency: Junit and JMockit</li><li>Remove feature which publishes message to queue directly<ul><li>Publisher supports exchange type broker only</li></ul></li><li>Trigger build with no parameter in message</li><li>Add routing key field to job config<ul><li>If empty, default key will be used</li></ul></li><li>Add Jenkins URL to published message header<ul><li>Key: &quot;jenkins-url&quot;</li></ul></li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version2.2(03/24/2014)">Version 2.2 (03/24/2014)</h2><ul><li>Bumped consumer-plugin to 2.2</li><li>Bumped Java to 1.6</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version2.1(01/27/2014)">Version 2.1 (01/27/2014)</h2><ul><li>Bumped consumer-plugin to 2.1</li><li>Bumped Jenkins to 1.532.1</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version2.0(01/14/2014)">Version 2.0 (01/14/2014)</h2><ul><li>Bumped consumer-plugin to 2.0</li><li>Replace old interfaces to new one.</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.9(07/23/2013)">Version 1.9 (07/23/2013)</h2><ul><li>Bumped consumer-plugin to 1.9</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.8(07/18/2013)">Version 1.8 (07/18/2013)</h2><ul><li>Bumped consumer-plugin to 1.8</li><li>Add feature: publish message to queue directly</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.7(07/17/2013)">Version 1.7 (07/17/2013)</h2><ul><li>Bumped consumer-plugin to 1.7</li><li>Add RemoteBuildPublisher</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.6(05/30/2013)">Version 1.6 (05/30/2013)</h2><ul><li>Bumped consumer-plugin to 1.6</li><li>Improve locking opportunity</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.5(05/30/2013)">Version 1.5 (05/30/2013)</h2><ul><li>Bumped consumer-plugin to 1.5</li><li>More tolerant behavior on empty token</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.4(04/16/2013)">Version 1.4 (04/16/2013)</h2><ul><li>Bumped consumer-plugin to 1.4</li><li>Cleanup logging messages</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.3(04/09/2013)">Version 1.3 (04/09/2013)</h2><ul><li>Bumped consumer-plugin to 1.3</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.2(04/09/2013)">Version 1.2 (04/09/2013)</h2><ul><li>Fix &quot;Cannot update token&quot; issue.</li><li>Bumped consumer-plugin to 1.2</li></ul><h2 id="RabbitMQBuildTriggerPlugin-Version1.1(04/01/2013)">Version 1.1 (04/01/2013)</h2><p>Re-release</p><h2 id="RabbitMQBuildTriggerPlugin-Version1.0(04/01/2013)">Version 1.0 (04/01/2013)</h2><p>Initial release</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:41</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

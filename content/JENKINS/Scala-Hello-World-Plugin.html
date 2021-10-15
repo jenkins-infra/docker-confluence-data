@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Scala Hello World Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Scala Hello World Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jeremym)</span>, last modified on Dec 05, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'scala-hello-world' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<p>Hello World Plugin built in Scala</p>
+
+<h1 id="ScalaHelloWorldPlugin-Introduction">Introduction</h1>
+
+<p>This plugin is a proof of concept for building plugins in Scala. It reimplements the standard hello world plugin</p>
+
+<p>There is a Java shim but the main functionality is Scala.</p>
+
+<p>The plugin is built with gradle</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">./gradlew server</pre>
+</div></div>
+
+<h1 id="ScalaHelloWorldPlugin-TechieDetail">Techie Detail</h1>
+
+<p>The main techie detail is to apply Java compile annotation processing to Scala code. This is the <a href="https://github.com/jglick/sezpoz" class="external-link" rel="nofollow">sezpoz</a> annotation processing which creates a file of plugin descriptors.</p>
+
+<p>The bit in gradle is this</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">task annotate(dependsOn:compileScala, type: Exec)  {
+
+    if (logging.level &gt;= LogLevel.INFO) {
+        args &#39;-verbose&#39;
+    }
+
+    doFirst{
+        args &#39;-proc:only&#39;
+        args &#39;-d&#39;
+        args compileJava.destinationDir
+        args &#39;-classpath&#39;
+        args compileJava.classpath.getAsPath() + java.io.File.pathSeparatorChar + compileJava.destinationDir
+
+        if (logging.level &gt;= LogLevel.INFO) {
+            args &#39;-verbose&#39;
+        }
+
+        fileTree(compileScala.destinationDir).each { File file -&gt;
+            if(file.path.contains(&#39;META-INF&#39;)) {
+                return
+            }
+            if(!file.path.endsWith(&#39;class&#39;)) {
+                return
+            }
+            args file.path.minus(compileScala.destinationDir).minus(&#39;.class&#39;).substring(1).replaceAll(File.separator,&#39;.&#39;)
+        }
+    }
+
+    executable &quot;javac&quot;
+}
+
+compileScala.doLast {annotate.execute()}</pre>
+</div></div>
+<p>This will iterate all the class files built from scala and run the preprocessors on them. This is complicated as class files must have the `.class` removed </p>
+
+<p>The scala gradle plugin is also used.</p>
+
+<h1 id="ScalaHelloWorldPlugin-Improvements">Improvements</h1>
+
+<p>* split the java and scala pieces</p>
+
+<p>* write some tests</p>
+
+<p>* the java shim splits out the scala functions to separate functions as the java paramaterizing didn't fit the scala parameterizing</p>
+
+<p>* make the code more functional</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:44</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

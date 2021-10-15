@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JBPM Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JBPM Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tom.huybrechts@gmail.com)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'jbpm' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin integrates JBoss JBPM with Hudson. It lets you define your own build, test and release workflows in a graphical designer, and execute them inside Hudson.<br/>
+It is a work in progress, and no releases have been made yet.</p>
+
+<h2 id="JBPMPlugin-Whyaworkflowplugin?">Why a workflow plugin ?</h2>
+
+<p> Hudson already has some workflow features. You can configure that one project should be build automatically after another build has completed. Dependencies between builds are also tracked and this is used by the promotion plugin to automate build promotion. So why do we need a separate workflow plugin ?</p>
+
+<p>Using JBPM has a number of advantages:</p>
+<ul>
+	<li>It is possible to model almost arbitrarily complex workflows using a graphical designer. The graphical representation allows non-developers to reason about and help design processes. It also gives a much better view of the state of a process at runtime. At a glance anyone can get an idea of wat is happening with a build.</li>
+	<li>Workflows can create tasks for human users too, e.g. manual testing or signing off on releases. Before, Hudson had no ability to query the user for information during a build.</li>
+	<li>Workflow definitions not only contain the workflow graph, but also the Java code that performs the actions triggered by the workflow. Both are versioned, whicn enables long-running processes. When new workflows definitions are deployed, existing processes are not affected.</li>
+	<li>Using workflows you can model the entire life of a build. Not only development and automated testing, but also various other stages of validation, release and deployment. Hudson becomes the central hub for information about your build, thanks to integration with other systems like SCM repositories and issue trackers.
+<br class="atl-forced-newline"/></li>
+</ul>
+
+
+<h2 id="JBPMPlugin-BackgroundInformation">Background Information</h2>
+
+<p>You can find more information about JBoss JBPM on the <a href="http://www.jboss.com/products/jbpm" class="external-link" rel="nofollow">JBPM website</a>. The <a href="http://docs.jboss.org/jbpm/v3/userguide/index.html" class="external-link" rel="nofollow">JBPM manual</a> in particular is very useful.</p>
+
+<p>The JBPM plugin is currently not compatible with the trunk (released) version of Hudson. It is developed on a branch, since some additional feature were required in the Hudson core. However it is certainly the intention that all work done on the branch is eventually merged to the trunk.</p>
+
+<h2 id="JBPMPlugin-StagedReleaseDemo">Staged Release Demo</h2>
+
+<p><span class="confluence-embedded-file-wrapper image-right-wrapper"><img class="confluence-embedded-image image-right" src="attachments/31457375/31588371.png" data-image-src="attachments/31457375/31588371.png" data-unresolved-comment-count="0" data-linked-resource-id="31588371" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="staging-release.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="31457375" data-linked-resource-container-version="12"></span><br/>
+To demonstrate what the JBPM integration is capable of, I wrote a small demo workflow. It tries to model part of the release process used by the Apache Maven project, as described <a href="http://maven.apache.org/developers/release/releasing.html" class="external-link" rel="nofollow">here</a>.The workflow is the following:</p>
+<ul>
+	<li>Somebody (the release manager) starts the release process by starting the 'release-workflow' build.</li>
+	<li>A first task will get some required information from the user: the release version, and email aliases to send announcement mails to.</li>
+	<li>The release build is executed, but not uploaded to the release repository. Instead the artifacts are put into a staging repository that is served by Hudson.</li>
+	<li>A mail is sent out announcing this staged release, and asking people to vote.</li>
+	<li>Registered users can cast a vote on the Hudson build page.</li>
+	<li>The release is finalized when the release manager completes the 'End Vote' task.</li>
+	<li>The votes are counted, and if the result is positive, then the artifacts in the staging repository are uploaded to the release repository. A mail is also sent to the announcement email address.</li>
+</ul>
+
+
+<p>Of course a <a href="attachments/31457375/31588368.zip" data-linked-resource-id="31588368" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="staging-workflow.zip" data-nice-type="Zip Archive" data-linked-resource-content-type="application/zip" data-linked-resource-container-id="31457375" data-linked-resource-container-version="12">video </a>says more than a thousand words... (I'm working on producing a video with better quality)
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<h2 id="JBPMPlugin-BuildPromotionDemo(TODO)">Build Promotion Demo (TODO)</h2>
+
+<p>This demo will show how you can model complex release and test processes. The workflow is triggered after the software has been released, and will drive both automated and manual testing and promotion of the build. <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/31457375/31916037.png" data-image-src="attachments/31457375/31916037.png" data-unresolved-comment-count="0" data-linked-resource-id="31916037" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test-workflow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="31457375" data-linked-resource-container-version="12"></span><br class="atl-forced-newline"/></p>
+
+<h2 id="JBPMPlugin-Setup">Setup</h2>
+
+<p>Some setup is currently required to start developing and/or running workflows.</p>
+<ul>
+	<li>Check out and build the right branch: <a href="https://hudson.dev.java.net/svn/hudson/branches/tom" class="external-link" rel="nofollow">https://hudson.dev.java.net/svn/hudson/branches/tom</a>. The jbpm plugin is under plugins/jbpm/jbpm.</li>
+	<li>You need a database. By default the jbpm-plugin uses a MySQL database on localhost with connection url: jdbc:mysql://localhost:3306/jbpm (user/password: jbpm). If you want to change this, modify hibernate.cfg.xml inside the plugin. TODO: this should be a configuration option.</li>
+	<li>When you run the first time, hibernate will create or update the required tables in your database</li>
+	<li>Set your smtp server in jbpm.cfg.xml. TODO: find a way to use the value already configured in Hudson</li>
+	<li>Start Hudson in development mode by running 'mvn hpi:run' in the jbpm plugin directory.</li>
+	<li><a href="http://sourceforge.net/project/showfiles.php?group_id=70542" class="external-link" rel="nofollow">Download </a>and install the graphical designer for developing and deploying workflows. This is an Eclipse plugin.</li>
+	<li>Import at least the JBPM plugin and optionally the example workflows.</li>
+</ul>
+
+
+<p>...</p>
+
+<h2 id="JBPMPlugin-Designingaworkflow">Designing a workflow</h2>
+
+<p> To create a new workflow, create a new project in Eclipse, and add dependencies on the jbpm plugin and any other plugin you want to use in your code. You can then develop your workflow as described in the JBPM documentation. For integration with Hudson, a number of variables and action handlers are available.</p>
+<ul>
+	<li> When you configured a workflow to start after the completion of a build, both the Run object and the corresponding Job are available as the 'build' and 'project' process variables.</li>
+	<li>The 'hudson' object is always available, referring to the Hudson singleton.</li>
+	<li>To start a build as part of a workflow:
+	<ul>
+		<li>create a task node</li>
+		<li>assign the task to actor 'hudson'</li>
+		<li>on the task-create event, execute the hudson.jbpm.workflow.StartProjectActionHandler, and set projectName to the project you want to build</li>
+	</ul>
+	</li>
+	<li>To create a human task, you also create a task and then assign it to the user who should perform it. Use the hudson.jbpm.workflow.ProjectMemberAssignmentHandler if the task can be executed by any member of the triggering project. A member is defined here as anyone who has 'configure' permissions on the Hudson project.</li>
+	<li>You can define a form that should be used for displaying a human task:
+	<ul>
+		<li>Create a form controller, extending from hudson.jbpm.model.Form. Configure the class name of the form by executing the hudson.jbp.workflow.FormActionHandler on the task-create event.</li>
+		<li>Create side files for your Form, in the usual Stapler way. You can create a start.jelly, inprogress.jelly and/or completed.jelly script that will be shown when the task is in the corresponding state. Alternatively create a form.jelly which is used for any state of the task. Your form controller will be the 'it' object.</li>
+		<li>The default implementations of these form let the user start a task, and then choose between the possible transitions.</li>
+		<li>Implement the handle() method of Form to process the submitted form, and trigger a transition to the next task if needed.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="JBPMPlugin-Deployment"> Deployment</h2>
+
+<p>The hudson jbpm plugin interfaces with the graphical designer to allow deploying workflows from Eclipse into Hudson. On the deployment tab of your process, use the host name and port of your Hudson server, with path '/plugin/jbpm/upload/' . Don't forget to check all the classes and resources you want to deploy. Files that are not directly referenced from your process definition will be disabled by default.</p>
+
+<h2 id="JBPMPlugin-Startingaworkflowprocess">Starting a workflow process</h2>
+
+<p>The plugin contributes a build publisher. That lets you specify a process that should be started after a build completes. 
+<br class="atl-forced-newline"/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31588368.zip">staging-workflow.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31588370.jpg">processimage.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31588369.jpg">processimage.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31588372.png">staging-release.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31588371.png">staging-release.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/31457375/31916037.png">test-workflow.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:28</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Figuring out URL binding of Stapler</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Figuring out URL binding of Stapler
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (m2spring)</span> on Oct 24, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>A part of writing UI in Hudson plugin is about figuring out what method/views Stapler maps to what URLs.</p>
+
+<h3 id="FiguringoutURLbindingofStapler-TracingStapler&#39;sURLdispatchingprocess">Tracing Stapler's URL dispatching process</h3>
+
+<p>When you run Hudson with the <code>stapler.trace</code> system property set to <code>true</code> (which happens automatically when you run <code>mvn hpi:run</code>), Stapler will produce the log of how the incoming URL is evaluated/dispatched. This trace is made available as HTTP response headers like &quot;Stapler-Trace-001&quot;, &quot;Stapler-Trace-002&quot;, ...</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>On Firefox, use the <a href="https://addons.mozilla.org/en-US/firefox/addon/3829" class="external-link" rel="nofollow">Live HTTP header extension</a> to inspect response HTTP headers. Firebug can do this, too.</p>
+
+<p>On Chrome, use View-&gt;Developer-&gt;Developer Tools-&gt;Network Tab-&gt;Click page you were loading to see headers</p></div></div>
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/36602373/36732953.png" data-image-src="attachments/36602373/36732953.png" data-unresolved-comment-count="0" data-linked-resource-id="36732953" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="live-http-header-extension.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36602373" data-linked-resource-container-version="9"></span></p>
+
+<p>Also, in this mode, 404 error page will also contain the similar trace in the HTML format, along with how it eventually failed and what are possible URL bindings that were available at the point of failure.</p>
+
+<p>These records are meant to assist plugin developers by showing URL mapping of stapler. You can use it against Hudson core or other plugins to see how their URL binding works, too. For the complete reference of how URL mapping works in stapler, see <a href="http://stapler.kohsuke.org/reference.html" class="external-link" rel="nofollow">the stapler documentation</a>.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602373/36732954.png">live-http-header-extension.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602373/36732953.png">live-http-header-extension.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

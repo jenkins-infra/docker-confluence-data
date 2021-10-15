@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Monitoring Scripts</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-Script-Console.html">Jenkins Script Console</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Monitoring Scripts
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (evernat)</span>, last modified on Apr 18, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    Several scripts to display data about http sessions, threads, memory, JVM or MBeans, when using the Monitoring plugin.<h1 id="MonitoringScripts-JenkinsScriptConsole">Jenkins Script Console</h1><p>Jenkins features a nice Groovy script console which allows to run arbitrary scripts on the Jenkins server (or on slave nodes). This feature can be accessed from the &quot;manage Jenkins&quot; link, typically at your <a href="http://server/jenkins/script" class="external-link" rel="nofollow">http://server/jenkins/script</a>. See <a href="Jenkins-Script-Console.html">more information and scripts</a>.</p><h1 id="MonitoringScripts-MonitoringScriptsandAlertsforJenkinsmaster">Monitoring Scripts and Alerts for Jenkins master</h1><p>If the <a href="Monitoring.html">Monitoring plugin</a> is installed, you can also use the following monitoring scripts in the <strong>Jenkins script console</strong>. To run a script periodically, you could also create and schedule a job to execute a <strong>system groovy script</strong> with the <a href="Groovy-plugin.html">groovy plugin</a>. (A system Groovy script executes insides Jenkins master's JVM, but see below for specific scripts for Jenkins slaves.)</p><p>The data printed by the scripts below can be displayed by the reports of the <a href="Monitoring.html">Monitoring plugin</a>, but the scripts can be used and customized to display some particular data or to automate some action.</p><h4 id="MonitoringScripts-ExecuteGC">Execute GC</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+before = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+System.gc();
+after = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+println I18N.getFormattedString(&quot;ramasse_miette_execute&quot;, Math.round((before - after) / 1024));
+</pre>
+</div></div><h4 id="MonitoringScripts-DisplayHTTPsessions">Display HTTP sessions</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+println SessionListener.getSessionCount() + &quot; sessions:&quot;;
+sessions = SessionListener.getAllSessionsInformations();
+for (session in sessions) {
+    println session;
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-Displayasimplethreadsdump">Display a simple threads dump</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+java = new JavaInformations(Parameters.getServletContext(), true);
+threads = java.getThreadInformationsList();
+println threads.size() + &quot; threads (&quot; + java.activeThreadCount + &quot; http threads active):&quot;;
+for (thread in threads) {
+  println &quot;&quot;;
+  println thread;
+  for (s in thread.getStackTrace())
+    println &quot;    &quot; + s;
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-Displaydeadlockedthreads">Display deadlocked threads</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+java = new JavaInformations(Parameters.getServletContext(), true);
+threads = java.getThreadInformationsList();
+deadlocked = new java.util.ArrayList();
+for (thread in threads) {
+  if (thread.deadlocked)
+    deadlocked.add(thread);
+}
+println deadlocked.size() + &quot; deadlocked threads / &quot; + threads.size() + &quot; threads (&quot; + java.activeThreadCount + &quot; http threads active)&quot;;
+for (thread in deadlocked) {
+  println &quot;&quot;;
+  println thread;
+  for (s in thread.getStackTrace())
+    println &quot;    &quot; + s;
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-Displaysomememorydata">Display some memory data</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+memory = new MemoryInformations();
+println &quot;\nused memory:\n    &quot; + Math.round(memory.usedMemory / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nmax memory:\n    &quot; + Math.round(memory.maxMemory / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nused perm gen:\n    &quot; + Math.round(memory.usedPermGen / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nmax perm gen:\n    &quot; + Math.round(memory.maxPermGen / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nused non heap:\n    &quot; +       Math.round(memory.usedNonHeapMemory / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nused physical memory:\n    &quot; +       Math.round(memory.usedPhysicalMemorySize / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;\nused swap space:\n    &quot; +       Math.round(memory.usedSwapSpaceSize / 1024 / 1024) + &quot; Mb&quot;;
+</pre>
+</div></div><h4 id="MonitoringScripts-DisplaysomeJVMdata">Display some JVM data</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+java = new JavaInformations(Parameters.getServletContext(), true);
+println &quot;\nsessions count:\n    &quot; + java.sessionCount;
+println &quot;\nactive HTTP threads count:\n    &quot; + java.activeThreadCount;
+println &quot;\nthreads count:\n    &quot; + java.threadCount;
+println &quot;\nsystem load average:\n    &quot; + java.systemLoadAverage;
+println &quot;\nsystem cpu load:\n    &quot; + java.systemCpuLoad; // since 1.59
+println &quot;\navailable processors:\n    &quot; + java.availableProcessors;
+println &quot;\nhost:\n    &quot; + java.host;
+println &quot;\nos:\n    &quot; + java.os;
+println &quot;\njava version:\n    &quot; + java.javaVersion;
+println &quot;\njvm version:\n    &quot; + java.jvmVersion;
+println &quot;\npid:\n    &quot; + java.pid;
+println &quot;\nserver info:\n    &quot; + java.serverInfo;
+println &quot;\ncontext path:\n    &quot; + java.contextPath;
+println &quot;\nstart date:\n    &quot; + java.startDate;
+println &quot;\nfree disk space in Jenkins directory:\n    &quot; + Math.round(java.freeDiskSpaceInTemp / 1024 / 1024) + &quot; Mb&quot;;
+</pre>
+</div></div><h4 id="MonitoringScripts-Displayheaphistogram(objectinstancesperclass)">Display heap histogram (object instances per class)</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+classes = VirtualMachine.createHeapHistogram().getHeapHistogram();
+println &quot;class    instances    bytes    source&quot;;
+println &quot;=====================================&quot;;
+for (c in classes) {
+    println c.name + &quot;    &quot; + c.instancesCount + &quot;    &quot; + c.bytes + &quot;    &quot; + c.source;
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-Takeaheapdump">Take a heap dump</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+if (System.getProperty(&quot;java.vendor&quot;).contains(&quot;IBM&quot;)) {
+  Action.HEAP_DUMP.ibmHeapDump();
+  println I18N.getString(&quot;heap_dump_genere_ibm&quot;);
+} else {
+  heapDumpPath = Action.HEAP_DUMP.heapDump().getPath();
+  println I18N.getFormattedString(&quot;heap_dump_genere&quot;, heapDumpPath);
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-DisplaysomeMBeanattributevalue">Display some MBean attribute value</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+exampleAttribute = &quot;java.lang:type=OperatingSystem.ProcessCpuTime&quot;;
+println exampleAttribute + &quot; = &quot; + MBeans.getConvertedAttributes(exampleAttribute);
+</pre>
+</div></div><h4 id="MonitoringScripts-Displaystatsofbuildsandbuildstepshavingmeantimegreaterthanseverethreshold">Display stats of builds and build steps having mean time greater than severe threshold</h4><p>(By default, severe threshold = 2 x stddev of all durations and warning threshold = 1 x stddev)</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+buildCounter = CounterRunListener.getBuildCounter();
+aggreg = new CounterRequestAggregation(buildCounter);
+for (request in aggreg.getRequests()) {
+   if (request.getMean() &gt;= aggreg.getSevereThreshold() 
+      || request.getCpuTimeMean() &gt;= aggreg.getSevereThreshold()) {
+         println(request.getName()
+            + &quot;, hits=&quot; + request.getHits()
+            + &quot;, mean=&quot; + request.getMean()
+            + &quot;, max=&quot; + request.getMaximum()
+            + &quot;, stddev=&quot; + request.getStandardDeviation()
+            + &quot;, cpuTimeMean=&quot; + request.getCpuTimeMean()
+            + &quot;, systemErrorPercentage=&quot; + request.getSystemErrorPercentage());
+   }
+}</pre>
+</div></div><h4 id="MonitoringScripts-Alerts">Alerts</h4><p>You can send alerts with a Jenkins job, using a <strong>system groovy script</strong> with the <a href="Groovy-plugin.html">groovy plugin</a>.</p><p>Suppose that you want to check every 15 minutes on the Jenkins master, if the system load average is above 50 or if the active HTTP threads count is above 100 or if there are deadlocked threads or if there are less than 10 Gb free disk space left:</p><ul><li>Create a freestyle job in Jenkins by clicking &quot;New item&quot;.</li><li>Check &quot;Build periodically&quot; and write a schedule, &quot;*/15 * * * *&quot; for example.</li><li>Add a build step &quot;Execute system Groovy script&quot; and write a script:</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+java = new JavaInformations(Parameters.getServletContext(), true);
+memory = java.memoryInformations;
+println &quot;used memory = &quot; + Math.round(memory.usedMemory / 1024 / 1024) + &quot; Mb&quot;;
+println &quot;active HTTP threads count = &quot; + java.activeThreadCount;
+println &quot;system load average = &quot; + java.systemLoadAverage;
+println &quot;free disk space in Jenkins directory = &quot; + Math.round(java.freeDiskSpaceInTemp / 1024 / 1024) + &quot; Mb&quot;;
+
+threads = java.getThreadInformationsList();
+deadlocked = new java.util.ArrayList();
+for (thread in threads) {
+  if (thread.deadlocked)
+    deadlocked.add(thread);
+}
+println deadlocked.size() + &quot; deadlocked threads / &quot; + threads.size() + &quot; threads&quot;;
+for (thread in deadlocked) {
+  println &quot;&quot;;
+  println thread;
+  for (s in thread.getStackTrace())
+    println &quot;    &quot; + s;
+}
+
+if (java.systemLoadAverage &gt; 50) throw new Exception(&quot;Alert for Jenkins: systemLoadAverage is &quot; + java.systemLoadAverage);
+if (java.activeThreadCount &gt; 100) throw new Exception(&quot;Alert for Jenkins: activeThreadCount is &quot; + java.activeThreadCount);
+if (deadlocked.size() &gt; 0) throw new Exception(&quot;Alert for Jenkins: &quot; + deadlocked.size() + &quot; deadlocked threads&quot;);
+if (java.freeDiskSpaceInTemp / 1024 / 1024 &lt; 10000) throw new Exception(&quot;Alert for Jenkins: only &quot; + Math.round(java.freeDiskSpaceInTemp / 1024 / 1024) + &quot; Mb free disk space left&quot;);
+</pre>
+</div></div><p>Or any script with monitoring values in this page.</p><ul><li>Add a post-build action &quot;E-mail Notification&quot; and write your email in &quot;Recipients&quot;.</li><li>You can also configure &quot;Discard old builds&quot; and write a description.</li><li>Save.</li><li>Click &quot;Build now&quot; to test it.</li></ul><h1 id="MonitoringScripts-MonitoringScriptsforJenkinsslaves">Monitoring Scripts for Jenkins slaves</h1><p>In the following scripts, new RemoteCallHelper(null) can be used to get data for all online slaves, or new RemoteCallHelper(&quot;my-slave&quot;) for a particular slave named &quot;my-slave&quot;.</p><h4 id="MonitoringScripts-Displayjvmdata,memorydata,deadlockedthreadsbynode">Display jvm data, memory data, deadlocked threads by node</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+String nodeName = null; // null for all nodes, not null for a particular node
+Map mapByNodeName = new RemoteCallHelper(nodeName).collectJavaInformationsListByName();
+for (node in mapByNodeName.keySet()) {
+  java = mapByNodeName.get(node);
+  println &quot;\nNode:\n	&quot; + node;
+
+  println &quot;\nsessions count:\n    &quot; + java.sessionCount;
+  println &quot;\nactive HTTP threads count:\n    &quot; + java.activeThreadCount;
+  println &quot;\nthreads count:\n    &quot; + java.threadCount;
+  println &quot;\nsystem load average:\n    &quot; + java.systemLoadAverage;
+  println &quot;\nsystem cpu load:\n    &quot; + java.systemCpuLoad; // since 1.59
+  println &quot;\navailable processors:\n    &quot; + java.availableProcessors;
+  println &quot;\nhost:\n    &quot; + java.host;
+  println &quot;\nos:\n    &quot; + java.os;
+  println &quot;\njava version:\n    &quot; + java.javaVersion;
+  println &quot;\njvm version:\n    &quot; + java.jvmVersion;
+  println &quot;\npid:\n    &quot; + java.pid;
+  println &quot;\nserver info:\n    &quot; + java.serverInfo;
+  println &quot;\ncontext path:\n    &quot; + java.contextPath;
+  println &quot;\nstart date:\n    &quot; + java.startDate;
+  println &quot;&quot;;
+
+  memory = java.memoryInformations;
+  println &quot;\nused memory:\n    &quot; + Math.round(memory.usedMemory / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nmax memory:\n    &quot; + Math.round(memory.maxMemory / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nused perm gen:\n    &quot; + Math.round(memory.usedPermGen / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nmax perm gen:\n    &quot; + Math.round(memory.maxPermGen / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nused non heap:\n    &quot; +       Math.round(memory.usedNonHeapMemory / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nused physical memory:\n    &quot; +       Math.round(memory.usedPhysicalMemorySize / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;\nused swap space:\n    &quot; +       Math.round(memory.usedSwapSpaceSize / 1024 / 1024) + &quot; Mb&quot;;
+  println &quot;&quot;;
+
+  threads = java.getThreadInformationsList();
+  deadlocked = new java.util.ArrayList();
+  for (thread in threads) {
+    if (thread.deadlocked)
+      deadlocked.add(thread);
+  }
+  println deadlocked.size() + &quot; deadlocked threads / &quot; + threads.size() + &quot; threads (&quot; + java.activeThreadCount + &quot; threads active)&quot;;
+  for (thread in deadlocked) {
+    println &quot;&quot;;
+    println thread;
+    for (s in thread.getStackTrace())
+      println &quot;    &quot; + s;
+  }
+  println &quot;&quot;;
+
+  println &quot;*************************************************************&quot;;
+  println &quot;&quot;;
+}
+</pre>
+</div></div><h4 id="MonitoringScripts-DisplaysomeMBeanattributesvaluesbynode">Display some MBean attributes values by node</h4><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import net.bull.javamelody.*;
+import net.bull.javamelody.internal.model.*;
+import net.bull.javamelody.internal.common.*;
+
+String exampleAttributes = &quot;java.lang:type=OperatingSystem.ProcessCpuTime|java.lang:type=Memory.HeapMemoryUsage&quot;;
+String nodeName = null; // null for all nodes, not null for a particular node
+List values = new RemoteCallHelper(nodeName).collectJmxValues(exampleAttributes);
+for (String value in values) {
+	println exampleAttributes + &quot; = &quot; + value;
+}
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848034/82280599.png">groovy-script.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

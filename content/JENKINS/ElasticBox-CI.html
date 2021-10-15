@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ElasticBox CI</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ElasticBox CI
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tphongio)</span>, last modified by <span class='editor'> Unknown User (riccardoelasticbox)</span> on Sep 02, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>
+
+<p>Provides full integration between Jenkins and ElasticBox (<a href="http://elasticbox.com" class="external-link" rel="nofollow">http://elasticbox.com</a>). With this plugin, Jenkins can launch, provision, and manage Jenkins slaves on-demand in different cloud providers via ElasticBox. It also provides build steps to deploy and manage your applications, including complex, multi-tier applications that are defined as boxes in ElasticBox.</p>
+<br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Version compatibility</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The plugin is always compatible with the latest version of ElasticBox.<br/>
+If you're using a previous version of ElasticBox (&lt;4.0), the latest compatible version of the plugin is the 0.9.14</p>
+</div></div>
+<p><br class="atl-forced-newline"/></p>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ElasticBox CI <a href="https://plugins.jenkins.io/elasticbox" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-16/#SECURITY-1434" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+
+<p>The latest documentation and tutorials can be found at <a href="https://elasticbox.com/documentation/integrate-with-jenkins/ci-cd-overview/" class="external-link" rel="nofollow">https://elasticbox.com/documentation/integrate-with-jenkins/ci-cd-overview/</a></p>
+
+<h1 id="ElasticBoxCI-Installation/Configuration">Installation / Configuration</h1>
+
+<ul>
+	<li>Jenkins must be restarted after installation of this plugin for it to work properly. You can trigger a hot restart of Jenkins by checking the check box as shown below after your selection to install ElasticBox CI plugin.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/72974392.png" data-image-src="attachments/72778254/72974392.png" data-unresolved-comment-count="0" data-linked-resource-id="72974392" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="restart-jenkins.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span></li>
+</ul>
+
+
+<ul>
+	<li>If you are starting a JNLP Jenkins slave agent in your slave instance and your Jenkins server is not wide-open at every port, configure a fixed JNLP port for your Jenkins server under Manager Jenkins &gt; Configure Global Security.</li>
+	<li>Set Jenkins URL in configuration page of your Jenkins server with a host name or IP address that are accessible to the slaves.</li>
+</ul>
+
+
+<h1 id="ElasticBoxCI-HowToUse">How To Use</h1>
+
+<ul>
+	<li>Add ElasticBox as a cloud in the configuration page of Jenkins. You can add multiple ElasticBox clouds, one for each user at elasticbox.com or your own ElasticBox appliance. An authentication token is required to access ElasticBox. You can retrieve an authentication token from your ElasticBox account or enter the username and password, click Get Authentication Token button, then copy the returned token to the Authentication Token field. Click Verify Authentication Token to make sure that the specified token is correct.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/72974389.png" data-image-src="attachments/72778254/72974389.png" data-unresolved-comment-count="0" data-linked-resource-id="72974389" data-linked-resource-version="8" data-linked-resource-type="attachment" data-linked-resource-default-alias="elasticbox-cloud.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span></li>
+	<li>Create a Jenkins Slave box in ElasticBox (you can sign up at <a href="http://elasticbox.com" class="external-link" rel="nofollow">http://elasticbox.com</a> and use it right away if you don't have an ElasticBox account yet). The box must have required variables JENKINS_URL and JNLP_SLAVE_OPTIONS. ElasticBox CI plugin will set the value of JENKINS_URL variable to the URL configured for this Jenkins server, and fill the value of JNLP_SLAVE_OPTIONS automatically. Those variable are needed to download the slave agent from Jenkins server and start it from within the slave instance as shown in the following scripts.
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+Install event script</li>
+	<li><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+#!/bin/bash
+
+# Download the slave agent from Jenkins server
+wget $JENKINS_URL/jnlpJars/slave.jar -O slave.jar
+</pre>
+</div></div>
+<br class="atl-forced-newline"/>
+Start event script</li>
+	<li><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+#!/bin/bash
+
+# Execute the agent and save the PID
+nohup java -jar slave.jar $JNLP_SLAVE_OPTIONS &gt; /dev/null 2&gt;&amp;1 &amp;
+echo \$! &gt; slave.pid
+</pre>
+</div></div>
+<br class="atl-forced-newline"/>
+You also need to add the following command in the stop event script of the Jenkins Slave box to kill the slave agent process when the instance is shutting down
+<br class="atl-forced-newline"/>  
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+#!/bin/bash
+
+# Stop the agent
+kill -9 $(cat slave.pid)
+</pre>
+</div></div></li>
+</ul>
+
+
+<ul>
+	<li>Configure slave to be provisioned on demand by clicking on Add button next to Slave Configurations in the ElasticBox cloud form.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/73597001.png" data-image-src="attachments/72778254/73597001.png" data-unresolved-comment-count="0" data-linked-resource-id="73597001" data-linked-resource-version="5" data-linked-resource-type="attachment" data-linked-resource-default-alias="slave-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span><br class="atl-forced-newline"/>
+Specify labels for the slave that any job can use to tie with slaves deployed with the configuration. The Environment is required and must be unique among slave configurations of the same ElasticBox cloud.</li>
+</ul>
+
+
+<ul>
+	<li>You also can configure your Jenkins project or job to be built on ElasticBox-managed slaves as following. The slaves deployed with this per-project configuration are used exclusively for the project. 
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/72974394.png" data-image-src="attachments/72778254/72974394.png" data-unresolved-comment-count="0" data-linked-resource-id="72974394" data-linked-resource-version="7" data-linked-resource-type="attachment" data-linked-resource-default-alias="instance-creation.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span><br class="atl-forced-newline"/>
+Select ElasticBox Single-Use Slave if you want to create a new instance for every execution of the job. After the job finished and the retention time elapsed, the instance will be terminated.</li>
+</ul>
+
+
+<ul>
+	<li>Add ElasticBox - Deploy Box to deploy an instance of a specified box
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/73596953.png" data-image-src="attachments/72778254/73596953.png" data-unresolved-comment-count="0" data-linked-resource-id="73596953" data-linked-resource-version="5" data-linked-resource-type="attachment" data-linked-resource-default-alias="deploy.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span><br/>
+You can specify build parameters or build environment variables as value of the variables or environment of the box you select to deploy. In the above picture, the GitHub Pull Request build parameter <code>ghprbSourceBranch</code> is specified as value for the variable BRANCH to receive the Git source branch to be used during deployment of the box.</li>
+</ul>
+
+
+<ul>
+	<li>Add ElasticBox - Manage Instance build step to Update, Reconfigure, Reinstall, Stop, or Terminate instances
+	<ul>
+		<li><strong>Update</strong>
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/74711073.png" data-image-src="attachments/72778254/74711073.png" data-unresolved-comment-count="0" data-linked-resource-id="74711073" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="update-instance.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span><br/>
+You can specify build parameters or build environment variables as value of the variables or environment of the box you select to update. .</li>
+		<li><strong>Reconfigure</strong><br/>
+Specify tags that are used to find the instances in the selected workspace of ElasticBox - Manage Instance build step to reconfigure
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/73596954.png" data-image-src="attachments/72778254/73596954.png" data-unresolved-comment-count="0" data-linked-resource-id="73596954" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="reconfigure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span></li>
+		<li><strong>Reinstall</strong><br/>
+Similarly to Reconfigure, specify tags used to find instances to reinstall.</li>
+		<li><strong>Start</strong><br/>
+Similarly to Reconfigure, specify tags used to find instances to start.</li>
+		<li><strong>Stop</strong><br/>
+Similarly to Reconfigure, specify tags used to find instances to stop.</li>
+		<li><strong>Terminate</strong><br/>
+Similarly to Reconfigure, specify tags used to find instances to terminate. Additionally, you can select to delete the instance after its termination.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/72778254/73596961.png" data-image-src="attachments/72778254/73596961.png" data-unresolved-comment-count="0" data-linked-resource-id="73596961" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="terminate.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72778254" data-linked-resource-container-version="50"></span></li>
+	</ul>
+	</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974388.png">Screen Shot 2014-06-11 at 8.58.40 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974390.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974391.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596997.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974392.png">restart-jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974393.png">jnlp-port.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596959.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597056.png">deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597055.png">reconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596956.png">reinstall.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597059.png">reinstall.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596958.png">reinstall-existing.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597054.png">reinstall-existing.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597000.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597061.png">terminate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596998.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596999.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/75071517.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597057.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597002.png">slave-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597060.png">slave-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596957.png">reinstall-existing.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711072.png">deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711075.png">reconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597063.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597058.png">reconfigure-existing.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597062.png">reinstall.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711076.png">terminate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597064.png">slave-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596955.png">reinstall.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/75071520.png">slave-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711074.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711077.png">deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711078.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711079.png">update-instance.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711080.png">terminate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711081.png">reconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/75071518.png">deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596954.png">reconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596961.png">terminate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/74711073.png">update-instance.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974394.png">instance-creation.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/75071519.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73596953.png">deploy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/72974389.png">elasticbox-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72778254/73597001.png">slave-config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:22</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

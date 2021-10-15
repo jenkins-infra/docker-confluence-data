@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Reactive Reference Dynamic Parameter Controls</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Active-Choices-Plugin.html">Active Choices Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Reactive Reference Dynamic Parameter Controls
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ioannis)</span>, last modified on Jul 26, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="ReactiveReferenceDynamicParameterControls-ReactiveReference:Displaycustom/dynamicUIparametercontrolswithdynamicHTML">Reactive Reference: Display custom/dynamic UI parameter controls with dynamic HTML</h2>
+<p>Reactive Choices allow you to display dynamic HTML as a build form helper (reference) parameter. This has been quite enabling, but Active Choices v1.2 further enhances this functionality by allowing you to not only display custom/dynamic HTML controls, but also use their values as build parameters. </p>
+
+<div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Required HTML Formatting</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The value of a dynamic HTML control will be passed to the build as a parameter as long as the HTML element includes a <strong>name=&quot;value&quot;</strong> attribute.</p></div></div>
+
+<p>Using this feature you can <strong>add new types of UI controls</strong> to job forms to collect build parameter values. Another possible use case is changing the UI control type dynamically, depending on the context (incl. referenced parameter values). Eg. from 'select' to read only text input, when there's only one option, or to a warning message (without a value of course) when there's no option available.</p>
+
+<h2 id="ReactiveReferenceDynamicParameterControls-Example:AddanInteractiveRangeControltoBuildForms">Example: Add an Interactive Range Control to Build Forms</h2>
+<p>Here we demonstrate how to <strong>add a new sliding range control</strong> to adjust and display the radius of a circle. The value of the control will be passed to the build as a parameter.<br/>
+The resulting build form is shown below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/81068565/81297456.gif" data-image-src="attachments/81068565/81297456.gif" data-unresolved-comment-count="0" data-linked-resource-id="81297456" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AC_ReactiveCircleBuild.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="81068565" data-linked-resource-container-version="6"></span></p>
+
+
+<h3 id="ReactiveReferenceDynamicParameterControls-Configuration:CircleRadiusActiveChoiceReactiveReferenceParameter">Configuration: CircleRadius Active Choice Reactive Reference Parameter</h3>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/81068565/81297452.jpg" data-image-src="attachments/81068565/81297452.jpg" data-unresolved-comment-count="0" data-linked-resource-id="81297452" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_072615_084656_AM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="81068565" data-linked-resource-container-version="6"></span></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>CircelRadius.groovy</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+html=
+&#39;&#39;&#39;
+&lt;p&gt;
+  &lt;input type=&quot;range&quot; min=&quot;1&quot; max=&quot;150&quot; id=&quot;nRadius&quot; name=&quot;value&quot;&gt;
+  &lt;label for=&quot;nRadius&quot; 
+         style=&quot;display: inline-block; width: 240px; text-align: left&quot;&gt;
+         radius = &lt;span id=&quot;nRadius-value&quot;&gt;
+&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/p&gt;
+&lt;hr&gt;
+&#39;&#39;&#39;
+return html
+</pre>
+</div></div>
+
+<h3 id="ReactiveReferenceDynamicParameterControls-Configuration:D3CircleActiveChoiceReactiveReferenceParameter">Configuration: D3Circle Active Choice Reactive Reference Parameter</h3>
+
+<p>This parameter provides the required D3 java script that dynamically updates the range control label and draws a circle</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/81068565/81297453.jpg" data-image-src="attachments/81068565/81297453.jpg" data-unresolved-comment-count="0" data-linked-resource-id="81297453" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_072615_085134_AM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="81068565" data-linked-resource-container-version="6"></span><br/>
+The groovy script code that adds the java script functions to the build form is shown below</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>D3Circle.groovy</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+d3HTML=
+&#39;&#39;&#39;
+&lt;!DOCTYPE html&gt;
+
+&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+
+var width = 500;
+var height = 300;
+ 
+var holder = d3.select(&quot;hr&quot;)
+      .append(&quot;svg&quot;)
+      .attr(&quot;width&quot;, width)    
+      .attr(&quot;height&quot;, height); 
+
+// draw the circle
+holder.append(&quot;circle&quot;)
+  .attr(&quot;cx&quot;, 300)
+  .attr(&quot;cy&quot;, 150) 
+  .style(&quot;fill&quot;, &quot;none&quot;)   
+  .style(&quot;stroke&quot;, &quot;blue&quot;) 
+  .attr(&quot;r&quot;, 120);
+
+// when the input range changes update the circle 
+d3.select(&quot;#nRadius&quot;).on(&quot;input&quot;, function() {
+  update(+this.value);
+});
+
+// Initial starting radius of the circle 
+update(120);
+
+// update the elements
+function update(nRadius) {
+
+  // adjust the text on the range slider
+  d3.select(&quot;#nRadius-value&quot;).text(nRadius);
+  d3.select(&quot;#nRadius&quot;).property(&quot;value&quot;, nRadius);
+  // update the circle radius
+  holder.selectAll(&quot;circle&quot;) 
+    .attr(&quot;r&quot;, nRadius);
+}
+
+&lt;/script&gt;
+&#39;&#39;&#39;
+return d3HTML
+</pre>
+</div></div>
+
+<p>When the build starts the CircleRadius is passed and can be used as a parameter to the build. Note that the D3Cirle parameter is null which is the default behavior of a Reactive Reference parameter (used to display reference information but the value is not passed to the build)</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/81068565/81297455.jpg" data-image-src="attachments/81068565/81297455.jpg" data-unresolved-comment-count="0" data-linked-resource-id="81297455" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_072615_114709_AM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="81068565" data-linked-resource-container-version="6"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/81068565/81297452.jpg">Screenshot_072615_084656_AM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/81068565/81297453.jpg">Screenshot_072615_085134_AM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/81068565/81297454.png">AC_ReactiveCircle.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/81068565/81297455.jpg">Screenshot_072615_114709_AM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/81068565/81297456.gif">AC_ReactiveCircleBuild.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

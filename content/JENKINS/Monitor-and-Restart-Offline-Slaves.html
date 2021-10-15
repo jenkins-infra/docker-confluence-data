@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Monitor and Restart Offline Slaves</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-Script-Console.html">Jenkins Script Console</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Monitor and Restart Offline Slaves
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (yurymilchenko)</span>, last modified by <span class='editor'> Unknown User (bwalding)</span> on Sep 06, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>
+<p>This script can monitor and restart offline nodes if they are not disconnected manually.</p><br/>
+Of course you can disable email notification. Thanks author for <a href="http://www.brookstevens.org/2009/09/sending-email-using-groovy.html" class="external-link" rel="nofollow">email notification</a>.</p>
+
+<p>You can run this script in Jenkins Console. But I think it is good idea to create Jenkins task, which will be run periodically (for example hourly). <a href="https://wiki.jenkins-ci.org/display/JENKINS/Groovy+plugin" class="external-link" rel="nofollow">Groovy Plugin</a> needs for Jenkins jobs.</p>
+
+<p>Also see <a href="https://wiki.jenkins-ci.org/display/JENKINS/Display+Information+About+Nodes" class="external-link" rel="nofollow">Display Information About Nodes</a></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+import hudson.model.*
+import hudson.node_monitors.*
+import hudson.slaves.*
+import java.util.concurrent.*
+
+jenkins = Hudson.instance
+
+import javax.mail.internet.*;
+import javax.mail.*
+import javax.activation.*
+
+
+def sendMail (slave, cause) {
+  
+ message = slave + &quot; slave is down. Check http://JENKINS_HOSTNAME:JENKINS_PORT/computer/&quot; + slave + &quot;\nBecause &quot; + cause
+ subject = slave + &quot; slave is offline&quot;
+ toAddress = &quot;JENKINS_ADMIN@YOUR_DOMAIN&quot;
+ fromAddress = &quot;JENKINS@YOUR_DOMAIN&quot;
+ host = &quot;SMTP_SERVER&quot;
+ port = &quot;SMTP_PORT&quot;
+
+ Properties mprops = new Properties();
+ mprops.setProperty(&quot;mail.transport.protocol&quot;,&quot;smtp&quot;);
+ mprops.setProperty(&quot;mail.host&quot;,host);
+ mprops.setProperty(&quot;mail.smtp.port&quot;,port);
+
+ Session lSession = Session.getDefaultInstance(mprops,null);
+ MimeMessage msg = new MimeMessage(lSession);
+
+
+ //tokenize out the recipients in case they came in as a list
+ StringTokenizer tok = new StringTokenizer(toAddress,&quot;;&quot;);
+ ArrayList emailTos = new ArrayList();
+ while(tok.hasMoreElements()){
+ emailTos.add(new InternetAddress(tok.nextElement().toString()));
+ }
+ InternetAddress[] to = new InternetAddress[emailTos.size()];
+ to = (InternetAddress[]) emailTos.toArray(to);
+ msg.setRecipients(MimeMessage.RecipientType.TO,to);
+ InternetAddress fromAddr = new InternetAddress(fromAddress);
+ msg.setFrom(fromAddr);
+ msg.setFrom(new InternetAddress(fromAddress));
+ msg.setSubject(subject);
+ msg.setText(message)
+
+ Transport transporter = lSession.getTransport(&quot;smtp&quot;);
+ transporter.connect();
+ transporter.send(msg);
+}
+
+
+def getEnviron(computer) {
+   def env
+   def thread = Thread.start(&quot;Getting env from ${computer.name}&quot;, { env = computer.environment })
+   thread.join(2000)
+   if (thread.isAlive()) thread.interrupt()
+   env
+}
+
+def slaveAccessible(computer) {
+    getEnviron(computer)?.get(&#39;PATH&#39;) != null
+}
+
+
+def numberOfflineNodes = 0
+def numberNodes = 0
+for (slave in jenkins.slaves) {
+   def computer = slave.computer
+   numberNodes ++
+   println &quot;&quot;
+   println &quot;Checking computer ${computer.name}:&quot;
+   def isOK = (slaveAccessible(computer) &amp;&amp; !computer.offline)
+   if (isOK) {
+     println &quot;\t\tOK, got PATH back from slave ${computer.name}.&quot;
+     println(&#39;\tcomputer.isOffline: &#39; + slave.getComputer().isOffline()); 
+     println(&#39;\tcomputer.isTemporarilyOffline: &#39; + slave.getComputer().isTemporarilyOffline());
+     println(&#39;\tcomputer.getOfflineCause: &#39; + slave.getComputer().getOfflineCause());
+     println(&#39;\tcomputer.offline: &#39; + computer.offline); 
+     
+     
+   } else {
+     numberOfflineNodes ++
+     println &quot;  ERROR: can&#39;t get PATH from slave ${computer.name}.&quot;
+     println(&#39;\tcomputer.isOffline: &#39; + slave.getComputer().isOffline()); 
+     println(&#39;\tcomputer.isTemporarilyOffline: &#39; + slave.getComputer().isTemporarilyOffline());
+     println(&#39;\tcomputer.getOfflineCause: &#39; + slave.getComputer().getOfflineCause());
+     println(&#39;\tcomputer.offline: &#39; + computer.offline); 
+     sendMail(computer.name, slave.getComputer().getOfflineCause().toString())
+     if (slave.getComputer().isTemporarilyOffline()) {
+      if (!slave.getComputer().getOfflineCause().toString().contains(&quot;Disconnected by&quot;)) {
+         computer.setTemporarilyOffline(false, slave.getComputer().getOfflineCause())        
+      }
+     } else {
+         computer.connect(true)  
+     }
+   }
+ }
+println (&quot;Number of Offline Nodes: &quot; + numberOfflineNodes)
+println (&quot;Number of Nodes: &quot; + numberNodes)  
+
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

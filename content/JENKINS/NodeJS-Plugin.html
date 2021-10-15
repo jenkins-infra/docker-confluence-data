@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : NodeJS Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : NodeJS Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (cliffano)</span>, last modified by <span class='editor'> Unknown User (dskrvk)</span> on Oct 16, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View NodeJS <a href="https://plugins.jenkins.io/nodejs" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Provides Jenkins integration for NodeJS &amp; npm packages.<h2 id="NodeJSPlugin-Download&amp;Installation">Download &amp; Installation</h2><p>You can download the <a href="http://updates.jenkins-ci.org/latest/nodejs.hpi" class="external-link" rel="nofollow">latest .hpi</a> and install it from the Manage Plugins menu, or install this plugin directly from the Plugins Update Center.</p><h2 id="NodeJSPlugin-Mainfeatures">Main features</h2><ul class="alternate"><li>Provides NodeJS auto-installer, allowing to create as many NodeJS installations &quot;profiles&quot; as you want.<br/>The auto-installer will automatically install a given version of NodeJS, on every jenkins slave where it will be needed</li><li>Allows to install globally some npm packages inside each installations, these npm packages will be made available to the PATH</li><li>Allows to execute some NodeJS script, under a given NodeJS installation</li><li>Allows use custom NPM user configuration file defined with config-file-provider plugin to setup custom NPM settings</li><li>Add a lightweight support to DSL pipeline</li><li>Force 32bit architecture</li><li>Relocate npm cache folder using pre defined streategies</li></ul><h2 id="NodeJSPlugin-Usage">Usage</h2><ol><li>After installing the plugin, go to the global jenkins configuration panel (JENKINS_URL/configure or JENKINS_URL/configureTools if using jenkins 2),<br/>and add new NodeJS installations.</li><li><p>For every Nodejs installation, you can choose to install some global npm packages.<br/>Since 1.2.6 you could force the installation of the 32bit package for the underlying architecture if supported. If the package is not available the build will fail.</p><em>Note that you might provide npm package's version (with syntax &quot;package@0.1.2&quot; for instance, or maybe better, &quot;package@~0.1.0&quot;) in order to enforce</em><br/><em>reproductibility of your npm execution environnment (the ~ syntax allows to benefits from bugfixes without taking the risk of a major version upgrade)</em><br/>See below:<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/138453031.png" data-image-src="attachments/46334885/138453031.png" data-unresolved-comment-count="0" data-linked-resource-id="138453031" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-3-31 16:40:29.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span></li><li>Now, go to a job configuration screen, you will have 2 new items :<ul class="alternate"><li>On the &quot;Build environnment&quot; section, you will be able to pick one of the NodeJS installations to provide its bin/ folder to the PATH.<br/>This way, during shell build scripts, you will have some npm executables available to the command line (like bower or grunt)<br/>See below:<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/69402661.png" data-image-src="attachments/46334885/69402661.png" data-unresolved-comment-count="0" data-linked-resource-id="69402661" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="nodejs_npm_to_path.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span></li><li>On the &quot;Build&quot; section, you will be able to add a &quot;Execute NodeJS script&quot; build step<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/46563414.png" data-image-src="attachments/46334885/46563414.png" data-unresolved-comment-count="0" data-linked-resource-id="46563414" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nodejs_buildstep_menu.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span><br/>This way, you will be able to fill a textarea with the script content you want to execute.<br/>Note that you will have to select a NodeJS runtime you previously installed, to specify the NodeJS version you want to use<br/>during your NodeJS script execution.<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/46563415.png" data-image-src="attachments/46334885/46563415.png" data-unresolved-comment-count="0" data-linked-resource-id="46563415" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="nodejs_buildstep_script.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span></li></ul></li><li>You can customise any <a href="https://docs.npmjs.com/misc/config#config-settings" class="external-link" rel="nofollow">NPM settings</a> you need creating a NPM config file where you can also setup multiple npm registry (scoped or public)<br/>and select for each one stored credential (only user/password supported type) as follow:<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/106496043.png" data-image-src="attachments/46334885/106496043.png" data-unresolved-comment-count="0" data-linked-resource-id="106496043" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nodejs_npm_configfile.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span><br/>and than select the config file to use for each configured build step<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334885/106496044.png" data-image-src="attachments/46334885/106496044.png" data-unresolved-comment-count="0" data-linked-resource-id="106496044" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nodejs_choose_configfile.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334885" data-linked-resource-container-version="46"></span></li><li>You would relocate the npm cache folder to swipe out it when a job is removed or workspace folder is deleted. There are three default strategy:<ul><li>per node, that is the default NPM behavour. All download package are placed in the ~/.npm on Unix system or %APP_DATA%\npm-cache on Windows system;</li><li>per executor, where each executor has an own NPM cache folder placed in ~/npm-cache/$executorNumber;</li><li>per job, placed in the workspace folder under $WORKSPACE/npm-cache. This cache will be swipe out together the workspace and will be removed when the job is deleted.</li></ul></li></ol><h2 id="NodeJSPlugin-Pipeline">Pipeline</h2><p>The current supported DSL steps are:</p><ul class="alternate"><li>nodejs (as buildwrapper)</li><li>tools</li></ul><p>In a Declarative pipeline you can add any configured NodeJS tool to your job, and it will enhance<br/>the PATH variable with the selected NodeJS installation folder, instead in scripted pipeline you have to do it manually.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b><em>Example of use tools in Jenkinsfile (Scripted Pipeline)</em></b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node {
+    env.NODEJS_HOME = &quot;${tool &#39;Node 6.x&#39;}&quot;
+	// on linux / mac
+	env.PATH=&quot;${env.NODEJS_HOME}/bin:${env.PATH}&quot;
+	// on windows
+	env.PATH=&quot;${env.NODEJS_HOME};${env.PATH}&quot;
+	sh &#39;npm --version&#39;
+}
+</pre>
+</div></div><p>This example show the use of <strong>buildwrapper</strong>, where enhanced PATH will be available only inside the brace block</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b><em>Example of the use of buildwrapper Jenkinsfile (Declarative Pipeline)</em></b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {
+    agent any
+
+    stages {
+        stage(&#39;Build&#39;) {
+            steps {
+                nodejs(nodeJSInstallationName: &#39;Node 6.x&#39;, configId: &#39;&lt;config-file-provider-id&gt;&#39;) {
+                    sh &#39;npm config ls&#39;
+                }
+            }
+        }
+    }
+}
+</pre>
+</div></div><h2 id="NodeJSPlugin-Knownlimitations/issues">Known limitations / issues</h2><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>NodeJS version 1.0 has adapted its code to the most recent Jenkins API (1.6xx). If also EnvInject is installed you will fall in <a href="https://issues.jenkins-ci.org/browse/JENKINS-26583">JENKINS-26583</a><br/>that corrupts setup of the nodejs installation bin folder into PATH environment. In this case consider if update or not or use an own build from<br/><a href="https://github.com/jenkinsci/nodejs-plugin/tree/workaround-26583" class="external-link" rel="nofollow">this branch</a> untill the JENKINS-26583 will not be fixed.</p></div></div><ul class="alternate"><li>If you update from NodeJS 0.2.2 or earlier to newer version materializes a data migration. This data migration is transparent to the users but<br/>you can not back to 0.2.2 without lost global configuration tools and job build step configuration.</li><li>NodeJS versions prior to 0.9.0 won't be available at the moment (directory structure was not the same as today on distribution site).<br/>This might be handled in the future (this is exposed as <a href="https://github.com/jenkinsci/nodejs-plugin/blob/master/src/main/java/jenkins/plugins/nodejs/tools/pathresolvers/LatestInstallerPathResolver.java" class="external-link" rel="nofollow">PathResolver implementation</a>) :<br/>don't hesitate to provide new implementations for previous versions and submit a PR on github.</li><li>Supported architecture are:<ul class="alternate"><li>Windows 32/64 bit</li><li>Linux 32/64 bit</li><li>OSX (intel) 64 bit</li><li>Arm 6l/7l/64</li><li>SunOS</li></ul></li></ul><h1 id="NodeJSPlugin-ReleasesNotes">Releases Notes</h1><p><strong>Moved to <a href="https://github.com/jenkinsci/nodejs-plugin/releases" class="external-link" rel="nofollow">github repository page</a></strong></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/69402660.png">nodejs_buildstep_script.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/46563414.png">nodejs_buildstep_menu.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/69402663.png">nodejs_installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496041.png">nodejs_npm_to_path.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496042.png">nodejs_buildstep_script.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/69402758.png">nodejs_installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496040.png">nodejs_installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496037.jpg">nodejs_installations.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496038.jpg">nodejs_buildstep_script.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496039.jpg">nodejs_npm_to_path.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/69402662.png">nodejs_installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/69402661.png">nodejs_npm_to_path.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/46563415.png">nodejs_buildstep_script.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496043.png">nodejs_npm_configfile.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/106496044.png">nodejs_choose_configfile.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334885/138453031.png">image2018-3-31 16:40:29.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:35</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

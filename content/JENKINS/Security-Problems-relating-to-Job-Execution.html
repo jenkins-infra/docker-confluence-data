@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Security Problems relating to Job Execution</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Security Problems relating to Job Execution
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (yamabb)</span>, last modified on Oct 25, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page is created for discussion on 'security problems relating to job execution in Jenkins'.<br/>
+As mentioned in ﻿﻿<a href="Securing-Jenkins.html#SecuringJenkins-SecurityImplication">Securing Jenkins#Security Implication</a>, Jenkins security setup does NOT imply 'secure job execution'.<br/>
+I'd like to summarize these issues on this page, and ask you for your opinion.</p>
+
+<h2 id="SecurityProblemsrelatingtoJobExecution-Preface">Preface</h2>
+
+<p>As you know,  Jenkins already supports &quot;Project-based Matrix Authorization Strategy&quot; to isolate different users or teams.</p>
+
+<p>In some case, it seems more useful and desirable to mix jobs of multiple teams into single Jenkins instance with the above strategy,<br/>
+rather than running many small Jenkins instances by each team,<br/>
+because running many Jenkins instances may often need a lot of administration labor and cost.</p>
+
+<p>But as someone pointed out, even when &quot;Project-based Matrix Authorization Strategy&quot; is used,<br/>
+there seems to exist some serious security problems relating to &quot;job execution&quot;<br/>
+or treatment of credentials for systems outside Jenkins, such as OS account for slave nodes and Subversion account.</p>
+
+<h2 id="SecurityProblemsrelatingtoJobExecution-Summaryofproblems">Summary of problems</h2>
+
+<p>As far as I can find out, there are 3 security problems below in current Jenkins.</p>
+
+<p>1)  A job can easily access files/folders beyond the workspace of the job.<br/>
+  As a result, a job can read, update or destroy workspace files/folders of other jobs or other resources,<br/>
+  if these resources are on the same slave machine or accessible from the same machine.<br/>
+  (e.g. <a href="http://groups.google.com/group/jenkinsci-users/browse_thread/thread/0b5035c86c21bea2/fb4616f344d1bb58?show_docid=fb4616f344d1bb58" class="external-link" rel="nofollow">http://groups.google.com/group/jenkinsci-users/browse_thread/thread/0b5035c86c21bea2/fb4616f344d1bb58?show_docid=fb4616f344d1bb58</a>)</p>
+
+<p>A job can also read/write Jenkins configuration files because jobs are executed with the same user id (e.g., tomcat6). </p>
+
+<p>2)  A job can easily use any slave node for execution, even when these slave nodes are exclusive to other jobs.<br/>
+As a result, the case of 1) can be done easily.<br/>
+  (e.g. <a href="http://groups.google.com/group/jenkinsci-users/browse_thread/thread/072d33e2e5337b23/c8890d34799e5e53?show_docid=c8890d34799e5e53" class="external-link" rel="nofollow">http://groups.google.com/group/jenkinsci-users/browse_thread/thread/072d33e2e5337b23/c8890d34799e5e53?show_docid=c8890d34799e5e53</a>)</p>
+
+<p>3)  When using Subversion plugin, a job can easily access to Subversion repositories/URLs,<br/>
+even when these repositories/URLs are exclusive to other jobs.<br/>
+ (e.g. Sorry, this is in Japanese. <a href="http://groups.google.com/group/jenkinsci-ja/browse_thread/thread/f0b4b388a8c3688d/9db9f17a7edf1210?show_docid=9db9f17a7edf1210" class="external-link" rel="nofollow">http://groups.google.com/group/jenkinsci-ja/browse_thread/thread/f0b4b388a8c3688d/9db9f17a7edf1210?show_docid=9db9f17a7edf1210</a>)</p>
+
+<h2 id="SecurityProblemsrelatingtoJobExecution-Discussion">Discussion</h2>
+
+<p>The case of 1) seems to be not a problem of Jenkins itself, rather a problem about configuration of slave nodes.<br/>
+We must appropriately configure OS user and his privilege used by job execution.<br/>
+Strict access control like 'chroot' may be needed in some cases.<br/>
+The situation is quite same to when adding a new user account to the machine, especially a user account for remote execution.</p>
+
+<p>For that purpose, I strongly recommend you not to perform build on master (configure system as # of executors = 0).<br/>
+Create slaves and perform build on slaves even when these slave nodes are on the same master machine,<br/>
+so that you can separate OS accounts for slave nodes from that of master, and control easily their resources and privileges.</p>
+<ul>
+	<li>When you use maven project of Jenkins,<br/>
+a better idea than chroots, OS containers, or VMs may be to use the <a href="http://download.oracle.com/javase/1,5.0/docs/api/java/lang/SecurityManager.html" class="external-link" rel="nofollow">Java Security Manager</a> for enabling isolation between projects. AFAIK it enables accesses to specific files/paths in the file system, it ensures users cannot kill other processes and can restrict access to specific network ports. This solution has the advantage that it is portable. It may also be quite easy to allow the admin of the job to configure the security settings of a job via a plugin. Then the users that &quot;own&quot; the job can run any shell script under the constraints imposed by the security manager. </li>
+</ul>
+
+
+
+
+
+<p>Regarding the case of 2), at least in current Jenkins, jobs can select slaves, but slaves can't reject jobs for execution,<br/>
+and slave names and labels are visible to all job authors.</p>
+
+<ul>
+	<li>Labels and any configuration of slaves are visible only to users who have 'configure-slave permission',<br/>
+but 'Label Expression' field on job configure page is kind enough to auto-complete slave labels !</li>
+</ul>
+
+
+<p>I think, slave and job configuration should have credential like password for job execution on that slave.</p>
+
+
+
+<p>The case of 3) may be a problem specific to Subversion plugin. (I don't know other SCM plugins)</p>
+
+<p>Subversion plugin tries to store subversion credentials globally for subversion URLs specified by job configuration<br/>
+and reuse these credentials automatically afterward.</p>
+
+<p>So if you know only subversion URLs of other jobs,<br/>
+you can access to this URLs without providing any credential!</p>
+
+<p>This problem may be due to SVNkit,<br/>
+but it seems more desirable and safe to set subversion credential for each job.</p>
+
+<h2 id="SecurityProblemsrelatingtoJobExecution-Notes">Notes</h2>
+
+<p>Of course, malicious attack by job or build-script authors is out of consideration,<br/>
+but it is a big problem to allow the above things very easily or by accident.<br/>
+These problems seems not so difficult to fix, and should be fixed, I believe.</p>
+
+<p>Sorry if I'm wrong, please feel free to comment to, or update this page.<br/>
+(I'm not so good at English, so correction of English words/expressions would be<br/>
+also very appreciated :-)</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

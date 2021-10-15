@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Mogotest Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Mogotest Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (nirvdrum)</span>, last modified by <span class='editor'> Unknown User (evernat)</span> on Dec 07, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="MogotestPlugin-MogotestJenkinsPlugin">Mogotest Jenkins Plugin</h1>
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Deprecated</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This plugin has been deprecated. <a href="http://www.mogotest.com/" class="external-link" rel="nofollow">http://www.mogotest.com/</a> is down.</p></div></div>
+
+<h2 id="MogotestPlugin-Overview">Overview</h2>
+
+<p>
+<p>The Mogotest Jenkins Plugin is used for triggering test runs on the <a href="http://mogotest.com/" class="external-link" rel="nofollow">Mogotest</a> visual cross-browser &amp; regression testing service.</p></p>
+
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'mogotest' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<h2 id="MogotestPlugin-Pre-requisites">Pre-requisites</h2>
+
+<p>In order to make use of this plugin you must have an active (trial or paid) <a href="http://mogotest.com/" class="external-link" rel="nofollow">Mogotest</a> account.  You will need your Mogotest API key, which you can fetch from your <a href="https://mogotest.com/settings" class="external-link" rel="nofollow">settings page</a>, to configure the plugin.</p>
+
+<h2 id="MogotestPlugin-Configuration">Configuration</h2>
+
+<p>The Mogotest Jenkins plugin is a build notifier, and as such, must be added as a post-build action in the job configuration.  There is no global configuration for the plugin, so everything will be set up through the job settings.  To get started, first add the post build action for your job, as shown in Figure 1:</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848059/67043442.png" data-image-src="attachments/66848059/67043442.png" data-unresolved-comment-count="0" data-linked-resource-id="67043442" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="post_build_action.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848059" data-linked-resource-container-version="15"></span><br/>
+<strong>Figure 1: Setting up the post build action.</strong>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Once you select the &quot;Start Mogotest Test Run&quot; option you'll then see the configuration section appear (Figure 2):</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848059/67043443.png" data-image-src="attachments/66848059/67043443.png" data-unresolved-comment-count="0" data-linked-resource-id="67043443" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848059" data-linked-resource-container-version="15"></span><br/>
+<strong>Figure 2: Configuring the Mogotest Jenkins plugin.</strong>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Note that you'll need two pieces of information here:</p>
+
+<ul>
+	<li>Your Mogotest API key, which can be retrieved from your <a href="https://mogotest.com/settings" class="external-link" rel="nofollow">settings page</a></li>
+	<li>The test plan ID for the test plan you'd like to build as part of this job</li>
+</ul>
+
+
+<p>Your test plan ID is embedded in the URL and takes a slightly different form depending on whether you created your test plan through the Mogotest API or through the web site.  In the URL <a href="https://mogotest.com/sites/www-quirksmode-org/groups/s5qtxk/tests/latest" class="external-link" rel="nofollow">https://mogotest.com/sites/www-quirksmode-org/groups/s5qtxk/tests/latest</a>, the test plan ID is <strong>s5qtxk</strong> (i.e., the part following the groups/ portion of the URL).</p>
+
+<p>Once your configuration has been saved, it will appear encrypted when you visit it again.  Don't worry, although the API key field looks different now, your tests will still be triggered. While this may be a bit confusing, it allows for protecting the API key in multi-user environments.  The encrypted configuration will look like Figure 3:</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848059/67043444.png" data-image-src="attachments/66848059/67043444.png" data-unresolved-comment-count="0" data-linked-resource-id="67043444" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="encrypted_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848059" data-linked-resource-container-version="15"></span><br/>
+<strong>Figure 3: Encrypted configuration masks API key.</strong>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+
+<h2 id="MogotestPlugin-Support">Support</h2>
+
+<p><strong>NB:</strong> This plugin cannot create or reconfigure Mogotest test plans.  You must do that directly through the Mogotest API or web site.  That means you must also create the test plan prior to configuring the Jenkins plugin.</p>
+
+<p>If you run into any issues, please contact the Mogotest <a href="mailto:support@mogotest.com" class="external-link" rel="nofollow">support team</a>.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848059/67043442.png">post_build_action.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848059/67043443.png">configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848059/67043445.png">encrypted_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848059/67043444.png">encrypted_configuration.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

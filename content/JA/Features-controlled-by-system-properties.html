@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Features controlled by system properties</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Features controlled by system properties
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (_imai)</span>, last modified on Dec 11, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Features+controlled+by+system+properties">Features controlled by system properties</a></p>
+
+
+
+<h1 id="Featurescontrolledbysystemproperties-JenkinsFeaturesControlledwithSystemProperties">Jenkins Features Controlled with System Properties</h1>
+
+<p>Jenkinsにはいくつかの&quot;隠し&quot;機能があり、システムプロパティで有効にできます。システムプロパティは、<code>-Dproperty=value</code>を<code>java</code>コマンドラインに渡してJenkinsを開始することで設定されます。これらの引数は、全て引数<code>-jar</code>の<strong>前</strong>で渡すことに注意してください。そうではない場合、それらは無視されます。</p>
+
+<p>例:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -Dhudson.footerURL=http://example.org -jar jenkins.war</pre>
+</div></div>
+
+<p>以下は、プロパティとそれらが導入されたJenkinsのバージョンの一覧です。</p>
+
+<ul>
+	<li><strong>プロパティ</strong> - Javaプロパティ名</li>
+	<li><strong>デフォルト</strong> - 明示的に指定しない場合のデフォルト値</li>
+	<li><strong>バージョン</strong> - このプロパティが導入されたJenkinsのバージョン</li>
+	<li><strong>備考</strong> - その他の覚書</li>
+</ul>
+
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> <strong>プロパティ</strong> </p></td>
+<td class="confluenceTd"><p> <strong>デフォルト</strong> </p></td>
+<td class="confluenceTd"><p> <strong>バージョン</strong> </p></td>
+<td class="confluenceTd"><p> <strong>備考</strong> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.ClassicPluginStrategy.useAntClassLoader </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.316 </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.consoleTailKB </p></td>
+<td class="confluenceTd"><p> 150 </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> How many KB of console log to show in default console view </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.diagnosis.HudsonHomeDiskUsageChecker.freeSpaceThreshold </p></td>
+<td class="confluenceTd"><p> 1073741824 </p></td>
+<td class="confluenceTd"><p> 1.339 </p></td>
+<td class="confluenceTd"><p> The notification threshold for when the Hudson home directory is running low on disk space, in bytes </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.diyChunking </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Set to true if the servlet container doesn't support chunked encoding </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.DNSMultiCast.disabled </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.359 </p></td>
+<td class="confluenceTd"><p> Set to &quot;true&quot; to disable DNS multicast </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.footerURL </p></td>
+<td class="confluenceTd"><p> <a href="http://jenkins-ci.org/" class="external-link" rel="nofollow">http://jenkins-ci.org/</a> </p></td>
+<td class="confluenceTd"><p> 1.416 </p></td>
+<td class="confluenceTd"><p> Allows tweaking the URL displayed at the bottom of Jenkins' UI </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.Functions.autoRefreshSeconds </p></td>
+<td class="confluenceTd"><p> 10 </p></td>
+<td class="confluenceTd"><p> 1.365 </p></td>
+<td class="confluenceTd"><p> Number of seconds between reloads when Auto Refresh is enabled </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.lifecycle </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Specify full class name for Lifecycle implementation to override default </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.matrix.MatrixConfiguration.useShortWorkspaceName </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Use shorter but cryptic names to avoid 256 character limit on paths in <a href="http://javadoc.jenkins-ci.org/byShortName/MatrixConfiguration#useShortWorkspaceName">Cygwin</a> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.DownloadService.never </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Suppress the periodic download of data files for plugins </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Hudson.flyweightSupport </p></td>
+<td class="confluenceTd"><p> was:false <br class="atl-forced-newline"/>
+1.337:true </p></td>
+<td class="confluenceTd"><p> 1.318 </p></td>
+<td class="confluenceTd"><p> Matrix parent job won't consume an executor when true </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Hudson.killAfterLoad </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Exit Jenkins right after loading </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Hudson.logStartupPerformance </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Log startup timing info </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Hudson.parallelLoad </p></td>
+<td class="confluenceTd"><p> true </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Loads job configurations in parallel on startup </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.LoadStatistics.clock </p></td>
+<td class="confluenceTd"><p> 10000 </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Load statistics clock cycle in milliseconds </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.LoadStatistics.decay </p></td>
+<td class="confluenceTd"><p> 0.9 </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Decay ratio for every clock cycle in node utilization charts </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.MultiStageTimeSeries.chartFont </p></td>
+<td class="confluenceTd"><p> SansSerif-10 </p></td>
+<td class="confluenceTd"><p> 1.562 </p></td>
+<td class="confluenceTd"><p> Font used for load statistics (see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Font.html#decode%28java.lang.String%29" class="external-link" rel="nofollow">Java documentation</a> on how the value is decoded) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Queue.cacheRefreshPeriod </p></td>
+<td class="confluenceTd"><p> 1000 <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> 1.577 <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Defines the refresh period for the internal queue cache (in milliseconds). The greater period workarounds web UI delays on large installations, which may be caused by locking of the build queue by build executors. Downside - builds appear in the queue with a noticeable delay. <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Run.ArtifactList.listCutoff </p></td>
+<td class="confluenceTd"><p> 16 </p></td>
+<td class="confluenceTd"><p> 1.330 </p></td>
+<td class="confluenceTd"><p> More artifacts than this will use tree view or simple link rather than listing out artifacts </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Run.ArtifactList.treeCutoff </p></td>
+<td class="confluenceTd"><p> 40 </p></td>
+<td class="confluenceTd"><p> 1.330 </p></td>
+<td class="confluenceTd"><p> More artifacts than this will show a simple link to directory browser rather than showing artifacts in tree view </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.Slave.workspaceRoot </p></td>
+<td class="confluenceTd"><p> workspace </p></td>
+<td class="confluenceTd"><p> 1.341? </p></td>
+<td class="confluenceTd"><p> name of the folder within the slave root directory to contain workspaces </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.UpdateCenter.never </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> When true, don't automatically check for new versions </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.model.WorkspaceCleanupThread.disabled </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Don't clean up old workspaces on slave nodes </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.os.solaris.ZFSInstaller.disabled </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> True to disable ZFS monitor on Solaris </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.remoting.FlightRecorderInputStream.BUFFER_SIZE </p></td>
+<td class="confluenceTd"><p> 1048576 </p></td>
+<td class="confluenceTd"><p> 1.563 </p></td>
+<td class="confluenceTd"><p> Size (in bytes) of the flight recorder ring buffer used for debugging remoting issues </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.remoting.Launcher.pingIntervalSec </p></td>
+<td class="confluenceTd"><p> 600 </p></td>
+<td class="confluenceTd"><p> 1.367 </p></td>
+<td class="confluenceTd"><p> Seconds between <a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=ping+thread&amp;linkCreation=true&amp;fromPageId=74876604">ping checks</a> to monitor health of slave nodes; 0 to disable ping </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.remoting.Launcher.pingTimeoutSec </p></td>
+<td class="confluenceTd"><p> 240 </p></td>
+<td class="confluenceTd"><p> 1.367 </p></td>
+<td class="confluenceTd"><p> If <a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=ping+thread&amp;linkCreation=true&amp;fromPageId=74876604">ping of slave node</a> takes longer than this, consider it dead; 0 to disable ping </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.PluginStrategy </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Allow plugins to be loaded into a different environment, such as an existing DI container like Plexus; specify full class name here to override default ClassicPluginStrategy </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.scheduledRetention </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> Up to 1.354 </p></td>
+<td class="confluenceTd"><p> Control a slave based on a schedule </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.scm.CVSSCM.skipChangeLog </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Useful with ancient versions of CVS that don't support the -d option in the log command </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.security.csrf.requestfield </p></td>
+<td class="confluenceTd"><p> .crumb </p></td>
+<td class="confluenceTd"><p> 1.310 </p></td>
+<td class="confluenceTd"><p> Parameter name that contains a crumb value on POST requests </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.security.ArtifactsPermission </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.374 </p></td>
+<td class="confluenceTd"><p> The Artifacts permission allows to control access to artifacts; When this property is unset or set to false, access to artifacts is not controlled </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.security.ExtendedReadPermission </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.324 </p></td>
+<td class="confluenceTd"><p> The ExtendedReadPermission allows read-only access to adminstrative pages; can also enable with extended-read-permission plugin </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.security.WipeOutPermission </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.416 </p></td>
+<td class="confluenceTd"><p> The WipeOut permission allows to control access to the &quot;Wipe Out Workspace&quot; action, which is normally available as soon as the Build permission is granted </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.security.LDAPSecurityRealm.groupSearch </p></td>
+<td class="confluenceTd"><p> <a href="#Featurescontrolledbysystemproperties-here">Mouseover</a> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> LDAP filter to look for groups by their names </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.slaves.ChannelPinger.pingInterval </p></td>
+<td class="confluenceTd"><p> 5 </p></td>
+<td class="confluenceTd"><p> 1.405 </p></td>
+<td class="confluenceTd"><p> Frequency (in minutes) of <a class="createlink" href="/pages/createpage.action?spaceKey=JA&amp;title=ping+thread&amp;linkCreation=true&amp;fromPageId=74876604">pings between the master and slaves</a> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.slaves.WorkspaceList </p></td>
+<td class="confluenceTd"><p> @ </p></td>
+<td class="confluenceTd"><p> 1.424 </p></td>
+<td class="confluenceTd"><p> When concurrent builds is enabled, a unique workspace directory name is required for each concurrent build. To create this name, this token is placed between project name and a unique ID, e.g. &quot;my-project@123&quot;. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.tasks.ArtifactArchiver.warnOnEmpty </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> When true, builds don't fail when there is nothing to archive </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.tasks.Fingerprinter.enableFingerprintsInDependencyGraph </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.430 </p></td>
+<td class="confluenceTd"><p> When true, jobs associated through fingerprints are added to the dependency graph, even when there is no configured upstream/downstream relationship between them. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.tasks.MailSender.maxLogLines </p></td>
+<td class="confluenceTd"><p> 250 </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Number of lines of console output to include in emails </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.TcpSlaveAgentListener.hostName </p></td>
+<td class="confluenceTd"><p> n/a (same as web) </p></td>
+<td class="confluenceTd"><p> 1.445 </p></td>
+<td class="confluenceTd"><p> Change the host name CLI should connect to, e.g. when Jenkins UI is accessed through reverse proxy on other host </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.TreeView </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Experimental nested views feature </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.triggers.SCMTrigger.starvationThreshold </p></td>
+<td class="confluenceTd"><p> 1 hour </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Milliseconds waiting for polling executor before trigger reports it is clogged </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.udp </p></td>
+<td class="confluenceTd"><p> 33848 </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Port for UDP multicast broadcast (set to -1 to disable) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.upstreamCulprits </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> 1.327 </p></td>
+<td class="confluenceTd"><p> Pass blame information to downstream jobs </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.Util.noSymLink </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> True to disable creation of symbolic links in job/builds directories </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.util.ProcessTree.disable </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> True to disable cleanup of child processes </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.util.RingBufferLogHandler.defaultSize </p></td>
+<td class="confluenceTd"><p> 256 </p></td>
+<td class="confluenceTd"><p> 1.563 </p></td>
+<td class="confluenceTd"><p> Number of log entries in loggers available on the UI at <code>/log/</code> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.util.Secret.provider </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> 1.360 </p></td>
+<td class="confluenceTd"><p> Force a particular crypto provider; with Glassfish Enterprise set value to <code>SunJCE</code> to workaround a <a href="https://issues.jenkins-ci.org/browse/JENKINS-6459">known issue</a>. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> hudson.Util.symlinkEscapeHatch </p></td>
+<td class="confluenceTd"><p> false </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> True to use exec of &quot;ln&quot; binary to create symbolic links instead of native code </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> jenkins.security.FrameOptionsPageDecorator.enabled </p></td>
+<td class="confluenceTd"><p> true </p></td>
+<td class="confluenceTd"><p> 1.581 </p></td>
+<td class="confluenceTd"><p> Whether to send <code>X-Frame-Options: sameorigin</code> header, set to false to disable and make Jenkins embeddable </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> jenkins.InitReactorRunner.concurrency </p></td>
+<td class="confluenceTd"><p> 2x of CPU <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <span style="color: rgb(0,0,0);">During start of Jenkins, loading of jobs in parallel have a fixed number of threads by default (twice the CPU). To make Jenkins load time 8x faster, increase it to 8x. For example, 24 CPU Jenkins Master host use this:</span> <span style="color: rgb(0,0,0);">-Dhudson.InitReactorRunner.concurrency=192</span> </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">No compatibility guarantee</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>In general, these switches are often experimental in nature, and subject to change without notice. If you find some of those useful, please file a ticket to promote it to the official feature.</p></div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

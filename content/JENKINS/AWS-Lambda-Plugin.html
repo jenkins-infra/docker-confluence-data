@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : AWS Lambda Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : AWS Lambda Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (cast)</span>, last modified on May 31, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View AWS Lambda <a href="https://plugins.jenkins.io/aws-lambda" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>This plugin adds AWS Lambda invocation and deployment abilities to build steps and post build actions</p></p>
+
+<p>Currently the plugin can deploy and invoke functions as a build step and post build action. When invoking a function it is possible to inject the output as Jenkins environment variables.</p>
+
+<p>Github link: <a href="https://github.com/XT-i/aws-lambda-jenkins-plugin" class="external-link" rel="nofollow">https://github.com/XT-i/aws-lambda-jenkins-plugin</a><br/>
+Jenkins wiki link: <a href="https://wiki.jenkins-ci.org/display/JENKINS/AWS+Lambda+Plugin" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/JENKINS/AWS+Lambda+Plugin</a></p>
+
+<h1 id="AWSLambdaPlugin-Installation">Installation</h1>
+
+<p>Look for the AWS Lambda plugin in the available plugins after clicking &quot;manage jenkins&quot; and &quot;manage plugins&quot;.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412675.jpg" data-image-src="attachments/75893476/80412675.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412675" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="install.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<h1 id="AWSLambdaPlugin-IAMsetup">IAM setup</h1>
+
+<p>For deployment you'll need access to the GetFunction, CreateFunction, UpdateFunctionCode and UpdateFunctionConfiguration Lambda commands.<br/>
+You'll also need access to iam:PassRole to attach a role to the Lambda function. </p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Stmt1432812345671&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;lambda:GetFunction&quot;,
+                &quot;lambda:CreateFunction&quot;,
+                &quot;lambda:UpdateFunctionCode&quot;,
+                &quot;lambda:UpdateFunctionConfiguration&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;arn:aws:lambda:REGION:ACCOUNTID:function:FUNCTIONNAME&quot;
+            ]
+        },
+        {
+            &quot;Sid&quot;: &quot;Stmt14328112345672&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;iam:Passrole&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;arn:aws:iam::ACCOUNTID:role/FUNCTIONROLE&quot;
+            ]
+        }
+    ]
+}
+</pre>
+</div></div>
+
+<p>For invocation you only need access to InvokeFunction.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Stmt14328112345678&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;lambda:InvokeFunction&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;arn:aws:lambda:REGION:ACCOUNTID:function:FUNCTIONNAME&quot;
+            ]
+        }
+    ]
+}
+</pre>
+</div></div>
+
+<h1 id="AWSLambdaPlugin-AWSLambdafunctiondeployment">AWS Lambda function deployment</h1>
+
+<p>After creating a job you can add a build step or post build action to deploy an AWS Lambda function.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412673.jpg" data-image-src="attachments/75893476/80412673.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412673" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-step.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<p>Due to the fact that AWS Lambda is still a rapid changing service we decided not to have select boxes for input.<br/>
+The AWS Access Key Id, AWS Secret Key, region and function name are always required. All other fields depend on the update mode.</p>
+
+<p>If the update mode is Code you also need to add the location of a zipfile or folder.<br/>
+Folders are automatically zipped according to the <a href="http://docs.aws.amazon.com/lambda/latest/dg/walkthrough-s3-events-adminuser-create-test-function-create-function.html" class="external-link" rel="nofollow">AWS Lambda documentation</a><br/>
+You can also choose to deploy a function already on S3, if the bucket is in the same region as the Lambda function.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+s3://bucket/key or s3://bucket/key?versionId=ABCDEF123
+</pre>
+</div></div>
+
+<p>For the Configuration update mode you need the role and handler. If you want to diverge from the defaults add the memory and timeout values.</p>
+
+<p>When choosing the Both update mode, both UpdateFunctionCode and UpdateFunctionConfiguration are performed.</p>
+
+<p>If the function has not been created before the plugin will try to do a CreateFunction call, which needs all fields previously mentioned in addition to the runtime value.<br/>
+The update mode value is ignored if the function does not exists yet, but it will take effect in future builds.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412674.jpg" data-image-src="attachments/75893476/80412674.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412674" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="deploy.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<h1 id="AWSLambdaPlugin-AWSLambdafunctioninvocation">AWS Lambda function invocation</h1>
+
+<p>To invoke a function once again open up the add build step or post build action menu.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412678.jpg" data-image-src="attachments/75893476/80412678.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412678" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="post-build.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<p>You need to add the AWS Access Key Id, AWS Secret key, region and function name. Optionally you can add a payload that your function expects.</p>
+
+<p>If you enable the Synchronous checkbox you will receive the response payload that can be parsed using the Json Parameters.<br/>
+You will also get the logs from Lambda into your Jenkins console output. </p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412677.jpg" data-image-src="attachments/75893476/80412677.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412677" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="invoke.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<p>The json parameters allow you to parse the output from the lambda function. The parsed value will then be injected into the Jenkins environment using the chosen name.<br/>
+An empty jsonPath field allows you to inject the whole response into the specified environment variable.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412676.jpg" data-image-src="attachments/75893476/80412676.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412676" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="invoke-json-parameters.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+
+<p>Examples:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+    &quot;key1&quot;:&quot;value1&quot;,
+    &quot;array1&quot;: [
+        {
+            &quot;arraykey&quot;:&quot;arrayvalue&quot;
+        },
+        {
+            &quot;arraykey&quot;:&quot;arrayvalue2&quot;
+        }
+    ]
+}
+</pre>
+</div></div>
+
+<p>$.key1 =&gt; value1  <br/>
+$.array1[1].arraykey =&gt; arrayvalue2</p>
+
+<p>More info about JsonPath:  <br/>
+github link: <a href="https://github.com/jayway/JsonPath" class="external-link" rel="nofollow">https://github.com/jayway/JsonPath</a><br/>
+try out expressions: <a href="http://jsonpath.herokuapp.com/?path=$.store.book" class="external-link" rel="nofollow">http://jsonpath.herokuapp.com/?path=$.store.book</a></p>
+
+<p>These environment variables can be used as parameters in further build steps and actions which allow a Lambda function to have a deciding factor in the deployment process.</p>
+
+<h1 id="AWSLambdaPlugin-Jobbuildresult">Job build result</h1>
+
+<p>On the job build result page you'll get a summary of all deployed and invoked functions and their success state.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75893476/80412679.jpg" data-image-src="attachments/75893476/80412679.jpg" data-unresolved-comment-count="0" data-linked-resource-id="80412679" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="result.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75893476" data-linked-resource-container-version="19"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054815.png">aws-lambda-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054821.png">Screen Shot 2015-03-17 at 22.40.36.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054822.png">Screen Shot 2015-03-17 at 22.45.03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054823.png">aws-lambda-plugin-post-build-action.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054824.png">aws-lambda-plugin-settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054825.jpg">aws-lambda-plugin-post-build-action.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/76054826.jpg">aws-lambda-plugin-settings.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412673.jpg">build-step.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412674.jpg">deploy.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412675.jpg">install.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412676.jpg">invoke-json-parameters.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412677.jpg">invoke.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412678.jpg">post-build.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/80412679.jpg">result.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/118064922.png">b1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/118064924.png">b2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/118064923.png">b2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/118064926.png">b3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/118064925.png">b3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/143492433.png">image2018-7-11 12:5:58.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/145359027.png">Screenshot from 2018-08-29 12-49-15.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893476/145359028.png">Screenshot from 2018-08-29 12-49-51.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

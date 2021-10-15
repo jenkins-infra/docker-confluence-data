@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : DDT Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : DDT Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (evgy)</span>, last modified on Mar 26, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/></colgroup><thead><tr><th class="confluenceTh"><p>Plugin Information</p></th></tr></thead><tbody><tr><td class="confluenceTd"><p>View DDT <a href="https://github.com/jenkinsci/ddt-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information.</p></td></tr></tbody></table></div><p><br/></p><p>This plugins allows to define your &quot;tests&quot; (from <a href="https://qa-app.doorzz.com/" class="external-link" rel="nofollow">https://qa-app.doorzz.com</a>) <br/>in the global configuration. These tests can then be &quot;set&quot; by jobs as a build step. <br/>This job will re-run this test and retrieve the JUnit report.</p><h2 id="DDTPlugin-Quickusageguide">Quick usage guide</h2><ul><li>Install the plugin</li><li>In <em>Manage Jenkins &gt; Configure System</em> go to <span style="color: rgb(51,51,51);"><strong><em>QA DDT</em></strong></span><br/><span style="color: rgb(51,51,51);"><strong><em><br/></em></strong></span><ul><li>Set <strong>Username &amp; Password:</strong><strong><br/></strong><br/><strong><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="150" width="768" confluence-query-params="effects=drop-shadow" src="attachments/165580103/165580375.png?effects=drop-shadow" data-image-src="attachments/165580103/165580375.png" data-unresolved-comment-count="0" data-linked-resource-id="165580375" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="QA-DDT-Credentials.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165580103" data-linked-resource-container-version="5"></span></strong><br/><br/><strong><br/></strong></li><li>Select<strong><span style="font-weight: 400;letter-spacing: 0.0px;"> </span><span style="color: rgb(51,51,51);"><strong><em>Add </em></strong></span></strong><span style="color: rgb(51,51,51);">and set the</span><strong><br/></strong><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="593" width="768" confluence-query-params="effects=drop-shadow" src="attachments/165580103/165580376.png?effects=drop-shadow" data-image-src="attachments/165580103/165580376.png" data-unresolved-comment-count="0" data-linked-resource-id="165580376" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="QA-DDT-Tests.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165580103" data-linked-resource-container-version="5"></span><br/><p>Brief description of the named fields:</p><ul><li><em><strong>UUID</strong> </em>- The UUID of the test you would like to run later on from the <u><a href="https://qa-app.doorzz.com" class="external-link" rel="nofollow">QA DDT App</a></u> (just copy-paste the desired UUID).<em><strong><br/></strong></em></li><li><em><strong>Name</strong></em> - A name describing the test ( Mandatory! )</li><li><strong><em>Tags </em></strong>- Additional tags for the test (see, <u><a href="https://github.com/freaker2k7/ui-data-driven-tests/blob/master/3-Advanced.md#tags---a-list-of-tags-of-the-task" class="external-link" rel="nofollow">&quot;tags&quot; in our official docs</a></u>)<br/><br/></li></ul></li></ul></li></ul><ul><li>In <em>Jenkins &gt; {job name} &gt;</em><span style="color: rgb(51,51,51);"> </span>Configure &gt; <strong><em>Build</em></strong><br/><strong><em><br/></em></strong><ul><li>Choose a test from the list of tests you set in the Jenkins Configuration<br/><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="214" width="768" confluence-query-params="effects=drop-shadow" src="attachments/165580103/165580377.png?effects=drop-shadow" data-image-src="attachments/165580103/165580377.png" data-unresolved-comment-count="0" data-linked-resource-id="165580377" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="QA-DDT-Build.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165580103" data-linked-resource-container-version="5"></span><br/><p>Brief description of the named fields:</p><ul><li><em><strong>Name</strong></em> - The name of the test from the list.</li><li><em><strong>Tags (Advanced)</strong></em> - A list of tags (separated by comas without spaces) to override the test's tags for this job.<br/><br/></li></ul></li></ul></li><li>(<em>Optional</em>) In <em>Jenkins &gt; {job name} &gt;</em><span style="color: rgb(51,51,51);"> </span>Configure &gt; <strong>Post-build Actions</strong><br/><br/><ul><li>Add &quot;report*.xml&quot; to the <strong>Test report XMLs</strong> field in order to get the JUnit report of the DDT test.<br/><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="768" confluence-query-params="effects=drop-shadow" src="attachments/165580103/170920418.png?effects=drop-shadow" data-image-src="attachments/165580103/170920418.png" data-unresolved-comment-count="0" data-linked-resource-id="170920418" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2019-03-26 at 8.45.47 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165580103" data-linked-resource-container-version="5"></span><br/><br/></li></ul></li></ul><ul><li>Start a build.<br/><br/><ul><li>You should see something like this in the <strong>Console Output</strong>:<br/><br/><pre class="console-output">Started by user anonymous
+Building in workspace /home/jenkins/work/jobs/Test_My_UI/workspace
+Initializing test: bfb408603f48ff882f3eea1a7dc778f6dbcf9b12cb548906e5aafce856c8f4ac()
+Waiting for test '57b61ec71bf53fa35e897b8e8a5aaaf955ed31e7b8e9332e62496c58335b638e' to start
+Testing...
+Done test: '57b61ec71bf53fa35e897b8e8a5aaaf955ed31e7b8e9332e62496c58335b638e'
+Recording test results
+Finished: SUCCESS</pre><pre class="console-output"><br/></pre>bfb4086... is the original test UUID from Jenkins' Configuration.<br/>57b61ec... is a new UUID from this specific run.</li></ul></li></ul><h3 id="DDTPlugin-"><strong style="font-size: 24.0px;letter-spacing: 0.0px;"><br/></strong></h3><h3 id="DDTPlugin-Changelog"><strong style="font-size: 24.0px;letter-spacing: 0.0px;">Changelog</strong></h3><p><span style="color: rgb(210,73,57);"> </span></p><h2 id="DDTPlugin-Release1.0(2018-11-29)">Release 1.0 (2018-11-29)</h2><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580373.png">image2017-4-28 15:14:44.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580374.png">image2017-4-28 15:16:38.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580375.png">QA-DDT-Credentials.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580376.png">QA-DDT-Tests.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580377.png">QA-DDT-Build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/165580379.png">QA-DDT-PostBuild.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/170920416.png">Screen Shot 2019-03-26 at 8.42.52 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/170920417.png">Screen Shot 2019-03-26 at 8.44.35 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165580103/170920418.png">Screen Shot 2019-03-26 at 8.45.47 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Job Cacher Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Job Cacher Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (petehayes)</span>, last modified on Jan 21, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Job Cacher <a href="https://plugins.jenkins.io/jobcacher" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="JobCacherPlugin-Summary">Summary</h1>
+
+
+<p>Enables caching of files on transient executors for use on subsequent builds to improve performance</p>
+
+<h1 id="JobCacherPlugin-Features">Features</h1>
+
+<ul>
+	<li><span style="color: rgb(51,51,51);">Item storage extension point supporting on master storage and AWS S3</span></li>
+	<li><span style="color: rgb(51,51,51);">Cache Wrapper for free style jobs that manages the cache</span></li>
+	<li><span style="color: rgb(51,51,51);">Arbitrary File Cache where user specifies paths to be cached</span></li>
+	<li><span style="color: rgb(51,51,51);">UI on Job page to review the job's caches</span></li>
+	<li><span style="color: rgb(51,51,51);">Supports Pipeline jobs with a cache directive</span></li>
+	<li><span style="color: rgb(51,51,51);">Cache Extension Point for other plugins to provide opinionated caching capability such as Gradle caches</span></li>
+	<li><span style="color: rgb(51,51,51);">Incremental storing of cache into storage to minimize data movement</span></li>
+</ul>
+
+
+<h1 id="JobCacherPlugin-GlobalConfiguration">Global Configuration</h1>
+
+<p>By default, the plugin is configured to use on-master storage for the cache.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/104104078/104333314.png" data-image-src="attachments/104104078/104333314.png" data-unresolved-comment-count="0" data-linked-resource-id="104333314" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2017-01-21 12_58_22-Clipboard.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="104104078" data-linked-resource-container-version="8"></span></p>
+
+<p>This storage mechanism is not recommended for heavy use as it will burden the remoting channel with considerable data when the job starts.  </p>
+
+<p>In addition to the on-master storage, a storage implementation for Amazon S3 is also available.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/104104078/104333317.png" data-image-src="attachments/104104078/104333317.png" data-unresolved-comment-count="0" data-linked-resource-id="104333317" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2017-01-21 12_59_25-aws.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="104104078" data-linked-resource-container-version="8"></span></p>
+
+
+<p>Additional storage implementations can be contributed as well via the <em>ItemStorage</em> extension point.</p>
+
+<h1 id="JobCacherPlugin-JobConfiguration">Job Configuration</h1>
+
+<p>The plugin offers a Build Wrapper extension point that can be configured for use in Free Style jobs.  Prior to the build starting, the plugin checks if there is a populated cache and if so copies it from the storage area to the executor.  At the end of the build, the plugin then copies the same cache, incrementally, back to storage.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/104104078/104333318.png" data-image-src="attachments/104104078/104333318.png" data-unresolved-comment-count="0" data-linked-resource-id="104333318" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2017-01-21 13_02_53-onfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="104104078" data-linked-resource-container-version="8"></span></p>
+
+<p>The above configuration caches the gradle cache and wrapper so that subsequent builds don't need to rebuild these folders and files through the dependency management repository.  It also configures the cache to have a maximum size of 250 MB so that the cache won't grow indefinitely.  Once this size is hit, the cache is deleted in the storage and the next build will need to repopulate the cache from scratch.</p>
+
+<h1 id="JobCacherPlugin-PipelineConfiguration">Pipeline Configuration</h1>
+
+<p>The plugin also supports the Pipeline plugin by introducing a cache build step that can be used within the pipeline definition.  </p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ cache(maxCacheSize: 250, caches: [
+     [$class: &#39;ArbitraryFileCache&#39;, excludes: &#39;modules-2/modules-2.lock,*/plugin-resolution/**&#39;, includes: &#39;**/*&#39;, path: &#39;${HOME}/.gradle/caches&#39;],
+     [$class: &#39;ArbitraryFileCache&#39;, excludes: &#39;&#39;, includes: &#39;**/*&#39;, path: &#39;${HOME}/.gradle/wrapper&#39;]
+  ]) {
+    // some block
+}
+</pre>
+</div></div>
+
+<h1 id="JobCacherPlugin-CacheTypes">Cache Types</h1>
+
+<p>The plugin currently ships with a single cache implementation called <em>ArbitraryFileCache</em> which must be explicitly configured with a path and includes / excludes rules to apply to find the files to cache.  Since <em>Cache</em> is an extension point in the plugin, other plugins can contribute implementations that deliver specific behavior such as a <em>GradleCache</em> that could automatically look to cache all gradle related files that can be cached from build to build.</p>
+
+<h1 id="JobCacherPlugin-VisualizingtheCache">Visualizing the Cache</h1>
+
+<p>A job action is added to the job so that users can look at the contents of the cache.</p>
+
+<p>Currently for on master storage, this is visualized through the Jenkins interface and for Amazon S3 storage, this redirects the user to the S3 console to view the cache contents.</p>
+
+<h1 id="JobCacherPlugin-Runningit">Running it</h1>
+
+<p>As the job begins, an entry will be published to the console output for each cache to indicate the executor is being primed with the files from storage:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+Caching /root/.gradle/caches to executor
+Caching /root/.gradle/wrapper to executor
+</pre>
+</div></div>
+
+<p>At the end of the job run, each cache is then copied back to the storage area</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+Storing /root/.gradle/caches in cache
+Storing /root/.gradle/wrapper in cache
+</pre>
+</div></div>
+
+<h1 id="JobCacherPlugin-OtherpluginssupportingJobCacher">Other plugins supporting Job Cacher</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="content-by-label macro-blank-experience">
+        <strong class="content-label-header">Content by label</strong>
+        <p>There is no content with the specified labels</p>
+    </div>
+
+
+<h1 id="JobCacherPlugin-VersionHistory">Version History</h1>
+
+<h2 id="JobCacherPlugin-1.0">1.0</h2>
+
+<ul>
+	<li>Initial version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104078/104333314.png">2017-01-21 12_58_22-Clipboard.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104078/104333315.png">2017-01-21 12_59_25-Configure System [Jenkins].png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104078/104333316.png">2017-01-21 13_02_53-pega-provisioning-engine Config [Jenkins].png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104078/104333317.png">2017-01-21 12_59_25-aws.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104078/104333318.png">2017-01-21 13_02_53-onfig.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

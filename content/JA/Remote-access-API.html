@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Remote access API</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Remote access API
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (akiko_pusu)</span> on Dec 26, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Remote+access+API">Remote access API</a></p>
+
+<p>Jenkinsは、コンピュータからの操作が可能なリモートアクセスAPIも提供しています。現在は3つの形式があります。</p>
+<ol>
+	<li>XML</li>
+	<li>JSON with JSONP support</li>
+	<li>Python</li>
+</ol>
+
+
+<p>リモートアクセスAPIは、RESTのような形式で提供されます。つまり、すべての機能に対して1つのエントリポイントがあるのではなく、代わりに <code>&quot;.../api/&quot;</code> (ここで、 <code>&quot;...&quot;</code> は対象となるデータ) というURLで利用することができます。</p>
+
+<p>例えば、インストールしたJenkinsが <a href="http://deadlock.netbeans.org/hudson/" class="external-link" rel="nofollow">http://deadlock.netbeans.org/hudson/</a> であれば、<a href="http://deadlock.netbeans.org/hudson/api/" class="external-link" rel="nofollow">http://deadlock.netbeans.org/hudson/api/</a> から、Jenkinsのルートで実行できる全ての機能のリストをHTMLで取得できます。例えば、ここからXML/JSONを使ってJenkins上のすべてのジョブにアクセスすることができます。もしくは、 <a href="http://deadlock.netbeans.org/hudson/job/trunk/lastSuccessfulBuild/" class="external-link" rel="nofollow">http://deadlock.netbeans.org/hudson/job/trunk/lastSuccessfulBuild/</a> の特定のビルドについての情報にアクセスしたいのであれば、 <a href="http://deadlock.netbeans.org/hudson/job/trunk/lastSuccessfulBuild/api/" class="external-link" rel="nofollow">http://deadlock.netbeans.org/hudson/job/trunk/lastSuccessfulBuild/api/</a> にアクセスすれば、ビルドに関する（APIの）機能の一覧を取得できます。</p>
+
+<p>この機能は現在開発中なので、もし、不十分な機能があるのであれば、チケット管理システムに登録してください。</p>
+
+<h2 id="RemoteaccessAPI-いったい何ができるの?">いったい何ができるの?</h2>
+
+<p>リモートアクセスAPIは、次のようなことに使用できます。</p>
+<ol>
+	<li>プログラムでJenkinsから情報を取得する</li>
+	<li>新しいビルドを起動する</li>
+	<li>ジョブの作成、コピー</li>
+</ol>
+
+
+
+<h2 id="RemoteaccessAPI-ジョブの実行">ジョブの実行</h2>
+
+<p>パラメータ指定の無いジョブは、単純にHTTP GETメソッドを使い、下記のように、</p>
+
+<p>JENKINS_URL/job/JOBNAME/build?token=TOKEN</p>
+
+<p>というURLに、ジョブの設定画面で指定したTOKENを付加してアクセスするだけで実行できます。</p>
+
+<p>パラメータ指定がある場合は、JSONを利用する必要があります。下記はshellのコードの抜粋です。<br/>
+（読みやすくするために、いくつか改行をしています）</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+json=&quot;{\&quot;parameter\&quot;: [{\&quot;name\&quot;: \&quot;taskfile\&quot;, \&quot;value\&quot;: \&quot;$taskfile\&quot;},
+{\&quot;name\&quot;: \&quot;task\&quot;, \&quot;value\&quot;: \&quot;$task\&quot;},
+{\&quot;name\&quot;: \&quot;jobParameters\&quot;, \&quot;value\&quot;: \&quot;$jobargs\&quot;}], \&quot;\&quot;: \&quot;\&quot;}&quot;
+url=http://hudson.basistech.net/job/benson-segmentation-training/build
+curl -X POST $url -d token=zorn --data-urlencode json=&quot;$json&quot;
+</pre>
+</div></div>
+
+<h2 id="RemoteaccessAPI-リモートAPIとセキュリティ">リモートAPIとセキュリティ</h2>
+
+<p>Jenkinsのセキュリティが有効化されているときは、リモートAPIの認証用に、HTTP BASIC認証を利用できます。詳しくは、<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Authenticating+scripted+clients">Authenticating scripted clients</a>を参照してください。</p>
+
+
+<h2 id="RemoteaccessAPI-サンプルコード">サンプルコード</h2>
+
+<p>JavaでXMLインタフェースを実行するサンプルが<a href="http://download.java.net/maven/2/org/jvnet/hudson/client-demo/" class="external-link" rel="nofollow">ここ</a> にあります(<a href="https://hudson.dev.java.net/source/browse/hudson/hudson/extras/client-demo/src/main/java/org/jvnet/hudson/client_demo/Main.java?view=markup" class="external-link" rel="nofollow">Java ソース</a>)。</p>
+
+<h2 id="RemoteaccessAPI-XPathによる検索">XPathによる検索</h2>
+
+<p>XML APIはクエリーパラメータ'xpath'を使ったXPathによる検索をサポートしています。 (シェルスクリプトのような) XMLの操作が面倒な環境で情報を抽出するのに便利です。どうやって使うかは<a href="https://issues.jenkins-ci.org/browse/JENKINS-626">課題 #626</a>を参照してください。</p>
+
+<h2 id="RemoteaccessAPI-Depthcontrol">Depth control</h2>
+
+<p>リモートAPIを1回呼ぶだけでは、十分な情報を取得できないことがあります。例えば、ビューの最後に成功したすべてのビルドを調査したい場合、ビューのリモートAPIを実行しても取得できないことがわかります。そして、取得した各プロジェクト毎に、リモートAPIを再帰的に呼ばなくてはなりません。1.167で実装された&quot;depth control&quot;はこの問題を解決します。この機能を理解するには、まずは、リモートAPIがどのように機能するのかを理解することから始めるのがいいでしょう。</p>
+
+<p>Jenkinsが内部に保持するデータモデルは、巨大な木構造と考えることができます。リモートAPIを呼ぶと、小さな木構造のサブツリーを取得します。サブツリーはリモートAPIを呼んだオブジェクトを先頭にし、巨大なデータを返さないように、ある深さを超えないようにカットされます。深さを表すクエリーパラメータを指定すれば、このカットする振る舞いを調整できます。正の深さを指定すると、後述するように、サブツリーはカットされます。</p>
+
+<p>結果的に、大きな値を指定すればするほど、リモートAPIはより大量にデータを返します。アルゴリズム上、深さの値を大きくすれば、深さの小さい値のすべてを含むために、大きな値を返すことになります。</p>
+
+<p>詳しくは、Jenkinsサーバの <code>.../api/</code> を参照して下さい。</p>
+
+
+<h2 id="RemoteaccessAPI-Jenkinsのバージョンの検出">Jenkinsのバージョンの検出</h2>
+
+<p>Jenkinsのバージョンをチェックするには、トップ画面を読み込んでレスポンスヘッダーの&quot;X-Jenkins&quot;ヘッダをチェックします。このヘッダには&quot;1.404&quot;のようなJenkinsのバージョン番号を含んでいます。JenkinsのURLかどうかチェックするにはこのヘッダをチェックするといいでしょう。</p>
+
+<h2 id="RemoteaccessAPI-ネットワーク上のJenkinsを検出する">ネットワーク上のJenkinsを検出する</h2>
+
+<p>JenkinsのインスタンスはUDP ポート33848をリッスンしています。JenkinsがUDPパケットを受け取ると、レスポンスとして接続情報を示す短いXMLフラグメントを返します。<br/>
+XMLは下記のようなフォーマットになります:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;hudson&gt;
+  &lt;version&gt;1.380&lt;/version&gt;           &lt;!-- version of Jenkins --&gt;
+  &lt;url&gt;http://somwhere/jenkins/&lt;/url&gt; &lt;!-- HTTP URL. Not available if not configured --&gt;
+  &lt;slave-port&gt;12345&lt;/slave-port&gt;     &lt;!-- if TCP slave listener port is configured, its number --&gt;
+&lt;/hudson&gt;
+</pre>
+</div></div>
+<p>この情報を利用し、クライアントはUDPブロードキャストを通して最寄のJenkinsインスタンスを検出できます。この方法は、自律的なビルドクラスタを構成する場合にとても有効です。</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

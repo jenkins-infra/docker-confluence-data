@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Google Summer of Code Idea List</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Google-Summer-of-Code-2009.html">Google Summer of Code 2009</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Google Summer of Code Idea List
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (batmat)</span> on Mar 04, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Warning</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This page is obsolete, please see <a href="Google-Summer-Of-Code-2016.html">Google Summer Of Code 2016</a> if you're looking for the GSoC 2006 ideas.</p></div></div>
+
+<p>This pages lists the project ideas for Google Summer of Code. As Hudson is primarily implemented in Java, a Java fluency is necessary for most of the projects.</p>
+
+<p>In addition to ideas listed here, any other ideas that you may have are welcome. If you have any questions, please feel free to send them to <a href="mailto:dev@hudson.dev.java.net" class="external-link" rel="nofollow">dev@hudson.dev.java.net</a>.</p>
+
+<h1 id="GoogleSummerofCodeIdeaList-Pluggablejobqueueimplementation">Pluggable job queue implementation</h1>
+
+<p><span class="inline-comment-marker" data-ref="0fdc3209-b08c-457e-b5a0-c87e2a071367"><span class="inline-comment-marker" data-ref="e29f6e06-2d15-41b5-969c-1545bda9c953">Queue</span></span> controls what build/test jobs are executed where and when, so it's a critical piece in the better utilization of the system. There are a lot of other things that can be put into making scheduling decisions, such as trying to keep a project on the set of small machines as much as possible, figuring out the system capabilities through build times, or detecting broken slaves and trying to avoid that, etc. So we'd like to let the community and interested developers experiment with new and different queue implementations, but the current queue implementation in Hudson is monolithic and cannot be replaced.</p>
+
+<p>This project is thus first to make the queue implementation pluggable, then experiment with various queue implementations. The algorithm for queue is open-ended, but if you need some concrete suggestions to start with, <a href="http://en.wikipedia.org/wiki/Consistent_hashing" class="external-link" rel="nofollow">consistent hashing</a> is an interesting starting point to improve the locality of builds.</p>
+
+<p>Expect some concurrency programming.</p>
+
+
+<h1 id="GoogleSummerofCodeIdeaList-OpeningupaHudsonclusterforotheruses">Opening up a Hudson cluster for other uses</h1>
+
+<p>Hudson creates a cluster of nodes that it uses for builds and tests, but allowing people to use the cluster for other purposes is useful, too.</p>
+
+<p>To that end, this project is about developing a general-purpose environment for doing a distributed computing. We can discuss what kind of approaches would make sense, but if you need some concrete suggestions to get started, it could include:</p>
+
+<ul>
+	<li>Scripting language like Groovy, patched a little to support distributed computation, as the environment to write a program that spans multiple JVMs. This experiment is already done to some degree to verify the feasibility of this effort.</li>
+	<li>A few library calls on this environment for common tasks, such as staging files on multiple JVMs, telling Hudson that the script is using nodes, and/or forking the same process over a large number of nodes.</li>
+	<li>A CLI and/or Ant task to make this functionality available to different environments.</li>
+</ul>
+
+
+<p>Such environment can be used to simplify the administration of Hudson cluster, perform one-off tasks, do distributed testing, and a lot more.</p>
+
+
+<h1 id="GoogleSummerofCodeIdeaList-UnifiedInstantMessengersupport">Unified Instant Messenger support</h1>
+
+<p>Hudson has several plugins that define connectivity to different IM protocols for notification and bots, but there's not much code reuse between them, and each bot end up looking very different.</p>
+
+<p>This project is about defining an abstract model of instant messenger and the bot, in such a way that the concrete protocol support can be implemented as add-ons. A project should also define several other extension points, such as adding new bot commands.</p>
+
+
+<h1 id="GoogleSummerofCodeIdeaList-SupportforJython/JRubyplugin">Support for Jython/JRuby plugin</h1>
+
+<p>Plugins have always been one of the strong points of Hudson, but the fact that it has to be written in Java makes it unnecessarily hard to write a simple plugin. So this project is about letting people write a plugin in other languages, whose interpreters are available in JVM (such as Jython and JRuby.)</p>
+
+<p>Such environment can focus on common use cases, such as writing a builder, and need not support everything. We should take advantage of this to further reduce the boiler plate code that a Hudson plugin may require.</p>
+
+
+<h1 id="GoogleSummerofCodeIdeaList-AddWindowsIntegratedAuthenticationtoHudson">Add Windows Integrated Authentication to Hudson</h1>
+
+<p>Windows domains and Internet Explorer supports Keroberos-on-SPNEGO based single sign-on solution called &quot;Windows Integrated Authentication&quot;. This allows the users of a Windows domain to access a remote web application without typing the password again. There are several pieces in JDKs that implement a part of the protocol, but it's not as readily usable as it should be.</p>
+
+<p>So this project is about wrapping the WIA support into a reusable library, and then integrate that into Hudson. This will benefit Java webapps in general, not just Hudson.</p>
+
+<p>This task is very well scoped out, so the creativity is mainly in implementation and designing it for reusability. Some of you may like that, and some others may hate that.</p>
+
+
+
+<h1 id="GoogleSummerofCodeIdeaList-WakeonLANsupport">Wake on LAN support</h1>
+
+<p>Work load on Hudson tends to be spiky, and it's rare to see the entire cluster utilized. Therefore, to make Hudson greener, it'd be nice for Hudson to be able to shut down unused nodes and bring them back on as the load changes. There is already an infrastructure in Hudson to do this, but it currently lacks the means to power it off and bring it up.</p>
+
+<p>This project is about implementing a Wake-on-LAN protocol support, which allows us to remotely power on a computer over the network, combined with various platform-specific shutdown techniques, to implement this mechanism.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

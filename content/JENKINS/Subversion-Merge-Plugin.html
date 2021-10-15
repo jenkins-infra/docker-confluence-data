@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Subversion Merge Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Subversion Merge Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (hugueschabot)</span> on Dec 11, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This plugin automates feature/personal branch workflow on Jenkins by providing one-click branching/rebasing/integration or automated rebasing/integration.</p>
+
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View svnmerge <a href="https://plugins.jenkins.io/svnmerge" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>For general discussion of feature branches in Subversion, see <a href="http://svnbook.red-bean.com/en/1.7/svn.branchmerge.commonpatterns.html" class="external-link" rel="nofollow">Online subversion book</a> or <a href="http://nedbatchelder.com/text/quicksvnbranch.html" class="external-link" rel="nofollow">articles</a>. Feature branches allow developers to commit their changes without worrying too much about regressions, and this Jenkins plugin assists teams to deploy this more easily.</p>
+
+
+<h1 id="SubversionMergePlugin-Features">Features</h1>
+
+
+<h2 id="SubversionMergePlugin-One-clickfeaturebranchsetup">One-click feature branch setup</h2>
+
+<p>You can have Jenkins create a branch in Subversion and create a job for it (by copying from the trunk build job) just by one click of a button.</p>
+
+<p>To do this, first enable the feature branch support in the job that currently builds the trunk by clicking &quot;Accept Integration from Subversion feature branches.&quot; This creates an action on the left to manage/create new feature branches. From this page, you can create a branch and the job:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border image-center" src="attachments/58001326/58196086.png" data-image-src="attachments/58001326/58196086.png" data-unresolved-comment-count="0" data-linked-resource-id="58196086" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="fb.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001326" data-linked-resource-container-version="44"></span></p>
+
+<p>Alternatively, you can manually create a branch, create a job, and enable the feature branch support after the fact by clicking &quot;This project builds a Subversion feature branch&quot; and specifying the trunk job.</p>
+
+
+<h2 id="SubversionMergePlugin-Integrationstatusvisualization">Integration status visualization</h2>
+
+<p>Jobs that build feature branches get two actions on the left. One shows the status of the integration, meaning what changes in the branch has already been integrated into the trunk, the revision number of the integration commit, what trunk CI job has built it, etc.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border image-center" src="attachments/58001326/58196087.png" data-image-src="attachments/58001326/58196087.png" data-unresolved-comment-count="0" data-linked-resource-id="58196087" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="integration-status.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001326" data-linked-resource-container-version="44"></span></p>
+
+<p>The up arrow in the build history indicates builds whose output has been integrated upstream.</p>
+
+
+<h2 id="SubversionMergePlugin-One-clickrebase">One-click rebase</h2>
+
+<p>The other action in the project top page allows you to manually initiate the &quot;rebase&quot; action, which is a Subversion merge command to pull in the latest changes from the trunk into your feature branch, thereby synchronizing the branch with the trunk.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border image-center" src="attachments/58001326/58196088.png" data-image-src="attachments/58001326/58196088.png" data-unresolved-comment-count="0" data-linked-resource-id="58196088" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="rebase.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001326" data-linked-resource-container-version="44"></span></p>
+
+<p>In addition to rebasing with the tip of the trunk, this UI allows you to pick arbitrary revision to rebase, in terms of the known build — for example, you can rebase with the revision that was resulted in the last stable trunk build, thereby eliminating any risk that you pick up regressions into your branch.</p>
+
+<p>(This also works with the build promotion plugin and others that can define their own permalinks.)</p>
+
+
+<h2 id="SubversionMergePlugin-Automaticrebase">Automatic rebase</h2>
+
+<p>Aside from manually performing rebase, you can also make rebase a part of the build. This can ensure that your feature branch always stay close  to the trunk, thereby reducing the pain of the merge down the road.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/58001326/58196089.png" data-image-src="attachments/58001326/58196089.png" data-unresolved-comment-count="0" data-linked-resource-id="58196089" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="auto-rebase.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001326" data-linked-resource-container-version="44"></span></p>
+
+<p>Specifying the build to rebase to is a good way to control the frequency of the rebase. For example, imagine using the build promotion plugin on the trunk, and promote a build as &quot;rebase point&quot; about once a day (contingent on passing QA jobs.) Since the last &quot;rebase point&quot; build would only change about once a day, the automatic rebase would be no-op most of the time but only once a day.</p>
+
+
+<h2 id="SubversionMergePlugin-Automaticintegration">Automatic integration</h2>
+
+<p>In addition to initiate integration manually, you can also make Jenkins do integration automatically. This can be used as a publisher, as seen below:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/58001326/58196090.png" data-image-src="attachments/58001326/58196090.png" data-unresolved-comment-count="0" data-linked-resource-id="58196090" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="auto-integrate.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001326" data-linked-resource-container-version="44"></span></p>
+
+<p>If you enable this in a project, you'll be automatically integrating with every successful build. This is useful for personal branches, where you'll keep on committing to this branch and let Jenkins verify the change before it gets integrated into the trunk.</p>
+
+<p>This feature gets more interesting in combination with the build promotion. You can keep producing CI builds quickly, then use other jobs to verify its quality, and as a promotion action you can make the integration happen. This matches more closely with the typical integration workflow.</p>
+
+
+<h2 id="SubversionMergePlugin-Tips">Tips</h2>
+
+<ul>
+	<li>Automatic rebase and integration actions can be configured in the upstream job so they are automatically configured on feature branch jobs when created by the plugin.</li>
+	<li>You can avoid the so-called Subversion &quot;keep-alive-dance&quot; which triggers unnecessary builds of the feature branch by excluding the commit messages matching <code>Rebasing with the integration commit that was just made in rev\.\d+</code> (see <a href="https://wiki.jenkins-ci.org/display/JENKINS/Subversion+Merge+Plugin?focusedCommentId=82020693#comment-82020693" class="external-link" rel="nofollow">this discussion</a>).</li>
+</ul>
+
+
+
+<h1 id="SubversionMergePlugin-Changelog">Changelog</h1>
+
+<h3 id="SubversionMergePlugin-Version2.6(December10,2015)">Version 2.6 (December 10, 2015)</h3>
+
+<ul>
+	<li>Add Support for Matrix build (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27609" class="external-link" rel="nofollow">issue 27609</a>).</li>
+	<li>Mark build as unstable on failure (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27610" class="external-link" rel="nofollow">issue 27610</a>).</li>
+	<li>Fix issue with &quot;CloudBees Folder plugin&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-31745" class="external-link" rel="nofollow">issue 31745</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version2.5(January10,2015)">Version 2.5 (January 10, 2015)</h3>
+
+<ul>
+	<li>Fix incompatible with <a href="https://wiki.jenkins-ci.org/display/JENKINS/Subversion+Plugin" class="external-link" rel="nofollow">subversion</a> 2.5 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26347" class="external-link" rel="nofollow">issue 26347</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-26357" class="external-link" rel="nofollow">issue 26357</a>).</li>
+	<li>Do integration on the first module regardless of the number of modules defined and the &quot;Ignore externals&quot; option (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26280" class="external-link" rel="nofollow">issue 26280</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version2.4(December20,2014)">Version 2.4 (December 20, 2014)</h3>
+
+<ul>
+	<li>Add support for build parameters in Subversion URLs. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-24735" class="external-link" rel="nofollow">issue 24735</a>).</li>
+	<li>Fix wrong revision used for upstream integration (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25739" class="external-link" rel="nofollow">issue 25739</a>).</li>
+	<li>Add permissions for Rebase and Integrate actions (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25942" class="external-link" rel="nofollow">issue 25942</a>).</li>
+	<li>Fix integration of promoted builds (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14725" class="external-link" rel="nofollow">issue 14725</a>).</li>
+</ul>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Breaking changes</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>New permissions for Rebase and Integration will have to be granted manually on system using matrix-based authorization.</p></div></div>
+
+<h3 id="SubversionMergePlugin-Version2.3(July15,2014)">Version 2.3 (July 15, 2014)</h3>
+
+<ul>
+	<li>Rebase not working for simple setup (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23107" class="external-link" rel="nofollow">issue 23107</a>).</li>
+	<li>Ignore <code>svn:externals</code> when reintegrating branch (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23371" class="external-link" rel="nofollow">issue 23371</a>).</li>
+	<li>Skip rebase on main branch (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23393" class="external-link" rel="nofollow">issue 23393</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version2.2(May28,2014)">Version 2.2 (May 28, 2014)</h3>
+
+<ul>
+	<li>Improved repository layout detection and customization on &quot;New Branch&quot; action (<a href="https://issues.jenkins-ci.org/browse/JENKINS-15830" class="external-link" rel="nofollow">issue 15830</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-22284" class="external-link" rel="nofollow">issue 22284</a>).</li>
+	<li>Added option on &quot;Automatic Rebase&quot; action to fail the build when merge conflicts are found (<a href="https://issues.jenkins-ci.org/browse/JENKINS-6851" class="external-link" rel="nofollow">issue 6851</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-22850" class="external-link" rel="nofollow">issue 22850</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version2.1(Mar13,2014)">Version 2.1 (Mar 13, 2014)</h3>
+
+<ul>
+	<li>Fix reintegration issue with HTTP protocol (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12495" class="external-link" rel="nofollow">issue 12495</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version2.0.4(Feb28,2014)">Version 2.0.4 (Feb 28, 2014)</h3>
+
+<ul>
+	<li>Support <a href="https://wiki.jenkins-ci.org/display/JENKINS/Subversion+Plugin" class="external-link" rel="nofollow">Subversion Plugin</a> version  2.x (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21916" class="external-link" rel="nofollow">issue 21916</a>).</li>
+	<li>Support rebase/integration actions on slaves (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12495" class="external-link" rel="nofollow">issue 12495</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version1.3(Feb21,2014)">Version 1.3 (Feb 21, 2014)</h3>
+
+<ul>
+	<li>Handle feature branches in subfolder (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21781" class="external-link" rel="nofollow">isse 21781</a>).</li>
+	<li>Added possibility to enter a commit message when creating a feature branch (<a href="https://issues.jenkins-ci.org/browse/JENKINS-11012" class="external-link" rel="nofollow">issue 11012</a>).</li>
+	<li>Copy &quot;Local module directory&quot; from upstream project when creating a feature branch (<a href="https://issues.jenkins-ci.org/browse/JENKINS-11379" class="external-link" rel="nofollow">issue 11379</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version1.2(Apr14,2012)">Version 1.2 (Apr 14, 2012)</h3>
+
+<ul>
+	<li>Changes (<a href="https://github.com/jenkinsci/svnmerge-plugin/compare/svnmerge-1.1...svnmerge-1.2" class="external-link" rel="nofollow">GitHub</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version1.1(Oct1,2011)">Version 1.1 (Oct 1, 2011)</h3>
+
+<ul>
+	<li>Changes (<a href="https://github.com/jenkinsci/svnmerge-plugin/compare/svnmerge-1.0...svnmerge-1.1" class="external-link" rel="nofollow">GitHub</a>).</li>
+</ul>
+
+
+<h3 id="SubversionMergePlugin-Version1.0(Sep1,2011)">Version 1.0 (Sep 1, 2011)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597008.png">fb.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597011.png">integration-status.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597012.png">rebase.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597013.png">auto-rebase.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196091.png">auto-integrate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597014.png">auto-integrate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597009.png">fb.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/73597010.png">fb.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196086.png">fb.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196087.png">integration-status.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196088.png">rebase.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196089.png">auto-rebase.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001326/58196090.png">auto-integrate.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

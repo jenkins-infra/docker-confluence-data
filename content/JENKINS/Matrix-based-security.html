@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Matrix-based security</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Matrix-based security
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mlei)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Dec 09, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Matrix-based security is one of the authorization strategies available for <a href="Securing-Jenkins.html">securing Jenkins</a>.  It allows you to grant specific permissions to users and groups.  The available permissions are listed below with their descriptions, and are also available by hovering over the permission heading in the Jenkins UI.</p>
+
+<p><strong>Note:</strong> These are the most common permissions available.  Other plugins may add their own permissions.</p>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020134583 {padding: 0px;}
+div.rbtoc1631020134583 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020134583 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020134583'>
+<ul class='toc-indentation'>
+<li><a href='#Matrix-basedsecurity-Overall'>Overall</a></li>
+<li><a href='#Matrix-basedsecurity-Slave'>Slave</a></li>
+<li><a href='#Matrix-basedsecurity-Job'>Job</a></li>
+<li><a href='#Matrix-basedsecurity-Run'>Run</a></li>
+<li><a href='#Matrix-basedsecurity-View'>View</a></li>
+<li><a href='#Matrix-basedsecurity-SCM'>SCM</a></li>
+</ul>
+</div>
+
+<h2 id="Matrix-basedsecurity-Overall">Overall</h2>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Several of these permissions are at least as powerful as Administer, but for historical reasons are implied by the Administer permission (i.e. everyone with Administer can also perform the actions associated with these other permissions):</p>
+
+<ul>
+	<li>RunScripts allows executing arbitrary code in the context of any (Jenkins internal) user, including the internal SYSTEM user.</li>
+	<li>UploadPlugins allows uploading plugins, which in turn can execute arbitrary code in the context of any (Jenkins internal) user.</li>
+	<li>ConfigureUpdateCenter can configure proxy settings and thereby control the update site metadata and plugin files downloaded by the Jenkins plugin manager, which in turn can be used to execute arbitrary code.</li>
+</ul>
+</div></div>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Administer </p></td>
+<td class="confluenceTd"><p> Make system-wide configuration changes.  Perform highly sensitive operations that amounts to full local system access (within the scope granted by the underlying OS). <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Read </p></td>
+<td class="confluenceTd"><p> View almost all pages within Jenkins. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> RunScripts </p></td>
+<td class="confluenceTd"><p> Run groovy scripts via the groovy console or groovy cli command. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> UploadPlugins </p></td>
+<td class="confluenceTd"><p> Upload arbitrary plugins. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> ConfigureUpdateCenter </p></td>
+<td class="confluenceTd"><p> Configure update sites and proxy settings. </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="Matrix-basedsecurity-Slave">Slave</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Configure </p></td>
+<td class="confluenceTd"><p> Configure existing slaves. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete </p></td>
+<td class="confluenceTd"><p> Delete existing slaves. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create </p></td>
+<td class="confluenceTd"><p> Create new slaves. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Disconnect </p></td>
+<td class="confluenceTd"><p> Disconnect slaves or mark slaves as temporarily offline. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Connect </p></td>
+<td class="confluenceTd"><p> Connect slaves or mark slaves as online. </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="Matrix-basedsecurity-Job">Job</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create </p></td>
+<td class="confluenceTd"><p> Create a new job. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete </p></td>
+<td class="confluenceTd"><p> Delete an existing job. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Configure </p></td>
+<td class="confluenceTd"><p> Update the configuration of an existing job. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Read </p></td>
+<td class="confluenceTd"><p> Grants read-only access to project configurations. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Discover </p></td>
+<td class="confluenceTd"><p> Redirect anonymous users to a login form rather than presenting an error message if they don't have permission to view jobs. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Build </p></td>
+<td class="confluenceTd"><p> Start a new build and cancel a running build. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Workspace </p></td>
+<td class="confluenceTd"><p> Retrieve the contents of a workspace that Jenkins has checked out for performing a build. <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Cancel </p></td>
+<td class="confluenceTd"><p> Cancel a running build. </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="Matrix-basedsecurity-Run">Run</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete </p></td>
+<td class="confluenceTd"><p> Delete specific builds from a build's history. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Update </p></td>
+<td class="confluenceTd"><p> Update the description and other properties of a build.  (For example, to leave notes about the cause of a build failure.) </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="Matrix-basedsecurity-View">View</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Create </p></td>
+<td class="confluenceTd"><p> Create new views. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Delete </p></td>
+<td class="confluenceTd"><p> Delete existing views. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Configure </p></td>
+<td class="confluenceTd"><p> Update the configuration of existing views. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Read </p></td>
+<td class="confluenceTd"><p> See any existing views. </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="Matrix-basedsecurity-SCM">SCM</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Permission </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Tag </p></td>
+<td class="confluenceTd"><p> Create a new tag in the source code repository for a given build. </p></td>
+</tr>
+</tbody></table></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67569939/75628733.jpg">grants_cancel.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

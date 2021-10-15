@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Build Flow Extensions Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Build Flow Extensions Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (teilo)</span>, last modified on Dec 24, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'build-flow-extensions-plugin' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+This plugin adds defines some <a href="Build-Flow-Plugin.html">build flow</a> extensions.</p>
+
+
+<h1 id="BuildFlowExtensionsPlugin-ProjectConfiguration">Project Configuration</h1>
+
+<p>To enable the extension it needs to be registered inside your build flow DSL.  The registration key for this plugin is 'build-flow-concurrent-extensions'</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>"registration"</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+def ext = extension.&#39;build-flow-concurrent-extensions&#39;
+</pre>
+</div></div>
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Be Careful</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The name of the extension as well as the methods defined below may be subject to change and the api is not yet considered stable.</p></div></div>
+
+<h1 id="BuildFlowExtensionsPlugin-Extensions">Extensions</h1>
+
+<h2 id="BuildFlowExtensionsPlugin-block">block</h2>
+
+<p>The block DSL ensures that only one Run (build) of a particular BuildFlow will execute the steps contained within it concurrently.<br/>
+It further will only allow the most recent FlowRun to proceed if multiple become blocked.<br/>
+It is expected that the blockName will only be used once in a Flow - using the blockname multiple times will work, however the results may not be what the user intended).</p>
+
+<p>If the block is not executed then the flow will be aborted.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>"block example"</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+def ext = extension.‘build-flow-concurrent-extensions&#39;
+
+def myparams = new HashMap(params)
+// define some parameters
+
+build(myparams, &quot;myproj-tests_LEVEL-1&quot;)
+
+ext.block(&quot;level2 &quot;) {
+  build(myparams , &quot;myproj-tests_LEVEL-2&quot;)
+}
+
+ext.block(“level3“) {
+   parallel (
+      { build(myparams, &quot;myproj-tests_LEVEL-3&quot;) },
+      { build(myparams, &quot;myproj-tests_CUST_FOOBAR&quot;) }
+   )
+}
+</pre>
+</div></div>
+
+<p>In the above example all flows will trigger and run myproj-tests_LEVEL-1.  If that is successful then only one run at once will run myproj-tests_LEVEL-2.  If subsequent runs attempt to start myproj-tests_LEVEL-2 whilst a previous run is still running this job then they will wait until the job has finished, at which point only the most recent run of the flow will run the &quot;myproj-tests_LEVEL-2&quot; job and earlier ones will be aborted.<br/>
+The example also shows that the block can be used around other flow constructs such as the parallel DSL.</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Be Careful</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This flow method will only work correctly in the 0.11 (or later) version of buildflow which has not yet been released.</p></div></div>
+
+<h2 id="BuildFlowExtensionsPlugin-getLastStableRun">getLastStableRun</h2>
+
+<p>This method gets the most recent stable build of a project.</p>
+<ul>
+	<li><strong>parameters</strong>:
+	<ul>
+		<li><strong>String</strong>: name of the project (relative to this flow).</li>
+	</ul>
+	</li>
+	<li><strong>return</strong>:  The last stable build of the named project</li>
+	<li><strong>throws</strong>:
+	<ul>
+		<li><strong>JobNotFoundException</strong>: if the job can not be located, or there is no lastStable build.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h1 id="BuildFlowExtensionsPlugin-FAQ">FAQ</h1>
+
+<h1 id="BuildFlowExtensionsPlugin-HelpandSupport">Help and Support</h1>
+
+<p>For Help and support please use the <a href="https://groups.google.com/group/jenkinsci-users" class="external-link" rel="nofollow">Jenkins Users</a> mailing list.<br/>
+To report a bug please <a href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open,+%22In+Progress%22,+Reopened)+AND+component+build+flow+extension" class="external-link" rel="nofollow">check the bug tracker</a> to see if the issue has been reported before <a href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=show&amp;createNew=true" class="external-link" rel="nofollow">creating a new issue</a>.</p>
+
+
+<h1 id="BuildFlowExtensionsPlugin-VersionHistory">Version History</h1>
+
+<h2 id="BuildFlowExtensionsPlugin-0.0.1(Notyetreleased)">0.0.1 (Not yet released)</h2>
+
+<p>build from <a href="https://github.com/jenkinsci/buildflow-extensions-plugin" class="external-link" rel="nofollow">source</a> or download from <a href="https://jenkins.ci.cloudbees.com/job/plugins/job/build-flow-extensions-plugin/lastStableBuild/org.jenkins-ci.plugins$build-flow-extension-plugin/" class="external-link" rel="nofollow">here</a> if interested</p>
+
+
+<p><strong>The comment list below is not monitored.</strong></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:14</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Starting and Accessing Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Starting and Accessing Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dbasch)</span>, last modified by <span class='editor'> Unknown User (deepchip)</span> on Aug 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>
+  <div style="float:right">
+  <div class="panel" style="border-color: #aaaaaa;border-style: solid;border-width: 1px;"><div class="panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #aaaaaa;"><b>See also</b></div><div class="panelContent">
+<ul><li><a href="Features-controlled-by-system-properties.html" rel="nofollow">Features controlled by system properties</a></li><li><a href="Administering-Jenkins.html" rel="nofollow">Administering Jenkins</a></li></ul>
+</div></div>
+  </div></p><h1 id="StartingandAccessingJenkins-StartingJenkins">Starting Jenkins</h1><p>The easiest way to execute Jenkins is through the built in Jetty servlet container. You can execute Jenkins like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ java -jar jenkins.war
+</pre>
+</div></div><p>Of course, you probably want to send the output of Jenkins to a log file, and if you're on Unix, you probably want to use <code><strong>nohup</strong></code>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ nohup java -jar jenkins.war &gt; $LOGFILE 2&gt;&amp;1
+</pre>
+</div></div><h1 id="StartingandAccessingJenkins-AccessingJenkins">Accessing Jenkins</h1><p>To see Jenkins, simply bring up a web browser and go to URL <code><strong>http</strong></code><code><strong>://</strong></code><span style="color: green;"><code><strong>myServer</strong></code></span><code><strong>:8080</strong></code> where <span style="color: green;">myServer</span> is the name of the system running Jenkins.</p><p><a href="#StartingandAccessingJenkins-top"><em>Top of page</em></a></p><h2 id="StartingandAccessingJenkins-CommandLineParameters">Command Line Parameters</h2><p>Jenkins normally starts up using port 8080. However, if you have other web services starting up you might find that this port is already taken. You can specify a different port by using <code>--httpPort=</code><span style="color: green;"><code>$HTTP_PORT</code></span> where <span style="color: green;"><code>$HTTP_PORT</code></span> is the port you want Jenkins to run on. Other command line parameters include:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Command Line Parameter</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td colspan="1" class="confluenceTd">--help</td><td colspan="1" class="confluenceTd">Displays all available options and their usage</td></tr><tr><td class="confluenceTd"><p>--httpPort=$HTTP_PORT</p></td><td class="confluenceTd"><p>Runs Jenkins listener on port $HTTP_PORT using standard <em>http</em> protocol. The default is port 8080. To disable (because you're using <em>https</em>), use port <code>-1</code>. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.); it  is defined by the Jenkins URL specified in the global configuration.</p></td></tr><tr><td class="confluenceTd"><p>--httpListenAddress=$HTTP_HOST</p></td><td class="confluenceTd"><p>Binds Jenkins to the IP address represented by $HTTP_HOST. The default is 0.0.0.0 — i.e. listening on all available interfaces. <br class="atl-forced-newline"/>For example, to only listen for requests from localhost, you could use: --httpListenAddress=127.0.0.1</p></td></tr><tr><td class="confluenceTd"><p>--httpsPort=$HTTPS_PORT</p></td><td class="confluenceTd"><p>Uses HTTPS protocol on port $HTTPS_PORT. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.); it  is defined by the Jenkins URL specified in the global configuration.</p></td></tr><tr><td class="confluenceTd"><p>--httpsListenAddress=$HTTPS_HOST</p></td><td class="confluenceTd"><p>Binds Jenkins to listen for HTTPS requests on the IP address represented by $HTTPS_HOST.</p></td></tr><tr><td colspan="1" class="confluenceTd"><span>--http2Port=$HTTP_PORT</span></td><td colspan="1" class="confluenceTd"><span>Uses HTTP/2 protocol on port $HTTP_PORT. This option does not impact the root URL being generated within Jenkins logic (UI, JNLP files, etc.); it is defined by the Jenkins URL specified in the global configuration.</span></td></tr><tr><td colspan="1" class="confluenceTd"><span>--http2ListenAddress=$HTTPS_HOST</span></td><td colspan="1" class="confluenceTd"><span>Binds Jenkins to listen for HTTP/2 requests on the IP address represented by $HTTPS_HOST.</span></td></tr><tr><td class="confluenceTd"><p>--prefix=$PREFIX</p></td><td class="confluenceTd"><p>Runs Jenkins to include the $PREFIX at the end of the URL. <br class="atl-forced-newline"/>For example, to make Jenkins accessible at <code><strong>http</strong></code><code><strong>://</strong></code><span style="color: green;"><code><strong>myServer</strong></code></span><code><strong>:8080/jenkins</strong></code>, set --prefix=/jenkins</p></td></tr><tr><td class="confluenceTd"><p>--ajp13Port=$AJP_PORT</p></td><td class="confluenceTd"><p>Runs Jenkins listener on port $AJP_PORT using standard <em>AJP13</em> protocol. The default is port 8009. To disable (because you're using <em>https</em>), use port <code>-1</code>.</p></td></tr><tr><td class="confluenceTd"><p>--ajp13ListenAddress=$AJP_HOST</p></td><td class="confluenceTd"><p>Binds Jenkins to the IP address represented by $AJP_HOST. The default is 0.0.0.0 — i.e. listening on all available interfaces.</p></td></tr><tr><td class="confluenceTd"><p>--argumentsRealm.passwd.$ADMIN_USER</p></td><td class="confluenceTd"><p>Sets the password for user $ADMIN_USER. If Jenkins security is turned on, you must log in as the $ADMIN_USER in order to configure Jenkins or a Jenkins project. NOTE: You must also specify that this user has an <em>admin</em> role. (See next argument below).</p></td></tr><tr><td class="confluenceTd"><p>--argumentsRealm.roles.$ADMIN_USER=admin</p></td><td class="confluenceTd"><p>Sets that $ADMIN_USER is an administrative user and can configure Jenkins if Jenkins' security is turned on. See <a href="Securing-Jenkins.html">Securing Jenkins</a> for more information.</p></td></tr><tr><td colspan="1" class="confluenceTd">--sessionTimeout=$SESSION_TIMEOUT</td><td colspan="1" class="confluenceTd"><p>Sets the http session timeout value to <span>$SESSION_TIMEOUT</span> minutes. Default to what webapp specifies, and then to 60 minutes</p></td></tr><tr><td colspan="1" class="confluenceTd">--useJmx</td><td colspan="1" class="confluenceTd">Enable Jetty JMX (<a href="https://www.eclipse.org/jetty/documentation/9.4.x/jmx-chapter.html" class="external-link" rel="nofollow">See documentation</a>)</td></tr><tr><td class="confluenceTd"><p>-Xdebug -Xrunjdwp:transport=dt_socket,address=$DEBUG_PORT,server=y,suspend=n</p></td><td class="confluenceTd"><p>Sets debugging on and you can access debug on $DEBUG_PORT.</p></td></tr><tr><td class="confluenceTd"><p>--logfile=$LOG_PATH/winstone_`date +&quot;%Y-%m-%d_%H-%M&quot;`.log</p></td><td class="confluenceTd"><p>Logging to desired file</p></td></tr><tr><td class="confluenceTd"><p>-XX:PermSize=512M -XX:MaxPermSize=2048M -Xmn128M -Xms1024M -Xmx2048M</p></td><td class="confluenceTd"><p>referring <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html" class="external-link" rel="nofollow">to these options for Oracle Java</a></p></td></tr></tbody></table></div><p>Jenkins passes all (or just leading parameters until the first Jenkins-specific parameter?) command line parameters to the Winstone servlet container, so you can get more information by looking at the <a href="http://winstone.sourceforge.net/#commandLine" class="external-link" rel="nofollow">Winstone Command Line Parameter Reference</a> and <a href="https://github.com/jenkinsci/winstone#command-line-options" class="external-link" rel="nofollow">jenkinsci/winstone</a>.</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Be Careful with Command Line Parameters</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Jenkins ignores command line parameters it doesn't understand instead of producing an error. Be careful when using command line parameters and make sure you have the correct spelling. For example, the parameter needed for defining the Jenkins administrative user is <code><strong>--argument</strong></code><code><strong><span style="text-decoration: underline;">s</span></strong></code><code><strong>Realm</strong></code> and not <code><strong>--argumentRealm</strong></code>.</p></div></div><h2 id="StartingandAccessingJenkins-Averysimpleinitscript">A very simple init script</h2><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The following script is for Ubuntu based systems. The <a href="Installing-Jenkins-on-Red-Hat-distributions.html">RedHat Jenkins distribution</a> contains a startup script. </p></div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#!/bin/sh
+
+DESC=&quot;Jenkins CI Server&quot;
+NAME=jenkins
+PIDFILE=/var/run/$NAME.pid
+RUN_AS=jenkins
+COMMAND=&quot;/usr/bin/java -- -jar /home/jenkins/jenkins.war&quot;
+
+d_start() {
+	start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $RUN_AS --exec $COMMAND
+}
+
+d_stop() {
+	start-stop-daemon --stop --quiet --pidfile $PIDFILE
+	if [ -e $PIDFILE ]
+		then rm $PIDFILE
+	fi
+}
+
+case $1 in
+	start)
+	echo -n &quot;Starting $DESC: $NAME&quot;
+	d_start
+	echo &quot;.&quot;
+	;;
+	stop)
+	echo -n &quot;Stopping $DESC: $NAME&quot;
+	d_stop
+	echo &quot;.&quot;
+	;;
+	restart)
+	echo -n &quot;Restarting $DESC: $NAME&quot;
+	d_stop
+	sleep 1
+	d_start
+	echo &quot;.&quot;
+	;;
+	*)
+	echo &quot;usage: $NAME {start|stop|restart}&quot;
+	exit 1
+	;;
+esac
+
+exit 0
+</pre>
+</div></div><p><br/></p><p><span style="color: rgb(210,73,57);"><strong>Using HTTPS with an existing certificate</strong></span></p><p>If you're setting up Jenkins using the built-in Winstone server and want to use an existing certificate for HTTPS:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">--httpPort=-1 --httpsPort=443 --httpsKeyStore=path/to/keystore --httpsKeyStorePassword=keystorePassword</pre>
+</div></div><p>The keystore should be in JKS format (as created by the JDK 'keytool') and the keystore and target key must have the same password. (Placing the keystore arguments after Jenkins-specific parameters does not seem to work; either they are not forwarded to Winstone or Winstone ignores them coming after unknown parameters. So, make sure they are adjacent to the working <code>--httpsPort</code> argument.)</p><p>If your keystore contains multiple certificates (e.g. you are using CA signed certificate) Jenkins might end-up using a incorrect one. In this case you can <a href="http://stackoverflow.com/questions/7528944/convert-ca-signed-jks-keystore-to-pem" class="external-link" rel="nofollow">convert the keystore to PEM</a> and use following command line options:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">--httpPort=-1 --httpsPort=443 --httpsCertificate=path/to/cert --httpsPrivateKey=path/to/privatekey</pre>
+</div></div><p><span style="color: rgb(210,73,57);"><strong>Passing the Command Line Parameters to an instance on a Mac OSX (Currently is Mavericks 10.9.4) that uses launchctl (rather than using Jenkins.jar to start up)</strong></span></p><p>In this example, we set the Jenkins server to listen for HTTPS on port 8443. Note that we do not disable the httpPort by passing in -1. So in this example, your server would answer on both http and https. We also assume that the user has already created the keystore (see the &quot;Using SSL&quot; section from <a href="http://wiki.wocommunity.org/display/documentation/Installing+and+Configuring+Jenkins" class="external-link" rel="nofollow">http://wiki.wocommunity.org/display/documentation/Installing+and+Configuring+Jenkins</a>)</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist
+
+sudo defaults write /Library/Preferences/org.jenkins-ci httpsPort 8443
+sudo defaults write /Library/Preferences/org.jenkins-ci httpsKeyStore /path/to/your/keystore/file
+sudo defaults write /Library/Preferences/org.jenkins-ci httpsKeyStorePassword &lt;keystore password&gt;
+
+sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist
+</pre>
+</div></div><h2 id="StartingandAccessingJenkins-UsingHTTP/2">Using HTTP/2</h2><p>With Java 8 (should be included per default in Java 9), you need to include alpn boot jar in the bootclasspath. The alpn boot jar depends on your jvm version. Have a look here <a href="https://www.eclipse.org/jetty/documentation/9.4.x/alpn-chapter.html#alpn-versions" class="external-link" rel="nofollow">https://www.eclipse.org/jetty/documentation/current/alpn-chapter.html#alpn-versions</a> to figure which version to use.</p><p>You can download it from (with alpn boot version <a href="https://repo.maven.apache.org/maven2/org/mortbay/jetty/alpn/alpn-boot/8.1.12.v20180117/alpn-boot-8.1.12.v20180117.jar" class="external-link" rel="nofollow">8.1.12.v20180117</a>): <a href="https://repo.maven.apache.org/maven2/org/mortbay/jetty/alpn/alpn-boot/8.1.12.v20180117/alpn-boot-8.1.12.v20180117.jar" class="external-link" rel="nofollow">https://repo.maven.apache.org/maven2/org/mortbay/jetty/alpn/alpn-boot/8.1.12.v20180117/alpn-boot-8.1.12.v20180117.jar</a></p><p>Then you have to include it on jvm start:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">java -Xbootclasspath/p:alpn-boot-8.1.12.v20180117.jar -jar target/jenkins.war --http2Port=9090
+</pre>
+</div></div><h2 id="StartingandAccessingJenkins-ConfiguringhttpscertificateswithWindows">Configuring https certificates with Windows</h2><p>Creating a certificate for use within Jenkins. This used a stock Jenkins 1.612 installation on Windows Server 2008 R2 Standard 64-bit. This creates a certificate signed by a Certificate Authority such as Digicert, if making your own certificate skip steps 3, 4, and 5.</p><p>This process utilizes Java's keytool, however you do not have to perform a separate Java installation if you don't need it. Jenkins packages a JRE with it when you do the installation, located in <code>C:\Program Files (x86)\Jenkins\jre\bin</code> </p><p>Step 1: Create a new keystore on your server. This will place a 'keystore' file in your current directory.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\jre\bin&gt;keytool -genkeypair -keysize 2048 -keyalg RSA -alias jenkins -keystore keystore
+Enter keystore password:
+Re-enter new password:
+What is your first and last name?
+[Unknown]: server-name.your.company.com
+What is the name of your organizational unit?
+[Unknown]: Your City
+What is the name of your organization?
+[Unknown]: Your company name
+What is the name of your City or Locality?
+[Unknown]: Your city
+What is the name of your State or Province?
+[Unknown]: Your State
+What is the two-letter country code for this unit?
+[Unknown]: US
+Is CN=server-name.your.company.com, OU=Your City, O=Your company name, L=Your City, ST=Your State, C=US correct?
+[no]: yes
+
+Enter key password for &lt;jenkins&gt;
+(RETURN if same as keystore password):
+</pre>
+</div></div><p><br/></p><p>Step 2: Verify the keystore was created (your fingerprint will vary)</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\jre\bin&gt;keytool -list -keystore keystore
+Enter keystore password:
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+jenkins, May 6, 2015, PrivateKeyEntry,
+Certificate fingerprint (SHA1): AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA:AA
+</pre>
+</div></div><p><br/></p><p>Step 3: Create the certificate request.  This will create a 'certreq.csr' file in your current directory.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\jre\bin&gt;keytool -certreq -alias jenkins -keyalg RSA -file certreq.csr -ext SAN=dns:server-name,dns:server-name.your.company.com -keystore keystore
+Enter keystore password:
+</pre>
+</div></div><p><br/></p><p>Step 4: Use the contents of the <code>certreq.csr</code> file to generate a certificate from your certificate provider. Request a SHA-1 certificate (SHA-2 is untested but will likely work). If using DigiCert, download the resulting certificate as Other format  &quot;a .p7b bundle of all the certs in a .p7b file&quot;.</p><p>Step 5: Add the resulting .p7b into the keystore you created above.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\jre\bin&gt;keytool -import -alias jenkins -trustcacerts -file response_from_digicert.p7b -keystore keystore
+Enter keystore password:
+Certificate reply was installed in keystore
+</pre>
+</div></div><p><br/></p><p>Step 6: Copy the 'keystore' file to your Jenkins secrets directory. On a stock installation, this will be at</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\secrets
+</pre>
+</div></div><p><br/></p><p>Step 7: Modify the &lt;arguments&gt; section of your <code>C:\Program Files (x86)\Jenkins\jenkins.xml</code> file to reflect the new certificate. Note: This example disables http via <code>--httpPort=-1</code> and places the server on <code>8443</code> via <code>--httpsPort=8443</code>.<br/> </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;arguments&gt;-Xrs -Xmx256m -Dhudson.lifecycle=hudson.lifecycle.WindowsServiceLifecycle -jar &quot;%BASE%\jenkins.war&quot; --httpPort=-1 --httpsPort=8443 --httpsKeyStore=&quot;%BASE%\secrets\keystore&quot; --httpsKeyStorePassword=your.password.here&lt;/arguments&gt;
+</pre>
+</div></div><p><br/></p><p>Step 8: Restart the jenkins service to initialize the new configuration.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">net stop jenkins
+net start jenkins
+</pre>
+</div></div><p><br/></p><p>Step 9: After 30-60 seconds, Jenkins will have completed the startup process and you should be able to access the website at <span class="nolink">https://server-name.your.company.com:8443</span>; Verify the certificate looks good via your browser's tools.  If the service terminates immediately, there's an error somewhere in your configuration. Useful error information can be found in:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">C:\Program Files (x86)\Jenkins\jenkins.err.log
+C:\Program Files (x86)\Jenkins\jenkins.out.log
+</pre>
+</div></div><p><br/></p><p><a href="#StartingandAccessingJenkins-top"><em>Top of page</em></a></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

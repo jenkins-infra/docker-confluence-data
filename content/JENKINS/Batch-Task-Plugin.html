@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Batch Task Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Batch Task Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (fbelzunc)</span> on Jul 01, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View batch task <a href="https://plugins.jenkins.io/batch-task" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin adds batch tasks that are not regularly executed to projects, such as releases, integration, archiving, etc. In this way, anyone in the project team can execute them in a way that leaves a record.</p>
+
+
+<h1 id="BatchTaskPlugin-Usage">Usage</h1>
+
+<p>When you install this plugin, your project configuration page gets additional &quot;batch tasks&quot; option as illustrated below:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/3309627/3473417.png" data-image-src="attachments/3309627/3473417.png" data-unresolved-comment-count="0" data-linked-resource-id="3473417" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="task-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="3309627" data-linked-resource-container-version="42"></span></p>
+
+<p>A batch task consists of a shell script and a name. When you execute a build, the shell script gets run on the workspace, just like a build. Batch tasks and builds &quot;lock&quot; the workspace, so when one of those activities is in progress, all the others will block in the queue.</p>
+
+<p>Once a task is configured, the project top page gets &quot;task(s)&quot; link, as illustrated below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/3309627/3473416.png" data-image-src="attachments/3309627/3473416.png" data-unresolved-comment-count="0" data-linked-resource-id="3473416" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="task-project-top.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="3309627" data-linked-resource-container-version="42"></span></p>
+
+<p>If you click that, you can see the status of all the tasks. You can schedule the execution of a task from here, too. Task executions are numbered like &quot;123-456&quot; where 123 portion refers to the latest build and 456 portion refers to the sequential number (so that you can execute a task multiple times with the same build.) The build number portion is significant because when a batch task runs, it sees the workspace as of the result of this build.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/3309627/3473415.png" data-image-src="attachments/3309627/3473415.png" data-unresolved-comment-count="0" data-linked-resource-id="3473415" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="task-top.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="3309627" data-linked-resource-container-version="42"></span></p>
+
+<p>The details of the task execution and its console output are available by further clicking a task of the interest, as below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/3309627/3473418.png" data-image-src="attachments/3309627/3473418.png" data-unresolved-comment-count="0" data-linked-resource-id="3473418" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="task-builds.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="3309627" data-linked-resource-container-version="42"></span></p>
+
+
+<h1 id="BatchTaskPlugin-ChangeLog">Change Log</h1>
+
+<h4 id="BatchTaskPlugin-Version1.19(Jul.1,2016)">Version 1.19 (Jul. 1, 2016)</h4>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-36184">JENKINS-36184</a> - Batch task console is empty</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.18(Jun.7,2016)">Version 1.18 (Jun. 7, 2016)</h4>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-35411">JENKINS-35411</a> - Migrate to pom-plugin</li>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-35188">JENKINS-35188</a> - Improve User Experience</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.17(Fev.24,2013)">Version 1.17 (Fev. 24, 2013)</h4>
+
+<ul>
+	<li>Fix reopened <a href="https://issues.jenkins-ci.org/browse/JENKINS-13647">JENKINS-13647</a> - Environment variables from EnvInject plugin are not inherited/parsed by batch tasks</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.16(May1,2012)">Version 1.16 (May 1, 2012)</h4>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13647">JENKINS-13647</a> - Environment variables from EnvInject plugin are not inherited/parsed by batch tasks</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.15(Apr5,2012)">Version 1.15 (Apr 5, 2012)</h4>
+
+<ul>
+	<li>Refactored internally to <a href="Hierarchical-projects-support.html">support hierarchical project</a></li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.14(Nov11,2010)-requiresHudson1.383+">Version 1.14 (Nov 11, 2010) - <em>requires Hudson 1.383+</em></h4>
+
+<ul>
+	<li>Fixed an AbstractMethodError when running with Hudson 1.383+ (<a href="http://issues.jenkins-ci.org/browse/JENKINS-8033" class="external-link" rel="nofollow">issue #8033</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.13(Feb10,2010)">Version 1.13 (Feb 10, 2010)</h4>
+
+<ul>
+	<li>Use resizable text area for task script. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5578">JENKINS-5578</a>)</li>
+	<li>Apply environment settings from <a href="Setenv-Plugin.html">setenv</a> plugin when running tasks. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5580">JENKINS-5580</a>)</li>
+	<li>Show links to downstream tasks on project page. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5582">JENKINS-5582</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.12(Feb5,2010)">Version 1.12 (Feb 5, 2010)</h4>
+
+<ul>
+	<li>Lock workspace during task run to prevent owner project or other tasks from using the same workspace. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5285">JENKINS-5285</a>)</li>
+	<li>Show animated ball icon for Tasks link in sidepanel when a task is running. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-3372">JENKINS-3372</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.11(Jan3,2010)">Version 1.11 (Jan 3, 2010)</h4>
+
+<ul>
+	<li>Environment variable bug fix and enhancements (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5039">JENKINS-5039</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-1628">JENKINS-1628</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-1316">JENKINS-1316</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.10(Dec7,2009)">Version 1.10 (Dec 7, 2009)</h4>
+
+<ul>
+	<li>A few minor bug fixes.</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.9(Nov5,2009)">Version 1.9 (Nov 5, 2009)</h4>
+
+<ul>
+	<li>Add &quot;trigger even if build is unstable&quot; selector for invoking tasks as a post-build action.  Previously the tasks were always invoked (even for failed builds); now they will only run if the build result meets the required threshold (and never for failed builds).</li>
+	<li>Fix build number written to job log when task is invoked as a post-build action (was off by one)</li>
+	<li>Fix broken image for aborted task (grey ball)</li>
+	<li>On task page, show only builds for this task in Build History (instead of all tasks)</li>
+	<li>Avoid error if try to run a task when there are no builds for the project</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.8(Aug28,2009)">Version 1.8 (Aug 28, 2009)</h4>
+
+<ul>
+	<li>Improved the error diagnosis and recovery when a build no longer has a workspace (<a href="http://www.nabble.com/NPE-with-batch-task-plugin-and-1.321-td25194567.html" class="external-link" rel="nofollow">report</a>) – requires Hudson 1.319 or higher.</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.7(Mar31,2009)">Version 1.7 (Mar 31, 2009)</h4>
+
+<ul>
+	<li>Allow non-admin users ability to manage and execute tasks (<a href="https://issues.jenkins-ci.org/browse/JENKINS-1198">JENKINS-1198</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.6(Feb27,2009)">Version 1.6 (Feb 27, 2009)</h4>
+
+<ul>
+	<li>Updated to work with recent versions of Hudson (<a href="https://issues.jenkins-ci.org/browse/JENKINS-3173">JENKINS-3173</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.5(Jan27,2009)">Version 1.5 (Jan 27, 2009)</h4>
+
+<ul>
+	<li>Fixed a bug &quot;batchtask in queue causes NPE at startup&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2925">JENKINS-2925</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.3(Jan29,2008)">Version 1.3 (Jan 29, 2008)</h4>
+
+<ul>
+	<li>Updated to work with the latest version of Hudson, so that it won't cause <code>AbstractMethodError</code> (<a href="http://www.nabble.com/Hudson---Problems-with-white-spaces-in-URLs-pointing-to-build-artifacts--td15088015.html#a15088729" class="external-link" rel="nofollow">report</a>)</li>
+	<li>Last successful/failed builds were computed incorrectly (<a href="https://issues.jenkins-ci.org/browse/JENKINS-1012">JENKINS-1012</a>)</li>
+	<li>Icon size in task list is now configurable (<a href="https://issues.jenkins-ci.org/browse/JENKINS-1010">JENKINS-1010</a>)</li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.2(Nov16,2007)">Version 1.2 (Nov 16, 2007)</h4>
+
+<ul>
+	<li>Task can be now individually deleted from the left menu</li>
+	<li>Build number should start from 1 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-991">JENKINS-991</a>)</li>
+	<li>Tasks now work on Windows (<a href="https://issues.jenkins-ci.org/browse/JENKINS-985">JENKINS-985</a>)</li>
+	<li><span style="text-decoration: line-through;">Build icon in task list is not larger than the other icons (</span><span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-1010">JENKINS-1010</a></span><span style="text-decoration: line-through;">)</span></li>
+</ul>
+
+
+<h4 id="BatchTaskPlugin-Version1.0(Oct18,2007)">Version 1.0 (Oct 18, 2007)</h4>
+
+<ul>
+	<li>initial version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/3309627/3473415.png">task-top.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/3309627/3473416.png">task-project-top.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/3309627/3473417.png">task-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/3309627/3473418.png">task-builds.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

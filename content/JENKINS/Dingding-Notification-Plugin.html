@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Dingding Notification Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Dingding Notification Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ztbsuper)</span>, last modified on Jul 10, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="DingdingNotificationPlugin-DingdingNotificationPluginIntro">Dingding Notification Plugin Intro</h1><p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View DingTalk <a href="https://plugins.jenkins.io/dingding-notifications" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-01/#SECURITY-1423" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+Allows users to send build notifications via <a href="https://www.dingtalk.com/" class="external-link" rel="nofollow">Dingding-钉钉</a></p><ol><li>Dingding Notification Plugin</li></ol><p>Dingding notification plugin is a simply config plugin, it can notify to your specified dingding group the build job status including:start build\build success\build failed.</p><p>Chinese Intro: <a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=%E4%B8%AD%E6%96%87%E4%BB%8B%E7%BB%8D&amp;linkCreation=true&amp;fromPageId=102006890">中文介绍</a>(<a href="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/readme-cn.md" class="external-link" rel="nofollow">https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/readme-cn.md</a>)</p><ol><li><ol><li>Contributing<br/> 1. Fork it<br/> 2. Create your feature branch (git checkout -b my-new-feature)<br/> 3. Commit your changes (git commit -am 'Add some feature')<br/> 4. Push to the branch (git push origin my-new-feature)<br/> 5. Create new Pull Request<br/> 6. Dev build<br/> ```<br/> mvn package --settings=./settings.xml<br/> ```</li></ol></li></ol><ol><li><ol><li>Installation<br/> 1. create a Dingding robot in Dingding side</li></ol></li></ol><p>Dingding -&gt; ... config -&gt; new robot<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/entry.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/entry.png?raw=true"></span></p><p>choose the 'custom robot'<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/robot.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/robot.png?raw=true"></span></p><p>config robot<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/create_robot.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/create_robot.png?raw=true"></span></p><p>save the access token<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/token.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/token.png?raw=true"></span><br/> 2. Config Jenkins<br/> After you installed the plugin, each job can add a post build step, choose 'dingding notification config'<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config_post_step.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config_post_step.png?raw=true"></span></p><p><s>input the access token in previous step, and please input the Jenkins URL</s><br/><s> because plugin don't know where is your jenkins, if you wanna the notification can link directly to your build, please make sure the URL is the Jenkins ROOT url.</s></p><p>Dingding plugin will try to get your Jenkins Root location when you add the post step, so you won't set your Jenkins URL in new version 1.3.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config.png?raw=true"></span><br/> 3. Enjoy!<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/result.png?raw=true" data-image-src="https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/result.png?raw=true"></span></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

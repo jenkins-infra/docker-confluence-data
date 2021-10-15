@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Add a Google-O-Meter to a view</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Add a Google-O-Meter to a view
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gregallen)</span>, last modified by <span class='editor'> Unknown User (warmfusion)</span> on May 31, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Here's a simple hack using a view's description text to add a Google swing-o-meter to indicate the proportion of builds passing.</p>
+
+<p>Paste this text into the view's description box:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;script&gt;
+var xmlhttp = null;
+if (window.XMLHttpRequest)
+    xmlhttp = new XMLHttpRequest();
+else if (window.ActiveXObject) {
+    if (new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;))
+        xmlhttp = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+    else
+        xmlhttp = new ActiveXObject(&quot;Msxml2.XMLHTTP&quot;);
+}
+var url = document.location + &quot;/api/xml?xpath=count%28//job[color=%22blue%22]%29div+count%28//job%29&quot;
+xmlhttp.open(&quot;GET&quot;, url, false);//false means synchronous
+xmlhttp.send()
+var buildSuccessFraction= xmlhttp.responseText
+document.write(&#39;&lt;img src=&quot;http://chart.apis.google.com/chart?chs=320x160&amp;cht=gom&amp;chd=t:&#39; + buildSuccessFraction * 100.0 + &#39;&amp;chxt=x,y&amp;chxl=y|0:||1:|failure|success&quot;&gt;&#39;)
+&lt;/script&gt;
+</pre>
+</div></div>
+
+<p>Sample:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43712871/43843607.png" data-image-src="attachments/43712871/43843607.png" data-unresolved-comment-count="0" data-linked-resource-id="43843607" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chart.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43712871" data-linked-resource-container-version="6"></span></p>
+<div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Security Limitations</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Jenkins now prevents script tags being used in the view section. If you accept the risk of allowing script tags in views, then you will need to also include and configure the <a href="https://wiki.jenkins-ci.org/pages/viewpage.action?pageId=60915753" class="external-link" rel="nofollow">&quot;Anything Goes&quot; formatter</a>.</p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43712871/43843607.png">chart.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

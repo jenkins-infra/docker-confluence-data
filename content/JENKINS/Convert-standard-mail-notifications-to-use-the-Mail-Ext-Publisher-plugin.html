@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Convert standard mail notifications to use the Mail-Ext Publisher plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-Script-Console.html">Jenkins Script Console</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Convert standard mail notifications to use the Mail-Ext Publisher plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (aheritier)</span>, last modified on Nov 05, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This script replace mail notifications in all projects by Mail-Ext publisher plugin and re-uses existing recipients.<br/>
+The Mail-Ext is configured with :</p>
+<ul>
+	<li>Recipient list : current recipient list defined in the project (the MailExt isn't activated if the project doesn't have yet a mail notification)</li>
+	<li>Mail subject : default subject from global config</li>
+	<li>Mail body : default body from global config</li>
+	<li>Triggers : Failure, StillFailing, Unstable, StillUnstable, Fixed triggers are activated and send mails to the recipient list</li>
+</ul>
+
+
+<p>It was tested on Freestyle and Maven projects with Hudson 1.346.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+import hudson.plugins.emailext.*
+import hudson.plugins.emailext.plugins.trigger.*
+import hudson.model.*
+import hudson.maven.*
+import hudson.maven.reporters.*
+import hudson.tasks.*
+
+// For each project
+for(item in Hudson.instance.items) {
+  def recipients
+  println(&quot;JOB : &quot;+item.name);
+  
+  // Find current recipients defined in project
+  
+  if(item instanceof MavenModuleSet) {
+    println(&quot;&gt;MAVEN MODULE SET&quot;);
+    
+    // Search for Maven Mailer Reporter
+    println(&quot;&gt;&gt;Reporters&quot;);    
+    for(reporter in item.reporters) {
+      println(&quot;&gt;&gt;&gt; &quot;+reporter);
+      if(reporter instanceof MavenMailer) {
+        // save recipients
+        recipients = reporter.recipients
+        // remove reporter
+        item.reporters.remove(reporter)
+      }
+    }
+  } else
+  if(item instanceof FreeStyleProject) {
+    println(&quot;&gt;FREESTYLE PROJECT&quot;);
+  }
+
+  println(&quot;&gt;&gt;Publishers&quot;);    
+  for(publisher in item.publishersList) {
+    println(&quot;&gt;&gt;&gt; &quot;+publisher);
+    // Search for default Mailer Publisher (doesn&#39;t exist for Maven projects)
+    if(publisher instanceof Mailer) {
+      // save recipients
+      recipients = publisher.recipients
+      // remove publisher
+      item.publishersList.remove(publisher)
+    } else
+    // Or for Extended Email Publisher
+    if(publisher instanceof ExtendedEmailPublisher) {
+      // save recipients (if it already exist it overrides others values)
+      recipients = publisher.recipientList
+      item.publishers.remove(publisher)
+      // remove it
+      item.publishersList.remove(publisher)
+    }
+  }
+  
+  // If we found recipients list to send mail
+  if(recipients!=null){
+    println (&quot;&gt;CURRENT RECIPIENT : &quot;+recipients)
+    // We create a new Extended Email Publisher
+    def eep = new ExtendedEmailPublisher();
+    eep.recipientList = recipients
+    eep.defaultSubject = &quot;\$DEFAULT_SUBJECT&quot;
+    eep.defaultContent = &quot;\$DEFAULT_CONTENT&quot;
+    // With some triggers
+    eep.configuredTriggers.add(new FailureTrigger(
+      email : new EmailType(
+        sendToRecipientList : true,
+        sendToDevelopers : true,
+        includeCulprits : true, 
+        body : ExtendedEmailPublisher.PROJECT_DEFAULT_BODY_TEXT, 
+        subject : ExtendedEmailPublisher.PROJECT_DEFAULT_SUBJECT_TEXT )))
+    eep.configuredTriggers.add(new FixedTrigger(
+      email : new EmailType(
+        sendToRecipientList : true, 
+        sendToDevelopers : true,
+        includeCulprits : true, 
+        body : ExtendedEmailPublisher.PROJECT_DEFAULT_BODY_TEXT, 
+        subject : ExtendedEmailPublisher.PROJECT_DEFAULT_SUBJECT_TEXT )))
+    eep.configuredTriggers.add(new StillFailingTrigger(
+      email : new EmailType(
+        sendToRecipientList : true, 
+        sendToDevelopers : true,
+        includeCulprits : true, 
+        body : ExtendedEmailPublisher.PROJECT_DEFAULT_BODY_TEXT, 
+        subject : ExtendedEmailPublisher.PROJECT_DEFAULT_SUBJECT_TEXT )))
+    eep.configuredTriggers.add(new StillUnstableTrigger(
+      email : new EmailType(
+        sendToRecipientList : true, 
+        sendToDevelopers : true,
+        includeCulprits : true, 
+        body : ExtendedEmailPublisher.PROJECT_DEFAULT_BODY_TEXT, 
+        subject : ExtendedEmailPublisher.PROJECT_DEFAULT_SUBJECT_TEXT )))
+    eep.configuredTriggers.add(new UnstableTrigger(
+      email : new EmailType(
+        sendToRecipientList : true, 
+        sendToDevelopers : true,
+        includeCulprits : true, 
+        body : ExtendedEmailPublisher.PROJECT_DEFAULT_BODY_TEXT, 
+        subject : ExtendedEmailPublisher.PROJECT_DEFAULT_SUBJECT_TEXT )))
+    // And we add/replace it in the project
+    item.publishersList.replace(eep);
+  }else{
+    println (&quot;&gt;NO RECIPIENT&quot;)
+  }
+   
+  println(&quot;\n=======\n&quot;);
+}
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

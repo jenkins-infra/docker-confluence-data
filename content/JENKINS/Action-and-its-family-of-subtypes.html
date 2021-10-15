@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Action and its family of subtypes</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Action and its family of subtypes
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (dalvizu)</span> on Aug 17, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><a href="http://javadoc.jenkins-ci.org/byShortName/Action">Action</a> is one of the primary ways that plugins can use to enrich the build/project pages. This extension point has the longest history, and as such its meaning is somewhat confusing, and its use across places are somewhat inconsistent. This page attempts to clarify that.</p>
+
+<h1 id="Actionanditsfamilyofsubtypes-WhatisAction?">What is Action?</h1>
+
+<p>The recurring UI pattern in Jenkins is to have a bunch of navigable links and command links to the left of the page. The extension point <a href="http://javadoc.jenkins-ci.org/byShortName/Action">Action</a> was born as a means to contribute custom entries here.</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border image-center" src="attachments/58001011/58196069.png" data-image-src="attachments/58001011/58196069.png" data-unresolved-comment-count="0" data-linked-resource-id="58196069" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="actions.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001011" data-linked-resource-container-version="7"></span></p>
+
+<p>Three methods defined on Action are for obtaining information needed to render actions (icon, name of the link, and where it takes the user to.)</p>
+
+
+<h1 id="Actionanditsfamilyofsubtypes-ActionandURLspace">Action and URL space</h1>
+
+<p>Actions often want to define additional URL space into Jenkins to show information. For example, &quot;test reports&quot; action adds a whole bunch of subpages into Jenkins. To facilitate this common use case, Jenkins uses the <code>Action.getUrlName()</code> method.</p>
+
+<p>For example, if the host object of <code>Action</code> (typically extends from <a href="http://javadoc.jenkins-ci.org/byShortName/Actionable">Actionable</a>) is at the URL <code>/jenkins/foo/bar/</code>, then <code>Action</code> that returns <code>zot</code> from the <code>getUrlName()</code> would be mapped to <code>/jenkins/foo/bar/zot</code> (and thus entire sub-space is available for this action to control. This is how you can have <code>Action</code> that shows information.</p>
+
+<p>In some other cases, actions just want to link to existing URL (perhaps even outside Jenkins.) <code>getUrlName()</code> javadoc explains how to do it.</p>
+
+
+<h1 id="Actionanditsfamilyofsubtypes-Specialviewsfortheactionhost">Special views for the action host</h1>
+
+<p>Some host classes that host <code>Action</code> designate a specific view, and when such a view is defined, it gets pulled into the host object's page rendering. For example, <a href="http://javadoc.jenkins-ci.org/byShortName/AbstractBuild">AbstractBuild</a> allows actions to define <code>summary.groovy</code> (or other languages), and when it is present, those views are merged into the top page of the build. For example, JUnit integration uses this to make the test report prominent.</p>
+
+<p>See the javadoc of respective host classes for details. Similarly, some host classes define a marker interface that extends from <code>Action</code> in addition to define additional interaction with actions. See <a href="http://javadoc.jenkins-ci.org/byShortName/ProminentProjectAction">ProminentProjectAction</a> for an example. See the subypes of <a href="http://javadoc.jenkins-ci.org/byShortName/Action">Action</a> for all such marker interfaces.</p>
+
+
+<h1 id="Actionanditsfamilyofsubtypes-TransientandPersistentactions">Transient and Persistent actions</h1>
+
+<p>Depending on the host, <code>Action</code> have different persistence semantics. In some hosts, such as <a href="http://javadoc.jenkins-ci.org/byShortName/AbstractBuild">AbstractBuild</a>, actions are explicitly added (typically by <a href="http://javadoc.jenkins-ci.org/byShortName/BuildStep">BuildStep</a>s that executed) and persisted along with it. In some other hosts, such as <a href="http://javadoc.jenkins-ci.org/byShortName/View">View</a>, actions are assembled entirely from other configurations of the said object whenever it's changed and therefore not persisted. Still others have hybrid approach, such as <a href="http://javadoc.jenkins-ci.org/byShortName/AbstractProject">AbstractProject</a>, which supports some explicitly added actions as well as transient ones contributed from build steps and etc.</p>
+
+<p>Unfortunately, the only way to really figure out which host behaves how is to look at the implementation of the getActions() method.</p>
+
+<p>Transient actions can be discarded any moment, and new ones created to take the place of the old one. Therefore, it is not suitable to use it for synchronization, or for keeping other persisted records.</p>
+
+<p>Persistent actions survive forever, until it's programmatically removed or the host object gets removed itself. So care must be taken to use 'transient' where appropriate. Those objects can be also used for synchronization.</p>
+
+
+<h1 id="Actionanditsfamilyofsubtypes-Addingactions">Adding actions</h1>
+
+<p>How you insert your implementation of <code>Action</code> to Jenkins depends on the type of the host, and whether it's transient or persistent.</p>
+
+<p>Persistent actions are almost always added via <code>Actionable.addAction()</code>.</p>
+
+<p>Transient actions are added via callback. You implement other extension points that can contribute transient actions, such as <a href="http://javadoc.jenkins-ci.org/byShortName/LabelAtomProperty">LabelAtomProperty</a>, <a href="http://javadoc.jenkins-ci.org/byShortName/Builder">Builder</a>, and <a href="http://javadoc.jenkins-ci.org/byShortName/Publisher">Publisher</a>, then your host will call your methods and expect you to return a list of transient actions. The host may do this every so often when it thinks it needs to update its transient actions.</p>
+
+<p>More recently, we are introducing a series of <code>Transient***ActionFactory</code>, such as <a href="http://javadoc.jenkins-ci.org/byShortName/TransientViewActionFactory">TransientViewActionFactory</a>, so that transient actions can be contributed without implementing another stateful extension point like <a href="http://javadoc.jenkins-ci.org/byShortName/Builder">Builder</a>. Most generally, <a href="http://javadoc.jenkins-ci.org/byShortName/TransientActionFactory">TransientActionFactory</a> can be used for <em>any</em> <a href="http://javadoc.jenkins-ci.org/byShortName/Actionable">Actionable</a>.</p>
+
+<h2 id="Actionanditsfamilyofsubtypes-RootAction">RootAction</h2>
+
+<p>Most actions are registered in one of the two ways described above, but there's a notable exception, which is <a href="http://javadoc.jenkins-ci.org/byShortName/RootAction">RootAction</a>. This is a stand-alone extension point of its own, that you'd put @<a href="http://javadoc.jenkins-ci.org/byShortName/Extension">Extension</a>, and these gets automatically registered as transient actions of the root <a href="http://javadoc.jenkins-ci.org/byShortName/Jenkins">Jenkins</a> object. There's a variant of this called <a href="http://javadoc.jenkins-ci.org/byShortName/UnprotectedRootAction">UnprotectedRootAction</a> that is made accessible even to anonymous users without the read access to Jenkins.</p>
+
+<h1 id="Actionanditsfamilyofsubtypes-Actionsasinputstobuild">Actions as inputs to build</h1>
+
+<p><a href="http://javadoc.jenkins-ci.org/byShortName/Action">Action</a>s are also used as a parameter/input (in a broad sense of the word) to the build, as can be seen in <code>Queue.schedule(...)</code>, because these actions get added to the newly created <a href="http://javadoc.jenkins-ci.org/byShortName/AbstractBuild">AbstractBuild</a> and then it can be accessed from build steps. For example, <a href="http://javadoc.jenkins-ci.org/byShortName/ParametersAction">ParametersAction</a> is one such use of <code>Action</code> that's used to implement parameterized builds. <a href="Matrix-Reloaded-Plugin.html">Matrix Reloaded Plugin</a> uses this mechanism similarly to remember what subset of the matrix build to execute.</p>
+
+<p>There are several subtypes that allows this kind of actions to interact with the queue, such as <a href="http://javadoc.jenkins-ci.org/byShortName/FoldableAction">FoldableAction</a> and <a href="http://javadoc.jenkins-ci.org/byShortName/QueueAction">QueueAction</a>.</p>
+
+<h1 id="Actionanditsfamilyofsubtypes-Actionsasthevehicletokeepinformationaboutbuilds">Actions as the vehicle to keep information about builds</h1>
+
+<p><a href="http://javadoc.jenkins-ci.org/byShortName/AbstractBuild">AbstractBuild</a> is <a href="http://javadoc.jenkins-ci.org/byShortName/Actionable">Actionable</a> and it takes persisted actions. This is the primary means for plugins to attach any information to the build. This allows other plugins to use your action to understand what has happened (such <code>Action</code> are also used to render information, the primary purpose of the <code>Action</code> class.)</p>
+
+<p>Even if your plugin doesn't use such record by itself, we highly recommend you do it, because that opens up interesting possibilities to build on top of your work.</p>
+
+
+<h1 id="Actionanditsfamilyofsubtypes-Invisibleactions">Invisible actions</h1>
+
+<p>As can be seen in the section above, some use of actions emerge over the time that goes beyond the original purpose of extending the UI, and therefore it became convenient to be able to have actions that aren't visible in the UI at all. <a href="http://javadoc.jenkins-ci.org/byShortName/InvisibleAction">InvisibleAction</a> is the convenient base class for such purposes. For example, <a href="http://javadoc.jenkins-ci.org/byShortName/InterruptedBuildAction">InterruptedBuildAction</a> records how the build was aborted, but this is currently invisible, so it extends from <a href="http://javadoc.jenkins-ci.org/byShortName/InvisibleAction">InvisibleAction</a></p>
+
+<h1 id="Actionanditsfamilyofsubtypes-ChangethewayActionlinkisrendered">Change the way Action link is rendered</h1>
+
+<p>An <a href="http://javadoc.jenkins-ci.org/byShortName/Action">Action</a> object can have an optional <code>action.groovy</code>/<code>action.jelly</code> file. When this file is presented, that is used to render the action link instead of the default icon+text.</p>
+
+<p>Use this with caution as it can create inconsistency in the user experience.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001011/58196069.png">actions.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

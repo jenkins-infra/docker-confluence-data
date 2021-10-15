@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Gradle JPI Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Gradle JPI Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (abayer)</span>, last modified by <span class='editor'> Unknown User (daspilker)</span> on Mar 22, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="GradleJPIPlugin-Introduction">Introduction</h2>
+
+<p>It has long been possible to build Jenkins plugins using Maven, but now you can build and release your Java and Groovy plugins using <a href="http://gradle.org/" class="external-link" rel="nofollow">Gradle</a>.</p>
+
+<h2 id="GradleJPIPlugin-Requirements">Requirements</h2>
+
+<ul>
+	<li>Gradle 2.8</li>
+	<li>Your plugin must be built against a Jenkins core version of 1.420 or later, due to the Gradle plugin relying on changes which were made to the annotation handling around that time.</li>
+</ul>
+
+
+<h2 id="GradleJPIPlugin-Setup">Setup</h2>
+
+<p>Once you've got Gradle installed, create your plugin project. The plugin project's directory should be named &quot;foo-plugin&quot; or &quot;foo&quot;, where &quot;foo&quot; is the artifact name for the plugin. In the build.gradle for the plugin, place the following at the top:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+plugins {
+  id &quot;org.jenkins-ci.jpi&quot; version &quot;0.16.0&quot;
+}
+
+group = &quot;org.jenkins-ci.plugins&quot;
+version = &quot;0.0.1-SNAPSHOT&quot;    // Or whatever your version is.
+description = &quot;A description of your plugin&quot;
+
+jenkinsPlugin {
+    coreVersion = &quot;1.420&quot;                                               // Version of Jenkins core this plugin depends on.
+    displayName = &quot;Hello World plugin built with Gradle&quot;                // Human-readable name of plugin.
+    url = &quot;http://wiki.jenkins-ci.org/display/JENKINS/SomePluginPage&quot;   // URL for plugin on Jenkins wiki or elsewhere.
+    gitHubUrl = &quot;https://github.com/jenkinsci/some-plugin&quot;              // Plugin URL on GitHub. Optional.
+    shortName = &quot;hello-world&quot;                                           // Plugin ID, defaults to the project name without trailing &#39;-plugin&#39;
+
+    // The developers section is optional, and corresponds to the POM developers section.
+    developers {
+        developer {
+            id &quot;abayer&quot;
+            name &quot;Andrew Bayer&quot;
+            email &quot;andrew.bayer@gmail.com&quot;
+        }
+    }
+}
+</pre>
+</div></div>
+
+<p>Make sure any additional repositories you need are defined after the <code>jenkinsPlugin</code> section, or artifact resolution may take a long time.</p>
+
+<h2 id="GradleJPIPlugin-Usage">Usage</h2>
+
+<h3 id="GradleJPIPlugin-Building">Building</h3>
+
+<p>To build, run <code>gradle jpi</code>. This will create a <code>.hpi</code> file in the <code>build/libs</code> directory in your plugin project directory.</p>
+
+<h3 id="GradleJPIPlugin-Testing">Testing</h3>
+
+<p>To run all unit tests, run <code>gradle test</code>. Unlike with Maven, the tests will not be automatically run when building the plugin via <code>gradle jpi</code>, or when releasing via <code>gradle publish</code>.</p>
+
+<p>To spin up a Jenkins instance with this plugin installed for manual testing, run <code>gradle server</code>. The Jenkins instance will be available on port 8080 on your localhost. The HTTP port can be changed with the <code>jenkins.httpPort</code> project or system property, e.g. <code>gradle server -Djenkins.httpPort=8082</code>.</p>
+
+<p>To deploy your plugin to your local Maven repository, run <code>gradle publishToMavenLocal</code>.</p>
+
+<h3 id="GradleJPIPlugin-Debugging">Debugging</h3>
+
+<p>It is possible to attach a remote debugger to the Jenkins instance started by <code>gradle server</code>. The <code>GRADLE_OPTS</code> environment variable must be used to configure the JVM debug options.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+$ export GRADLE_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+$ ./gradlew server
+</pre>
+</div></div>
+
+<h3 id="GradleJPIPlugin-Releasing">Releasing</h3>
+
+<p>The Gradle JPI plugin does not provide an automated release with Gradle, so you will need to make sure your version is not a SNAPSHOT version manually. It is recommended that you check in your <code>build.gradle</code> file with your release version, tag it with <code>foo-plugin-0.0.1</code>, where <code>foo</code> is your plugin's name, and <code>0.0.1</code> is your release version. You should then push that tag to GitHub.</p>
+
+<p>Once you have updated the version and tagged the tree, you can release by running <code>gradle clean publish</code>. This will build the plugin and deploy it to the Jenkins Maven repository for inclusion in the update center. The Gradle JPI plugin will look for your Jenkins Maven repository credentials in the file <code>~/.jenkins-ci.org</code> where it expects to find:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+userName=yourusername
+password=yourpassword
+</pre>
+</div></div>
+
+<h2 id="GradleJPIPlugin-DependenciesonotherJenkinsPlugins">Dependencies on other Jenkins Plugins</h2>
+
+<p>If your plugin depends on other Jenkins plugins you can specify the dependencies in the following way:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+dependencies {
+    jenkinsPlugins &#39;org.jenkinsci.plugins:git:1.1.15@jar&#39;
+    optionalJenkinsPlugins &#39;org.jenkins-ci.plugins:ant:1.2@jar&#39;
+    jenkinsTest &#39;org.jenkins-ci.main:maven-plugin:1.480@jar&#39;
+}
+</pre>
+</div></div>
+
+<p>Adding the dependency to the <code>jenkinsPlugins</code> configuration will make all classes available during compilation and also add the dependency to the manifest of your plugin. To define an optional dependency on a plugin then use the <code>optionalJenkinsPlugins</code> configuration and to use a plugin only for testing, add a dependency to the <code>jenkinsTest</code> configuration.</p>
+
+<p>Note that you must use the artifact only notation (append <code>@jar</code> if you're using the semicolon notation as in the example or specify <code>ext: 'jar'</code> if you're using the map-style notation).</p>
+
+<h2 id="GradleJPIPlugin-Examples">Examples</h2>
+
+<ul>
+	<li>The <a href="https://github.com/jenkinsci/job-dsl-plugin" class="external-link" rel="nofollow">Job DSL plugin</a> is built with Gradle.</li>
+	<li>You can also clone the <a href="https://github.com/jenkinsci/hello-world-plugin" class="external-link" rel="nofollow">Hello World plugin</a> and copy in the example <a href="https://github.com/jenkinsci/gradle-jpi-plugin/blob/master/doc/build.gradle" class="external-link" rel="nofollow">build.gradle</a> from the gradle-jpi-plugin's doc directory, and build it.</li>
+	<li><a href="https://github.com/martinda/simple-scm-plugin" class="external-link" rel="nofollow">simple-scm-plugin</a>: A simple SCM skeleton plugin you can build with Gradle 2.9, very minimalistic, no real functionality.</li>
+</ul>
+
+
+<h2 id="GradleJPIPlugin-Changelog">Changelog</h2>
+
+<p>See <a href="https://github.com/jenkinsci/gradle-jpi-plugin/blob/master/CHANGELOG.md" class="external-link" rel="nofollow">CHANGELOG.md</a>.</p>
+
+<h2 id="GradleJPIPlugin-SourceControlandBugReporting">Source Control and Bug Reporting</h2>
+
+<p>The source for the gradle-jpi-plugin is in GitHub, at <a href="https://github.com/jenkinsci/gradle-jpi-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/gradle-jpi-plugin</a>.</p>
+
+<p>If you run into bugs or have improvements to suggest, you can open an issue at <a href="https://issues.jenkins-ci.org" class="external-link" rel="nofollow">the Jenkins JIRA</a>. Make sure to set the component to <code>gradle-jpi-plugin</code>. You can also <a href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+resolution+%3D+Unresolved+AND+component+%3D+gradle-jpi-plugin" class="external-link" rel="nofollow">review open issues</a>.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

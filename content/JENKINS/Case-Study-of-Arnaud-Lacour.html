@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Case Study of Arnaud Lacour</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Case-studies.html">Case studies</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Case Study of Arnaud Lacour
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (al_xipe)</span>, last modified by <span class='editor'> Unknown User (ts.bogdan.iosif@gmail.com)</span> on Sep 03, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="CaseStudyofArnaudLacour-WhoAreYou?">Who Are You?</h2>
+
+<p>I'm Arnaud Lacour. Quality's my thing. Even though I'm originally a developer, I've always looked at it from the angle of high availability, reliability, catastrophic recovery and such. On the performance side of things, I like to keep an eye on regressions introduced as more features get added.</p>
+
+<h2 id="CaseStudyofArnaudLacour-WhatDoYouUseHudsonFor?">What Do You Use Hudson For?</h2>
+
+<p>We use (and abuse?) Hudson for a number of things:</p>
+<ul>
+	<li>good old continuous build. We have an &quot;instant build&quot; job, roaming among the slaves pool to build the project whenever a commit is detected. That job uses the poll SCM feature and is configured to poll every minute. We've seen that it sometimes can be too long anyway, I'd need to tweak to do incremental updates of the workspace, the difficulty being that it roams, so you're not guaranteed that an existing workspace will be there.</li>
+	<li>continuous (errrr, close enough) unit testing. This job is run with 4 types of JVMs: Sun Java 5, Sun Java 6, OpenJDK 7 and BEA JRockit 5 on Windows.</li>
+	<li>daily functional tests. This is based on a test suite using IBM's <a href="http://staf.sourceforge.net/index.php" class="external-link" rel="nofollow">STAF</a> framework and is such that roaming is not possible so these 6 jobs are tied to dedicated slaves.</li>
+	<li>continuous upgrade (the project has an upgrade utility that allows the users to upgrade -or downgrade for that matter- from build X to build Y. There's a job that checks that backward and forward compatibility are not broken by new commits. This Hudson job incrementally updates the workspace revision by revision to allow to pinpoint when a problem is introduced.</li>
+	<li>continuous perfomance monitoring. We hooked up <a href="http://www.slamd.com/" class="external-link" rel="nofollow">SLAMD</a> to Hudson to provide continuous performance assessment. This has saved us quite a few times after what seemed like harmless commits decreased the performance of our project.</li>
+</ul>
+
+
+<h2 id="CaseStudyofArnaudLacour-BuildSystem">Build System</h2>
+
+<p>Our build system is written in Ant and we use a single project with little to no external dependencies in a java.net subversion repository.
+<br class="atl-forced-newline"/></p>
+
+<h2 id="CaseStudyofArnaudLacour-DistributedBuilds">Distributed Builds</h2>
+
+<p>The variety of systems we have is the hard thing to manage for us:</p>
+<ul>
+	<li>Solaris
+	<ul>
+		<li>10
+		<ul>
+			<li>x86</li>
+			<li>x64</li>
+			<li>sparc</li>
+		</ul>
+		</li>
+		<li>11 (b55 and b69)
+		<ul>
+			<li>x64</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>Windows
+	<ul>
+		<li>XP
+		<ul>
+			<li>x86</li>
+		</ul>
+		</li>
+		<li>2000
+		<ul>
+			<li>x86</li>
+		</ul>
+		</li>
+		<li>2003
+		<ul>
+			<li>x86</li>
+			<li>x64</li>
+		</ul>
+		</li>
+		<li>Vista
+		<ul>
+			<li>x86</li>
+			<li>x64</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li> Linux
+	<ul>
+		<li>2.6
+		<ul>
+			<li>x86</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>There are many more possible conbinations but we just don't have the hardware or the energy (or will) to maintain so many boxes. Also, most of the time exhaustive coverage is not required to catch 90% of issues. It takes very little DOE to figure that out and mixing the platforms was done to maximize the odds of finding those 90% of issues. For some of those OSes, we actually have 2 slaves to be able to execute more tests in parallel. We're closing in on 20 nodes and we're going to add 10 more in the near future for automated real-life deployments simulations.</p>
+
+<h2 id="CaseStudyofArnaudLacour-ManagingSlaves">Managing Slaves</h2>
+
+<p>Managing all those slaves can be a chore unless it's done right. At least you have to find what works for you. I found that naming the common root to all things hudson /path/to worked fine for me as it works on Unixes and Windows platform (Ant maps /path/to to \path\to which works fine). Then I do the symlink trick on Unixes and I just install hardwired on Windows. Hudson home is always set to /path/to/hudson for example and Java is always /path/to/java/version/latest. this makes managing the tools dependency maintenance really easy on me. And Hudson configuration is down to the bare minimum.</p>
+
+<h2 id="CaseStudyofArnaudLacour-LeveragingThePluginsPower">Leveraging The Plugins Power</h2>
+
+<p>All in all, if you looked at other CI tools, nothing comes close to Hudson in terms of usability and serviceability. In our previous CI system, we had poor to no reporting facilities and so Hudson comes as a tremendous improvement. For example, here's a snapshot of our performance job.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/2916491/3080237.png" data-image-src="attachments/2916491/3080237.png" data-unresolved-comment-count="0" data-linked-resource-id="3080237" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="performance-monitor.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="2916491" data-linked-resource-container-version="9"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916491/3080237.png">performance-monitor.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

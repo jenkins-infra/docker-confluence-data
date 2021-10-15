@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Configuring a Rails build</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Configuring a Rails build
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (pkuczynski)</span> on Sep 01, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><p class="title">Deprecated</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This information is outdated. Please lookup some tutorials on Google of you need help...</p>
+</div></div>
+
+
+<h1 id="ConfiguringaRailsbuild-GuidetoconfiguringaRailsprojectinJenkins">Guide to configuring a Rails project in Jenkins</h1>
+
+<p>I had some problems getting Jenkins to play along with the &quot;Jenkins ruby metrics plugin&quot;, so I wrote this guide to document my setup. Hope it helps someone else out.</p>
+
+<p>Based loosely on: <a href="http://www.juretta.com/log/2008/11/11/hudson_test_drive_part_1_rails/" class="external-link" rel="nofollow">http://www.juretta.com/log/2008/11/11/hudson_test_drive_part_1_rails/</a></p>
+
+<p>Notice that Saikuro reports aren't currently working.</p>
+
+<h2 id="ConfiguringaRailsbuild-Prerequisites">Prerequisites</h2>
+
+<p>Jenkins needs to have the following plugins installed: &quot;Jenkins Ruby Plugin&quot;, &quot;Jenkins ruby metrics plugin&quot;. Also, the build server needs Ruby and rubygems.</p>
+
+<p>The build process will take care of installing any gems, as long as they are in &quot;config/environment.rb&quot;.</p>
+
+<h2 id="ConfiguringaRailsbuild-Application">Application</h2>
+
+<p>edit <strong>Rakefile</strong> and add the following:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>require &#39;rubygems&#39;
+# Install:
+#  sudo gem install ci_reporter
+gem &#39;ci_reporter&#39;
+require &#39;ci/reporter/rake/test_unit&#39; # use this if you&#39;re using Test::Unit
+
+</pre>
+</div></div>
+<p>Install the rcov-plugin, by running:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>./script/plugin install http://svn.codahale.com/rails_rcov
+
+</pre>
+</div></div>
+<p>Add a dummy test case, to please rcov. Put the following in &quot;test/unit/dummy_test.rb&quot;, &quot;test/functional/dummy_test.rb&quot; and &quot;test/integration/dummy_test.rb&quot;:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># This is because rcov chokes, when there are no test cases found.
+require &#39;test_helper&#39;
+
+class DummyTest &lt; ActiveSupport::TestCase
+  def test_truth
+    assert true
+  end
+end
+
+</pre>
+</div></div>
+<p>(Once you add real test cases to the project, you can remove these again)</p>
+
+<p>Unless you require a MySql database, you can set the test database to sqlite. Otherwise, you'll have to create a test database somewhere, and put credentials in &quot;database.yml&quot;. Remember to add sqlite as a dependency to &quot;config/environment.rb&quot;, if you use it.</p>
+
+<p>Since Rake can't always install missing gems through the &quot;rake gems:install&quot; task, we'll have to put the install the following plugin:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>./script/plugin install http://github.com/troelskn/gemconf_plugin.git
+
+</pre>
+</div></div>
+<p>SVN add new files and commit the changes.</p>
+
+<h2 id="ConfiguringaRailsbuild-Jenkins">Jenkins</h2>
+
+<p>Select &quot;New Job&quot;</p>
+
+<p>Check option &quot;Build a free-style software project&quot; and enter a name. The name should be <strong>CamelCaseWithoutSpaces</strong></p>
+
+<p>Under &quot;Source Code Management&quot;, select &quot;SVN&quot;</p>
+
+<p>Enter:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Repository URL: http://blah/project/trunk
+Local module directory (optional): trunk
+
+</pre>
+</div></div>
+<p>Under &quot;Build Triggers&quot;, select &quot;Poll SCM&quot;</p>
+
+<p>Enter:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Poll every 5 minutes
+*/5 * * * *
+
+</pre>
+</div></div>
+<p>Select &quot;Add Build Step&quot; -&gt; &quot;Execute shell&quot;</p>
+
+<p>Enter:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># enter application root
+cd trunk
+# install missing gems
+script/install_gems
+# set env vars
+export GEM_PATH=/usr/local/lib/ruby/gems/1.8/gems
+export CI_REPORTS=results
+export RAILS_ENV=test
+# Prepare for rcov
+[ -d &quot;coverage&quot; ] &amp;&amp; rm -rf coverage
+mkdir coverage
+# invoke rake
+rake db:create db:migrate ci:setup:testunit test:test:rcov --trace RCOV_PARAMS=&quot;-I/usr/local/lib/ruby/gems/1.8/gems --aggregate coverage/aggregate.data&quot;
+
+</pre>
+</div></div>
+<p>(Note that if your GEM_PATH differs, you'll have to adjust it in the above)</p>
+
+<p>If you'd prefer to only make coverage reports for unit tests, you can replace &quot;test:test:rcov&quot; with &quot;test:units:rcov test&quot;</p>
+
+<p>Under &quot;Post-build Actions&quot;, select &quot;Publish JUnit test result report&quot;, &quot;Publish Rcov report&quot; and &quot;Publish Rails stats report&quot;</p>
+
+<p>In &quot;Test report XMLs&quot;, enter &quot;trunk/results/*.xml&quot;</p>
+
+<p>In &quot;Rcov report directory&quot;, enter &quot;coverage/units&quot;</p>
+
+<p>Click &quot;Build Now&quot; to test the configuration.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

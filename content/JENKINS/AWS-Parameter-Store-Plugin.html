@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : AWS Parameter Store Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : AWS Parameter Store Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rikturnbull)</span>, last modified on Apr 05, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>A Jenkins plugin to populate environment variables from <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html" rel="nofollow" class="external-link">AWS Parameter Store</a>.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View AWS Parameter Store Build Wrapper <a href="https://plugins.jenkins.io/aws-parameter-store" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><h2 id="AWSParameterStorePlugin-Overview">Overview</h2><p>This plugin collects parameters from the AWS Parameter Store and sets them as environment variables for a build.</p><p>Each AWS Parameter Store parameter name is converted to uppercase and any non-numeric characters are converted to underscores. For example, the parameter name <code>my-param1</code> with value <code>my-value1</code> would become the environment variable <code>MY_PARAM1=my-value1</code>.</p><p>This plugin is compatible with <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html" rel="nofollow" class="external-link">AWS Parameter Store Hierarchies</a>. A <strong>path</strong> and <strong>recursive</strong> indicator can be specified to pass to the <a href="https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_GetParametersByPath.html" rel="nofollow" class="external-link">GetParametersByPath</a> API call. The <strong>naming</strong> parameter can be used to specify how the environment variable is derived from the <strong>path</strong>:</p><ul><li><strong>basename</strong> - anything after the last '/' is the variable name (e.g. with path <code>/service</code>, parameter <code>/service/app/param</code> becomes <code>PARAM</code>)</li><li><strong>relative</strong> - anything after the <strong>path</strong> is the variable name (e.g. with path <code>/service</code>, parameter <code>/service/app/param</code> becomes <code>APP_PARAM</code>)</li><li><strong>absolute</strong> - the full path with parameter name is the variable name (e.g. with path <code>/service</code>, parameter <code>/service/app/param</code> becomes <code>SERVICE_APP_PARAM</code>)</li></ul><p>Parameter types are handled as follow:</p><ul><li><strong>String</strong> parameter values are unchanged</li><li><strong>SecureString</strong> parameter values are decrypted</li><li><strong>StringList</strong> parameter values are set as comma-separated values</li></ul><h2 id="AWSParameterStorePlugin-Configuration"><span class="anchor">Configuration</span></h2><p>The plugin is configured on each build configuration page:</p><p><a href="https://github.com/jenkinsci/aws-parameter-store-plugin/blob/master/images/screenshot-1.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Screenshot" src="https://github.com/jenkinsci/aws-parameter-store-plugin/raw/master/images/screenshot-1.png" data-image-src="https://github.com/jenkinsci/aws-parameter-store-plugin/raw/master/images/screenshot-1.png"></span></a></p><p>This has the following fields:</p><ul><li><strong>AWS Credentials</strong> - the id of credentials added via the <a href="https://plugins.jenkins.io/aws-credentials" rel="nofollow" class="external-link">AWS Credentials Plugin</a></li><li><strong>AWS Region Name</strong> - the region name to search for parameters (defaults to <code>us-east-1</code>)</li><li><strong>Path</strong> - the hierarchy for the parameters</li><li><strong>Recursive</strong> - whether to retrieve all parameters within a hierarchy</li><li><strong>Naming</strong> - whether the environment variable should be <strong>basename</strong>, <strong>relative</strong> or <strong>absolute</strong></li></ul><h2 id="AWSParameterStorePlugin-Pipelines"><span class="anchor">Pipelines</span></h2><p>This plugin can be included in your <code>Jenkinsfile</code>, for example:</p><pre><code>withAWSParameterStore(credentialsId: '', naming: 'relative', path: '/service', recursive: true, regionName: 'eu-west-1') {
+  // some block
+}
+</code></pre><h2 id="AWSParameterStorePlugin-ChangeLog">ChangeLog</h2><p>1.1.0 (2018-04-05)</p><ul><li>Add support for pipelines</li><li>Add naming options for environment variables: basename, absolute, relative</li><li>Migrate deprecated AWS API calls</li></ul><p><a class="external-link" href="https://github.com/jenkinsci/aws-parameter-store-plugin/blob/master/CHANGELOG.md#100-2018-03-27" rel="nofollow"></a>1.0.0 (2018-03-27)</p><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

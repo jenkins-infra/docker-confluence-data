@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins behind an NGinX reverse proxy</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Running-Jenkins-behind-Nginx.html">Running Jenkins behind Nginx</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins behind an NGinX reverse proxy
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tomdevylder)</span>, last modified by <span class='editor'> Unknown User (orion)</span> on Jun 06, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="JenkinsbehindanNGinXreverseproxy-RunningJenkinsfromasubdomain(likehttp://jenkins.domain.tld)">Running Jenkins from a subdomain (like <a href="http://jenkins.domain.tld" class="external-link" rel="nofollow">http://jenkins.domain.tld</a>)</h2><p>Due to people are often struggling getting Jenkins to work behind an NGINX reverse proxy setup I've decided to share my currently running config.</p><p>Hope this could be of any help to someone.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">server {
+    listen 80;
+    server_name jenkins.domain.tld;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 80;
+    server_name jenkins.domain.tld;
+    
+    location / {
+      proxy_set_header        Host $host:$server_port;
+      proxy_set_header        X-Real-IP $remote_addr;
+      proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header        X-Forwarded-Proto $scheme;
+
+      # Fix the &quot;It appears that your reverse proxy set up is broken&quot; error.
+      proxy_pass          http://127.0.0.1:8080;
+      proxy_read_timeout  90;
+
+      proxy_redirect      http://127.0.0.1:8080 https://jenkins.domain.tld;
+ 
+	  # Required for new HTTP-based CLI
+      proxy_http_version 1.1;
+	  proxy_request_buffering off;
+      # workaround for https://issues.jenkins-ci.org/browse/JENKINS-45651
+      add_header &#39;X-SSH-Endpoint&#39; &#39;jenkins.domain.tld:50022&#39; always;
+    }
+  }</pre>
+</div></div><h2 id="JenkinsbehindanNGinXreverseproxy-RunningfromasubdomainwithSSL">Running from a subdomain with SSL</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">upstream jenkins {
+  server 127.0.0.1:8080 fail_timeout=0;
+}
+
+server {
+  listen 80;
+  server_name jenkins.domain.tld;
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name jenkins.domain.tld;
+
+  ssl_certificate /etc/nginx/ssl/server.crt;
+  ssl_certificate_key /etc/nginx/ssl/server.key;
+
+  location / {
+    proxy_set_header        Host $host:$server_port;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_redirect http:// https://;
+    proxy_pass              http://jenkins;
+	# Required for new HTTP-based CLI
+    proxy_http_version 1.1;
+	proxy_request_buffering off;
+    proxy_buffering off; # Required for HTTP-based CLI to work over SSL
+    # workaround for https://issues.jenkins-ci.org/browse/JENKINS-45651
+    add_header &#39;X-SSH-Endpoint&#39; &#39;jenkins.domain.tld:50022&#39; always;
+  }
+}</pre>
+</div></div><h2 id="JenkinsbehindanNGinXreverseproxy-RunningJenkinsfromafolderwithTLSencryption(likehttps://domain.tld/jenkins/)">Running Jenkins from a folder with TLS encryption (like <a href="https://domain.tld/jenkins)server" class="external-link" rel="nofollow">https://domain.tld/jenkins/</a>)</h2><p>However, you may want to access Jenkins from a folder on your main web server. This allows you to use the same TLS/SSL certificate as for your top level domain, whereas a sub-domain like <em>jenkins.domain.tld</em> may require a new TLS/SSL certificate (that seems to depend on your certificate provider). You can configure nginx as a reverse proxy to translate requests coming in from the WAN as <a href="https://domain.tld/jenkins/" class="external-link" rel="nofollow">https://domain.tld/jenkins/</a> to LAN requests to <a href="http://10.0.0.100:8080/jenkins" class="external-link" rel="nofollow">http://10.0.0.100:8080/jenkins</a>.</p><p>Note that this example uses the same settings as currently listed on the wiki article at <a href="https://wiki.jenkins-ci.org/display/JENKINS/Running+Hudson+behind+Nginx" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/JENKINS/Running+Hudson+behind+Nginx</a>, but with different values for the <strong>proxy_pass</strong> and <strong>proxy_redirect</strong> directives.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">server {
+
+
+    # All your server and TLS/certificate settings are up here somewhere
+    [...]
+
+
+    # Nginx configuration specific to Jenkins
+    # Note that regex takes precedence, so use of &quot;^~&quot; ensures earlier evaluation
+    location ^~ /jenkins/ {
+
+        # Convert inbound WAN requests for https://domain.tld/jenkins/ to 
+        # local network requests for http://10.0.0.100:8080/jenkins/
+        proxy_pass http://10.0.0.100:8080/jenkins/;
+        
+	    # Rewrite HTTPS requests from WAN to HTTP requests on LAN
+        proxy_redirect http:// https://;
+
+        # The following settings from https://wiki.jenkins-ci.org/display/JENKINS/Running+Hudson+behind+Nginx
+        sendfile off;
+
+        proxy_set_header   Host             $host:$server_port;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_max_temp_file_size 0;
+
+        # This is the maximum upload size
+        client_max_body_size       10m;
+        client_body_buffer_size    128k;
+
+        proxy_connect_timeout      90;
+        proxy_send_timeout         90;
+        proxy_read_timeout         90;
+
+        proxy_temp_file_write_size 64k;
+ 
+	    # Required for new HTTP-based CLI
+        proxy_http_version 1.1;
+	    proxy_request_buffering off;
+        proxy_buffering off; # Required for HTTP-based CLI to work over SSL
+  }
+</pre>
+</div></div><p>In addition, you must ensure that Jenkins is configured to listen for requests to the /jenkins/ folder (e.g. <a href="http://10.0.0.100:8080/jenkins/" class="external-link" rel="nofollow">http://10.0.0.100:8080/jenkins/</a> instead of <a href="http://10.0.0.100:8080/" class="external-link" rel="nofollow">http://10.0.0.100:8080/</a>). Do that by adding the parameter <strong>--prefix=/jenkins</strong> to the Jenkins default start-up configuration file. On my system (Ubuntu 12.04 LTS) the configuration file is <strong>/etc/default/jenkins</strong>. For example, here's the full JENKINS_ARG parameter list (the only part I added was <strong>--prefix=/jenkins</strong>):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">JENKINS_ARGS=&quot;--webroot=/var/cache/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=/jenkins&quot;
+</pre>
+</div></div><p>Once configured, you should also set the URL used by the Jenkins UI at <strong>Jenkins</strong> &gt; <strong>Manage Jenkins</strong> &gt; <strong>Jenkins Location</strong> &gt; <strong>Jenkins URL</strong> to something like:  &quot;https://domain.tld/jenkins/. </p><h2 id="JenkinsbehindanNGinXreverseproxy-RunningJenkinsbehindAWSELBfromasubdomain(likehttps://jenkins.domain.tld)">Running Jenkins behind AWS ELB from a subdomain (like <a href="http://jenkins.domain.tld" class="external-link" rel="nofollow">https://jenkins.domain.tld</a>)</h2><p>This example is suitable for the following request flow: <strong>User → AWS ELB → nginx → Jenkins</strong></p><p>If you don't use SSL on AWS ELB, remove redirection from HTTP to HTTPS in config below.</p><p>In case Jenkins is not the only service on your host, replace <strong>server_name localhost</strong> with your actual domain name and remove <strong>default_server</strong>.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">server {
+  listen 80 default_server;
+  server_name localhost;
+
+  # Remove nginx and OS versions from server header
+  server_tokens off;
+
+  # Redirect HTTP requests to HTTPS basing on X-Forwarded-Proto header from AWS ELB
+  if ($http_x_forwarded_proto = &#39;http&#39;) {
+    return 301 https://$host$request_uri;
+  }
+
+  # Extract real IP from X-Forwarded-For header to see user IP in nginx logs
+  set_real_ip_from  10.0.0.0/8;
+  set_real_ip_from  172.16.0.0/12;
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+
+  # Proxy all requests to Jenkins
+  location / {
+    proxy_set_header        Host              $host;
+    proxy_set_header        X-Real-IP         $remote_addr;
+    proxy_set_header        X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $http_x_forwarded_proto;
+    proxy_set_header        X-Forwarded-Port  $http_x_forwarded_port;
+
+    proxy_pass              http://localhost:8080;
+
+    # Required for new HTTP-based CLI
+    proxy_http_version      1.1;
+    proxy_request_buffering off;
+  }
+}</pre>
+</div></div><h2 id="JenkinsbehindanNGinXreverseproxy-BeingcompatiblewithCSRFprotection">Being compatible with CSRF protection</h2><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This section applies to Jenkins 1.x only. Jenkins 2 uses an nginx-compatible crumb header name by default.</p></div></div><p>If you enable &quot;Prevent Cross Site Request Forgery exploits&quot; in the <strong>Configure Global Security</strong> page, you'll need special care for Jenkins to work behind a proxy. You'll need to enable the <strong>Enable proxy compatibility</strong> checkbox. And you'll need to add to your nginx configuration the following fragment:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http {
+  ignore_invalid_headers off;
+}
+</pre>
+</div></div><p>This is required because Jenkins uses a custom HTTP header named <code>.crumb</code>. See bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-12875" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-12875</a> for details.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

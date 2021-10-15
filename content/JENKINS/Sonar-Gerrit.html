@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Sonar Gerrit</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Sonar Gerrit
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (aquarellian)</span>, last modified on Jun 10, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><p class="title">Incompatibility with Sonar 7.7</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Starting with Sonarqube 7.7 the preview mode (-Dsonar.analysis.mode=preview) was removed, making it incompatible with the plugin. </p><p>Sonarqube release notes say it now has &quot;native support for short-living branches&quot; <a href="https://www.sonarqube.org/sonarqube-7-7/" class="external-link" rel="nofollow">https://www.sonarqube.org/sonarqube-7-7/</a>, author will make an effort to integrate these features. Contributions are appreciated <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/></p><p>A place to start with (for getting a json report): <a href="https://community.sonarsource.com/t/sonar-report-json-is-this-file-still-available/5827/6" class="external-link" rel="nofollow">https://community.sonarsource.com/t/sonar-report-json-is-this-file-still-available/5827/6</a></p></div></div><br/><p><span style="color: rgb(0,0,0);">The plugin shares </span><span style="color: rgb(0,0,0);"><a href="http://www.sonarqube.org/" class="external-link" rel="nofollow">SonarQube</a></span><span style="color: rgb(0,0,0);"> feedback with developers via </span><span style="color: rgb(0,0,0);"><a href="https://code.google.com/p/gerrit/" class="external-link" rel="nofollow">Gerrit</a></span><span style="color: rgb(0,0,0);"> tools.</span></p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Sonar Gerrit <a href="https://plugins.jenkins.io/sonar-gerrit" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1003" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+<p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022489426 {padding: 0px;}
+div.rbtoc1631022489426 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022489426 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022489426'>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Requirements'>Requirements</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Jenkins'>Jenkins</a></li>
+<li><a href='#SonarGerrit-SonarQube'>SonarQube</a></li>
+<li><a href='#SonarGerrit-Gerrit'>Gerrit</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-GerritTriggerconfiguration'>Gerrit Trigger configuration</a></li>
+<li><a href='#SonarGerrit-RunningoutofGerritTriggerjob'>Running out of Gerrit Trigger job</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Setup'>Setup</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Installplugin'>Install plugin</a></li>
+<li><a href='#SonarGerrit-Configurebuild'>Configure build</a></li>
+<li><a href='#SonarGerrit-Pluginsettings'>Plugin settings</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-SonarQubeSettings'>SonarQube Settings</a></li>
+<li><a href='#SonarGerrit-ProjectSettings'>Project Settings</a></li>
+<li><a href='#SonarGerrit-Filter'>Filter</a></li>
+<li><a href='#SonarGerrit-ReviewSettings'>Review Settings</a></li>
+<li><a href='#SonarGerrit-ReportFormatting'>Report Formatting</a></li>
+<li><a href='#SonarGerrit-ScoreSettings'>Score Settings</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Credentials'>Credentials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Pipelinessupport'>Pipelines support</a></li>
+<li><a href='#SonarGerrit-Resultexample'>Result example</a></li>
+<li><a href='#SonarGerrit-Troubleshooting'>Troubleshooting</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Pluginfailsbuildwithmessage&quot;Unabletopostreview.Requestfailed&quot;'>Plugin fails build with message &quot;Unable to post review. Request failed&quot;</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Versionincompatibilities'>Version incompatibilities</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Version1.0.5'>Version 1.0.5</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Versions'>Versions</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-Version2.3(2Apr2018)'>Version 2.3 (2 Apr 2018)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed'>Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version2.2.1(5Feb2018)'>Version 2.2.1 (5 Feb 2018)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.1'>Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version2.1(6Jan2018)'>Version 2.1 (6 Jan 2018)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.2'>Bugs Fixed</a></li>
+<li><a href='#SonarGerrit-NewFeatures'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version2.0(24Apr2017)'>Version 2.0 (24 Apr 2017)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-NewFeatures.1'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.8(6Apr2017)'>Version 1.0.8 (6 Apr 2017)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.3'>Bugs Fixed</a></li>
+<li><a href='#SonarGerrit-NewFeatures.2'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.7.6(10Nov2016)'>Version 1.0.7.6 (10 Nov 2016)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-NewFeatures.3'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.6(3Dec2015)'>Version 1.0.6 (3 Dec 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-NewFeatures.4'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.5(18Nov2015)'>Version 1.0.5 (18 Nov 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.4'>Bugs Fixed</a></li>
+<li><a href='#SonarGerrit-NewFeatures.5'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.4(24Oct2015)'>Version 1.0.4 (24 Oct 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.5'>Bugs Fixed</a></li>
+<li><a href='#SonarGerrit-NewFeatures.6'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.3(13Oct2015)'>Version 1.0.3 (13 Oct 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-BugsFixed.6'>Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.2(13Oct2015)'>Version 1.0.2 (13 Oct 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-NewFeatures.7'>New Features</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0.1(9Oct2015)'>Version 1.0.1 (9 Oct 2015)</a>
+<ul class='toc-indentation'>
+<li><a href='#SonarGerrit-NewFeatures.8'>New Features</a></li>
+<li><a href='#SonarGerrit-BugsFixed.7'>Bugs Fixed</a></li>
+</ul>
+</li>
+<li><a href='#SonarGerrit-Version1.0(7Oct2015)'>Version 1.0 (7 Oct 2015)</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="SonarGerrit-Requirements">Requirements</h1><h2 id="SonarGerrit-Jenkins">Jenkins</h2><p>Jenkins <a href="http://jenkins-ci.org/changelog-stable#v1.565.1" class="external-link" rel="nofollow">version </a><a href="http://updates.jenkins-ci.org/download/war/1.625.3/jenkins.war" rel="nofollow" class="external-link">1.625.3</a><a href="http://jenkins-ci.org/changelog-stable#v1.565.1" class="external-link" rel="nofollow"><span style="color: rgb(0,0,0);"> </span></a><a rel="nofollow" class="external-link" href="http://updates.jenkins-ci.org/download/war/1.625.3/jenkins.war"> or newer is required.</a></p><h2 id="SonarGerrit-SonarQube">SonarQube</h2><p>This plugin is intended to work with report provided by SonarQube running on a project in preview mode. That means SonarQube report generation should be included to build.</p><p>If you use Maven, fill out &quot;Goals and options&quot; field in &quot;Build&quot; section of your Jenkins job:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">clean install sonar:sonar -Dsonar.analysis.mode=preview -Dsonar.report.export.path=sonar-report.json</pre>
+</div></div><h2 id="SonarGerrit-Gerrit">Gerrit</h2><h3 id="SonarGerrit-GerritTriggerconfiguration">Gerrit Trigger configuration</h3><p><a href="Gerrit-Trigger.html">Gerrit Trigger</a> plugin should be installed and configured.</p><p>Rest API should be configured in the Advanced section of Gerrit Trigger settings.</p><p>HTTP authentication data should be set up. Enable Code-Review and Enable Verified checkboxes should be checked on.</p><p>For complete guidance please see <a href="https://wiki.jenkins-ci.org/display/JENKINS/Gerrit+Trigger#GerritTrigger-SetupRequirements" class="external-link" rel="nofollow">Gerrit Trigger Wiki page</a>.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/82837522.png" data-image-src="attachments/82020643/82837522.png" data-unresolved-comment-count="0" data-linked-resource-id="82837522" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Gerrit.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><h3 id="SonarGerrit-RunningoutofGerritTriggerjob">Running out of Gerrit Trigger job</h3><p><span>In case when the plugin is runing outside of a job with Gerrit Trigger the next environmental variables should be set:</span></p><ul><li><span>GERRIT_NAME - Gerrit server name</span></li><li><span>GERRIT_CHANGE_NUMBER - Change number</span></li><li><span>GERRIT_PATCHSET_NUMBER - Patchset number</span></li></ul><h1 id="SonarGerrit-Setup">Setup</h1><h2 id="SonarGerrit-Installplugin">Install plugin</h2><p>Install the plugin via Jenkins plugin manager. Gerrit Trigger plugin should be also installed and configured.</p><h2 id="SonarGerrit-Configurebuild">Configure build</h2><p>Sonar Gerrit plugin is intended to run as post-build action. Choose it from available post-build actions.</p><h2 id="SonarGerrit-Pluginsettings">Plugin settings</h2><p>There are several settings allows customise plugin for your needs.</p><p>There are the next sections:</p><h3 id="SonarGerrit-SonarQubeSettings">SonarQube Settings</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446171.png" data-image-src="attachments/82020643/138446171.png" data-unresolved-comment-count="0" data-linked-resource-id="138446171" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="sonar url.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><ol><li><span>Server URL</span> - URL of SonarQube instance used for analysis. It is also used to provide a link to a SonarQube rule in Gerrit comments. Default value: <span class="nolink"><a href="http://localhost:9000" class="external-link" rel="nofollow">http://localhost:9000</a></span></li></ol><h3 id="SonarGerrit-ProjectSettings">Project Settings</h3><p>Use setting &quot;Project configuration&quot; if only one SonarQube report is generated and static code analysis of the whole project is required.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446169.png" data-image-src="attachments/82020643/138446169.png" data-unresolved-comment-count="0" data-linked-resource-id="138446169" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Sonar settings - base.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><p>Use setting &quot;Sub-project configurations&quot; to specify modules and paths for separate reports if modules are analysed separately or not every module needs to be analysed. </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446170.png" data-image-src="attachments/82020643/138446170.png" data-unresolved-comment-count="0" data-linked-resource-id="138446170" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Sonar settings - multi.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><p>Settings:</p><ol><li><span>Project base directory</span> - subdirectory for a case when Jenkins job is related to a specific module of a big project. The path is relative to a main project root directory. Default value is empty.</li><li><span>SonarQube report path</span> - Path to a SonarQube report generated by SonarQube while a project was being built. The path is relative to a build working directory. Default value:  <span style="color: rgb(0,0,0);"><strong>target/sonar/sonar-report.json</strong></span></li><li><u><span style="color: rgb(0,51,102);">Allow auto match</span></u><span style="color: rgb(0,51,102);"> - setting to allow automatically match SonarQube issues to Gerrit files in case if project consists of several sub-modules, but only one SonarQube report is generated for the whole project.</span></li></ol><h3 id="SonarGerrit-Filter">Filter</h3><p>Filter is used to specify what issues will be affected in the output: </p><ul><li>to be commented</li><li>to affect review score</li><li>etc</li></ul><p>It is possible to filter issues by:</p><ol><li><span>Severity</span> - SonarQube issue severity. If user doesn't want issues with low severity to be reported to Gerrit, he (or she) can choose the lowest severity level to be reported. For example if &quot;Major&quot; level is selected, information about issues with &quot;Major&quot;, &quot;Critical&quot; and &quot;Blocker&quot; will be included to Gerrit review. Default value: <span style="color: rgb(0,0,0);"><strong>Info</strong></span>.</li><li><span>New issues only</span> - reflects SonarQube issue &quot;new&quot; property. If issue is not marked as new that may be a sign that it is not created by processing commit and this issue is not supposed to be included to review.</li><li><span>Changed lines only</span> - when only several lines are changed in a commit user may not want other lines to be commented by Gerrit. With &quot;Add comments to changed lines only&quot; unchanged in the commit lines will not be commented in Gerrit.</li></ol><h6 id="SonarGerrit-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/83558426.png" data-image-src="attachments/82020643/83558426.png" data-unresolved-comment-count="0" data-linked-resource-id="83558426" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-28 at 14.15.14.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></h6><h3 id="SonarGerrit-ReviewSettings">Review Settings</h3><p>Review settings contains of issue filter to specify issues to be commented and review template. </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446167.png" data-image-src="attachments/82020643/138446167.png" data-unresolved-comment-count="0" data-linked-resource-id="138446167" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Review Settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><h3 id="SonarGerrit-ReportFormatting">Report Formatting</h3><p>This section allows user to customise text, intended to use as review title and issue comment. </p><ol><li><span>Title</span> - Review title settings allow customization of Gerrit review titles for both cases (violations found or not) separately. There are several tags to be replaced by real values allowed in this context: <ol><li>&lt;info_count&gt; - will be replaced with count of issues having INFO severity level; </li><li>&lt;minor_count&gt; - will be replaced with count of issues having MINOR severity level;</li><li>&lt;major_count&gt; - will be replaced with count of issues having MAJOR severity level;</li><li>&lt;critical_count&gt; - will be replaced with count of issues having CRITICAL severity level;</li><li>&lt;blocker_count&gt; - will be replaced with count of issues having BLOCKER severity level;</li><li>&lt;min_minor_count&gt; - will be replaced with count of issues having MINOR severity level or higher;</li><li>&lt;min_major_count&gt; - will be replaced with count of issues having MAJOR severity level or higher;</li><li>&lt;min_critical_count&gt; - will be replaced with count of issues having CRITICAL severity level or higher;</li><li>&lt;total_count&gt; - will be replaced with total count of issues.      </li></ol></li><li><span>Comment</span> - Issue comment pattern. Available tags:<ol><li>&lt;key&gt; - will be replaced with issue key;</li><li>&lt;component&gt; - will be replaced with issue component info;</li><li>&lt;message&gt; - will be replaced with issue message;</li><li>&lt;severity&gt; - will be replaced with issue severity;</li><li>&lt;rule&gt; - will be replaced with issue rule name;</li><li>&lt;rule_url&gt; - will be replaced with link to rule description on SonarQube if SonarQube URL is provided in SonarQube settings section or rule name if URL is not provided; </li><li>&lt;status&gt; - will be replaced with issue status;</li><li>&lt;creation_date&gt; - will be replaced with issue creation date.</li></ol></li></ol><h3 id="SonarGerrit-ScoreSettings">Score Settings</h3><p>Starting with v. 2.1 it's become possible to specify a separate filter for score settings. </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446168.png" data-image-src="attachments/82020643/138446168.png" data-unresolved-comment-count="0" data-linked-resource-id="138446168" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Score settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><ol><li><span>Post score</span> - This setting describes whether it is necessary to post score to Gerrit or not.</li><li><span>Category</span> - Gerrit category used for score posting. Default value: <span style="color: rgb(0,0,0);"><strong>Code-Review</strong></span>.</li><li><span>Score for no SonarQube violation found case</span> - Score to be posted to Gerrit. Default value: <span style="color: rgb(0,0,0);"><strong>+1</strong></span></li><li><span>Score for SonarQube violations found case</span> - Score to be posted to Gerrit. Default value: <span style="color: rgb(0,0,0);"><strong><span>-1</span></strong></span></li></ol><p>Please note: to use Gerrit category other than Default it is necessary to configure it in Gerrit. See details in <a href="https://gerrit-review.googlesource.com/Documentation/config-labels.html" class="external-link" rel="nofollow">Gerrit Documentation</a>.</p><p>An example of settings to be added to the project.config for creating Sonar-Verified category:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">[label &quot;Sonar-Verified&quot;]
+    function = MaxWithBlock
+    value = -1 Issues found
+    value =  0 No score
+    value = +1 Verified
+    defaultValue = 0
+</pre>
+</div></div><p>And access rights:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">[access &quot;refs/heads/*&quot;]
+    label-Sonar-Verified = -1..+1 group Project Owners
+    label-Sonar-Verified = -1..+1 group Non-Interactive Users
+</pre>
+</div></div><p><br/></p><h4 id="SonarGerrit-Credentials">Credentials</h4><p>To override the credentials used to post comments on the job level set up section &quot;Override default HTTP credentials&quot;. (Global credentials on the Gerrit Trigger Server level should be set up as well for Gerrit Trigger needs.)</p><p><br/></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/110133890.png" data-image-src="attachments/82020643/110133890.png" data-unresolved-comment-count="0" data-linked-resource-id="110133890" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2017-04-06 at 12.36.41.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><ol><li><span>Override default HTTP credentials?</span> - This setting describes whether it is necessary to override Gerrit credentials from the Gerrit Trigger Server settings or not.</li><li><span>HTTP Username</span> - Username to be used to post review result to Gerrit.</li><li><u>HTTP Password</u> - Password to be used to post review result to Gerrit.</li><li><span>Gerrit Server</span> - The server used to check connection with overridden credentials. The value <strong>does not</strong> affect plugin settings and <strong>only</strong> used to verify credentials. </li></ol><p><span style="color: rgb(210,73,57);"><strong><br/></strong></span></p><p><span style="color: rgb(210,73,57);"><strong>Notification Settings</strong></span></p><p>This functionality works when Gerrit is configured with post server settings. </p><ol><li><span>To be notified if no SonarQube violations found</span> - Choice of persons to be notified. Default value: <span style="color: rgb(0,0,0);"><strong>None</strong></span>. </li><li><span>To </span><span>be notified if SonarQube violations found</span> - Choice of persons to be notified. Default value: <span style="color: rgb(0,0,0);"><strong>Owner</strong></span>.</li><li><u>To be notified if negative score is posted</u> - Choice of persons to be notified. Default value: <span style="color: rgb(0,0,0);"><strong>Owner</strong></span>.</li></ol><p>Options:</p><ul><li>None - No notification regarding particular review will be sent.</li><li>Owner - Notification with review results will be sent to a change owner.</li><li>Owner &amp; Reviewers - Notification with review results will be sent to an owner and to all the change reviewers added to the change.</li><li>All - Everyone in Gerrit project will receive notification.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/82020643/138446166.png" data-image-src="attachments/82020643/138446166.png" data-unresolved-comment-count="0" data-linked-resource-id="138446166" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Notification settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><h1 id="SonarGerrit-Pipelinessupport">Pipelines support</h1><p>Basic support for pipelines is added in 2.0</p><p><strong>Pipeline with default settings example</strong></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node {
+	// trigger build
+	git url: &#39;ssh://your_project_repo&#39;
+	// Fetch the changeset to a local branch using the build parameters provided to the build by the Gerrit Trigger...
+	def changeBranch = &quot;change-${GERRIT_CHANGE_NUMBER}-${GERRIT_PATCHSET_NUMBER}&quot;
+	sh &quot;git fetch origin ${GERRIT_REFSPEC}:${changeBranch}&quot;
+	sh &quot;git checkout ${changeBranch}&quot; 
+ 
+ 
+	// Get the maven tool.
+   	def mvnHome = tool &#39;M3&#39;
+   	// Mark the code build &#39;stage&#39;....
+   	stage &#39;Build&#39;
+   	// Run the maven build
+   	sh &quot;${mvnHome}/bin/mvn clean install sonar:sonar -Dmaven.test.skip=true -Dsonar.analysis.mode=preview -Dsonar.report.export.path=sonar-report.json&quot;
+
+
+	// to run plugin with default settings
+    stage &#39;Review&#39;
+    sonarToGerrit()
+ 
+}</pre>
+</div></div><p><strong>Pipeline overridden settings example</strong></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">	sonarToGerrit (
+		inspectionConfig: [
+			serverURL: &#39;http://localhost:9000&#39;,
+		    baseConfig: [
+				projectPath: &#39;&#39;,
+				sonarReportPath: &#39;target/sonar/sonar-report.json&#39;,
+				autoMatch: true
+			]
+			// OR
+			//subJobConfigs : [
+			//	[
+			//		projectPath: &#39;module0&#39;,
+			//		sonarReportPath: &#39;target/sonar/sonar-report.json&#39;
+			//	],
+			//	[
+			//		projectPath: &#39;module1&#39;,
+			//		sonarReportPath: &#39;target/module1/sonar/sonar-report.json&#39;
+			//	]
+			//]
+		],
+        reviewConfig: [ 
+            issueFilterConfig: [
+                severity: &#39;INFO&#39;, 
+                newIssuesOnly: false, 
+                changedLinesOnly: false
+                ], 
+            noIssuesTitleTemplate: &#39;SonarQube violations have not been found.&#39;, 
+            someIssuesTitleTemplate: &#39;&lt;total_count&gt; SonarQube violations have been found.&#39;,
+            issueCommentTemplate: &#39;&lt;severity&gt; SonarQube violation:\n\n\n&lt;message&gt;\n\n\nRead more: &lt;rule_url&gt;&#39;
+        ],
+        scoreConfig: [ 
+            issueFilterConfig: [
+                severity: &#39;INFO&#39;, 
+                newIssuesOnly: false, 
+                changedLinesOnly: false
+                ], 
+            category: &#39;Code-Review&#39;, 
+            noIssuesScore: 0,
+            issuesScore: -1
+        ],
+		notificationConfig: [
+			noIssuesNotificationRecipient: &#39;NONE&#39;,
+			commentedIssuesNotificationRecipient: &#39;OWNER&#39;,
+			negativeScoreNotificationRecipient: &#39;OWNER&#39;
+		],
+		authConfig: [
+			username: &#39;Jenkins&#39;,
+			password: &#39;HTTP Password of user called Jenkins&#39;
+		]
+    )</pre>
+</div></div><p><br/></p><p><br/>Known issues:</p><p><span style="color: rgb(0,51,102);">
+<span class="jira-issue" data-jira-key="JENKINS-43804" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-43804?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-43804</a>
+                            -
+            <span class="summary">Pipeline: Integrate with Credentials Plugin</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+     jira-macro-single-issue-export-pdf">Open</span>
+                </span>
+ - </span><u><span style="color: rgb(0,51,102);">Overriding Gerrit credentials is unsafe (2.0)</span></u></p><h1 id="SonarGerrit-Resultexample">Result example</h1><p>Result of plugin work in Gerrit history:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/102793340.png" data-image-src="attachments/82020643/102793340.png" data-unresolved-comment-count="0" data-linked-resource-id="102793340" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-11-14 at 21.43.10.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><p>Gerrit commit:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/102793341.png" data-image-src="attachments/82020643/102793341.png" data-unresolved-comment-count="0" data-linked-resource-id="102793341" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-11-14 at 21.43.34.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><p>Score posted:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/84246530.png" data-image-src="attachments/82020643/84246530.png" data-unresolved-comment-count="0" data-linked-resource-id="84246530" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-10-30 at 16.37.09.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><h1 id="SonarGerrit-Troubleshooting">Troubleshooting</h1><h2 id="SonarGerrit-Pluginfailsbuildwithmessage&quot;Unabletopostreview.Requestfailed&quot;">Plugin fails build with message &quot;Unable to post review. Request failed&quot;</h2><p>This message occurres when RestAPIException is thrown by Gerrit API on attempt to post request.</p><p>Since version 1.0.7 it is possible to obtain a full stacktrace of the exception using a logger for class</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">org.jenkinsci.plugins.sonargerrit.SonarToGerritPublisher</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/102793217.png" data-image-src="attachments/82020643/102793217.png" data-unresolved-comment-count="0" data-linked-resource-id="102793217" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-11-08 at 19.56.22.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><p>The log will contain necessary information about the exception as follows:  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020643/102793218.png" data-image-src="attachments/82020643/102793218.png" data-unresolved-comment-count="0" data-linked-resource-id="102793218" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="sonar-gerrit log.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020643" data-linked-resource-container-version="59"></span></p><h1 id="SonarGerrit-Versionincompatibilities">Version incompatibilities</h1><h2 id="SonarGerrit-Version1.0.5">Version 1.0.5</h2><p>In this version plugin settings has moved from Build Steps to Post Build Actions. User needs to reconfigure jobs, or settings will be erased to default.</p><h1 id="SonarGerrit-Versions">Versions</h1><h2 id="SonarGerrit-Version2.3(2Apr2018)">Version 2.3 (2 Apr 2018)</h2><h3 id="SonarGerrit-BugsFixed">Bugs Fixed</h3><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-49639" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-49639?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-49639</a>
+                            -
+            <span class="summary">Sonar Gerrit plugin not posting comments when changedLinesOnly == true</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ </p><h2 id="SonarGerrit-Version2.2.1(5Feb2018)">Version 2.2.1 (5 Feb 2018)</h2><h3 id="SonarGerrit-BugsFixed.1">Bugs Fixed</h3><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-49172" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-49172?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-49172</a>
+                            -
+            <span class="summary">Pipeline snippet generator no longer working</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ </p><h2 id="SonarGerrit-Version2.1(6Jan2018)">Version 2.1 (6 Jan 2018)</h2><h3 id="SonarGerrit-BugsFixed.2">Bugs Fixed</h3><ol class="aui-nav aui-nav-breadcrumbs"><li><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-43730" rel="nofollow">JENKINS-43730</a> - No issues reported if there are no Project Settings configurations</li></ol><h3 id="SonarGerrit-NewFeatures">New Features</h3><ol class="aui-nav aui-nav-breadcrumbs"><li><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-48808" rel="nofollow">JENKINS-48808</a> - Allow file name auto-match for projects with several modules</li><li><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-48807" rel="nofollow">JENKINS-48807</a> - <span style="color: rgb(41,41,41);">Implement separate filter for score settings</span></li></ol><h2 id="SonarGerrit-Version2.0(24Apr2017)">Version 2.0 (24 Apr 2017)</h2><h3 id="SonarGerrit-NewFeatures.1">New Features</h3><ol class="aui-nav aui-nav-breadcrumbs"><li><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-43397" rel="nofollow">JENKINS-43397</a> - Support pipelines (initial)</li></ol><h2 id="SonarGerrit-Version1.0.8(6Apr2017)">Version 1.0.8 (6 Apr 2017)</h2><h3 id="SonarGerrit-BugsFixed.3">Bugs Fixed</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-43093" class="external-link" rel="nofollow">JENKINS-43093</a> - Replace NPE stacktrace with message in case when Gerrit Change and Patchset numbers are not set</li><li><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-43047" rel="nofollow">JENKINS-43047</a> - Fix issue processing for nested modules</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-42465" class="external-link" rel="nofollow">JENKINS-42465</a> - Fix LDAP lockout when using Gerrit HTTP password</li></ol><h3 id="SonarGerrit-NewFeatures.2">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-40970" class="external-link" rel="nofollow">JENKINS-40970</a> - Add an option to override Gerrit HTTP credentials</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31240" class="external-link" rel="nofollow">JENKINS-31240</a> - UI: Hide &quot;Score Settings&quot; section if &quot;Post scor&quot; is not checked</li></ol><h2 id="SonarGerrit-Version1.0.7.6(10Nov2016)">Version 1.0.7.6 (10 Nov 2016)</h2><h3 id="SonarGerrit-NewFeatures.3">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-33892" class="external-link" rel="nofollow">JENKINS-33892</a><span> - Add details of RestAPIException to a log</span></li></ol><h2 id="SonarGerrit-Version1.0.6(3Dec2015)">Version 1.0.6 (3 Dec 2015)</h2><h3 id="SonarGerrit-NewFeatures.4">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31892" class="external-link" rel="nofollow">JENKINS-31892</a><span> - Support multiple project locations for multi-jobs</span></li></ol><h2 id="SonarGerrit-Version1.0.5(18Nov2015)">Version 1.0.5 (18 Nov 2015)</h2><h3 id="SonarGerrit-BugsFixed.4">Bugs Fixed</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31238" class="external-link" rel="nofollow">JENKINS-31238</a><span> - Replace &quot;Sonar&quot; with &quot;SonarQube&quot; in plugin ui</span></li></ol><h3 id="SonarGerrit-NewFeatures.5">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31639" class="external-link" rel="nofollow">JENKINS-31639</a><span> - Notify user about plugin changes causing incompatibility</span></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31003" class="external-link" rel="nofollow">JENKINS-31003</a><span> - Move plugin from post-build steps to post-build actions</span></li></ol><h2 id="SonarGerrit-Version1.0.4(24Oct2015)">Version 1.0.4 (24 Oct 2015)</h2><h3 id="SonarGerrit-BugsFixed.5">Bugs Fixed</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31001" class="external-link" rel="nofollow">JENKINS-31001</a><span> - Unable to save changes for Filter settings</span></li></ol><h3 id="SonarGerrit-NewFeatures.6">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31006" class="external-link" rel="nofollow">JENKINS-31006</a><span> - Allow user to specify Gerrit category and post score under it.</span></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31005" class="external-link" rel="nofollow">JENKINS-31005</a><span style="color: rgb(53,85,100);"> - Move some settings to Advanced section</span></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31004" class="external-link" rel="nofollow">JENKINS-31004</a><span style="color: rgb(53,85,100);"> - Check if Gerrit RESTAPI is enabled</span></li></ol><h2 id="SonarGerrit-Version1.0.3(13Oct2015)">Version 1.0.3 (13 Oct 2015)</h2><h3 id="SonarGerrit-BugsFixed.6">Bugs Fixed</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30932" class="external-link" rel="nofollow">JENKINS-30932</a><span> - Localisation is failed on error messages</span></li><li><span><a href="https://issues.jenkins-ci.org/browse/JENKINS-30933" class="external-link" rel="nofollow">JENKINS-30933</a></span><span> - NPE on attempt to run job with no SonarQube execution configured</span></li></ol><h2 id="SonarGerrit-Version1.0.2(13Oct2015)">Version 1.0.2 (13 Oct 2015)</h2><h3 id="SonarGerrit-NewFeatures.7">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30915" class="external-link" rel="nofollow">JENKINS-30915</a><span> - Support plugin run in downstream jobs</span></li></ol><h2 id="SonarGerrit-Version1.0.1(9Oct2015)">Version 1.0.1 (9 Oct 2015)</h2><h3 id="SonarGerrit-NewFeatures.8">New Features</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30853" class="external-link" rel="nofollow">JENKINS-30853</a><span> - Support projects located in subdirectories of repository root directory.</span></li></ol><h3 id="SonarGerrit-BugsFixed.7">Bugs Fixed</h3><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30863" class="external-link" rel="nofollow">JENKINS-30863</a> - Unable to run plugin: NoSuchMethod Error: GerritTrigger.getTrigger</li></ol><h2 id="SonarGerrit-Version1.0(7Oct2015)">Version 1.0 (7 Oct 2015)</h2><p>Basic functionality</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/82280606.png">settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/82280607.png">gerrit history.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/82280608.png">gerrit comment.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/82837510.png">comment.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/82837522.png">Gerrit.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558425.png">Screen Shot 2015-10-28 at 14.15.34.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558426.png">Screen Shot 2015-10-28 at 14.15.14.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558427.png">Screen Shot 2015-10-28 at 14.15.05.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558428.png">Screen Shot 2015-10-28 at 14.14.55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558429.png">Screen Shot 2015-10-28 at 14.14.36.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/83558430.png">Screen Shot 2015-10-28 at 14.14.24.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/84246529.png">Screen Shot 2015-10-30 at 16.35.08.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/84246535.png">Screen Shot 2015-10-30 at 16.37.09.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/84246530.png">Screen Shot 2015-10-30 at 16.37.09.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/85753870.png">Screen Shot 2015-12-03 at 22.32.20.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/85753871.png">Screen Shot 2015-12-03 at 22.32.37.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/85753868.png">Screen Shot 2015-12-03 at 22.32.20.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/85753869.png">Screen Shot 2015-12-03 at 22.32.37.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/102793217.png">Screen Shot 2016-11-08 at 19.56.22.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/102793218.png">sonar-gerrit log.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/102793340.png">Screen Shot 2016-11-14 at 21.43.10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/102793341.png">Screen Shot 2016-11-14 at 21.43.34.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/110133890.png">Screen Shot 2017-04-06 at 12.36.41.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446166.png">Notification settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446167.png">Review Settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446168.png">Score settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446172.png">Sonar settings - base.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446173.png">Sonar settings - multi.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446171.png">sonar url.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446169.png">Sonar settings - base.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/138446170.png">Sonar settings - multi.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/165583161.png">image2019-1-22_10-49-33.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020643/165583162.png">image2019-1-22_10-51-16.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:48</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

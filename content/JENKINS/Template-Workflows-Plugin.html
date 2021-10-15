@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Template Workflows Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Template Workflows Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (shaib)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Sep 01, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Template Workflows <a href="https://plugins.jenkins.io/template-workflows" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<h2 id="TemplateWorkflowsPlugin-DefinitionofaWorkflow(AKABuildFloworPipeline):">Definition of a Workflow (AKA Build Flow or Pipeline):</h2>
+
+<p>A workflow is a set of jobs, these jobs may be linked (trigger each other) and may share parameters.</p>
+
+
+
+<h2 id="TemplateWorkflowsPlugin-Introduction:">Introduction:</h2>
+
+<p>Jenkins is all about workflows. But creating, updating, duplicating or deleting these workflows is not easy and takes time.<br/>
+Think about all the times you had to duplicate a set of jobs: duplicate each job, link the jobs together and modify each job one by one so it will be properly configured, didn't you ask yourself - why can't I just define the workflow once and reuse this definition?<br/>
+This plugin introduces an easy way of managing workflows using the Jenkins UI.</p>
+
+<p>Plugin main features:</p>
+
+<ul>
+	<li>Define template workflows</li>
+	<li>Optionally share parameters between jobs in a template workflow</li>
+	<li>Create workflows from templates</li>
+	<li>Update workflows parameters easily</li>
+	<li>Execute workflows</li>
+	<li>Delete workflows</li>
+	<li>Full compatibility with other Jenkins plugins</li>
+</ul>
+
+
+<h2 id="TemplateWorkflowsPlugin-DefiningTemplateWorkflows:">Defining Template Workflows:</h2>
+
+<p>Template workflows can be defined as any type(s) of jobs and each job can be a member of several &quot;template workflows&quot;.<br/>
+The definition is done from the job configuration screen, just mark the job as a building block in a template workflow and state the template workflow name.</p>
+
+<p>Let's say we would like to define a simple template workflow called &quot;template-workflow1&quot; which is made out of 2 jobs where one triggers the other (jobA triggers jobB):</p>
+
+<h6 id="TemplateWorkflowsPlugin-DefinitionofjobA:">Definition of jobA:</h6>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275080.jpg" data-image-src="attachments/63145061/63275080.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275080" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+<p><span style="color: rgb(210,73,57);"><strong>Definition of</strong></span> <span style="color: rgb(210,73,57);"><strong>jobB</strong></span><span style="color: rgb(210,73,57);"><strong>:</strong></span></p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275085.jpg" data-image-src="attachments/63145061/63275085.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275085" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="8.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275086.jpg" data-image-src="attachments/63145061/63275086.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275086" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="9.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+
+<p><span style="text-decoration: underline;">Notes:</span></p>
+
+<ul>
+	<li>In order for a job to be a member of several template workflows, simply state all the workflows names (comma separated).</li>
+	<li>By checking the &quot;This is The Workflow Starting Job&quot; check box, this job will be scheduled when the workflow will be executed (more than one job can be selected as a starting point for a single template workflow). </li>
+</ul>
+
+
+
+<h2 id="TemplateWorkflowsPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275079.jpg" data-image-src="attachments/63145061/63275079.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275079" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></h2>
+
+
+<h2 id="TemplateWorkflowsPlugin-DefiningParametersforTemplateWorkflows:">Defining Parameters for Template Workflows:</h2>
+
+<p>Parameters are also defined in the job configuration page and are identified using a unique pattern: <span style="color: rgb(0,0,0);"><strong>@@</strong></span>PARAMETER_NAME<span style="color: rgb(0,0,0);"><strong>@@.</strong></span></p>
+
+<p><span style="color: rgb(0,0,0);"><span style="text-decoration: underline;">You can define parameters wherever you like on the job configuration page:</span></span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275081.jpg" data-image-src="attachments/63145061/63275081.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275081" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span>       <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275084.jpg" data-image-src="attachments/63145061/63275084.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275084" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="7.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+<p><span style="text-decoration: underline;">Notes:</span></p>
+<ul>
+	<li><span style="color: rgb(0,0,0);">In case two or more jobs are building blocks of the same template workflow - they share the same parameters, just define the same parameter name in the jobs configuration pages.  </span></li>
+	<li><span style="color: rgb(0,0,0);">By using this methodology (defining parameters by pattern), we are able to define parameters on any field we like (please</span> <span style="color: rgb(0,0,0);">refer also to the &quot;</span>Limitations &amp; Workarounds&quot; section).</li>
+</ul>
+
+
+
+
+<h2 id="TemplateWorkflowsPlugin-CreateWorkflowsfromTemplates:">Create Workflows from Templates:</h2>
+
+<p>In order to create workflow we first have to create a new job type called &quot;<strong>Template Workflow Job&quot;</strong>.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275087.jpg" data-image-src="attachments/63145061/63275087.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275087" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="10.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+
+<p>After creating the new job, we are now able to create workflows out of our template workflows.</p>
+
+<p>Open the new project and click the &quot;<strong>Create Workflow</strong>&quot; link, all the defined template workflows will be automatically recognized.</p>
+
+<ol>
+	<li>Select a workflow template (automatically shows all the related jobs and related parameters)</li>
+	<li>Give your workflow a name (Must be unique for the current project)</li>
+	<li>Select new jobs names for your workflow (These jobs will be created and associated in the current workflow)</li>
+	<li>Fill the parameter values (these values will be populated in the above jobs configuration)</li>
+	<li>Click the &quot;Create&quot; button</li>
+</ol>
+
+
+<p>   <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275092.jpg" data-image-src="attachments/63145061/63275092.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275092" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="17.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+<p>You will see that a new workflow has been added to your project in the &quot;Associated Workflows&quot; side view.<br/>
+In our example, the workflow named &quot;workflow-test&quot; is made out of 2 jobs: job1 and job2. <br/>
+The relation between job1 and job2 has been derived from jobA and jobB, meaning job1 triggers job2. Please notice that job1 and job2 are configured with the workflow parameter values. </p>
+
+<p>You now have several options:</p>
+
+<ul>
+	<li>Create other workflows and associate them to your project.</li>
+	<li>Edit created workflow and update the workflow parameters (will update the workflow jobs configuration). </li>
+	<li>Execute a workflow (Jobs that have been marked as the starting point for the workflow will be added to the build queue).</li>
+	<li>Delete a workflow (will also delete the jobs that were created during the workflow definition).</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63145061/63275090.jpg" data-image-src="attachments/63145061/63275090.jpg" data-unresolved-comment-count="0" data-linked-resource-id="63275090" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="13.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="63145061" data-linked-resource-container-version="80"></span></p>
+
+<h2 id="TemplateWorkflowsPlugin-VersionCompatibility">Version Compatibility</h2>
+
+<p>This plugin was tested against Jenkins 1.477, but should work with previous versions of Jenkins.</p>
+
+<h2 id="TemplateWorkflowsPlugin-Advancedconfiguration:">Advanced configuration:</h2>
+
+<ul>
+	<li>Sometimes you do not want to duplicate a specific job and just include it in your workflow.<br/>
+In order to accomplish that, when creating the workflow - enter the existing job name and check the 'Allow the use of existing jobs' checkbox.</li>
+	<li>Explanation on how to configure the <a href="Locks-and-Latches-plugin.html">Locks and Latches plugin</a>: create a lock with parameter pattern and configure your job with this lock.</li>
+</ul>
+
+
+
+<h2 id="TemplateWorkflowsPlugin-Limitations&amp;Workarounds:">Limitations &amp; Workarounds:</h2>
+
+<p>Some fields have validation (when submitting the job configuration page), this prevents us from configuring parameter pattern in these fields.<br/>
+In order to overcome this issue, you will have to manually configure the template job config.xml (one time task) - replacing the specific field value with parameter pattern.</p>
+
+<h2 id="TemplateWorkflowsPlugin-Releases:">Releases:</h2>
+
+
+<h5 id="TemplateWorkflowsPlugin-*Version1.2:Initialrelease">* Version 1.2: Initial release</h5>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275074.jpg">workflow-defenition1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275076.jpg">workflow-defenition1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275075.jpg">workflow-defenition2.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275077.jpg">workflow-defenition1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275073.jpg">workflow-defenition1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275078.jpg">1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275079.jpg">2.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275080.jpg">3.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275081.jpg">4.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275082.jpg">5.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275083.jpg">6.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275084.jpg">7.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275085.jpg">8.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275086.jpg">9.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275087.jpg">10.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275088.jpg">11.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275089.jpg">12.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275090.jpg">13.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275091.jpg">16.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63145061/63275092.jpg">17.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:51</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

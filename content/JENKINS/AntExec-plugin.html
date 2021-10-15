@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : AntExec plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : AntExec plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (svasek)</span>, last modified on Aug 21, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>smoyers
+<p>This plugin makes it possible to run Apache Ant code directly from Jenkins-CI.</p></p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View AntExec <a href="https://plugins.jenkins.io/antexec" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="AntExecplugin-Features">Features</h1>
+
+<ul>
+	<li>Adding build step to execute Ant code</li>
+	<li>Bundled ant-contrib to support ant-contrib tasks (needs to be enable in global config)</li>
+	<li>Easy to write simple Ant build file directly into the build step</li>
+	<li>Ability to write the fully functional Ant build file directly into Jenkins as a build step</li>
+	<li>You can reuse the build file created by the build step</li>
+	<li>Supports multi-line parameters</li>
+</ul>
+
+
+<h1 id="AntExecplugin-Someusecases">Some use cases</h1>
+
+<ul>
+	<li>To do some platform independent tasks</li>
+	<li>To do some advanced build preparation steps</li>
+	<li>To write the custom Ant build file maintained by Jenkins</li>
+	<li>To maintain custom Ant build file when you don't have access into the VCS of the current project</li>
+	<li>To write Ant targets that use multi-line text parameters (currently not possible using the core Ant plugin)</li>
+	<li>And much more <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/></li>
+</ul>
+
+
+<h1 id="AntExecplugin-Supportformulti-linetextparameters">Support for multi-line text parameters</h1>
+
+<p>If your job uses text parameters (as opposed to string parameters) and the parameter values contain newline characters, the core ant plugin fails with the following syntax error:</p>
+
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>  Building in workspace c:\svn\automation\baf
+  baf $ cmd.exe /C &#39;&quot;ant.bat &quot;-Dmulti_line_text=This is line 1
+  This is line 2
+  This is line3&quot; usage &amp;&amp; exit %%ERRORLEVEL%%&quot;&#39;
+  The syntax of the command is incorrect.
+  Build step &#39;Invoke Ant&#39; marked build as failure
+  Finished: FAILURE
+</pre>
+</div></div>
+
+<p>The problem is that parameters are passed verbatim to the command line, and if they contain any line breaks, cmd.exe will discard everything after the first line break, inevitably leading to a syntax error. The AntExec plugin gets around this problem by saving the build parameters into a .properties file on the fly and loading this file into the Ant session automatically. This also means that you can no longer verify in the build log the list of parameters that were handed down to Ant. If you need this (presumably for debugging purposes) then check the <strong>Keep buildfile</strong> check box, which will cause the plugin to retain the build file, as well as the parameter properties file, in the workspace of the plugin.</p>
+
+
+<h1 id="AntExecplugin-Changelog">Changelog</h1>
+
+
+
+
+
+<h5 id="AntExecplugin-1.11(2015-08-18)">1.11 (2015-08-18)</h5>
+
+<ul>
+	<li>Passing parameters and properties through the generated property file instead of command-line which caused problems (especially on Windows)</li>
+	<li>Changed core dependency from 1.480 to 1.596</li>
+	<li>Updated dependency on &quot;token-macro&quot; plugin (1.10)</li>
+	<li>Dropped compatibility with Java 1.5</li>
+</ul>
+
+
+<h5 id="AntExecplugin-1.10(2013-10-31)">1.10 (2013-10-31)</h5>
+
+<ul>
+	<li>Fixed missing job options in command line properties</li>
+	<li>Load environment variables with &lt;property environment=&quot;env&quot;/&gt; by default, so they are accessible via ${env.VARIABLE}</li>
+</ul>
+
+
+<h5 id="AntExecplugin-1.9(2013-07-15)">1.9 (2013-07-15)</h5>
+
+<ul>
+	<li>Fixing upgrade issue with ant-contrib in version 1.8</li>
+	<li>Build files are now automatically deleted by default so you need to update job configuration if you want to keep them</li>
+</ul>
+
+
+<h5 id="AntExecplugin-1.8(2013-06-28)">1.8 (2013-06-28)</h5>
+
+<ul>
+	<li>Remove archive copying of buildfile to job directory</li>
+	<li>Cleanup dependencies in pom.xml</li>
+</ul>
+
+
+<h5 id="AntExecplugin-1.7(2013-06-24)">1.7 (2013-06-24)</h5>
+
+<ul>
+	<li>Added option to keep build files for each build step, it's deleted by default now</li>
+	<li>Option for disabling  ant-contrib has been moved to build step configuration</li>
+	<li>Changed dependency to core 1.480</li>
+	<li>Added dependency on &quot;ant&quot; plugin (1.2)</li>
+	<li>Added dependency on &quot;token-macro&quot; plugin (1.7)</li>
+</ul>
+
+
+<h5 id="AntExecplugin-1.6(2012-08-28)">1.6 (2012-08-28)</h5>
+
+<ul>
+	<li>Fixing typo in extendedScriptSource</li>
+</ul>
+
+
+
+<h5 id="AntExecplugin-1.5(2012-06-21)">1.5 (2012-06-21)</h5>
+
+<ul>
+	<li>Fixing typo</li>
+</ul>
+
+
+
+<h5 id="AntExecplugin-1.4(2012-06-20)">1.4 (2012-06-20)</h5>
+
+<ul>
+	<li>Fixing build file when extended script source is null</li>
+</ul>
+
+
+
+<h5 id="AntExecplugin-1.3(2012-06-06)">1.3 (2012-06-06)</h5>
+
+<ul>
+	<li>First public release</li>
+</ul>
+
+
+
+<h1 id="AntExecplugin-Screenshots:">Screenshots:</h1>
+
+<h2 id="AntExecplugin-Addingnewbuildstep">Adding new build step</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275054.png" data-image-src="attachments/60919322/63275054.png" data-unresolved-comment-count="0" data-linked-resource-id="63275054" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="01.Add_buildstep.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+
+
+<h2 id="AntExecplugin-NewAntExecbuildstep">New AntExec build step</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275059.png" data-image-src="attachments/60919322/63275059.png" data-unresolved-comment-count="0" data-linked-resource-id="63275059" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="02.New_AntExec_Step.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+
+
+<h2 id="AntExecplugin-NewAntExecbuildstepwith1stlevelofadvancedoptions">New AntExec build step with 1st level of advanced options</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275055.png" data-image-src="attachments/60919322/63275055.png" data-unresolved-comment-count="0" data-linked-resource-id="63275055" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="03.New_AntExec_Step_Adv1.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+
+
+<h2 id="AntExecplugin-NewAntExecbuildstepwith2ndlevelofadvancedoptions">New AntExec build step with 2nd level of advanced options</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275056.png" data-image-src="attachments/60919322/63275056.png" data-unresolved-comment-count="0" data-linked-resource-id="63275056" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="04.New_AntExec_Step_Adv2.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+
+
+<h2 id="AntExecplugin-CodeExample">Code Example</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275057.png" data-image-src="attachments/60919322/63275057.png" data-unresolved-comment-count="0" data-linked-resource-id="63275057" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="05.Example1.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+
+
+<h2 id="AntExecplugin-CodeValidationExample">Code Validation Example</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60919322/63275058.png" data-image-src="attachments/60919322/63275058.png" data-unresolved-comment-count="0" data-linked-resource-id="63275058" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="06.Example2-Validation.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60919322" data-linked-resource-container-version="34"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275054.png">01.Add_buildstep.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275055.png">03.New_AntExec_Step_Adv1.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275056.png">04.New_AntExec_Step_Adv2.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275057.png">05.Example1.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275058.png">06.Example2-Validation.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/63275059.png">02.New_AntExec_Step.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60919322/71696385.png">Capture.PNG</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

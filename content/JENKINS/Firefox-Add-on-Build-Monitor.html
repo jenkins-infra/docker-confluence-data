@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Firefox Add-on Build Monitor</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Firefox Add-on Build Monitor
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (cliffano)</span>, last modified on Nov 03, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'firefoxaddon' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>This plugin is up for adoption.</strong> This add-on is looking for a co maintainer. Contact cliffano@gmail.com <a href="/display/JENKINS/Adopt+a+Plugin" title="Adopt a Plugin">Click here to learn more</a>!</p></div></div>Monitor Jenkins builds and display the status on Firefox status bar. Use Jenkins Build Monitor to keep track of Jenkins builds. Add Jenkins feed URL to Build Monitor and an icon representing the builds status will appear on Firefox status bar.</p>
+
+<p>Either mouse over the status icon to view the tooltip and quickly check the builds information, or left click the icon and select a build page to open. It's also easy to trigger a build by using one of the menu options.</p>
+
+<h2 id="FirefoxAdd-onBuildMonitor-Download&amp;Installation">Download &amp; Installation</h2>
+
+<p>Visit <a href="https://addons.mozilla.org/en-US/firefox/addon/7522" class="external-link" rel="nofollow">https://addons.mozilla.org/en-US/firefox/addon/7522</a> and click 'Add to Firefox' button.</p>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+
+<p>Starting Firefox 4, Jenkins icon is displayed on add-on bar. An add-on bar is disabled by default (at least as of Firefox 4 Beta 7), you have to manually enable it.<br/>
+On OS X: View -&gt; Toolbars -&gt; Add-on Bar.<br/>
+Windows &amp; Linux users? Please leave a comment with the instruction on how you enabled the Add-on Bar, I'll add it to this section.</p></div></div>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+
+<p>OS X users are required to configure Firefox:</p>
+<ul class="alternate">
+	<li>type about:config on Firefox URL bar, press enter</li>
+	<li>search for browser.preferences.instantApply , the default value on OS X is true, set this to false</li>
+</ul>
+
+
+
+<p>This change is needed due to a problem with preference accept button behaviour with FF3.* on OS X, more info is available from <a href="http://forums-test.mozillazine.org/viewtopic.php?f=19&amp;t=698285" class="external-link" rel="nofollow">http://forums-test.mozillazine.org/viewtopic.php?f=19&amp;t=698285</a> .<br/>
+By setting instantApply to false, you'll have to click OK button when you change FF Add-on Preferences.</p>
+
+<p>OS X users are also required to install <a href="http://growl.info/" class="external-link" rel="nofollow">Growl</a> to provide alerts service on Firefox.</p>
+
+
+</div></div>
+
+<h2 id="FirefoxAdd-onBuildMonitor-FAQ">FAQ</h2>
+
+<ol>
+	<li><strong>Q: How to add a feed to be monitored?</strong><br/>
+A: Go to your Jenkins web page. If you're on the dashboard or view page, the Jenkins feed links are located at the bottom right area. If you're on a job page, the feed links are at the left area bellow the build history. Right clink on a feed link (<strong>for all</strong>, <strong>for failures</strong>, or <strong>for just last builds</strong>), select <strong>Add Link To Jenkins Build Monitor</strong>. Provide a name and click <strong>OK</strong>.</li>
+	<li><strong>Q: How to monitor a group of jobs?</strong><br/>
+A: You can either add the feeds of those jobs one by one, or you can create a view that contains only the jobs that you want and then add the feed link of that view.</li>
+	<li><strong>Q: How to display only the latest build status?</strong><br/>
+A: Go to <strong>Preference</strong> -&gt; <strong>Display</strong> -&gt; select <strong>latest build</strong> from the drop down list.</li>
+	<li><strong>Q: I'm using OS X and Growl, I'm getting error message &quot;Unable to add link&quot; when I try to add a Jenkins feed link, and on the error console I see error &quot;Component returned failure code: 0x80570016 (NS_ERROR_XPC_GS_RETURNED_FAILURE)</strong><strong>&quot;.</strong><br/>
+A: The first thing you should try is to uninstall then reinstall Growl. If that doesn't work, try a new Firefox.dmg installation, or try a fresh Firefox profile. Check out the comments section on <a href="https://issues.jenkins-ci.org/browse/JENKINS-8899" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-8899</a></li>
+</ol>
+
+
+<h2 id="FirefoxAdd-onBuildMonitor-Usage">Usage</h2>
+
+<ol>
+	<li>After restarting Firefox following an installation, a Jenkins icon will appear on Firefox status bar panel.</li>
+	<li>Go to your Jenkins web site, right click on a feed link (i.e. &quot;for all&quot;, &quot;for failures&quot;, or &quot;for just last builds&quot; links) and select &quot;Add Link To Jenkins Build Monitor&quot; from the menu.</li>
+	<li>Provide a name for the feed, then click OK. Build Monitor will suggest a name for the feed depending on whether the feed is for the whole Jenkins instance, or specific to a particular job.</li>
+	<li>The feed status icon will appear on Firefox status bar. Mouse over it to see the build details on a tooltip. If you want to visit any of those builds' web page, left click the weather/orb icon, and a build menu will appear. Click on any of the build items to open the corresponding build web page.</li>
+	<li>Preferences window can be opened via right click menu of a status icon.</li>
+</ol>
+
+
+<p>Check out the <a href="http://blog.cliffano.com/2008/11/10/buildmonitor-v09-usage-video/" class="external-link" rel="nofollow">demo video</a> of Build Monitor 0.9.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="FirefoxAdd-onBuildMonitor-Translation">Translation</h2>
+
+<p>Build Monitor has been translated to French, Indonesian, and Japanese. If you're interested in helping with the translations, please submit a patch to the issue tracker. If you have commit rights, please feel free to add the translation yourself.</p>
+
+<p>To add a new locale, please follow these steps:</p>
+<ol>
+	<li>Fork <a href="https://github.com/jenkinsci/firefox-extension-buildmonitor" class="external-link" rel="nofollow">https://github.com/jenkinsci/firefox-extension-buildmonitor</a> .</li>
+	<li>Add new locale directory under <a href="https://github.com/jenkinsci/firefox-extension-buildmonitor/tree/master/src/main/resources/firefox/chrome/locale" class="external-link" rel="nofollow">/src/main/resources/firefox/chrome/locale</a> directory.</li>
+	<li>Add buildmonitor.dtd and buildmonitor.properties files in that directory. Have a look at en-US locale directory as example, copy paste the content to the new locale files, translate the value of each property.</li>
+	<li>Add the new locale to /src/main/resources/firefox/chrome.manifest
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">locale    buildmonitor   &lt;new_locale&gt;    jar:chrome/buildmonitor.jar!/locale/&lt;new_locale&gt;/
+</pre>
+</div></div></li>
+	<li>Submit a pull request.</li>
+</ol>
+
+
+<h2 id="FirefoxAdd-onBuildMonitor-Screenshots">Screenshots</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/30834692/36208709.jpg" data-image-src="attachments/30834692/36208709.jpg" data-unresolved-comment-count="0" data-linked-resource-id="36208709" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="08buildmonitor-multiplefeeds.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="30834692" data-linked-resource-container-version="61"></span><br/>
+ <br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/30834692/36208710.jpg" data-image-src="attachments/30834692/36208710.jpg" data-unresolved-comment-count="0" data-linked-resource-id="36208710" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="08buildmonitor-alertnotification.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="30834692" data-linked-resource-container-version="61"></span><br/>
+ <br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/30834692/36208711.jpg" data-image-src="attachments/30834692/36208711.jpg" data-unresolved-comment-count="0" data-linked-resource-id="36208711" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="08buildmonitor-preferences.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="30834692" data-linked-resource-container-version="61"></span><br/>
+ </p>
+
+<h2 id="FirefoxAdd-onBuildMonitor-Credits">Credits</h2>
+
+<p>Icons from <a href="http://tango.freedesktop.org/Tango_Desktop_Project" class="external-link" rel="nofollow">Tango Desktop Project</a>.</p>
+
+<p>Sound effects from <a href="http://www.freesound.org/" class="external-link" rel="nofollow">the freesound project</a>:</p>
+<ul>
+	<li>Build Failure - <a href="http://www.freesound.org/samplesViewSingle.php?id=42903" class="external-link" rel="nofollow">glass break 5.wav</a> by <a href="http://www.freesound.org/usersViewSingle.php?id=92661" class="external-link" rel="nofollow">Freq Man</a></li>
+	<li>Executor Stuck - <a href="http://www.freesound.org/samplesViewSingle.php?id=2846" class="external-link" rel="nofollow">scannerhrn.wav</a> by <a href="http://www.freesound.org/usersViewSingle.php?id=4948" class="external-link" rel="nofollow">NoiseCollector</a></li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/30834692/36208709.jpg">08buildmonitor-multiplefeeds.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/30834692/36208710.jpg">08buildmonitor-alertnotification.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/30834692/36208711.jpg">08buildmonitor-preferences.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

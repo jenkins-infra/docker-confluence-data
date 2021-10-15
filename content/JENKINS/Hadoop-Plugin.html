@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Hadoop Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Hadoop Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Hadoop <a href="https://plugins.jenkins.io/hadoop" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin makes Jenkins cluster act as a Hadoop cluster without any configuration.</p>
+
+<p>When you install this plugin, Jenkins will start a Hadoop &quot;master&quot; (namenode and job tracker, in their jargons) on the Jenkins master. On each slave that Jenkins starts, this plugin also starts a Hadoop &quot;slave&quot; (datanode and task tracker, in their jargons.) Hudson then instructs Hadoop to form a cluster among those nodes. All the jar files needed to run Hadoop is packaged inside this plugin, and will be automatically deployed to eveyrwhere they are needed.</p>
+
+<p>In this way, this plugin takes your machines in your Jenkins cluster and runs a Hadoop cluster very easily.</p>
+
+<h1 id="HadoopPlugin-JenkinsUIaddition">Jenkins UI addition</h1>
+
+<p>Once installed, you'll see the &quot;Hadoop&quot; link in the Jenkins top page.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/37323226/37519381.png" data-image-src="attachments/37323226/37519381.png" data-unresolved-comment-count="0" data-linked-resource-id="37519381" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Hadoop-link.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323226" data-linked-resource-container-version="13"></span><br/>
+This link will take you to the information page that shows links to Hadoop web UI, as well as the configuration users need on their <code>hadoop-site.xml</code>.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/37323226/37519382.png" data-image-src="attachments/37323226/37519382.png" data-unresolved-comment-count="0" data-linked-resource-id="37519382" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hadoop-page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323226" data-linked-resource-container-version="13"></span></p>
+
+<p>Slave log page (<code><a href="http://yourserver/hudson/computer/SLAVENAME/log" class="external-link" rel="nofollow">http://yourserver/hudson/computer/SLAVENAME/log</a></code>) will also include text showing how the hadoop slave JVM is launched. Any error encountered will be recorded there, too.</p>
+
+<h1 id="HadoopPlugin-ConfiguringHadoop">Configuring Hadoop</h1>
+
+<p>Once you run this, you'll get $HUDSON_HOME/hadoop/dist directory that contains the stripped down version of Hadoop. You can change conf/hadoop-site.xml in this directory to apply different parameters.</p>
+
+<h1 id="HadoopPlugin-Notes">Notes</h1>
+
+<ul>
+	<li>Hadoop requires that everyone in the cluster can reach everyone else in the cluster by a TCP connection.</li>
+	<li>This plugin requires slave.jar from Hudson 1.292 or later, or else you'll get &quot;undefined option -cp&quot; error on slaves.</li>
+	<li>Scheduling of the work in Jenkins and that in Hadoop are independently done, without consideration to each other.</li>
+</ul>
+
+
+
+<h1 id="HadoopPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="HadoopPlugin-Version1.3(2009Sep2)">Version 1.3 (2009 Sep 2)</h3>
+
+<ul>
+	<li>NameNode now listens on all interfaces.</li>
+	<li>Fixed a cygwin compatibility problem (<a href="http://issues.apache.org/jira/browse/HADOOP-6209" class="external-link" rel="nofollow">report</a>)</li>
+</ul>
+
+
+<h3 id="HadoopPlugin-Version1.2(2009Jul20)">Version 1.2 (2009 Jul 20)</h3>
+
+<ul>
+	<li>Fixed a bug with recent versions of Hudson (1.316, for example) where a failure to bring name node causes a failure to start Hudson</li>
+	<li>Improved the plugin so that it automatically figures out the network topology.</li>
+</ul>
+
+
+<h3 id="HadoopPlugin-Version1.1(2009May15)">Version 1.1 (2009 May 15)</h3>
+
+<ul>
+	<li>Hadoop wasn't seeing hadoop-site.xml and hadoop-default.xml.</li>
+</ul>
+
+
+<h3 id="HadoopPlugin-Version1.0">Version 1.0</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323226/37519381.png">Hadoop-link.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323226/37519382.png">hadoop-page.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:26</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

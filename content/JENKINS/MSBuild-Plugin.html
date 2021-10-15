@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : MSBuild Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : MSBuild Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kyle.sweeney@valtech.com)</span>, last modified by <span class='editor'> Unknown User (seitz)</span> on Apr 01, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View MSBuild <a href="https://plugins.jenkins.io/msbuild" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin allows you to use MSBuild to build .NET and Visual Studio projects.</p><h2 id="MSBuildPlugin-Usage">Usage</h2><p>To use this plugin, specify the location directory of MSBuild.exe on Jenkin's configuration page. The MSBuild executable is usually situated in a subfolder of C:\WINDOWS\Microsoft.NET\Framework. The Visual Studio 2017 Community version of &quot;msbuild.exe&quot; is located in &quot;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\&quot; If you have multiple MSBuild versions installed, you can configure multiple executables. </p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/2916478/170920742.png" data-image-src="attachments/2916478/170920742.png" data-unresolved-comment-count="0" data-linked-resource-id="170920742" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-msbuild.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="2916478" data-linked-resource-container-version="56"></span></p><p>Then, on your project configuration page, specify the name of the build file (.proj or .sln) and any <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference?view=vs-2017" class="external-link" rel="nofollow">command line arguments</a> you want to pass in. The files are compiled to the directory where Visual Studio would put them as well.</p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/2916478/170920743.png" data-image-src="attachments/2916478/170920743.png" data-unresolved-comment-count="0" data-linked-resource-id="170920743" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-job-msbuild.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="2916478" data-linked-resource-container-version="56"></span></p><h3 id="MSBuildPlugin-Troubleshooting">Troubleshooting</h3><ul><li>When using Command Line Arguments, bear in mind that special characters are treated like in Unix, so they will need to be escaped using the backslash.</li></ul><h2 id="MSBuildPlugin-Changelog">Changelog</h2><h5 id="MSBuildPlugin-Release1.29">Release 1.29</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-48194">JENKINS-48194</a> - Binary compatibility broken since 1.28</p><h5 id="MSBuildPlugin-Release1.28">Release 1.28</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-42284">JENKINS-42284</a> - chcp command errors are ignored and no longer fail the build. Moreover, a checkbox is now available on the build step configuration to prevent the plugin from executing chcp before running msbuild.</p><h5 id="MSBuildPlugin-Release1.27">Release 1.27</h5><p>* Add <a href="https://issues.jenkins-ci.org/browse/JENKINS-24132">JENKINS-24132</a> - Support for multiple MSBuild Output encoding so that the console log of Jenkins is displayed correctly <br/> * Add <a href="https://issues.jenkins-ci.org/browse/JENKINS-37392">JENKINS-37392</a> - Add @Symbol(&quot;msbuild&quot;) to MSBuild's ToolDescriptor<br/> * Fix <a href="https://github.com/jenkinsci/msbuild-plugin/pull/28" class="external-link" rel="nofollow">PR#28</a> - Minor bugs and build warnings </p><h5 id="MSBuildPlugin-Release1.26">Release 1.26</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-28679">JENKINS-28679</a> - Warning when setting MSBuild installation path to the directory containing msbuild.exe instead of the path to the executable itself <br/> * Add <a href="https://issues.jenkins-ci.org/browse/JENKINS-3367">JENKINS-3367</a> - Add ouput coloring for warning and error messages</p><h5 id="MSBuildPlugin-Release1.25">Release 1.25</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-9104">JENKINS-9104</a> - Veto killing mspdbsrv.exe&quot;</p><h5 id="MSBuildPlugin-Release1.24">Release 1.24</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-19706">JENKINS-19706</a> - Masked Password Clearly visible as plain text in console output.<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-19830">JENKINS-19830</a> - Masked Password visible as plain text in Msbuild Plugin<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-21585">JENKINS-21585</a> - Pass build variables as properties incorrectly format command line<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18652">JENKINS-18652</a> - Handling of Configuration and Platform parameters<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-22344">JENKINS-22344</a> - Command Line Arguments: /p:PublishFolder does not work with UNC format to publish to remote server<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-22451">JENKINS-22451</a> - Backslash is stripped from MSBuild command line argument<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-22461">JENKINS-22461</a> - New MSBuild release has a space in the installation path; causes msbuild plugin to fail</p><h5 id="MSBuildPlugin-Release1.23">Release 1.23</h5><p>* Fix textbox for argument is too short<br/> * Add french translation</p><h5 id="MSBuildPlugin-Release1.22">Release 1.22</h5><p>* Fixed more documentation links.</p><h5 id="MSBuildPlugin-Release1.21">Release 1.21</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-19830">JENKINS-19830</a> - Masked Password visible as plain text in Msbuild Plugin</p><h5 id="MSBuildPlugin-Release1.20">Release 1.20</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-19432">JENKINS-19432</a> - Add option: &quot;If warnings during msbuild, set the build to unstable&quot;</p><h5 id="MSBuildPlugin-Release1.19">Release 1.19</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18543">JENKINS-18543</a> - Update to newest MSBuild plugin breaks passing of release configurations with spaces in them</p><h5 id="MSBuildPlugin-Release1.18">Release 1.18</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-17876">JENKINS-17876</a> - MSBuild Command Line Arguments quotes being stripped...not 5552</p><h5 id="MSBuildPlugin-Release1.17">Release 1.17</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-5552">JENKINS-5552</a> - MSBuild plugin creates malformed command line</p><h5 id="MSBuildPlugin-Release1.16">Release 1.16</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-14898">JENKINS-14898</a> - MsBuild windows style environment variables no longer work<br/> * Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-15029">JENKINS-15029</a> - Update of MSBuild plugin to 1.15 causes Parameterized trigger plugin to fail.</p><h5 id="MSBuildPlugin-Release1.15">Release 1.15</h5><p>* Fix issue on backward compatibility</p><h5 id="MSBuildPlugin-Release1.14">Release 1.14</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13863">JENKINS-13863</a> - MSBuild is unable to build projects in a different directory</p><h5 id="MSBuildPlugin-Release1.13">Release 1.13</h5><p>* Merge pull request - Add a checkbox to exclude a failure on msbuild step</p><h5 id="MSBuildPlugin-Release1.12">Release 1.12</h5><p>* Add UI checkbox to control build variables passing</p><h5 id="MSBuildPlugin-Release1.11">Release 1.11</h5><p>* Integrate pull request - Use lowercase &quot;/p&quot; for xbuild compatibility</p><h5 id="MSBuildPlugin-Release1.10">Release 1.10</h5><p>* Integrate pull request - Change Internal object: Descriptor by BuildStepDescriptor</p><h5 id="MSBuildPlugin-Release1.9">Release 1.9</h5><p>* Fix command generation with multiple build parameters</p><h5 id="MSBuildPlugin-Release1.8.2(December25,2011)">Release 1.8.2 (December 25, 2011)</h5><p>* Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-12222">JENKINS-12222</a> - java.lang.NullPointerException in the msbuild plugin when a job is executed by the parameterized build trigger plugin</p><h5 id="MSBuildPlugin-Release1.8.1(December03,2011)">Release 1.8.1 (December 03, 2011)</h5><p>* Fix double quoted default args</p><h5 id="MSBuildPlugin-Release1.8(December01,2011)">Release 1.8 (December 01, 2011)</h5><p>* Add default args (global configuration) - Merged pull request</p><h5 id="MSBuildPlugin-Release1.7(May13,2011)">Release 1.7 (May 13, 2011)</h5><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-3823">JENKINS-3823</a> - configure msbuild path as a tool<br/> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-4120">JENKINS-4120</a> - Implement concept of tool installation into MSBuild plugin</li></ul><h5 id="MSBuildPlugin-Release1.6(May10,2011)">Release 1.6 (May 10, 2011)</h5><ul><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-9645">JENKINS-9645</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-9643">JENKINS-9643</a> - Regression introduced in 1.5 - The MsBuild file was not taken into account</li></ul><h5 id="MSBuildPlugin-Release1.5(May05,2011)">Release 1.5 (May 05, 2011)</h5><ul><li>Add variables (from build and environment) resolution.</li></ul><h5 id="MSBuildPlugin-Release1.4(April02,2011)">Release 1.4 (April 02, 2011)</h5><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-4121">JENKINS-4121</a> - Existence check for MsBuild.exe does not account for non-master nodes</li></ul><h5 id="MSBuildPlugin-Release1.3(Dec29,2009)">Release 1.3 (Dec 29, 2009)</h5><ul><li>Add build parameters as properties (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2349">JENKINS-2349</a>)</li><li>Console output should show the command (<a href="https://issues.jenkins-ci.org/browse/JENKINS-3610">JENKINS-3610</a>)</li><li>Update uses of deprecated APIs</li></ul><h5 id="MSBuildPlugin-Release1.2(Apr21,2009)">Release 1.2 (Apr 21, 2009)</h5><ul><li>Add a the possibility to manage multiple Msbuild version (<a href="https://issues.jenkins-ci.org/browse/JENKINS-3179">JENKINS-3179</a>)</li></ul><h5 id="MSBuildPlugin-Release1.1(Jun03,2008)">Release 1.1 (Jun 03, 2008)</h5><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916478/59900016.png">Screenshot-2011-11-30_10.11.03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916478/69959697.png">Capture.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916478/69959696.png">Capture.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916478/170920742.png">jenkins-msbuild.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916478/170920743.png">jenkins-job-msbuild.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

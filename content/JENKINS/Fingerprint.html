@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Fingerprint</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Fingerprint
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jsoref)</span> on Nov 29, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Fingerprint-TrackingfileusageacrossJenkinsjobsusingfingerprints">Tracking file usage across Jenkins jobs using fingerprints</h1><p>When you have interdependent projects on Jenkins, it often becomes hard to keep track of which version of a file is used by which version of a dependency on that file. Jenkins supports <strong>file fingerprinting</strong> to track dependencies.</p><p>For example, suppose you have the TOP project that depends on the MIDDLE project, which in turn depends on the BOTTOM project. You are working on the BOTTOM project. The TOP team reported that <code>bottom.jar</code> that they are using causes an NPE, which you (a member of the BOTTOM team) thought you fixed in BOTTOM #32. Jenkins can tell you which MIDDLE builds and TOP builds are using (or not using) your <code>bottom.jar</code> #32.</p><h1 id="Fingerprint-HowdoIsetitup?">How do I set it up?</h1><p>To make this work, all the relevant projects need to be configured to <strong>Record fingerprints</strong> of the jar files (in the above case, <code>bottom.jar</code>).</p><p>For example, if you just want to track which BOTTOM builds are used by which TOP builds, configure TOP and BOTTOM to record the fingerprint of <code>bottom.jar</code>. If you also want to know which MIDDLE builds are using which <code>bottom.jar</code>, also configure MIDDLE.</p><p>Since recording fingerprints is a cheap operation, the simplest thing to do is just blindly record all fingerprints of the followings:</p><ol><li>jar files that your project produce</li><li>jar files that your project rely on</li></ol><p>The disk usage is affected more by the number of files fingerprinted, as opposed to the size of files or the number of builds they are used. So unless you have a plenty of disk space, you don't want to fingerprint <code>**/*</code>.</p><h2 id="Fingerprint-ConfigureajobtoRecordFingerprint(s)ofafileorsetoffiles">Configure a job to Record Fingerprint(s) of a file or set of files</h2><p>Go to your project, click <strong>Configure</strong> in the left navigation bar, then scroll down to the <strong>Post-build Actions</strong> section of the job</p><p>Click on the button to add a <strong>Post-build</strong> action.</p><p>Select <strong>Record fingerprints of files to track usage</strong>.</p><p>The post-build action configuration fields provide you with a pattern option to match the files you want to fingerprint as well as a couple check-box selections to do your file fingerprinting.</p><p>Maven job type does this automatically for its dependencies and artifacts.</p><h1 id="Fingerprint-Howdoesitwork?">How does it work?</h1><p>The fingerprint of a file is simply an MD5 checksum. Jenkins maintains a database of md5sum, and for each md5sum, Jenkins records which builds of which projects used. This database is updated every time a build runs and files are fingerprinted.</p><p>To avoid the excessive disk usage, Jenkins does not store the actual file. Instead, it just stores md5sum and their usages. These files can be seen in</p><p><strong>$JENKINS_HOME/fingerprints</strong></p><p>Plugins can store additional information in these records. For example, <a href="Deployment-Notification-Plugin.html">Deployment Notification Plugin</a> tracks files deployed on servers via chef/puppet through fingerprints.</p><h1 id="Fingerprint-HowcanIuseit?">How can I use it?</h1><p>Here are a few typical scenarios that benefit from this feature:</p><p>You develop the BOTTOM project and you want to know who is using BOTTOM #13 in which builds</p><ol><li>Go to BOTTOM #13 build page.</li><li>Click the &quot;fingerprint&quot; icon of <code>bottom.jar</code> in the build artifacts</li><li>You'll see all the projects and builds that use it.</li></ol><p>You develop the TOP project and you want to know which build of <code>bottom.jar</code> and <code>middle.jar</code> you are using in TOP #10.</p><ol><li>Go to TOP #10 build page.</li><li>Click &quot;see fingerprints&quot;</li><li>You'll see all the files fingerprinted in TOP #10, along with where they came from.</li></ol><p>You have the TOP project that builds a jar. You also have the TOP-TEST project that runs after the TOP project and does extensive integration tests on the latest TOP bits. You want to know the test results of TOP #7.</p><ol><li>Go to TOP #7 build page.</li><li>Click the &quot;fingerprint&quot; icon of <code>top.jar</code> in the build artifacts</li><li>You'll see all the TOP-TEST builds that used it.</li><li>Click it and you'll be taken to the appropriate TOP-TEST build page, which will show you test reports.</li><li>If there's no TOP-TEST builds displayed, then that means TOP-TEST build didn't run against TOP #7. Maybe it skipped TOP #7 (this can happen if there are a lot of TOP builds in a short period of time), or maybe a new TOP-TEST build is in progress.</li></ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

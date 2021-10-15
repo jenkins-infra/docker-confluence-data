@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Locked Files Report Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Locked Files Report Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (redsolo)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Locked Files Report <a href="https://plugins.jenkins.io/locked-files-report" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-09-16/#SECURITY-1921" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+
+<p> This debug plugin fails a build if there are locked files in the workspace at the begining or end of a build.<br/>
+This plugin is only thought to be used when figuring out why sometimes a SCM (or any other file) action fails as it can not delete files in the workspace.</p>
+
+<h2 id="LockedFilesReportPlugin-Usage">Usage</h2>
+
+<p>Enable it in the project configuration and it will at begining and end of the build check if there are any locked files in the workspace.</p>
+
+<p>If there are any locked files, a short summary will be displayed in the Build page.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/38928464/39256067.png" data-image-src="attachments/38928464/39256067.png" data-unresolved-comment-count="0" data-linked-resource-id="39256067" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="summary.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="38928464" data-linked-resource-container-version="15"></span></p>
+
+<p>Clicking on the Locked files page, will show a more detailed list of what files that was locked and by whatprocess.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/38928464/39256068.png" data-image-src="attachments/38928464/39256068.png" data-unresolved-comment-count="0" data-linked-resource-id="39256068" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="action.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="38928464" data-linked-resource-container-version="15"></span></p>
+
+<h3 id="LockedFilesReportPlugin-Windowsnote">Windows note</h3>
+
+<p>To be able to use the plugin on Windows, you must install <a href="http://technet.microsoft.com/en-us/sysinternals/bb896655.aspx" class="external-link" rel="nofollow">Handle</a> on all nodes that is going to use the plugin. Easiest is to add the <code>handle.exe</code> path to the <code>PATH</code> environmental variable, otherwise you must specify the path in System configuration.</p>
+
+<p><strong>handle.exe</strong> pops up an EULA dialogue the first time you run it;  if you are running Hudson as a Windows service as a user other than yourself, then you will have to run the exe with &quot;run as...&quot; the service user to accept the EULA once, otherwise you will find that <strong>handle.exe</strong> just hangs when run from hudson.</p>
+
+
+
+<h1 id="LockedFilesReportPlugin-Changelog">Changelog</h1>
+
+<h3 id="LockedFilesReportPlugin-1.6(3rdfeb2012)">1.6 (3rd feb 2012)</h3>
+
+<p>Thanks to hokatichenci for fixing the below issues in a pull request.</p>
+
+<ul>
+	<li>Handle.exe fixes - The plugin always accepts the EULA right now . (<a href="https://issues.jenkins-ci.org/browse/JENKINS-8467">JENKINS-8467</a>)</li>
+	<li>Handle.exe fixes - Added support for the new output format (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12344">JENKINS-12344</a>)</li>
+</ul>
+
+
+
+<h3 id="LockedFilesReportPlugin-1.4-1.5(16thnov2011)">1.4 - 1.5 (16th nov 2011)</h3>
+
+<ul>
+	<li>Fixed so the plugin can be used in Matrix builds. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-9904">JENKINS-9904</a>)</li>
+	<li>Added a timeout for joining on the tool process, this should fix problems with the handle.exe tool not finishing properly. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-4797">JENKINS-4797</a>)</li>
+	<li>Updated plugin so it will copy the output from the tool to the console of the build, so it is possible to see if the tool actually found any locked files.</li>
+	<li>Updated source code so the plugin works with a Java 5.0 JRE.</li>
+</ul>
+
+
+<h3 id="LockedFilesReportPlugin-1.3(5thJan2011)">1.3 (5th Jan 2011)</h3>
+
+<ul>
+	<li>Fixed a parsing problem when the workspace folder was locked. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-8323">JENKINS-8323</a>)</li>
+</ul>
+
+
+<h3 id="LockedFilesReportPlugin-1.1">1.1</h3>
+
+<ul>
+	<li>Fixed a NPE bug. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-4606">JENKINS-4606</a>)</li>
+</ul>
+
+
+<h3 id="LockedFilesReportPlugin-1.0">1.0</h3>
+
+<ul>
+	<li>Added support for <a href="http://technet.microsoft.com/en-us/sysinternals/bb896655.aspx" class="external-link" rel="nofollow">Handle</a> on windows.</li>
+	<li>Added support for <code>lsof</code> on *nix.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928464/39256067.png">summary.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928464/39256068.png">action.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:32</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

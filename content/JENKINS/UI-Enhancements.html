@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : UI Enhancements</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : UI Enhancements
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fredg)</span>, last modified by <span class='editor'> Unknown User (ioannis)</span> on Nov 26, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="UIEnhancements-Introduction">Introduction</h1>
+
+<p>This page should give an overview of ideas and suggestions how the Jenkins UI can be improved, streamlined or just kept as it is (if applicable).</p>
+
+<ul>
+	<li>There is an old wiki page showing some <a href="UI-Mockups.html">UI Mockups</a>.</li>
+</ul>
+
+
+<ul>
+	<li>Kohsuke added <a href="FOSDEM-UI-Enhancement-discussion-notes.html">FOSDEM UI Enhancement discussion notes</a></li>
+</ul>
+
+
+<ul>
+	<li>Here is another mailing list thread started by Tom Bevers:<a href="https://groups.google.com/forum/#!msg/jenkinsci-dev/YdVx8r51ESE/SHgnW1Vu97MJ" class="external-link" rel="nofollow">https://groups.google.com/forum/#!msg/jenkinsci-dev/YdVx8r51ESE/SHgnW1Vu97MJ|https://groups.google.com/forum/#!msg/jenkinsci-dev/YdVx8r51ESE/SHgnW1Vu97MJ</a></li>
+</ul>
+
+
+<ul>
+	<li>See <a href="Completed-UI-Improvements.html">Completed UI Improvements</a>.</li>
+</ul>
+
+
+<h1 id="UIEnhancements-Ideasfromthemailinglistthread">Ideas from the mailing list thread</h1>
+
+<p>I tried to digest the ideas coming from this mailinglist thread: <a href="https://groups.google.com/forum/?fromgroups#!topic/jenkinsci-users/mz0rJNTzqms" class="external-link" rel="nofollow">https://groups.google.com/forum/?fromgroups#!topic/jenkinsci-users/mz0rJNTzqms|https://groups.google.com/forum/?fromgroups#!topic/jenkinsci-users/mz0rJNTzqms</a><br/>
+As the thread gets pushed down quite fast, this might be a way to keep the ideas in one place. If there are ideas considered worth pursuing they should be turned into JIRA feature requests.</p>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020179046 {padding: 0px;}
+div.rbtoc1631020179046 ul {list-style: disc;margin-left: 0px;padding-left: 15px;}
+div.rbtoc1631020179046 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020179046'>
+<ul class='toc-indentation'>
+<li><a href='#UIEnhancements-Managingviews/tabs'>Managing views/tabs</a></li>
+<li><a href='#UIEnhancements-Configurationpage'>Configuration page</a>
+<ul class='toc-indentation'>
+<li><a href='#UIEnhancements-Expanding/collapsingsections'>Expanding/collapsing sections</a></li>
+<li><a href='#UIEnhancements-Advancedsettingsbutton'>Advanced settings button</a></li>
+</ul>
+</li>
+<li><a href='#UIEnhancements-Navigation'>Navigation</a>
+<ul class='toc-indentation'>
+<li><a href='#UIEnhancements-UpdateManager(INPROGRESS)'>Update Manager (IN PROGRESS)</a></li>
+<li><a href='#UIEnhancements-KeyboardShortcuts(DONE)'>Keyboard Shortcuts (DONE)</a></li>
+</ul>
+</li>
+<li><a href='#UIEnhancements-Graphs'>Graphs</a></li>
+<li><a href='#UIEnhancements-Slaves'>Slaves</a></li>
+<li><a href='#UIEnhancements-Artifacts'>Artifacts</a></li>
+<li><a href='#UIEnhancements-Icons'>Icons</a></li>
+<li><a href='#UIEnhancements-Layout'>Layout</a></li>
+<li><a href='#UIEnhancements-Improvepageloadtimes'>Improve page load times</a></li>
+<li><a href='#UIEnhancements-Dynamicupdateofpagecontents'>Dynamic update of page contents</a></li>
+<li><a href='#UIEnhancements-Misc'>Misc</a>
+<ul class='toc-indentation'>
+<li><a href='#UIEnhancements-Revisitingcontextmenu'>Revisiting context menu</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">WORK IN PROGRESS</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>TODO about this page:</p>
+<ul>
+	<li><span style="text-decoration: line-through;">add missing comments</span></li>
+	<li><span style="text-decoration: line-through;">put the ideas into categories</span></li>
+	<li>add links to existing JIRA issues</li>
+</ul>
+</div></div>
+
+<h2 id="UIEnhancements-Managingviews/tabs">Managing views/tabs</h2>
+
+<ul>
+	<li>Add the ability to custom order job list tabs (currently it seems to be alphabetic) (Nathan Perrier)
+<blockquote><p>This is an extension point, so all we need is a plugin that offers more controls to the user. (Kohsuke Kawaguchi)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>The views-list on the top is also a source of clutter. My project has about 20 views - it makes the screen look terrible.<br/>
+Could we have an alternative method to access the views, for example from a heirarchical pop-down menu? That would make things a great deal better. (Salim Fadhley)
+<blockquote><p>Have you tried out the <a href="DropDown-ViewsTabBar-Plugin.html">DropDown ViewsTabBar Plugin</a> yet? It replaces the view tabs with a drop down menu. (Fred G)</p></blockquote>
+<blockquote><p>Many people want to see tabs take less space. Someone already suggested installing the <a href="https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/JENKINS/DropDown+ViewsTabBar+Plugin</a><br/>
+It works. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/qDD5HWNpb-gJ" class="external-link" rel="nofollow">Sami</a>)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>View tabs – having a lot makes them less useful (moving to folders instead has helped here – but removed the dashboard views L) (teilo)</li>
+</ul>
+
+
+<ul>
+	<li>Views have &quot;Filter Built Queue&quot; and &quot;Filter Build Executors&quot;, but<br/>
+&quot;Filter Build Executors&quot; shows me executors that <em>could</em> run jobs in<br/>
+my view. Instead, I'd like to filter them to only show executors that<br/>
+<em>are</em> running jobs in my view. (pgweiss)</li>
+</ul>
+
+
+<ul>
+	<li>A better way to manage views would be helpful.<br/>
+some thing I can't seem to find:<br/>
+1. a way to hide/delete a view<br/>
+2. a way to add an existing build to a populated view (an empty view has links to add projects) (Al)
+<blockquote>
+<p>1) oh, yes: I have simple issue with them: ordering.<br/>
+The view tabs seems ordered alphabetically.. So to get a specific order (of importance, for example), a workaround is to add numbers as prefixes in the names.. a bit clumsy.<br/>
+Could we support manually ordering as well?<br/>
+2) also about views: I have several list/sectioned views with same column layout.. however this is a bit tedious to set up and to keep consistent.<br/>
+So, it would be great to define the tables columns once (eg. one with build button, preference button, etc) , then refer to that definition in all the views.<br/>
+(Gergo)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>Views<br/>
+Could this be more customizable for default behaviour. I don't think<br/>
+many of my users set personal views and I would like more control over<br/>
+what the default views are. Change the order of the views - seems<br/>
+alphabetical, possibility to remove &quot;All&quot;, permissions for particular<br/>
+views would be nice too. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/dUZfkPolZfkJ" class="external-link" rel="nofollow">Tony P.</a>)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Configurationpage">Configuration page</h2>
+
+<ul>
+	<li>Make the page robust against performance issue and broken plugin. Tolerate an error in a section.</li>
+	<li>splitting config to multiple tabs, using more AJAX to update data in the page without reload (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/B8_1NRioI5oJ" class="external-link" rel="nofollow">domi</a>)
+<blockquote><p>+1<br/>
+and lazy loading, as jobs with a lot of config load very long time to show<br/>
+config page (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/8aSvZDdx5T0J" class="external-link" rel="nofollow">vjuranek</a>)</p></blockquote></li>
+	<li>Tabs are a good idea, but if we use it in jobs config, they must be used in every config pages. (Daniel PETISME)</li>
+	<li>I'm not a big fan of having tabs in the config page, since I'm always<br/>
+finding myself hitting &quot;Ctrl + f&quot; to find things on that page. With tabs,<br/>
+I'll have to visit each tab to execute my search... (grayaii)
+<blockquote><p>I am against tabs myself - please keep everything on one page. (vladsed)</p></blockquote>
+<blockquote><p>+1 (Ferenc Kovacs)</p></blockquote></li>
+	<li>[] As for overall UI, I'm probably unusual this way, but I really hate things<br/>
+that hide sections behind tabs or don't expose options until you push<br/>
+the right button. Would much prefer a way to see every option in one<br/>
+big page so I can use the browser's search feature instead of having<br/>
+to google for instructions on which tab to open or which button to<br/>
+click to get a screen with the option I want to change. Color coding<br/>
+active/non active sections would be nice, though. And when I see a<br/>
+bunch of stuff at once, then I want a way to enter a regexp to make<br/>
+changes across everything instead of having to move to every form<br/>
+field and repeat it - this might be particularly useful after copying<br/>
+an existing job to a new one. (LesMikesell)</li>
+	<li>Splitting long configuration pages into separate pages or tabs would prevent a lot of scrolling to get to the item you want to configure.<br/>
+It also may result in quicker page loads. It seems faster to me to be able to click a tab rather than having to scroll for a few pages to find what you want. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/sCAqpDbNBlgJ" class="external-link" rel="nofollow">Brian J</a>)</li>
+	<li>It seems there are differing opinions on the most efficient navigation. Perhaps we can address both with enabling a couple different view styles.<br/>
+So far it looks like I'm seeing &quot;more tabs, expand everything&quot; and &quot;no tabs, more collapsing&quot;. We won't please everyone, but perhaps a small number of styles would take care of most. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/sCAqpDbNBlgJ" class="external-link" rel="nofollow">Brian J</a>)</li>
+</ul>
+
+
+<ul>
+	<li>the handle in the config page that lets you reorder steps is apparently very hard to find (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/B8_1NRioI5oJ" class="external-link" rel="nofollow">domi</a>)</li>
+	<li>I find the &quot;delete&quot; button to be confusing where it belongs to, for certain build steps (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/B8_1NRioI5oJ" class="external-link" rel="nofollow">domi</a>)</li>
+</ul>
+
+
+<ul>
+	<li>When you have a lot of plugins, the $JENKINS/configure page is really big and the button save is far away at the bottom of the page. Maybe this page should be redesigned. (Grégory Bougeard)</li>
+</ul>
+
+
+<ul>
+	<li>Please use fieldsets + borders for separating the configuration blocks a little bit more. (Ferenc Kovacs)</li>
+</ul>
+
+
+<ul>
+	<li>On the main configuration page settings should be grouped together and put in better order (eg. settings related to plugins should be in one group) (Fred G)</li>
+</ul>
+
+
+<ul>
+	<li>With many plugins installed, sometimes it is hard to tell which section on configure pages (both global and job) is introduced by which plugin (or by core).<br/>
+In some extreme situation, the only way to find out is to uninstall some plugins and see which configuration is gone.<br/>
+Maybe a tooltip over the configuration label with plugin name? (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/K0tRL4q6GKEJ" class="external-link" rel="nofollow">John Vacz</a>)
+<blockquote><p>+ 0.5 for the nifty idea.<br/>
+You'll get my other 0.5 if you can explain why this feature would be<br/>
+useful to you. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/0QbNnZt-SvEJ" class="external-link" rel="nofollow">Sami</a>)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>I would throw into the mix in IE8 the matrix based security – the groups and names of permissions are printed vertically which<br/>
+is much better than on chrome where they are printed horizontally taking up much more real estate forcing you to scroll left/right to see the full list. (teilo)</li>
+</ul>
+
+
+<h3 id="UIEnhancements-Expanding/collapsingsections">Expanding/collapsing sections</h3>
+
+<ul>
+	<li>About config editing: it would be great if parts of the big config page could be expandable/foldable.<br/>
+Eg. hide details under bigger blocks like Build Steps, environment.. similar to how webmail and google Reader works. You can always 'Expand all' to make Ctrl+F addicts happy<img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/><br/>
+Of course foldable options are already there but only under &quot;Advanced&quot; buttons of specific details.<br/>
+I'd assume the loading of the page can be much faster, only loading unfolded options parts. (Gergo)</li>
+	<li>It would be also really nice, if I would be able to collapse/expand the blocks (we already do that for some stuff, like advanced options). (Ferenc Kovacs)</li>
+	<li>What about a expand/collapse sections mechanisms ? The sections could be lazy loaded (Load a section if the user ask to expand it).<br/>
+The configurations are XML trees, why not use Tree views as UI ? (Daniel PETISME)
+<blockquote><p>I'm perfectly fine with expand/collapse (maybe even better than tabs), my main<br/>
+point was lazy loading as waitng for a page to load is quite annoying for me (vjuranek)</p></blockquote></li>
+	<li>+1 on expand/collapse sections in job config with lazy load and expand/collapse all options<br/>
+at the top for those that use ctrl-F to jump to what they need (Ann Campell)</li>
+</ul>
+
+
+<h3 id="UIEnhancements-Advancedsettingsbutton">Advanced settings button</h3>
+
+<ul>
+	<li>“Advanced” plugin button expanded in config page by default if master config param set (Nathan Perrier)</li>
+	<li>Settings in &quot;Advanced&quot;/collapsed areas are often difficult to find, and even if you know where the setting is, it takes several clicks and scrolling to get to it.<br/>
+In many cases having everything expanded would make it easier to find a setting. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/sCAqpDbNBlgJ" class="external-link" rel="nofollow">Brian J</a>)</li>
+	<li>I'd like to see &quot;Advanced&quot; sections expanded by default if they<br/>
+contain non-default configs. (Ann Campell)</li>
+	<li>I'd like to be able to re-collapse an Advanced section (Ann Campell)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Navigation">Navigation</h2>
+
+<ul>
+	<li>Add config link to core UI in job list (one less mouse click) (Nathan Perrier)
+<blockquote><p>A config link in the job list is already available if you use the &quot;configure project column&quot; of the <a href="Extra-Columns-Plugin.html">Extra Columns Plugin</a>. If this is what you want<br/>
+and more people find it useful maybe it can be pulled up to the core. (Fred G)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>Navigation between jobs could be improved. (If you select a job which is part of a view or a matrix configuration, links to the next and previous job of the same view/matrix would be nice.) (Fred G)</li>
+</ul>
+
+
+<ul>
+	<li>For parametrised builds, currently the build Button navigates away from where you pressed it, to set parameters. It would be better if that could be a simple non-disruptive popup, especially for the above use case. (Gergo)</li>
+</ul>
+
+
+<ul>
+	<li>I would also miss the option to jump quickly to various parts of the admin area, it would be really nice if we could have some quick navigation bar or something,<br/>
+so that I don't have to visit the Manage Jenkins page every time when I want to go to Manage plugins or Configure System. (Ferenc Kovacs)
+<blockquote><p>This &quot;I want to reduce the number of clicks&quot; seem to be a common theme.<br/>
+Maybe some kind of drop-down menu or something to provide quicker<br/>
+nagivation or something. (Kohsuke Kawaguchi)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>less clicks required would be great in general (Gergo)</li>
+</ul>
+
+
+<ul>
+	<li>there are some improvements which could make work much faster: less<br/>
+clicks to go to the pages I need often:
+	<ul>
+		<li>I am in the job page and see some failed builds in the list. To see<br/>
+the reason, I have to click on the build, and then on the show console<br/>
+message. I hate failed builds, not because they are failed, but<br/>
+because I have to click twice to see the console. There is a plugin to<br/>
+add the latest console to the views, but not to the job build list</li>
+		<li>Every time I make config changes to Jenkins, saving the config will<br/>
+lead me to the main page and not to the admin page. So when testing<br/>
+something which needs serveral config changes, I always need two<br/>
+clicks to get into the jenkins config again.</li>
+		<li>There are two jobs running, and I want to see both console outputs,<br/>
+but the jobs are in another view. Strg-Click on the little blue<br/>
+progress bar does not open the console in a new window, so I have to<br/>
+open both jobs with Strg-left-Click and then I can click on the<br/>
+progress bars. Two clicks to much <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/> (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/zfCXTmlL_dsJ" class="external-link" rel="nofollow">Florian R.</a>)
+<blockquote><p>Hello Florian,<br/>
+I submitted a patch a while ago, which will jump to the console<br/>
+immediately. Clicking on the status icon (blue, yellow, red) of a<br/>
+build will go directly to the console output (see<a href="https://github.com/jenkinsci/jenkins/pull/93" class="external-link" rel="nofollow">https://github.com/jenkinsci/jenkins/pull/93</a>).<br/>
+Regards Mirko (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/treTP_5tIiEJ" class="external-link" rel="nofollow">Mirko Friedenhagen</a>)</p></blockquote></li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>Consistent and nested bread crumbs. The Jenkins bread crumbs are<br/>
+all over the place. And especially for the Manage Jenkins part, they<br/>
+should be nested.<br/>
+For example:<a href="http://jenkins.bc.corp.adobe.com/manage" class="external-link" rel="nofollow">http://jenkins.bc.corp.adobe.com/manage</a> -&gt; &quot;Jenkins&quot; should be:<br/>
+&quot;Jenkins -&gt; Manage&quot;<a href="http://jenkins.bc.corp.adobe.com/pluginManager/available" class="external-link" rel="nofollow">http://jenkins.bc.corp.adobe.com/pluginManager/available</a> -&gt; &quot;Jenkins &gt;<br/>
+Plugin Manager&quot; should be: &quot;Jenkins &gt; Plugin Manager &gt; Available<br/>
+Plugins&quot; (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/QKnZRkQTBnUJ" class="external-link" rel="nofollow">Costin</a>)</li>
+</ul>
+
+
+<ul>
+	<li>+1 for fixing the admin page, it is an issue to have to got to manage<br/>
+jenkins to get to manage plugins, etc... (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/iIZxqaDb5z8J" class="external-link" rel="nofollow">Mark Donohoe</a>)</li>
+</ul>
+
+
+<ul>
+	<li>+1 for making it easier to delete a job using the shelved projects plugin.<br/>
+(<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/iIZxqaDb5z8J" class="external-link" rel="nofollow">Mark Donohoe</a>)</li>
+</ul>
+
+
+<ul>
+	<li>I would have to say though what would really be nice is if the search bar would allow us to search through all of the config files, especially for when we have to branch the pipeline that would be a really life saver. Find and Replace for config files. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/mOBb2aNCowUJ" class="external-link" rel="nofollow">Charles Murray</a>)</li>
+</ul>
+
+
+<ul>
+	<li>Copy Project<br/>
+When copying projects you have to put the name of the project you want<br/>
+to copy. Would be nice if this was a dropdown. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/dUZfkPolZfkJ" class="external-link" rel="nofollow">Tony P.</a>)
+<blockquote><p>Tony P,<br/>
+When you are copying a project, you have to type a letter (at least in Firefox) in the &quot;to be copied&quot; field to get a drop down list of all the existing projects with names beginning with that letter. I don't know how to see the whole list of existing projects. Maybe there is a way.<br/>
+I can think of several ways to make that easier when there is a large list of existing projects. Something to click that brings up a popup window (sort of the way calendars pop up). That window shows the whole list or lets you select a view and shows only those projects or, maybe, you type something and the list shows matching project names.<br/>
+It sure isn't a major problem though.(<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/LD0SdNpo484J" class="external-link" rel="nofollow">Lee Meador</a>)</p></blockquote></li>
+</ul>
+
+
+<h3 id="UIEnhancements-UpdateManager(INPROGRESS)">Update Manager (IN PROGRESS)</h3>
+
+<ul>
+	<li>The Available Plugins page has also become rather long, assuming most people have more plugins not installed than installed.<br/>
+Possible solutions would be a search mechanism, a second set of tabs by category, or links to jump to a certain category. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/sCAqpDbNBlgJ" class="external-link" rel="nofollow">Brian J</a>)</li>
+</ul>
+
+
+<p><span style="color: red;"><strong>=&gt;</strong></span> <span style="color: red;"><strong><a href="https://issues.jenkins-ci.org/browse/JENKINS-12868" class="external-link" rel="nofollow">JENKINS-12868 Improve navigation on the &quot;Available Plugins&quot; tab of the update center</a></strong></span></p>
+
+<h3 id="UIEnhancements-KeyboardShortcuts(DONE)">Keyboard Shortcuts (DONE)</h3>
+
+<ul>
+	<li>How about supporting keyboard shortcuts? Granted they're more for power users, but those tend to be the ones who would need to change/save configs too frequently.<br/>
+Eg. 'c' to configure current job, '&lt;Tab&gt;&lt;Enter&gt; - save job, Tab or 'p'/'n' : prev/next configuration group*.<br/>
+(inspired by <a href="http://support.google.com/mail/bin/answer.py?hl=en&amp;answer=6594" class="external-link" rel="nofollow">http://support.google.com/mail/bin/answer.py?hl=en&amp;answer=6594</a> ) (Gergo)</li>
+</ul>
+
+
+<ul>
+	<li>2) More keyboard shortcuts for faster navigation: E.g. I'd love a key<br/>
+to take me to the Jenkins search box at the top. The search box should<br/>
+allow fuzzy matching for job names. It should search for job<br/>
+descriptions too. It would be great it if allowed me to jump directly<br/>
+to a certain build of a job too.<br/>
+In other words: I want to see more without scrolling and I want to<br/>
+navigate without reaching for the mouse. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/qDD5HWNpb-gJ" class="external-link" rel="nofollow">Sami</a>)</li>
+</ul>
+
+
+<p><span style="color: red;"><strong>=&gt; Some of the suggestions have been implemented in</strong></span> <span style="color: red;"><strong><a href="https://wiki.jenkins-ci.org/display/JENKINS/Keyboard+Shortcuts+Plugin" class="external-link" rel="nofollow">Keyboard Shortcuts Plugin</a></strong></span><span style="color: red;"><strong>!</strong></span></p>
+
+<h2 id="UIEnhancements-Graphs">Graphs</h2>
+
+<ul>
+	<li>How about providing some standard widgets for graphs etc. That way they are consistent between the different plugins that track numbers over time. (Nick)</li>
+	<li>Graphs – IMAPs don’t work in IE8 but do in chrome (<a href="https://issues.jenkins-ci.org/browse/JENKINS-6879" class="external-link" rel="nofollow">JENKINS-6879</a>). (teilo)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Slaves">Slaves</h2>
+
+<ul>
+	<li>The slave-list on the left gets cluttered with mostly irrelevant information. I'd like to see online nodes at the top, offline nodes at the bottom.<br/>
+I'd like an option to disable the display of non-active executors to save space. (Salim Fadhley)</li>
+</ul>
+
+
+<ul>
+	<li>“build now here” option (for testing new slaves). (Terry)</li>
+	<li>Slave info page – have a “your slave.jar is not up to date” message. And probably in the connection string “connected via XXX, with version YYY, on arch (x32|x64).” (Terry)</li>
+	<li>“run elsewhere” option/button for queued builds. (Terry)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Artifacts">Artifacts</h2>
+
+<ul>
+	<li>Artifacts<br/>
+I would like to have more control over this. We generally spit out a<br/>
+handful of artifacts and it would be nice if they were able to be on<br/>
+the job screen. The names of the artifacts change for any given build<br/>
+and I always end in a situation where you have to drill down a little<br/>
+bit to get to them (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/dUZfkPolZfkJ" class="external-link" rel="nofollow">Tony P.</a>)</li>
+	<li>Also when displaying artificats it seems if there is only a small<br/>
+number the widget or whatever it is, works and you can just get to the<br/>
+artifact by clicking on &quot;+&quot; - great. If the number of artifacts is too<br/>
+big this completely disappears and you have to drill down several<br/>
+pages. This cutover is not for thousands of files but what seems to be<br/>
+a relatively small number. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/dUZfkPolZfkJ" class="external-link" rel="nofollow">Tony P.</a>)</li>
+	<li>We should be able to control the visibility of artifacts with permissions, for example: have anonymous read of the job but require login before you can see and download the artifacts. (Liam Bennett)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Icons">Icons</h2>
+
+<ul>
+	<li>Unique Icons for different actions. (Right now the same icons get reused in core and also in plugins for different actions, eg. Build History, Script Console, Changes all share the same icon) (Fred G)
+<blockquote><p>This is because we draw from the Tango icon set and hence the choice is<br/>
+limited. I still think it's better than us pulling icons that feel<br/>
+different from all over the place.<br/>
+But if we have someone interested in writing icons in the same theme,<br/>
+that's entirely different story... (Kohsuke Kawaguchi)</p></blockquote>
+<blockquote><p>Could look at the famfam silk icon set, its very nice and has a very large set of icons. Not sure on the available format though.(slide)</p></blockquote>
+<blockquote><p>The license looks right, but the icons appear to only be in 16x16 format. (Jesse Farinacci)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>Add icons to the status balls. Advantages:
+	<ul>
+		<li>great help for color blind users</li>
+		<li>easier to notice for regular users too<br/>
+Suggestions: x (cross) for red, v (check mark) for green, !<br/>
+(exclamation) for yellow, - (dash) for disabled/aborted. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/QKnZRkQTBnUJ" class="external-link" rel="nofollow">Costin</a>)</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Layout">Layout</h2>
+
+<ul>
+	<li>make fonts bigger and use less borders (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/B8_1NRioI5oJ" class="external-link" rel="nofollow">domi</a>)</li>
+	<li>background color changes in different regions to group things together (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/B8_1NRioI5oJ" class="external-link" rel="nofollow">domi</a>)</li>
+</ul>
+
+
+<ul>
+	<li>Whatever change happens, it would be nice to have the option to configure<br/>
+it ourselves. Some sort of UI that allows users to change colors, fonts,<br/>
+maybe even layouts, maybe even icons, etc.etc. would be nice. (grayaii)</li>
+	<li>Currently, the webpage does a good job at maximizing its real-estate.<br/>
+Meaning that banners and graphics don't take up too much space. But, when<br/>
+the amount of views/jobs/etc grows, jenkins has a hard time displaying that<br/>
+information. I remember that Dean Yu gave a presentation on how to handle<br/>
+displaying 100+ views, but it would nice if that sort of functionality is<br/>
+built into jenkins. (I don't remember if there is plugin for this or not) Or<br/>
+at least take this into consideration when re-doing the graphics. (grayaii)</li>
+	<li>This is minor, but I posted a question a while back about changing the<br/>
+icons of the view folder. Here is the<a href="http://jenkins.361315.n4.nabble.com/Different-Icons-for-Different-Views-td3649489.html" class="external-link" rel="nofollow">http://jenkins.361315.n4.nabble.com/Different-Icons-for-Different-Views-td3649489.html</a><br/>
+link (grayaii)</li>
+	<li>Overall, IMHO, the layout does its job quite nicely, so if changes are<br/>
+coming, hopefully they will not be too disruptive (The microsoft Ribbon<br/>
+comes to mind... I don't think I met anyone who liked that UI...) (grayaii)</li>
+</ul>
+
+
+<ul>
+	<li>1) Find ways to pack more information into the browser window. A<br/>
+serious Jenkins site with lots of jobs and slaves requires one to<br/>
+scroll too much. Make sidebars shrink when mouse is not over them<br/>
+(like Gmail's label list). Make executor list smaller. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/qDD5HWNpb-gJ" class="external-link" rel="nofollow">Sami</a>)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Improvepageloadtimes">Improve page load times</h2>
+
+<ul>
+	<li>Load performance (certainly in IE8 is not brilliant in a few pages) (teilo)</li>
+	<li>Improve page load times. Running tools such as Yslow against certain key pages may give some hints for how to improve in this area.<br/>
+Some preliminary tests suggest there might be some room for improvement in how js/CSS is handled. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/sCAqpDbNBlgJ" class="external-link" rel="nofollow">Brian J</a>)</li>
+	<li>The autorefresh thing is nice but it should be &quot;ajaxified&quot; to not refresh the whole page and just widgets which could be autorefreshed. (Grégory Bougeard)</li>
+</ul>
+
+
+<h2 id="UIEnhancements-Dynamicupdateofpagecontents">Dynamic update of page contents</h2>
+
+<ul>
+	<li>My biggest peve is stale pages. The job has been finished for 1 hour<br/>
+and the build page button is still blinking!<br/>
+I configure a job and the page is stale, I refresh, it's good, I save<br/>
+and get the dreaded can't find class error, do it again<br/>
+and hope it works. If you turn on auto refresh (I have mine set for 7<br/>
+seconds) you can't read reports as a refresh takes you to another page.<br/>
+This is the only application I use that has this problem. Is this a<br/>
+java thing? (I don't code in java). (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/iIZxqaDb5z8J" class="external-link" rel="nofollow">Mark Donohoe</a>)
+	<ul>
+		<li>﻿﻿+1 - This is pretty annoying indeed (Tomas Brambora)</li>
+	</ul>
+	</li>
+</ul>
+
+
+
+
+<h2 id="UIEnhancements-Misc">Misc</h2>
+
+<ul>
+	<li>The ability to define your own report page. For example, my users want<br/>
+colored indicators next to reports. My reports may report errors in the<br/>
+run, so those reports get 'red'. Reports that show a clean run get<br/>
+green, reports that have some other problem show yellow, modules with no<br/>
+tests show orange. I can to this now by creating a directory with my<br/>
+own index.html in it with the reports, but it would nice to have some<br/>
+sort of template system that could be used. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/iIZxqaDb5z8J" class="external-link" rel="nofollow">Mark Donohoe</a>)</li>
+</ul>
+
+
+<ul>
+	<li>It would be nice to indicate a particular view that was able to be viewed by everyone (without them logging in). It would be up to you to make sure that view didn't include any options you didn't want exposed to the world.<br/>
+This would let me set up particular status views that show projects of interest to non-advanced web users. I put a link on their phone or computer and they click to see how things are going.<br/>
+Notice that it fools with the security model that says the project itself decides who can see anything about it. In this case, the view would do that. I haven't thought through the implications so just ignore me quietly if it introduces a security hole that isn't fixable. What I don't want is to make these folks log in but I don't want to open all the project info the the world at large. The view can limit what is seen about all the projects in that view.<br/>
+(<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/bbICzHJFY8cJ" class="external-link" rel="nofollow">Lee Meador</a>)</li>
+</ul>
+
+
+<ul>
+	<li>I can set a description on a view-by-view basis, but sometimes I need<br/>
+to be able to set a system-wide message that would appear on every<br/>
+view (and project and build?) It would be really spiffy if the area<br/>
+reserved for this message did an auto refresh - on a configurable time<br/>
+limit - the same way the build queue does. (Ann Campell)<br/>
++1 - Jason Wooster</li>
+</ul>
+
+
+<ul>
+	<li>I'd love to be able to configure on a job-by-job basis what the<br/>
+&quot;build&quot; link said. We have many jobs that are pure &quot;deploy&quot; and this<br/>
+sometimes causes confusion. (Ann Campell)</li>
+</ul>
+
+
+<ul>
+	<li>Recently saw discussed in some other tool the ability to &quot;View<br/>
+as&quot; [], which I have craved in Jenkins but didn't know how<br/>
+to say it. As an admin I often have trouble understanding what other<br/>
+users can/can't see without hanging over their shoulders. It would be<br/>
+nice if I could verify their experience before I told them to &quot;go look/<br/>
+do...&quot; Ditto as a plugin writer w/r/t the view/execute perms I put on<br/>
+features. (<a href="https://groups.google.com/d/msg/jenkinsci-users/mz0rJNTzqms/2vLVvvtR56wJ" class="external-link" rel="nofollow">Ann Campell</a>)<br/>
++1 - Jason Wooster</li>
+</ul>
+
+
+<ul>
+	<li>Better plugin support for multi jobs. Can you summarise the multi job data better within a plugin? (Terry)</li>
+</ul>
+
+
+<ul>
+	<li>How about an easy way to convert a working single target job to a matrix build? (LesMikesell)</li>
+	<li>+1 - converting from one job-type to another could be quite useful. Single-&gt;Matrix, Maven-&gt;Freestyle, Single-&gt;(template,build-flow etc)</li>
+</ul>
+
+
+<ul>
+	<li>I think depending on who you ask you will get conflicting reports of what works/doesn’t – I haven’t herad anybody at work complain about the UI in Jenkins.<br/>
+(apart from where its’s broken or displays badly in IE – plugin descriptions I’m looking at you!) (teilo)</li>
+</ul>
+
+
+<ul>
+	<li>Ability to have common options for all jobs (like columns, timestamping, ...) (Grégory Bougeard)</li>
+</ul>
+
+
+<ul>
+	<li>I'm not aware of which web technology is used for Jenkins GUI but today great things can be done with tools like GWT or Primefaces (JSF2) or jQuery to have a really nice UI.<br/>
+I would have a look on it <img class="emoticon emoticon-laugh" src="images/icons/emoticons/biggrin.svg" data-emoticon-name="laugh" alt="(big grin)"/> (Grégory Bougeard)
+<blockquote><p>From my understanding, the idea here was to get UX designer to help improve look and feel, usability and such things, not to fully redesign the UI framework <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/><br/>
+As a side note, GWT can't be used on Jenkins as it requires all UI code to be available at compile time, so can't handle plugins to contribute UI. (nicolas de loof)</p></blockquote></li>
+</ul>
+
+
+<ul>
+	<li>Complete the Twitter bootstrap integration that was started. What are the current remaining issues? Compatibiltiy implications?
+	<ul>
+		<li>Done: Integration with Bootstrap and jQuery. Red and black Jenkins theme.</li>
+		<li>Done: Some improvements. For instance, <a href="https://issues.jenkins-ci.org/browse/JENKINS-13289">collapsible advanced block</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-14035">responsive layout</a>.</li>
+		<li>Issue: Plugin compatibility. Some plugins have assumption on CSS rules. Importing Bootstrap changes many CSS rules. Especially PRE tags look ugly in some plugins.</li>
+		<li>Issue: Conflicts with master branch. hudson-behavior.js has been modularized in master branch and these changes cannot be merged.</li>
+	</ul>
+	</li>
+	<li>Allow more flexible placement of parameter description. In many cases it makes sense to have the description displayed above/before the parameter entry (Ioannis Moutsatsos)</li>
+	<li>Allow display of build forms uncluttered by the side-panel (hyperlinks/build history)</li>
+</ul>
+
+
+
+
+<h3 id="UIEnhancements-Revisitingcontextmenu">Revisiting context menu</h3>
+
+<ul>
+	<li>Many people told me that the automatic pop-up of the menu is annoying as it hides what they are trying to see. The suggestions for mitigation includes:
+	<ul>
+		<li>Allowing users to individually disable</li>
+		<li>Show a small arrow on the right upon hover, then click that arrow to open the menu.</li>
+	</ul>
+	</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

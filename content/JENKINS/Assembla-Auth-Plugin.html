@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Assembla Auth Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Assembla Auth Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (varsketiz)</span>, last modified by <span class='editor'> Unknown User (paveld)</span> on Aug 23, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="AssemblaAuthPlugin-PluginInformation">Plugin Information</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin ID </p></th>
+<td class="confluenceTd"><p> assembla-auth </p></td>
+<th class="confluenceTh"><p> Changes </p></th>
+<td class="confluenceTd"><p> <a href="https://app.assembla.com/spaces/assembla-oss/git/compare/assembla-oss.jenkins-auth:assembla-auth-1.11...assembla-oss.jenkins-auth:assembla-auth-1.09" class="external-link" rel="nofollow">In Latest Release</a> <br class="atl-forced-newline"/>
+<a href="https://app.assembla.com/spaces/assembla-oss/git/compare/assembla-oss.jenkins-auth:master...assembla-oss.jenkins-auth:assembla-auth-1.11" class="external-link" rel="nofollow">Since Latest Release</a> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> Latest Release  <br class="atl-forced-newline"/>
+Latest Release Date  <br class="atl-forced-newline"/>
+Required Core  <br class="atl-forced-newline"/>
+Dependencies </p></th>
+<td class="confluenceTd"><p> 1.11    <br class="atl-forced-newline"/>
+Aug 23, 2016    <br class="atl-forced-newline"/>
+1.622 </p></td>
+<th class="confluenceTh"><p> Source Code  <br class="atl-forced-newline"/>
+Issue Tracking  <br class="atl-forced-newline"/>
+Maintainer(s) </p></th>
+<td class="confluenceTd"><p> <a href="https://www.assembla.com/code/assembla-oss/git/nodes" class="external-link" rel="nofollow">Assembla.git</a><br class="atl-forced-newline"/>
+<a href="https://www.assembla.com/spaces/assembla-oss/support/tickets" class="external-link" rel="nofollow">Open Issues</a><br class="atl-forced-newline"/>
+<a href="https://www.assembla.com" class="external-link" rel="nofollow">Assembla</a> </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+
+
+<h1 id="AssemblaAuthPlugin-AssemblaAuthPlugin">Assembla Auth Plugin</h1>
+
+
+<h2 id="AssemblaAuthPlugin-Overview"><span style="color: rgb(0,0,0);">Overview</span></h2>
+
+<p>This plugin enables OAuth (see <a href="http://oauth.net/" class="external-link" rel="nofollow">http://oauth.net</a>) authentication for <a href="https://www.assembla.com" class="external-link" rel="nofollow">Assembla</a> users to Jenkins instance using their Assembla credentials and delegate the authorization to an Assembla space permissions.</p>
+
+<h2 id="AssemblaAuthPlugin-AssemblaSecurityRealm(authentication):"><span style="color: rgb(0,0,0);">Assembla Security Realm (authentication):</span></h2>
+
+<p><span style="color: rgb(51,51,51);">Handles the authentication and acquisition of the Assembla OAuth token for the connecting user. Takes the client id (Application identifier) and client secret (Application secret) from the application registration here:</span><a href="https://www.assembla.com/user/edit/manage_clients" class="external-link" rel="nofollow">https://www.assembla.com/user/edit/manage_clients</a></p>
+
+
+
+<p><span style="color: rgb(51,51,51);">The entry should look like this:</span>Assembla API uri: <a href="https://api.assembla.com" class="external-link" rel="nofollow">https://api.assembla.com</a><br/>
+Main url: <a href="http://127.0.0.1:8080" class="external-link" rel="nofollow">http://127.0.0.1:8080</a><br/>
+Callback url: <a href="http://127.0.0.1:8080/securityRealm/finishLogin" class="external-link" rel="nofollow">http://127.0.0.1:8080/securityRealm/finishLogin</a><br/>
+Space url name:     assembla_space_name<br/>
+<span style="color: rgb(51,51,51);">Assembla API uri: by default is </span><a href="https://api.assembla.com/" class="external-link" rel="nofollow">https://api.assembla.com</a><span style="color: rgb(51,51,51);">. Do not change if you are not running a private install of Assembla.</span></p>
+
+<p><span style="color: rgb(51,51,51);">Main url and Callback url: use the url of your jenkins instance instead of </span><a href="http://127.0.0.1:8080/" class="external-link" rel="nofollow">http://127.0.0.1:8080</a></p>
+
+
+
+<p><span style="color: rgb(51,51,51);">Space url name: has to be set for authorization purposes, replace assembla_space_name with your space's url name (</span><a href="http://www.assembla.com/spaces/" class="external-link" rel="nofollow">www.assembla.com/spaces/</a><span style="color: rgb(51,51,51);">)</span></p>
+
+<h2 id="AssemblaAuthPlugin-AssemblaAuthorizationStrategy(authorization):"><span style="color: rgb(0,0,0);">Assembla Authorization Strategy (authorization):</span></h2>
+
+<p><span style="color: rgb(51,51,51);">Jenkins user permissions are based on Assembla permission:</span></p>
+<ul>
+	<li>Assembla user with ALL permission for space has Jenkins ADMIN access.</li>
+	<li>Assembla user with EDIT permission for space has Jenkins EDIT access.</li>
+	<li>Assembla user with VIEW permission for space has Jenkins READ access.</li>
+	<li>Assembla user with NONE permission for space has NO Jenkins access.</li>
+</ul>
+
+
+<p><span style="color: rgb(51,51,51);">&quot;Admin usernames&quot; field accepts a list of comma separated usernames. These users will:</span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);">have Jenkins ADMIN access</span></li>
+	<li><span style="color: rgb(51,51,51);">have external access (access to Jenkins API via basic http auth) using their username and API key defined in Jenkins People section: </span><a href="http://127.0.0.1:8080/user/configure" class="external-link" rel="nofollow">http://127.0.0.1:8080/user/configure</a></li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

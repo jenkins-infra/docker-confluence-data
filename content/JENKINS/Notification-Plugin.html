@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Notification Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Notification Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mark2b)</span>, last modified by <span class='editor'> Unknown User (evgenyg)</span> on Sep 16, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Notification <a href="https://plugins.jenkins.io/notification" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>This plugin from <a href="http://www.tikalk.com" class="external-link" rel="nofollow">Tikal Knowledge</a> allows sending Job Status notifications in JSON and XML formats.<br/>
+</p>
+
+<p>Job Notifications are defined in job's configuration, in their own separate section <strong>&quot;Job Notifications&quot;</strong>:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/52297834/72974400.png" data-image-src="attachments/52297834/72974400.png" data-unresolved-comment-count="0" data-linked-resource-id="72974400" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="new-endpoints.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="52297834" data-linked-resource-container-version="37"></span></p>
+
+<p>Several notification endpoints can be defined. Each endpoint can be configured with:</p>
+
+<ul>
+	<li><strong>&quot;Format&quot;</strong> : notification payload format, JSON or XML.</li>
+	<li><strong>&quot;Protocol&quot;</strong>: protocol to use for sending notification messages, HTTP, TCP or UDP.</li>
+	<li><strong>&quot;Event&quot;</strong>: job events that trigger notifications: Job Started, Job Completed, Job Finalized or All Events (the default option). The difference between job being &quot;completed&quot; and &quot;finalized&quot; is as follows: when job is finalized all post-build activities, such as archiving artifacts, were executed as well. This is not the case with job being merely &quot;completed&quot; which usually involves only creation of job's artifacts without post-processing them. If you're unsure of which event to use, you can start with &quot;Job Finalized&quot;.</li>
+	<li><strong>&quot;URL&quot;</strong>: URL to send notifications to. It takes the form of <strong>&quot;</strong><code><strong><a href="http://host" class="external-link" rel="nofollow">http://host</a></strong></code><strong>&quot;</strong> for HTTP protocol, and <strong>&quot;</strong><code><strong>host:port</strong></code><strong>&quot;</strong> for TCP and UDP protocols.</li>
+	<li><strong>&quot;Timeout&quot;</strong>: Timeout in milliseconds for sending notification request, 30 seconds by default.</li>
+</ul>
+
+
+
+<p>Example of notification message (you can use <a href="http://requestb.in/" class="external-link" rel="nofollow"><strong>requestb.in</strong></a> and <a href="http://jsonlint.com/" class="external-link" rel="nofollow"><strong>jsonlint.com</strong></a> services to aggregate HTTP requests and validate JSON payload):</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+    &quot;name&quot;: &quot;asgard&quot;,
+    &quot;url&quot;: &quot;job/asgard/&quot;,
+    &quot;build&quot;: {
+        &quot;full_url&quot;: &quot;http://localhost:8080/job/asgard/18/&quot;,
+        &quot;number&quot;: 18,
+        &quot;phase&quot;: &quot;COMPLETED&quot;,
+        &quot;status&quot;: &quot;SUCCESS&quot;,
+        &quot;url&quot;: &quot;job/asgard/18/&quot;,
+        &quot;scm&quot;: {
+            &quot;url&quot;: &quot;https://github.com/evgeny-goldin/asgard.git&quot;,
+            &quot;branch&quot;: &quot;origin/master&quot;,
+            &quot;commit&quot;: &quot;c6d86dc654b12425e706bcf951adfe5a8627a517&quot;
+        },
+        &quot;artifacts&quot;: {
+            &quot;asgard.war&quot;: {
+                &quot;archive&quot;: &quot;http://localhost:8080/job/asgard/18/artifact/asgard.war&quot;
+            },
+            &quot;asgard-standalone.jar&quot;: {
+                &quot;archive&quot;: &quot;http://localhost:8080/job/asgard/18/artifact/asgard-standalone.jar&quot;,
+                &quot;s3&quot;: &quot;https://s3-eu-west-1.amazonaws.com/evgenyg-bakery/asgard/asgard-standalone.jar&quot;
+            }
+        }
+    }
+}
+</pre>
+</div></div>
+
+<p>The payload submitted includes the following information:</p>
+
+<ul>
+	<li>Job's name and URL.</li>
+	<li>Build's number, full URL, phase, and status.</li>
+	<li>SCM URL, branch and commit (only for Git repositories).</li>
+	<li>Artifacts generated. They need to be archived by <strong>&quot;Archive the artifacts&quot;</strong> or published to S3 by <strong>&quot;Publish artifacts to S3 Bucket&quot;</strong> post-build actions. In addition, Jenkins needs to have its URL configured in &quot;Manage Jenkins&quot; =&gt; &quot;Configure System&quot; =&gt; &quot;Jenkins Location&quot; =&gt; &quot;Jenkins URL&quot;.</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/52297834/72974399.png" data-image-src="attachments/52297834/72974399.png" data-unresolved-comment-count="0" data-linked-resource-id="72974399" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="s3-publish.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="52297834" data-linked-resource-container-version="37"></span></p>
+
+<h3 id="NotificationPlugin-AWSS3Support">AWS S3 Support</h3>
+
+<p>If Jenkins <a href="https://wiki.jenkins-ci.org/display/JENKINS/S3+Plugin" class="external-link" rel="nofollow"><strong>S3 Plugin</strong></a> is installed and artifacts are uploaded to <a href="http://aws.amazon.com/s3/" class="external-link" rel="nofollow">AWS S3</a> by <strong>&quot;Publish artifacts to S3 Bucket&quot;</strong> post-build action - the plugin will send their downloadable locations as well.</p>
+
+<p>Note that you need to <a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/EditingBucketPermissions.html" class="external-link" rel="nofollow">edit S3 bucket's policy</a> (see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-2" class="external-link" rel="nofollow">example</a>) to make its artifacts directly &quot;downloadable&quot; by anonymous users. Here's one possible policy:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{
+    &quot;Version&quot;: &quot;2008-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Principal&quot;: {
+                &quot;AWS&quot;: &quot;*&quot;
+            },
+            &quot;Action&quot;: &quot;s3:GetObject&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:s3:::notification-plugin/*&quot;
+        }
+    ]
+}
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/52461575.png">hudson-notif-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/52461576.png">hudson-notif-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/72974398.png">new-endpoint.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/73400321.png">s3-publish.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/72974400.png">new-endpoints.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/74285067.png">s3-publish.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/52297834/72974399.png">s3-publish.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:35</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

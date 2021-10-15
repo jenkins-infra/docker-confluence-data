@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Mocking in Unit Tests</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Unit-Test.html">Unit Test</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Mocking in Unit Tests
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kutzi)</span>, last modified by <span class='editor'> Unknown User (kinow)</span> on Nov 30, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins provides excellent support for integration tests by starting up a complete instance of Jenkins if your test class extends <code>HudsonTestCase.</code> However, sometimes you might not want to do this - e.g. because you just want to test a single method or just because launching a HudsonTestCase takes a long time (several seconds).</p>
+
+<h3 id="MockinginUnitTests-MockingwithMockito">Mocking with Mockito</h3>
+
+<p>Unfortunately, it's not easy to test most Jenkins core classes in isolation as they implicitely depend on the <code>Jenkins#getInstance()</code> singleton, so creating/accessing instances of them often results in <code>NullPointerExceptions</code>. One technique which comes in handy in this case is stubbing / <em><a href="http://en.wikipedia.org/wiki/Mock_object" class="external-link" rel="nofollow">mocking</a></em><em>.</em> There are several good mocking frameworks for Java, but we propose <a href="http://github.com/mockito/mockito" class="external-link" rel="nofollow">Mockito</a> - it's already included in Jenkins' core dependencies. A basic example looks like this:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+AbstractBuild build = Mockito.mock(AbstractBuild.class);
+Mockito.when(build.getResult()).thenReturn(Result.FAILURE);
+</pre>
+</div></div>
+
+<p>This creates a new instance of AbstractBuild which returns FAILURE as build result. All methods which are not explicitly instrumented via one of the Mockito <em>when</em>, <em>doCallRealMethod</em>, <em>doThrow</em> (and so on) methods will do nothing (and return null if they have a return value). Note that there are several other options on how to <em>verify</em> that certain methods are called in your test case or to <em>spy</em> on real objects. You should read the <a href="http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html" class="external-link" rel="nofollow">Mockito documentation</a> to get familiar with these features.</p>
+
+<p>More complete examples can be found in existing Jenkins unit test. See for example: <a href="https://github.com/jenkinsci/maven-plugin/blob/master/src/test/java/hudson/maven/reporters/SurefireArchiverUnitTest.java" class="external-link" rel="nofollow">SurefireArchiverUnitTest</a></p>
+
+
+<h3 id="MockinginUnitTests-HandlemorecomplicatedcaseswithPowerMock">Handle more complicated cases with PowerMock</h3>
+
+<p>In a more complicated case this may still not be enough to test a Jenkins class in isolation. Possible reasons are static or final methods/classes (Mockito can't mock these) or access to Jenkins.getInstance() in constructors. In that case you can use <a href="http://github.com/jayway/powermock" class="external-link" rel="nofollow">PowerMock/PowerMockito</a> to work around these problems - i.e. removing the 'final' restriction of Mockito or suppressing constructors. See <a href="https://github.com/jenkinsci/maven-plugin/blob/master/src/test/java/hudson/maven/MavenModuleTest.java" class="external-link" rel="nofollow">MavenModuleTest</a> for an example how to use it.</p>
+
+<p>Here's an example using PowerMock to mock the <code>Jenkins#getInstance()</code> singleton from the <a href="GitHub-OAuth-Plugin.html">Github OAuth Plugin</a>.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+package org.jenkinsci.plugins;
+
+import jenkins.model.Jenkins;
+import junit.framework.TestCase;
+import org.jenkinsci.plugins.GithubSecurityRealm.DescriptorImpl;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Jenkins.class, GithubSecurityRealm.class, DescriptorImpl.class})
+public class GithubLogoutActionTest extends TestCase {
+
+    @Mock
+    private Jenkins jenkins;
+
+    @Mock
+    private GithubSecurityRealm securityRealm;
+
+    @Mock
+    private DescriptorImpl descriptor;
+
+    @Before
+    public void setUp() throws Exception {
+        PowerMockito.mockStatic(Jenkins.class);
+        PowerMockito.when(Jenkins.getInstance()).thenReturn(jenkins);
+        PowerMockito.when(jenkins.getSecurityRealm()).thenReturn(securityRealm);
+        PowerMockito.when(securityRealm.getDescriptor()).thenReturn(descriptor);
+        PowerMockito.when(descriptor.getDefaultGithubWebUri()).thenReturn(&quot;https://github.com&quot;);
+    }
+
+    private void mockGithubSecurityRealmWebUriFor(String host) {
+        PowerMockito.when(securityRealm.getGithubWebUri()).thenReturn(host);
+    }
+
+    @Test
+    public void testGetGitHubText_gh() {
+        mockGithubSecurityRealmWebUriFor(&quot;https://github.com&quot;);
+        GithubLogoutAction ghlogout = new GithubLogoutAction();
+        assertEquals(&quot;GitHub&quot;, ghlogout.getGitHubText());
+    }
+
+    @Test
+    public void testGetGitHubText_ghe() {
+        mockGithubSecurityRealmWebUriFor(&quot;https://ghe.example.com&quot;);
+        GithubLogoutAction ghlogout = new GithubLogoutAction();
+        assertEquals(&quot;GitHub Enterprise&quot;, ghlogout.getGitHubText());
+    }
+}
+</pre>
+</div></div>
+
+<p>In the above example, the <code>GithubLogoutAction</code> class is being tested.  It calls <code>Jenkins.getInstance().getSecurityRealm()</code> (which returns the mocked <code>securityRealm</code>). </p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>PowerMocking the static <code>Jenkins</code> class appears to negatively interfere with <code>org.jvnet.hudson.test.HudsonTestCase</code>.  When using <code>HudsonTestCase</code> in the same code above an unhelpful exception is thrown: <code>java.lang.ExceptionInInitializerError: null</code>.</p></div></div>
+
+<h3 id="MockinginUnitTests-Troubleshooting">Troubleshooting</h3>
+
+<h4 id="MockinginUnitTests-java.lang.ClassCastException:com.sun.crypto.provider.AESCiphercannotbecasttojavax.crypto.CipherSpi">java.lang.ClassCastException: com.sun.crypto.provider.AESCipher cannot be cast to javax.crypto.CipherSpi</h4>
+
+<p>In case you see CCE happening with similar messages, you may want to prevent the mocking library of changing things in the crypto land.</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Error injecting constructor, java.lang.ClassCastException: com.sun.crypto.provider.AESCipher cannot be cast to javax.crypto.CipherSpi
+  at hudson.security.csrf.DefaultCrumbIssuer$DescriptorImpl.&lt;init&gt;(DefaultCrumbIssuer.java:127)</pre>
+</div></div>
+
+<p>You can disable that in Powermockito with the following annotation: PowerMockIgnore. Here's one example.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+// snip
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({StaplerRequest.class})
+@PowerMockIgnore({&quot;javax.crypto.*&quot; })
+public class TestAbstractUnoChoiceParameter {
+//
+}
+// snip
+</pre>
+</div></div>
+
+<h4 id="MockinginUnitTests-PermGenerrorswithJava7whenusingPowerMockito">PermGen errors with Java 7 when using PowerMockito</h4>
+
+<p>When running your plug-in tests with Java 7 and PowerMockito, you may see PermGen errors. You can increase the PermGen size if you have access to the JVM settings, but sometimes you are not able to change that. In this case, sometimes this error happens when PowerMockito creates several objects in the PermGen, that are never collected. This can be avoided if you add the PrepareForTest annotation to your test.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+// snip
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({StaplerRequest.class})
+@PowerMockIgnore({&quot;javax.crypto.*&quot; })
+public class TestAbstractUnoChoiceParameter {
+//
+}
+// snip
+</pre>
+</div></div>
+
+<p>The class above was not annotated with the PrepareFortest, but had the PowerMockIgnore and RunWith, and there were PermGen errors. After adding it, PowerMockito takes care to carefully create instances as required for that class, keeping a pool and avoiding pollution in the PermGen.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

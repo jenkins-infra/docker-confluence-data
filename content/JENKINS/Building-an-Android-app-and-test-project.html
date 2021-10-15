@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Building an Android app and test project</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Building an Android app and test project
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gmdode)</span>, last modified on Dec 10, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020102712 {padding: 0px;}
+div.rbtoc1631020102712 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020102712 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020102712'>
+<ul class='toc-indentation'>
+<li><a href='#BuildinganAndroidappandtestproject-Introduction'>Introduction</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-Assumptions'>Assumptions</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-SetupAnt'>Set up Ant</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-Emma'>Emma</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-Checkstyle'>Checkstyle</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-FindBugs'>FindBugs</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-Jenkins'>Jenkins</a>
+<ul class='toc-indentation'>
+<li><a href='#BuildinganAndroidappandtestproject-Createandconfiguretheappproject'>Create and configure the app project</a></li>
+<li><a href='#BuildinganAndroidappandtestproject-Configurethetestproject'>Configure the test project</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="BuildinganAndroidappandtestproject-Introduction">Introduction</h1>
+
+<p>If you have an Android app project including a test project in Eclipse and you would like to use Jenkins for Continuous Integration and have Checkstyle, FindBugs and Emma coverage trends - this is how it should work.</p>
+
+<h1 id="BuildinganAndroidappandtestproject-Assumptions">Assumptions</h1>
+
+<p>You have an Android app including a test project in Eclipse. For this document, let's assume the app project is called &quot;android-app&quot; and the test project &quot;test&quot; is located inside &quot;android-app&quot;, and that your Android SDK is installed in &quot;/home/joe/android-sdk&quot;.<br/>
+This document also assumes that you are checking in your projects to a version control system like Subversion, and that you are checking them out in Jenkins from there.<br/>
+The procedure described here should work with SDK 14 or above (last tested with SDK 23).</p>
+
+<p>The directory tree should look like</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+/home/joe/workspace
+/home/joe/workspace/android-app
+/home/joe/workspace/android-app/test
+</pre>
+</div></div>
+<p>Assuming this directory structure then the commands below would be executed from <code>/home/joe/workspace</code></p>
+
+<h1 id="BuildinganAndroidappandtestproject-SetupAnt">Set up Ant</h1>
+
+<ul>
+	<li>Install Ant if you don't have it already</li>
+	<li>In your Eclipse workspace, run the following command to set up Ant for the app project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+android update project -p android-app
+</pre>
+</div></div></li>
+	<li>Then run this command to set up Ant for the test project. Note that the path given to -m must be the relative path to the project under test, seen from the test project, not the workspace:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+android update test-project -m ../ -p android-app/test
+</pre>
+</div></div></li>
+	<li>If you have any library projects that need to be set up for and use this
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+android update lib-project --target &quot;Google Inc.:Google APIs:13&quot; --path JakeWharton-ActionBarSherlock/plugins/maps
+</pre>
+</div></div></li>
+	<li>Refresh the projects in Eclipse</li>
+	<li>Note: The files &quot;local.properties&quot; and &quot;ant.properties&quot; contain local configuration, like the location where your Android SDK is installed. Since this location can be different on build machines, this file should <strong>not</strong> be checked in to version control. So it is recommended to add them to the &quot;Ignored Resources&quot; in Eclipse right away.
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The file &quot;ant.properties&quot; in the <strong>test</strong> project contains the relative path &quot;tested.project.dir=../&quot;, so it is okay to check it in to version control. If you don't want to check it in anyway, you can set the property in the Jenkins configuration of the test job under the &quot;Advanced&quot; settings of &quot;Invoke Ant&quot;.</p></div></div></li>
+	<li>The files &quot;project.properties&quot; are required and must be checked in to version control.</li>
+	<li>Test if you can build the app project in &quot;android-app&quot; with
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ant clean debug
+</pre>
+</div></div></li>
+	<li>Make sure that you have a (virtual) device (only one at a time!) running, and see if you can build the test project and run the tests in &quot;android-app/test&quot;:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ant clean emma debug install test
+</pre>
+</div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If you receive an error like &quot;Failed to generate emma coverage. Is emma jar on classpath?&quot;, try to build the test project with &quot;ant all clean emma debug install test&quot;, this might fix it.</p></div></div></li>
+	<li>This will take a bit longer. Eventually, you should find a &quot;coverage.html&quot;, &quot;coverage.xml&quot; and &quot;coverage.txt&quot; in the &quot;bin&quot; folder of your test project, containing the test coverage.
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If you can only find a &quot;coverage.html&quot; in your project (probably in a &quot;coverage&quot; folder), follow the steps in the &quot;Emma&quot; section below, otherwise skip it.</p></div></div></li>
+</ul>
+
+
+<h1 id="BuildinganAndroidappandtestproject-Emma">Emma</h1>
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This section can be skipped if the build creates a &quot;coverage.html&quot;, &quot;coverage.xml&quot; and &quot;coverage.txt&quot; in the &quot;bin&quot; folder of your test project, which should be the case with at least SDK 22 or later.</p></div></div>
+
+<p>If you want to build your projects in Jenkins and use the Emma plugin to see the test coverage and trend, you cannot use the &quot;coverage.html&quot; file as it currently is generated by the &quot;coverage&quot; Ant task and you have to change it to create a &quot;coverage.xml&quot; instead:</p>
+
+<ul>
+	<li>Go to your Android SDK installation, and open the file &quot;tools/ant/build.xml&quot;, copy the complete &quot;test&quot; target and paste it in the &quot;build.xml&quot; of the test project, <strong>before</strong> the import of build.xml, so before the comment starting with &quot;Import the actual build file&quot;. There is more information on how to customize targets in that comment.</li>
+	<li>Change the version-tag from &quot;1&quot; to &quot;custom&quot; to avoid the file being overwritten by future runs of &quot;android update project&quot;:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;!-- version-tag: custom --&gt;
+</pre>
+</div></div></li>
+	<li>Note: Eclipse might complain about your build file. Since I didn't know how to get rid of these errors and warnings, I just set &quot;Ignore all buildfile problems&quot; in the &quot;Ant Editor settings&quot; in Eclipse's preferences.</li>
+	<li>In the copied &quot;test&quot; target in your build.xml, make the following changes:</li>
+	<li>Change
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;html outfile=&quot;coverage.html&quot; /&gt;
+</pre>
+</div></div></li>
+	<li>to
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;html outfile=&quot;coverage.html&quot; /&gt;
+&lt;xml outfile=&quot;coverage/coverage.xml&quot; /&gt;
+</pre>
+</div></div></li>
+	<li>Adjust the last &quot;echo&quot; message accordingly (just for the sake of correctness):
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;echo&gt;Saving the report file in ${basedir}/coverage/coverage.html and ${basedir}/coverage/coverage.xml&lt;/echo&gt;
+</pre>
+</div></div></li>
+	<li>When you now run &quot;ant clean emma debug install test&quot; again, you should have a coverage.xml file, ready to be used by Jenkins!</li>
+	<li>Note: The Emma XML report does not provide &quot;highlighting individual source line coverage states&quot; as the HTML report does. So we make both reports. See the ANT section in the emma manual <a href="http://emma.sourceforge.net/userguide_single/userguide.html" class="external-link" rel="nofollow">http://emma.sourceforge.net/userguide_single/userguide.html</a></li>
+</ul>
+
+
+<h1 id="BuildinganAndroidappandtestproject-Checkstyle">Checkstyle</h1>
+
+<ul>
+	<li>If you don't already have Checkstyle installed, download the JAR from <a href="http://sourceforge.net/projects/checkstyle/" class="external-link" rel="nofollow">http://sourceforge.net/projects/checkstyle/</a>. Let's assume that you install it to &quot;/usr/lib/checkstyle&quot;.</li>
+	<li>Add the location of your Checkstyle installation to the &quot;ant.properties&quot; file in your app project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+checkstyle.jar=/usr/lib/checkstyle/checkstyle-all.jar
+</pre>
+</div></div></li>
+	<li>Place &quot;google-checks.xml&quot; or your own checkstyle configuration in the root of the app project</li>
+	<li>Add the following taskdef and target to the &quot;build.xml&quot; of your app project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;taskdef classpath=&quot;${checkstyle.jar}&quot; resource=&quot;checkstyletask.properties&quot; /&gt;
+&lt;target name=&quot;checkstyle&quot;&gt;
+	&lt;mkdir dir=&quot;reports&quot; /&gt;
+	&lt;checkstyle config=&quot;google_checks.xml&quot;&gt;
+		&lt;formatter type=&quot;xml&quot; tofile=&quot;reports/checkstyle-result.xml&quot;/&gt;
+		&lt;fileset dir=&quot;src&quot; includes=&quot;**/*.java&quot;/&gt;
+	&lt;/checkstyle&gt;
+&lt;target&gt;
+</pre>
+</div></div></li>
+	<li>Change the version-tag from &quot;1&quot; to &quot;custom&quot; to avoid the file being overwritten by future runs of &quot;android update project&quot;:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;!-- version-tag: custom --&gt;
+</pre>
+</div></div></li>
+	<li>To create a Checkstyle report, run your app project like this:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ant clean debug checkstyle
+</pre>
+</div></div>
+You should get a folder &quot;reports&quot; containing a &quot;checkstyle-result.xml&quot; file.</li>
+	<li>You might want to add the &quot;reports&quot; folder to the version control &quot;Ignored Resources&quot; as well.</li>
+</ul>
+
+
+
+<h1 id="BuildinganAndroidappandtestproject-FindBugs">FindBugs</h1>
+
+<ul>
+	<li>If you don't already have FindBugs installed, download the .zip or .tar.gz from <a href="http://findbugs.sourceforge.net/downloads.html" class="external-link" rel="nofollow">http://findbugs.sourceforge.net/downloads.html</a>. Let's assume that you install it to &quot;/usr/lib/findbugs&quot;.</li>
+	<li>Copy &quot;lib/findbugs-ant.jar&quot; from your FindBugs installation to the &quot;lib&quot; folder of your Ant installation.</li>
+	<li>Add the location of your FindBugs installation to the &quot;ant.properties&quot; file in your app project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+findbugs.home=/usr/lib/findbugs
+</pre>
+</div></div></li>
+	<li>If you want to exclude FindBugs warnings for the R.java generated source file, create a file &quot;findbugs-exclude.xml&quot; in your app project folder with the following content:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;FindBugsFilter&gt;
+	&lt;Match&gt;
+		&lt;Class name=&quot;~.*\.R\$.*&quot;/&gt;
+		&lt;Bug code=&quot;Nm&quot;/&gt;
+	&lt;/Match&gt;
+&lt;/FindBugsFilter&gt;
+</pre>
+</div></div></li>
+	<li>Add the following taskdef and target to the &quot;build.xml&quot; of your app project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;taskdef name=&quot;findbugs&quot; classname=&quot;edu.umd.cs.findbugs.anttask.FindBugsTask&quot;/&gt;
+&lt;target name=&quot;findbugs&quot;&gt;
+	&lt;mkdir dir=&quot;reports&quot; /&gt;
+	&lt;findbugs home=&quot;${findbugs.home}&quot; output=&quot;xml&quot; outputFile=&quot;reports/findbugs.xml&quot; excludeFilter=&quot;findbugs-exclude.xml&quot;&gt;
+		&lt;auxClasspath path=&quot;${project.target.android.jar}&quot;/&gt;
+		&lt;class location=&quot;${out.dir}&quot; /&gt;
+	&lt;/findbugs&gt;
+&lt;/target&gt;
+</pre>
+</div></div></li>
+	<li>Change the version-tag from &quot;1&quot; to &quot;custom&quot; to avoid the file being overwritten by future runs of &quot;android update project&quot;:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;!-- version-tag: custom --&gt;
+</pre>
+</div></div></li>
+	<li>To create a FindBugs report, run your app project like this:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ant clean debug findbugs
+</pre>
+</div></div>
+You should get a folder &quot;reports&quot; containing a &quot;findbugs.xml&quot; file.</li>
+</ul>
+
+
+<ul>
+	<li>Note, it may be necessary to add JARs your code depends on with additional &quot;auxClasspath&quot; elements, but I am not really sure.</li>
+	<li>If you don't want to use the &quot;findbugs-exclude.xml&quot; described above, you have to remove the &quot;excludeFilter&quot; attribute.</li>
+	<li>You might want to add the &quot;reports&quot; folder to the version control &quot;Ignored Resources&quot; as well.</li>
+</ul>
+
+
+<h1 id="BuildinganAndroidappandtestproject-Jenkins">Jenkins</h1>
+
+
+<h3 id="BuildinganAndroidappandtestproject-Createandconfiguretheappproject">Create and configure the app project</h3>
+
+<p>Create a &quot;Freestyle project&quot; for the app project.</p>
+
+<ul>
+	<li>Configure the &quot;Source Code Management&quot; to check out the app project</li>
+	<li>Add an &quot;Invoke Ant&quot; build step and set &quot;Targets&quot; to
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+clean debug checkstyle findbugs
+</pre>
+</div></div></li>
+	<li>Under &quot;Advanced&quot;, add the following properties and adjust the paths according to the Android SDK, Checkstyle and FindBugs installation location of the machine where Jenkins is running on:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sdk.dir=/home/joe/android-sdk
+checkstyle.jar=/usr/lib/checkstyle/checkstyle-all.jar
+findbugs.home=/usr/lib/findbugs
+</pre>
+</div></div></li>
+	<li>Under &quot;Post-build Actions&quot; check &quot;Publish Checkstyle analysis results&quot; and &quot;Publish FindBugs analysis results&quot;. It should not be necessary to make any settings there.</li>
+	<li>You should now be able to build the project, and the Checkstyle and FindBugs trend should be visible after at least 2 successful builds.</li>
+</ul>
+
+
+<h3 id="BuildinganAndroidappandtestproject-Configurethetestproject">Configure the test project</h3>
+
+<p>Create the test project using &quot;Copy existing Item&quot; by copying from the app project. Change the description</p>
+
+
+<ul>
+	<li>&quot;Source Code Management&quot; should stay the same - check out the app project</li>
+	<li>Add an &quot;Invoke Ant&quot; build step and set &quot;Targets&quot; to
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+clean emma debug install test
+</pre>
+</div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>For the SDK 14 use &quot;clean emma debug&quot; and a second task &quot;ant emma installt test&quot; <a href="http://code.google.com/p/android/issues/detail?id=20997" class="external-link" rel="nofollow">http://code.google.com/p/android/issues/detail?id=20997</a><br/>
+Also fix your build.xml as described here: <a href="http://code.google.com/p/android/issues/detail?id=20979&amp;can=1" class="external-link" rel="nofollow">http://code.google.com/p/android/issues/detail?id=20979&amp;can=1</a></p>
+</div></div></li>
+	<li>Under &quot;Advanced&quot;, specify the relative path to the &quot;Build File&quot; of the test project:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+test/build.xml
+</pre>
+</div></div></li>
+	<li>The &quot;Properties&quot; under &quot;Advanced&quot; should be the same as for the app project.
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If you did not check in the &quot;ant.properties&quot; of the test project including &quot;tested.project.dir=../&quot;, you can add this property here</p></div></div></li>
+	<li>Delete any &quot;Post-build Actions&quot; like Checkstyle and FindBugs that you don't want to run in the test build</li>
+	<li>Under &quot;Post-build Actions&quot;, check &quot;Record Emma coverage report&quot;. In &quot;Folders or files containing Emma XML reports&quot;, I filled in:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+**/bin/coverage*.xml
+</pre>
+</div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>If coverage files are placed in a &quot;coverage&quot; folder in your project, the path should be</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+**/coverage/coverage*.xml
+</pre>
+</div></div></div></div></li>
+	<li>If you want to view the HTML coverage reports from within the Jenkins job, add &quot;Publish HTML reports&quot; to &quot;Post-build Actions&quot; and set <code>test/bin</code> or <code>test/coverage</code> as &quot;HTML directory to archive&quot; and <code>coverage.html</code> as &quot;Index pages&quot;. The text set as &quot;Report title&quot; is used for the link in the job menu to the HTML reports.</li>
+	<li>You should now be able to build the project and the Emma coverage trend should be visible after at least 2 successful builds.</li>
+</ul>
+
+
+<p><strong>Happy building!</strong></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

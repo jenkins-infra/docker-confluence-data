@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Metadata plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Metadata plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (t_westling)</span>, last modified by <span class='editor'> Unknown User (rsandell)</span> on Dec 16, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Metadata <a href="https://plugins.jenkins.io/metadata" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-1135" class="external-link" rel="nofollow">Missing permission check allows unauthorized users to change Metadata Plugin configuration</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-1075" class="external-link" rel="nofollow">Cross-Site Scripting vulnerability</a></li>
+</ul>
+
+</div></div>
+
+<p>This plugin allows metadata to be added to projects, builds and slaves in Jenkins.<br/>
+Users can add metadata manually on a project or slave via the user interface. Metadata can also be added programmatically through a plugin.<br/>
+Currently, this can be done when a build starts or when a build ends. The Metadata can then be searched for.</p>
+
+<p>The main idea of the metadata plugin is to make searching for jobs and builds to behave more like a database, and act as an enabler for other plugins.<br/>
+Once all the information about a project is gathered in one place, plugins can be developed to use this information, as well as to provide information.<br/>
+The more plugins that provide information, the more usable data you can search for.<br/>
+As an example of using the information, look at the <a href="https://wiki.jenkins-ci.org/display/JENKINS/External+Resource+Dispatcher" class="external-link" rel="nofollow">External Resource Dispatcher plugin</a>.</p>
+
+<h3 id="Metadataplugin-Metadatadefinitionsandvalues">Metadata definitions and values</h3>
+
+<p>We differentiate between MetadataDefinitions and MetadataValues. The idea comes from the parameter setup in Jenkins.<br/>
+A MetadataValue is what's set on the configuration page of a project or slave and is also what is saved for a build.</p>
+
+<p>MetadataDefinitions are used by admins for making sure that certain metadata exist on all projects.<br/>
+A MetadataDefinition is set up through a special configuration page, configuring a name and default value for the definition.<br/>
+Once set, the MetadataDefinition will end up in all projects on the server, prompting the user to set a value for it when the project is configured.<br/>
+MetadataDefinitions are then converted to MetadataValues.</p>
+
+<h3 id="Metadataplugin-Metadatatypes">Metadata types</h3>
+
+<ul>
+	<li>StringMetadataDefinition/Value: Metadata containing string values.</li>
+	<li>NumberMetadataDefinition/Value: Metadata containing integer numbers.</li>
+	<li>DateMetadataDefinition/Value: Metadata containing date values with optional hour/minute/second values.</li>
+	<li>TreeNodeMetadataDefinition/Value: Metadata representing a tree of Metadata. Can contain any kind of Metadata as children, including other trees.</li>
+</ul>
+
+
+<p>These are the metadata types currently available. More will be added, and plugin developers could add their own types.</p>
+
+<h3 id="Metadataplugin-Metadataforbuildsandenvironmentvariables.">Metadata for builds and environment variables.</h3>
+
+<p>All MetadataValues for a project will automatically get copied to each build on that project. Metadata for a project or a build can be<br/>
+seen by clicking the &quot;Metadata&quot; link from the project or the build, respectively.</p>
+
+<p>If &quot;Expose to environment&quot; is checked for a MetadataValue, the value will also be made available as an environment variable like this:<br/>
+TreeNodeMetadataValue with name &quot;my&quot; with one child, a StringMetadataValue with name &quot;string&quot; and value &quot;value&quot;.<br/>
+This will be converted to an environment variable called MD_MY_STRING with value &quot;value&quot;.<br/>
+That is, MD (short for metadata) will be prepended, and each parent-child bond will be represented by an underscore.<br/>
+These environment variables can then be used by the build.</p>
+
+<h3 id="Metadataplugin-Search">Search</h3>
+
+<p>The search functionality is accessible through the &quot;Metadata search&quot; link.<br/>
+Currently, only searching for projects is supported, but builds and slaves will be added.<br/>
+Searching is done with the syntax metadatavaluename=value &amp;&amp; othervaluename=value2<br/>
+Equals, And and Or (||) are the operators supported so far.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65667718/65863708.png" data-image-src="attachments/65667718/65863708.png" data-unresolved-comment-count="0" data-linked-resource-id="65863708" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="metadata-search.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65667718" data-linked-resource-container-version="8"></span><br/>
+<em>Metadata search view and result.</em><br/>
+You can also add a metadata filter to a view where you can provide a search string that will filter out the jobs matching that search.</p>
+
+
+<h3 id="Metadataplugin-Extendability">Extendability</h3>
+
+<p>Plugin developers can add their own MetadataDefinitions and Values, by extending either AbstractMetadataDefinition/Value directly or<br/>
+one of the subclasses. If possible, try to use the existing classes as much as possible when providing data from your plugin as there is<br/>
+no value in lots of definitions/values that do almost the same thing but with different names.<br/>
+Other than writing your own MetadataDefinitions and Values, the main way of extending the Metadata plugin is through the contributor classes.</p>
+
+<h4 id="Metadataplugin-JobMetadataContributor">JobMetadataContributor</h4>
+
+<p>This ExtensionPoint can be used when you want to automatically add Metadata to a project whenever the project is saved. Extend JobMetadataContributor,<br/>
+add @Extension to your class, and implement the getMetaDataFor method. Return a list of MetadataValues which will then be added to the project.</p>
+
+<h4 id="Metadataplugin-BuildMetadataContributor">BuildMetadataContributor</h4>
+
+<p>This ExtensionPoint can be used when you want to automatically add Metadata to a build whenever it is finished. Extend BuildMetadataContributor,<br/>
+add @Extension to your class, and implement the getMetadataFor method. Return a list of MetadataValues which will then be added to the project.</p>
+
+<h3 id="Metadataplugin-Roadmapandfuture">Roadmap and future</h3>
+
+<p>Here is a list of features we would like to see in the Metadata plugin in the future:</p>
+<ul>
+	<li>Finalized definitions support. The definitions support isn't yet fully functional, the conversion to values needs to be done.</li>
+	<li>Search for builds and nodes based on specific metadata.</li>
+	<li>Search for projects with specific metadata in a build of that project.</li>
+	<li>More advanced search functionality</li>
+	<li>Search optimization</li>
+	<li>Support for plugins to add metadata to nodes</li>
+	<li>Advanced resource selection criteria</li>
+	<li>More definitions and values</li>
+	<li>Put the metadata into some kind of database</li>
+</ul>
+
+
+<h3 id="Metadataplugin-ChangeLog">Change Log</h3>
+
+
+<h4 id="Metadataplugin-Version1.1.0b(releasedDec16,2013)">Version 1.1.0b (released Dec 16, 2013)</h4>
+
+<ul>
+	<li>Some more work on &quot;definitions&quot;</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20113" class="external-link" rel="nofollow">JENKINS-20113</a> Unable to delete metadata job</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20950" class="external-link" rel="nofollow">JENKINS-20950</a> NPE during Discard Old Data</li>
+</ul>
+
+
+
+<h4 id="Metadataplugin-Version1.0b(releasedNov22,2012)">Version 1.0b (released Nov 22, 2012)</h4>
+
+<p>Initial beta release</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667718/65863711.png">metadata-search.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667718/65863708.png">metadata-search.PNG</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

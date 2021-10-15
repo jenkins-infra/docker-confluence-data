@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ClearCase UCM Baseline Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ClearCase UCM Baseline Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rseguy)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Allows using ClearCase UCM baselines as the input of builds: When using this SCM, users will be asked at build-time to select the baseline on which the job has to work.</p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ClearCase UCM Baseline <a href="https://plugins.jenkins.io/clearcase-ucm-baseline" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>To use this plugin, you need to install the <a href="ClearCase-Plugin.html">ClearCase Plugin</a> since it relies on it (more precisely, the global configuration data is shared between the two plugins):</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> </p></td>
+<th class="confluenceTh"><p> <a href="ClearCase-Plugin.html">ClearCase Plugin</a><br class="atl-forced-newline"/>
+1.0.x </p></th>
+<th class="confluenceTh"><p> <a href="ClearCase-Plugin.html">ClearCase Plugin</a><br class="atl-forced-newline"/>
+1.1.x </p></th>
+<th class="confluenceTh"><p> <a href="ClearCase-Plugin.html">ClearCase Plugin</a><br class="atl-forced-newline"/>
+1.2.x </p></th>
+<th class="confluenceTh"><p> <a href="ClearCase-Plugin.html">ClearCase Plugin</a><br class="atl-forced-newline"/>
+1.3.x </p></th>
+</tr>
+<tr>
+<th class="confluenceTh"><p> ClearCase UCM Baseline Plugin <br class="atl-forced-newline"/>
+1.0, 1.1, 1.2 </p></th>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> ClearCase UCM Baseline Plugin <br class="atl-forced-newline"/>
+1.3, 1.4, 1.5.x </p></th>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> ClearCase UCM Baseline Plugin <br class="atl-forced-newline"/>
+1.6 </p></th>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<th class="confluenceTh"><p> ClearCase UCM Baseline Plugin <br class="atl-forced-newline"/>
+1.7.x </p></th>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+</tr>
+</tbody></table></div>
+</div></div>
+
+<h1 id="ClearCaseUCMBaselinePlugin-Aboutthisplugin">About this plugin</h1>
+
+<p>This plugin adds a new <strong>ClearCase UCM baseline</strong> SCM mode to the projects: It's then possible for a build to start based on a ClearCase UCM baseline (composite or not) without playing with config specs or having to modify the job configuration. When using the <strong>ClearCase UCM baseline</strong> SCM mode, the user will be presented with the following screen when starting a new build:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/42468743/42631306.png" data-image-src="attachments/42468743/42631306.png" data-unresolved-comment-count="0" data-linked-resource-id="42631306" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clearcase-ucm-baseline-02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42468743" data-linked-resource-container-version="39"></span></p>
+
+<p>After having clicked on the <strong>Build</strong> button of this screen, a new view will be created to retrieve the whole content of the selected baseline and the job will be able to work on this data, as usually.</p>
+
+<h1 id="ClearCaseUCMBaselinePlugin-Ausecasebehindthisplugin">A use case behind this plugin</h1>
+
+<p>Let's say your development team is using Hudson as their continuous integration system while developing a new J2EE application. They have defined a new job in Hudson, which runs twice a day (at noon and at night) to frequently ensure everything works fine. This job may do the following:</p>
+<ol>
+	<li>It gathers the application source code using the <a href="ClearCase-Plugin.html">ClearCase Plugin</a>.</li>
+	<li>It builds the application from the source code using the <a href="RAD-Builder-Plugin.html">RAD Builder Plugin</a>.</li>
+	<li>It runs the unit tests (thank you JUnit).</li>
+	<li>It deploys the application on a production-like application server (for example using the <a href="WAS-Builder-Plugin.html">WAS Builder Plugin</a>), ensuring everything is deployed properly (e.g. JDBC resources are available, etc.).</li>
+	<li>It triggers the execution of non-regression testing.</li>
+	<li>At one moment or another in this build-flow (depending on your point on view), it creates a new ClearCase baseline.</li>
+</ol>
+
+
+<p>After some time, once the application has been extensively tested and when most of its functionalities are considered as ready-for-production, one of the baseline is promoted to the RELEASED level. It means your infrastructure team will gather this baseline and deploy on the production environment what has to be deployed.<br/>
+Hey, minute, we're talking about deployment, right? Something has already been defined in the previously described job to do that! It has run many many times, so it can also surely be used to perform the deployment on the production environment, no? This is when the ClearCase UCM Baseline Plugin comes in: It allows you to reuse what has already been defined in Hudson but to work on promoted baselines rather than working on the HEAD revision.</p>
+
+<h1 id="ClearCaseUCMBaselinePlugin-Userguide">User guide</h1>
+
+<p>There's not much to say here, refer to the inline help (the little question marks at the right of the jobs' configuration screen) to get detailed information:</p>
+<ul>
+	<li>Set the SCM to be <strong>ClearCase UCM baseline</strong>. You'll notice that it has no parameters (screenshot below).</li>
+	<li>If not already done, activate the <strong>This build is parameterized</strong> option.</li>
+	<li>Add one (and only one) <strong>ClearCase UCM baseline</strong> parameter and fill the various fields.</li>
+	<li>You're done!</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/42468743/42631305.png" data-image-src="attachments/42468743/42631305.png" data-unresolved-comment-count="0" data-linked-resource-id="42631305" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clearcase-ucm-baseline-01.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42468743" data-linked-resource-container-version="39"></span></p>
+
+<p>Now, when starting a new build, the user will be offered with a drop-down list allowing him to chose one of the baselines based on the job's settings:</p>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/42468743/42631306.png" data-image-src="attachments/42468743/42631306.png" data-unresolved-comment-count="0" data-linked-resource-id="42631306" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clearcase-ucm-baseline-02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42468743" data-linked-resource-container-version="39"></span></p>
+
+<p>Some questions and their answers regarding the configuration of this plugin:</p>
+<ul>
+	<li>What if I define the SCM to be <strong>ClearCase UCM baseline</strong> but without adding the required parameter?<br/>
+<em>The build will fail, explaining why.</em></li>
+	<li>What if I define the SCM to be <strong>ClearCase UCM baseline</strong> but adding more than one <strong>ClearCase UCM baseline</strong> parameter?<br/>
+<em>The build will fail explaining why.</em></li>
+	<li>What if I don't set the SCM to be <strong>ClearCase UCM baseline</strong> but adding some <strong>ClearCase UCM baseline</strong> parameter?<br/>
+<em>Here also, the build will fail explaining why.</em></li>
+	<li>What if I create a string parameter named <strong>ClearCase UCM baseline</strong> (using the <strong>ClearCase UCM baseline</strong> mode)?<br/>
+<em>The build will fail, explaining why.</em></li>
+</ul>
+
+
+<h1 id="ClearCaseUCMBaselinePlugin-Roadmap">Roadmap</h1>
+
+<h1 id="ClearCaseUCMBaselinePlugin-Knownlimitations">Known limitations</h1>
+
+<ul>
+	<li>The plugin will not work when using it for a job which is not tied to a specific node: It won't be able to get the baselines list before the build is actually assigned to a node.</li>
+</ul>
+
+
+<h1 id="ClearCaseUCMBaselinePlugin-Versionhistory">Version history</h1>
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.7.4(09/19/2011)">Version 1.7.4 (09/19/2011)</h2>
+
+<ul>
+	<li>Implemented <a href="https://issues.jenkins-ci.org/browse/JENKINS-9074">JENKINS-9074</a>: A warning message is now displayed if both the <strong>Exclude element CHECKEDOUT</strong> and <strong>Use snaphost view</strong> options are checked</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.7.3(02/20/2011)">Version 1.7.3 (02/20/2011)</h2>
+
+<ul>
+	<li>Implemented <a href="http://issues.hudson-ci.org/browse/HUDSON-8013" class="external-link" rel="nofollow">HUDSON-8013</a>:
+	<ul>
+		<li>Baselines are now displayed from the most recent one to the oldest one.</li>
+		<li>Added a new <strong>More recent than</strong> field which allows displaying only baselines more recent than a given duration.</li>
+	</ul>
+	</li>
+	<li>Implemented <a href="http://issues.hudson-ci.org/browse/HUDSON-8015" class="external-link" rel="nofollow">HUDSON-8015</a>: Baselines description are now displayed in builds log.</li>
+	<li>Fixed <a href="http://issues.jenkins-ci.org/browse/JENKINS-8695" class="external-link" rel="nofollow">JENKINS-8695</a>: Baselines spread across several PVOBs are now properly handled.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.7.2(01/21/2011)">Version 1.7.2 (01/21/2011)</h2>
+
+<ul>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-8168" class="external-link" rel="nofollow">HUDSON-8168</a>: The <code>cleartool</code> command was wrongly generated when adding the <code>-stg</code> option in the <strong>Additional mkview arguments</strong> field.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.7.1(10/01/2010)">Version 1.7.1 (10/01/2010)</h2>
+
+<ul>
+	<li>Fixed an issue which was preventing to use snapshot views.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.7(09/02/2010)">Version 1.7 (09/02/2010)</h2>
+
+<ul>
+	<li>Compatibility with the 1.3.x versions of the ClearCase plugin – Compatibility with 1.0.x, 1.1.x and 1.2.x has been dropped.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.6(06/23/2010)">Version 1.6 (06/23/2010)</h2>
+
+<ul>
+	<li>Upward compatibility with the 1.2.x versions of the ClearCase plugin (still supporting the 1.0.x and 1.1.x versions).</li>
+	<li>Added an option to specify additional <code>mkview</code> arguments (cf. <a href="http://issues.hudson-ci.org/browse/HUDSON-6409" class="external-link" rel="nofollow">HUDSON-6409</a>).</li>
+	<li>Added the possibility to use the <code>CLEARCASE_BASELINE</code> environment variable within the view name (cf. <a href="http://issues.hudson-ci.org/browse/HUDSON-6410" class="external-link" rel="nofollow">HUDSON-6410</a>).</li>
+	<li>Added a new option to exclude <code>element * CHECKEDOUT</code> from config specs (cf. <a href="http://issues.hudson-ci.org/browse/HUDSON-6411" class="external-link" rel="nofollow">HUDSON-6411</a>).</li>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-6398" class="external-link" rel="nofollow">HUDSON-6398</a>:
+	<ul>
+		<li>Rootless components are now no more taken into account.</li>
+		<li>Load rules are no more duplicated under certain conditions.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.5.1(04/02/2010)">Version 1.5.1 (04/02/2010)</h2>
+
+<ul>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-6152" class="external-link" rel="nofollow">HUDSON-6152</a>:
+	<ul>
+		<li>No config spec elements/load rules were generated for the selected baseline.</li>
+		<li>The config spec was not used.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.5(03/29/2010)">Version 1.5 (03/29/2010)</h2>
+
+<ul>
+	<li>Added a new <strong>Stream</strong> option to filter the displayed baselines (cf. <a href="http://issues.hudson-ci.org/browse/HUDSON-6088" class="external-link" rel="nofollow">HUDSON-6088</a>).</li>
+	<li>Added a new <strong>Use update</strong> option to avoid recreating the view each time a new build is triggered (cf. <a href="http://issues.hudson-ci.org/browse/HUDSON-6088" class="external-link" rel="nofollow">HUDSON-6088</a> too).</li>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-6057" class="external-link" rel="nofollow">HUDSON-6057</a>: The plugin will try to start the node it is tied to if it is offline.</li>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-6029" class="external-link" rel="nofollow">HUDSON-6029</a>: The plugin will behave properly in a mixed Linux/Windows environment (e.g. the master being Linux and slaves being either Linux or Windows).</li>
+	<li>Fixed <a href="http://issues.hudson-ci.org/browse/HUDSON-5877" class="external-link" rel="nofollow">HUDSON-5877</a>: Added a new error message to clearly show that the publishers (make baseline and make composite baseline) from the <a href="ClearCase-Plugin.html">ClearCase plugin</a> can't be used with the <strong>ClearCase UCM baseline</strong> SCM mode.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.4(03/02/2010)">Version 1.4 (03/02/2010)</h2>
+
+<ul>
+	<li>Added a new <strong>Use snapshot view</strong> option (activated per default).</li>
+	<li>The plugin now better handles '/' characters in front of PVOB names: If '/' is/was not specified, it will be automatically added.</li>
+	<li>The VOB parameter has been removed. If you get the following exception, you can safely ignore it:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">ATTENTION: Skipping a non-existent field vob
+com.thoughtworks.xstream.converters.reflection.NonExistentFieldException: No such field com.michelin.cio.hudson.plugins.clearcaseucmbaseline.ClearCaseUcmBaselineParameterValue.vob
+</pre>
+</div></div></li>
+	<li>The component root dir is now retrieved from the specified component; In earlier releases, the plugin assumed that the component root dir was identical to the name of component.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.3(02/24/2010)">Version 1.3 (02/24/2010)</h2>
+
+<ul>
+	<li>Upward compatibility with the 1.1.x versions of the ClearCase plugin (still supporting the 1.0.x versions).</li>
+	<li>Added a new <strong>Force rmview</strong> option: If the baseline selected for build #<em>n</em> is the same as for build #<em>n-1</em> (and if the corresponding view still exists), by default the view won't be created/loaded again; Set this option to true so that the view gets recreated anyway.</li>
+	<li>Fixed an issue which was displaying an incorrect view name in builds' history.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.2(02/08/2010)">Version 1.2 (02/08/2010)</h2>
+
+<ul>
+	<li>Added a new <strong>CLEARCASE_BASELINE</strong> environment variable.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.1(01/22/2010)">Version 1.1 (01/22/2010)</h2>
+
+<ul>
+	<li>Added a new <strong>Restrict folders to</strong> field which allows defining which folders have to be actually downloaded from the ClearCase UCM baseline.</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.0.1(01/11/2010)">Version 1.0.1 (01/11/2010)</h2>
+
+<ul>
+	<li>Fixed an issue which was preventing to display the list of the baselines when the job was running on a tied slave node</li>
+</ul>
+
+
+<h2 id="ClearCaseUCMBaselinePlugin-Version1.0(01/10/2010)">Version 1.0 (01/10/2010)</h2>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468743/42631305.png">clearcase-ucm-baseline-01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468743/42631306.png">clearcase-ucm-baseline-02.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

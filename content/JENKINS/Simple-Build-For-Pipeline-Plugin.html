@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Simple Build For Pipeline Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Simple Build For Pipeline Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (michaelneale)</span>, last modified on Feb 25, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Simple Build DSL for Pipeline <a href="https://plugins.jenkins.io/simple-build-for-pipeline" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<p>This is a work in progress and semantics may change.<br/>
+For users of Jenkins Pipeline.</p>
+
+<p>
+<p>This (preview release) plugin provides a Pipeline DSL extension that should be familiar to people used to things like travisci. It is declarative and takes care of common tasks. It works well with pipeline-as-code and docker.</p></p>
+
+<p>Some examples:</p>
+
+<p>This is a simple Jenkinsfile. Put it in your repo as a Jenkinsfile and create a new multibranch project pointing to it:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>simpleBuild {
+  env = [
+    FOO : 42,
+    BAR : &quot;YASS&quot;
+  ]
+
+  before_script = &#39;echo before&#39;
+  script = &#39;echo after $FOO&#39;
+  after_script = &#39;ls -lah&#39;
+
+  notifications = [
+    email : &quot;mneale@cloudbees.com&quot;
+  ]
+}
+</pre>
+</div></div>
+
+<p>This sets 2 environment variables (env), and runs those scripts. Should it fail, it will notify those mentioned in the email (can be a list) of the failure and some details. This should be almost intuitive.</p>
+
+<p>Some more features:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>simpleBuild {
+  machine = &quot;hi-speed&quot;
+  script = &#39;make install&#39;
+}
+</pre>
+</div></div>
+
+<p>This will look for a &quot;label&quot; and run the build on a node that has that label. This is like saying &quot;restrict where this can run&quot; on freestyle.</p>
+
+<p>Wait, there's more:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>simpleBuild {
+  docker_image = &quot;java:1.9&quot;
+  script = &#39;make install&#39;
+}
+</pre>
+</div></div>
+
+<p>This will run the build inside a docker container that matches the image specified (using docker-pipeline plugin).</p>
+
+<p>If you don't want to use Jenkinsfile in a repo, you can do this:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>simpleBuild {
+  git_repo = &quot;git@...&quot;
+  script = &#39;make install&#39;
+}
+</pre>
+</div></div>
+
+<p>It will then be like a normal pipeline Job, and clone the repo specified.</p>
+
+
+<p>Remember this is a pipeline DSL, so it IS PIPELINE SCRIPT! So you can use other pipeline steps and constructs alongside it (some things make more sense than others...) but the idea of simpleBuild is to make a simple build... uh... simple. You can &quot;graduate&quot; to richer pipeline scripts if and when you need them.</p>
+
+
+<p>See the <a href="https://github.com/jenkinsci/simple-build-for-pipeline-plugin" class="external-link" rel="nofollow">README</a> for more details.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:46</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

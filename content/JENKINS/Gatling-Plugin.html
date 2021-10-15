@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Gatling Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Gatling Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (pdalpra)</span>, last modified by <span class='editor'> Unknown User (ccousseran)</span> on Aug 03, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Gatling <a href="https://plugins.jenkins.io/gatling" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-04-07/#SECURITY-1633" class="external-link" rel="nofollow">XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+This plugin integrates <a href="http://gatling.io" class="external-link" rel="nofollow">Gatling</a>, an Open Source stress tool, with Jenkins.<p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021073994 {padding: 0px;}
+div.rbtoc1631021073994 ul {list-style: disc;margin-left: 0px;padding-left: 8px;}
+div.rbtoc1631021073994 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021073994'>
+<ul class='toc-indentation'>
+<li><a href='#GatlingPlugin-Features'>Features</a></li>
+<li><a href='#GatlingPlugin-Changelog'>Changelog</a></li>
+<li><a href='#GatlingPlugin-Configuration'>Configuration</a></li>
+<li><a href='#GatlingPlugin-Gatlingpluginusage'>Gatling plugin usage</a></li>
+</ul>
+</div></p><h2 id="GatlingPlugin-Features">Features</h2><p>This plugin allows you to : </p><ul><li>Keep track of a Gatling simulation, providing performance trends across builds</li><li>Publish detailed reports for each build</li></ul><h2 id="GatlingPlugin-Changelog">Changelog</h2><p><img class="emoticon emoticon-warning" src="images/icons/emoticons/warning.svg" data-emoticon-name="warning" alt="(warning)"/>  <strong>If you're coming from 1.0.0, make sure &quot;Enable simulation tracking&quot; checkbox is checked in your build configuration and if not, check it. </strong></p><p><strong>This is an issue with configuration changes between 1.0.0 and 1.0.1 and doesn't affect fresh 1.0.1 installations.</strong></p><ul><li>1.2.5<ul><li>Fix Trends Links</li></ul></li><li>1.2.4<ul><li>Fix links to run with multiple simulations (contributed by pscosta)</li></ul></li><li>1.2.3<ul><li>Fix Gatling Publisher sometimes trying to serialize non-whitelisted classes to the disk(contributed by oleg-nenashev)</li></ul></li><li>1.2.2<ul><li>Fix 50th percentile trend being displayed instead of the 95th percentile trend</li><li>Fix trends click, see JENKINS-42622</li><li>Render reports without Content-Security-Policy (contributed by <span style="color: rgb(36,41,46);">David Griffiths</span>)</li></ul></li><li>1.2.1<ul><li>Fix Gatling Reports Iframe height</li><li>Fix issues with reports display</li></ul></li></ul><ul><li>1.2.0<ul><li>Add compatibility with Jenkins Pipeline</li></ul></li><li>1.1.1:<ul><li>Fix compatibility with Jenkins 1.597+ (contributed by Piotr Wielgolaski)</li></ul></li></ul><ul><li>1.1.0 :<ul><li>Support for Gatling 2.1</li></ul></li><li>1.0.3 : <ul><li>Support multiple reports per build (contributed by Chris Price)</li></ul></li></ul><ul><li>1.0.2 :<ul><li>Allow to run multiples simulations in one build, as long as there is only one report created per build</li><li>Removed the need to clean projects on every build</li></ul></li><li>1.0.1 : <ul><li>Ouput directory prefix doesn't need to be specified anymore</li><li>Better logging in case of trouble finding a report</li></ul></li><li>1.0.0 : <ul><li>Initial release</li></ul></li></ul><h2 id="GatlingPlugin-Configuration">Configuration</h2><ol><li>Install Gatling Plugin (via Manage Jenkins -&gt; Manage Plugins)</li><li>Configure your project to execute Gatling simulations, for example using the Maven plugin (see <a href="https://github.com/gatling/gatling-maven-plugin-demo" class="external-link" rel="nofollow">Maven plugin demo</a>)</li><li>Configure your job :<ol><li>For a maven job: add &quot;Track a Gatling load simulation&quot; as a new post-build action. Beware that neither your Jenkin's path nor your job's name should contain any space.</li><li>For a pipeline job: add a line to your pipeline script: <em>gatlingArchive()</em></li></ol></li></ol><p><strong>Optional configuration</strong>: You can publish Gatling results with the Jenkins JUnit plugin. Your Gatling simulation needs to have some assertions, as each Junit testcase is a different Gatling assertion.</p><ol><li>Configure the Jenkins plugin with the following Test report XMLs: <em>target/gatling/assertions-*.xml</em></li><li>Execute Gatling with the following option: <em>-Dgatling.useOldJenkinsJUnitSupport=true</em>, for example: <em>mvn gatling:execute -Dgatling.useOldJenkinsJUnitSupport=true</em></li></ol><p>Gatling Plugin will look for files under your Job Root Directory (defaults to <em><code>$JENKINS_HOME/yourjobname)</code></em>, so you may need to copy the results file if you're doing a containerized job.</p><h2 id="GatlingPlugin-Gatlingpluginusage">Gatling plugin usage</h2><p>As soon as you've properly configured your job and launched a build, you'll see two changes on your project dashboard :</p><ul><li>A new entry will be available in the left summary : <span style="text-decoration: underline;">Gatling</span>.</li><li>A graph, displaying the mean response time trend of your last 15 builds, will appear.</li></ul><p> </p><p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/65669112/65863778.png" data-image-src="attachments/65669112/65863778.png" data-unresolved-comment-count="0" data-linked-resource-id="65863778" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="dashboard.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669112" data-linked-resource-container-version="33"></span></p><p> </p><p>The Gatling entry in the left summary has two purposes, depending on which page you are.</p><p>If you are on the project dashboard, clicking on <span style="text-decoration: underline;">Gatling</span> will get you to a more detailed performance trend, displaying for your last 30 builds :</p><ul><li>Mean response time trend</li><li>95th percentiles response time trend</li><li>Percentage of KO requests</li></ul><p>This page will also provides links to detailed reports for all your builds, at the bottom of the page.</p><p>If you are on the summary of a specific build, clicking on <span style="text-decoration: underline;">Gatling</span> will get you to a list of all available reports for this build.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669112/65863772.png">post-build_action.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669112/65863779.png">dashboard.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669112/65863778.png">dashboard.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

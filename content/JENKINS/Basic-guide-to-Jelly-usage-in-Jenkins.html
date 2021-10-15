@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Basic guide to Jelly usage in Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Basic guide to Jelly usage in Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (slide_o_mix)</span> on Jan 28, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If you are unfamiliar with Jelly and Jenkins' use of it, you may find it difficult to create configurable parameters for your plugin. This page describes some very simple examples to get you started.</p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020153717 {padding: 0px;}
+div.rbtoc1631020153717 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020153717 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020153717'>
+<ul class='toc-indentation'>
+<li><a href='#BasicguidetoJellyusageinJenkins-UISamples'>UI Samples</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-LoadingYourFirst*.jelly'>Loading Your First *.jelly</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-Understandingtheitobject'>Understanding the it object</a>
+<ul class='toc-indentation'>
+<li><a href='#BasicguidetoJellyusageinJenkins-Otherpredefinedobjects'>Other predefined objects</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-PredefinedURLs'>Predefined URLs</a></li>
+</ul>
+</li>
+<li><a href='#BasicguidetoJellyusageinJenkins-IterativelyModifying*.jellyfiles'>Iteratively Modifying *.jelly files</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-ObjectswithDescriptors'>Objects with Descriptors</a>
+<ul class='toc-indentation'>
+<li><a href='#BasicguidetoJellyusageinJenkins-Helpfiles'>Help files</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-Formvalidation'>Form validation</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-Defaultvalue'>Default value</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-Otherjellyvariables'>Other jelly variables</a></li>
+</ul>
+</li>
+<li><a href='#BasicguidetoJellyusageinJenkins-ObjectswithoutDescriptors'>Objects without Descriptors</a></li>
+<li><a href='#BasicguidetoJellyusageinJenkins-Usefullinks'>Useful links</a></li>
+</ul>
+</div></p><h1 id="BasicguidetoJellyusageinJenkins-UISamples">UI Samples</h1><p>The first thing you should do is install the <a href="UI-Samples-Plugin.html">UI Samples Plugin</a> in your test instance so you can see how to do some common things.<br/>It is available on the update center.</p><h1 id="BasicguidetoJellyusageinJenkins-LoadingYourFirst*.jelly">Loading Your First *.jelly</h1><p>A basic plugin structure is </p><p>pom.xml<br/>src/main/java<br/>src/main/resources<br/>src/main/webapp</p><p>Suppose you have a java class stored in src/main/java/org/myorganization/MyAction.java that you would like to define Jelly files for.</p><ol><li>Create folder under resources with the same name as the class<ul><li>Create src/main/resources/org/myorganization/MyAction/</li></ul></li><li>Add index.jelly to that folder<ul><li>Write your first jelly file in src/main/resources/org/myorganization/MyAction/index.jelly</li></ul></li></ol><p>Now you can start getting more complex!</p><h1 id="BasicguidetoJellyusageinJenkins-Understandingtheitobject">Understanding the <code>it</code> object</h1><p>As the above section hints at, Jelly files are tied directly to classes. This means they can call methods on those classes. To reference the file they are tied to, jelly files use the <code>it</code> keyword. To define code, use the dollar sign and curly-braces, like this: &quot;${insert code here}&quot;.</p><p>Here is a simple example:</p><ol><li>Create a java file<ul><li>Let's use src/main/java/org/myorg/MyAction.java</li></ul></li><li>Define a method in the class<ul><li><p>Let's define</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public String getMyString() {
+    return &quot;Hello Jenkins!&quot;;
+}</pre>
+</div></div></li></ul></li><li>Write a jelly file with the following<ul><li><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:st=&quot;jelly:stapler&quot; xmlns:d=&quot;jelly:define&quot; xmlns:l=&quot;/lib/layout&quot;
+         xmlns:t=&quot;/lib/hudson&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+
+    ${it.myString}
+&lt;/j:jelly&gt;
+</pre>
+</div></div></li></ul></li><li>Load the class, and note that 'Hello Jenkins!' is displayed</li></ol><p>A few things to notice: the 'get' was automatically stripped from the method name, and the first letter of the remaining method name was lower-cased. I'd recommend using the Java convention for naming methods (e.g. starting getters with 'get' and using CamelCase) so that Jelly can always find the methods.</p><h2 id="BasicguidetoJellyusageinJenkins-Otherpredefinedobjects">Other predefined objects</h2><p>Depending on the page being rendered, other objects besides <code>it</code> may be predefined:</p><ul><li><code>app</code> - the instance of <code>Jenkins</code> (or <code>Hudson</code>)</li><li><code>instance</code> - an object currently being configured, within a section of a configure page such as a <code>BuildStep</code>; <code>null</code> if this is a newly added instance rather than reconfiguring</li><li><code>descriptor</code> - the <code>Descriptor</code> object (see below) corresponding to the class of <code>instance</code></li><li><code>h</code> - an instance of <code>hudson.Functions</code>, with various useful functions</li></ul><h2 id="BasicguidetoJellyusageinJenkins-PredefinedURLs">Predefined URLs</h2><p>Pages can use the following variables to create absolute links:</p><ul><li><code>rootURL</code> - the Jenkins instance</li><li><code>resURL</code> - static webapp resources such as JavaScript or HTML (cf. <code>Jenkins.RESOURCE_PATH</code>)</li><li><code>imagesURL</code> - like <code>resURL</code> but with <code>/images</code> appended, for loading icons and the like</li></ul><p>(Use <code>resURL</code> rather than <code>rootURL</code> wherever possible as it permits browser caching, improving responsiveness and lessening server load.)</p><p>These URLs are defined as soon as you are within an <code>l:layout</code> or an <code>l:ajax</code> block. This means that on any Jenkins page you already have them available except if your page is loaded via ajax. Then you should add the <code>l:ajax</code> tag.</p><p>Note that until 1.505 <code>rootURL</code> will be empty in the typical case of Jenkins running in development mode with no context path (<code><a href="http://localhost:8080/" class="external-link" rel="nofollow">http://localhost:8080/</a></code>); it is used for creating server-absolute paths such as <code>/some/path</code> for direct links. As of 1.505 it will be <code>/jenkins</code> in test mode, to help remind you to use it! In the rare case that you need to pass a complete URL to an external service for some reason, use <code>app.rootUrl</code> instead (which takes into account “Jenkins URL” from the system <code>/configure</code> screen). <a href="Hyperlinks-in-HTML.html">Hyperlinks in HTML</a> has a fuller treatment of this topic.</p><h1 id="BasicguidetoJellyusageinJenkins-IterativelyModifying*.jellyfiles">Iteratively Modifying *.jelly files</h1><p>It's worth mentioning that in most cases you don't need to re-start the Jenkins server, simply modify the *.jelly file in your editor of choice and re-request the page that will load that jelly. </p><h1 id="BasicguidetoJellyusageinJenkins-ObjectswithDescriptors">Objects with Descriptors</h1><p>For objects with <a href="http://javadoc.jenkins-ci.org/byShortName/Descriptor">Descriptor</a> (such as <a href="http://javadoc.jenkins-ci.org/byShortName/Publisher">Publisher</a>), the general steps are as follows:</p><ol><li>Define a immutable class that takes all the configuration parameters as constructor parameters. Put <code>@DataBoundConstructor</code> on this constructor, which tells Jenkins how to instantiate it.</li><li>Define getters for the configuration fields, or make the fields &quot;<code>public final</code>&quot;. This allows Jelly script to read the values to populate the configuration page.</li><li>Write a Jelly fragment (normally named <code>config.jelly</code> but see javadoc of your base class) and list all the configuration options. The most basic form of this is something like the following. The value of <code>@field</code> is used as a property name (so you need to either have the <code>getPort</code> method or a public <code>port</code> field) as well as the constructor parameter name.</li></ol><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+  &lt;f:entry title=&quot;${%Port}&quot; field=&quot;port&quot;&gt;
+    &lt;f:textbox /&gt;
+  &lt;/f:entry&gt;
+  &lt;f:entry title=&quot;${%Host}&quot; field=&quot;host&quot;&gt;
+    &lt;f:textbox /&gt;
+  &lt;/f:entry&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div><p>That odd &quot;${%...}&quot; thing is a marker for <a href="Internationalization.html">internationalization</a>.</p><h5 id="BasicguidetoJellyusageinJenkins-Helpfiles">Help files</h5><p>If your plugin has a <code>help-</code><code><em>FIELD</em></code><code>.html</code> or <code>help-</code><code><em>FIELD</em></code><code>.jelly in the </code><code>src/main/resources/path/to/plugin/PluginName</code><code> directory</code>, Jenkins will put <img class="emoticon emoticon-question" src="images/icons/emoticons/help_16.svg" data-emoticon-name="question" alt="(question)"/> icon and render your help inline. You can add top-level plugin help, e.g. on the job configuration page, by providing <code>help.html</code> or <code>help.jelly</code> in the <code>src/main/resources/path/to/plugin/PluginName</code> directory. If you add help for a field for a job configuration, e.g. a post-build action, add the <code>help-</code><code><em>FIELD</em></code><code>.html</code> file next to  your<code> config.jelly</code> file, e.g. to the <code><span>src/main/resources/path/to/plugin/PluginName/YourPostBuildAction</span></code><span> directory instead.</span></p><h5 id="BasicguidetoJellyusageinJenkins-Formvalidation">Form validation</h5><p>You can write <code>doCheckFIELD</code> method on your descriptor to add the form validation logic. Your check method would look something like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public FormValidation doCheckPort(@QueryParameter String value) {
+  if(looksOk(value))  return FormValidation.ok();
+  else                return FormValidation.error(&quot;There&#39;s a problem here&quot;);
+}
+</pre>
+</div></div><p>You can also define additional parameters with @QueryParameter to obtain values from other nearby form fields of the specified names. This is useful if your validation depends on values on the other form fields.</p><p>Refer to stapler documentation for more details.</p><h5 id="BasicguidetoJellyusageinJenkins-Defaultvalue">Default value</h5><p>If you want the configuration page to have the initial default value, use <code>@default</code>. The first example shows the literal default value, while the second example shows the programmatically computed default value:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+  &lt;f:entry title=&quot;${%Port}&quot; field=&quot;port&quot;&gt;
+    &lt;f:textbox default=&quot;80&quot; /&gt;
+  &lt;/f:entry&gt;
+  &lt;f:entry title=&quot;${%Host}&quot; field=&quot;host&quot;&gt;
+    &lt;f:textbox default=&quot;${descriptor.defaultHost()}/&gt;
+  &lt;/f:entry&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div><h5 id="BasicguidetoJellyusageinJenkins-Otherjellyvariables">Other jelly variables</h5><p>When using the <code>field=</code> mechanism shown above you see where the data really comes from. Jenkins defines these variables which you may use as needed: <code>descriptor</code> and <code>instance</code>, which are the instance of your Descriptor class and instance of the class it describes, respectively (both are available in <code>config.jelly</code>, just <code>descriptor</code> in <code>global.jelly</code>).</p><h1 id="BasicguidetoJellyusageinJenkins-ObjectswithoutDescriptors">Objects without Descriptors</h1><p>If your plugin uses an object without a <a href="http://javadoc.jenkins-ci.org/byShortName/Descriptor">Descriptor</a>, such as <a href="http://javadoc.jenkins-ci.org/byShortName/ComputerListener">ComputerListener</a>, follow these steps to include a single text box in the configuration page that will be readable within your plugin class (the one that extends <a href="http://javadoc.jenkins-ci.org/byShortName/Plugin">Plugin</a>).</p><ol><li>Override the <a href="http://javadoc.jenkins-ci.org/hudson/Plugin.html#configure(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject)" class="external-link" rel="nofollow">configure(StaplerRequest req, JSONObject formData)</a> method in your plugin class. This method will be called when the user clicks the Save button in the configuration page.</li><li>In your <code>configure</code> method, use a method like <a href="http://json-lib.sourceforge.net/apidocs/net/sf/json/JSONObject.html#optInt(java.lang.String,%20int)" class="external-link" rel="nofollow">optInt</a> to extract the value you would like the user to configure. For instance, <code>formData.optInt(&quot;port&quot;, 3141)</code> will get a port number if the user enters it, or the value 3141 if the user leaves it blank. Store the extracted value in a member of the plugin class.</li><li>In your <code>configure</code> method, call <a href="http://javadoc.jenkins-ci.org/hudson/Plugin.html#save()" class="external-link" rel="nofollow">save()</a>. This will save the serializable fields of your plugin class.</li><li>In the <code>start</code> method of your plugin class, call <a href="http://javadoc.jenkins-ci.org/hudson/Plugin.html#load()" class="external-link" rel="nofollow">load()</a>, which will reload these fields from persistent storage on startup.</li><li><p>Create a file called <code>config.jelly</code> with content like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:st=&quot;jelly:stapler&quot; xmlns:d=&quot;jelly:define&quot; xmlns:l=&quot;/lib/layout&quot;
+         xmlns:t=&quot;/lib/hudson&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+  &lt;f:section title=&quot;My Plugin&quot;&gt;
+    &lt;f:entry title=&quot;${%Port}&quot; help=&quot;/plugin/ARTIFACT_ID_GOES_HERE/help-projectConfig.html&quot;&gt;
+      &lt;f:textbox name=&quot;port&quot; value=&quot;${it.port}&quot;/&gt;
+    &lt;/f:entry&gt;
+  &lt;/f:section&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div><p>We use <code>it.port</code> to refer to the current value of the parameter <code>port</code> (note that <code>config.jelly</code> for a plugin class uses <code>it</code> instead of <code>instance</code>). In the help attribute, we use the artifactId you specified when you created your plugin (see <code>pom.xml</code> in the root directory of your plugin if you forgot what your artifactId is).</p></li><li>Store the file <code>config.jelly</code> in <code>src/main/resources/path/to/plugin/class/config.jelly</code>. For instance, if your plugin class is <code>hudson.plugins.exampleplugin.MyPlugin</code>, put the file in <code>src/main/resources/hudson/plugins/exampleplugin/MyPlugin/config.jelly</code>.</li><li><p>Create a file called <code>help-projectConfig.html</code> containing an HTML fragment like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: html; gutter: false; theme: Confluence" data-theme="Confluence">&lt;div&gt;
+ &lt;p&gt;
+  Your help text goes here.
+ &lt;/p&gt;
+&lt;/div&gt;
+</pre>
+</div></div><p>Store it in <code>src/main/webapp/help-projectConfig.html</code>.</p></li><li>Start Jenkins normally (using <code>mvn hpi:run</code>). Navigate to the configure page and observe your new section. Click the help link and observe your help text.</li></ol><h1 id="BasicguidetoJellyusageinJenkins-Usefullinks"><span style="color: rgb(210,73,57);"><span style="font-size: 20.0px;">Useful links</span></span></h1><ul><li><a href="Plugin-Structure.html">Plugin Structure</a></li><li><a href="http://stapler.kohsuke.org/reference.html" class="external-link" rel="nofollow">Stapler URL mapping rules</a></li><li>Jelly taglib reference <a href="http://commons.apache.org/jelly/tags.html" class="external-link" rel="nofollow">core</a>, <a href="http://commons.apache.org/jelly/libs/define/tags.html" class="external-link" rel="nofollow">define</a>, <a href="http://stapler.kohsuke.org/jelly-taglib-ref.html" class="external-link" rel="nofollow">stapler</a>, and <a href="http://reports.jenkins.io/core-taglib/jelly-taglib-ref.html" class="external-link" rel="nofollow">taglibs defined in Jenkins core</a></li><li><a href="UI-Samples-Plugin.html">UI Samples Plugin</a></li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

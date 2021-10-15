@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OSF Builder Suite Standalone Sonar Linter Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OSF Builder Suite Standalone Sonar Linter Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danechitoaie)</span>, last modified on Jul 17, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><strong>OSF Builder Suite :: Standalone Sonar Linter Plugin</strong> is a very easy-to-use Jenkins plugin that is used to lint your JavaScript (for now; additional plugins can be added upon request) files using an standalone version of Sonar.</p><p>If you have a bug to report or maybe a feature that you wish to request, please do so <a href="https://github.com/jenkinsci/osf-builder-suite-standalone-sonar-linter-plugin/issues" class="external-link" rel="nofollow">on GitHub, on the project's issues page</a>.</p><p> </p><h1 id="OSFBuilderSuiteStandaloneSonarLinterPlugin-Installation">Installation</h1><p>Just go to &quot;<code><em><strong>Manage Jenkins &gt; Manage Plugins &gt; Available</strong></em></code>&quot;, search for &quot;<code><em><strong>OSF Builder Suite</strong></em></code>&quot;, select <code><em><strong>&quot;OSF Builder Suite :: <strong>Standalone Sonar Linter Plugin</strong>&quot;</strong></em></code> and click &quot;<code><em><strong>Download now and install after restart</strong></em></code>&quot; button.</p><p> </p><h1 id="OSFBuilderSuiteStandaloneSonarLinterPlugin-Configuration">Configuration</h1><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/143492916/143492966.png" data-image-src="attachments/143492916/143492966.png" data-unresolved-comment-count="0" data-linked-resource-id="143492966" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2018-07-17 at 22.38.03.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143492916" data-linked-resource-container-version="3"></span></p><p><span>Pattern (relative to the workspace) to be used by the linter to get the list of files that you want to be linted. </span><br/><br/><span>When a path is matched against a pattern, the following special characters can be used:</span></p><ul><li>? <br/>Matches one character (any character except path separators)</li><li>* <br/>Matches zero or more characters (not including path separators)</li><li>** <br/>Matches zero or more path segments</li></ul><p><span>Examples:</span></p><ul><li>**/*.js<br/>Matches all .js files/dirs in a directory tree</li><li>node_modules/**<br/>Matches the node_modules folder and all its contents</li><li>test/a??.js<br/>Matches all files/dirs which start with an a, then two more characters and then .js, in a directory called test</li><li>**<br/>Matches everything in a directory tree</li><li>**/test/**/XYZ*<br/>Matches all files/dirs which start with XYZ and where there is a parent directory called test (e.g. abc/test/def/ghi/XYZ123)</li></ul><p> </p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/143492916/143492967.png" data-image-src="attachments/143492916/143492967.png" data-unresolved-comment-count="0" data-linked-resource-id="143492967" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2018-07-17 at 22.39.40.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143492916" data-linked-resource-container-version="3"></span></p><p><span>List of patterns to be ignored. If a path matches any of the patterns in this list then it will be ignored. </span><br/><span>The pattern needs to be relative to the workspace. </span><br/><br/><span>When a path is matched against a pattern, the following special characters can be used:</span></p><ul><li>? <br/>Matches one character (any character except path separators)</li><li>* <br/>Matches zero or more characters (not including path separators)</li><li>** <br/>Matches zero or more path segments</li></ul><p><span>Examples:</span></p><ul><li>**/*.js<br/>Matches all .js files/dirs in a directory tree</li><li>node_modules/**<br/>Matches the node_modules folder and all its contents</li><li>test/a??.js<br/>Matches all files/dirs which start with an a, then two more characters and then .js, in a directory called test</li><li>**<br/>Matches everything in a directory tree</li><li>**/test/**/XYZ*<br/>Matches all files/dirs which start with XYZ and where there is a parent directory called test (e.g. abc/test/def/ghi/XYZ123)</li></ul><p> </p><p> </p><h1 id="OSFBuilderSuiteStandaloneSonarLinterPlugin-JenkinsPipelineConfiguration">Jenkins Pipeline Configuration</h1><p>Here's a sample pipeline configuration to get you started:</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/143492916/143492970.png" data-image-src="attachments/143492916/143492970.png" data-unresolved-comment-count="0" data-linked-resource-id="143492970" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2018-07-17 at 22.56.33.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143492916" data-linked-resource-container-version="3"></span></p><p> </p><p>You can also always consult the pipelines documentation available at <a href="https://jenkins.io/doc/book/pipeline/" class="external-link" rel="nofollow">https://jenkins.io/doc/book/pipeline/</a> or check the pipeline syntax link right inside Jenkins on the left navigation menu.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" height="250" src="attachments/143492916/143492968.png" data-image-src="attachments/143492916/143492968.png" data-unresolved-comment-count="0" data-linked-resource-id="143492968" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pipeline_syntax.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="143492916" data-linked-resource-container-version="3"></span></p><p> </p><h1 id="OSFBuilderSuiteStandaloneSonarLinterPlugin-Versionhistory">Version history</h1><p><a href="https://github.com/jenkinsci/osf-builder-suite-standalone-sonar-linter-plugin/releases" class="external-link" rel="nofollow">https://github.com/jenkinsci/osf-builder-suite-standalone-sonar-linter-plugin/releases</a></p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143492916/143492966.png">Screen Shot 2018-07-17 at 22.38.03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143492916/143492967.png">Screen Shot 2018-07-17 at 22.39.40.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143492916/143492968.png">pipeline_syntax.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/143492916/143492970.png">Screen Shot 2018-07-17 at 22.56.33.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:02</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

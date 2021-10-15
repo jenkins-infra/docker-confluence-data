@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Cucumber Living Documentation Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Cucumber Living Documentation Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rmpestano)</span>, last modified on Oct 19, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Cucumber Living Documentation <a href="https://plugins.jenkins.io/cucumber-living-documentation" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-03-26/#SECURITY-308" class="external-link" rel="nofollow">Plugin disables Jenkins Cross-Site Scripting protection</a></li>
+</ul>
+
+</div></div>
+Brings Cucumber living documentation to your continuous integration environment via <a href="https://github.com/rmpestano/cukedoctor" class="external-link" rel="nofollow">Cukedoctor</a>.<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020780778 {padding: 0px;}
+div.rbtoc1631020780778 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020780778 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020780778'>
+<ul class='toc-indentation'>
+<li><a href='#CucumberLivingDocumentationPlugin-Howitworks?'>How it works?</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Usage'>Usage</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Configuration'>Configuration</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Accessingdocumentation'>Accessing documentation</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Documentationhistory'>Documentation history</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Documentationexamples'>Documentation examples</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Jenkinspipelinestep'>Jenkins pipeline step</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-Docker'> Docker</a></li>
+<li><a href='#CucumberLivingDocumentationPlugin-ChangeLog'>Change Log</a></li>
+</ul>
+</div></p><p><br/></p><div><p><br/></p><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 32.7123%;"><colgroup><col style="width: 7.55034%;"/><col style="width: 92.4497%;"/></colgroup><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image emoji confluence-external-resource" alt="exclamation" height="20" width="20" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png" data-image-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png"></span></div></td><td class="confluenceTd"><s>This plugin only works if <a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy" rel="nofollow">content security policy is relaxed</a> as described in <a rel="nofollow" href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy#ConfiguringContentSecurityPolicy-RelaxingTheRules">this section</a>. For example start Jenkins with following argument:</s><pre class="console-output"><s>-Dhudson.model.DirectoryBrowserSupport.CSP=&quot;sandbox allow-scripts; style-src 'unsafe-inline' *;script-src 'unsafe-inline' *;&quot;</s></pre><p><strong><span style="color: rgb(255,102,0);">Since <span style="color: rgb(0,0,0);"><u>v2.2.1 </u></span>the plugin doesn't need relaxed content security policy.</span></strong></p></td></tr></tbody></table></div><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image emoji confluence-external-resource" alt="exclamation" height="20" width="20" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png" data-image-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png"></span></div></td><td class="confluenceTd"><div class="content-wrapper"><p><br/></p><div><p>Versions <strong><code>2.x</code></strong> of the plugin uses Jenkins <strong><code>2.73.1</code></strong> as baseline (<a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/18" class="external-link" rel="nofollow">see issue #17</a>), for older Jenkins installations use version <strong>1.1.1</strong> of this plugin, otherwise the exception <em><code>java.lang.NoSuchMethodError: jnr.constants.platform.OpenFlags.defined()Z </code></em> will be raised when generating living documentation.</p></div><div><p><br/></p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image emoji confluence-external-resource" alt="bulb" height="20" width="20" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4a1.png" data-image-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4a1.png"></span></div></td><td class="confluenceTd">The PDF documentation generation is way faster on version <strong><code>2.x</code></strong>.</td></tr></tbody></table></div></div></div></td></tr></tbody></table></div><h2 id="CucumberLivingDocumentationPlugin-Howitworks?"><br/>How it works?</h2></div><p>The plugin first looks for <strong style="color: rgb(51,51,51);font-size: 14.0px;">Cucumber json files</strong><span style="color: rgb(51,51,51);font-size: 14.0px;">, generated by your BDD tests, on your build workspace. After it parses the files and transforms them into html and pdf documentation making them available into your Jenkins build.</span><br/><br/></p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>To generate Cucumber json output files use the <strong>json formatter</strong>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">@RunWith(Cucumber.class)
+@CucumberOptions(plugin ={&quot;json:target/cucumber.json&quot;})
+</pre>
+</div></div></div></div><div><div><div><h2 id="CucumberLivingDocumentationPlugin-Usage"><span style="color: rgb(210,73,57);font-size: 20.0px;"><br/>Usage</span></h2></div></div></div><p>After installing the plugin, you'll get a new <em>Post build action</em> entry named <strong>Living documentation:</strong></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796849/96731213.png" data-image-src="attachments/96796849/96731213.png" data-unresolved-comment-count="0" data-linked-resource-id="96731213" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796849" data-linked-resource-container-version="68"></span></p><h2 id="CucumberLivingDocumentationPlugin-Configuration">Configuration</h2><p>Here are the possible plugin configuration:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796849/96731214.png" data-image-src="attachments/96796849/96731214.png" data-unresolved-comment-count="0" data-linked-resource-id="96731214" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="config02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796849" data-linked-resource-container-version="68"></span></p><h2 id="CucumberLivingDocumentationPlugin-Accessingdocumentation">Accessing documentation</h2><p>When the plugin is enabled in your job it adds a link which will take you to the current project documentation:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796849/96731215.png" data-image-src="attachments/96796849/96731215.png" data-unresolved-comment-count="0" data-linked-resource-id="96731215" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="initial.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796849" data-linked-resource-container-version="68"></span></p><p><br/></p><h2 id="CucumberLivingDocumentationPlugin-Documentationhistory">Documentation history</h2><p><br/></p><div><div><div><p>The plugin stores living documentation history:</p><p><br/></p></div><div><div><a rel="nofollow" href="https://user-images.githubusercontent.com/1592273/36995077-d5a8ddb2-2091-11e8-9e78-51ad3f1d8488.png" class="external-link"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="docs history" src="https://github.com/jenkinsci/cucumber-living-documentation-plugin/raw/master/docs-history.png" data-image-src="https://github.com/jenkinsci/cucumber-living-documentation-plugin/raw/master/docs-history.png"></span></a></div></div><div><p><br/></p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><div><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image emoji confluence-external-resource" alt="warning" height="20" width="20" src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png" data-image-src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png"></span></div></div></td><td class="confluenceTd">It reads the history from your <code>job runs history</code>, if you delete a job execution, the documentation will also be deleted from the history.</td></tr></tbody></table></div><p><br/></p></div></div></div><h2 id="CucumberLivingDocumentationPlugin-Documentationexamples">Documentation examples</h2><p>Here is a documentation example generated by the plugin based on a <strong>cucumber json output file</strong>:</p><p><a href="https://github.com/rmpestano/cukedoctor/blob/master/img/cukedoctor-sample.png?raw=true" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/96796849/96731219.png" data-image-src="attachments/96796849/96731219.png" data-unresolved-comment-count="0" data-linked-resource-id="96731219" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="cukedoctor-sample.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796849" data-linked-resource-container-version="68"></span></a></p><p>The feature file for the above sample can be <a href="https://github.com/database-rider/database-rider/blob/master/rider-core/src/test/resources/features/seeding/seeding-database.feature" class="external-link" rel="nofollow">found here</a>.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>For more examples <a href="http://rmpestano.github.io/cukedoctor/" class="external-link" rel="nofollow">access here</a>.</p></div></div><div><h2 id="CucumberLivingDocumentationPlugin-Jenkinspipelinestep"><br/>Jenkins pipeline step</h2><div><div><p>Following is an example of pipeline step using this plugin:</p><p><br/></p></div><div><pre>node {
+    step([$class: 'CukedoctorPublisher', featuresDir: '', format: 'HTML', hideFeaturesSection: false, hideScenarioKeyword: false, hideStepTime: false, hideSummary: false, hideTags: false, numbered: true, sectAnchors: true, title: 'Living Documentation', toc: 'RIGHT'])
+  }</pre><p><br/></p><div><div><p>Since version <em>1.0.10</em> it is possible to use the <span>livingDocs</span> shortcut in pipeline DSL:</p><p><br/></p></div><div><div><pre>node {
+    svn 'https://subversion.assembla.com/svn/cucumber-json-files/trunk'
+    livingDocs()
+}</pre><p><br/></p></div></div><div><p>Parameters should be declared as <code>key</code>: <code>'value'</code> as example below:</p><p><br/></p></div><div><pre>node {
+    svn 'https://subversion.assembla.com/svn/cucumber-json-files/trunk'
+    livingDocs(featuresDir:'cukedoctor')
+}</pre><p><br/></p><p><span style="color: rgb(36,41,46);">Or using the </span><a href="https://jenkins.io/doc/book/pipeline/syntax/" class="external-link" rel="nofollow">declarative pipeline</a><span style="color: rgb(36,41,46);">:</span></p><p><span style="color: rgb(36,41,46);"><br/></span></p><pre>pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                svn 'https://subversion.assembla.com/svn/cucumber-json-files/trunk'
+                livingDocs(featuresDir:'cukedoctor')
+            }
+        }
+    }
+}</pre></div></div><h2 id="CucumberLivingDocumentationPlugin-Docker"> Docker</h2></div></div></div><p>An easy way to test this plugin is using a docker container, here are the steps (assuming you have docker installed):</p><ol><li><p><span style="color: rgb(51,51,51);">Run the image: </span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">docker run -it -p 8080:8080 rmpestano/jenkins-living-documentation</pre>
+</div></div></li><li><span style="color: rgb(51,51,51);">Access</span> <span style="color: rgb(51,51,51);"><a href="http://localhost:8080/" class="external-link" rel="nofollow">http://localhost:8080/</a></span> <span style="color: rgb(51,51,51);">and create a job;</span></li><li><p><span style="color: rgb(51,51,51);">Configure this svn repository: </span><a href="https://subversion.assembla.com/svn/cucumber-json-files/trunk/" class="external-link" rel="nofollow">https://subversion.assembla.com/svn/cucumber-json-files/trunk</a></p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This repository contains cucumber json sample files for the living documentation plugin.</p></div></div></li><li>Add the <strong>Living documentation</strong> post build action;</li><li>Now you can run the job</li></ol><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>use featuresDir to point to specific json output, a sub folder relative to workspace root dir, eg: <strong>cukedoctor.</strong></p></div></div><p><br/></p><p><span style="color: rgb(51,51,51);">Job output should look like:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796849/96731220.png" data-image-src="attachments/96796849/96731220.png" data-unresolved-comment-count="0" data-linked-resource-id="96731220" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job-output.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796849" data-linked-resource-container-version="68"></span></p><h2 id="CucumberLivingDocumentationPlugin-ChangeLog">Change Log</h2><h5 id="CucumberLivingDocumentationPlugin-Version2.2.2(oct19,2018)">Version 2.2.2 (oct 19, 2018)</h5><ul><li><p><a class="external-link" href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/28" style="font-weight: 400;letter-spacing: 0.0px;" rel="nofollow">#28</a> CukedoctorProjectAction included null not assignable to interface hudson.model.Action</p></li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.2.1(set21,2018)">Version 2.2.1 (set 21, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/24" class="external-link" rel="nofollow">#24</a> Can't change theme in html documentation</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/25" class="external-link" rel="nofollow">#25</a> Make the plugin work <strong>without content security policy</strong></li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/26" class="external-link" rel="nofollow">#26</a> Documentation not found via Living documentation link</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/27" class="external-link" rel="nofollow">#27</a> Update to Cukedoctor 1.2.1</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.2.0(set20,2018)">Version 2.2.0 (set 20, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/22" class="external-link" rel="nofollow">#22</a> Documentation history is lost on Jenkins restart</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/23" class="external-link" rel="nofollow">#23</a> Update to Cukedoctor 1.2.0</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.1.2(mar24,2018)">Version 2.1.2 (mar 24, 2018)</h5><ul><li>Failed to serialize hudson.model.Project#publishers for class hudson.model.FreeStyleProject (<a href="https://issues.jenkins-ci.org/browse/JENKINS-50271" rel="nofollow" class="external-link">JENKINS-50271</a>)</li><li>Fixes nested project references in Build actions (<a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-50273" class="external-link">JENKINS-50273</a>)</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.1.1(mar11,2018)">Version 2.1.1 (mar 11, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/20" class="external-link" rel="nofollow">#20</a> Do not fail build when content security policy is not relaxed</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.1.3(mar11,2018)">Version 1.1.3 (mar 11, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/20" class="external-link" rel="nofollow">#20</a> Do not fail build when content security policy is not relaxed</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.1(mar09,2018)">Version 2.1 (mar 09, 2018)</h5><ul><li>Merge with v1.1.2</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version2.0(mar09,2018)">Version 2.0 (mar 09, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/17" class="external-link" rel="nofollow">#17</a> Use Jenkins 2.73 as baseline</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.1.2(mar09,2018)">Version 1.1.2 (mar 09, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/19" class="external-link" rel="nofollow">#19</a>  Fix link to documentation</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/20" class="external-link" rel="nofollow">#20</a> Downgrade Asciidoctor toolchain</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.1.1(mar08,2018)">Version 1.1.1 (mar 08, 2018)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/16" class="external-link" rel="nofollow">#16</a> Allow usage with 'sandbox' content security policy</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.1.0(mar08,2018)">Version 1.1.0 (mar 08, 2018)</h5><div><div><div><p><br/></p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><div><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image emoji confluence-external-resource" alt="exclamation" height="20" width="20" src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png" data-image-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2757.png"></span></div></div></td><td class="confluenceTd"><div class="content-wrapper"><p>Since this version the plugin will only work if <strong><a rel="nofollow" href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy">content security policy is relaxed</a></strong> as described in <a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy#ConfiguringContentSecurityPolicy-RelaxingTheRules" rel="nofollow">this section</a>.</p></div></td></tr></tbody></table></div><p><br/></p></div></div></div><ul><li><a class="external-link" href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/12" rel="nofollow">#12</a> SECURITY-XXX</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/13" class="external-link" rel="nofollow">#13</a> Store documentation history</li><li><a class="external-link" href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/14" rel="nofollow">#14</a> Update to latest Asciidoctor</li><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/15" class="external-link" rel="nofollow">#15</a> Don't rely on System properties for CukedoctorConfig</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.12(oct19,2017)">Version 1.0.12 (oct 19, 2017)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/9" class="external-link" rel="nofollow">#9</a><span style="color: rgb(36,41,46);"> Pipeline dsl not found</span></li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.11(sep15,2017)">Version 1.0.11 (sep 15, 2017)</h5><ul><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/8" class="external-link" rel="nofollow">#8</a><span style="color: rgb(36,41,46);"> Updates to latest Asciidoctor.</span></li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.10(aug13,2017)">Version 1.0.10 (aug 13, 2017)</h5><ul><li><a class="external-link" href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/7" title="Simplify pipeline script execution" rel="nofollow">#7</a><span style="color: rgb(36,41,46);"> Simplifies pipeline script execution.</span></li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.9(aug7,2017)">Version 1.0.9 (aug 7, 2017)</h5><ul><li>Fixes documentation link in job console.</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.8(aug6,2017)">Version 1.0.8 (aug 6, 2017)</h5><ul><li>Updates to <a href="https://github.com/rmpestano/cukedoctor/milestone/2?closed=1" class="external-link" rel="nofollow">Cukedoctor 1.0.7</a></li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.7(fev7,2017)">Version 1.0.7 (fev 7, 2017)</h5><ul><li>Support for Jenkins 2 pipelines</li></ul><h5 id="CucumberLivingDocumentationPlugin-Version1.0.6(out24,2016)">Version 1.0.6 (out 24, 2016)</h5><ul><li>Updates to Cukedoctor 1.0.6;</li><li>Documentation layout configuration:<ol><li>Hide 'Features' section;</li><li>Hide summary;</li><li>Hide 'scenario' and 'scenario outline' keyword on generated documentation;</li><li>Hide step execution time;</li><li>Hide tags.</li></ol></li></ul><ul style="margin-top: 10.0px;"><li><a href="https://github.com/jenkinsci/cucumber-living-documentation-plugin/issues/17" class="external-link" rel="nofollow">#17</a> Use Jenkins 2.73 as baseline</li></ul><div class="aui-page-header-main" style="margin: 0.0px;padding: 0.0px 0.0px 0.0px 10.0px;display: table-cell;vertical-align: middle;"><h1 class="editable-field inactive" style="padding: 2.0px 30.0px 2.0px 5.0px;color: rgb(41,41,41);border-radius: 2.01px;display: inline-block;max-width: 100.0%;vertical-align: top;z-index: 1;" title="Click to edit" id="CucumberLivingDocumentationPlugin-nestsprojectreferencesinBuildactions"> nests project references in Build actions<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit" style="background-repeat: no-repeat;background-position: 4.0px 4.0px;border-top: none;border-right: none;border-bottom: none;border-left: 1.0px solid rgb(204,204,204);display: inline-block;height: auto;margin: 0.0px;padding: 0.0px;text-indent: -999.0em;vertical-align: text-top;width: 24.0px;line-height: 0;background-color: rgb(240,240,240);bottom: 0.0px;right: 0.0px;top: 0.0px;z-index: -1;color: rgb(112,112,112);cursor: pointer;"> </span></h1></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731212.png">config01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731211.png">config01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731213.png">config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731214.png">config02.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731215.png">initial.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731216.png">all-docs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731217.png">all-docs2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731218.png">all-docs3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/161546450.png">cukedoctor-sample.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731220.png">job-output.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/98238496.png">doc-sample.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796849/96731219.png">cukedoctor-sample.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:19</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

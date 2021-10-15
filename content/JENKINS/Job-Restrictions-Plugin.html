@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Job Restrictions Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Job Restrictions Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (oleg_nenashev)</span>, last modified on Oct 07, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Job Restrictions <a href="https://plugins.jenkins.io/job-restrictions" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>This plugin is up for adoption.</strong> Want to help improve this plugin? <a href="/display/JENKINS/Adopt+a+Plugin" title="Adopt a Plugin">Click here to learn more</a>!</p></div></div>The plugin allows restricting job executions in order to change their behavior or to harden the security. With this plugin it is possible to configure nodes to accept only particular jobs. It is also possible to prevent job triggering by users and other jobs using various conditions.<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021424257 {padding: 0px;}
+div.rbtoc1631021424257 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021424257 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021424257'>
+<ul class='toc-indentation'>
+<li><a href='#JobRestrictionsPlugin-Abouttheplugin'>About the plugin</a></li>
+<li><a href='#JobRestrictionsPlugin-Usage'>Usage</a>
+<ul class='toc-indentation'>
+<li><a href='#JobRestrictionsPlugin-Jobrestrictionsfornodes'>Job restrictions for nodes</a></li>
+<li><a href='#JobRestrictionsPlugin-Jobrestrictionsforprojects'>Job restrictions for projects</a></li>
+</ul>
+</li>
+<li><a href='#JobRestrictionsPlugin-Extensionpoints'>Extension points</a></li>
+<li><a href='#JobRestrictionsPlugin-JIRAissues'>JIRA issues</a></li>
+<li><a href='#JobRestrictionsPlugin-Versionhistory'>Version history</a>
+<ul class='toc-indentation'>
+<li><a href='#JobRestrictionsPlugin-Version0.8(Oct06,2018)'>Version 0.8 (Oct 06, 2018)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.7(May16,2018)'>Version 0.7 (May 16, 2018)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.6(10/14/2016)'>Version 0.6 (10/14/2016)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.5(08/03/2016)'>Version 0.5 (08/03/2016)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.4(01/18/2015)'>Version 0.4 (01/18/2015)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.3(06/29/2013)'>Version 0.3 (06/29/2013)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.2.2(12/08/2013)'>Version 0.2.2 (12/08/2013)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.2.1(11/13/2013)'>Version 0.2.1 (11/13/2013)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.2(10/26/2013)'>Version 0.2 (10/26/2013)</a></li>
+<li><a href='#JobRestrictionsPlugin-Version0.1(08/26/2013)'>Version 0.1 (08/26/2013)</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="JobRestrictionsPlugin-Abouttheplugin">About the plugin</h1><p>Features:</p><ul><li>Execution restrictions on the node level<ul><li>Example 1: Take jobs according to the specified name pattern (e.g. allow running only &quot;QA_.*&quot; jobs on a node)</li><li>Example 2: Prevent execution of user jobs on the Jenkins master node</li></ul></li><li>Restrictions of jobs triggering by external causes<ul><li>Example 1: Prohibit manual builds</li><li>Example 2: Allow triggering only by a job with the specified <a href="Ownership-Plugin.html">owner</a>.</li></ul></li><li>Several built-in restrictions + JobRestriction extension point</li></ul><p>Contributors:</p><ol><li><a href="hhttp://www.linkedin.com/in/onenashev" rel="nofollow">Oleg Nenashev</a> (maintainer)<ul><li>Initial plugin version has been sponsored by Synopsys Inc., <a href="http://www.synopsys.com" class="external-link" rel="nofollow">www.synopsys.com</a></li></ul></li></ol><h1 id="JobRestrictionsPlugin-Usage">Usage</h1><h2 id="JobRestrictionsPlugin-Jobrestrictionsfornodes">Job restrictions for nodes</h2><p>These restrictions can be configured in node's configuration page.</p><ul><li>Node won't accept jobs, which violate the specified restrictions</li><li>Other requirements (executors, labels, etc.) will be checked as well</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69273423/69402769.png" data-image-src="attachments/69273423/69402769.png" data-unresolved-comment-count="0" data-linked-resource-id="69402769" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Jenkins_JobRestrictions_NodeRestriction.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69273423" data-linked-resource-container-version="23"></span></p><h2 id="JobRestrictionsPlugin-Jobrestrictionsforprojects">Job restrictions for projects</h2><p>This type of restrictions allows to prevent execution of jobs by the launch cause.<br/> If the cause does not satisfy requirements, job fails before running of SCM (the job cannot be aborted due to <a href="https://issues.jenkins-ci.org/browse/JENKINS-19497">JENKINS-19497</a>).</p><p>The current version supports the following checks:</p><ul><li><strong>Apply Job restrictions to upstream build</strong> - prohibits the invocation from specific builds, which do not satisfy the specified requirements</li><li>Prohibit manual launch of the job (since 0.2)</li></ul><h1 id="JobRestrictionsPlugin-Extensionpoints">Extension points</h1><p>Plugin provides a JobRestriction extension point, which allows implementation of new restrictions.</p><p>Built-in extensions:</p><ul><li>Logic operations (and, or, not)</li><li>Started by user/group restrictions<ul><li>Restrictions support upstream projects (UpstreamCause)</li><li><a href="Rebuild-Plugin.html">Rebuild Plugin</a> and other specific causes are not supported</li></ul></li><li>Regex restriction - check the jobs name by a regular expression</li></ul><p>The following plugins produce additional job restrictions:</p><p>
+
+
+
+
+
+
+
+
+
+
+
+<ul class="content-by-label">
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Priority+Sorter+Plugin">Priority Sorter Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin allows Jobs to be prioritised based on <em>Queue Strategies</em> and <em>Priority Strategies</em>.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Ownership+Plugin">Ownership Plugin</a>
+                
+                        
+                    </div>
+    </li>
+    </ul>
+</p><p>If your plug-in is not listed here, then simply add the label <strong>job-restriction-producer</strong> to your plug-in wiki page and it will be automatically listed.</p><h1 id="JobRestrictionsPlugin-JIRAissues">JIRA issues</h1><p>If you have any proposals/bug reports, please create an issue on Jenkins JIRA.</p><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20&#39;job-restrictions-plugin&#39;&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h1 id="JobRestrictionsPlugin-Versionhistory">Version history</h1><h2 id="JobRestrictionsPlugin-Version0.8(Oct06,2018)">Version 0.8 (Oct 06, 2018)</h2><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-51359" class="external-link" rel="nofollow"><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> JENKINS-51359</a> - Fix Form validation issue for classname restrictions when a class belongs to another plugin</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Jenkins core requirement is updated to 2.60.3</li></ul><h2 id="JobRestrictionsPlugin-Version0.7(May16,2018)">Version 0.7 (May 16, 2018)</h2><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Jenkins core requirement is updated to 2.7.3</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> <a href="https://github.com/jenkinsci/job-restrictions-plugin/pull/19" class="external-link" rel="nofollow">PR #19</a> - Performance: use new core API to speedup user retrieval in the plugin</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> <a href="https://github.com/jenkinsci/job-restrictions-plugin/pull/22" class="external-link" rel="nofollow">PR #22</a> - Add Chinese localization for top-level entries</li></ul><h2 id="JobRestrictionsPlugin-Version0.6(10/14/2016)">Version 0.6 (10/14/2016)</h2><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Get full names for queue items when they're available. Solves the issue with restricting Pipelines within Folders (<a href="https://issues.jenkins-ci.org/browse/JENKINS-36626">JENKINS-36626</a>)</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Add Job Class Restriction (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38644">JENKINS-38644</a>)</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Update core dependency to 1.609.3 due to Pipeline autotest requirements</li></ul><h2 id="JobRestrictionsPlugin-Version0.5(08/03/2016)">Version 0.5 (08/03/2016)</h2><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Upgraded the core baseline to 1.580.x in order to support Pipeline in near future</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Upgrade to the new parent POM</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Change the display name of AnyJobRestriction to &quot;No restriction (take any)&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-36960">JENKINS-36960</a>)</li></ul><h2 id="JobRestrictionsPlugin-Version0.4(01/18/2015)">Version 0.4 (01/18/2015)</h2><ul><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Support of &quot;Started by user&quot; restriction (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25726">JENKINS-25726</a>)</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Support of &quot;Started by user from the group&quot; restriction (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25726">JENKINS-25726</a>) - thanks to <a class="confluence-userlink user-mention" data-username="csms" href="https://wiki.jenkins.io/display/~csms" data-linked-resource-id="65669152" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (csms)</a></li><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Avoid NPEs for deleted builds in UpstreamCauseRestriction for jobs (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26374">JENKINS-26374</a>)</li></ul><h2 id="JobRestrictionsPlugin-Version0.3(06/29/2013)">Version 0.3 (06/29/2013)</h2><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Added support of full names for all items: support of Folders Plugin and Maven modules (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23597">JENKINS-23597</a>)</li></ul><h2 id="JobRestrictionsPlugin-Version0.2.2(12/08/2013)">Version 0.2.2 (12/08/2013)</h2><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Missing jelly file causes errors on job configuration pages (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20357">JENKINS-20357</a>)</li></ul><h2 id="JobRestrictionsPlugin-Version0.2.1(11/13/2013)">Version 0.2.1 (11/13/2013)</h2><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Broken release, equals to <strong>0.2</strong></li></ul><h2 id="JobRestrictionsPlugin-Version0.2(10/26/2013)">Version 0.2 (10/26/2013)</h2><ul><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> AND and OR expressions with multiple entries (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20207">JENKINS-20207</a>)</li><li><p><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Restriction of manual build's execution (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20281">JENKINS-20281</a>)</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Warning!</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This version has corrupted resources, which may affect Jenkins installations on several platforms.<br/> Use job-restrictions 0.2.2 to avoid this issue</p></div></div></li></ul><h2 id="JobRestrictionsPlugin-Version0.1(08/26/2013)">Version 0.1 (08/26/2013)</h2><ul><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Initial version with basic restrictions for nodes and jobs</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69273423/69402769.png">Jenkins_JobRestrictions_NodeRestriction.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:30</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

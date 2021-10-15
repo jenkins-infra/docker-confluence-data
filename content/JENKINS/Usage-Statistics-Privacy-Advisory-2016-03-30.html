@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Usage Statistics Privacy Advisory 2016-03-30</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Usage-Statistics.html">Usage Statistics</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Usage Statistics Privacy Advisory 2016-03-30
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danielbeck)</span>, last modified on Mar 30, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><strong>A  bug introduced in Jenkins 1.645 and 1.642.2 caused Jenkins to send anonymous usage statistics data to the Jenkins project even if the administrator opted out of it.</strong></p>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020224909 {padding: 0px;}
+div.rbtoc1631020224909 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020224909 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020224909'>
+<ul class='toc-indentation'>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whichversionsareaffected?'>Which versions are affected?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whatdataisbeingcollected?'>What data is being collected?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Howisthedatatransferredandprocessed?Whocanaccessthedata?'>How is the data transferred and processed? Who can access the data?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whatareyoudoingwiththeusagedata?Whyareyouevencollectingit?'>What are you doing with the usage data? Why are you even collecting it?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whataboutprivatedata,likenamesofpluginswewroteourselves?'>What about private data, like names of plugins we wrote ourselves?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whatareyoudoingtofixthis?'>What are you doing to fix this?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Whataboutthedatayouhavealreadycollected?'>What about the data you have already collected?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-WhatcanIdoaboutthis?Isthereaworkaroundtoreallydisablesubmissionofusagestatistics?'>What can I do about this? Is there a workaround to really disable submission of usage statistics?</a></li>
+<li><a href='#UsageStatisticsPrivacyAdvisory2016-03-30-Thiswasfixedin1.653,whyareyouonlynotifyingusnow?'>This was fixed in 1.653, why are you only notifying us now?</a></li>
+</ul>
+</div>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whichversionsareaffected?">Which versions are affected?</h3>
+
+<p>The following versions of Jenkins do not properly honor the setting to opt out of usage statistics collection, resulting in data being submitted even when disabled:</p>
+
+<ul>
+	<li>Main line: 1.645 (inclusive) to 1.652 (inclusive)</li>
+	<li>LTS: 1.642.2 and 1.642.3</li>
+</ul>
+
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whatdataisbeingcollected?">What data is being collected?</h3>
+
+<ul>
+	<li>The public instance ID</li>
+	<li>Name and version of the servlet container</li>
+	<li>The version of Jenkins</li>
+	<li>For all connected nodes, including master,
+	<ul>
+		<li>The values of the system properties <code>java.vm.vendor</code>, <code>java.vm.name</code>, <code>java.version</code></li>
+		<li>The number of executors</li>
+		<li>The operating system as shown on the &quot;Manage Nodes&quot; page in Jenkins, e.g. <code>Linux (amd64)</code></li>
+	</ul>
+	</li>
+	<li>For all installed and enabled plugins,
+	<ul>
+		<li>the short name/artifactId (e.g. <code>git</code>, or <code>email-ext</code>)</li>
+		<li>the version</li>
+	</ul>
+	</li>
+	<li>For all item/job types,
+	<ul>
+		<li>the class name (e.g. <code>hudson.model.FreestyleProject</code>)</li>
+		<li>the number of items/job of that type in your Jenkins</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>For an example of this data, see <a href="Usage-Statistics.html">this wiki page</a>.</p>
+
+<p><strong>We do not collect information like job names, user names, host names, IP addresses, build logs, build names or descriptions, etc.</strong></p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Howisthedatatransferredandprocessed?Whocanaccessthedata?">How is the data transferred and processed? Who can access the data?</h3>
+
+<p>The data is encrypted, base64-encoded, and transferred via an AJAX request piggybacking on a user's browser.</p>
+
+<p>The data is stored encrypted on the Jenkins project infrastructure, from where it is downloaded, decrypted, and filtered locally by one of the board members, and uploaded again. Only <a href="Governance-Board.html">Jenkins board members</a> have access to the decryption key to read the full, raw data.</p>
+
+<p>Partially decrypted (see below) data was made available to the public at <a class="external-link" href="https://jenkins-ci.org/census/" rel="nofollow">https://jenkins-ci.org/census/</a></p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whatareyoudoingwiththeusagedata?Whyareyouevencollectingit?">What are you doing with the usage data? Why are you even collecting it?</h3>
+
+<p>We're currently providing the statistics at <a href="http://stats.jenkins-ci.org/jenkins-stats/" class="external-link" rel="nofollow">http://stats.jenkins-ci.org/jenkins-stats/</a> to everyone. They show various statistics, e.g. number of known Jenkins instances, which plugins are most popular, etc.</p>
+
+<p>We're also providing mostly plugin-related statistics at <a href="http://stats.jenkins-ci.org/plugin-installation-trend/" class="external-link" rel="nofollow">http://stats.jenkins-ci.org/plugin-installation-trend/</a> that are used on the Jenkins wiki to indicate plugin popularity, as well as help plugin developers make choices about which versions of Jenkins to target as minimum compatible release.</p>
+
+<p>Data such as operating system, servlet container and Java version help us make decisions on what platforms need to be supported by Jenkins.</p>
+
+<p>In the future, we'd like to use the statistics to help tell us which versions of Jenkins/plugins are unpopular and downgraded from, to help  us spot problems.</p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whataboutprivatedata,likenamesofpluginswewroteourselves?">What about private data, like names of plugins we wrote ourselves?</h3>
+
+<p>Operating system names, servlet container names, and Java VM vendor, name, and version are always fully decrypted.</p>
+
+<p>Item/job types and plugin names are only decrypted based on what's essentially a whitelist:</p>
+<ul>
+	<li>In the case of job types, all types starting with <code>hudson.</code>, <code>org.jvnet.hudson</code>, and <code>org.jenkinsci</code> are currently considered public. If you follow the convention to use package names corresponding to your organization (e.g. com.yourcorp.whatever), these types will not be decrypted.</li>
+	<li>In the case of plugins, only plugin names for plugins available on the Jenkins community update site are decrypted.</li>
+</ul>
+
+
+<p>While the processed data still contains entries for all plugins and item types, those determined to be private are still encrypted, and not part of output such as the stats site.</p>
+
+<p><strong>Again: We do not collect information like job names, user names,  host names, IP addresses, build logs, build names or descriptions, etc.</strong></p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whatareyoudoingtofixthis?">What are you doing to fix this?</h3>
+
+<p>As soon as we found out about this bug, we disabled third party access to the partially decrypted data at <a href="http://jenkins-ci.org/census" class="external-link" rel="nofollow">http://jenkins-ci.org/census</a></p>
+
+<p>We also changed <a href="https://github.com/jenkins-infra/usage-log-decrypter" class="external-link" rel="nofollow">the decryption/filter tool</a> to discard all data submitted by the affected Jenkins versions, to make  sure we're not using data from users not upgrading Jenkins and not  applying the workaround described below. We can't do anything about the  encrypted data we will continue to receive, as we don't know what version it's about until we decrypt it. So we discard it in the same processing step as decryption.</p>
+
+<p>We'll also release an unscheduled LTS release, 1.642.4, later this week, so users on the LTS line can upgrade to that version to get the  bug fix. This LTS release will not impact the regular LTS schedule, i.e. we still plan to release 1.651.1 in two weeks.</p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Whataboutthedatayouhavealreadycollected?">What about the data you have already collected?</h3>
+
+<p>We regenerated all statistics data for January and February, applying the version filter mentioned above, to make sure we remove all traces of the affected versions' usage data from the data we have.</p>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-WhatcanIdoaboutthis?Isthereaworkaroundtoreallydisablesubmissionofusagestatistics?">What can I do about this? Is there a workaround to <em>really</em> disable submission of usage statistics?</h3>
+
+<p>If you are running one of the affected versions, the best medium-term solution is to upgrade. The bug does not affect Jenkins 1.653 or newer, or Jenkins LTS 1.642.4 or newer.</p>
+
+<p>In the short term, you can immediately disable submission of usage  statistics to the Jenkins project by running the following script in <em>Manage Jenkins » Script Console</em>:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">hudson.model.UsageStatistics.DISABLED = true</pre>
+</div></div>
+
+<p>This will immediately disable usage data submission until you restart Jenkins. To make this permanent, change your Jenkins startup script so it passes a system property to the java process:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">java -Dhudson.model.UsageStatistics.disabled=true -jar …/jenkins.war</pre>
+</div></div>
+
+<p>For information how to do this when using one of the installers/packages, <a href="Native-Packages.html">see the installer/package documentation here</a>.</p>
+
+<p>To verify that usage stats submission is disabled, run the following script in <em>Manage Jenkins » Script Console</em> and confirm the result is true:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">println hudson.model.UsageStatistics.DISABLED</pre>
+</div></div>
+
+<h3 id="UsageStatisticsPrivacyAdvisory2016-03-30-Thiswasfixedin1.653,whyareyouonlynotifyingusnow?">This was fixed in 1.653, why are you only notifying us now?</h3>
+
+<p>We noticed an unusual drop in usage data for the month of February.  We were initially unable to determine the cause, but reverted a  robustness-improving commit that changed code related to usage data  submission anyway. This change went into 1.653. While again looking for  the cause of the drop of reported usage data earlier this week, we  determined that it was really only affecting versions that included this  commit, so we took a closer look at it -- and found that it actually  inverted the meaning of the usage data option: Only instances opted out  of it did now submit data.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

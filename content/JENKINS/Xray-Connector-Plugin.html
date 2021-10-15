@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Xray Connector Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Xray Connector Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (xpandit)</span>, last modified on Oct 16, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Xray - Test Management for Jira <a href="https://plugins.jenkins.io/xray-connector" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-11/#SECURITY-2251%20(1)" class="external-link" rel="nofollow">CSRF vulnerability allows capturing credentials</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-11/#SECURITY-2251%20(2)" class="external-link" rel="nofollow">Missing permission check allows enumerating credentials IDs</a></li>
+</ul>
+
+</div></div>
+<br/></p><p><br/>This plugin enables continuous integration using Jenkins and Xray Test Management. In a nutshell, this connector provides tasks to publish test results from Jenkins to Xray.<br/></p><p><br/></p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Full Documentation</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The documentation below it's a &quot;Quick Start&quot; version of our full documentation available in Xray official page:</p><ul><li>Xray Cloud: <a href="https://confluence.xpand-it.com/display/XRAYCLOUD/Using+the+Xray+plugin+-+Jenkins" class="external-link" rel="nofollow">https://confluence.xpand-it.com/display/XRAYCLOUD/Using+the+Xray+plugin+-+Jenkins</a></li><li>Xray Server: <a href="https://confluence.xpand-it.com/display/public/XRAY/Integration+with+Jenkins" class="external-link" rel="nofollow">https://confluence.xpand-it.com/display/public/XRAY/Integration+with+Jenkins</a></li></ul><p>You can also check the source code of the plugin here: <a href="https://github.com/jenkinsci/xray-connector-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/xray-connector-plugin</a></p></div></div><div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Upgrading from version below 2.1</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are upgrading from a version below 2.1, you have to:</p><ol><li>Uninstall the old version of the plugin (xray-for-jira-connector)</li><li>Go to the <em>Xray configuration</em> section and <strong>re-write</strong> your instances credentials</li><li><strong>Re-save</strong> (you don't need to change any data) any Project/Job that is using Xray steps.</li></ol></div></div><p><br/></p><h2 id="XrayConnectorPlugin-Features">Features</h2><ul><li>Integration with both Xray in Jira Cloud and Jira Server/Data Center</li><li>Export Cucumber features files from Xray</li><li>Import Cucumber feature files to Xray</li><li>Import your test results in any format supported by Xray</li></ul><h2 id="XrayConnectorPlugin-Requirements">Requirements</h2><ul><li>Jenkins 2.60.3 or above</li><li>At least one Jira instance (Server, Data Center and/or Cloud) with the <a href="https://marketplace.atlassian.com/apps/1211769/xray-test-management-for-jira" class="external-link" rel="nofollow">Xray</a> installed.</li></ul><h2 id="XrayConnectorPlugin-Needhelp?">Need help?</h2><p>If you need any help using in <em>Xray Test Management for Jira</em> or this plugin, you can contact by using our <a href="http://xraysupport.xpand-it.com" class="external-link" rel="nofollow">Support System</a>.</p><h2 id="XrayConnectorPlugin-Configuration">Configuration</h2><p>Xray for Jenkins is configured in the global settings configuration page  <strong>Manage Jenkins</strong> &gt; <strong>Configure System &gt; Xray configuration</strong>.</p><p>To add a new Jira instance connection, you need to specify some properties:</p><ol><li><strong>Configuration alias: </strong>the name you want to give to this configuration</li><li><strong>Hosting: </strong><span style="color: rgb(23,43,77);">Hosting (instance type) in this case Cloud/Server/Data Center</span></li><li><strong>(<span style="color: rgb(23,43,77);">Server/Data Center only) </span>Server Address</strong>: The address of the Jira Server where Xray is running</li><li>Credentials:<br/><ol><li>Use the <strong>Jenkins Credentials Plugin</strong> to set the username/password (if you are using a Server/Data Center instance) or an API key/secret (if you are using an Cloud instance)</li><li>Make sure that the user you are using have the following permissions in the projects where you want to import the results and import/export feature files: <strong>View, Edit, Create</strong></li></ol></li></ol><p>Note: the Configuration ID is not editable. This value can be used in the pipelines scripts.</p><p>After setting the instances, you can test your connection to Jira, by using the and <strong><em>Test Connection</em></strong> button.</p><p>When you are done configuring your Jira instances, don't forget to <strong>Save </strong>the changes.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/182487254/182487257.png" data-image-src="attachments/182487254/182487257.png" data-unresolved-comment-count="0" data-linked-resource-id="182487257" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="182487254" data-linked-resource-container-version="16"></span></p><h2 id="XrayConnectorPlugin-JobTasks">Job Tasks</h2><p>Currently, we support <strong>Freestyle</strong>,<strong> Pipeline, Multi-configuration Projects</strong> and<strong> Maven projects</strong>.</p><p>This plugin provides 2 new Build tasks:</p><p>The <strong><em>Xray: Cucumber Features Export Task</em></strong> and the <strong><em>Xray: Cucumber Features Import Task</em></strong></p><p>Both tasks can be used while executing Cucumber tests: In a typical <a href="http://confluence.xpand-addons.com/display/XRAY/Testing+with+Cucumber" class="external-link" rel="nofollow">Cucumber Workflow</a>, after having created a Cucumber project and the Cucumber tests specified in Jira, you may want to have a project that <strong>exports</strong> the features from Jira, executes the automated tests on a CI environment and then <strong>imports</strong> back its results.</p><p>For this scenario, the Jenkins project would be configured with a set of tasks responsible for:</p><ol><li>Pulling the Cucumber project</li><li><strong>Exporting Cucumber features from Jira to your Cucumber project</strong></li><li>Executing the tests in the CI environment</li><li><strong>Importing the execution results back to Jira</strong></li></ol><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/182487254/182487260.png" data-image-src="attachments/182487254/182487260.png" data-unresolved-comment-count="0" data-linked-resource-id="182487260" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-steps.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="182487254" data-linked-resource-container-version="16"></span></p><p><br/></p><p>In the <strong>Post-build Actions</strong>, you can add the <strong><em>Xray: Results Import Task</em></strong>, in order to import your Test Results in the following formats:</p><ul><li>Xray JSON</li><li>Xray JSON Multipart</li><li>Cucumber JSON</li><li>Cucumber JSON Multipart</li><li>Behave JSON <strong>(Xray Server/Data Center Only)</strong></li><li>Behave JSON Multipart <strong>(Xray Server/Data Center Only)</strong></li><li>JUnit XML</li><li>JUnit XML Multipart</li><li>Nunit XML</li><li>NUnit XML Multipart</li><li>Robot XML</li><li>Robot XML Multipart</li><li>TestNG XML</li><li>TestNG XML Multipart</li><li>xUnit XML <strong>(Xray Cloud only)</strong></li><li>xUnit XML Multipart <strong>(Xray Cloud only)</strong></li></ul><p><strong><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/182487254/182487264.png" data-image-src="attachments/182487254/182487264.png" data-unresolved-comment-count="0" data-linked-resource-id="182487264" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="import-results.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="182487254" data-linked-resource-container-version="16"></span></strong></p><p><br/></p><h2 id="XrayConnectorPlugin-Wanttolearnmore?">Want to learn more?</h2><p>Check out <a href="https://getxray.app" class="external-link" rel="nofollow">Xray Test Management website</a> if you want to learn more about Xray and understand how to leverage Jira for test management. Feel free to <a href="https://marketplace.atlassian.com/apps/1211769/xray-test-management-for-jira?hosting=server&amp;tab=overview" class="external-link" rel="nofollow">try it out</a>.</p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/182487254/182487257.png">configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/182487254/182487260.png">build-steps.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/182487254/182487264.png">import-results.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:59</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Building a matrix project</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Building a matrix project
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (akiko)</span> on Mar 01, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Building+a+matrix+project">Building a matrix project</a></p>
+
+<h2 id="Buildingamatrixproject-これは何?">これは何?</h2>
+
+<p>Jenkinsには&quot;マルチ構成プロジェクト&quot;と呼ばれるジョブタイプがあり、<a href="Building-a-software-project.html">フリースタイル・プロジェクト</a> をビルドの設定をパラメータ化できるように拡張しています。</p>
+
+<p>ここでは、このジョブスタイルがいかに便利かを説明します。あなたが<a href="https://jax-ws.dev.java.net/" class="external-link" rel="nofollow">JAX-WS RI</a>を開発しているとしましょう。このプロジェクトでは、様々な異なる環境でテストする必要があります。Solaris、Linux,およびWindowsといったOS、Glassfish、TomcatおよびJettyのようなコンテナ、JDK5、JDK6などのVM、様々なStAxの実装。もし、すべての組み合わせをテストするとすれば、36通りの組み合わせが考えられます。フリースタイル・プロジェクトを使うとしたら、ほとんど同じような36個のジョブを準備する必要があります。 これは明らかに維持できるものではありません。</p>
+
+<p>マルチ構成プロジェクトはこのような状況を扱えるようにデザインされています。マルチ構成プロジェクトでは、1つの設定とユーザー定義の複数のパラメータを準備し、ビルドを実行すると、そのパラメータのすべての組み合わせをビルドし、分かりやすく結果をまとめます。</p>
+
+<p>テストに加えて、このジョブタイプは、複数のプラットフォーム上でのビルドでも便利です。</p>
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Alpha quality warning</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>この機能は、あたらしく1.122で追加されました。So be warned of possible rough edges and missing features. As usual, we appreciate your feedback on this feature. See the <a href="https://hudson.dev.java.net/issues/buglist.cgi?Submit+query=Submit+query&amp;component=hudson&amp;subcomponent=matrix&amp;issue_status=NEW&amp;issue_status=STARTED&amp;issue_status=REOPENED&amp;version=current&amp;email1=&amp;emailtype1=exact&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=exact&amp;emailreporter2=1&amp;issueidtype=include&amp;issue_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;short_desc=&amp;short_desc_type=fulltext&amp;long_desc=&amp;long_desc_type=fulltext&amp;issue_file_loc=&amp;issue_file_loc_type=fulltext&amp;status_whiteboard=&amp;status_whiteboard_type=fulltext&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time" class="external-link" rel="nofollow">Matrix Project bug queue</a> to see what's missing.
+<br class="atl-forced-newline"/></p></div></div>
+
+<h2 id="Buildingamatrixproject-軸の設定">軸の設定</h2>
+
+<p>このジョブタイプは専用の設定パラメータを2つを用意しています。</p>
+<ul>
+	<li><strong>JDKs</strong>: 構成軸に追加する複数のJDKを指定できます。上記のJAX-WSの例では、両方をテストするようにJDK5とJDK6をチェックします。</li>
+	<li><strong>ノード</strong>: 構成軸に追加する複数のスレーブやラベルを指定できます。上記のJAX-WSの例では、Windows、SolarisおよびLinuxのラベルを作り、3種類すべてのノード上で各設定で動くように3つともチェックします。</li>
+</ul>
+
+
+<p>任意の軸を追加することもできます。どの軸も名前と組み合わせに追加する複数の値を持っています。これらのユーザー定義の軸はビルドスクリプトに変数として渡されるので、ビルドスクリプトでそれらの変数を認識し、それに応じて動作するようにします。 例えば、メインのビルドがAntプロジェクトとして設定されているなら、変数をAntのプロパティとして取得します。シェルスクリプトなら、環境変数として取得します。</p>
+
+<p>複数の軸、JDK、ノードを指定すると、すべての組み合わせでビルトされます。上記のJAX-WSの例では、マルチ構成プロジェクトは異なる設定を持つ36個のサブビルドで構成されます。すべてのサブプロジェクトは、SCMから全く同一のワークスペースのコピーをチェックアウトします。</p>
+
+<h2 id="Buildingamatrixproject-ワークアラウンド">ワークアラウンド</h2>
+
+<p> For issue &quot;936 Matrix parent build shouldn't consume an executor&quot;:</p>
+
+<p>First find a machine (virtual or whatever) with resources making it unusable for any other work. Add it as a slave with say 10 executors and let it be &quot;Utilize as much as possible&quot;. Then parent job will execute on it (given you don't have other such slaves) so you will not block a good executor for such a job.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

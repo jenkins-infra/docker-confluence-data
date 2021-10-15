@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : 2.0 UX improvements</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-2.0.html">Jenkins 2.0</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : 2.0 UX improvements
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danielbeck)</span>, last modified by <span class='editor'> Unknown User (kohsuke)</span> on Oct 25, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Please use <a href="https://issues.jenkins-ci.org/browse/JENKINS-31156">epic ticket</a> for comments, feedbacks, etc.</p></div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This is a draft document for <a href="Jenkins-2.0.html">Jenkins 2.0</a>. Many of this is real (yet).</p></div></div>
+
+<p>A more powerful plugin manager. A revamped UI for configuring jobs, views, slaves, etc. An easier to use &quot;New Item/View/Slave&quot; dialog.</p>
+
+<h2 id="id-2.0UXimprovements-Overview">Overview</h2>
+
+<p>Over the past year and a half or so, Tom and I have been cobbling together fragments of Javascript, Java and Jelly code trying to push the Jenkins web ui in the right direction, but routinely bumping into the walls of inflexible page DOM, incompatible legacy JS libraries, plugin compatibility concerns and life draining skepticism from the community. With the release of a new version of Jenkins, Tom and now Keith and I are eager to cast off some of this baggage so we can start bringing the Jenkins web user experience.</p>
+
+<h3 id="id-2.0UXimprovements-Subjectareas">Subject areas</h3>
+
+<p>The Jenkins GUI has a potentially broad reach and many areas for possible and substantial improvement. To help clarify the effort, the following 15 subprojects are a helpful means of dividing possible areas of work:</p>
+
+<p><a href="https://www.youtube.com/embed/yra_HzRzt1k" class="external-link" rel="nofollow">https://www.youtube.com/embed/yra_HzRzt1k</a> (6min and again 11min as Tom demos themes which are an upside enabled by semantic pages and required for config pages demoed at 24min)</p>
+<ol>
+	<li>Initial plugin selection and installation <br/>
+<a href="https://youtu.be/kzRR8XR8hu4" class="external-link" rel="nofollow">https://youtu.be/kzRR8XR8hu4</a></li>
+	<li>Flexible LESS driven theming (Tom’s forgotten effort)<br/>
+This is not as well articulated but touched on in this JUC talk:<br/>
+<a href="https://www.youtube.com/embed/yra_HzRzt1k" class="external-link" rel="nofollow">https://www.youtube.com/embed/yra_HzRzt1k</a> (11 min in)</li>
+	<li>New item categorization and dynamic choice offering<br/>
+<a href="https://www.youtube.com/watch?v=A_lu-P0OhNQ" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=A_lu-P0OhNQ</a></li>
+	<li>Configuration page overhaul<br/>
+<a href="https://www.youtube.com/watch?v=A_lu-P0OhNQ" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=A_lu-P0OhNQ</a></li>
+	<li>Plugin Manager and Update Center overhaul <br/>
+<a href="https://www.youtube.com/watch?v=9vPUMe3lzfo" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=9vPUMe3lzfo</a><br/>
+<a href="https://www.youtube.com/watch?v=kcxKvyX4Oq8" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=kcxKvyX4Oq8</a><br/>
+<a href="https://www.youtube.com/watch?v=jf5s0sqIYBY" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=jf5s0sqIYBY</a></li>
+	<li>Fully responsive app page template wrapper</li>
+	<li>Workflow results monitoring </li>
+	<li>Improved console out (easier access and better readability)</li>
+	<li>Multi and inline action grid control (with sorting and grouping)</li>
+	<li>Global context build queue tracking</li>
+	<li>Improved post-run build analytics (<a href="https://www.youtube.com/watch?v=FzvmEcqlfgk" class="external-link" rel="nofollow">video</a>)</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31095">Terminology cleanup</a></li>
+</ol>
+
+
+<h2 id="id-2.0UXimprovements-References">References</h2>
+
+<ul>
+	<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a>'s <a href="http://jenkins-ci.org/content/gui-improvements-horizon" class="external-link" rel="nofollow">blog post</a></li>
+	<li><a href="http://jenkins-ci.org/content/office-hour-proposed-uiux-changes" class="external-link" rel="nofollow">Jenkins blog post with references to previous discussions and presentations</a></li>
+</ul>
+
+
+<h2 id="id-2.0UXimprovements-RelatedIssues">Related Issues</h2>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-14538">JENKINS-14538</a> Separate &quot;configure tools&quot; page
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> So far, I have not looked more deeply into the notion of splitting the control of plugin added configuration from stock job configuration (as suggested here, if I am understanding correctly). Even outside of #14538, the idea of somehow segmenting plugin added controls from stock controls has come up in JUC and makes a lot of sense. What I am suggesting for configuration is collapsible regions. As shown here: </li>
+		<li><a href="https://www.youtube.com/watch?v=qKLi_ViPXy8" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=qKLi_ViPXy8</a></li>
+		<li><a href="https://www.youtube.com/watch?v=A_lu-P0OhNQ" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=A_lu-P0OhNQ</a></li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17011">JENKINS-17011</a> More convenient job selection control
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> As part of a CloudBees feature development, we have constructed a new file browsing control that does a sort of type-complete of your folder structure, allowing you to type or pick your path smoothly. This control should be generalized and open-source.</li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17373">JENKINS-17373</a> Unconditionally display tool installation selector
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> This seems Maven job specific, or am I misunderstanding?</li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-18435">JENKINS-18435</a> Navigating back, then forward, from a job configuration causes loss of config data</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-19828">JENKINS-19828</a> Kill or rework auto refresh
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> yes, this is awful. I would like to see real time sensitive data separated a bit from configuration. Then real time data could be handled in a more modern way and most importantly not bog down the sort of regular page navigation that is required for configuration (which is also less than ideal).</li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-19584">JENKINS-19584</a> Ability to redirect user to configuration screen when erroneous data is saved
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> This issues seems specific to a particular error case that is not adequately handled. The behavior described by the issue reported is the behavior we want in all possible cases.<br/>
+ </li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21092">JENKINS-21092</a> Adaptable UI for Mobile Devices
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> I believe this needs to happen. For it to happen, many pages will need to have moderate DOM structure changes that will require a refactoring of hudson-behavior.js and will introduce some plugin instability.</li>
+	</ul>
+	</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20190">JENKINS-20190</a> Ability to sort or group /lib/hudson/newFromList:form</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21486">JENKINS-21486</a> Fail a plugin if its dependencies doesn't exist</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22926">JENKINS-22926</a> Extension point for augmenting Plugin Manager display
+	<ul>
+		<li><a class="confluence-userlink user-mention" data-username="gusreiber" href="https://wiki.jenkins.io/display/~gusreiber" data-linked-resource-id="80642234" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (gusreiber)</a> I think plugin handling needs to be completely overhauled:</li>
+		<li><a href="https://www.youtube.com/watch?v=9vPUMe3lzfo" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=9vPUMe3lzfo</a></li>
+		<li><a href="https://www.youtube.com/watch?v=kcxKvyX4Oq8" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=kcxKvyX4Oq8</a></li>
+		<li><a href="https://www.youtube.com/watch?v=jf5s0sqIYBY" class="external-link" rel="nofollow">https://www.youtube.com/watch?v=jf5s0sqIYBY</a></li>
+	</ul>
+	</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

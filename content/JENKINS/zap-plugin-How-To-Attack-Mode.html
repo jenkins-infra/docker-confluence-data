@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : zap-plugin How To Attack Mode</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="zap-plugin.html">zap plugin</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Configure-the-Job.html">Configure the Job</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : zap-plugin How To Attack Mode
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jordangs)</span>, last modified on Nov 15, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h4 id="zap-pluginHowToAttackMode-AttackMode">Attack Mode</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/102662429/102793270.png" data-image-src="attachments/102662429/102793270.png" data-unresolved-comment-count="0" data-linked-resource-id="102793270" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="attack_modes.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662429" data-linked-resource-container-version="6"></span></p>
+
+<ol>
+	<li><strong>Starting Point</strong><br/>
+ 
+	<ul>
+		<li>The starting point is the request you desire from which you would like all attacks to originate from.
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> Specify a URL as the starting point in the form of:<br/>
+ <br/>
+<strong>e.g.</strong> <span style="color: gray;"><code><span class="nolink">http://localhost:8180/bodgeit/</span></code></span></p></div></div>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> Accepts <strong>System Environment Variables</strong>, <strong>Build Variables</strong> as well as <strong>Environment Inject Plugin Variables</strong>(cannot be used during pre-build).</p></div></div></li>
+	</ul>
+	</li>
+	<li><strong><a href="https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsSpider#spider" class="external-link" rel="nofollow">Spider Scan</a></strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Evaluates URL for <a href="https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsPscan#passive-scan" class="external-link" rel="nofollow">Passive Alerts</a>.<br/>
+ 
+	<ul>
+		<li><strong>Recurse</strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Default: True
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> If you select 'Recurse' then all of the nodes underneath the one specified will also be used to seed the spider.</p></div></div></li>
+		<li><strong>Subtree Only</strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Default: False
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> If you select 'Subtree Only' the spider will only access resources that are under the starting point (URI). When evaluating if a resource is found within the specified subtree, the spider considers only the scheme, host, port, and path components of the URI.</p></div></div></li>
+		<li><strong>Max Children to Crawl</strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Default: 0
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> Specify the 'Max Children to Crawl'. This parameter limits the number of children that will be crawled at every node in the tree. This is useful for data driven applications that have large numbers of 'pages' that are in fact exactly the same code but containing different data, for example from a database. By default this is set to zero which means there are no limits applied to the number of child nodes crawled.</p></div></div></li>
+	</ul>
+	</li>
+	<li><strong><a href="https://github.com/zaproxy/zap-core-help/wiki/HelpAddonsSpiderAjaxConcepts#ajax-spider" class="external-link" rel="nofollow">AJAX Spider</a></strong><br/>
+ 
+	<ul>
+		<li><strong>In Scope Only</strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Default: False
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> If you select 'In Scope Only' then any URLs which are out of scope will be ignored.</p></div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Notice:</strong> Does <strong>not</strong> support authentication.</p></div></div></li>
+	</ul>
+	</li>
+	<li><strong><a href="https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan#active-scan" class="external-link" rel="nofollow">Active Scan</a></strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Evaluates URL for <a href="https://github.com/zaproxy/zap-core-help/wiki/HelpStartConceptsAscan#active-scan" class="external-link" rel="nofollow">Active Alerts</a>.<br/>
+ 
+	<ul>
+		<li><strong>Policy</strong>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> Select a ZAP policy to use for the Active Scan. The policies must be stored in the Path provided for 'ZAP Settings'. &quot;Default Policy&quot; is used if no policy is specified.</p></div></div></li>
+		<li><strong>Recurse</strong> – <img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Default: True
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> If you select 'Recurse' then all of the nodes underneath the one selected will also be scanned. Custom input vectors are only supported if this option is not selected.</p></div></div></li>
+	</ul>
+	</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662429/102793270.png">attack_modes.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:01</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

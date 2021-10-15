@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : PureCoverage plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : PureCoverage plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (szczepiq)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'pure-coverage-publisher' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>PureCoverage plugin reports coverage results from Rational PureCoverage tool (c++ coverage tool). <br/>
+The plugin takes flat text file ('export' file) as input so you need to make your build export PureCoverage report in this format.</p>
+
+<p>Tested with large report files.</p>
+
+<p>Limitations:</p>
+<ul>
+	<li>NOTE - After spending a number of hours pulling my hair out -&gt; this plugin version only works on the text output from the UNIX version of purecov, NOT on the windows output from 'coverage.exe' - the formats are <strong>totally</strong> different.</li>
+	<li>I only use it with free-style project-type jobs so I cannot grant it works with maven2 project-type jobs.</li>
+	<li>It doesn't accumulate reports in case there are multiple report files</li>
+</ul>
+
+
+<p>Compilation 6th May 2010:</p>
+<ul>
+	<li>NOT completely tested! (so not checked in...)</li>
+	<li>Code 'https://svn.dev.java.net/svn/hudson/trunk/hudson/plugins/pure-coverage' @ revision 30769</li>
+	<li>This plugin was originally coded against Hudson '1.258'. I have successfully recompiled against '1.356', after:</li>
+</ul>
+
+
+<p>From \pom.xml, Completely <strong>removing</strong>:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+    &lt;!-- Finally, the slowest repository of them all --&gt;
+    &lt;repository&gt;
+      &lt;id&gt;hudson-libs&lt;/id&gt;
+      &lt;url&gt;https://hudson.dev.java.net/source/browse/*checkout*/hudson/hudson/main/lib&lt;/url&gt;
+      &lt;layout&gt;legacy&lt;/layout&gt;
+      &lt;releases&gt;
+        &lt;enabled&gt;true&lt;/enabled&gt;
+        &lt;!-- only look for jars here when they are not present locally --&gt;
+        &lt;updatePolicy&gt;never&lt;/updatePolicy&gt;
+      &lt;/releases&gt;
+      &lt;snapshots&gt;
+        &lt;enabled&gt;false&lt;/enabled&gt;
+      &lt;/snapshots&gt;
+    &lt;/repository&gt;
+</pre>
+</div></div>
+
+<p>To CoveragePublisher.java <strong>adding</strong>:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@Override
+public BuildStepMonitor getRequiredMonitorService()
+{
+	return BuildStepMonitor.BUILD;
+}
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602017/46563467.gif">0838_fig1.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:40</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

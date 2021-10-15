@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Build Flow Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Build Flow Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (rodrigc)</span> on Aug 04, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><p class="title">Deprecated: Users should migrate to https://wiki.jenkins-ci.org/display/JENKINS/Pipeline+Plugin</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"></div></div>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin allows managing Jenkins jobs orchestration using a dedicated DSL, extracting the flow logic from jobs.</p></p>
+
+
+<h1 id="BuildFlowPlugin-Summary"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59510381/59900101.png" data-image-src="attachments/59510381/59900101.png" data-unresolved-comment-count="0" data-linked-resource-id="59900101" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59510381" data-linked-resource-container-version="76"></span> Summary</h1>
+
+<p>This plugin is designed to handle complex build workflows (aka build pipelines) as a dedicated entity in Jenkins. Without such a plugin, to manage job orchestration the user has to combine parameterized-build, join, downstream-ext and a few more plugins, polluting the job configuration. The build process is then scattered in all those jobs and very complex to maintain. Build Flow enables you to define an upper level Flow item to manage job orchestration and link up rules, using a dedicated DSL. This DSL makes the flow definition very concise and readable.</p>
+
+<h1 id="BuildFlowPlugin-Configuration">Configuration</h1>
+
+<p>After installing the plugin, you'll get a new Entry in the job creation wizard to create a Flow. Use the DSL editor to define the flow.</p>
+
+<h3 id="BuildFlowPlugin-Basics">Basics</h3>
+
+<p>The DSL defines the sequence of jobs to be built :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+build( &quot;job1&quot; )
+build( &quot;job2&quot; )
+build( &quot;job3&quot; )
+</pre>
+</div></div>
+
+<p>You can pass parameters to jobs, and get the resulting AbstractBuild when required :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+b = build( &quot;job1&quot;, param1: &quot;foo&quot;, param2: &quot;bar&quot; )
+build( &quot;job2&quot;, param1: b.build.number )
+</pre>
+</div></div>
+
+<p>Environment variables from a job can be obtained using the following, which is especially useful for getting things like the checkout revision used by the SCM plugin ('P4_CHANGELIST', 'GIT_REVISION', etc) :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+def revision = b.environment.get( &quot;GIT_REVISION&quot; )
+</pre>
+</div></div>
+
+<p>You can also access some pre-defined variables in the DSL :</p>
+
+<ul>
+	<li>&quot;build&quot; the current flow execution</li>
+	<li>&quot;out&quot; the flow build console</li>
+	<li>&quot;env&quot; the flow environment, as a Map</li>
+	<li>&quot;params&quot; triggered parameters</li>
+	<li>&quot;upstream&quot; the upstream job, assuming the flow has been triggered as a downstream job for another job.</li>
+</ul>
+
+
+<p>For example:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">// output values
+out.println &#39;Triggered Parameters Map:&#39;
+out.println params
+out.println &#39;Build Object Properties:&#39;
+build.properties.each { out.println &quot;$it.key -&gt; $it.value&quot; }
+
+// use it in the flow
+build(&quot;job1&quot;, parent_param1: params[&quot;param1&quot;])
+build(&quot;job2&quot;, parent_workspace:build.workspace)</pre>
+</div></div>
+
+<h3 id="BuildFlowPlugin-Guard/Rescue">Guard / Rescue</h3>
+
+<p>You may need to run a cleanup job after a job (or set of jobs) whenever they succeeded or not. The guard/rescue structure is designed for this use-case. It works mostly like a try+finally block in Java language :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+guard {
+    build( &quot;this_job_may_fail&quot; )
+} rescue {
+    build( &quot;cleanup&quot; )
+}
+</pre>
+</div></div>
+
+<p>The flow result will then be the worst of the guarded job(s) result and the rescue ones</p>
+
+<h3 id="BuildFlowPlugin-Ignore">Ignore</h3>
+
+<p>You may also want to just ignore result of some job, that are optional for your build flow. You can use ignore block for this purpose :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ignore(FAILURE) {
+    build( &quot;send_twitter_notification&quot; )
+}
+</pre>
+</div></div>
+
+<p>The flow will not take care of the triggered build status if it's better than the configured result. This allows you to ignore UNSTABLE &lt; FAILURE &lt; ABORTED</p>
+
+<h3 id="BuildFlowPlugin-Retry">Retry</h3>
+
+<p>You can ask the flow to retry a job a few times until success. This is equivalent to the retry-failed-job plugin :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+retry ( 3 ) {
+    build( &quot;this_job_may_fail&quot; )
+}
+</pre>
+</div></div>
+
+<h3 id="BuildFlowPlugin-Parallel">Parallel</h3>
+
+<p>The flow is strictly sequential, but let you run a set of jobs in parallel and wait for completion. This is equivalent to the join plugin :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+parallel (
+    // job 1, 2 and 3 will be scheduled in parallel.
+    { build(&quot;job1&quot;) },
+    { build(&quot;job2&quot;) },
+    { build(&quot;job3&quot;) }
+)
+// job4 will be triggered after jobs 1, 2 and 3 complete
+build(&quot;job4&quot;)
+</pre>
+</div></div>
+
+<p>compared to join plugin, parallel can be used for more complex workflows where the parallel branches can sequentially chain multiple jobs :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+parallel (
+    {
+        build(&quot;job1A&quot;)
+        build(&quot;job1B&quot;)
+        build(&quot;job1C&quot;)
+    },
+    {
+        build(&quot;job2A&quot;)
+        build(&quot;job2B&quot;)
+        build(&quot;job2C&quot;)
+    }
+)
+</pre>
+</div></div>
+
+<p>you also can &quot;name&quot; parallel executions, so you can later use reference to extract parameters / status :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+join = parallel ([
+        first:  { build(&quot;job1&quot;) },
+        second: { build(&quot;job2&quot;) },
+        third:  { build(&quot;job3&quot;) }
+])
+
+// now, use results from parallel execution
+build(&quot;job4&quot;,
+       param1: join.first.result.name,
+       param2: join.second.lastBuild.parent.name)
+</pre>
+</div></div>
+<p>and this can be combined with other orchestration keywords :</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+parallel (
+    {
+        guard {
+            build(&quot;job1A&quot;)
+        } rescue {
+            build(&quot;job1B&quot;)
+        }
+    },
+    {
+        retry 3, {
+            build(&quot;job2&quot;)
+        }
+    }
+)
+</pre>
+</div></div>
+
+<h3 id="BuildFlowPlugin-ExtensionPoint">Extension Point</h3>
+
+<p>Other plugins that expose themselves to the build flow can be accessed with extension.'plugin-name'</p>
+
+<p>So the plugin foobar might be accessed like:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+def x = extension.&#39;my-plugin-name&#39;
+x.aMethodOnFoobarObject()
+</pre>
+</div></div>
+
+<h4 id="BuildFlowPlugin-Pluginsimplementingextensionpoints">Plugins implementing extension points</h4>
+
+<p>(searching github for &quot;BuildFlowDSLExtension&quot;)</p>
+
+<ul>
+	<li><a href="https://github.com/jniesen/build-flow-json-parser-extension-plugin" class="external-link" rel="nofollow">https://github.com/jniesen/build-flow-json-parser-extension-plugin</a></li>
+	<li><a href="https://github.com/dnozay/build-flow-toolbox-plugin" class="external-link" rel="nofollow">https://github.com/dnozay/build-flow-toolbox-plugin</a></li>
+	<li><a href="https://github.com/jenkinsci/external-resource-dispatcher-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/external-resource-dispatcher-plugin</a></li>
+	<li><a href="https://github.com/jniesen/build-flow-http-extension-plugin" class="external-link" rel="nofollow">https://github.com/jniesen/build-flow-http-extension-plugin</a></li>
+	<li><a href="https://github.com/jenkinsci/buildflow-extensions-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/buildflow-extensions-plugin</a></li>
+</ul>
+
+
+<h4 id="BuildFlowPlugin-ImplementingExtension">Implementing Extension</h4>
+
+<p>Write the extension in your plugin</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">@Extension(optional = true)
+public class MyBuildFlowDslExtension extends BuildFlowDSLExtension {
+
+    /**
+     * The extensionName to use for the extension.
+     */
+    public static final String EXTENSION_NAME = &quot;my-plugin-name&quot;;
+
+    @Override
+    public Object createExtension(String extensionName, FlowDelegate dsl) {
+        if (EXTENSION_NAME.equals(extensionName)) {
+            return new MyBuildFlowDsl(dsl);
+        }
+        return null;
+    }
+}</pre>
+</div></div>
+<p>Write the actual extension</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public class MyBuildFlowDsl {
+    private FlowDelegate dsl;
+
+    /**
+     * Standard constructor.
+     * @param dsl the delegate.
+     */
+    public MyBuildFlowDsl(FlowDelegate dsl) {
+        this.dsl = dsl;
+    }
+
+    /**
+     * World.
+     */
+    public void hello() {
+        ((PrintStream)dsl.getOut()).println(&quot;Hello World&quot;);
+    }
+
+}</pre>
+</div></div>
+
+<h3 id="BuildFlowPlugin-Andmore...">And more ...</h3>
+
+<p>future releases may introduce support for some more features and DSL syntax for advanced job orchestration.</p>
+
+
+<h1 id="BuildFlowPlugin-Usage">Usage</h1>
+
+<p>As any Job, the Flow is executed by a trigger, and the Cause is exposed to the flow DSL. If you want to implement a build-pipeline after a commit on your scm, you can configure the flow to be triggered as the first scm-polling job is run, but you can as well use any other trigger (manual trigger, <a href="XTrigger-Plugin.html">XTrigger plugin</a>, ...) for your flow to integrate in a larger process.</p>
+
+<h1 id="BuildFlowPlugin-Needhelp?">Need help ?</h1>
+
+<p>Join <a href="Mailing-Lists.html">jenkins-user</a> mailing list and explain your use-case there</p>
+
+<h1 id="BuildFlowPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="BuildFlowPlugin-WorkinProgress">Work in Progress</h3>
+
+<h3 id="BuildFlowPlugin-0.20(releaseAug04,2016)">0.20 (release Aug 04, 2016)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34961">JENKINS-34961</a> Fix display issues with Jenkins 2.0</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.19(releaseMay09,2016)">0.19 (release May 09, 2016)</h3>
+
+<ul>
+	<li>allow a build flow dsl job to be called using <strong>build job:</strong> from a <a href="https://github.com/jenkinsci/pipeline-plugin" class="external-link" rel="nofollow">pipeline</a></li>
+	<li>fix dependency with <a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=Build%2BGraph%2BView%2BPlugin&amp;linkCreation=true&amp;fromPageId=59510381">buildgraph-view</a></li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.14(releaseSep.09,2014)">0.14 (release Sep. 09, 2014)</h3>
+
+<ul>
+	<li>enable test-jar for plugins leveraging the extension point.</li>
+	<li>use build.displayName in JobInvocation.toString.</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.13(releaseSep.09,2014)">0.13 (release Sep. 09, 2014)</h3>
+
+<ul>
+	<li>read DSL from a file</li>
+	<li>fix buildgraph when using 2nd level flows.</li>
+	<li>swap dependency with buildgraph-view.</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.12(releaseMay14,2014)">0.12 (release May 14, 2014)</h3>
+
+<ul>
+	<li>wait for build to be finalized</li>
+	<li>fixed-width font in DSL box</li>
+	<li>print stack traces when parallel builds fail</li>
+	<li>restore ability to <strong>use a workspace</strong>, as a checkbox in flow configuration (useful for SCM using workspace)</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.11.1">0.11.1</h3>
+
+<ul>
+	<li>no changes (added the compatibility warning to update center)</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.11(releasedApr.8,2014)">0.11 (released Apr. 8, 2014)</h3>
+
+<ul>
+	<li>plugin re-licensed to MIT</li>
+	<li><strong>build flow no longer has a workspace</strong></li>
+	<li>Validation of the DSL when configuring the flow</li>
+	<li>If a build could not be scheduled show the underlying cause</li>
+	<li>extensions can contribute to dsl help</li>
+	<li>aborting a flow causes all jobs scheduled and started by the flow to be aborted</li>
+	<li>retry is configurable</li>
+	<li>misc tweaks to UI and small fixes</li>
+</ul>
+
+
+
+<h3 id="BuildFlowPlugin-0.10">0.10 </h3>
+
+<ul>
+	<li>add support for SimpleParameters (parameter that can be set from a String)</li>
+	<li>mechanism to define DSL extensions</li>
+	<li>visualization moved to <a href="Build-Graph-View-Plugin.html">build-graph-view plugin</a></li>
+	<li>minor fixes</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.8(releasedFeb.11,2013)">0.8 (released Feb. 11, 2013)</h3>
+
+<ul>
+	<li>Fix folder support</li>
+	<li>Basic flow visualization support (thanks to <a class="confluence-userlink user-mention" data-username="gregory144" href="https://wiki.jenkins.io/display/~gregory144" data-linked-resource-id="66453853" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">~gregory144</a>)</li>
+	<li>Alternative map-style way to define parallel executions (thanks to <a class="confluence-userlink user-mention" data-username="jvoorhis" href="https://wiki.jenkins.io/display/~jvoorhis" data-linked-resource-id="65671103" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (jvoorhis)</a>)</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.7(releasedJan.11,2013)">0.7 (released Jan. 11, 2013)</h3>
+
+<ul>
+	<li>Add support for ignore(Result)</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.6(releasedNovember24,2012)">0.6 (released November 24, 2012)</h3>
+
+<ul>
+	<li>Enable &quot;read job&quot; permissions for Anonymous (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14027">JENKINS-14027</a>)</li>
+	<li>Print errors as .. errors</li>
+	<li>Better failed test reporting</li>
+	<li>Use transient ref to Job/Build …</li>
+	<li>Fix a NullPointer to render FlowCause after jenkins restart</li>
+	<li>Use futures for synchronization plus publisher support plus console println cleanup (Pull request #14 from coreyoconnor)</li>
+	<li>Call to Parametrized jobs correctly use their default values (Pull request #16 from dbaeli)</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.5(releasedSeptember03,2012)">0.5 (released September 03, 2012)</h3>
+
+<ul>
+	<li>fixed support for publishers (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14411">JENKINS-14411</a>)</li>
+	<li>improved job configuration UI (dedicated section, help, prepare code mirror integration)</li>
+	<li>improved error message</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.4(releasedJune28,2012)">0.4 (released June 28, 2012)</h3>
+
+<ul>
+	<li>fixed cast error parsing DSL (Collections$UnmodifiableRandomAccessList' to class 'long') on some version of Jenkins</li>
+	<li>add groovy bindings for current build as &quot;build&quot;, console output as &quot;out&quot;, environment variables Map as &quot;env&quot;, and triggered parameters of current build as &quot;params&quot;</li>
+	<li>fixed bug when many &quot;Parameters&quot; links were shown for each triggered parameter on build page</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.3(releasedApril12,2012)">0.3 (released April 12, 2012)</h3>
+
+<ul>
+	<li>add support for hierarchical project structure (typically : cloudbees folders plugin)</li>
+</ul>
+
+
+
+<h3 id="BuildFlowPlugin-0.2(releasedApril9,2012)">0.2 (released April 9, 2012)</h3>
+
+<ul>
+	<li>changed parallel syntax to support nested flows concurrent execution</li>
+	<li>fixed serialization issues</li>
+</ul>
+
+
+<h3 id="BuildFlowPlugin-0.1(releasedApril3,2012)">0.1 (released April 3, 2012)</h3>
+
+<ul>
+	<li>initial release with DSL-based job orchestration</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/59900101.png">flow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/59900102.png">cloudbees.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/61112355.png">serli.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/61112354.png">serli.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/71008316">test</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510381/71008317.png">test.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:14</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

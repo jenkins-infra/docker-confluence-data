@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jobcopy Builder plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jobcopy Builder plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ikedam)</span>, last modified on Oct 15, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Jobcopy Builder <a href="https://plugins.jenkins.io/jobcopy-builder" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>This plugin adds &quot;Copy Job&quot; as a build step.You can select how to retrieve choices, including the way to share choices among all jobs.</p><h2 id="JobcopyBuilderplugin-What&#39;sthis?">What's this?</h2><p>This plugin provides a Copy Job build step:</p><ul><li>It makes a new job from an existing job.<ul><li>You can copy multiple jobs in one build execution with specifying multiple Copy Job build steps.</li><li>Can be applied to any type of jobs.</li></ul></li><li>You specify following parameters.<ul><li>From Job Name<ul><li>Variable expressions can be used.</li></ul></li><li>To Job Name<ul><li>Variable expressions can be used.</li></ul></li><li>Overwrite<ul><li>Specifies whether to overwrite the destination job if it already exists.</li></ul></li></ul></li><li>Additional operations can be performed when copying.<ul><li>Enable Job: Enabling the destination job if the source job is disabled.</li><li>Disable Job: Disabling the destination job if the source job is enabled. ( &gt;= 1.3.0)</li><li>Replace String: Replace strings in a job configuration.<ul><li>Source and destination strings can contain variable expressions.</li></ul></li></ul></li><li>Additional operation can be extended by using Extension Points.</li></ul><h2 id="JobcopyBuilderplugin-Screenshots">Screenshots</h2><ol><li>You can add &quot;Copy Job&quot; build step.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65669907/65863885.png" data-image-src="attachments/65669907/65863885.png" data-unresolved-comment-count="0" data-linked-resource-id="65863885" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="01-configure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669907" data-linked-resource-container-version="17"></span></li><li>&quot;Copy Job&quot; performs additional operations. Replacing strings in the configuration, enabling a disabled job.<ul><li>The job copied from<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65669907/65863886.png" data-image-src="attachments/65669907/65863886.png" data-unresolved-comment-count="0" data-linked-resource-id="65863886" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="02-copyfrom01.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669907" data-linked-resource-container-version="17"></span></li><li>The job copied to. String &quot;VERSION&quot; is replaced, and the job is enabled.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65669907/65863887.png" data-image-src="attachments/65669907/65863887.png" data-unresolved-comment-count="0" data-linked-resource-id="65863887" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="03-copyto01.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669907" data-linked-resource-container-version="17"></span></li></ul></li><li>Replacing strings can be applied to any part of configurations, including that of plugins. This is a example that the branch field of Git plugin is replaced.<ul><li>The job copied from.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65669907/65863884.png" data-image-src="attachments/65669907/65863884.png" data-unresolved-comment-count="0" data-linked-resource-id="65863884" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="04-copyfrom02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669907" data-linked-resource-container-version="17"></span></li><li>The job copied to. String &quot;VERSION&quot; is replaced.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65669907/65863883.png" data-image-src="attachments/65669907/65863883.png" data-unresolved-comment-count="0" data-linked-resource-id="65863883" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="05-copyto02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65669907" data-linked-resource-container-version="17"></span></li></ul></li></ol><h2 id="JobcopyBuilderplugin-Howdoesthiswork?">How does this work?</h2><p>This plugin works as following:</p><ol><li>Reads the configuration xml (config.xml) of the copying job.</li><li>Applies the operations to the configuration xml string.</li><li>Create a new job with the processed configuration xml string.</li></ol><h2 id="JobcopyBuilderplugin-Extensionpoint">Extension point</h2><p>A new way to provide choices can be added with implementing <code>JobcopyOperation</code>, overriding the following method:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public String perform(String xmlString, String encoding, EnvVars env, PrintStream logger);
+</pre>
+</div></div><p>or, with extending <code>AbstractXmlJobcopyOperation</code>, overriding the following method:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">abstract public Document perform(Document doc, EnvVars env, PrintStream logger);
+</pre>
+</div></div><h2 id="JobcopyBuilderplugin-Usedwithpromotedbuilds">Used with promoted builds</h2><p>When used with <a href="Promoted-Builds-Plugin.html">Promoted Builds Plugin</a>, the configurations of promotions are not copied for they are not stored in config.xml.<br/> Do as followings:</p><ul><li>Click &quot;Advanced&quot; in &quot;copy Job&quot;</li><li>Add &quot;Additional File Sets&quot;, specify &quot;promotions/*/config.xml&quot; in &quot;Files&quot;.</li></ul><h2 id="JobcopyBuilderplugin-Permissionstocopyjobs">Permissions to copy jobs</h2><ul><li><p>&quot;Copy Job&quot; build step requires following permissions.</p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Target Job</p></th><th class="confluenceTh"><p>Required permissions</p></th><th class="confluenceTh"><p>Notes</p></th></tr><tr><td class="confluenceTd"><p>Item to copy from</p></td><td class="confluenceTd"><p>Job/Read, Job/ExtendedRead</p></td><td class="confluenceTd"><p>Job/ExtendedRead is displayed only when you install <a href="Extended-Read-Permission-Plugin.html">Extended Read Permission Plugin</a>. You can grant it by granting Job/Configure instead.</p></td></tr><tr><td class="confluenceTd"><p>Item to copy to (when create)</p></td><td class="confluenceTd"><p>Job/Create</p></td><td class="confluenceTd"><p> </p></td></tr><tr><td class="confluenceTd"><p>Item to copy to (when overwrite)</p></td><td class="confluenceTd"><p>Job/Read, Job/Configure</p></td><td class="confluenceTd"><p> </p></td></tr></tbody></table></div></li><li>&quot;Copy Job&quot; is run as ANONYMOUS as default.<ul><li>If you want &quot;Copy Job&quot; run as a specific user, use other plugins authenticate builds. e.g. <a href="Authorize-Project-plugin.html">Authorize Project plugin</a></li></ul></li></ul><h2 id="JobcopyBuilderplugin-Issues">Issues</h2><p>To report a bug or request an enhancement to this plugin please create a ticket in JIRA (you need to login or to sign up for an account). Also have a look on <a href="How-to-report-an-issue.html">How to report an issue</a></p><ul><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=1&amp;components=17506&amp;priority=4&amp;assignee=ikedam" class="external-link" rel="nofollow">Bug report</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=4&amp;components=17506&amp;priority=4" class="external-link" rel="nofollow">Request or propose an improvement of existing feature</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=2&amp;components=17506&amp;priority=4" class="external-link" rel="nofollow">Request or propose a new feature</a></li></ul><p>
+
+
+
+
+
+<div id="refresh-module-1816535612" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues-1816535612" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64080?src=confmacro">JENKINS-64080</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64080?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-64080?src=confmacro">
+                                            Enable or disable Boolean value
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-53993?src=confmacro">JENKINS-53993</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-53993?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-53993?src=confmacro">
+                                            Provide recursive processing of jobs referenced in jobcopy plugin
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-30773?src=confmacro">JENKINS-30773</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-30773?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-30773?src=confmacro">
+                                            Use jobcopy-plugin&#39;s text replacement feature for existing jobs.
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18773?src=confmacro">JENKINS-18773</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18773?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18773?src=confmacro">
+                                            Copy Operation for adding new job to View
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="4">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%2C+%22In+Review%22%2C+Verified%29+AND+component+%3D+%27jobcopy-builder-plugin%27++&amp;src=confmacro">
+                                                            4 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><h2 id="JobcopyBuilderplugin-ChangeLog">Change Log</h2><h3 id="JobcopyBuilderplugin-Version1.4.0(Jul24,2016)">Version 1.4.0 (Jul 24, 2016)</h3><ul><li>Targets Jenkins 1.532. (was 1.480.3 till 1.3.0)</li><li>Improved permission checks (<a href="https://issues.jenkins-ci.org/browse/JENKINS-36672">JENKINS-36672</a>)<ul><li>Jobcopy build step is authorized as anonymous when the build is run as SYSTEM (that is, if not authorization for the job is not configured)</li><li>Requires EXTENTED_READ (or CONFIGURE) permission to read job configurations.</li><li>See <a href="#JobcopyBuilderplugin-Permissionstocopyjobs">#Permissions to copy jobs</a> for details.</li></ul></li></ul><h3 id="JobcopyBuilderplugin-Version1.3.0(May24,2015)">Version 1.3.0 (May 24, 2015)</h3><ul><li>Added &quot;Disable Job&quot; operation (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28439">JENKINS-28439</a>)</li></ul><h3 id="JobcopyBuilderplugin-Version1.2.0(Sep11,2014)">Version 1.2.0 (Sep 11, 2014)</h3><ul><li>Changed target Jenkins version from 1.466 to 1.480.3.</li><li>Supports <a href="CloudBees-Folders-Plugin.html">CloudBees Folders Plugin</a> (<a href="https://issues.jenkins-ci.org/browse/JENKINS-24515">JENKINS-24515</a>)<ul><li>You can copy a job in a folder into another folder.</li><li>You can copy folders.</li></ul></li></ul><h3 id="JobcopyBuilderplugin-Version1.1.2(Dec22,2013)">Version 1.1.2 (Dec 22, 2013)</h3><ul><li>FIXED: Build results page shows wrong link for Copied To and Copied From (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21080">JENKINS-21080</a>)</li></ul><h3 id="JobcopyBuilderplugin-Version1.1.1(Aug31,2013)">Version 1.1.1 (Aug 31, 2013)</h3><ul><li>Fixed a problem with overwriting multi-configuration projects.<ul><li>combination filter was not removed even when it is removed in the source project.</li></ul></li></ul><h3 id="JobcopyBuilderplugin-Version1.1.0(Feb27,2013)">Version 1.1.0 (Feb 27, 2013)</h3><ul><li>Added advanced configuration to copy additional files.<ul><li>Useful for plugins that does not store configurations in config.xml of the job.</li><li>For example, you can copy configurations of <a href="Promoted-Builds-Plugin.html">Promoted Builds Plugin</a>.</li></ul></li></ul><h3 id="JobcopyBuilderplugin-Version1.0.1(Feb06,2013)">Version 1.0.1 (Feb 06, 2013)</h3><ul><li>Improved overwrite behavior<ul><li>Version 1.0.0: delete the old job, and create a new job. Also builds are deleted.</li><li>Version 1.0.1 and later: update the configuration. Builds are preserved.</li></ul></li><li>expand &quot;From Job Name&quot; field</li></ul><h3 id="JobcopyBuilderplugin-Version1.0.0(Jan14,2013)">Version 1.0.0 (Jan 14, 2013)</h3><ul><li>Initial release.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669907/65863883.png">05-copyto02.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669907/65863884.png">04-copyfrom02.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669907/65863885.png">01-configure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669907/65863886.png">02-copyfrom01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65669907/65863887.png">03-copyto01.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:30</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

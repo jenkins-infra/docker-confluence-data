@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : GitHub SQS Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : GitHub SQS Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (aaronwalker)</span>, last modified on Apr 19, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View GitHub SQS Build Trigger <a href="https://plugins.jenkins.io/github-sqs-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="GitHubSQSPlugin-GithubAmazonSQSPlugin">Github Amazon SQS Plugin</h1>
+
+<p>This plugin integrates Jenkins with <a href="http://github.com/" class="external-link" rel="nofollow">Github</a> projects via <a href="http://aws.amazon.com/sqs/" class="external-link" rel="nofollow">Amazon's Simple Queue Service</a></p>
+
+<p>The plugin currently:</p>
+
+<ul>
+	<li>Consumes a message from an SQS Queue and triggers any jobs that have a matching github repository configuration.</li>
+	<li>Atomically adds and removes the Github SQS Service hook</li>
+	<li>Trigger build job using GitHub Amazon SNS service hook that use a SQS topic subscription</li>
+</ul>
+
+
+<h2 id="GitHubSQSPlugin-TriggerabuildwhenachangeispushedtoGitHubusingAmazonSQS">Trigger a build when a change is pushed to GitHub using Amazon SQS</h2>
+
+<p>To use this feature, first go to the global configuration and add a SQS Profile</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/59512603/61112325.png" data-image-src="attachments/59512603/61112325.png" data-unresolved-comment-count="0" data-linked-resource-id="61112325" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2012-03-15 at 4.35.49 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512603" data-linked-resource-container-version="26"></span></p>
+
+<p>To verify that you have correctly configured the SQS profile you can click &quot;Test Access&quot; this checks to see if the Queue exists in your SQS account and tries to create it if it does not. You can always manually create the queue via <a href="http://aws.amazon.com/console/" class="external-link" rel="nofollow">Amazon AWS Management Console</a></p>
+
+<p>Once that configuration is done, go to the project config and simply check &quot;Build when a message is published to an SQS Queue&quot; under &quot;Build Triggers&quot;.</p>
+
+<h3 id="GitHubSQSPlugin-HowtoconfiguretheGitHubSQShook">How to configure the GitHub SQS hook</h3>
+
+<p>You can choose to have Jenkins automatically manage the Github SQS hook automatically. You'll specify GitHub user names and passwords so that Jenkins can login as you to do this, and yes, we need your password and not API token because GitHub doesn't have an API for managing service hooks.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/59512603/65863716.png" data-image-src="attachments/59512603/65863716.png" data-unresolved-comment-count="0" data-linked-resource-id="65863716" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="GithubSQSHookConfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512603" data-linked-resource-container-version="26"></span></p>
+
+<p>If you want to manually manage the service hook or inspect the config you navigate to the Admin -&gt; Service Hooks section and select the SqsQueue hook and enter your AWS Access Key, the SQS Queue name and your AWS Secret key. The Queue name will need to match the Queue name you have configured in Jenkins</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/59512603/65863713.png" data-image-src="attachments/59512603/65863713.png" data-unresolved-comment-count="0" data-linked-resource-id="65863713" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="GithubSQSHook.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512603" data-linked-resource-container-version="26"></span></p>
+
+
+<h3 id="GitHubSQSPlugin-HowtoconfiguretheGitHubSNShook">How to configure the GitHub SNS hook</h3>
+
+<p>To use the GitHub SNS service hook to trigger builds you need to manually configure it. You need to navigate to the Admin -&gt; Service Hooks section and select the AmazonSNS hook and enter Aws Key, Aws Secret, Sns Topic and Sqs Queue. The Sqs queue is used by the SNS service to create a subscription for that queue. The queue name will need to match the queue you have configured in your Jenkins SQS Profile config.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/59512603/65863719.png" data-image-src="attachments/59512603/65863719.png" data-unresolved-comment-count="0" data-linked-resource-id="65863719" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="GitHubSNSConfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512603" data-linked-resource-container-version="26"></span></p>
+
+<h2 id="GitHubSQSPlugin-ChangeLog">Change Log</h2>
+
+
+<h5 id="GitHubSQSPlugin-Version1.5(Apr19,2013)">Version 1.5 (Apr 19, 2013)</h5>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-16617" class="external-link" rel="nofollow">JENKINS-16617</a> - Github SQS plugin not starting jobs on Jenkins 1.500<br/>
+Github SQS plugin not starting jobs on Jenkins 1.500</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-16669" class="external-link" rel="nofollow">JENKINS-16669</a> - GitHub SQS Plugin works only once after project config</li>
+</ul>
+
+
+<h5 id="GitHubSQSPlugin-Version1.4(Feb04,2013)">Version 1.4 (Feb 04, 2013)</h5>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-16128" class="external-link" rel="nofollow">JENKINS-16128</a> - Broken Jenkins Configuration page when Github SQS plugin is installed</li>
+</ul>
+
+
+<h5 id="GitHubSQSPlugin-Version1.3(Nov23,2012)">Version 1.3 (Nov 23, 2012)</h5>
+
+<ul>
+	<li>support for triggering builds using GitHub Amazon SNS service hook that have been bridged to SQS Queue.</li>
+</ul>
+
+
+<h5 id="GitHubSQSPlugin-Version1.2.1(Nov22,2012)">Version 1.2.1 (Nov 22, 2012)</h5>
+
+<ul>
+	<li>Correctly use the Github Credentials supplied in the SQS Profile config</li>
+	<li>Atomically adds and removes the Github SQS Service hook</li>
+</ul>
+
+
+
+<h5 id="GitHubSQSPlugin-Version1.0(Mar13,2012)">Version 1.0 (Mar 13, 2012)</h5>
+
+<ul>
+	<li>Support for consuming messages published to SQS queues with message body in the Github webook payload format and triggering the appropriate builds.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/61112325.png">Screen Shot 2012-03-15 at 4.35.49 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863713.png">GithubSQSHook.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863715.png">JenkinsGithubSQSHookConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863714.png">JenkinsGithubSQSHookConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863717.png">GithubSQSHookConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863716.png">GithubSQSHookConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863718.png">Screen Shot 2012-11-23 at 1.27.25 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/65863719.png">GitHubSNSConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512603/73597005.pdf">JenkinsPlugins.pdf</a> (application/pdf)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:25</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

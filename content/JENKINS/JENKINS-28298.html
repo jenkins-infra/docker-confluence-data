@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JENKINS-28298</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Authorize-Project-plugin.html">Authorize Project plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JENKINS-28298
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ikedam)</span>, last modified on Mar 27, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020348622 {padding: 0px;}
+div.rbtoc1631020348622 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020348622 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020348622'>
+<ul class='toc-indentation'>
+<li><a href='#JENKINS-28298-Abstract'>Abstract</a></li>
+<li><a href='#JENKINS-28298-JenkinsinstancesaffectedbyJENKINS-28298.'>Jenkins instances affected by JENKINS-28298.</a></li>
+<li><a href='#JENKINS-28298-HowtoavoidJENKINS-28298.'>How to avoid JENKINS-28298.</a>
+<ul class='toc-indentation'>
+<li><a href='#JENKINS-28298-DisablingremoteaccessAPI(exampleconfigurationwithapacheHTTPserver2.4)'>Disabling remote access API (example configuration with apache HTTP server 2.4)</a></li>
+<li><a href='#JENKINS-28298-DisablingCLI'>Disabling CLI</a></li>
+</ul>
+</li>
+<li><a href='#JENKINS-28298-Statusofauthorize-projectfortheproblem'>Status of authorize-project for the problem</a></li>
+<li><a href='#JENKINS-28298-Howtoreproducetheproblem'>How to reproduce the problem</a>
+<ul class='toc-indentation'>
+<li><a href='#JENKINS-28298-ReproducewithremoteaccessAPI'>Reproduce with remote access API</a></li>
+<li><a href='#JENKINS-28298-ReproducewithCLI'>Reproduce with CLI</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Fixed in authorize-project-plugin 1.2.0. (Requires Jenkins &gt; 1.625)</p></div></div>
+
+<h2 id="JENKINS-28298-Abstract">Abstract</h2>
+
+<ul>
+	<li><a href="Authorize-Project-plugin.html">Authorize Project plugin</a> provides a feature &quot;Run as specific user&quot; to have run builds as a specified user.</li>
+	<li>&quot;Run as specific user&quot; requires authentication to configure.</li>
+	<li>Unfortunately, <a href="Remote-access-API.html">Remote access API</a> (aka WebAPI) and <a href="Jenkins-CLI.html">Jenkins CLI</a> can bypass that authentication and users with configuration privileges can have run builds as any users (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28298">JENKINS-28298</a>).</li>
+	<li>This page describes details and a workaround for that problem.</li>
+</ul>
+
+
+<h2 id="JENKINS-28298-JenkinsinstancesaffectedbyJENKINS-28298.">Jenkins instances affected by JENKINS-28298.</h2>
+
+<p>Users meeting <strong>ALL</strong> following conditions are affected by this problem:</p>
+
+<ul>
+	<li>Installs authorize-project-plugin.</li>
+	<li>Enables &quot;Run as specific user&quot; in Global Security Configuration.
+	<ul>
+		<li>The feature for enabiling / disabling a specific strategy is introdiced since authorize-project 1.1.0.</li>
+		<li>Authorize-project &lt; 1.1.0 always meet this condition.</li>
+	</ul>
+	</li>
+	<li>Using Jenkins &gt;= 1.532.3 or &gt;= 1.545.
+	<ul>
+		<li>That is, the change in 1.545 was backported to 1.532.3.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="JENKINS-28298-HowtoavoidJENKINS-28298.">How to avoid JENKINS-28298.</h2>
+
+<p>You have to disable <strong>BOTH</strong> remote access API and CLI to avoid JENKINS-28298.</p>
+
+<h3 id="JENKINS-28298-DisablingremoteaccessAPI(exampleconfigurationwithapacheHTTPserver2.4)">Disabling remote access API (example configuration with apache HTTP server 2.4)</h3>
+
+<ul>
+	<li>Jenkins doesn't provide an option to disable Remote access API. You have to disable that by limiting accesses to URLs for remove access APIs.</li>
+	<li>This is an example configuration with apache HTTP server 2.4
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ProxyPass /jenkins http://localhost:8080/jenkins
+ProxyPassReverse /jenkins http://localhost:8080/jenkins
+
+&lt;LocationMatch &quot;^/jenkins/.*/config.xml$&quot;&gt;
+  &lt;Limit POST&gt;
+    Require all denied
+    # for httpd &lt;= 2.2
+    # Order deny,allow
+    # Deny from all
+  &lt;/Limit&gt;
+&lt;/LocationMatch&gt;
+</pre>
+</div></div> </li>
+</ul>
+
+
+<h3 id="JENKINS-28298-DisablingCLI">Disabling CLI</h3>
+
+<ul>
+	<li>Jenkins doesn't provide an option to disable CLI. You have to disable that by limiting accesses to the TCP port for CLI.</li>
+	<li>CLI is accessed via &quot;TCP port for JNLP slave agents&quot;: <a href="Jenkins-CLI.html#JenkinsCLI-ConfiguringTCP/IPportforCLIandslaves.#Connectionmechanism">Jenkins CLI#Configuring TCP/IP port for CLI and slaves.#Connection mechanism</a></li>
+	<li>It is defined randomly by default. You can bind that to a specific port in Global Secufiry Configuration: <a href="Jenkins-CLI.html#JenkinsCLI-ConfiguringTCP/IPportforCLIandslaves.">Jenkins CLI#Configuring TCP/IP port for CLI and slaves.</a></li>
+	<li>You can disable the CLI by limiting accesses to that port:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+iptables -A INPUT -p tcp --dport 49187 -j DROP
+</pre>
+</div></div>
+	<ul>
+		<li>You may want to allow accesses from specific hosts if you use JNLP (especially Windows slaves).</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="JENKINS-28298-Statusofauthorize-projectfortheproblem">Status of authorize-project for the problem</h2>
+
+<ul>
+	<li>The fix for this is requested to Jenkins core: <a href="https://issues.jenkins-ci.org/browse/JENKINS-28440">JENKINS-28440</a>, <a class="external-link" href="https://github.com/jenkinsci/jenkins/pull/1715" rel="nofollow">https://github.com/jenkinsci/jenkins/pull/1715</a>
+	<ul>
+		<li>Fixed in Jenkins-1.625. (and Jenkins-1.625 is a LTS line)</li>
+	</ul>
+	</li>
+	<li>Authorize-project 1.1.0 provides an option to disable specific strategies and &quot;Run as specific user&quot; is disabled by default.</li>
+	<li>I don't plan to remove &quot;Run as specific user&quot; as it's considered one of essential features of <a href="Authorize-Project-plugin.html">Authorize Project plugin</a>.</li>
+</ul>
+
+
+<h2 id="JENKINS-28298-Howtoreproducetheproblem">How to reproduce the problem</h2>
+
+<p>Following Jenkins users are used in these examples:</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> User </p></th>
+<th class="confluenceTh"><p> Password </p></th>
+<th class="confluenceTh"><p> Privileges     </p></th>
+<th class="confluenceTh"><p> Comment </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> admin </p></td>
+<td class="confluenceTd"><p> (unknown) </p></td>
+<td class="confluenceTd"><p> Administrative  </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> devel </p></td>
+<td class="confluenceTd"><p> devel     </p></td>
+<td class="confluenceTd"><p> Configure a job </p></td>
+<td class="confluenceTd"><p> he / she can configure a job run as his own authorization, but cannot (should not) configure it run as admin.</p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="JENKINS-28298-ReproducewithremoteaccessAPI">Reproduce with remote access API</h3>
+
+<ol>
+	<li>Test that &quot;devel&quot; cannot configure authorize-project for &quot;admin&quot;
+	<ol>
+		<li>Create a new free-style project &quot;JENKINS-28298&quot;</li>
+		<li>Check &quot;Configure Build Authorization&quot;</li>
+		<li>Check &quot;Run as Specific User&quot;</li>
+		<li>Enter &quot;admin&quot; for &quot;User ID&quot;</li>
+		<li>Leave empty for &quot;Password&quot;</li>
+		<li>Save the configuration. It will cause an error for failure of authentication.</li>
+	</ol>
+	</li>
+	<li>Create a project that run as &quot;devel&quot;
+	<ol>
+		<li>Create a new free-style project &quot;JENKINS-28298&quot;</li>
+		<li>Check &quot;Configure Build Authorization&quot;</li>
+		<li>Check &quot;Run as Specific User&quot;</li>
+		<li>Enter &quot;devel&quot; for &quot;User ID&quot;</li>
+		<li>Save the configuration.</li>
+	</ol>
+	</li>
+	<li>retreive current config.xml via remote access API
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+curl -u devel:devel -o config.xml http://[path to your jenkins]/job/JENKINS-28298/config.xml
+</pre>
+</div></div></li>
+	<li>modify &quot;&lt;userid&gt;devel&lt;/userid&gt;&quot; to &quot;&lt;userid&gt;admin&lt;/userid&gt;&quot; in config.xml with an editor.</li>
+	<li>Overwrite the configuration via remote access API
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+curl -u devel:devel -d @config.xml http://[path to your jenkins]/job/JENKINS-28298/config.xml
+</pre>
+</div></div></li>
+	<li>Open the configuration page. The project is configured to run as &quot;admin&quot;.</li>
+</ol>
+
+
+<h3 id="JENKINS-28298-ReproducewithCLI">Reproduce with CLI</h3>
+
+<ol>
+	<li>Parepare a job &quot;JENKINS-28298&quot; as in <a href="#JENKINS-28298-ReproducewithremoteaccessAPI">#Reproduce with remote access API</a></li>
+	<li>retreive jenkins-cli.jar
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+curl -o jenkins-cli.jar http://[path to your jenkins]/jnlpJars/jenkins-cli.jar
+</pre>
+</div></div></li>
+	<li>retreive current config.xml via CLI.
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+java -jar jenkins-cli.jar -s http://[path to your jenkins]/ get-job JENKINS-28298 --username devel --password devel &gt; config.xml
+</pre>
+</div></div>
+	<ul>
+		<li>If it fails with No such job 'JENKINS-28298', you might need to grant Overall.Read and Job.Read to anonymous users for <a href="https://issues.jenkins-ci.org/browse/JENKINS-12543">JENKINS-12543</a>.</li>
+	</ul>
+	</li>
+	<li>modify &quot;&lt;userid&gt;devel&lt;/userid&gt;&quot; to &quot;&lt;userid&gt;admin&lt;/userid&gt;&quot; in config.xml</li>
+	<li>Overwrite the configuration via CLI.
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+java -jar jenkins-cli.jar -s http://[path to your jenkins]/ update-job JENKINS-28298 --username devel --password devel &lt; config.xml
+</pre>
+</div></div></li>
+	<li>Open the configuration page. The project is configured to run as &quot;admin&quot;.</li>
+</ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

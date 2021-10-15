@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Build-timeout Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Build-timeout Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jsoref)</span> on Jun 11, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Build Timeout <a href="https://plugins.jenkins.io/build-timeout" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>This plugin allows you to automatically abort a build if it's taking too long.<br/></p><p>Once the timeout is reached, Jenkins behaves as if an invisible hand has clicked the &quot;abort build&quot; button.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plugin isn't applicable to pipelines.<br/>Use <a href="https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#code-timeout-code-enforce-time-limit" class="external-link" rel="nofollow"><code>timeout</code> step in workflow-basic-steps</a> instead.</p></div></div><h2 id="Build-timeoutPlugin-Instructions:">Instructions:</h2><p>After installing the plugin, go to the configure page for your job and select &quot;<strong>Abort the build if it's stuck</strong>&quot;.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Because Java only allows threads to be interrupted at a set of fixed locations, depending on how a build hangs, the abort operation might not take effect. For example,</p><ul><li>if Jenkins is waiting for child processes to complete, it can abort right away.</li><li>if Jenkins is stuck in an infinite loop, it can never be aborted.</li><li>if Jenkins is doing a network or file I/O within the Java VM (such as lengthy file copy or SVN update), it cannot be aborted.</li></ul><p>So if you think the build time out isn't taking effect, our default assumption is that the build is hanging at the place that cannot be interrupted. If you suspect otherwise, please <a href="Build-is-hanging.html">obtain the thread dump</a> and report it.</p></div></div><h2 id="Build-timeoutPlugin-Time-outactionswithnotes">Time-out actions with notes</h2><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Time-out action</p></th><th class="confluenceTh"><p>Note</p></th></tr><tr><td class="confluenceTd"><p>Abort and restart the build</p></td><td class="confluenceTd"><p>Installing <a href="Naginator-Plugin.html">Naginator Plugin</a> enables this action</p></td></tr></tbody></table></div><h2 id="Build-timeoutPlugin-History">History</h2><h4 id="Build-timeoutPlugin-Version1.19(Oct8,2017)">Version 1.19 (Oct 8, 2017)</h4><ul><li>Targets Jenkins 1.625.1 (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/64" class="external-link" rel="nofollow">Pull request #64</a>)<br/><ul><li>You no longer need matrix-project plugin and so on to install build-timeout plugin</li></ul></li><li>Improved Japanese translations (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/63" class="external-link" rel="nofollow">Pull request #63</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.18(Nov13,2016)">Version 1.18 (Nov 13, 2016)</h4><ul><li>Introduced &quot;Run with timeout&quot; build step (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/61/" class="external-link" rel="nofollow">PR61</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.17.1(Jul19,2016)">Version 1.17.1 (Jul 19, 2016)</h4><ul><li>Fixed: a stacktrace is output when Jenkins launches without naginator-plugin (<a href="https://issues.jenkins-ci.org/browse/JENKINS-36696">JENKINS-36696</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.17(Jun26,2016)">Version 1.17 (Jun 26, 2016)</h4><ul><li>A new time-out action: Abort and restart the build (<a href="https://issues.jenkins-ci.org/browse/JENKINS-8947">JENKINS-8947</a>)<ul><li>This feature is enabled when you install <a href="Naginator-Plugin.html">Naginator Plugin</a>.</li></ul></li><li>Clarified the help text of 'likely stuck' (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/48" class="external-link" rel="nofollow">#48</a>)</li><li>The previous help text simply referenced the source code, which isn't helpful for most users.</li></ul><h4 id="Build-timeoutPlugin-Version1.16.1(Jun20,2016)">Version 1.16.1 (Jun 20, 2016)</h4><ul><li>No change from 1.16.</li><li>Just to suppress the wrong version in the update center (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/56" class="external-link" rel="nofollow">#56</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.16(Jan24,2015)">Version 1.16 (Jan 24, 2015)</h4><ul><li>Introduced fail safe timeout duration for ElasticTimeOutStrategy (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30564">JENKINS-30564</a>).</li></ul><h4 id="Build-timeoutPlugin-Version1.15.1(Nov21,2015)">Version 1.15.1 (Nov 21, 2015)</h4><ul><li>Fixed a memory leak NoActivityTimeOutStrategy (<a href="https://issues.jenkins-ci.org/browse/JENKINS-31627">JENKINS-31627</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.15(Jul26,2015)">Version 1.15 (Jul 26, 2015)</h4><ul><li>Added Deadline timeout strategy (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29163">JENKINS-29163</a>)</li><li>Added Spanish translations (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29506">JENKINS-29506</a>)</li><li>Added Japanese translations (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29483">JENKINS-29483</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.14.1(Jan03,2015)">Version 1.14.1 (Jan 03, 2015)</h4><ul><li>FIXED: timeout actions don't defaults to 'abort build' when no option is selected (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23740">JENKINS-23740</a>)</li><li>Added license notice (MIT) (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21270">JENKINS-21270</a>)</li><li>Improved the performance of NoActivityTimeOutStrategy (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26170">JENKINS-26170</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.14(Jun01,2014)">Version 1.14 (Jun 01, 2014)</h4><ul><li><strong>Now targets Jenkins 1.466.</strong></li><li><strong>This version breaks binary compatibility.</strong><ul><li>This can affect you onlt in following cases (In other words, this does not affect most users)<ul><li>When you have private plugins accessing inner information of Build-timeout plugin.</li><li>When you have groovy scripts accessing inner information of Build-timeout plugin.</li></ul></li></ul></li><li>Resolved a performance problem introduced in 1.13 by capturing log outputs. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23012">JENKINS-23012</a>)</li><li>Use dropdown for strategy instead of hetero-radio, as it can conflicts with other plugins. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20164">JENKINS-20164</a>)</li><li>FIXED: Enable BuildStep Action in System Configuration page was not saved to the disk. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23118">JENKINS-23118</a>)</li><li>Supported launcher in Perform Buildstep. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23117">JENKINS-23117</a>)</li><li>Allow use of ${...} style expressions in defining the build timeouts. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-9457">JENKINS-9457</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-19773">JENKINS-19773</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-20526">JENKINS-20526</a>)</li></ul><h4 id="Build-timeoutPlugin-Version1.13(Mar29,2014)">Version 1.13 (Mar 29, 2014)</h4><ul><li>Added &quot;No Activity&quot; timeout strategy, which triggers timeout when no log output for specified seconds. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-13349">JENKINS-13349</a>)</li><li>Actions performed when timeout occurs can be extended using extension points. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21929">issue #21919</a>)</li><li>expose the build timeout milliseconds with an environment variable</li><li>&quot;Perform BuildStep&quot; timeout action is added. It allows you to trigger any build step when timeout.<ul><li>It does not ensure any build steps work correctly.</li><li>As it is provided as an advanced feature, you need to enable it in System Configuration page to enable in project configuration pages.</li></ul></li></ul><h4 id="Build-timeoutPlugin-Version1.12.2(Oct14,2013)">Version 1.12.2 (Oct 14, 2013)</h4><ul><li>Fixed missing strategies selection when a new job is created (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19592">JENKINS-19592</a>)</li><li>Fixed missing label selecting time-out strategy</li></ul><h4 id="Build-timeoutPlugin-Version1.12(Sep7,2013)">Version 1.12 (Sep 7, 2013)</h4><ul><li>Fix elastic timout (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/12" class="external-link" rel="nofollow">pull #12</a>).</li><li>Define an extension point for time-out strategy (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/14" class="external-link" rel="nofollow">pull #14</a>).</li><li>Build Timeout Plugin configuration interface shows all sub options (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18618">JENKINS-18618</a>).</li></ul><h4 id="Build-timeoutPlugin-Version1.11(Oct28,2012)">Version 1.11 (Oct 28, 2012)</h4><ul><li>Change to build timeout job configuration not saved (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14158">JENKINS-14158</a>).</li><li>Clarified timeoutMinutesElasticDefault's name (<a href="https://github.com/jenkinsci/build-timeout-plugin/pull/11" class="external-link" rel="nofollow">pull #11</a>).</li></ul><h4 id="Build-timeoutPlugin-Version1.10(Jun16,2012)">Version 1.10 (Jun 16, 2012)</h4><ul><li>Build timeout plugin 1.9 always sets timeout period to 3 minutes ([]).</li><li>updated to LTS 1.447</li><li>updated Japanese localization.</li></ul><h4 id="Build-timeoutPlugin-Version1.9(March12,2012)">Version 1.9 (March 12, 2012)</h4><ul><li>amend build description on timeout</li><li>elastic timeout option to define timeout as a percent of previous build duration</li><li>&quot;likely stuck&quot; option</li></ul><h4 id="Build-timeoutPlugin-Version1.8(Aug27,2011)">Version 1.8 (Aug 27, 2011)</h4><ul><li>Marking a build as failed works now as expected.</li><li>Japanese translation</li></ul><h4 id="Build-timeoutPlugin-Version1.7(Mar20,2011)">Version 1.7 (Mar 20, 2011)</h4><ul><li>Clarify in help text that marking build as failed instead of aborted does still abort the build.</li><li>Write more detail in log when build is aborted.</li></ul><h4 id="Build-timeoutPlugin-Version1.6(Dec28,2009)">Version 1.6 (Dec 28, 2009)</h4><ul><li>Remove debug output</li><li>Update uses of deprecated APIs</li></ul><h4 id="Build-timeoutPlugin-Version1.5">Version 1.5</h4><ul><li>Option to mark builds as failed or aborted.</li></ul><h4 id="Build-timeoutPlugin-Version1.4">Version 1.4</h4><ul><li>The plugin now works with the native maven2 job type as well as the matrix job type.</li></ul><h2 id="Build-timeoutPlugin-Issues">Issues</h2><p>To report a bug or request an enhancement to this plugin please create a ticket in JIRA (you need to login or to sign up for an account). Also have a look on <a href="How-to-report-an-issue.html">How to report an issue</a></p><ul><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=1&amp;components=15530&amp;priority=4&amp;assignee=ikedam" class="external-link" rel="nofollow">Bug report</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=4&amp;components=15530&amp;priority=4" class="external-link" rel="nofollow">Request or propose an improvement of existing feature</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=2&amp;components=15530&amp;priority=4" class="external-link" rel="nofollow">Request or propose a new feature</a></li></ul><p>
+
+
+
+
+
+<div id="refresh-module--1417877735" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues--1417877735" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62956?src=confmacro">JENKINS-62956</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62956?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62956?src=confmacro">
+                                            build timeout does not stop a multi-configuration project
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57476?src=confmacro">JENKINS-57476</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57476?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57476?src=confmacro">
+                                            Build timeout should include only successful builds, not unstable builds
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57263?src=confmacro">JENKINS-57263</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57263?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57263?src=confmacro">
+                                            Java java.lang.ClassNotFoundException on Jenkins Startup
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-45174?src=confmacro">JENKINS-45174</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-45174?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-45174?src=confmacro">
+                                            Time-out strategy Deadline for specific days
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41584?src=confmacro">JENKINS-41584</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41584?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41584?src=confmacro">
+                                            Plugin functionality missing in pipeline API
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-27396?src=confmacro">JENKINS-27396</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-27396?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-27396?src=confmacro">
+                                            Elastic timeout in pipeline
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26778?src=confmacro">JENKINS-26778</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26778?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26778?src=confmacro">
+                                            Build-timeout+Plugin global timeout setting
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26563?src=confmacro">JENKINS-26563</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26563?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26563?src=confmacro">
+                                            BlockableBuildTrigger invokes build timeout
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23137?src=confmacro">JENKINS-23137</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23137?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23137?src=confmacro">
+                                            Show a message in the console log when a build timeout occurs
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-19883?src=confmacro">JENKINS-19883</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-19883?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-19883?src=confmacro">
+                                            Thread dump when a build time out
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-16875?src=confmacro">JENKINS-16875</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-16875?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-16875?src=confmacro">
+                                            Builds do not timeout when job hangs in post build actions
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-12744?src=confmacro">JENKINS-12744</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-12744?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-12744?src=confmacro">
+                                            Execute a command before timeout
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11064?src=confmacro">JENKINS-11064</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11064?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/trivial.svg"
+                                             alt="Trivial"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11064?src=confmacro">
+                                            Update ambiguous ABORTED message to &quot;TIMED OUT&quot; and fix raised InterruptedException
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-9716?src=confmacro">JENKINS-9716</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-9716?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-9716?src=confmacro">
+                                            allow timeouts to occur during pre-build
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-2936?src=confmacro">JENKINS-2936</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-2936?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-2936?src=confmacro">
+                                            Using build-timeout plugin to stop build but not force the build abort or failed
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-789?src=confmacro">JENKINS-789</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-789?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-789?src=confmacro">
+                                            build-timeout — ver.1.3: should kill the all process tree.
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="4">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%2C+%22In+Review%22%2C+Verified%29+AND+component+%3D+%27build-timeout-plugin%27++++&amp;src=confmacro">
+                                                            16 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753767/170919411.png">2019-03-10_11-38-36.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:15</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

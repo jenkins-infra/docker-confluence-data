@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Windows slaves fail to start via DCOM</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Distributed-builds.html">Distributed builds</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Windows slaves fail to start via DCOM
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (akiko)</span> on Feb 16, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If you chose &quot;Let Hudson control this Windows slave as a Windows service&quot; for connecting to slave, you may get an error message like this:<br/>
+&quot;WindowsサービスとしてこのWindowsスレーブを制御&quot; を選んでスレーブと接続しようとして、下記のようなエラーが出てしまった場合: </p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Access is denied. [0x00000005]
+	at org.jinterop.dcom.core.JIComServer.init(JIComServer.java:542)
+	at org.jinterop.dcom.core.JIComServer.initialise(JIComServer.java:458)
+	at org.jinterop.dcom.core.JIComServer.&lt;init&gt;(JIComServer.java:427)
+	at org.jvnet.hudson.wmi.WMI.connect(WMI.java:41)
+	at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:107)
+	at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:170)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+	at java.lang.Thread.run(Thread.java:619)
+Caused by: rpc.FaultException: Received fault. (unknown)
+	at rpc.ConnectionOrientedEndpoint.call(ConnectionOrientedEndpoint.java:142)
+	at rpc.Stub.call(Stub.java:112)
+	at org.jinterop.dcom.core.JIComServer.init(JIComServer.java:538)
+	... 10 more
+</pre>
+</div></div>
+<p>If so, check the following settings on Windows:<br/>
+このような場合は、以下のWindowsの設定をチェックして下さい:</p>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-Local&quot;Administrator&quot;groupmembership/ローカルの&quot;Administrator&quot;グループメンバーシップの確認">Local &quot;Administrator&quot; group membership / ローカルの&quot;Administrator&quot;グループメンバーシップの確認</h3>
+
+<p>Make sure that the user name you have entered is a member of the local &quot;Administrators&quot; group. In the default Windows installation, this group membership is required for Hudson to remotely copy files and install a service.<br/>
+&quot;WindowsサービスとしてこのWindowsスレーブを制御&quot;で設定したユーザ名が、スレーブのローカルの&quot;Administrator&quot;グループのメンバであることを確認して下さい。デフォルトのWindowsの場合、このグループメンバーでないと、Hudsonのリモートへのファイル転送と、スレーブサービスのインストールが出来ません。</p>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-Firewall/ファイアウォール">Firewall / ファイアウォール</h3>
+
+<p>By default, Windows Firewall prevents the TCP connections necessary to make this mechanism work. The firewall on the slave must allow the following exceptions (see <a href="http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers" class="external-link" rel="nofollow">List of TCP&amp;UDP port numbers</a>):<br/>
+デフォルトでは、Windowsのファイアウォールは、DCOMによる起動メカニズムが動作するために必要なTCPコネクションをブロックしてしまいます。スレーブ上のファイアウォールは下記の例外を許可する必要があります<br/>
+(<a href="http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers" class="external-link" rel="nofollow">List of TCP&amp;UDP port numbers</a> を参照のこと):</p>
+
+<ul>
+	<li>TCP Port <a href="http://www.speedguide.net/port.php?port=135" class="external-link" rel="nofollow">135</a> (DCE/RPC Locator service)</li>
+	<li>TCP Port <a href="http://www.speedguide.net/port.php?port=139" class="external-link" rel="nofollow">139</a> (NetBIOS Session Service)</li>
+	<li>TCP Port <a href="http://www.speedguide.net/port.php?port=445" class="external-link" rel="nofollow">445</a> (Windows shares / Windows共有)</li>
+</ul>
+
+
+<ul>
+	<li>C:\WINDOWS\system32\dllhost.exe (dllhost.exe seems to use a random port number / dllhost.exe がランダムなポート番号を利用するため)</li>
+	<li>C:\WINDOWS\system32\javaw.exe (Hudson also uses a random port number / Hudsonがランダムなポート番号を利用するため)</li>
+	<li>File and Printer sharing (TCP 139, TCP 445, UDP 137, UDP 138 (possibly only a subset of these is required))</li>
+	<li>ファイルとプリンタ共有 (TCP 139, TCP 445, UDP 137, UDP 138 (おそらく、これらのサブセットで十分です))</li>
+</ul>
+
+
+
+<p>The easiest way to track down firewall issues is to use <a href="http://www.tcpdump.org/" class="external-link" rel="nofollow">tcpdump</a>. Just run the following command on the Hudson server, which is trying to connect to the slave:<br/>
+ファイアウォールの問題を調査するもっとも簡単な方法は、<a href="http://www.tcpdump.org/" class="external-link" rel="nofollow">tcpdump</a>を利用することです。スレーブに接続しようとするHudson上から、下記のようなコマンドを実行します:</p>
+
+<p><strong>Linux/UNIX:</strong></p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>tcpdump -n -i &lt;IF&gt; -s 1500 port not 22 and host &lt;HOST-IP&gt;
+
+&lt;IF&gt;       the network interface name, e.g. eth1 / ネットワークインターフェース(NIC)名 (e.g. eth1)
+&lt;HOST-IP&gt;  the IP address of the slave / スレーブのIPアドレス
+</pre>
+</div></div>
+
+<h4 id="WindowsslavesfailtostartviaDCOM-Ports139and445/ポート139,445">Ports 139 and 445 / ポート 139, 445 </h4>
+
+
+<p>When the Ports 139 (NetBIOS Session Service) and 445 (Windows Shares) are not available, the following error message appears:<br/>
+139ポート (NetBIOS セッションサービス) と 445ポート (Windows共有) が利用できない場合は、次のようなメッセージが表示されます:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ERROR: Message not found for errorCode: 0xC0000001
+org.jinterop.dcom.common.JIException: Message not found for errorCode: 0xC0000001
+ at org.jinterop.winreg.smb.JIWinRegStub.winreg_OpenHKCR(JIWinRegStub.java:121)
+ at org.jinterop.dcom.core.JIComServer.initialise(JIComServer.java:479)
+ at org.jinterop.dcom.core.JIComServer.&lt;init&gt;(JIComServer.java:427)
+ at org.jvnet.hudson.wmi.WMI.connect(WMI.java:41)
+ at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:137)
+ at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:184)
+ at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+ at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+ at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+ at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+ at java.lang.Thread.run(Thread.java:619)
+Caused by: jcifs.smb.SmbException:
+Connection timeout jcifs.util.transport.TransportException: Connection timeout
+ at jcifs.util.transport.Transport.connect(Transport.java:178)
+ at jcifs.smb.SmbTransport.connect(SmbTransport.java:294)
+ at jcifs.smb.SmbTree.treeConnect(SmbTree.java:141)
+ at jcifs.smb.SmbFile.doConnect(SmbFile.java:858)
+ at jcifs.smb.SmbFile.connect(SmbFile.java:901)
+ at jcifs.smb.SmbFile.connect0(SmbFile.java:827)
+ at jcifs.smb.SmbFileInputStream.&lt;init&gt;(SmbFileInputStream.java:76)
+ at jcifs.smb.SmbFileInputStream.&lt;init&gt;(SmbFileInputStream.java:65)
+ at jcifs.smb.SmbFile.getInputStream(SmbFile.java:2784)
+ at rpc.ncacn_np.RpcTransport.attach(RpcTransport.java:90)
+ at rpc.Stub.attach(Stub.java:105)
+ at rpc.Stub.call(Stub.java:109)
+ at org.jinterop.winreg.smb.JIWinRegStub.winreg_OpenHKCR(JIWinRegStub.java:119)
+ at org.jinterop.dcom.core.JIComServer.initialise(JIComServer.java:479)
+ at org.jinterop.dcom.core.JIComServer.&lt;init&gt;(JIComServer.java:427)
+ at org.jvnet.hudson.wmi.WMI.connect(WMI.java:41)
+ at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:137)
+ at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:184)
+ at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+ at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+ at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+ at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+ at java.lang.Thread.run(Thread.java:619)
+ at jcifs.smb.SmbTransport.connect(SmbTransport.java:296)
+ at jcifs.smb.SmbTree.treeConnect(SmbTree.java:141)
+ at jcifs.smb.SmbFile.doConnect(SmbFile.java:858)
+ at jcifs.smb.SmbFile.connect(SmbFile.java:901)
+ at jcifs.smb.SmbFile.connect0(SmbFile.java:827)
+ at jcifs.smb.SmbFileInputStream.&lt;init&gt;(SmbFileInputStream.java:76)
+ at jcifs.smb.SmbFileInputStream.&lt;init&gt;(SmbFileInputStream.java:65)
+ at jcifs.smb.SmbFile.getInputStream(SmbFile.java:2784)
+ at rpc.ncacn_np.RpcTransport.attach(RpcTransport.java:90)
+ at rpc.Stub.attach(Stub.java:105)
+ at rpc.Stub.call(Stub.java:109)
+ at org.jinterop.winreg.smb.JIWinRegStub.winreg_OpenHKCR(JIWinRegStub.java:119)
+ ... 10 more
+</pre>
+</div></div>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-LocalSecuritySettings/ローカルセキュリティ設定">Local Security Settings / ローカルセキュリティ設定</h3>
+
+<ol>
+	<li>Start the control panel, go to &quot;Administrative Tools&quot;, then &quot;Local Security Policy&quot;. This will open up the &quot;local security settings&quot; window</li>
+	<li>コントロールパネルから、&quot;管理ツール&quot;、そして&quot;ローカルセキュリティポリシー&quot;に移動します。&quot;ローカルセキュリティ設定&quot;のウィンドウを開きます。</li>
+</ol>
+
+
+<ol>
+	<li>Go to &quot;Local Policies&quot; &gt; &quot;Security Options&quot; &gt; &quot;Network access: Sharing and security model for local accounts.&quot; Change that to &quot;Classic.&quot;</li>
+	<li>&quot;ローカルポリシー&quot; &gt; &quot;セキュリティオプション&quot; &gt; &quot;ネットワークアクセス: ローカルアカウントの共有とセキュリティモデル&quot; にアクセスします。この値を&quot;クラシック&quot;に変更します。</li>
+</ol>
+
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This only applies to Windows computers that are not a part of a domain (<a href="http://technet.microsoft.com/en-us/library/cc786449(WS.10).aspx" class="external-link" rel="nofollow">reference</a>)</p></div></div>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>この設定は、ドメインのメンバーでないコンピュータにのみ適用されます。(<a href="http://technet.microsoft.com/ja-jp/library/cc786449(WS.10).aspx" class="external-link" rel="nofollow">参考</a>)</p></div></div>
+
+
+<h3 id="WindowsslavesfailtostartviaDCOM-RemoteRegistryService/リモートレジストリサービス">Remote Registry Service　/ リモートレジストリサービス</h3>
+
+<p>The Remote Registry service must be running in order to install the Jenkins service, but it may be stopped on your computer.  This is especially true for Windows Vista, where it is disabled by default.  If it is not running, you may get an error like this:<br/>
+Jenkinsのサービスをインストールするためには、リモートレジストリサービスが起動している必要がありますが、あなたのコンピュータでは、このサービスは停止状態となっているかもしれません。とくにWindows Vista (もしくはそれ以降)では、デフォルトで無効になっているからです。もし、このサービスが起動していなければ、次のようなエラーが表示されます:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Message not found for errorCode: 0xC0000034
+ org.jinterop.dcom.common.JIException: Message not found for errorCode: 0xC0000034
+     at org.jinterop.winreg.smb.JIWinRegStub.winreg_OpenHKCR(JIWinRegStub.java:121)
+     at org.jinterop.dcom.core.JIComServer.initialise(JIComServer.java:479)
+     at org.jinterop.dcom.core.JIComServer.&lt;init&gt;(JIComServer.java:427)
+     at org.jvnet.hudson.wmi.WMI.connect(WMI.java:41)
+     at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:107)
+     at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:178)
+     at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+     at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+     at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+     at java.lang.Thread.run(Thread.java:636)
+ Caused by: jcifs.smb.SmbException: The system cannot find the file specified.
+     at jcifs.smb.SmbTransport.checkStatus(SmbTransport.java:542)
+     at jcifs.smb.SmbTransport.send(SmbTransport.java:644)
+     at jcifs.smb.SmbSession.send(SmbSession.java:242)
+     at jcifs.smb.SmbTree.send(SmbTree.java:111)
+     at jcifs.smb.SmbFile.send(SmbFile.java:729)
+     at jcifs.smb.SmbFile.open0(SmbFile.java:934)
+     at jcifs.smb.SmbFile.open(SmbFile.java:951)
+     at jcifs.smb.SmbFileOutputStream.&lt;init&gt;(SmbFileOutputStream.java:142)
+     at jcifs.smb.TransactNamedPipeOutputStream.&lt;init&gt;(TransactNamedPipeOutputStream.java:32)
+     at jcifs.smb.SmbNamedPipe.getNamedPipeOutputStream(SmbNamedPipe.java:187)
+     at rpc.ncacn_np.RpcTransport.attach(RpcTransport.java:91)
+     at rpc.Stub.attach(Stub.java:105)
+     at rpc.Stub.call(Stub.java:109)
+     at org.jinterop.winreg.smb.JIWinRegStub.winreg_OpenHKCR(JIWinRegStub.java:119)
+     ... 10 more
+</pre>
+</div></div>
+<p>If so, start the control panel, open &quot;Administrative Tools,&quot; then &quot;Services.&quot;  Locate the Remote Registry service on the list, and click &quot;Start this service.&quot;</p>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-RemoteRegistryPermissions/リモートレジストリパーミッション">Remote Registry Permissions / リモートレジストリ パーミッション</h3>
+
+<p>If the Remote Registry user don't have access to the registry key that configures remote registry path access you should see this error:<br/>
+リモートレジストリユーザが、リモートレジストリパスへのアクセスを設定をする <strong>レジストリキー</strong> そのものにアクセスする権限が無い場合、下記のようなエラーが表示されます:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Access is denied. See
+http://wiki.jenkins-ci.org/display/HUDSON/Windows+slaves+fail+to+start+via+DCOM
+for more information about how to resolve this.
+
+org.jinterop.dcom.common.JIException: Access is denied, please check whether the
+[domain-username-password] are correct. Also, if not already done please check
+the GETTING STARTED and FAQ sections in readme.htm. They provide information on
+how to correctly configure the Windows machine for DCOM access, so as to avoid
+such exceptions.  [0x00000005]
+
+	at org.jinterop.winreg.smb.JIWinRegStub.winreg_CreateKey(JIWinRegStub.java:297)
+	at org.jinterop.dcom.core.JIComServer.initialise(JIComServer.java:480)
+	at org.jinterop.dcom.core.JIComServer.&lt;init&gt;(JIComServer.java:427)
+	at org.jvnet.hudson.wmi.WMI.connect(WMI.java:41)
+	at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:107)
+	at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:178)
+	at java.util.concurrent.FutureTask$Sync.innerRun(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.jinterop.dcom.common.JIRuntimeException: Access is denied, please
+check whether the [domain-username-password] are correct. Also, if not already
+done please check the GETTING STARTED and FAQ sections in readme.htm. They
+provide information on how to correctly configure the Windows machine for DCOM
+access, so as to avoid such exceptions.  [0x00000005]
+	at org.jinterop.winreg.IJIWinReg$createKey.read(IJIWinReg.java:459)
+	at ndr.NdrObject.decode(NdrObject.java:19)
+	at rpc.ConnectionOrientedEndpoint.call(ConnectionOrientedEndpoint.java:138)
+	at rpc.Stub.call(Stub.java:112)
+	at org.jinterop.winreg.smb.JIWinRegStub.winreg_CreateKey(JIWinRegStub.java:291)
+	... 10 more
+</pre>
+</div></div>
+
+<p>In the slave use regedit to ensure that the user that is running the 'Remote Registry' service, usually 'LOCAL SERVICE', has READ access to these entries:<br/>
+'リモートレジストリ' サービスを実行するJenkinsの実行ユーザに対して、下記のレジストリキーに読み取り権限を設定して下さい。権限はレジストリエディタを使って、スレーブマシン上で実施します。下記の値を右クリックし、『アクセス許可』のメニューから設定ができます。通常は、 'LOCAL SERVICE' に対して読み取り権限が設定されています。Jenkinsを 'LOCAL SERVICE' 以外のアカウントで実行する場合は、そのアカウントに対しての許可が要ります。</p>
+
+<p>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurePipeServers\winreg</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46337567/59900181.png" data-image-src="attachments/46337567/59900181.png" data-unresolved-comment-count="0" data-linked-resource-id="59900181" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-regedit.png" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46337567" data-linked-resource-container-version="10"></span></p>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-.NETFramework">.NET Framework</h3>
+
+<p>On Windows XP / 2003, if you see a message like this:<br/>
+Windows XP / 2003で、下記のようなメッセージが出た場合は、.NET framework のバージョンを 3.5SP1（もしくはそれ以上）に上げて下さい。</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Installing the Hudson slave service
+No more data is available. [0x00000103]
+org.jinterop.dcom.common.JIException: No more data is available. [0x00000103]
+	at org.jinterop.winreg.smb.JIWinRegStub.winreg_EnumKey(JIWinRegStub.java:390)
+	at hudson.util.jna.DotNet.isInstalled(DotNet.java:81)
+	at hudson.os.windows.ManagedWindowsServiceLauncher.launch(ManagedWindowsServiceLauncher.java:117)
+	at hudson.slaves.SlaveComputer$1.call(SlaveComputer.java:180)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:636)
+Caused by: org.jinterop.dcom.common.JIRuntimeException: No more data is available. [0x00000103]
+	at org.jinterop.winreg.IJIWinReg$enumKey.read(IJIWinReg.java:762)
+	at ndr.NdrObject.decode(NdrObject.java:19)
+	at rpc.ConnectionOrientedEndpoint.call(ConnectionOrientedEndpoint.java:138)
+	at rpc.Stub.call(Stub.java:112)
+	at org.jinterop.winreg.smb.JIWinRegStub.winreg_EnumKey(JIWinRegStub.java:386)
+	... 8 more
+</pre>
+</div></div>
+<p>Then try upgrading .NET framework to ver 3.5SP1.</p>
+
+<p>Taken from <a href="http://n4.nabble.com/exception-when-winxp-slaves-launch-No-more-data-is-available-0x00000103-td386006.html" class="external-link" rel="nofollow">http://n4.nabble.com/exception-when-winxp-slaves-launch-No-more-data-is-available-0x00000103-td386006.html</a><br/>
+この情報はこちらから：<a href="http://n4.nabble.com/exception-when-winxp-slaves-launch-No-more-data-is-available-0x00000103-td386006.html" class="external-link" rel="nofollow">http://n4.nabble.com/exception-when-winxp-slaves-launch-No-more-data-is-available-0x00000103-td386006.html</a>（ただし現在リンクが無いようです）</p>
+
+<h3 id="WindowsslavesfailtostartviaDCOM-Ifallelsefails.../もしそのほかのエラーがあれば....">If all else fails... / もしそのほかのエラーがあれば....</h3>
+
+<p>Please file an issue about the problem with the stack trace, with information like Windows versions, so that we can take a look.<br/>
+スタックとレースと一緒に、問題についてのチケットを届け出て下さい。そうすれば、こちらでもチケットをチェックすることができます。その際は、Windowsのバージョン情報も添えて下さい。</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46337567/59900181.png">jenkins-regedit.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

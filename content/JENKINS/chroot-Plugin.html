@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : chroot Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : chroot Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rmohr)</span>, last modified on Feb 01, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Chroot <a href="https://plugins.jenkins.io/chroot" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>Support for disposable chroot environments (pbuilder), which can be very useful for C and C++ projects</p>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020576186 {padding: 0px;}
+div.rbtoc1631020576186 ul {list-style: disc;margin-left: 0px;padding-left: 15px;}
+div.rbtoc1631020576186 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020576186'>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-NodeSetup'>Node Setup</a></li>
+<li><a href='#chrootPlugin-SetupaChrootEnvironment'>Setup a Chroot Environment</a>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-MinimalSetup'>Minimal Setup</a></li>
+<li><a href='#chrootPlugin-AdvancedSetup'>Advanced Setup</a>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-Addingrepositories'>Adding repositories</a>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-Addingtheuniverserepository'>Adding the universe repository</a></li>
+<li><a href='#chrootPlugin-Addingubuntugisppa'>Adding ubuntugis ppa</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#chrootPlugin-UsingaChrootEnvironment'>Using a Chroot Environment</a>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-MinimalSetup.1'>Minimal Setup</a></li>
+<li><a href='#chrootPlugin-AdvancedConfiguration'>Advanced Configuration</a></li>
+</ul>
+</li>
+<li><a href='#chrootPlugin-Runthejob'>Run the job</a></li>
+<li><a href='#chrootPlugin-Roadmap'>Roadmap</a></li>
+<li><a href='#chrootPlugin-Changelog'>Changelog</a>
+<ul class='toc-indentation'>
+<li><a href='#chrootPlugin-Version0.1.4'>Version 0.1.4</a></li>
+<li><a href='#chrootPlugin-Version0.1.2'>Version 0.1.2</a></li>
+<li><a href='#chrootPlugin-Version0.1.1'>Version 0.1.1</a></li>
+<li><a href='#chrootPlugin-Version0.1'>Version 0.1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="chrootPlugin-NodeSetup">Node Setup</h1>
+
+<p>On every node, where you want to run the plugin, you have to</p>
+
+<ol>
+	<li>install pbuiler: 
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"> apt-get install pbuilder </pre>
+</div></div></li>
+	<li>Allow jenkins to use <em>pbuilder:</em>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">jenkins_user ALL=(ALL) NOPASSWD: /usr/sbin/pbuilder</pre>
+</div></div></li>
+</ol>
+
+
+
+
+<h1 id="chrootPlugin-SetupaChrootEnvironment">Setup a Chroot Environment</h1>
+
+<h2 id="chrootPlugin-MinimalSetup">Minimal Setup</h2>
+
+<p>Create chroot environments in <em>Manage Jenkins</em> &gt; <em>Chroot Environments</em>:</p>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596968.png" data-image-src="attachments/73531750/73596968.png" data-unresolved-comment-count="0" data-linked-resource-id="73596968" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pbuilder_minimal_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<p><strong>Make sure that &quot;Install Automatically&quot; is selected, and is configured to use the &quot;Create the chroot environment on demand&quot; installer!</strong></p>
+
+
+
+<h2 id="chrootPlugin-AdvancedSetup">Advanced Setup</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596969.png" data-image-src="attachments/73531750/73596969.png" data-unresolved-comment-count="0" data-linked-resource-id="73596969" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pbuilder_advanced_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<h3 id="chrootPlugin-Addingrepositories">Adding repositories</h3>
+
+<p>You can add <strong>ppa's</strong> and standard repositories like <strong>universe</strong>. The plugin distinguishes between the two types by the <strong>Repository URL</strong> prefix. If it starts with <em><span style="text-decoration: underline;">deb</span></em>, the repository is just added to <em><span style="text-decoration: underline;">/etc/apt/sources.list.d/</span></em> and the key is imported. If the URL starts with <em><span style="text-decoration: underline;">ppa</span></em>, the repository is added via <em><span style="text-decoration: underline;">add-apt-repository</span></em> (no keyfile is required).</p>
+
+
+<h4 id="chrootPlugin-Addingtheuniverserepository">Adding the universe repository</h4>
+
+<p><strong>Name</strong>: universe</p>
+
+<p><strong>Repository URL</strong>: deb <a href="http://archive.ubuntu.com/ubuntu" class="external-link" rel="nofollow">http://archive.ubuntu.com/ubuntu</a> <strong>DISTRO</strong> universe</p>
+
+<p><strong>Keyfile URL</strong>: <a href="http://archive.ubuntu.com/ubuntu/project/ubuntu-archive-keyring.gpg" class="external-link" rel="nofollow">http://archive.ubuntu.com/ubuntu/project/ubuntu-archive-keyring.gpg</a></p>
+
+
+
+
+<p>Make sure to select the correct distro of the chroot environment. By default a chroot environment similar to the host system where the node is running is created.</p>
+
+<p>In the screenshot at the end of this section i have used <strong>lucid</strong>.</p>
+
+
+<h4 id="chrootPlugin-Addingubuntugisppa">Adding ubuntugis ppa</h4>
+
+<p><strong>Name</strong>: ubuntugis</p>
+
+<p><strong>Repository URL</strong>: ppa:ubuntugis/ubuntugis-unstable</p>
+
+<p>The resulting repositories section should now look like this:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596972.png" data-image-src="attachments/73531750/73596972.png" data-unresolved-comment-count="0" data-linked-resource-id="73596972" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pbuilder_add_repositories.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+
+<h1 id="chrootPlugin-UsingaChrootEnvironment">Using a Chroot Environment</h1>
+
+<h2 id="chrootPlugin-MinimalSetup.1">Minimal Setup</h2>
+
+<p>After you have configured a Chroot-Environment, it can be used in the Chroot Buildstep in every job.</p>
+
+<p>Make sure, that you restrict the job to nodes where pbuilder is configured.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596973.png" data-image-src="attachments/73531750/73596973.png" data-unresolved-comment-count="0" data-linked-resource-id="73596973" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="restrict_build.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span><br/>
+Add a Chroot  Buildstep:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596974.png" data-image-src="attachments/73531750/73596974.png" data-unresolved-comment-count="0" data-linked-resource-id="73596974" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chroot_buildstep.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span><br/>
+Select the chroot environment and add the build instructions:</p>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596970.png" data-image-src="attachments/73531750/73596970.png" data-unresolved-comment-count="0" data-linked-resource-id="73596970" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chroot_builder_minimal.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<p><strong>Chroot Environment</strong>: A list of the predefined chroot environments</p>
+
+<p><strong>Clear</strong>: The chroot environment (of the job) will be reset to the state of the predefined environment before every build ( better reproducability, slower build)</p>
+
+<p><strong>Login as root</strong>: The build comands will be run via the root unser inside of the environment (<strong>although it is inside the environment, be carefull what you do!</strong>)</p>
+
+<p><strong>Command</strong>: the build commands (uses bash per default)</p>
+
+
+<p><strong>Note, that all the jenkins specific environment varaibles are available!</strong></p>
+
+
+
+<h2 id="chrootPlugin-AdvancedConfiguration">Advanced Configuration</h2>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596971.png" data-image-src="attachments/73531750/73596971.png" data-unresolved-comment-count="0" data-linked-resource-id="73596971" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chroot_builder_advanced.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<p><strong>Requirement Files</strong>: Files which contain package dependencies (comparable to requirements.txt in the python world)</p>
+
+<p><strong>Requirements</strong>: Additional package dependencies, not listed in any requirement file</p>
+
+<p><strong>Ignore exit code</strong>: The build will always succeed, no mather if the build step fails or not.</p>
+
+<p><strong>Do not update repository indices</strong>: speeds up the build, but will not fetch and install the newest versions of the packages</p>
+
+<p><strong>Force installation of packages</strong>: allows the installation of unsigned packages (can be dangerous)</p>
+
+
+
+<h1 id="chrootPlugin-Runthejob">Run the job</h1>
+
+<p>After configuring a new chroot instance it will be built along with the first job which uses this environment. When launching the build, you will encounter something like this:</p>
+
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596975.png" data-image-src="attachments/73531750/73596975.png" data-unresolved-comment-count="0" data-linked-resource-id="73596975" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="console_initializing_chroot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<p>Here the two previously configured repositories (ubuntugis and universe) are added:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596977.png" data-image-src="attachments/73531750/73596977.png" data-unresolved-comment-count="0" data-linked-resource-id="73596977" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chroot_add_repositories.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+<p>These steps are part of the initial creation of the environment, which can take a  few minutes. They are only excuted once, if you add a  completely new environment, or if you change the existing configuration  in the Jenkins System configuration.</p>
+
+<p>This is what we actually wanted to do in the build (as stated before, the $WORKSPACE variable was available inside the chroot environment):</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73531750/73596976.png" data-image-src="attachments/73531750/73596976.png" data-unresolved-comment-count="0" data-linked-resource-id="73596976" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chroot_builder_commands.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73531750" data-linked-resource-container-version="19"></span></p>
+
+
+
+<h1 id="chrootPlugin-Roadmap">Roadmap</h1>
+
+<ul>
+	<li>mock support is next</li>
+</ul>
+
+
+<h1 id="chrootPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="chrootPlugin-Version0.1.4">Version 0.1.4</h3>
+
+<ul>
+	<li>add support for Ubuntu &gt; 12.04</li>
+	<li>better detection if the chroot binary is correctly set up for Jenkins</li>
+	<li>correctly process additional chroot arguments with quotes</li>
+</ul>
+
+
+<h3 id="chrootPlugin-Version0.1.2">Version 0.1.2</h3>
+
+
+<ul>
+	<li>fixes a null pointer exception when building on a slave node</li>
+	<li>uses 'local' copying of chroot image FilePaths, no more network involved</li>
+	<li>removes useless tarBall field from ChrootToolsetProperty</li>
+	<li>detects aborted/failed chroot environment initializations</li>
+</ul>
+
+
+<h3 id="chrootPlugin-Version0.1.1">Version 0.1.1</h3>
+
+<ul>
+	<li>adding description and wiki page to pom</li>
+</ul>
+
+
+<h3 id="chrootPlugin-Version0.1">Version 0.1</h3>
+
+<ul>
+	<li>initial release</li>
+	<li>pbuilder support (mock not usable at the moment)</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596947.png">minimal_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596948.png">buildstep.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596968.png">pbuilder_minimal_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596969.png">pbuilder_advanced_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596970.png">chroot_builder_minimal.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596971.png">chroot_builder_advanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596972.png">pbuilder_add_repositories.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596973.png">restrict_build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596974.png">chroot_buildstep.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596978.png">console_initializing_chroot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596976.png">chroot_builder_commands.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596977.png">chroot_add_repositories.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73531750/73596975.png">console_initializing_chroot.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

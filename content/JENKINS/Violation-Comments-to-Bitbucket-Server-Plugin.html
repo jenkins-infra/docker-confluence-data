@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Violation Comments to Bitbucket Server Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Violation Comments to Bitbucket Server Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tomasbjerre)</span>, last modified on Jun 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Violation Comments to Bitbucket Server <a href="https://plugins.jenkins.io/violation-comments-to-stash" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Analyzes Jenkins workspace to find code analyzer report files, comments Bitbucket Server (or Stash) pull requests with code analyzer comments.<p><a href="https://ci.jenkins.io/job/Plugins/job/violation-comments-to-stash-plugin" rel="nofollow" class="external-link"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Build Status" src="https://camo.githubusercontent.com/19a43b2a3a6b9b9dc2f2fa5732d1770869e6e8a2/68747470733a2f2f63692e6a656e6b696e732e696f2f6a6f622f506c7567696e732f6a6f622f76696f6c6174696f6e2d636f6d6d656e74732d746f2d73746173682d706c7567696e2f6a6f622f6d61737465722f62616467652f69636f6e" data-image-src="https://camo.githubusercontent.com/19a43b2a3a6b9b9dc2f2fa5732d1770869e6e8a2/68747470733a2f2f63692e6a656e6b696e732e696f2f6a6f622f506c7567696e732f6a6f622f76696f6c6174696f6e2d636f6d6d656e74732d746f2d73746173682d706c7567696e2f6a6f622f6d61737465722f62616467652f69636f6e"></span></a></p><p>It comments pull requests in Bitbucket Server (or Stash) with violations found in report files from static code analysis.</p><p>It uses <a href="https://github.com/tomasbjerre/violation-comments-to-bitbucket-server-lib" class="external-link" rel="nofollow">Violation Comments to Bitbucket Server Lib</a> and supports the same formats as <a href="https://github.com/tomasbjerre/violations-lib" class="external-link" rel="nofollow">Violations Lib</a>.</p><p>Example of supported reports are available <a href="https://github.com/tomasbjerre/violations-lib/tree/master/src/test/resources" class="external-link" rel="nofollow">here</a>.</p><p><strong>Note:</strong><span style="color: rgb(36,41,46);"><span> </span>Using<span> </span></span><strong>Bitbucket Cloud</strong><span style="color: rgb(36,41,46);">? You may have a look at<span> </span></span><a href="https://github.com/tomasbjerre/violation-comments-to-bitbucket-cloud-command-line" style="text-decoration: none;" class="external-link" rel="nofollow">Violation Comments to Bitbucket Cloud Command Line</a><span style="color: rgb(36,41,46);">. This will only work with Bitbucket Server.</span></p><p><span style="color: rgb(36,41,46);">You can also do this with a<span> </span><a rel="nofollow" style="text-decoration: none;" href="https://www.npmjs.com/package/violation-comments-to-bitbucket-server-command-line" class="external-link">command line tool</a>.</span></p><p>A number of <span>parsers</span> have been implemented. Some <span>parsers</span> can parse output from several <span>reporters</span>.</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/></colgroup><thead><tr><th class="confluenceTh">Reporter</th><th class="confluenceTh">Parser</th><th class="confluenceTh">Notes</th></tr></thead><tbody><tr><td class="confluenceTd"><a rel="nofollow" href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm" class="external-link"><em>ARM-GCC</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://developer.android.com/tools/help/lint.html" class="external-link"><em>AndroidLint</em></a></td><td class="confluenceTd"><code>ANDROIDLINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/willthames/ansible-lint" class="external-link" rel="nofollow"><em>AnsibleLint</em></a></td><td class="confluenceTd"><code>FLAKE8</code></td><td class="confluenceTd">With <code>-p</code></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://clang-analyzer.llvm.org/" class="external-link"><em>CLang</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://pmd.sourceforge.net/pmd-4.3.0/cpd.html" class="external-link"><em>CPD</em></a></td><td class="confluenceTd"><code>CPD</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://cppcheck.sourceforge.net/" class="external-link"><em>CPPCheck</em></a></td><td class="confluenceTd"><code>CPPCHECK</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/theandrewdavis/cpplint" class="external-link" rel="nofollow"><em>CPPLint</em></a></td><td class="confluenceTd"><code>CPPLINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/CSSLint/csslint" class="external-link" rel="nofollow"><em>CSSLint</em></a></td><td class="confluenceTd"><code>CSSLINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://checkstyle.sourceforge.net/" rel="nofollow" class="external-link"><em>Checkstyle</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://codenarc.sourceforge.net/" rel="nofollow" class="external-link"><em>CodeNarc</em></a></td><td class="confluenceTd"><code>CODENARC</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/arturbosch/detekt" class="external-link" rel="nofollow"><em>Detekt</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>--output-format xml</code>.</td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://dotnet.github.io/docfx/" class="external-link"><em>DocFX</em></a></td><td class="confluenceTd"><code>DOCFX</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://www.stack.nl/~dimitri/doxygen/" rel="nofollow" class="external-link"><em>Doxygen</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://www.puppetcookbook.com/posts/erb-template-validation.html" rel="nofollow" class="external-link"><em>ERB</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd">With <code>erb -P -x -T '-' &quot;${it}&quot; | ruby -c 2&gt;&amp;1 &gt;/dev/null | grep '^-' | sed -E 's/^-([a-zA-Z0-9:]+)/${filename}\1 ERROR:/p' &gt; erbfiles.out</code>.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/sindresorhus/grunt-eslint" class="external-link" rel="nofollow"><em>ESLint</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>format: 'checkstyle'</code>.</td></tr><tr><td class="confluenceTd"><a href="http://findbugs.sourceforge.net/" rel="nofollow" class="external-link"><em>Findbugs</em></a></td><td class="confluenceTd"><code>FINDBUGS</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://flake8.readthedocs.org/en/latest/" rel="nofollow" class="external-link"><em>Flake8</em></a></td><td class="confluenceTd"><code>FLAKE8</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://en.wikipedia.org/wiki/FxCop" class="external-link"><em>FxCop</em></a></td><td class="confluenceTd"><code>FXCOP</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://gcc.gnu.org/" rel="nofollow" class="external-link"><em>GCC</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://www.mono-project.com/docs/tools+libraries/tools/gendarme/" rel="nofollow" class="external-link"><em>Gendarme</em></a></td><td class="confluenceTd"><code>GENDARME</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/golang/lint" class="external-link" rel="nofollow"><em>GoLint</em></a></td><td class="confluenceTd"><code>GOLINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://golang.org/cmd/vet/" class="external-link"><em>GoVet</em></a></td><td class="confluenceTd"><code>GOLINT</code></td><td class="confluenceTd">Same format as GoLint.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/golangci/golangci-lint/" class="external-link" rel="nofollow"><em>GolangCI-Lint</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>--out-format=checkstyle</code>.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/google/error-prone" class="external-link" rel="nofollow"><em>GoogleErrorProne</em></a></td><td class="confluenceTd"><code>GOOGLEERRORPRONE</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://www.iar.com/iar-embedded-workbench/" rel="nofollow" class="external-link"><em>IAR</em></a></td><td class="confluenceTd"><code>IAR</code></td><td class="confluenceTd">With <code>--no_wrap_diagnostics</code></td></tr><tr><td class="confluenceTd"><a href="http://fbinfer.com/" rel="nofollow" class="external-link"><em>Infer</em></a></td><td class="confluenceTd"><code>PMD</code></td><td class="confluenceTd">Facebook Infer. With <code>--pmd-xml</code>.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/jCoderZ/fawkez/wiki/JcReport" class="external-link" rel="nofollow"><em>JCReport</em></a></td><td class="confluenceTd"><code>JCREPORT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://jshint.com/" rel="nofollow" class="external-link"><em>JSHint</em></a></td><td class="confluenceTd"><code>JSHINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/shyiko/ktlint" class="external-link" rel="nofollow"><em>KTLint</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://www.klocwork.com/products-services/klocwork/static-code-analysis" rel="nofollow" class="external-link"><em>Klocwork</em></a></td><td class="confluenceTd"><code>KLOCWORK</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/JetBrains/kotlin" class="external-link" rel="nofollow"><em>KotlinGradle</em></a></td><td class="confluenceTd"><code>KOTLINGRADLE</code></td><td class="confluenceTd">Output from Kotlin Gradle Plugin.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/JetBrains/kotlin" class="external-link" rel="nofollow"><em>KotlinMaven</em></a></td><td class="confluenceTd"><code>KOTLINMAVEN</code></td><td class="confluenceTd">Output from Kotlin Maven Plugin.</td></tr><tr><td class="confluenceTd"><a href="https://github.com/jenkinsci/violation-comments-to-stash-plugin/blob/master" class="external-link" rel="nofollow"><em>Lint</em></a></td><td class="confluenceTd"><code>LINT</code></td><td class="confluenceTd">A common XML format, used by different linters.</td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://visualstudio.microsoft.com/vs/features/cplusplus/" class="external-link"><em>MSCpp</em></a></td><td class="confluenceTd"><code>MSCPP</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://pypi.python.org/pypi/mccabe" rel="nofollow" class="external-link"><em>Mccabe</em></a></td><td class="confluenceTd"><code>FLAKE8</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://pypi.python.org/pypi/mypy-lang" rel="nofollow" class="external-link"><em>MyPy</em></a></td><td class="confluenceTd"><code>MYPY</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/uber/NullAway" class="external-link" rel="nofollow"><em>NullAway</em></a></td><td class="confluenceTd"><code>GOOGLEERRORPRONE</code></td><td class="confluenceTd">Same format as Google Error Prone.</td></tr><tr><td class="confluenceTd"><a href="http://www.gimpel.com/html/pcl.htm" rel="nofollow" class="external-link"><em>PCLint</em></a></td><td class="confluenceTd"><code>PCLINT</code></td><td class="confluenceTd">PC-Lint using the same output format as the Jenkins warnings plugin, <a href="https://wiki.jenkins.io/display/JENKINS/PcLint+options" rel="nofollow"><em>details here</em></a></td></tr><tr><td class="confluenceTd"><a href="https://github.com/squizlabs/PHP_CodeSniffer" class="external-link" rel="nofollow"><em>PHPCS</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>phpcs api.php --report=checkstyle</code>.</td></tr><tr><td class="confluenceTd"><a href="https://phpmd.org/" rel="nofollow" class="external-link"><em>PHPPMD</em></a></td><td class="confluenceTd"><code>PMD</code></td><td class="confluenceTd">With <code>phpmd api.php xml ruleset.xml</code>.</td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://pmd.github.io/" class="external-link"><em>PMD</em></a></td><td class="confluenceTd"><code>PMD</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/PyCQA/pycodestyle" class="external-link" rel="nofollow"><em>Pep8</em></a></td><td class="confluenceTd"><code>FLAKE8</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/Perl-Critic" class="external-link" rel="nofollow"><em>PerlCritic</em></a></td><td class="confluenceTd"><code>PERLCRITIC</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://pitest.org/" class="external-link"><em>PiTest</em></a></td><td class="confluenceTd"><code>PITEST</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://puppet-lint.com/" rel="nofollow" class="external-link"><em>Puppet-Lint</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd">With <code>-log-format %{fullpath}:%{line}:%{column}: %{kind}: %{message}</code></td></tr><tr><td class="confluenceTd"><a href="https://pypi.python.org/pypi/pydocstyle" rel="nofollow" class="external-link"><em>PyDocStyle</em></a></td><td class="confluenceTd"><code>PYDOCSTYLE</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://pypi.python.org/pypi/pyflakes" rel="nofollow" class="external-link"><em>PyFlakes</em></a></td><td class="confluenceTd"><code>FLAKE8</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://www.pylint.org/" rel="nofollow" class="external-link"><em>PyLint</em></a></td><td class="confluenceTd"><code>PYLINT</code></td><td class="confluenceTd">With <code>pylint --output-format=parseable</code>.</td></tr><tr><td class="confluenceTd"><a href="https://www.jetbrains.com/resharper/" rel="nofollow" class="external-link"><em>ReSharper</em></a></td><td class="confluenceTd"><code>RESHARPER</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://rubocop.readthedocs.io/en/latest/formatters/" rel="nofollow" class="external-link"><em>RubyCop</em></a></td><td class="confluenceTd"><code>CLANG</code></td><td class="confluenceTd">With <code>rubycop -f clang file.rb</code></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://www.scala-sbt.org/" class="external-link"><em>SbtScalac</em></a></td><td class="confluenceTd"><code>SBTSCALAC</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="http://www.scalastyle.org/" class="external-link"><em>Scalastyle</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="http://www.harukizaemon.com/simian/" rel="nofollow" class="external-link"><em>Simian</em></a></td><td class="confluenceTd"><code>SIMIAN</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://www.sonarqube.org/" rel="nofollow" class="external-link"><em>Sonar</em></a></td><td class="confluenceTd"><code>SONAR</code></td><td class="confluenceTd">With <code>mvn sonar:sonar -Dsonar.analysis.mode=preview -Dsonar.report.export.path=sonar-report.json</code>.</td></tr><tr><td class="confluenceTd"><a href="https://spotbugs.github.io/" rel="nofollow" class="external-link"><em>Spotbugs</em></a></td><td class="confluenceTd"><code>FINDBUGS</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://stylecop.codeplex.com/" class="external-link"><em>StyleCop</em></a></td><td class="confluenceTd"><code>STYLECOP</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a href="https://github.com/realm/SwiftLint" class="external-link" rel="nofollow"><em>SwiftLint</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>--reporter checkstyle</code>.</td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://palantir.github.io/tslint/usage/cli/" class="external-link"><em>TSLint</em></a></td><td class="confluenceTd"><code>CHECKSTYLE</code></td><td class="confluenceTd">With <code>-t checkstyle</code></td></tr><tr><td class="confluenceTd"><a href="http://xmlsoft.org/xmllint.html" rel="nofollow" class="external-link"><em>XMLLint</em></a></td><td class="confluenceTd"><code>XMLLINT</code></td><td class="confluenceTd"><br/></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://yamllint.readthedocs.io/en/stable/index.html" class="external-link"><em>YAMLLint</em></a></td><td class="confluenceTd"><code>YAMLLINT</code></td><td class="confluenceTd">With <code>-f parsable</code></td></tr><tr><td class="confluenceTd"><a rel="nofollow" href="https://pypi.python.org/pypi/zptlint" class="external-link"><em>ZPTLint</em></a></td><td class="confluenceTd"><code>ZPTLINT</code></td><td class="confluenceTd"><br/></td></tr></tbody></table></div><p>Missing a format? Open an issue <a href="https://github.com/tomasbjerre/violations-lib/issues" class="external-link" rel="nofollow">here</a>!</p><p>The pull request will be commented like this.</p><p><a href="https://raw.githubusercontent.com/jenkinsci/violation-comments-to-stash-plugin/master/sandbox/screenshot-stash.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Pull request comment" src="https://raw.githubusercontent.com/jenkinsci/violation-comments-to-stash-plugin/master/sandbox/screenshot-stash.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/violation-comments-to-stash-plugin/master/sandbox/screenshot-stash.png"></span></a></p><p>Available in Jenkins <a rel="nofollow" href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+Bitbucket+Server+Plugin" class="external-link">here</a>.</p><h2 id="ViolationCommentstoBitbucketServerPlugin-NotifyJenkinsfromBitbucketServer">Notify Jenkins from Bitbucket Server</h2><ul><li><p>You may trigger with a <a href="https://confluence.atlassian.com/bitbucketserver/managing-webhooks-in-bitbucket-server-938025878.html" rel="nofollow" class="external-link">webhook</a> in Bitbucket Server. And consume it with <a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin" class="external-link" rel="nofollow">Generic Webhook Trigger plugin</a> to get the variables you need.</p></li><li><p>Or, trigger with <a href="https://github.com/tomasbjerre/pull-request-notifier-for-bitbucket" class="external-link" rel="nofollow">Pull Request Notifier for Bitbucket Server</a>. It can supply any parameters and variables you may need. Here is an example URL. <code><a href="http://localhost:8080/jenkins/job/builder/buildWithParameters?FROM=${PULL_REQUEST_FROM_HASH}&amp;TO=${PULL_REQUEST_TO_HASH}&amp;TOSLUG=${PULL_REQUEST_TO_REPO_SLUG}&amp;TOREPO=${PULL_REQUEST_TO_HTTP_CLONE_URL}&amp;FROMREPO=${PULL_REQUEST_FROM_HTTP_CLONE_URL}&amp;ID=${PULL_REQUEST_ID}&amp;PROJECT=${PULL_REQUEST_TO_REPO_PROJECT_KEY" class="external-link" rel="nofollow">http://localhost:8080/jenkins/job/builder/buildWithParameters?FROM=${PULL_REQUEST_FROM_HASH}&amp;TO=${PULL_REQUEST_TO_HASH}&amp;TOSLUG=${PULL_REQUEST_TO_REPO_SLUG}&amp;TOREPO=${PULL_REQUEST_TO_HTTP_CLONE_URL}&amp;FROMREPO=${PULL_REQUEST_FROM_HTTP_CLONE_URL}&amp;ID=${PULL_REQUEST_ID}&amp;PROJECT=${PULL_REQUEST_TO_REPO_PROJECT_KEY</a>}</code></p></li></ul><h2 id="ViolationCommentstoBitbucketServerPlugin-Merge">Merge</h2><p><span>You must perform the merge before build</span>. If you don't perform the merge, the reported violations will refer to other lines then those in the pull request. The merge can be done with a shell script like this.</p><pre><code>echo ---
+echo --- Merging from $FROM in $FROMREPO to $TO in $TOREPO
+echo ---
+git clone $TOREPO
+cd *
+git reset --hard $TO
+git status
+git remote add from $FROMREPO
+git fetch from
+git merge $FROM
+git --no-pager log --max-count=10 --graph --abbrev-commit
+
+Your build command here!
+</code></pre><h2 id="ViolationCommentstoBitbucketServerPlugin-JobDSLPlugin">Job DSL Plugin</h2><p>This plugin can be used with the Job DSL Plugin. Here is an example.</p><p>I trigger it with <a href="https://github.com/tomasbjerre/pull-request-notifier-for-bitbucket" class="external-link" rel="nofollow">Pull Request Notifier for Bitbucket Server</a> with URL like <code><a href="http://jenkins:8080/job/Bitbucket_Server_PR_Builder/buildWithParameters?${EVERYTHING_URL" class="external-link" rel="nofollow">http://jenkins:8080/job/Bitbucket_Server_PR_Builder/buildWithParameters?${EVERYTHING_URL</a>}</code>, I report back to Bitbucket Server with <a href="https://wiki.jenkins-ci.org/display/JENKINS/HTTP+Request+Plugin" rel="nofollow" class="external-link">HTTP Request Plugin</a> and <a rel="nofollow" href="https://wiki.jenkins-ci.org/display/JENKINS/Conditional+BuildStep+Plugin" class="external-link">Conditional BuildStep Plugin</a>.</p><pre><code>job('Bitbucket_Server_PR_Builder') {
+ concurrentBuild()
+ quietPeriod(0)
+ parameters {
+  stringParam('PULL_REQUEST_TO_HTTP_CLONE_URL', '')
+  stringParam('PULL_REQUEST_TO_HASH', '')
+  stringParam('PULL_REQUEST_FROM_HTTP_CLONE_URL', '')
+  stringParam('PULL_REQUEST_FROM_HASH', '')
+  stringParam('PULL_REQUEST_TO_REPO_PROJECT_KEY', '')
+  stringParam('PULL_REQUEST_TO_REPO_SLUG', '')
+  stringParam('PULL_REQUEST_ID','')
+ }
+ steps {
+  httpRequest {
+   url(&quot;http://admin:admin@bitbucket:7990/rest/api/1.0/projects/\$PULL_REQUEST_TO_REPO_PROJECT_KEY/repos/\$PULL_REQUEST_TO_REPO_SLUG/pull-requests/\$PULL_REQUEST_ID/comments&quot;)
+   consoleLogResponseBody(true)
+   httpMode(&quot;POST&quot;)
+   acceptType('APPLICATION_JSON')
+   contentType('APPLICATION_JSON')
+   requestBody('{ &quot;text&quot;: &quot;Building... \$BUILD_URL&quot; }')
+  }
+
+  shell('''
+echo ---
+echo --- Merging from $FROM in $FROMREPO to $TO in $TOREPO
+echo ---
+git clone $PULL_REQUEST_TO_HTTP_CLONE_URL
+cd *
+git reset --hard $PULL_REQUEST_TO_HASH
+git status
+git remote add from $PULL_REQUEST_FROM_HTTP_CLONE_URL
+git fetch from
+git merge $PULL_REQUEST_FROM_HASH
+git --no-pager log --max-count=10 --graph --abbrev-commit
+
+./gradlew build
+  ''')
+
+  conditionalBuilder {
+   runCondition {
+    statusCondition {
+     worstResult('SUCCESS')
+     bestResult('SUCCESS')
+    }
+    runner {
+     runUnstable()
+    }
+    conditionalbuilders {
+     httpRequest {
+      url(&quot;http://admin:admin@bitbucket:7990/rest/api/1.0/projects/\$PULL_REQUEST_TO_REPO_PROJECT_KEY/repos/\$PULL_REQUEST_TO_REPO_SLUG/pull-requests/\$PULL_REQUEST_ID/comments&quot;)
+      consoleLogResponseBody(true)
+      httpMode(&quot;POST&quot;)
+      acceptType('APPLICATION_JSON')
+      contentType('APPLICATION_JSON')
+      requestBody('{ &quot;text&quot;: &quot;Success... \$BUILD_URL&quot; }')
+     }
+    }
+   }
+  }
+
+  conditionalBuilder {
+   runCondition {
+    statusCondition {
+     worstResult('FAILURE')
+     bestResult('FAILURE')
+    }
+    runner {
+     runUnstable()
+    }
+    conditionalbuilders {
+     httpRequest {
+      url(&quot;http://admin:admin@bitbucket:7990/rest/api/1.0/projects/\$PULL_REQUEST_TO_REPO_PROJECT_KEY/repos/\$PULL_REQUEST_TO_REPO_SLUG/pull-requests/\$PULL_REQUEST_ID/comments&quot;)
+      consoleLogResponseBody(true)
+      httpMode(&quot;POST&quot;)
+      acceptType('APPLICATION_JSON')
+      contentType('APPLICATION_JSON')
+      requestBody('{ &quot;text&quot;: &quot;Failure... \$BUILD_URL&quot; }')
+     }
+    }
+   }
+  }
+ }
+ publishers {
+  violationsToBitbucketServerRecorder {
+   config {
+    bitbucketServerUrl(&quot;http://bitbucket:7990&quot;)
+    projectKey(&quot;\$PULL_REQUEST_TO_REPO_PROJECT_KEY&quot;)
+    repoSlug(&quot;\$PULL_REQUEST_TO_REPO_SLUG&quot;)
+    pullRequestId(&quot;\$PULL_REQUEST_ID&quot;)
+
+    credentialsId('bitbucketservercredentials')
+
+    minSeverity('INFO')
+    maxNumberOfViolations(99999)
+    createSingleFileComments(true)
+    createCommentWithAllSingleFileComments(false)
+    commentOnlyChangedContent(true)
+    commentOnlyChangedContentContext(5)
+    keepOldComments(false)
+    
+    commentTemplate(&quot;&quot;&quot;
+    **Reporter**: {{violation.reporter}}{{#violation.rule}}
+    
+    **Rule**: {{violation.rule}}{{/violation.rule}}
+    **Severity**: {{violation.severity}}
+    **File**: {{violation.file}} L{{violation.startLine}}{{#violation.source}}
+    
+    **Source**: {{violation.source}}{{/violation.source}}
+    
+    {{violation.message}}
+    &quot;&quot;&quot;)
+
+    violationConfigs {
+     violationConfig {
+      parser(&quot;FINDBUGS&quot;)
+      reporter(&quot;Findbugs&quot;)
+      pattern(&quot;.*/findbugs/.*\\.xml\$&quot;)
+     }
+     violationConfig {
+      parser(&quot;CHECKSTYLE&quot;)
+      reporter(&quot;Checkstyle&quot;)
+      pattern(&quot;.*/checkstyle/.*\\.xml\$&quot;)
+     }
+    }
+   }
+  }  
+ }
+}
+</code></pre><h2 id="ViolationCommentstoBitbucketServerPlugin-PipelinePlugin">Pipeline Plugin</h2><p>This plugin can be used with the Pipeline Plugin:</p><pre><code>node {
+ deleteDir()
+ 
+ stage('Merge') {
+  sh '''
+  git clone git@github.com:tomasbjerre/violations-test.git .
+  git checkout master
+  git merge origin/feature/addingcrap
+  '''
+ }
+
+ stage('Build') {
+  sh '''
+  ./build.sh || ls
+  '''
+ }
+
+ stage('Static code analysis') {
+  ViolationsToBitbucketServer([
+   bitbucketServerUrl: 'http://localhost:7990/',
+   commentOnlyChangedContent: true,
+   commentOnlyChangedContentContext: 5,
+   createCommentWithAllSingleFileComments: false,
+   createSingleFileComments: true,
+   maxNumberOfViolations: 99999,
+   keepOldComments: true,
+   projectKey: 'PROJ', // Use environment variable here
+   pullRequestId: '1', // Use environment variable here
+   repoSlug: 'violations-test', // Use environment variable here
+   
+   credentialsId: 'theid',
+   
+   commentTemplate: &quot;&quot;&quot;
+   **Reporter**: {{violation.reporter}}{{#violation.rule}}
+   
+   **Rule**: {{violation.rule}}{{/violation.rule}}
+   **Severity**: {{violation.severity}}
+   **File**: {{violation.file}} L{{violation.startLine}}{{#violation.source}}
+   
+   **Source**: {{violation.source}}{{/violation.source}}
+   
+   {{violation.message}}
+   &quot;&quot;&quot;,
+   
+   violationConfigs: [
+    // Many more formats available, check https://github.com/tomasbjerre/violations-lib
+    [parser: 'FINDBUGS', pattern: '.*/findbugs/.*\\.xml\$', reporter: 'Findbugs'],
+    [parser: 'CHECKSTYLE', pattern: '.*/checkstyle/.*\\.xml\$', reporter: 'Checkstyle']
+   ]
+  ])
+ }
+}</code></pre><h1 id="ViolationCommentstoBitbucketServerPlugin-Changelog">Changelog</h1><p><a href="https://github.com/jenkinsci/violation-comments-to-stash-plugin/blob/master/CHANGELOG.md" rel="nofollow" class="external-link">https://github.com/jenkinsci/violation-comments-to-stash-plugin/blob/master/CHANGELOG.md</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/100106254.png">screenshot-stash.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/78938182.png">screenshot-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/78938181.png">jenkins-job-builder-configure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/78938183.png">screenshot-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/79298566.png">screenshot-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/100106253.png">screenshot-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/78938180.png">screenshot-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/100106296.png">screenshot-stash.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/106496058.png">screenshot-stash.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676717/78938179.png">screenshot-stash.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:56</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

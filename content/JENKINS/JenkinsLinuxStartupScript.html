@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JenkinsLinuxStartupScript</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Installing-Jenkins-as-a-Unix-daemon.html">Installing Jenkins as a Unix daemon</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JenkinsLinuxStartupScript
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (adamfeuer)</span>, last modified by <span class='editor'> Unknown User (mr_dfuse)</span> on Dec 11, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This is a startup script for Linux, and provides start/stop/restart/status functionality. This has been tested on Redhat, but should work on other Linuxes like Ubuntu or SuSE. You may need to change the environment variables at the top of the script to fit your system. This assumes that Jenkins is installed in <code>/home/jenkins</code>, Tomcat is installed in /home/jenkins/apache-tomcat-6.0.18, and that JENKINS_HOME is <code>/home/jenkins/jenkins-home</code></p>
+
+<p>To install, on Ubuntu:</p>
+<ul>
+	<li>Save the file to <code>/etc/init.d/jenkins</code></li>
+	<li><code>chmod a+x /etc/init.d/jenkins</code></li>
+	<li><code>update-rc.d jenkins defaults</code></li>
+</ul>
+
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>#!/bin/sh
+#
+# Startup script for the Jenkins Continuous Integration server
+# (via Jakarta Tomcat Java Servlets and JSP server)
+#
+# chkconfig: - 85 15
+# description: Jakarta Tomcat Java Servlets and JSP server
+# processname: jenkins
+# pidfile: /home/jenkins/jenkins-tomcat.pid
+
+# Set Tomcat environment.
+JENKINS_USER=jenkins
+LOCKFILE=/var/lock/jenkins
+export PATH=/usr/local/bin:$PATH
+export HOME=/home/jenkins
+export JAVA_HOME=/usr/lib/jvm/java-6-sun
+export JENKINS_BASEDIR=/home/jenkins
+export TOMCAT_HOME=$JENKINS_BASEDIR/apache-tomcat-6.0.18
+export CATALINA_PID=$JENKINS_BASEDIR/jenkins-tomcat.pid
+export CATALINA_OPTS=&quot;-DJENKINS_HOME=$JENKINS_BASEDIR/jenkins-home -Xmx512m -Djava.awt.headless=true&quot;
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+[ -f $TOMCAT_HOME/bin/catalina.sh ] || exit 0
+
+export PATH=$PATH:/usr/bin:/usr/local/bin
+
+# See how we were called.
+case &quot;$1&quot; in
+  start)
+        # Start daemon.
+        echo -n &quot;Starting Tomcat: &quot;
+        su -p -s /bin/sh $JENKINS_USER -c &quot;$TOMCAT_HOME/bin/catalina.sh start&quot;
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] &amp;&amp; touch $LOCKFILE
+        ;;
+  stop)
+        # Stop daemons.
+        echo -n &quot;Shutting down Tomcat: &quot;
+        su -p -s /bin/sh $JENKINS_USER -c &quot;$TOMCAT_HOME/bin/catalina.sh stop&quot;
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] &amp;&amp; rm -f $LOCKFILE
+        ;;
+  restart)
+        $0 stop
+        $0 start
+        ;;
+  condrestart)
+       [ -e $LOCKFILE ] &amp;&amp; $0 restart
+       ;;
+  status)
+        status -p $CATALINA_PID -l $(basename $LOCKFILE) jenkins
+        ;;
+  *)
+        echo &quot;Usage: $0 {start|stop|restart|status}&quot;
+        exit 1
+esac
+
+exit 0
+</pre>
+</div></div>
+
+<p>To install, on Red Hat</p>
+
+<ul>
+	<li>Save the file to <code>/etc/init.d/jenkins</code></li>
+	<li><code>chmod a+x /etc/init.d/jenkins</code></li>
+	<li><code>chkconfig jenkins on</code></li>
+	<li><code>ntsysv</code> and see if the Jenkins service is turned on.</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

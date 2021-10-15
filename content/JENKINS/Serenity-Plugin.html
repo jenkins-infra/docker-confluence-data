@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Serenity Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Serenity Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (michaelcouck)</span>, last modified by <span class='editor'> Unknown User (michael_couck)</span> on Sep 03, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Serenity <a href="https://plugins.jenkins.io/serenity" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>Serenity is a Java code coverage and code metrics library, tool and Jenkins plugin, with dynamic byte code instrumentation, and introducing continuous profiling.<br/>
+Configuring Serenity with Jenkins is a snap, four easy steps.</p>
+
+
+<p><strong>1)</strong> <strong><span style="text-decoration: underline;">Download:</span></strong> the <a href="attachments/42468477/42631300.zip" data-linked-resource-id="42631300" data-linked-resource-version="14" data-linked-resource-type="attachment" data-linked-resource-default-alias="serenity.zip" data-nice-type="Zip Archive" data-linked-resource-content-type="application/zip" data-linked-resource-container-id="42468477" data-linked-resource-container-version="53">Serenity</a> and unpack it in the same directory as your build.xml or pom.xml.<br/>
+<strong>2)</strong> <strong><span style="text-decoration: underline;">Add properties:</span></strong> for which packages you want to generate code metrics for, and the adapters that you would like to use by adding this to the build.xml or pom.xml for</p>
+
+<p><strong>Ant</strong> builds:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;!-- Serenity system properties. --&gt;
+&lt;sysproperty key=&quot;included.packages&quot; value=&quot;your.package.name.here&quot; /&gt;
+&lt;sysproperty key=&quot;included.adapters&quot; value=&quot;coverage:complexity:dependency&quot; /&gt;
+</pre>
+</div></div>
+<p><strong>Maven</strong> builds:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;properties&gt;
+	&lt;included.packages&gt;-Dincluded.packages=your.package.name.here&lt;/included.packages&gt;
+	&lt;included.adapters&gt;-Dincluded.adapters=coverage:complexity:dependency&lt;/included.adapters&gt;
+&lt;/properties&gt;
+</pre>
+</div></div>
+<p><strong>3)</strong> <strong><span style="text-decoration: underline;">Add agent:</span></strong> to the command line for <strong>Ant</strong> like this:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;!-- Serenity JVM command line. --&gt;
+&lt;jvmarg line=&quot;-javaagent:serenity/serenity.jar&quot; /&gt;
+</pre>
+</div></div>
+<p>And for <strong>Maven</strong> like this:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;argLine&gt;-javaagent:serenity/serenity.jar -Xms512m -Xmx1024m ${included.packages} ${included.adapters}&lt;/argLine&gt;
+</pre>
+</div></div>
+<p><strong>4)</strong> <strong><span style="text-decoration: underline;">Jenkins configuration:</span></strong> page for the project in Jenkins check the Serenity box at the bottom. First install the plugin from the Jenkins download/install plugin page.</p>
+
+
+<p>And that is it, run as normal. The coverage and code metrics for all modules will be collected, aggregated and made available in the Jenkins GUI, in reports, graphs and visualization aids.</p>
+
+
+<h3 id="SerenityPlugin-ExampleprojectsusingSerenity:">Example projects using Serenity:</h3>
+
+<p>* <strong>Maven</strong> reference project at - <a href="https://github.com/michaelcouck/i-discover" class="external-link" rel="nofollow">https://github.com/michaelcouck/i-discover</a></p>
+
+
+<p>* <strong>Maven</strong> multi-module project for at - <a href="https://github.com/michaelcouck/ikube" class="external-link" rel="nofollow">https://github.com/michaelcouck/ikube</a></p>
+
+<p>Similarly any build system can incorporate Serenity, Gradle for example, simply add Serenity to the agrLine for running the unit/integration tests, and of course the system properties for the packages to be analyzed and the adapters to be used. System properties required and optional are described below.</p>
+
+
+
+
+<h3 id="SerenityPlugin-Systempropertiesthatareavailableandcanbesetare:">System properties that are available and can be set are:</h3>
+
+<p>1) included.packages - the package names that are to be collected, semi-colon separated list(mandatory)<br/>
+2) included.adapters - the class adapters that will generate the collection data for the classes, semi-colon separated list(mandatory)<br/>
+3) write.classes - whether the modified classes are to be written to the file system for later inspection, true or false(optional)<br/>
+4) clean.classes - whether to delete the old class files on the file system before writing the new ones, true or false(optional)<br/>
+5) included.jars - jar files that are to be included in the accumulation, for source files if the source is not added to the build jars during the build(optional)<br/>
+6) dump - dumps the database to the output at the end of the job<br/>
+7) delete - deletes the database file before the execution, this is to prevent integration jobs overwriting the unit test database. So if there are integration tests running directly after the unit tests, in the same directory then set this parameter to false for the integration tests.</p>
+
+<h4 id="SerenityPlugin-FullexampleconfigurationofSerenityforanAntbuild:">Full example configuration of Serenity for an Ant build:</h4>
+
+<p>To enable the JavaAgent the Ant build script needs to be modified to include the agent as in the following:</p>
+
+<p>&lt;jvmarg line=&quot;-javaagent:serenity/serenity.jar&quot; /&gt;</p>
+
+<p>Below is the build.xml fragment from the FindBugs project running Serenity as an example.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;target name=&quot;test&quot; depends=&quot;junittests,jars&quot;&gt;
+	&lt;echo&gt;Running JUnit test cases for FindBugs...&lt;/echo&gt;
+	&lt;junit fork=&quot;true&quot; printsummary=&quot;true&quot; showoutput=&quot;true&quot; filtertrace=&quot;true&quot; forkmode=&quot;once&quot;&gt;
+		...
+		&lt;!-- Serenity system properties. --&gt;
+		&lt;sysproperty key=&quot;included.packages&quot; value=&quot;edu.umd.cs.findbugs&quot; /&gt;
+		&lt;sysproperty key=&quot;included.adapters&quot; value=&quot;coverage,complexity,dependency&quot; /&gt;
+
+                &lt;!-- Serenity JVM command line. --&gt;
+		&lt;jvmarg line=&quot;-javaagent:serenity/serenity.jar&quot; /&gt;
+
+		&lt;formatter type=&quot;xml&quot; /&gt;
+		&lt;classpath refid=&quot;tools.classpath&quot; /&gt;
+		&lt;classpath&gt;
+			&lt;pathelement path=&quot;${junitclasses.dir}&quot; /&gt;
+		&lt;/classpath&gt;
+		&lt;!-- And run the tests. --&gt;
+		&lt;batchtest todir=&quot;build/junit&quot; haltonerror=&quot;false&quot; haltonfailure=&quot;false&quot;&gt;
+			&lt;fileset dir=&quot;${junitsrc.dir}&quot;&gt;
+				&lt;include name=&quot;**/*Test*.java&quot; /&gt;
+			&lt;/fileset&gt;
+		&lt;/batchtest&gt;
+	&lt;/junit&gt;
+&lt;/target&gt;
+</pre>
+</div></div>
+
+<h4 id="SerenityPlugin-FullexampleconfigurationofSerenityforaMavenbuild:">Full example configuration of Serenity for a Maven build:</h4>
+
+<p>As in the Ant configuration there are system parameters that can be set, and those that need to be set. Below is a fragment from a pom configured to run Serenity during the test phase of Maven:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;properties&gt;
+	&lt;included.packages&gt;-Dincluded.packages=discover&lt;/included.packages&gt;
+	&lt;included.adapters&gt;-Dincluded.adapters=coverage:complexity:dependency&lt;/included.adapters&gt;
+&lt;/properties&gt;
+
+&lt;build&gt;
+	...
+	&lt;plugins&gt;
+		...
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;forkMode&gt;once&lt;/forkMode&gt;
+				&lt;argLine&gt;-javaagent:serenity/serenity.jar -Xms512m -Xmx1024m ${included.packages} ${included.adapters}&lt;/argLine&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+		...
+	&lt;/plugins&gt;
+	...
+&lt;/build&gt;
+</pre>
+</div></div>
+<p>As can be seen from the above, properties are defined for the Serenity properties and used in the command line for the Surefire plugin.</p>
+
+<h4 id="SerenityPlugin-Additionaltechnicaldetails,configurationdetailsandgotchas!">Additional technical details, configuration details and gotchas!</h4>
+
+<p>Serenity runs as a JavaAgent, as such the byte code is modified in memory. Serenity will generate statistics on coverage, complexity, (in)stability, abstractness and distance from main for the project depending on the adapters defined in the system property 'included.adapters'. The instrumented classes can be written to the file system to be validated visually by setting a system property 'write.classes'. The class files will be written to the 'serenity' folder.</p>
+
+<p>The JUnit task in both Ant and Maven needs to be in forked mode, and typically with the option 'once' set to true. Starting a new JVM for every test will be very time consuming and data will be overwritten with each JVM, i.e. the results are undefined.</p>
+
+<p>The command line for Ant and Maven must have no spaces or page breaks, i.e. one long command. The JVM doesn't like page breaks and complains bitterly about the agent not starting etc.</p>
+
+<p>If no adapters are added, or the names for the adapters are wrongly spelled then no metrics will be generated for the classes. Generally all the adapters are added. The coverage adapter is the most sought after, and incidentally the most expensive for performance, but the others are not very expensive at all as it turns out so there is no harm in adding them too.</p>
+
+<p>In the plugin, viewing of the source and the covered lines is desirable. To include source the source must be in the jars that are generated and are on the classpath, not in folders. Alternatively the source can be in the 'indluded.jars' property. The jars that are specified here must then contain not only the source but the class files too.</p>
+
+<p>Serenity will maintain all the data in memory until the JVM for the unit tests shuts down. As such, depending on the size of the project, the memory needs to be set appropriately. This can be set on the command line for the Maven build and for Ant in the 'jvmarg' tag as in the following:</p>
+
+<h5 id="SerenityPlugin-Maven">Maven</h5>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;argLine&gt;-javaagent:serenity/serenity.jar -Xms512m -Xmx1024m ${included.packages} ${included.adapters}&lt;/argLine&gt;
+</pre>
+</div></div>
+
+<h5 id="SerenityPlugin-Ant">Ant</h5>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;jvmarg value=&quot;-XX:PermSize=256m&quot; /&gt;
+&lt;jvmarg value=&quot;-XX:MaxPermSize=512m&quot; /&gt;
+&lt;jvmarg value=&quot;-Xms768m&quot; /&gt;
+&lt;jvmarg value=&quot;-Xmx1024m&quot; /&gt;
+</pre>
+</div></div>
+<p>Typically performance for the tests will be p = p * 3 with the coverage added. Generally however unit tests are fast and not performance sensitive.</p>
+
+
+
+<p>This is a screen shot of the Serenity trend result and the report in Jenkins.</p>
+
+<p>﻿ <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42468477/99123224.jpeg" data-image-src="attachments/42468477/99123224.jpeg" data-unresolved-comment-count="0" data-linked-resource-id="99123224" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="serenity-floating-1200.jpeg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="42468477" data-linked-resource-container-version="53"></span></p>
+
+<p>Code tree and source coverage visualized.</p>
+
+
+<p>﻿ <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42468477/99123225.jpeg" data-image-src="attachments/42468477/99123225.jpeg" data-unresolved-comment-count="0" data-linked-resource-id="99123225" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="serenity-report-1200.jpeg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="42468477" data-linked-resource-container-version="53"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631289.jpg">ScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631344.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631313.jpg">SerenityFloatingBoxScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631314.jpg">SerenityReportScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631346.jpg">SerenityFloatingBoxScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631347.jpg">SerenityReportScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631345.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/43483137.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631311.jpg">SerenityFloatingBoxScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631312.jpg">SerenityReportScreenShot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/43483140.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/46563349.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/67895372.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/67895381.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/69402761.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/69959811.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/69959817.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/71008314.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/69959820.png">screenshot1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/69959821.png">screenshot2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/99123226.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/99123224.jpeg">serenity-floating-1200.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/99123225.jpeg">serenity-report-1200.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/100859933.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468477/42631300.zip">serenity.zip</a> (application/zip)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:46</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Ivy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Ivy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (davidseymore)</span>, last modified by <span class='editor'> Unknown User (arothian)</span> on Nov 29, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Ivy <a href="https://plugins.jenkins.io/ivy" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>This plugin automatically configures a build to trigger other builds based on dependency configuration via <a href="http://ant.apache.org/ivy" class="external-link" rel="nofollow">Apache Ivy</a>.</p></p>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Please Note</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Support for Hudson has now been dropped, only Jenkins will be supported from now on.</p></div></div>
+
+<h4 id="IvyPlugin-Plugindownload">Plugin download</h4>
+
+<p><a href="http://updates.jenkins-ci.org/latest/ivy.hpi" class="external-link" rel="nofollow">Latest hpi</a></p>
+
+<h1 id="IvyPlugin-SupportedVersions">Supported Versions</h1>
+
+<p>Since Version 1.25 this plugin uses Ivy 2.4.0 internally (but it should work with Ivy 2.+ projects)</p>
+
+<h1 id="IvyPlugin-CreatingAnIvyProject(addedinversion1.0ofthisplugin)">Creating An Ivy Project (added in version 1.0 of this plugin)</h1>
+
+<p>By using an Ivy project instead of a Freestyle project Jenkins can simplify the job configuration. It will auto-detect all the ivy modules you checked out, create builds for them, and automatically generate the upstream/downstream build triggers based on your Ivy dependencies.</p>
+
+<ol>
+	<li>Click on the &quot;New Job&quot; link<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631366.png" data-image-src="attachments/26574871/42631366.png" data-unresolved-comment-count="0" data-linked-resource-id="42631366" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="new-job.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>Enter a project name and choose &quot;Build an Ivy project&quot;<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631367.png" data-image-src="attachments/26574871/42631367.png" data-unresolved-comment-count="0" data-linked-resource-id="42631367" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="new-ivy-project.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>Fill in your SCM details (you can choose to check out a single ivy module, or an entire branch of ivy modules)</li>
+	<li>Choose the Ant version to build with and enter the targets you want run.  Most of the options have sensible defaults so you only need to fill them in if your modules are set up differently than the default values expect.  If you want to build each module as a separate job, expand the &quot;Advanced&quot; section and check &quot;Build modules as separate jobs&quot;.  If you are polling for changes from your SCM, you can also optionally choose to only build changed modules.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631368.png" data-image-src="attachments/26574871/42631368.png" data-unresolved-comment-count="0" data-linked-resource-id="42631368" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="ivy-project-configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>Now on your Jenkins job page you will see a &quot;Modules&quot; link<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631369.png" data-image-src="attachments/26574871/42631369.png" data-unresolved-comment-count="0" data-linked-resource-id="42631369" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="modules.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>This will give you a view of all the discovered ivy modules you checked out (Note: you will need to build the project once before the modules show up)<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631370.png" data-image-src="attachments/26574871/42631370.png" data-unresolved-comment-count="0" data-linked-resource-id="42631370" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="modules-view.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>The upstream/downstream project build triggers will be automatically generated from the dependencies in your ivy files.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631371.png" data-image-src="attachments/26574871/42631371.png" data-unresolved-comment-count="0" data-linked-resource-id="42631371" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="upstream-downstream.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+	<li>If you chose to build the modules as separate jobs, then you can click on a module in the module view to see all the individual builds, SCM changes, artifacts, etc.</li>
+	<li>If you want to run different targets on a certain module then you can override the default targets in the module configuration.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/42631372.png" data-image-src="attachments/26574871/42631372.png" data-unresolved-comment-count="0" data-linked-resource-id="42631372" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ivy-module-configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span></li>
+</ol>
+
+
+<h1 id="IvyPlugin-BuildTriggerConfiguration(forFreestyleProjects)">Build Trigger Configuration (for Freestyle Projects)</h1>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/26705922.png" data-image-src="attachments/26574871/26705922.png" data-unresolved-comment-count="0" data-linked-resource-id="26705922" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_ivy_build_trigger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span><br class="atl-forced-newline"/></p>
+
+<p> Upon building, it scans the ivy.xml and fills in the 'build other projects' setting, which results in output on the project page of which projects are upstream (depends on) and which are downstream (is a dependency). <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/26574871/26705923.png" data-image-src="attachments/26574871/26705923.png" data-unresolved-comment-count="0" data-linked-resource-id="26705923" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_ivy_-_project_associations.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="26574871" data-linked-resource-container-version="81"></span><br/>
+ </p>
+
+<h1 id="IvyPlugin-Changelog">Changelog</h1>
+
+
+<h4 id="IvyPlugin-Version1.26(November28,2015)">Version 1.26 (November 28, 2015)</h4>
+
+<ul>
+	<li>Fixed <a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-13440" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-13440</a> - Ivy.xml scanning (Thanks mbechtol<span style="color: rgb(51,51,51);">)</span></li>
+	<li><span style="color: rgb(51,51,51);">Fixed issue when slave nodes offline at startup (Thanks burghduffkc)</span></li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.25.1(October8,2015)">Version 1.25.1 (October 8, 2015)</h4>
+
+<ul>
+	<li>Fixed java dependency back to Java 1.5</li>
+</ul>
+
+
+
+<h4 id="IvyPlugin-Version1.25(September27,2015)">Version 1.25 (September 27, 2015)</h4>
+
+<ul>
+	<li>Note: This release has a unintended dependency on Java 1.7</li>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-29670" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-29670</a><span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-29670" class="external-link" rel="nofollow">JENKINS-29670</a></span> - Support Ivy 2.4.0</li>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-24282" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-24282</a><span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-24282" class="external-link" rel="nofollow">JENKINS-24282</a></span> - Improved wording (Thanks tfennelly)</li>
+	<li>Fixed Build now link (Thanks mcupak)</li>
+	<li>Migrated build to gradle</li>
+	<li>Increased core version to 1.491</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.24(April27,2014)"><span style="color: rgb(210,73,57);"><strong>Version 1.24 (April 27, 2014)</strong></span></h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-22447" class="external-link" rel="nofollow">JENKINS-22447</a></span> - Ivy Job builds don't release workspace lock</li>
+</ul>
+
+
+
+<h4 id="IvyPlugin-Version1.23.2(July26,2013)">Version 1.23.2 (July 26, 2013)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-18848" class="external-link" rel="nofollow">JENKINS-18848</a></span> - Ivy-Projects ends up with a NPE on build after update Jenkins and Ivy-Plugin</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.23.1(July18,2013)">Version 1.23.1 (July 18, 2013)</h4>
+
+<ul>
+	<li>Only parse ivy descriptor files when required.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.23(July18,2013)">Version 1.23 (July 18, 2013)</h4>
+
+<ul>
+	<li>Fix for Jenkins &gt;= 1.522</li>
+	<li>Allow absolute paths to be used for properties files.</li>
+	<li>Manage global ivy config file using config-file-provider plugin.</li>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-10025" class="external-link" rel="nofollow">JENKINS-10025</a></span> - break cycle computing dependency graph</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.22(March10,2013)">Version 1.22 (March 10, 2013)</h4>
+
+<ul>
+	<li>Updated to Ivy 2.3.0</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.21(Feb6,2012)">Version 1.21 (Feb 6, 2012)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-12625" class="external-link" rel="nofollow">JENKINS-12625</a></span> - Java-level deadlock between Disk Usage Plugin and Ivy Plugin</li>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="https://issues.jenkins-ci.org/browse/JENKINS-12638" class="external-link" rel="nofollow">JENKINS-12638</a></span> - Rebuilding dependency graph slow on large numbers of Ivy Projects</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.20(November26,2011)">Version 1.20 (November 26, 2011)</h4>
+
+<ul>
+	<li>Updated to Ivy 2.2.0</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.19(Jun9,2011)">Version 1.19 (Jun 9, 2011)</h4>
+
+<ul>
+	<li>Fixed a bug introduced in 1.18 where Freestyle Projects using the Ivy Build Trigger would be unable to locate the cached copy of the ivy.xml file.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.18(Jun7,2011)">Version 1.18 (Jun 7, 2011)</h4>
+
+<ul>
+	<li><span style="color: red;">Warning: bug introduced for Freestyle Projects using Ivy Build Trigger, fixed in version 1.19</span></li>
+	<li>Added support in the Freestyle Project Ivy Build Trigger for loading a property file before parsing ivy xml file (contribution from Ed Burcher).</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.17(May9,2011)">Version 1.17 (May 9, 2011)</h4>
+
+<ul>
+	<li>Implemented <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-9464" class="external-link" rel="nofollow">JENKINS-9464</a></span> - Added support for custom workspaces for Ivy Projects</li>
+	<li><strong>Note:</strong> requires Jenkins 1.410 or newer <strong>(Hudson no longer supported)</strong></li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.16(Apr18,2011)">Version 1.16 (Apr 18, 2011)</h4>
+
+<ul>
+	<li>Fixed a compatibility bug with Jenkins version &gt;= 1.406</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.15(Feb7,2011)">Version 1.15 (Feb 7, 2011)</h4>
+
+<ul>
+	<li>Fixed a compatibility bug with core Hudson/Jenkins version &gt;= 1.395</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.14(Nov16,2010)">Version 1.14 (Nov 16, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-8012" class="external-link" rel="nofollow">JENKINS-8012</a></span> - Ivy plugin now bundles jsch and commons-vfs since those classes may have to be loaded when parsing the Ivy settings file.  Referencing a settings file with sftp/ssh/vfs resolvers should work now.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.13(Nov1,2010)">Version 1.13 (Nov 1, 2010)</h4>
+
+<ul>
+	<li>Added support for using build wrappers when building modules as separate jobs. (patch supplied by Jesse Bexten)
+	<ul>
+		<li>Now build wrappers like locks and latches and the version number plugin can be configured for an Ivy Project that's configured to build its modules as separate jobs. In this case the build wrappers will be applied to each module individually.</li>
+	</ul>
+	</li>
+	<li>Fixed several oversights in the Ivy module build logic. Logic now more closely resembles that in the standard Build$RunnerImpl. The BuildWrappers are now torn down properly, and return values from post build actions are checked.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.12(Oct22,2010)">Version 1.12 (Oct 22, 2010)</h4>
+
+<ul>
+	<li>Fixed a bug whereby any build triggers manually configured for individual Ivy modules were ignored.
+	<ul>
+		<li>This only affected Ivy Projects using the &quot;Build modules as separate jobs&quot; option and the &quot;Build other projects&quot; option for individual Ivy modules.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.11(Oct14,2010)">Version 1.11 (Oct 14, 2010)</h4>
+
+<ul>
+	<li>Added ability to optionally use Parameters from upstream jobs triggered by their Ivy dependencies (patch supplied by Jesse Bexten)
+	<ul>
+		<li>This applies to Ivy Projects triggering other Ivy Projects, Ivy Projects triggering their own modules to build when they have been configured to build their modules as separate jobs, and also Freestyle jobs using the Ivy Build Trigger to trigger other Freestyle jobs.</li>
+		<li>In all cases, an additional checkbox is provided that will cause the builds to use the same parameters as the jobs that triggered them.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.10(Sep30,2010)">Version 1.10 (Sep 30, 2010)</h4>
+
+<ul>
+	<li>Added ability to disable the automatic triggering of downstream Ivy dependencies in other Jenkins projects.</li>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-7602" class="external-link" rel="nofollow">JENKINS-7602</a></span> - Incremental Ivy builds work on Windows now.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.9(Jul29,2010)">Version 1.9 (Jul 29, 2010)</h4>
+
+<ul>
+	<li>Fixed spammy exception logging on startup if the NAnt plugin wasn't installed.  The NAnt builder extension is now marked as optional.</li>
+	<li>Exposed a couple of environment variables in multi-module Ivy builds.  Now when building a multi-module Ivy project as separate builds, IVY_MODULE_NAME and IVY_MODULE_ORGANISATION are available.  This is leading up to better integration with the Jenkins <a href="SonarQube-plugin.html">SonarQube plugin</a>.</li>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-7085" class="external-link" rel="nofollow">JENKINS-7085</a></span> - Ivy Projects using multi-module, non-aggregated, incremental build will now always build their modules in the correct order</li>
+	<li><strong>Note:</strong> requires Jenkins 1.358 or newer</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.8(Jul21,2010)">Version 1.8 (Jul 21, 2010)</h4>
+
+<ul>
+	<li>Added workaround for issue introduced in Jenkins v1.363 where a self-referential build trigger gets created causing a project to trigger itself endlessly <a href="http://issues.jenkins-ci.org/browse/JENKINS-6819" class="external-link" rel="nofollow">JENKINS-6819</a>.</li>
+	<li>Implemented <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-6802" class="external-link" rel="nofollow">JENKINS-6802</a></span> - Refactored project builder logic to allow Ivy Project builders to be pluggable. Implemented the Ant (default) and NAnt builder types.</li>
+	<li>Applied a patch from the <a href="http://www.jfrog.org/" class="external-link" rel="nofollow">JFrog</a> guys to support integration with the next release of their <a href="Artifactory-Plugin.html">Artifactory Plugin</a>.</li>
+	<li>Implemented <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-6884" class="external-link" rel="nofollow">JENKINS-6884</a></span> - Added ability to specify property files that need to get loaded before parsing the Ivy settings and Ivy module descriptors.  This allows Ivy Projects to work properly when using ant property references in the Ivy settings file or module descriptors.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.7(May13,2010)">Version 1.7 (May 13, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-6468" class="external-link" rel="nofollow">JENKINS-6468</a></span> - Added an option to specify an ivy settings file for Ivy Projects.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.6(Apr27,2010)">Version 1.6 (Apr 27, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-6308" class="external-link" rel="nofollow">JENKINS-6308</a></span> - Ivy Project global ANT_OPTS are now saved properly.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.5(Apr1,2010)">Version 1.5 (Apr 1, 2010)</h4>
+
+<ul>
+	<li>Fixed several issues with Ivy Project build dependencies for projects configured to build their modules as separate jobs.
+	<ul>
+		<li>a project can no longer run again until all its module builds have finished (otherwise the svn changes get out of sync between module builds)</li>
+		<li>a project will no longer allow downstream projects of its modules to build when their &quot;Block build when upstream project is building&quot; option is selected.  This is done by adding a virtual dependency between the parent project and the downstream project that never actually triggers a build, but makes the project show up in the transitive upstream dependencies</li>
+		<li>a project will now correctly set up its own modules' build dependencies when &quot;Build whenever an Ivy dependency is built&quot; is unchecked</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.4(Mar22,2010)">Version 1.4 (Mar 22, 2010)</h4>
+
+<ul>
+	<li>Fixed regression in 1.3 where the specified ant version is not selected when job configuration page is opened.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.3(Mar19,2010)">Version 1.3 (Mar 19, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-5961" class="external-link" rel="nofollow">JENKINS-5961</a></span> - Relative paths to ant build files actually work now.</li>
+	<li>Removed the need to have a specific Ant installation configured.  If none is now configured, no select box will be shown on the job configuration page and Jenkins will just use the &quot;ant&quot; command on your PATH (just like Freestyle projects do).  Mentioned in <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-5961" class="external-link" rel="nofollow">JENKINS-5961</a></span>.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.2(Mar16,2010)">Version 1.2 (Mar 16, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-5823" class="external-link" rel="nofollow">JENKINS-5823</a></span> - Ivy plugin will no longer throw a NullPointerException if you leave the targets field blank.</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.1(Feb26,2010)">Version 1.1 (Feb 26, 2010)</h4>
+
+<ul>
+	<li>Made sure Ivy Modules can't be built when their parent is disabled</li>
+	<li>Implemented incremental build functionality for aggregated builds</li>
+	<li>Added option to disable ivy build triggers between Ivy Project jobs.</li>
+	<li><strong>Note:</strong> requires Jenkins 1.347 or newer</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version1.0(Feb18,2010)">Version 1.0 (Feb 18, 2010)</h4>
+
+<ul>
+	<li>Added support for creating Ivy Projects - see <a href="Adding-Ivy-Project-Support.html">Adding Ivy Project Support</a> for information on the development of this feature.</li>
+	<li><strong>Note:</strong> requires Jenkins 1.346 or newer</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version0.6(Jan19,2010)">Version 0.6 (Jan 19, 2010)</h4>
+
+<ul>
+	<li>Fixed <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-4069" class="external-link" rel="nofollow">JENKINS-4069</a></span> - Downstream builds will no longer be triggered when the current build has failed.</li>
+	<li><strong>Note:</strong> requires Jenkins 1.341 or newer</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version0.5(Jan18,2010)">Version 0.5 (Jan 18, 2010)</h4>
+
+<ul>
+	<li>Fixed NullPointerException introduced in 0.4 when no build with a workspace can be found for an ivy-enabled project</li>
+	<li>Fixed issue introduced in 0.4 where the ivy.xml backup file was copied into the build directory instead of the project directory</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version0.4(Dec29,2009)">Version 0.4 (Dec 29, 2009)</h4>
+
+<ul>
+	<li>Ivy setting on job config page always came up with first entry instead of saved value</li>
+	<li>Update uses of deprecated APIs</li>
+</ul>
+
+
+<h4 id="IvyPlugin-Version0.2">Version 0.2</h4>
+
+<ul>
+	<li>now version 2.0.0 of ivy is supported</li>
+	<li>the ivy plugin can now handle builds run on a slave</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/43483145.png">hudson_ivy_build_trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/26705923.png">hudson_ivy_-_project_associations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631366.png">new-job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631367.png">new-ivy-project.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/46563352.png">ivy-project-configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631369.png">modules.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631370.png">modules-view.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631371.png">upstream-downstream.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631372.png">ivy-module-configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/26705922.png">hudson_ivy_build_trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/26574871/42631368.png">ivy-project-configuration.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:28</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

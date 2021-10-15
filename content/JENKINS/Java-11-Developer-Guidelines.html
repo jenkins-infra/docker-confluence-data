@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Java 11 Developer Guidelines</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Known-Java-11-Compatibility-issues.html">Known Java 11 Compatibility issues</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Java 11 Developer Guidelines
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (batmat)</span>, last modified on Mar 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page is a collaborative entry point for developer resources about developing and testing Jenkins to run on Java 11.</p><p>This page is <strong>not</strong> designed to receive status updates for user-facing issues. But you are more than welcome to check and report such issues so that they show on the dedicated <a href="Known-Java-11-Compatibility-issues.html">Known Java 11 Compatibility issues</a> wiki page. </p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631023398084 {padding: 0px;}
+div.rbtoc1631023398084 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631023398084 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631023398084'>
+<ul class='toc-indentation'>
+<li><a href='#Java11DeveloperGuidelines-Howto'>How to</a>
+<ul class='toc-indentation'>
+<li><a href='#Java11DeveloperGuidelines-RunJenkinsusingJava11'>Run Jenkins using Java 11</a></li>
+<li><a href='#Java11DeveloperGuidelines-DevelopandtestyourpluginforrunningonJava11'>Develop and test your plugin for running on Java 11</a>
+<ul class='toc-indentation'>
+<li><a href='#Java11DeveloperGuidelines-MakesureyourpluginistestedinContinuousIntegrationonJava8andJava11atthesametime'>Make sure your plugin is tested in Continuous Integration on Java 8 and Java 11 at the same time</a></li>
+</ul>
+</li>
+<li><a href='#Java11DeveloperGuidelines-ReleaseanexperimentalpluginversionspecificallyforJava11'>Release an experimental plugin version specifically for Java 11</a></li>
+<li><a href='#Java11DeveloperGuidelines-RunPluginCompatTester(akaPCT)usingJava11'>Run Plugin Compat Tester (aka PCT) using Java 11</a></li>
+<li><a href='#Java11DeveloperGuidelines-RunAcceptanceTestHarness(akaATH)usingJava11'>Run Acceptance Test Harness (aka ATH) using Java 11</a></li>
+<li><a href='#Java11DeveloperGuidelines-JenkinsCoreknownissueswithJava11'>Jenkins Core known issues with Java 11</a></li>
+</ul>
+</li>
+<li><a href='#Java11DeveloperGuidelines-Knowndevelopertoolsissues'>Known developer tools issues</a></li>
+</ul>
+</div></p><h2 id="Java11DeveloperGuidelines-Howto">How to</h2><h3 id="Java11DeveloperGuidelines-RunJenkinsusingJava11">Run Jenkins using Java 11</h3><p>See the <a href="https://jenkins.io/blog/2018/12/14/java11-preview-availability/" class="external-link" rel="nofollow">Java 11 Preview Availability announcement</a></p><h3 id="Java11DeveloperGuidelines-DevelopandtestyourpluginforrunningonJava11">Develop and test your plugin for running on Java 11</h3><p>As a part of <a href="https://github.com/jenkinsci/jep/tree/master/jep/211" class="external-link" rel="nofollow">JEP-211,</a> we request all plugins to remain compatible with Java 8 for now. But you may still need to run the tests with Java 11 so that you can verify the plugin's behavior. It is possible to pass &quot;jvm&quot; and extra Java properties to Maven Surefire plugin to just run tests, but it is easier to actually build &amp; test plugins with JDK 11. Jenkins development tools have been updated to support that:</p><ol><li>For non-experimental releases you should <strong>always</strong> build the plugins with <strong>java.level</strong>=8 </li><li>Use <code>plugin-pom:3.29+</code> (<a href="https://github.com/jenkinsci/plugin-pom/blob/master/CHANGELOG.md#329" style="font-weight: 400;letter-spacing: 0.0px;" class="external-link" rel="nofollow">changelog</a>). Versions before <span style="color: rgb(23,43,77);font-weight: 400;letter-spacing: 0.0px;">3.29 contain some updates to be able to build and test your plugins using JDK 11</span></li><li>Plugins will be able to compile successfully with JDK 11 if and only if Jenkins Core version (<strong>jenkins.version</strong>) is above 2.138+</li><li>You can update Jenkinsfile to run tests with Java 11. To workaround the Jenkins core requirement, a full configuration matrix may be used in buildPlugin():<ol><li>Example: <a href="https://github.com/jenkinsci/label-verifier-plugin/blob/master/Jenkinsfile" class="external-link" rel="nofollow">Jenkinsfile in the Label Verifier Plugin</a></li></ol></li></ol><p><span style="color: rgb(23,43,77);font-weight: 400;letter-spacing: 0.0px;">Some potential pitfalls to remember about:</span></p><ul><li><span style="letter-spacing: 0.0px;">The existing &quot;mvn hpi:run&quot; command will not work correctly on Java 11 unless Java modules are downloaded and passed to the environment (</span>
+<span class="jira-issue resolved" data-jira-key="JENKINS-54807" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54807?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-54807</a>
+                            -
+            <span class="summary">Maven HPI Plugin or Plugin POM should automatically set up Java 11 environment for hpi:run</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+<span style="letter-spacing: 0.0px;">)</span></li><li><span style="letter-spacing: 0.0px;">If you use Mockito/PowerMock in your plugin tests, you may need to update to the recent versions with Java 11 support </span><ul><li><span style="letter-spacing: 0.0px;">
+<span class="jira-issue resolved" data-jira-key="JENKINS-55098" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55098?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-55098</a>
+                            -
+            <span class="summary">Build Flow: PowerMock and Mockito need massive updates for Java 11</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ tracks adding the versions to Plugin POM dependency management. Plugin POM 3.32 is recommended</span></li><li><span style="letter-spacing: 0.0px;">You may also need to add test annotations to workaround <a href="https://github.com/powermock/powermock/issues/864" class="external-link" rel="nofollow">PowerMock Issue #864</a>. <a href="https://github.com/jenkinsci/jenkins/pull/3651" class="external-link" rel="nofollow">Example for the Jenkins Core</a></span></li></ul></li><li>In some cases FindBugs may crash in some cases (
+<span class="jira-issue resolved" data-jira-key="JENKINS-53692" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-53692?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-53692</a>
+                            -
+            <span class="summary">Plugin POM: FindBugs sometimes fails on Java 11</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+), workarounds may be needed</li></ul><p><span style="letter-spacing: 0.0px;">See the &quot;</span><span style="color: rgb(0,51,102);">Known developer tools issues&quot; for more known issues in Plugin POM and Jenkins plugins.</span></p><h4 id="Java11DeveloperGuidelines-MakesureyourpluginistestedinContinuousIntegrationonJava8andJava11atthesametime"><span style="color: rgb(0,51,102);">Make sure your plugin is tested in Continuous Integration on Java 8 and Java 11 at the same time</span></h4><p>Since <a href="https://github.com/jenkins-infra/pipeline-library/pull/86" class="external-link" rel="nofollow">this addition</a>, it is now recommended that you use the following configuration in your plugin: </p><p><span style="color: rgb(36,41,46);">buildPlugin(</span><span class="pl-c1" style="color: rgb(0,92,197);">configurations</span><span style="color: rgb(36,41,46);">: buildPlugin</span><span class="pl-k" style="color: rgb(215,58,73);">.</span><span style="color: rgb(36,41,46);">recommendedConfigurations())</span></p><p>By default, this will build your plugin:</p><ul><li>on the default configuration, extracted from your pom.xml</li><li>on Jenkins 2.164.1 using a JDK 8</li><li>on Jenkins 2.164.1 using a JDK 11</li></ul><p>All this both on Windows and Linux.</p><h3 id="Java11DeveloperGuidelines-ReleaseanexperimentalpluginversionspecificallyforJava11">Release an experimental plugin version specifically for Java 11</h3><p>Although we request all plugins to remain compatible with Java 8, in some cases it may be reasonable to release an <strong>experimental</strong> version for Java 11 early adopters.</p><p>In order to do that, we provide an <a href="https://github.com/jenkinsci/jep/tree/master/jep/211#temporary-experimental-update-center-for-java-11" class="external-link" rel="nofollow">Experimental Update Center for Java 11</a>. Since <a href="https://github.com/jenkinsci/jenkins/pull/3794" class="external-link" rel="nofollow">Jenkins 2.155</a>, if you run using Jenkins versions with Java 11 preview, Jenkins and Jenkins Docker plugins.txt installer (e.g. &quot;workflow-support:experimental&quot;) will default to this experimental update center. It allows Java 11 early adopters to get patches without requiring deploying snapshots manually:</p><p>In order to do an experimental release for Java 11, <span style="color: rgb(255,0,0);"><strong>all the following steps must be performed</strong></span>:</p><ul><li>Develop the Java 11 code in a feature branch (e.g. &quot;java11-support&quot;) so that it does not impact main release line</li><li>Add an &quot;alpha&quot; or &quot;beta&quot; marker to the version of your experimental plugin</li><li><span>Update to </span>plugin-pom:3.29+ so your plugin embeds the new minimum version of Java requirement in its manifest</li><li>Set the <strong>plugin.minimumJavaVersion</strong> property in your pom.xml to 11 (see <a href="https://github.com/jenkinsci/plugin-pom/blob/master/CHANGELOG.md#329" class="external-link" rel="nofollow">https://github.com/jenkinsci/plugin-pom/blob/master/CHANGELOG.md#329</a>)</li></ul><p>If if you forget about any of the bullets above, the update may impact Java 8 users. The long-term solution is already on its way, but is not delivered yet. Follow 
+<span class="jira-issue resolved" data-jira-key="JENKINS-55048" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55048?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-55048</a>
+                            -
+            <span class="summary">Jenkins core should check plugin Minimum Java requirements in Update Center metadata</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ if you are interested.</p><h3 id="Java11DeveloperGuidelines-RunPluginCompatTester(akaPCT)usingJava11">Run Plugin Compat Tester (aka PCT) using Java 11</h3><p>Documented in the PCT repository: <a href="https://github.com/jenkinsci/plugin-compat-tester#running-pct-with-custom-java-versions" class="external-link" rel="nofollow">https://github.com/jenkinsci/plugin-compat-tester#running-pct-with-custom-java-versions</a></p><p><a href="https://docs.google.com/document/d/1oluVrNVpQhXCIwW9CYVm09Y1vPc3H77d3q92LrzcpDw/edit" class="external-link" rel="nofollow">Current status of many plugins</a> (please comment there to get access, or send an email if you tested another opensource plugin).</p><h3 id="Java11DeveloperGuidelines-RunAcceptanceTestHarness(akaATH)usingJava11">Run Acceptance Test Harness (aka ATH) using Java 11</h3><p>Documented on the ATH repository: <a href="https://github.com/jenkinsci/acceptance-test-harness/blob/master/docs/JAVA11.md" class="external-link" rel="nofollow">https://github.com/jenkinsci/acceptance-test-harness/blob/master/docs/JAVA11.md</a></p><h3 id="Java11DeveloperGuidelines-JenkinsCoreknownissueswithJava11">Jenkins Core known issues with Java 11</h3><p>If you hit this issue 
+<span class="jira-issue resolved" data-jira-key="JENKINS-55150" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55150?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55150</a>
+                            -
+            <span class="summary">[jenkins-dev] jenkins-dev:run no longer has hot reload after 2.152</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ about live reloading of resources in Jenkins, the current workaround is <em>&quot;<span style="color: rgb(23,43,77);">mvn org.jenkins-ci.tools:maven-jenkins-dev-plugin:9.4.5.v20170502-jenkins-1:run&quot;</span></em></p><h2 id="Java11DeveloperGuidelines-Knowndevelopertoolsissues">Known developer tools issues</h2><p><em>Please add known issues here. The preferred way is to create or find the associated JIRA in the <a href="https://issues.jenkins-ci.org/secure/Dashboard.jspa" class="external-link" rel="nofollow">Jenkins Issue Tracker</a>, and add the <code>&quot;java11-devtools-compatibility&quot;. Then the issue </code> it will automatically show up in the list below.</em></p><p><em>If you cannot create a JIRA issue, please still feel free to add notes about your findings below.</em></p><p><em>(<a href="https://issues.jenkins-ci.org/secure/Dashboard.jspa?selectPageId=17955" class="external-link" rel="nofollow">associated JIRA board for the following filter</a>)</em></p><p><em>
+
+
+
+
+
+<div id="refresh-module--899433438" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues--899433438" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Component(s)</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Status</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">released as</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61105?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61105?src=confmacro">JENKINS-61105</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        core
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61105?src=confmacro">
+                                            2.204.3 rc fails to open folder in Java 8, throws class not found exception
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        Jenkins 2.227 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57341?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57341?src=confmacro">JENKINS-57341</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        archetypes
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57341?src=confmacro">
+                                            Plugin archetype and tutorial do Java 7 and Java 8 but not Java 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57320?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57320?src=confmacro">JENKINS-57320</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-57320?src=confmacro">
+                                            Fix a possible regression introduced on JENKINS-56312
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        PCT 0.1.0 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56657?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56657?src=confmacro">JENKINS-56657</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        jenkinsfile-runner
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56657?src=confmacro">
+                                            Can not build jenkinsfile-runner with JDK 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56492?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56492?src=confmacro">JENKINS-56492</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        acceptance-test-harness
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56492?src=confmacro">
+                                            [ATH] Fix Javadoc failures on Java11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55885?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55885?src=confmacro">JENKINS-55885</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-pom
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55885?src=confmacro">
+                                            Update Maven HPI Plugin version to run on Java11 
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        Maven HPI Plugin 3.3, Plugin POM 3.37 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55692?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55692?src=confmacro">JENKINS-55692</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        platformlabeler-plugin
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55692?src=confmacro">
+                                            Java 11 Javadoc generation fails in maven
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55541?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55541?src=confmacro">JENKINS-55541</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        git-plugin
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55541?src=confmacro">
+                                            PCT on git plugin with JDK11 fails because of old powermock versions and xstream library dependencies
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55296?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55296?src=confmacro">JENKINS-55296</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55296?src=confmacro">
+                                            Add support of running PCT main executable with Java 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55290?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55290?src=confmacro">JENKINS-55290</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        mailer-plugin, plugin-pom
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55290?src=confmacro">
+                                            Missing META-INF/exposed.stapler-beans when building Mailer plugin with Java 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Fixed but Unreleased
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55205?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55205?src=confmacro">JENKINS-55205</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        saml-plugin
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55205?src=confmacro">
+                                            Review findbugs error with some OS+JDK
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        saml-1.1.2 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55200?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55200?src=confmacro">JENKINS-55200</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        gradle-jpi-plugin
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55200?src=confmacro">
+                                            Gradle JPI plugin should be updated to support testing with Java 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55199?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55199?src=confmacro">JENKINS-55199</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55199?src=confmacro">
+                                            PCT fails when cycle dependency on test scope
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        <a href="https://github.com/jenkinsci/plugin-compat-tester/commit/7d7fa307cbd75e76bb084bac09012bc826a7722f">https://github.com/jenkinsci/plugin-compat-tester/commit/7d7fa307cbd75e76bb084bac09012bc826a7722f</a> 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55162?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55162?src=confmacro">JENKINS-55162</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        core, plugin-pom
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55162?src=confmacro">
+                                            Maven JAR Plugin should be updated to 3.1.1 in Plugin POM and Jenkins POM
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        Jenkins POM 1.51, Plugin POM 3.30 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55150?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55150?src=confmacro">JENKINS-55150</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        core
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55150?src=confmacro">
+                                            [jenkins-dev] jenkins-dev:run no longer has hot reload after 2.152
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55146?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55146?src=confmacro">JENKINS-55146</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester, plugin-pom
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55146?src=confmacro">
+                                            PCT sometimes crashes on Java 11 due to module read errors when using the docker image
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Fixed but Unreleased
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55098?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55098?src=confmacro">JENKINS-55098</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-pom
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55098?src=confmacro">
+                                            Build Flow: PowerMock and Mockito need massive updates for Java 11
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        Plugin POM 3.32 
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55097?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55097?src=confmacro">JENKINS-55097</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55097?src=confmacro">
+                                            PCT cannot efficiently run Java 8/11 tests in Docker due to SUREFIRE-1588
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54906?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54906?src=confmacro">JENKINS-54906</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        custom-war-packager
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54906?src=confmacro">
+                                            Custom WAR Packager should support producing Java 11-compatible JFR images
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54862?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54862?src=confmacro">JENKINS-54862</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        plugin-compat-tester
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-54862?src=confmacro">
+                                            PCT: Add support of passing plugin version overrides
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                                                                        
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="7">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                        <span>Showing 20 out of</span>
+                                                <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=filter%3D%22Java+11+-+DevTools+compatibility+issues%22++++&amp;src=confmacro">
+                                                            39 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+<br/></em></p><p><br/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Measurement Plots Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Measurement Plots Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (krwalker)</span>, last modified on Jan 05, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'measurement-plots' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>Plot measurements embedded into the standard output and error streams of tests.</p>
+
+
+<h1 id="MeasurementPlotsPlugin-General">General</h1>
+
+<p>Searches standard output and standard error of test reports for measurements of the form:</p>
+
+<p><code>&lt;measurement&gt;&lt;name&gt;My Measurement&lt;/name&gt;&lt;value&gt;42.0&lt;/value&gt;&lt;/measurement&gt;</code></p>
+
+<p>These measurements will be associated with the test objects they are found within.</p>
+
+<h3 id="MeasurementPlotsPlugin-MeasurementFormatRequirements">Measurement Format Requirements</h3>
+
+<p>The <code>&lt;measurement&gt;</code> must be:</p>
+<ul>
+	<li>on one line</li>
+	<li>within the standard-output or standard-error tags in the JUnit output</li>
+	<li>escaped (they're essentially a nested mini-document)</li>
+</ul>
+
+
+<p>e.g., </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;standard-error&gt;
+&amp;lt;measurement&amp;gt;&amp;lt;name&amp;gt;hi&amp;lt;/name&amp;gt;&amp;lt;value&amp;gt;16&amp;lt;/value&amp;gt;&amp;lt;/measurement&amp;gt;
+&lt;/standard-error&gt; 
+</pre>
+</div></div>
+
+<h3 id="MeasurementPlotsPlugin-ExampleofaCompleteInputJUnitFile">Example of a Complete Input JUnit File</h3>
+
+<p>Notice that the XML-like syntax for the measurement has to be escaped in the <code>&lt;system-out&gt;</code> element.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;testsuites&gt;
+    &lt;testsuite name=&quot;package&quot;&gt;
+       &lt;testcase name=&quot;case&quot; time=&quot;0&quot;/&gt;
+       &lt;system-out&gt;
+&amp;lt;measurement&amp;gt;&amp;lt;name&amp;gt;Length (m)&amp;lt;/name&amp;gt;&amp;lt;value&amp;gt;0.5&amp;lt;/value&amp;gt;&amp;lt;/measurement&amp;gt;
+&amp;lt;measurement&amp;gt;&amp;lt;name&amp;gt;Time (s)&amp;lt;/name&amp;gt;&amp;lt;value&amp;gt;0.2&amp;lt;/value&amp;gt;&amp;lt;/measurement&amp;gt;&lt;/system-out&gt;
+    &lt;/testsuite&gt;
+&lt;/testsuites&gt;
+</pre>
+</div></div>
+
+<h3 id="MeasurementPlotsPlugin-ExampleofMultipleMeasurementsonaTestObject">Example of Multiple Measurements on a Test Object</h3>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/43713066/43843616.png" data-image-src="attachments/43713066/43843616.png" data-unresolved-comment-count="0" data-linked-resource-id="43843616" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MeasurementsTable.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43713066" data-linked-resource-container-version="7"></span></p>
+
+<h3 id="MeasurementPlotsPlugin-ExampleofaMeasurementGraph">Example of a Measurement Graph</h3>
+
+<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/43713066/43843617.png" data-image-src="attachments/43713066/43843617.png" data-unresolved-comment-count="0" data-linked-resource-id="43843617" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MeasurementsGraph.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43713066" data-linked-resource-container-version="7"></span></p>
+
+
+<h1 id="MeasurementPlotsPlugin-Configuration">Configuration</h1>
+
+<h3 id="MeasurementPlotsPlugin-GlobalConfiguration">Global Configuration</h3>
+
+<p>None.</p>
+
+<h3 id="MeasurementPlotsPlugin-ProjectConfiguration">Project Configuration</h3>
+
+<p>For a project to use the Measurement Plots plugin, you need to enable it in the project configuration page:</p>
+
+<p>Post-build actions &gt; Publish JUnit test result report &gt; Additional test report features &gt; Measurement Plots</p>
+
+
+<h1 id="MeasurementPlotsPlugin-VersionHistory">Version History</h1>
+
+<h4 id="MeasurementPlotsPlugin-0.1(Apr7,2010)">0.1 (Apr 7, 2010)</h4>
+
+<ul>
+	<li>Initial public release</li>
+</ul>
+
+
+<h4 id="MeasurementPlotsPlugin-0.0(Apr3,2010,Unreleased)">0.0 (Apr 3, 2010, Unreleased)</h4>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43713066/43843616.png">MeasurementsTable.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43713066/43843617.png">MeasurementsGraph.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

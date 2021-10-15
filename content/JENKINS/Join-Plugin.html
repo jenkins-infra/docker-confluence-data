@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Join Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Join Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mdonohue)</span>, last modified by <span class='editor'> Unknown User (oltzu)</span> on Aug 06, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><br class="atl-forced-newline"/>  This plugin allows a job to be run after all the immediate downstream jobs have completed.   In this way,  the execution can branch out and perform many steps in parallel, and then run a final aggregation step just once after all the parallel work is finished.
+<br class="atl-forced-newline"/>
+The plugin is useful for creating a 'diamond' shape project dependency.   This means there is a single parent job that starts several downstream jobs.   Once those jobs are finished, a single aggregation job runs.   More complex interactions are not possible with this plugin.
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+The downstream projects are specified using Hudson's normal project relationship mechanism. 
+<br class="atl-forced-newline"/>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Join <a href="https://plugins.jenkins.io/join" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<h2 id="JoinPlugin-Example:">Example:</h2>
+
+<p>Our build consists of four jobs - test, testDown1, testDown2 and testJoin. Basically they have to run in sequence, but testDown1 and testDown2 could be run in parallel.(Maybe something like build - run tests - metrics - release). The logical overview of our jobs would be:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37324404/37519497.jpg" data-image-src="attachments/37324404/37519497.jpg" data-unresolved-comment-count="0" data-linked-resource-id="37519497" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JobJoinPlugin-Config.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="37324404" data-linked-resource-container-version="53"></span><br/>
+First we have to define our four jobs. With normal Hudson job dependency (&quot;<em>Build other projects</em>&quot;) we add testDown1 and testDown2 to test. This is the fork in the diagram.</p>
+
+<p>Adding the testJoin in that way is not possible, because would start it immediately after finishing the test-job. This is where this plugin jumps into: the test-job configures the Join Trigger and specifies the job to run after the join. The plugin is now able to start the testJoin job - but it needs to know when the forked jobs have finished. That's why we add the Join Trigger Upstream Notifier to these jobs.</p>
+
+<p>Now the plugin gets the list of all forked jobs by its base job (test), gets informed by all forked jobs, waits for all &quot;own&quot; jobs to be completed and then starts the final job (testJoin).</p>
+
+<h3 id="JoinPlugin-Configurationofthebasejob(test):">Configuration of the base job (test):</h3>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37324404/37519492.png" data-image-src="attachments/37324404/37519492.png" data-unresolved-comment-count="0" data-linked-resource-id="37519492" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Picture 7.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324404" data-linked-resource-container-version="53"></span><br class="atl-forced-newline"/></p>
+
+<h3 id="JoinPlugin-Configurationofforkedjobs-testDown1+testDown2:">Configuration of forked jobs - testDown1 + testDown2:</h3>
+
+<p>No configuration required.
+<br class="atl-forced-newline"/></p>
+
+<h3 id="JoinPlugin-Havingmultipleforks&amp;joinsinHudson">Having multiple forks&amp;joins in Hudson</h3>
+
+<p>The first example shows the use of this plugin for creating one 'diamond' job dependency. Having multiple diamonds is also easy (I whished it would be in real world <img class="emoticon emoticon-wink" src="images/icons/emoticons/wink.svg" data-emoticon-name="wink" alt="(wink)"/> ) But the resulting logical overview is a little bit different: <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37324404/37519498.jpg" data-image-src="attachments/37324404/37519498.jpg" data-unresolved-comment-count="0" data-linked-resource-id="37519498" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Two Diamonds.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="37324404" data-linked-resource-container-version="53"></span><br/>
+You have two base jobs (testA and testB) and Hudson forks them in the first step. Each of the diamonds has its own fork (2A and 2B). But ALL forked jobs inform the SAME observer (here shown as join bar <em>JobJoin Observer</em>). This ONE observer has two joins configured: the A-diamond and the B-diamond. And each fragment waits for recieving all the notifications it needs.</p>
+
+<h3 id="JoinPlugin-Example:.1">Example:</h3>
+
+<ol>
+	<li>Hudson starts</li>
+	<li>Hudson starts testB</li>
+	<li>Hudson starts testA</li>
+	<li>testA finishes</li>
+	<li>Hudson starts downA1</li>
+	<li>Hudson starts downA2</li>
+	<li>testB finishes</li>
+	<li>Hudson starts downB2</li>
+	<li>Hudson starts downB1</li>
+	<li>downA2 finishes</li>
+	<li>downA2 notifies the plugin</li>
+	<li>PlugIn: downA2 belongs to diamond A</li>
+	<li>PlugIn: diamond A requires downA1 and downA2</li>
+	<li>PlugIn: diamond A is missing downA1, so do nothing</li>
+	<li>downB2 finishes</li>
+	<li>downB2 notifies the plugin</li>
+	<li>PlugIn: downB2 belongs to diamond B</li>
+	<li>PlugIn: diamond B requires downB1 and downB2</li>
+	<li>PlugIn: diamond B is missing downB1, so do nothing</li>
+	<li>downB1 finishes</li>
+	<li>downB1 notifies the plugin</li>
+	<li>PlugIn: downB1 belongs to diamond B</li>
+	<li>PlugIn: diamond B requires downB1 and downB2</li>
+	<li>PlugIn: all notifications recieved, so start joinB</li>
+	<li>downA1 finishes</li>
+	<li>downA1 notifies the plugin</li>
+	<li>PlugIn: downA1 belongs to diamond A</li>
+	<li>PlugIn: diamond A requires downA1 and downA2</li>
+	<li>PlugIn: all notifications recieved, so start joinA</li>
+</ol>
+
+
+<h3 id="JoinPlugin-BuildParameters">Build Parameters</h3>
+
+<p>By default, parameters of the current build will not be passed to the join project (like the default build trigger). If you want to do this, choose  &quot;Post-Join Action&quot; -&gt; &quot;Trigger parameterized build on other project&quot; and then choose &quot;Current Build Parameters&quot; (or other parameters you want to use).<br/>
+For example:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37324404/57409725.png" data-image-src="attachments/37324404/57409725.png" data-unresolved-comment-count="0" data-linked-resource-id="57409725" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="join-parameterized.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37324404" data-linked-resource-container-version="53"></span></p>
+
+
+<p>Although you can specify in your Post-Join Actions build triggers other than &quot;Stable&quot;, only &quot;Stable&quot; seems to work.</p>
+
+<h2 id="JoinPlugin-Changelog">Changelog</h2>
+
+
+<h4 id="JoinPlugin-Version1.16-August2,2015">Version 1.16 - August 2, 2015</h4>
+
+
+
+
+<ul>
+	<li>Removed integration with deprecated <a href="CopyArchiver-Plugin.html">CopyArchiver Plugin</a> (pull #6)</li>
+	<li>Pick up job renames properly</li>
+	<li>JENKINS-16201 - Handle cache reloads correctly.  Previous behavior may not see all downstream jobs as completed, and so would never start the join job</li>
+	<li>JENKINS-25710 - Work with folders</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.15-May3,2012">Version 1.15 - May 3, 2012</h4>
+
+<ul>
+	<li>Supported hierarchical projects (even more)</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.14-April5,2012">Version 1.14 - April 5, 2012</h4>
+
+<ul>
+	<li>Supported hierarchical projects</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.13-September18,2011">Version 1.13 - September 18, 2011</h4>
+
+<ul>
+	<li>Add a method fromSameSplitProject to JoinDependency for use in other plugins - e.g. the Build Pipeline View.</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.12-August28,2011">Version 1.12 - August 28, 2011</h4>
+
+<ul>
+	<li>Add support for downstream-ext plugin</li>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-9903">9903</a>: Downstream projects include the &quot;join&quot; project when using the downstream-ext plugin</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.11-July11,2011">Version 1.11 - July 11, 2011</h4>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-10301">10301</a>: Jenkins does not start when the parameterized trigger plugin with version 2.10 and the join plugin with version 1.10.1 are installed.
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p> Join Plugin does not work with versions of the <a href="Parameterized-Trigger-Plugin.html">Parameterized Trigger Plugin</a> prior to 2.10.</p></div></div></li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.10.1-April11,2011">Version 1.10.1 - April 11, 2011</h4>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-8443">8443</a></li>
+	<li>Added autocompletion and form validation to join projects text field
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Jobs in the join projects field which don't exist will be pruned on save</p></div></div></li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.10-April11,2011">Version 1.10 - April 11, 2011</h4>
+
+<ul>
+	<li>Failure when publishing artifacts</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.9-September13,2010">Version 1.9 - September 13, 2010</h4>
+
+<ul>
+	<li>Fix NPE on newer versions of Hudson when adding a post-build action like the copy-archiver or the parameterized-trigger plugin (<a href="https://issues.jenkins-ci.org/browse/JENKINS-7344">7344</a>)</li>
+	<li>Run parametrized-trigger after join should work again on Hudson version newer than 1.341 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5602">5602</a>)</li>
+	<li>Respect disabled projects: Start join projects when all non-disabled downstream projects are finished (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5972">5972</a>).</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.7-January16,2010">Version 1.7 - January 16, 2010</h4>
+
+<ul>
+	<li>Avoid error if <a href="Parameterized-Trigger-Plugin.html">parameterized-trigger</a> plugin is installed, but current project doesn't use a parameterized BuildTrigger. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-5159">5159</a>)</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.6-September30,2009">Version 1.6 - September 30, 2009</h4>
+
+<ul>
+	<li>The join plugin will now wait for downstream builds triggered by the parameterized-trigger plugin, in addition to the built-in downstream projects, before performing the join actions.</li>
+	<li>Implement the <code>getRequiredMonitorService</code> method to indicate no dependency on the previous build.  This should allow more parallelism when using concurrent builds.</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.5-September18,2009">Version 1.5 - September 18, 2009</h4>
+
+<ul>
+	<li>Fix problem where email recipients were cleared on job save (<a href="https://hudson.dev.java.net/issues/show_bug.cgi?id=4384" class="external-link" rel="nofollow">4384</a>)</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.4-September2,2009">Version 1.4 - September 2, 2009</h4>
+
+<ul>
+	<li>Fix NPE for builds that are automatically upgraded from version 1.2 or earlier (<a href="https://hudson.dev.java.net/issues/show_bug.cgi?id=4370" class="external-link" rel="nofollow">4370</a>)</li>
+	<li>Re-add Maven projects as applicable for the Join plugin.   Matrix (multi-config) projects remain incompatible.  Feedback of using this plugin with Maven projects is sought.</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.3-August31,2009">Version 1.3 - August 31, 2009</h4>
+
+<ul>
+	<li>Remove console log warnings from builds that are not using the join plugin (<a href="http://www.nabble.com/Join-notifier-cannot-find-upstream-JoinAction-tt25077029.html" class="external-link" rel="nofollow">report</a>)</li>
+	<li>Provide initial support for running arbitrary post-build actions as part of the join process.  The parameterized-build plugin is the first candidate (<a href="https://hudson.dev.java.net/issues/show_bug.cgi?id=3959" class="external-link" rel="nofollow">3959</a>)</li>
+	<li>Only offer Join plugin with Freestyle builds, due to report of Matrix build incompatibility.  (<a href="http://www.nabble.com/Regarding-build-td24848107.html#a24868203" class="external-link" rel="nofollow">report</a>)</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.2-June28,2009">Version 1.2 - June 28, 2009</h4>
+
+<ul>
+	<li>Downstream failure detection was broken previous to this version.   Previously, the join projects were started no matter what the result of the downstream builds.   With this fix, failed downstream builds block the join projects from being started (<a href="http://www.nabble.com/Join-plugin-1.1-released-td23796412.html#a23872626" class="external-link" rel="nofollow">report</a>)</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.1-May30,2009">Version 1.1 - May 30, 2009</h4>
+
+<ul>
+	<li>Fix a NPE that occurs when the join plugin is enabled, but no downstream jobs are specified (<a href="http://www.nabble.com/Join-plugin-1.0-released-td23680165.html#a23741501" class="external-link" rel="nofollow">report</a>)</li>
+	<li>Start the join projects immediately if there are no downstream jobs specified.</li>
+</ul>
+
+
+<h4 id="JoinPlugin-Version1.0-May23,2009">Version 1.0 - May 23, 2009</h4>
+
+<ul>
+	<li>Basic support for joining.  After the downstream jobs finish, a comma separated list of jobs can be started as the join jobs.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519492.png">Picture 7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519493.png">Picture 6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519494.hpi">join-20090511.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519497.jpg">JobJoinPlugin-Config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519498.jpg">Two Diamonds.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519499.mdzip">JobJoinPlugin.mdzip</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/37519504.hpi">join-20090513.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/41975834.jpg">config.JPG</a> (image/pjpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37324404/57409725.png">join-parameterized.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:30</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

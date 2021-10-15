@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : XPath Configuration Viewer</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : XPath Configuration Viewer
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ffromm)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View XPath Configuration Viewer <a href="https://plugins.jenkins.io/xpath-config-viewer" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin adds a new link &quot;XPath Configuration Viewer&quot; to the Jenkins Managagement page. It provides a simple and easy way to check job configurations having a huge number of jobs.</p>
+
+<h1 id="XPathConfigurationViewer-General">General</h1>
+
+<p>Do you habe more than 50 jenkins jobs to administrate? Do you use several plugins that have all individual entries in the job's config.xml files? Than this plugin can help you a lot.</p>
+
+<p>It takes the idea of the <a href="Configuration-Slicing-Plugin.html">configuration slicing plugin</a> using a more generic approach. XPath expressions are used to filter all jobs, that match to it. The resulting table shows all variations of the XPath-selected XML-snippets in the left column. The right column shows for each XML-snippet all jobs having this exact XML-snippet.<br/>
+In this way, it is easy to see, if a job is missing or missplaced in a list of jobs for an XML-snippet.<br/>
+Each job title is directly linked to it's configuration page.</p>
+
+<h1 id="XPathConfigurationViewer-Howtouse">How to use</h1>
+
+<p><strong>The XPath Configuration Viewer plugin can only be used by users with adminstrator rights!</strong></p>
+
+<p>The plugin integrates in the list of management links on the <code>.../manage</code> page.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59509783/59900074.png" data-image-src="attachments/59509783/59900074.png" data-unresolved-comment-count="0" data-linked-resource-id="59900074" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_manage.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59509783" data-linked-resource-container-version="18"></span></p>
+
+<p>Clicking on the link leads to the following page:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59509783/59900075.png" data-image-src="attachments/59509783/59900075.png" data-unresolved-comment-count="0" data-linked-resource-id="59900075" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_xpath_01.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59509783" data-linked-resource-container-version="18"></span></p>
+
+<p>It shows a table with two columns. The left column for the XML-snippets and the right column for the jobs having this snippet.</p>
+
+<p>Clicking on the &quot;Add a new XPath&quot;-link opens this dialog:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59509783/59900076.png" data-image-src="attachments/59509783/59900076.png" data-unresolved-comment-count="0" data-linked-resource-id="59900076" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_xpath_02.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59509783" data-linked-resource-container-version="18"></span></p>
+
+<p>It has 4 fields:</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> field </p></th>
+<th class="confluenceTh"><p> function </p></th>
+<th class="confluenceTh"><p> sample </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> ID </p></td>
+<td class="confluenceTd"><p> internal ID of the XPath expression </p></td>
+<td class="confluenceTd"><p> <code>XPathConfigProvider.1326298020534</code> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Name </p></td>
+<td class="confluenceTd"><p> Name for the XPath expression that describes, what to look for </p></td>
+<td class="confluenceTd"><p> which node is assigned? </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Job Filter Regexp </p></td>
+<td class="confluenceTd"><p> Regular expression to filter the jobs by their names </p></td>
+<td class="confluenceTd"><p> <code>^.</code><code><strong>MyJob-.</strong></code><code>$</code> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Content </p></td>
+<td class="confluenceTd"><p> XPath expression to select an XML-snippet from the jobs config.xml files </p></td>
+<td class="confluenceTd"><p> <code>//assignedNode</code> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<p>On saving the new XPath configuration, it is stored into an XML file in the jenkinshome directory using the org.jenkins-ci.lib::config-provider-model::1.1.</p>
+
+<p>The XPath Configuration Viewer shows something like the following:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59509783/59900077.png" data-image-src="attachments/59509783/59900077.png" data-unresolved-comment-count="0" data-linked-resource-id="59900077" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_xpath_03.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59509783" data-linked-resource-container-version="18"></span></p>
+
+<p>All configured XPath expressions are listed in a collapsed table. The results of each expression can be opened by clicking on the plus sign on the right side in the table row. The other two signs are for editing and deleting of the row.</p>
+
+<p>In the title row, all configured XPath expressions are listed by their names. These are ancor links to jump directly down the page to the corresponding block. With the two links right of this list it is possible to open and close all rows at once.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59509783/59900078.png" data-image-src="attachments/59509783/59900078.png" data-unresolved-comment-count="0" data-linked-resource-id="59900078" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_xpath_04.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59509783" data-linked-resource-container-version="18"></span></p>
+
+<p>Jobs not matching to an XPath expression are listed as last row of a configuration block.</p>
+
+<p>Using the link behind the job names leads to the corresponding job configuration page.</p>
+
+<h1 id="XPathConfigurationViewer-Versionhistory">Version history</h1>
+
+<h4 id="XPathConfigurationViewer-1.1.1(May21,2012)">1.1.1 (May 21, 2012)</h4>
+
+<ul>
+	<li>Changed XPath result output to show all matches if expression selects multiple config nodes.</li>
+</ul>
+
+
+<h4 id="XPathConfigurationViewer-1.1.0(Mar07,2012)">1.1.0 (Mar 07, 2012)</h4>
+
+<ul>
+	<li>Added a comparator to order the configs by their ids. Now they keep the order in which they are created.</li>
+</ul>
+
+
+<h4 id="XPathConfigurationViewer-1.0.8(Jan31,2012)">1.0.8 (Jan 31, 2012)</h4>
+
+<ul>
+	<li>In respect to Ullrich Hafners email of Jan 31, 2012 &quot;Plug-in should not depend on jenkins-co​re &gt; LTS version&quot; I downgraded the dependency to 1.424.</li>
+</ul>
+
+
+<h4 id="XPathConfigurationViewer-1.0.6(Jan11,2012)">1.0.6 (Jan 11, 2012)</h4>
+
+<ul>
+	<li>After a longer fight with maven, I finally managed to release the plugin to the jenkins nexus.</li>
+</ul>
+
+
+<h4 id="XPathConfigurationViewer-1.0(Jan08,2012)">1.0 (Jan 08, 2012)</h4>
+
+<ul>
+	<li>Plugin creation, initial checkin. Waiting for GIT integration...</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59509783/59900074.png">jenkins_manage.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59509783/59900075.png">jenkins_xpath_01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59509783/59900076.png">jenkins_xpath_02.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59509783/59900077.png">jenkins_xpath_03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59509783/59900078.png">jenkins_xpath_04.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:59</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

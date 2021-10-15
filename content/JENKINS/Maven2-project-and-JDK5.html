@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Maven2 project and JDK5</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Maven2 project and JDK5
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Anonymous</span> on Jul 08, 2007
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Hudson makes extensive use of generics.  Thus it has to be compiled with JDK 1.5. There is no possibility of removing the generics from the code as it is too well integrated.</p>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Up until builds in the 1.90ish area, the Hudson build process would use retrotranslator to backport the Hudson to work on JDK 1.4. However, retrotranslator is not perfect.  It does not catch every case where you have used a method that was introduced in JDK 1.5.  Very often, it would take a couple of days before somebody would catch the problem.</p>
+
+<p>Basically, using retrotranslator was a patch over the seeping wound at best. So retrotranslator was dropped, and you must run Hudson with JRE 1.5.</p>
+
+<p>To make things more fun, there is a bug in JDK 1.5 to do with generic exceptions, so Hudson needs to be compiled with JDK 1.6. Thankfully, this is just a compilation requirements and not a runtime requirement, so we can run Hudson with JDK 1.5)</p></div></div>
+<p>The Maven2 project type (alpha) uses Maven in a semi-embedded mode, therefore, it must run Maven in the same JRE (as far as I know).</p>
+
+<p>Building with JDK5 and deploying to JDK1.4 (or earlier) is quite possible, but if you'd like to use compiler from the earlier version of JDK, or to run unit tests with the target JVM, you can do as follows:</p>
+
+<p>In your ~/.m2/settings.xml put a ,</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;properties&gt;
+  &lt;jdk.ibm.1.4.2.path&gt;c:\jdks\ibm-1.4.2\&lt;/jdk.ibm.1.4.2.path&gt; &lt;!-- or whatever your local path is --&gt;
+  &lt;!-- if windows --&gt;
+  &lt;jdk.ibm.1.4.2.jvm&gt;${jdk.ibm.1.4.2.path}bin\java.exe&lt;/jdk.ibm.1.4.2.jvm&gt;
+  &lt;jdk.ibm.1.4.2.javac&gt;${jdk.ibm.1.4.2.path}bin\javac.exe&lt;/jdk.ibm.1.4.2.javac&gt;&lt;!-- if windows --&gt;
+  !-- if *nix --&gt;
+  &lt;jdk.ibm.1.4.2.jvm&gt;${jdk.ibm.1.4.2.path}bin\java&lt;/jdk.ibm.1.4.2.jvm&gt;&lt;
+  &lt;jdk.ibm.1.4.2.javac&gt;${jdk.ibm.1.4.2.path}bin\javac&lt;/jdk.ibm.1.4.2.javac&gt;&lt;!-- if *nix --&gt;
+&lt;/properties&gt;
+</pre>
+</div></div>
+<p>Then change your project's pom.xml such that you have something like</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;verbose&gt;true&lt;/verbose&gt;
+    &lt;fork&gt;true&lt;/fork&gt;
+    &lt;executable&gt;${jdk.ibm.1.4.2.javac}&lt;/executable&gt;
+    &lt;compilerVersion&gt;1.4&lt;/compilerVersion&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;jvm&gt;${jdk.ibm.1.4.2.jvm}&lt;/jvm&gt;
+    &lt;forkMode&gt;once&lt;/forkMode&gt;   &lt;!-- can also use always.  Cannot use never --&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</pre>
+</div></div>
+<p>You might also consider adding the enforcer plugin to stop the build if the properties are not set or if the compiler and jvm don't exist.</p>
+
+<p>Note: I have not tested this, the need for the .exe's on windows may not exist. Give it a try and update this page when you have something that works (if my initial guess is incorrect)</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

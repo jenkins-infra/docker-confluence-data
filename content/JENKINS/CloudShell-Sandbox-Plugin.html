@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : CloudShell Sandbox Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : CloudShell Sandbox Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tomeradmon)</span>, last modified on Sep 15, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View CloudShell Sandbox <a href="https://plugins.jenkins.io/cloudshell-sandbox" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p><br/></p><h2 id="CloudShellSandboxPlugin-Introduction">Introduction</h2><p>The <strong>CloudShell Sandbox Jenkins Plugin</strong> provides an easy way to consume CloudShell sandboxes through Jenkins for a variety of use cases. The plugin allows you to build jobs that create on-demand sandboxes in CloudShell based on pre-defined blueprints. </p><h2 id="CloudShellSandboxPlugin-Requirements">Requirements</h2><p>This plugin requires CloudShell 8.0 or later and Jenkins 2.0 or later.</p><p><strong><em>Note: If you are upgrading to a Certified version of the plugin, you may experience some issues. Contact us for details.</em></strong></p><p>Depending on the plugin version, some features may require a specific version of CloudShell. For more details, see the <em>Features</em> section below.</p><h2 id="CloudShellSandboxPlugin-Installation">Installation</h2><p>The <strong>CloudShell Sandbox Jenkins Plugin</strong> is available for download directly from Jenkins <strong>Plugin Manager</strong> (Manage Jenkins &gt; Plugin Manager) in the Jenkins UI. </p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/100696855/135465602.png" data-image-src="attachments/100696855/135465602.png" data-unresolved-comment-count="0" data-linked-resource-id="135465602" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-10-1 9:53:13.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></p><h2 id="CloudShellSandboxPlugin-Architecture">Architecture</h2><p>The <strong>CloudShell Sandbox Jenkins Plugin</strong> leverages the CloudShell Sandbox API to perform operations in CloudShell. The CloudShell Sandbox API comes out of the box with the CloudShell Suite installation and should be fully installed and configured for the plugin functionality. </p><p><strong><em>Note: The Jenkins plugin only interacts with public blueprints.</em></strong></p><p>When configuring the CloudShell Sandbox API, you will need to set the API port (82 by default). To see the port, open the <strong>CloudShell Configuration</strong> application and click <strong>CloudShell Sandbox API</strong>.</p><p><br/></p><p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/100696855/135465054.png" data-image-src="attachments/100696855/135465054.png" data-unresolved-comment-count="0" data-linked-resource-id="135465054" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-24 17:19:45.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></p><p><br/></p><p>The <strong>Quali Configuration</strong> web interface is displayed, showing the Sandbox API configurations.</p><p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/100696855/135465055.png" data-image-src="attachments/100696855/135465055.png" data-unresolved-comment-count="0" data-linked-resource-id="135465055" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-24 17:20:1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></p><p><br/></p><p><br/></p><h3 id="CloudShellSandboxPlugin-Distributedarchitecture:">Distributed architecture:</h3><h3 id="CloudShellSandboxPlugin-"> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/100696855/135465056.png" data-image-src="attachments/100696855/135465056.png" data-unresolved-comment-count="0" data-linked-resource-id="135465056" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-24 17:20:11.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></h3><p><br/></p><h2 id="CloudShellSandboxPlugin-Configuration">Configuration</h2><p>After installing the plugin, perform the following steps:</p><ol><li>Navigate to the main Jenkins configuration page (<strong>Manage Jenkins &gt; Configure System</strong>) and configure the plugin according to your CloudShell installation.<br/><br/></li><li>Set the <strong>CloudShell Sandbox API Host Address</strong> to the machine where the CloudShell Sandbox API is installed.<br/><strong><em>Note: This may be a different machine than the Quali Server.</em></strong></li><li>Specify the credentials (user, password, domain) of the CloudShell user you would like to use for CloudShell operations.<br/><br/>We recommend creating a new CloudShell admin user for Jenkins.<br/><br/></li><li>To verify your configurations, click the <strong>Test Connection</strong>.<br/><br/>Jenkins interacts with CloudShell to validate connectivity and credentials.<br/><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/100696855/135465057.png" data-image-src="attachments/100696855/135465057.png" data-unresolved-comment-count="0" data-linked-resource-id="135465057" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-9-24 17:20:26.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span>           </li></ol><h2 id="CloudShellSandboxPlugin-FreestyleSteps">Freestyle Steps</h2><p>The plugin adds several new steps to Jenkins to streamline interactions with CloudShell sandboxes.</p><p><strong>CloudShell Build Step</strong> is a generic step that contains CloudShell Actions you can execute. Each action contains several inputs. Currently, the action <strong>Start sandbox</strong> is provided and we plan to support others in the future.</p><p><br/></p><p>The <strong>Start Sandbox</strong> action creates a new CloudShell sandbox based on the selected public blueprint and restricts interaction with the sandbox while it is running Setup. This ensures the sandbox Setup process completes successfully without any outside interference. When the sandbox is active, the sandbox’s Id and additional information become available in $SANDBOX_ID and $SANDBOX_DETAILS, respectively. These environment variables can be used in other steps in the build.</p><p>$SANDBOX_DETAILS is a JSON format string containing the sandbox's metadata like the sandbox name, start time, expected end time, state and associated blueprint, as well as a list of all the sandbox components with their name, type, address and more.</p><p>The <strong>Sandbox duration in minutes</strong> field specifies the maximum duration of the sandbox. If the build does not end before the specified duration, CloudShell will teardown the sandbox.</p><p>The <strong>Timeout if sandbox unavailable </strong>field indicates the number of minutes to wait until the sandbox becomes available in case any of the sandbox's resources are unavailable for the specified sandbox duration (conflicts). If the timeout period is reached, the build will be interrupted.</p><p>The <strong>Blueprint parameters</strong> field allows you to specify user inputs, which can be used for resource selection (if the blueprint contains abstract resource requirements), as additional information to drive the provisioning, or as general information. For more information, see <a href="http://help.quali.com/" class="external-link" rel="nofollow">CloudShell Help</a>.</p><p>The <strong>Domain name </strong>field allows you to define a domain in which to create your sandbox in CloudShell. If this field is not populated, the domain defined in the <strong>Configuration</strong> step is used.</p><p>The <strong>Setup timeout </strong>field indicates the number of minutes to wait until the sandbox setup finishes running and the sandbox becomes active. If the timeout period is reached, the build will be interrupted.</p><p><br/></p><p>For more information about a field, click that field’s help icon on the right.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/100696855/182485620.png" data-image-src="attachments/100696855/182485620.png" data-unresolved-comment-count="0" data-linked-resource-id="182485620" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-9-15_11-12-40.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></p><p><br/></p><p><strong>We recommend using the “Start Sandbox” action as a pre-run step to ensure the sandbox is created before the actual build steps are executed.</strong></p><p><strong> </strong></p><p>Here is an example of how to print the sandbox information for future use:</p><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Alt text" src="https://github.com/jenkinsci/cloudshell-sandbox-plugin/raw/master/Pics/echoSandboxInformation.png?raw=true" data-image-src="https://github.com/jenkinsci/cloudshell-sandbox-plugin/raw/master/Pics/echoSandboxInformation.png?raw=true"></span></p><p><br/></p><p>To end the sandboxes that have been created in the build, use the <strong>Stop CloudShell sandboxes</strong> post-build action. Since this is a post-build action, it can be used only once per build and will end all sandboxes created by that build. This step ensures that the sandbox Teardown process completes successfully and checks the sandbox’s Activity Feed to validate that there are no errors in the sandbox activity log. The <strong>Teardown timeout </strong>field indicates the number of minutes to wait until the sandbox teardown finishes running and the sandbox completes. If the timeout period is reached, the build will be interrupted, but the teardown will keep running in CloudShell.</p><p><br/></p><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/100696855/182485621.png" data-image-src="attachments/100696855/182485621.png" data-unresolved-comment-count="0" data-linked-resource-id="182485621" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-9-15_11-12-56.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></p><p><br/></p><h2 id="CloudShellSandboxPlugin-PipelineStepsandSyntax">Pipeline Steps and Syntax</h2><p>The plugin installation adds the following pipeline steps to the Jenkins pipeline:</p><ul><li><strong>startSandbox</strong>– Initiates a new sandbox in CloudShell and waits for the sandbox to complete its Setup process. The method returns the sandbox Id.</li><li><strong>stopSandbox</strong>– Stops an active sandbox, waits for the teardown process to end and checks the sandbox’s Activity Feed for errors.</li></ul><p>To create a sandbox in CloudShell from a domain other than the one defined in the <strong>Configuration</strong> step:</p><ol><li>To start the sandbox, add the following script in the <strong>Pipeline</strong> section, replacing [domain name] with the name of your domain:<br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="150" src="attachments/100696855/170919463.png" data-image-src="attachments/100696855/170919463.png" data-unresolved-comment-count="0" data-linked-resource-id="170919463" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_plugin_pipeline_startsandbox.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span></li><li>Save and run the build. </li><li>To stop the sandbox, add the following script in the <strong>Pipeline</strong> section, replacing [domain name] with the name of your domain:<br/><span style="color: rgb(34,34,34);"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="1010" src="attachments/100696855/170919489.png" data-image-src="attachments/100696855/170919489.png" data-unresolved-comment-count="0" data-linked-resource-id="170919489" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_plugin_pipeline_stopsandbox.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100696855" data-linked-resource-container-version="24"></span><br/></span></li><li>Save and run the build.</li></ol><p><span style="color: rgb(34,34,34);">   </span></p><p>In case an error occurs in CloudShell during the sandbox start or during the sandbox setup, you can catch an ExtendedSandboxApiException exception in order to perform extra logic. For example, stop the sandbox if an error occurs during setup:</p><p><br/></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: ruby; gutter: false; theme: Confluence" data-theme="Confluence">stage(&#39;Safely create cloudshell sandbox&#39;) {
+
+    try {
+
+        echo &quot;Attempting sandbox reservation...&quot;
+
+        sandboxId = startSandbox duration: 10, name: &#39;Empty&#39;, params: &#39;&#39;, sandboxDomain: &#39;&#39;, sandboxName: &#39;&#39;, setupTimeout: 300, timeout: 10
+
+        echo &quot;Sandbox started&quot;
+
+    } catch (com.quali.cloudshell.qsExceptions.ExtendedSandboxApiException err) {
+
+            echo &quot;err.sandboxId is: &quot; + err.sandboxId
+
+            stopSandbox err.sandboxId
+
+        throw err
+
+}</pre>
+</div></div><p><br/></p><p>Here’s an example showing how to use the pipeline syntax to execute a Python test that requires the use of a sandbox that is based on a “Performance” blueprint:</p><ol><li>First, the Performance blueprint is reserved using the parameters passed from Jenkins.</li><li>The sandbox runs the Setup process.</li><li>When this process completes successfully, Jenkins runs the Python code (downloaded from the build VCS) with the sandbox Id.</li><li>At the end of the test, the plugin initiates the sandbox’s Teardown process using the <strong>stopSandbox</strong></li></ol><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: ruby; gutter: false; theme: Confluence" data-theme="Confluence">    stage (&#39;Performance Testing&#39;){
+        Id = startSandbox duration: 13, name: &#39;Performance&#39;, params: &#39;os=Win; server=4&#39;
+        sh &#39;python .\Perf2.py --sandbox_id Id&#39;
+        stopSandbox  Id
+    }</pre>
+</div></div><p><br/></p><p>The <strong>WithSandbox</strong> step implements the same logic as in <strong>startSandbox</strong> and <strong>stopSandbox</strong> but in a contextual syntax. This step is recommended for demos but not suitable for production.</p><p>We recommend using the Jenkins pipeline’s <strong>Snippet Generator</strong> which allows you to compose pipelines with an easy-to-use UI instead of requiring you to write code. For example:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Alt text" src="https://github.com/jenkinsci/cloudshell-sandbox-plugin/raw/master/Pics/PipelineSnippet.png?raw=true" data-image-src="https://github.com/jenkinsci/cloudshell-sandbox-plugin/raw/master/Pics/PipelineSnippet.png?raw=true"></span></p><p><br/></p><h2 id="CloudShellSandboxPlugin-Features">Features</h2><p>This table lists the plugin features that are supported per CloudShell version:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td class="confluenceTd"><p><strong>Plugin feature</strong></p></td><td class="confluenceTd"><p><strong>CloudShell version</strong></p></td></tr><tr><td class="confluenceTd"><p>Blueprint parameters</p></td><td class="confluenceTd"><p>8.0 and up</p></td></tr><tr><td class="confluenceTd"><p>Activity Feed Teardown validation</p></td><td class="confluenceTd"><p>8.1 and up</p></td></tr></tbody></table></div><h2 id="CloudShellSandboxPlugin-Contributingandissues">Contributing and issues</h2><p>The plugin is an open-source project under the MIT License. We encourage users to contribute, add pull requests and open issues.</p><p><br/></p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/133958404.png">image2017-8-10 13:52:39.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/133958408.png">image2017-8-10 13:54:45.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/135465054.png">image2017-9-24 17:19:45.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/135465055.png">image2017-9-24 17:20:1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/135465056.png">image2017-9-24 17:20:11.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/135465057.png">image2017-9-24 17:20:26.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/135465602.png">image2017-10-1 9:53:13.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919454.png">image2019-3-11_12-47-54.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919455.png">image2019-3-11_12-49-1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919456.png">image2019-3-11_12-52-46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919458.png">jenkins_plugin_freestyle.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919465.png">jenkins_plugin_freestyle.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919466.png">jenkins_plugin_pipeline_startsandbox.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919457.png">jenkins_plugin_freestyle.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919463.png">jenkins_plugin_pipeline_startsandbox.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919495.png">jenkins_plugin_pipeline_stopsandbox.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/170919489.png">jenkins_plugin_pipeline_stopsandbox.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/182485620.png">image2019-9-15_11-12-40.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100696855/182485621.png">image2019-9-15_11-12-56.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:17</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

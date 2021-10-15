@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jira Issue Updater Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jira Issue Updater Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (laszlomiklosik)</span>, last modified by <span class='editor'> Unknown User (lubap)</span> on Feb 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>I see only questions and no answers. Does anybody answers these questions? Otherwise what is the point to ask?</p><p><br/></p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Jira Issue Updater <a href="https://plugins.jenkins.io/jenkins-jira-issue-updater" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-837" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+<p>This is a Jenkins plugin which updates issues in Atlassian JIRA (by changing their status, adding a comment or updating fields) as part of a Jenkins job.</p><p>Jira-Issue-Updater-Plugin can search for issues to update using a flexible, user-definable JQL which can contain arbitrary variable values from the Jenkins Build, and update the contents of the JIRA.</p><p>The plugin can be called during a Post Build Step and/or as a Post Build Action.</p><p>Common Use Cases:</p><ul><li>Update a JIRA when a build passes/fails, for example to keep an audit trail in JIRA</li><li>Update Fixed Versions in JIRA</li><li>Fail a build if a JIRA cannot be found </li></ul><h2 id="JiraIssueUpdaterPlugin-What&#39;snew">What's new</h2><h3 id="JiraIssueUpdaterPlugin-Version1.20">Version 1.20</h3><p>Version 1.19 failed due to using out of date build settings. Updated and re-released as Version 1.20.</p><p>Changes:</p><ul><li>Added fixed versions</li><li>Use up to date build settings, deal with FindBugs and Javadoc issues</li></ul><h3 id="JiraIssueUpdaterPlugin-Version1.18">Version 1.18</h3><p>Changes:</p><ul><li>Added version management</li></ul><h3 id="JiraIssueUpdaterPlugin-Version1.17">Version 1.17</h3><p>Changed to use the REST interface (SOAP has been deprecated and is being removed). The current functionality is:</p><ul><li>JIRA selection using JQL</li><li>Add a JIRA comment (supports variable substitution)</li><li>Update a field with a value (supports variable substitution)</li><li>Set a workflow status</li></ul><p>Note: &quot;Fixed Versions&quot; removed temporarily</p><p>Added &quot;Post Build Action&quot;</p><h3 id="JiraIssueUpdaterPlugin-Version1.3">Version 1.3</h3><p>Added support for build parameters and environment variables.</p><p>Use e.g</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$BUILD_NUMBER
+</pre>
+</div></div><p>and not:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">${BUILD_NUMBER}
+</pre>
+</div></div><p>and then they will get replaced for any of the below:</p><ul class="alternate"><li>jira comment</li><li>jql</li><li>workflow action name</li></ul><h2 id="JiraIssueUpdaterPlugin-Whentouseit">When to use it</h2><ul class="alternate"><li>in case you would like to announce or just log in Jira that the deployment of certain fixes / issues the acceptance server has completed (this makes sense if you already use Jenkins to deploy your applications to the acceptance web/app server).</li><li>in case you would like Jenkins to update multiple issues when a new version of one of your projects is released (this makes sense if you use the &quot;maven release plugin&quot; and you trigger it from Jenkins).</li><li>in case you would like to progress multiple Jira issues in the workflow (bulk changing the status of multiple Jira issues) and/or add a comment to issues after a Jenkins job has successfully completed.</li></ul><h2 id="JiraIssueUpdaterPlugin-Howtouseit">How to use it</h2><p>After installing this plugin you will find it:</p><ul class="alternate"><li>under the 'Add build step' option (in case of a free-style or multi-configuration project build jobs) </li><li>under the 'Add pre-build Step' &amp; 'Add post-build step' options (in case of Maven project build jobs)</li></ul><h3 id="JiraIssueUpdaterPlugin-Inputs">Inputs</h3><ul class="alternate"><li>the Jira SOAP URL (e.g. <a href="http://something.com/rpc/soap/jirasoapservice-v2" class="external-link" rel="nofollow">http://something.com/rpc/soap/jirasoapservice-v2</a>)</li><li>the Jira username and password to be used to connect to Jira</li><li>a JQL query selecting the issues to be updated (e.g. project=&quot;JENKINS&quot; and status=&quot;Pending deploy&quot;)</li><li>the name of the workflow action to be executed (not mandatory)</li><li>the message to be added to each issue (not mandatory)</li></ul><h3 id="JiraIssueUpdaterPlugin-Examplepluginconfiguration">Example plugin configuration</h3><h2 id="JiraIssueUpdaterPlugin-Usage">Usage</h2><p><span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-left" src="attachments/59507289/59899940.png" data-image-src="attachments/59507289/59899940.png" data-unresolved-comment-count="0" data-linked-resource-id="59899940" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="jira-issue-updater-plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59507289" data-linked-resource-container-version="42"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59507289/59899941.png">jira-issue-updater-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59507289/59899940.png">jira-issue-updater-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59507289/79298565.jpg">Jelly.JIRA.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59507289/79298564.jpg">Jelly.JIRA.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

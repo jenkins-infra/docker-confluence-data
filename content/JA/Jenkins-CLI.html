@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Jenkins CLI</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Jenkins CLI
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (akiko)</span> on Jul 22, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Jenkins+CLI">Jenkins CLI</a></p>
+
+<p>Jenkinsは、スクリプトやシェルからアクセスできる組込のCLIクライアントをサポートしています。定型のタスクや、大量のアップデート、トラブルシューティングなどの自動化に役に立ちます。</p>
+
+<h2 id="JenkinsCLI-CLIの取得">CLIの取得</h2>
+
+<p>Jenkins CLIは <code>jenkins.war</code> の中に、jarファイルとして含まれています。<code><a href="http://yourserver.com/cli" class="external-link" rel="nofollow">http://yourserver.com/cli</a></code> からダウンロードすることができます。CLI jarはJenkinsのバージョンに依存していますが、実際には異なるバージョン間でも互換性を保つことができるようになっています。</p>
+
+<h2 id="JenkinsCLI-CLIを動かす">CLIを動かす</h2>
+
+<p>一般的な文法は次の通りです（svnやgitといったツールと似たインタフェースです）。</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java -jar jenkins-cli.jar [-s JENKINS_URL] command [options...] [arguments...]
+</pre>
+</div></div>
+
+<p><code>JENKINS_URL</code> は環境変数 <code>$JENKINS_URL</code> でも指定できます。この環境変数は、Jenkinsがビルド中にプロセスをフォークする際に、自動的に設定されます。このため、ビルドの設定でJenkinsのURLを明示しなくても、ビルドの中からでもJenkins CLIを利用することができます。'help' コマンドを使用すると、利用可能なコマンドの一覧を表示します。(Helpの内容は、使用するJenkinsサーバにより違います)</p>
+
+<h2 id="JenkinsCLI-CLIの拡張">CLIの拡張</h2>
+
+<p>PluginをJenkinsにインストールすると、カスタムCLIコマンドを追加することができます。詳細は、<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Writing+CLI+commands">writing CLI commands</a> を参照してください。</p>
+
+<h2 id="JenkinsCLI-Credentials(証明書)を使って動かす(1.419以降)">Credentials(証明書) を使って動かす (1.419 以降)</h2>
+
+<p>Jenkinsの利用に認証が求められる場合は、公開鍵認証を設定する必要があります。Web UIからログインし、 <code>http:</code><code>//yourserver.com/me/configure</code> にアクセスして下さい。そして、公開鍵を所定のテキストエリアに入力します。サーバに接続する際には、CLIは、デフォルトで <code>~/.ssh/identity</code>, <code>~/.ssh/id_dsa</code>, <code>~/.ssh/id_rsa</code>　を参照します。そして、この情報をサーバに対する認証のために利用します。代わりに、 <code>-i</code> オプションを使って、明示的に秘密鍵の場所を指定することもできます。</p>
+
+<p>もしまだ鍵を所持していないのであれば、SSHの鍵ペアを作成する方法については、<a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=this+guide">こちらのガイド</a>を参照して下さい。</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>互換性を保つため、 <code>-i</code> オプションを指定した場合を除いて、自分自身の認証に失敗しても、特に致命的なエラーが起きることはありません。認証に失敗した場合は、匿名ユーザとしてのコマンド実行を試みることになります。</p></div></div>
+
+
+<h2 id="JenkinsCLI-Credentials(証明書)を使って動かす(1.419以前のバージョン)">Credentials(証明書) を使って動かす (1.419 以前のバージョン)</h2>
+
+<p>Jenkinsの利用に認証が求められる場合は、証明書を指定するために、 <code>--username</code> と <code>--password</code> 、もしくは <code>--password-file</code> オプションを利用して下さい。コマンドごとにこのオプション指定を設定する手間を省くため、一度 <code>login</code> CLIコマンド（証明書用のパラメータ付き）を使ってログインすれば、その後はその他のコマンドは証明書の指定無しで実行できます。</p>
+
+<p>こういった証明書用のパラメータは、Jenkinsのどの認証タイプでもサポートされるわけでは無い、ということに注意して下さい。バージョン 1.373より以前では、Jenkins自身のデータベースによる認証しかサポートしていません。バージョン 1.373では、LDAP認証がサポートされるようになっています。<br/>
+もし、CLIが認証用パラメータを「有効でないパラメータ」と判断した場合は、みなさんが使っている認証タイプについてのチケットを提出して下さい。そして、 <code>SecurityRealm</code>　から <code>AbstractPasswordBasedSecurityRealm</code>　に拡張して、これらのパラメータをサポートしてくれるように依頼をして下さい。</p>
+
+
+<p>Change History: Note that a security hole in CLI commands was fixed in version 1.371, and that CLI <code>login</code> did not work properly for many commands until 1.375.<br/>
+（変更履歴: CLIコマンドのセキュリティホールは、バージョン 1.371で修正されました。また、CLI <code>login</code> は、バージョン1.375までは、多くのコマンドに対して正しく動作しないことにご注意下さい。）</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

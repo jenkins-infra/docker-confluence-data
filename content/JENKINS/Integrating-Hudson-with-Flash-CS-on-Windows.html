@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Integrating Hudson with Flash CS on Windows</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Integrating Hudson with Flash CS on Windows
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danny@orionrobots.co.uk)</span>, last modified on Sep 21, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>While the Flex tools, or Sprouts + MTasc make CI integration easy, if you are on a platform or project which requires an FLA file, and thus compilation in Flash CS, you may find yourself in a bind as we did.</p>
+
+<p>Here is a recipe to get unstuck on Windows - tested on Windows 7:</p>
+
+<ul>
+	<li>Install Flash CS on the target machine.</li>
+	<li>The target machine must be set up as a slave node. The hudson service on windows can not run Flash CS and will fail or hang when trying. The JNLP Hudson launcher running on the node will work, and this can be the same machine as the hudson service.</li>
+	<li>Set up a JSFL file to open and compile the FLA to a SWF.</li>
+	<li>Set up a hudson job restricted to the slave node(s) with CS5, check out the project, and then run the Flash CS5 executable from the command line.</li>
+	<li>To Be Completed - parse the errors output.</li>
+</ul>
+
+
+<h1 id="IntegratingHudsonwithFlashCSonWindows-InstallingFlashCS">Installing Flash CS</h1>
+<p>I used CS5. It should be licensed of course, and the trialware nags, or occasional survey popup may throw this. They are not seen too often though.<br/>
+Be sure to take note of where the Flash CS executable lives - you will need to reference this in your Hudson job.</p>
+
+<h1 id="IntegratingHudsonwithFlashCSonWindows-Settingupaslavenode">Setting up a slave node</h1>
+<p>On the hudson dashboard, go to manage hudson, select manage nodes.<br/>
+Select New node from the left hand menu, name the node and then download the webstart client. This should be ready to hook up with the hudson service although you may need to make firewall rules to allow it through.</p>
+
+<h1 id="IntegratingHudsonwithFlashCSonWindows-JSFL">JSFL</h1>
+<p>JSFL is a javascript language suitable for setting up macro tasks in the Create Suite tools. It is capable of manipulating the system, although it has limitations in that it can not process command line arguments.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+var doc = fl.openDocument(&quot;file:///&lt;path of fla file relative to Hudson checkout&gt;&quot;);
+doc.exportSWF(&quot;file:///&lt;swf output path&gt;&quot;);
+fl.compilerErrors.save(&quot;file:///&lt;fla path&gt;.err&quot;);
+fl.quit(false);
+</pre>
+</div></div>
+
+<p>This will open the named file. Note that a relative path can be used after 3 slashes, which is essential for Hudson.<br/>
+It will then export the SWF file, and then save the compiler error log.<br/>
+Finally it will ensure that CS exits too. The last step is optional as it may be more efficient to leave CS open and merely open/close documents instead. Note the paths should be relative to the location of the JSFL file and not the root of the project (that is, not the CWD - CS is fairly agnostic of a current working directory).</p>
+
+<p>You should test run this from a command line with the JSFL file as the only parameter to the CS5 Executable.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&gt;&quot;C:\program files\Adobe\Flash CS5\Flash.exe build.jsfl&quot;
+</pre>
+</div></div>
+
+<h1 id="IntegratingHudsonwithFlashCSonWindows-HudsonJob">Hudson Job</h1>
+
+<p>Once on the job configuration page, you will need to restrict this to nodes that are able to run CS5 - the root hudson node will not be able to do this due to service/desktop interaction restrictions. Tick &quot;Restrict where this project can be run&quot; and type the slave node name into the location expression box that appears.<br/>
+After configuring where to get the project (source control etc), you then need to add the command line from above as a Batch file build step.</p>
+
+<h1 id="IntegratingHudsonwithFlashCSonWindows-Errorparsing-itisworthnotingthatwhilethisautomatescompilation,itdoesnotcatcherrors/warnings.Thesearebeingsavedintoalog,anditisworthsettingupasimplescripttoparsethemandthrowanerrorstoppingthathudsonbuiliftheyareencount">Error parsing - it is worth noting that while this automates compilation, it does not catch errors/warnings. These are being saved into a log, and it is worth setting up a simple script to parse them and throw an error stopping that hudson buil if they are encountered. At a later time I will revisit this part of the system.</h1>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

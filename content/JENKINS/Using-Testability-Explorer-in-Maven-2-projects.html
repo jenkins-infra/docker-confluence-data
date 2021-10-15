@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Using Testability Explorer in Maven 2 projects</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Testability-Explorer-Plugin.html">Testability Explorer Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Using Testability Explorer in Maven 2 projects
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (reik schatz)</span>, last modified by <span class='editor'> Unknown User (herringbone)</span> on Jan 11, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Explains a temporary solution how to use the Testability Explorer in Maven 2 projects.  </p>
+
+<h1 id="UsingTestabilityExplorerinMaven2projects-Background">Background</h1>
+
+<p><a href="http://code.google.com/p/testability-explorer/" class="external-link" rel="nofollow">Testability Explorer</a> is an open-source tool that identifies hard-to-test Java code. Right now, you can run the program from the Command Line or using the <a href="http://code.google.com/p/testability-explorer/wiki/AntTask" class="external-link" rel="nofollow">Ant Task</a>. There is no Maven 2 plugin available at the moment. You have to use the <code>maven-antrun-plugin</code> for the time being. However, there is one big problem. The Testability Explorer JAR files are not available yet in any Maven 2 repository. This page offers a temporary solution for this problem until the JAR files become available in any public Maven 2 repository.</p>
+
+<h1 id="UsingTestabilityExplorerinMaven2projects-InstallingtheJARfilestolocalMavenrepo">Installing the JAR files to local Maven repo</h1>
+
+<p>In order to use the <code>maven-antrun-plugin</code> with the <code>com.google.ant.TestabilityTask</code>, you have to add two dependencies into your Maven 2 pom.xml under the dependencies section.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;dependency&gt;
+    &lt;groupId&gt;com.google.code.testability-explorer&lt;/groupId&gt;
+    &lt;artifactId&gt;testability-explorer&lt;/artifactId&gt;
+    &lt;version&gt;1.3&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;com.google.code.testability-explorer&lt;/groupId&gt;
+    &lt;artifactId&gt;ant-testability-explorer&lt;/artifactId&gt;
+    &lt;version&gt;1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+</div></div>
+<p>As said before, the JAR files are not available in any public repository. You have to add them manually into your local repository. Run the Maven install commands:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+mvn install:install-file  -Dfile=[path to]/testability-explorer-1.3.0-r275.jar \
+-DgroupId=com.google.code.testability-explorer -DartifactId=testability-explorer -Dversion=1.3 \
+-Dpackaging=jar -DcreateChecksum=true
+
+mvn install:install-file  -Dfile=[path to]/ant-testability-explorer-1.3.0-r275.jar \
+-DgroupId=com.google.code.testability-explorer -DartifactId=ant-testability-explorer -Dversion=1.3 \
+-Dpackaging=jar -DcreateChecksum=true
+</pre>
+</div></div>
+<p>You are now ready to use the Testability Explorer in a Maven 2 powered project locally.</p>
+
+<h1 id="UsingTestabilityExplorerinMaven2projects-RunningtheAntTaskfromMaven">Running the Ant Task from Maven</h1>
+
+<p>Now that you have the JAR files available locally, you can use the <code>maven-antrun-plugin</code> to run the Testability Explorer during builds. Go to the build section of your pom.xml and add the following plugin (if you do not have a build section in your pom.xml, you have to create <code>&lt;build&gt;</code> and <code>&lt;plugins&gt;</code> first).</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;build&gt;
+    &lt;plugins&gt;
+        ...
+
+        &lt;plugin&gt;
+            &lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;Testability Explorer&lt;/id&gt;
+                    &lt;phase&gt;test&lt;/phase&gt;
+                    &lt;configuration&gt;
+                        &lt;tasks&gt;
+                            &lt;path id=&quot;ant.classpath&quot;&gt;
+                                &lt;path refid=&quot;maven.runtime.classpath&quot; /&gt;
+                            &lt;/path&gt;
+
+                            &lt;echo message=&quot;Running Testability Explorer&quot; /&gt;
+
+                            &lt;property name=&quot;testability.report.dir&quot; value=&quot;target/reports/testability&quot; /&gt;
+                            &lt;delete dir=&quot;${testability.report.dir}&quot; /&gt;
+                            &lt;mkdir dir=&quot;${testability.report.dir}&quot; /&gt;
+
+                            &lt;taskdef name=&quot;testability&quot; classname=&quot;com.google.ant.TestabilityTask&quot;&gt;
+                                &lt;classpath refid=&quot;maven.runtime.classpath&quot; /&gt;
+                            &lt;/taskdef&gt;
+                            &lt;testability filter=&quot;my.package&quot; resultfile=&quot;${testability.report.dir}/results.xml&quot; print=&quot;xml&quot;&gt;
+                                &lt;classpath refid=&quot;maven.runtime.classpath&quot; /&gt;
+                            &lt;/testability&gt;
+
+                            &lt;echo message=&quot;Done. Reports can be found in ${testability.report.dir}/results.xml&quot; /&gt;
+                        &lt;/tasks&gt;
+
+                    &lt;/configuration&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;run&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</pre>
+</div></div>
+<p>This will execute the <code>com.google.ant.TestabilityTask</code> during the test phase of a Maven 2 run, ie. if you run <code>mvn test</code>. Note: in the XML snippet above you have to replace <code>my.package</code> with your own Java package that you want to have tested.</p>
+
+<h1 id="UsingTestabilityExplorerinMaven2projects-Prospects">Prospects</h1>
+
+<p>The suggested solution is far from optimal. As the JAR files will become available in a public Maven 2 repository, you will not have to copy them manually into you local repository. Sooner or later, there will also be am official Maven 2 plugin, so that the <code>maven-antrun-plugin</code> will not be required anymore.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602362/36732952.zip">m2-testability-jars.zip</a> (application/zip)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

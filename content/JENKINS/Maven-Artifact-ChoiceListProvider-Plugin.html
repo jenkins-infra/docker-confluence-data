@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Maven Artifact ChoiceListProvider Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Maven Artifact ChoiceListProvider Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (phreakadelle)</span>, last modified on Feb 07, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Maven Artifact ChoiceListProvider (Nexus) <a href="https://plugins.jenkins.io/maven-artifact-choicelistprovider" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-07-30/#SECURITY-1022" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allowed capturing credentials</a></li>
+</ul>
+
+</div></div>
+<p>This Plugin adds an additional ChoiceListProvider to famous <a href="Extensible-Choice-Parameter-plugin.html">Extensible Choice Parameter Plugin</a> to select Artifacts from any Nexus or Maven Central Repository.</p><h1 id="MavenArtifactChoiceListProviderPlugin-MavenArtifactChoiceListProvider">MavenArtifact ChoiceListProvider</h1><h2 id="MavenArtifactChoiceListProviderPlugin-Whatisthis?">What is this?</h2><p>This Plugin adds an additional ChoiceListProvider to famous <a href="https://plugins.jenkins.io/extensible-choice-parameter" class="external-link" rel="nofollow">Extensible Choice Parameter </a>Plugin.</p><p>With this extension its possible to use the Service API from a Maven Repositories like Nexus, Maven-Central or Artifactory to search for artifacts using groupId, artifactId and packaging.</p><p>This plugin will let the user choose a version from the available artifacts in the repository and will publish the URL as an environment variable. The Plugin will return the full URL of the choosen artifact, so that it will be available during the build, i.E. you can retrieve the artifact by using &quot;wget&quot;</p><h3 id="MavenArtifactChoiceListProviderPlugin-Example">Example</h3><p>We are using this plugin to let our QA department choose between the various versions of our software which then is downloaded and installed on the test environment.</p><h2 id="MavenArtifactChoiceListProviderPlugin-ConfigurationExample">Configuration Example</h2><h2 id="MavenArtifactChoiceListProviderPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/102662239/102793223.jpg" data-image-src="attachments/102662239/102793223.jpg" data-unresolved-comment-count="0" data-linked-resource-id="102793223" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="project-config-1.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="102662239" data-linked-resource-container-version="27"></span></h2><h2 id="MavenArtifactChoiceListProviderPlugin-KnownsIssue">Knowns Issue</h2><h3 id="MavenArtifactChoiceListProviderPlugin-Nexus3">Nexus 3</h3><p>Since Nexus 3.15.x the RESTful search service is available by a different URL. In the current plugin version this new URL is used. If you are using an older Nexus 3 instance you have to use the plugin in version 1.3.4</p><h3 id="MavenArtifactChoiceListProviderPlugin-NexusSnapshots">Nexus Snapshots</h3><p>If you would like to use Snapshot Versions of your artifacts you have to enable the tick-box in the Jenkins Settings. Only with the RESTful interface of Nexus 2 you will be able to retrieve Snapshot versions.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="70" src="attachments/102662239/165581590.png" data-image-src="attachments/102662239/165581590.png" data-unresolved-comment-count="0" data-linked-resource-id="165581590" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-12-23_10-38-7.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662239" data-linked-resource-container-version="27"></span></p><h3 id="MavenArtifactChoiceListProviderPlugin-Artifactory">Artifactory</h3><p>Artifactory API is not returning the correct ArtifactIds but only a URL to a JSON file that contains the DownloadURI of the Artifact. As currently there is no way in the Extensible Choice Plugin to intercept the selected value and because its not performant to query Artifactory for all items in the list for the correct downloadURI, the workaround is like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">wget `wget -qO - https://repo.jenkins-ci.org/api/storage/releases/org/jenkins-ci/plugins/ant-in-workspace/1.1.0/ant-in-workspace-1.1.0-javadoc.jar | json downloadUri`</pre>
+</div></div><p>The json command like tool is required:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">json --version
+json 9.0.6
+written by Trent Mick
+https://github.com/trentm/json</pre>
+</div></div><p><a href="https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/11#issuecomment-374142298" class="external-link" rel="nofollow">https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/11#issuecomment-374142298</a></p><h2 id="MavenArtifactChoiceListProviderPlugin-Links">Links</h2><ul><li>Thanks for the hint, but this plugin is very simliar to mine <a href="https://github.com/jenkinsci/repository-connector-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/repository-connector-plugin</a></li></ul><h2 id="MavenArtifactChoiceListProviderPlugin-Authors">Authors</h2><p>Stephan Watermeyer</p><h2 id="MavenArtifactChoiceListProviderPlugin-FurtherLinks">Further Links</h2><ul><li><s>Nexus 3 Support (Pending): <a href="https://issues.sonatype.org/browse/NEXUS-11893" class="external-link" rel="nofollow">https://issues.sonatype.org/browse/NEXUS-11893</a></s></li></ul><h2 id="MavenArtifactChoiceListProviderPlugin-License">License</h2><p>Licensed  under the <a href="https://github.com/heremaps/buildrotator-plugin/blob/master/LICENSE" class="external-link" rel="nofollow">MIT License (MIT)</a>.</p><h2 id="MavenArtifactChoiceListProviderPlugin-Changelog">Changelog</h2><h3 id="MavenArtifactChoiceListProviderPlugin-07.Februrary2019-1.4.0">07. Februrary 2019 - 1.4.0</h3><ul><li><a href="https://issues.sonatype.org/browse/NEXUS-18345" class="external-link" rel="nofollow">NEXUS-18345</a>: Migrate to the new RESTful Endpoint</li><li>Fix: Duplicate entry in global settings</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-22.December2018-1.3.4">22. December 2018 - 1.3.4</h3><ul><li>FIX: Support more than 50 matches on Nexus 3. Use continuationToken feature.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-30.July2018-1.3.2">30. July 2018 - 1.3.2</h3><ul><li><a href="https://jenkins.io/security/advisory/2018-07-30/#SECURITY-1022" class="external-link" rel="nofollow">Fix security issue</a></li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-12.July2018-1.3.1">12. July 2018 - 1.3.1</h3><ul><li>Added Nexus 3 Support</li><li>Updated Dependency Versions</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-18.January2018-1.2.3">18. January 2018 - 1.2.3</h3><ul><li>Fixed an Issue with a missing &quot;-&quot; between the Version and the Classifier<br/><a href="https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/9" class="external-link" rel="nofollow">https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/9</a></li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-15.December2017-1.2.2">15. December 2017 - 1.2.2</h3><ul><li>ADD: Added an optional field for the RepositoryId to search in Nexus<br/><a href="https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/8" class="external-link" rel="nofollow">https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/8</a></li><li>FIX: The Checkbox &quot;Use Restful API&quot; in the Global Configuration was not loaded correctly after a Jenkins restart.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-18.October2017-1.2.0">18. October 2017 - 1.2.0</h3><ul><li>ADD: Make ArtifactId Optional<br/><a href="https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/5" class="external-link" rel="nofollow">https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/5</a></li><li>ADD: It's configurable now, wether to use the RESTful API of Nexus or just display the static Aritifact-URL.<br/><a href="https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/3" class="external-link" rel="nofollow">https://github.com/phreakadelle/maven-artifact-choicelistprovider-plugin/issues/3</a></li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-15.Februar2017-1.1.3">15. Februar 2017 - 1.1.3</h3><ul><li>FIX: Caching of ChoiceList Parameters leads to the point, that you have to reconfigure the job first before new values are available in the list. This implicit caching is now taken out.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-18.Januar2017-1.1.1">18. Januar 2017 - 1.1.1</h3><ul><li>FIX: Fixed an bug that occured when the URL to the artifact was generated.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-17.Januar2017-1.1.0">17. Januar 2017 - 1.1.0</h3><ul><li>ADD: Added Feature to Support jFrog Artifactory repository.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-13.January2017-1.0.4">13. January 2017 - 1.0.4</h3><ul><li>ADD: Implemented a new resolver for artifact items. In the past the URL was constructed to target the file directly in the repository. The new implementation makes use of the RESTful service of Nexus to retrieve an artifact. This has the advantage, that also Snapshot versions can be retrieved. </li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-23.November2016-1.0.3">23. November 2016 - 1.0.3</h3><ul><li>Finally the official release to jenkins repository</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-11.November2016-1.0.2">11. November 2016 - 1.0.2</h3><p>ADD: New dependency to extensible-choice-plugin in version 1.3.3<br/> FIX: POM Update</p><h3 id="MavenArtifactChoiceListProviderPlugin-10.November2016-1.0.1">10. November 2016 - 1.0.1</h3><p>ADD: New Feature to use the search.maven.org REST API to display artifacts in Jenkins<br/> FIX: Some changes to support the official release of this software</p><h3 id="MavenArtifactChoiceListProviderPlugin-09.November2016-1.0.0">09. November 2016 - 1.0.0</h3><ul><li>ADD: Plugin is released as an official Jenkins Plugin</li><li>FIX: Changed unit tests to use a public nexus for testing</li><li>ADD: Prepartion to use shorter artifact names in SelectBox that will be resolved once the build has been started (onBuildTriggeredWith(...)). Only preparation, as i dont have a solution how to change build environments once the build has been started.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-25.July2016-0.0.8">25. July 2016 - 0.0.8</h3><ul><li>ADD: Added Configuration to configure UserCredentials for a Nexus Server. Could be a Token or a real Username.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-25.July2016-0.0.6">25. July 2016 - 0.0.6</h3><ul><li>ADD: Quickfix to add user credentials for Nexus. Will be put into Jenkins-Credentials in the next version</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-20.July2016">20. July 2016</h3><ul><li>Changed Implementation of Set containing the results from Nexus to LinkedHashSet as this implementation keeps the order as it is replied from Nexus and also makes sure that entries are only contained once.</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-29.June2016">29. June 2016</h3><ul><li>Added Checkbox to have the response list in reverse order</li><li>Changed Packaging-Textbox: Empty Value will only return the parent folder. The * character will return all entries for that artifact. Or use special entries like &quot;tar.gz&quot; or &quot;zip&quot;</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-30.May2016">30. May 2016</h3><ul><li>Added Example Image showing the Project Configuration</li><li>Added Comment for the &quot;onBuildTriggeredWith(...)&quot; method which can maybe later extended to transform the provided parameter (which could be a short version of the name) into the correct working URL</li></ul><h3 id="MavenArtifactChoiceListProviderPlugin-24.May2016">24. May 2016</h3><ul><li>Initial Version</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662239/102793223.jpg">project-config-1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662239/165581590.png">image2018-12-23_10-38-7.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

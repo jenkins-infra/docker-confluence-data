@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Running Jenkins behind IIS</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Running Jenkins behind IIS
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (darsstar)</span>, last modified on Feb 25, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In situations where you have existing web sites on your server, you may find it useful to run Jenkins (or the servlet container that Jenkins runs in) behind <a class="external-link" rel="nofollow" href="http://nginx.org/">Nginx</a>, so that you can bind Jenkins to the part of a bigger website that you may have. This document discusses some of the approaches for doing this.</p><p><strong>Make sure that you change the Jenkins httpListenAddress from its default of 0.0.0.0 to 127.0.0.1 or configure the firewall to block request on the port Jenkins is bound to, otherwise any IIS-level restrictions can be easily bypassed by hitting the Jenkins port directly.</strong></p><h1 id="RunningJenkinsbehindIIS-Requirements">Requirements</h1><ul><li>IIS 7.0 or greater.<ul><li>IIS 8.5 or greater if you want <a href="https://docs.microsoft.com/en-us/iis/get-started/whats-new-in-iis-85/certificate-rebind-in-iis85" class="external-link" rel="nofollow">Certificate Rebind</a>.</li></ul></li><li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" class="external-link" rel="nofollow">URL Rewrite 2.1</a> or greater.<ul><li>As the <a href="https://blogs.iis.net/iisteam/url-rewrite-v2-1" class="external-link" rel="nofollow">announcement </a>explains, it introduces a feature flag to turn off the default non-compliant-RFC3986 behavior. Which is what we want.</li></ul></li><li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" class="external-link" rel="nofollow">Application Request Routing</a>  3.0 or greater.</li><li>Server access</li></ul><h1 id="RunningJenkinsbehindIIS-Exampleusecase">Example use case</h1><p>I have a dedicated Jenkins installation on a Windos Server 2012 R2 server with a Common Name of <strong>VRTJENKINS01</strong> in the Active Directory domain <strong>acme.example</strong> and is reachable by the Fully Qualified Domain Name <strong>vrtjenkins01.acme.example</strong>. Additionally Jenkins runs on port <strong>8080</strong> and already listens to <strong>127.0.0.1</strong> instead of 0.0.0.0 and the server has additional DNS names: <strong>jenkins</strong> and<strong> jenkins.acme.example</strong>.</p><p>I want to have an IIS installation which acts as a TLS/SSL terminating reverse proxy. In combination with our in-house Active Directory Certificate Services (ADCS, Microsoft's Certificate Authority software) this should make certificate management a lot easier since Windows can be configured to automatically renew certificates, and the IIS 8.5+ Certificate Rebind feature can listen to renewal events (which contain the fingerprints of both the old and new certificate) and update the relevant bind(s) to use the fresh certificate. This would ensure that after the initial manual request it would only be necessary to manually change TLS/SSL related settings when the set of Alternate Subject Names on the certificate IIS presents should change.</p><p>IIS will only have to act as 1) a reverse proxy for Jenkins 2) redirect non-canonical URLs to the canonical URL: <em>https://jenkins.acme.example/</em></p><p>I have installed the IIS (8.5) role using the <em>Add Roles and Features Wizard</em> with the all the default and also the following non-default features:</p><ul><li>HTTP Redirection (Under <em>Common HTTP Features</em>, to redirect <span class="nolink">http(s)://jenkins/,</span> etc. to https://jenkins.acme.example/)</li><li>WebSocket Protocol (Under <em>Application Development</em>, because I felt like it)</li></ul><p>Then I installed URL Rewrite and Application Request Routing.</p><h1 id="RunningJenkinsbehindIIS-ConfigurationTime">Configuration Time</h1><h3 id="RunningJenkinsbehindIIS-EnablingReverseProxyfunctionality">Enabling Reverse Proxy functionality</h3><ol><li>In the <em>Internet Information Services (IIS) Manager</em> click on the VRTJENKINS01 server.</li><li>Go to <em>Application Request Routing Cache</em>.</li><li>In the <em>Actions</em> panel click on <em>Server Proxy Settings...</em></li><li>Enable the proxy</li><li>Disable the <em>Reverse rewrite host in response header</em><ol><li>Don't worry, it will work, just follow the rest of the instructions</li></ol></li><li>Set the <em>Response buffer threshold (KB)</em> to 0.<ol><li>This helps to prevent HTTP 502 errors on Jenkin's Replay pages.</li></ol></li><li>Apply (the <em>Actions</em> panel again)</li></ol><h3 id="RunningJenkinsbehindIIS-ConfiguringTLS/SSL">Configuring TLS/SSL</h3><p>Out of scope, there are enough tutorials on the rest of the interwebs for this part. The rest of this tutorial will assume it has been configured with a certificate trusted by your browser of choice.</p><h3 id="RunningJenkinsbehindIIS-Configuringrulesforresponserewriting">Configuring rules for response rewriting</h3><ol><li>Go to the <em>Default Web Site</em></li><li>Go to <em><em>URL Rewrite</em></em></li><li>In the <em>Actions</em> panel click <em>View Server Variables...</em></li><li>Add the following is not already define on the server level:<ol><li>Name: <strong>HTTP_FORWARDED</strong></li></ol></li><li>Click on <em>Back to Rules</em></li><li><em>Click on Add Rule(s)...</em></li><li>Select <em>Reverse Proxy</em> and click on OK</li><li>Enter <em>jenkins.acme.example</em> and click on OK</li><li>Open the rule you just created</li><li>Under <em>Conditions</em> add:<ol><li>Condition input: <strong>{CACHE_URL}</strong></li><li>Pattern: <strong>^(http|ws)s://</strong></li></ol></li><li>Under <em>Server Variables</em> add:<ol><li>Name: <strong>HTTP_FORWARDED</strong>, Value: <strong>for={REMOTE_ADDR};by={LOCAL_ADDR};host=&quot;{HTTP_HOST}&quot;;proto=&quot;https&quot;</strong>, Replace: yes<ol><li>Jenkins runs under Jetty, Jetty supports <a href="https://tools.ietf.org/html/rfc7239" class="external-link" rel="nofollow">RFC7239</a>, so all should be well.</li></ol></li></ol></li><li>Under Action change:<ol><li> Rewrite URL to <strong>{C:1}<span class="nolink">://jenkins.acme.example:8080{UNENCODED_URL</span>}</strong><ol><li>Note that there is no slash between the port number and the opening curly bracket</li></ol></li><li><strong>Remove</strong> the check from the <strong>Append query string</strong> checkbox</li></ol></li><li>Apply the changes.</li><li>Edit <em>C:\Windows\System32\drivers\etc\hosts</em> so that <strong>jenkins.acme.example</strong> points to 127.0.0.1<ol><li>When resolving names Windows will check if the name is its own name before consulting the hosts file. Meaning that adding <em>vrtjenkins01</em> or<em> vrtjenkins01.acme.example</em> to the hosts file won't have any effect.<ol><li>The hosts file will however be consulted before consulting the DNS infrastructure</li></ol></li></ol></li></ol><h3 id="RunningJenkinsbehindIIS-Experiencingthedreaded&quot;Itappearsthatyourreverseproxysetupisbroken.&quot;errorforyourself">Experiencing the dreaded &quot;It appears that your reverse proxy set up is broken.&quot; error for yourself</h3><ol><li><span class="nolink">https://jenkins.acme.example/configure</span></li><li>Configure the <em>Jenkins URL</em> to be <strong><span class="nolink"><span class="nolink">https://jenkins.acme.example/</span></span></strong><span class="nolink"><span class="nolink"> and</span></span><span class="nolink"><span class="nolink"> Save the change</span></span></li><li><span class="nolink"><span class="nolink">Go to <em>Configure Global Security</em> and enable <em>Enable proxy compatibility</em> if you have already enabled <em>Prevent Cross Site Request Forgery exploits</em><br/></span></span></li><li>Go to <span class="nolink"><span class="nolink">https://jenkins.acme.example/manage </span></span></li><li><span class="nolink">You will still experience the &quot;It appears that your reverse proxy set up is broken.&quot; as expected</span><ol><li><span class="nolink"><span class="nolink"><span class="nolink"> </span></span></span><span class="nolink">If you do not get that at this point, then that is very weird... Continue anyway.</span><span class="nolink"> </span></li></ol></li><li><span class="nolink">Right click the <em>Configure System</em> link and choose to inspect the element.<br/></span><ol><li><span class="nolink">Make sure you are still on the Manage page as you will want it as your referrer</span></li></ol></li><li><span class="nolink">Change the value of the <em>href</em> attribute to be <em>administrativeMonitor/hudson.diagnosis.ReverseProxySetupMonitor/test</em></span></li><li><span class="nolink">Open the link you just changed in a new tab.</span><ol><li><span class="nolink">Keep this tab open</span></li></ol></li><li><span class="nolink">Observe the &quot;<span class="nolink">https://jenkins.acme.example/manage</span> vs http:&quot; error and bask in its glory</span><ol><li><span class="nolink">a white page served with HTTP status code is 200 indicates all is well</span><ol><li><span class="nolink">If you do get that at this point, then that is very weird... Continue anyway.</span></li></ol></li></ol></li></ol><h3 id="RunningJenkinsbehindIIS-Fixingtheerrors"><span class="nolink">Fixing the errors</span></h3><ol><li><span class="nolink">In IIS Manager got to <em>Application Pools</em> then edit <em>DefaultAppPool</em> so that the <em>.NET CLR version</em> is <strong>No Managed Code</strong> </span><ol><li><span class="nolink">You might find that this is not necessary (at far as you can tell) for your setup, since IIS will only act as a TLS/SSL offloading reverse proxy, we don't need it. IIS on Windows 7 does appear to need this to be turned off for some urls (<span class="nolink">https://jenkins.acme.example/*)</span><br/></span></li></ol></li><li><span class="nolink">Then go to <em>Sites</em> →<em> Default Web Site</em> → <em>Request Filtering</em> and in the <em>Actions</em> panel choose <em>Edit Feature Settings...</em> and turn on <strong>Allow doube escaping</strong> </span><ol><li><span class="nolink">This is so IIS forwards URLs like <span class="nolink">https://jenkins.acme.example/%2525</span> to Jenkins instead of showing an IIS error page</span></li></ol></li><li><span class="nolink">Last, but not least, go to <span class="nolink"><em>Sites</em> →<em> Default Web Site</em> → </span><em>Configuration Editor</em> and change the <em>Section</em> to <em>system.webServer/rewrite/rules</em></span></li><li><span class="nolink">Now you should see the URL Rewrite 2.1 property <em>useOriginalURLEncoding</em> listed, if not install URL Rewrite 2.1 using the x86 or x64 installer, not the WebPI one and resume from here after a reboot.</span></li><li><span class="nolink">Change <span class="nolink"><em>useOriginalURLEncoding</em> </span>to <strong>False</strong></span><ol><li><span class="nolink">As the URL Rewrite 2.1 announcement this will change the value of {UNENCODED_URL} to make it <em>RFC3986</em> and usable for reverse proxy forwarding purposes</span></li><li><span class="nolink">original as in pre 2.1 behaviour.<br/></span></li></ol></li><li><span class="nolink">Refresh that tab you were supposed to keep open, or recreate it.</span><ol><li><span class="nolink">Again, take some time to bask in its glory<br/></span></li></ol></li><li><span class="nolink">It should now be white, also the Manage page should no longer complain!</span></li></ol><h3 id="RunningJenkinsbehindIIS-ContinueconfiguringIIS"><span class="nolink">Continue configuring IIS</span></h3><p><span class="nolink">Some of the things you might want but I won't cover:</span></p><ul><li><span class="nolink"><em>Hypertext Strict Transport Security</em> headers</span></li><li><span class="nolink">Redirecting from non canonical URLs to the canonical URL (ok, sort of covered this in the web.config example)<br/></span></li><li><span class="nolink">The X-UA-Compatibility header so that Internet Explorer 11 (or 9, or ...) won't claim to be IE 7 for intranet sites</span></li><li><span class="nolink">Use IIS Crypto to configure cipher suites</span></li><li><span class="nolink">...</span></li></ul><h3 id="RunningJenkinsbehindIIS-Aworkingweb.config"><span class="nolink">A working web.config</span></h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>web.config</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: true; theme: Confluence" data-theme="Confluence">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration&gt;
+    &lt;system.webServer&gt;
+        &lt;rewrite&gt;
+            &lt;rules useOriginalURLEncoding=&quot;false&quot;&gt;
+                &lt;rule name=&quot;CanonicalHostNameRule2&quot; stopProcessing=&quot;true&quot;&gt;
+                    &lt;match url=&quot;(.*)&quot; /&gt;
+                    &lt;conditions trackAllCaptures=&quot;true&quot;&gt;
+                        &lt;add input=&quot;{CACHE_URL}&quot; pattern=&quot;^(http|ws)://&quot; /&gt;
+                        &lt;add input=&quot;{HTTP_HOST}&quot; pattern=&quot;^jenkins$|^jenkins\.acme\.example$|^vrtjenkins01$|^vrtjenkins01\.acme\.example$&quot; /&gt;
+                    &lt;/conditions&gt;
+                    &lt;action type=&quot;Redirect&quot; url=&quot;{C:1}s://jenkins.acme.example{UNENCODED_URL}&quot; appendQueryString=&quot;false&quot; redirectType=&quot;Permanent&quot; /&gt;
+                &lt;/rule&gt;
+                &lt;rule name=&quot;CanonicalHostNameRule1&quot; stopProcessing=&quot;true&quot;&gt;
+                    &lt;match url=&quot;(.*)&quot; /&gt;
+                    &lt;conditions trackAllCaptures=&quot;true&quot;&gt;
+                        &lt;add input=&quot;{CACHE_URL}&quot; pattern=&quot;^(https|wss)://&quot; /&gt;
+                        &lt;add input=&quot;{HTTP_HOST}&quot; pattern=&quot;^jenkins$|^vrtjenkins01$|^vrtjenkins01\.acme\.example$&quot; /&gt;
+                    &lt;/conditions&gt;
+                    &lt;action type=&quot;Redirect&quot; url=&quot;{C:1}://jenkins.acme.example{UNENCODED_URL}&quot; appendQueryString=&quot;false&quot; redirectType=&quot;Permanent&quot; /&gt;
+                &lt;/rule&gt;
+                &lt;rule name=&quot;ReverseProxyInboundRule1&quot; stopProcessing=&quot;true&quot;&gt;
+                    &lt;match url=&quot;(.*)&quot; /&gt;
+                    &lt;action type=&quot;Rewrite&quot; url=&quot;{C:1}://jenkins.acme.example:8080{UNENCODED_URL}&quot; appendQueryString=&quot;false&quot; /&gt;
+                    &lt;serverVariables&gt;
+                        &lt;set name=&quot;HTTP_FORWARDED&quot; value=&quot;for={REMOTE_ADDR};by={LOCAL_ADDR};host=&amp;quot;{HTTP_HOST}&amp;quot;;proto=&amp;quot;https&amp;quot;&quot; /&gt;
+                    &lt;/serverVariables&gt;
+                    &lt;conditions trackAllCaptures=&quot;true&quot;&gt;
+                        &lt;add input=&quot;{CACHE_URL}&quot; pattern=&quot;^(http|ws)s://&quot; /&gt;
+                        &lt;add input=&quot;{HTTP_HOST}&quot; pattern=&quot;^jenkins\.acme\.example$&quot; /&gt;
+                    &lt;/conditions&gt;
+                &lt;/rule&gt;
+            &lt;/rules&gt;
+        &lt;/rewrite&gt;
+        &lt;security&gt;
+            &lt;requestFiltering allowDoubleEscaping=&quot;true&quot; /&gt;
+        &lt;/security&gt;
+    &lt;/system.webServer&gt;
+&lt;/configuration&gt;
+
+</pre>
+</div></div><p><span class="nolink"><br/></span></p><h3 id="RunningJenkinsbehindIIS-Complainaboutitstillnotworking"><span class="nolink">Complain about it still not working</span></h3><p><span class="nolink">Leave a comment or complain to me over at twitter (@Darsstar)<br/></span></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

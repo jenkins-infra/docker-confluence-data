@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Deploy WebSphere Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Deploy WebSphere Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (asanso)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 08, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'deploy-websphere' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="DeployWebSpherePlugin-Overview">Overview</h1>
+
+<p>This plugin is an extension of the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Deploy+Plugin" class="external-link" rel="nofollow">Deploy Plugin</a>. It takes a war/ear file and deploys that to a running remote WebSphere Application Server at the end of a build.<br/>
+The plugin currently supports:</p>
+<ul>
+	<li>WebSphere Application Server 6.1 (with <strong>security disabled</strong>)</li>
+</ul>
+
+
+<h1 id="DeployWebSpherePlugin-Installation">Installation</h1>
+
+<p>To run this plugin against a Jenkins installation, the following extra step need to be taken:</p>
+<ul>
+	<li>The following WAS JAR files need to be placed into the Hudson class path or dropped into the <em>%project.basedir%/WEB-INF/lib/</em>  directory. These JAR files can be copied from the <em>%WAS_HOME%/runtimes/</em> directory of your WAS server installation.
+	<ul>
+		<li>com.ibm.ws.admin.client_6.1.0</li>
+		<li>com.ibm.ws.webservices.thinclient_6.1.0</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>Failure to follow the above steps will mean the plugin will not operate.</p>
+
+<h1 id="DeployWebSpherePlugin-Userguide">User guide</h1>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/44302418/44564481.jpg" data-image-src="attachments/44302418/44564481.jpg" data-unresolved-comment-count="0" data-linked-resource-id="44564481" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="deploy-websphere.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="44302418" data-linked-resource-container-version="31"></span></p>
+
+
+<h1 id="DeployWebSpherePlugin-ReleasePlan">Release Plan</h1>
+
+<ul>
+	<li><span style="text-decoration: line-through;">WebSphere Application Server 6.1/7 (</span><strong><span style="text-decoration: line-through;">with  security disabled</span></strong><span style="text-decoration: line-through;">)</span> (DONE)</li>
+	<li>WebSphere Application Server 6.1/7 (<strong>with  security enabled</strong>) (soon)</li>
+	<li>WebSphere Portal Server 6.1 (soon)</li>
+</ul>
+
+
+<h1 id="DeployWebSpherePlugin-KnownIssues">Known Issues</h1>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-6732">JENKINS-6732</a></li>
+</ul>
+
+
+
+<h1 id="DeployWebSpherePlugin-Versionhistory">Version history</h1>
+
+<h2 id="DeployWebSpherePlugin-Version1.0(Jun2,2010)">Version 1.0 (Jun 2, 2010)</h2>
+
+<ul>
+	<li>Initial release : WebSphere Application Server 6.1 (with <strong>security disabled</strong>)</li>
+</ul>
+
+
+<h1 id="DeployWebSpherePlugin-FAQ">FAQ</h1>
+
+<h3 id="DeployWebSpherePlugin-HowdisableWASsecurity">How disable WAS security</h3>
+
+<ol>
+	<li>Open admin console: Start -&gt; Programs -&gt; IBM Websphere -&gt; Application Server -&gt; Profiles-&gt; &lt;SERVER_NAME&gt; -&gt; First Steps -&gt; Administrative Console.</li>
+	<li>Login and proceed: Security -&gt; Secure administration, applications, and infrastructur.</li>
+	<li>Clear &quot;Enable administrative security&quot; checkbox under Administrative security.</li>
+	<li>Apply, save settings, restart WAS.</li>
+</ol>
+
+
+<h3 id="DeployWebSpherePlugin-Thepluginexecuteswithoutexceptionsbutitdoesnotdoanything">The plugin executes without exceptions but it does not do anything</h3>
+
+<p>This plugin depends on <a href="Deploy-Plugin.html">Deploy Plugin</a>. The last version of the <a href="Deploy-Plugin.html">Deploy Plugin</a> (1.5) seems to have some issue affecting also the Deploy WebSphere plugin. Downgrading the Deploy Plugin to version 1.4 should solve the problem.</p>
+
+
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/44302418/44564482.jpg">deploy-websphere.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/44302418/44564481.jpg">deploy-websphere.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

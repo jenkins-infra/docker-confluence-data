@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Groovy Label Assignment plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Groovy Label Assignment plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ikedam)</span>, last modified on Oct 15, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Groovy Label Assignment <a href="https://plugins.jenkins.io/groovy-label-assignment" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+Provides &quot;Groovy script to restrict where this project can be run&quot; in job configuration pages.</p><h2 id="GroovyLabelAssignmentplugin-What&#39;sthis?">What's this?</h2><p>This plugin provides &quot;Groovy script to restrict where this project can be run&quot; to the job configuration page:</p><ul><li>The value returned from the script is treated as a label expression.<ul><li>This label expression overrides &quot;Restrict where this project can be run&quot;, and &quot;Slaves&quot;/&quot;Label-expression&quot; axes of multi-configuration projects.</li><li>A non-string values is converted into a string with <code>toString()</code>.</li><li>Returning null or empty string does not override existing label expressions.</li></ul></li><li>Following variables are binded to the Groovy script:<ul><li>Parameters defined with &quot;This build is parameterized&quot;.</li><li>Axes defined with a multi-configuration project.</li><li>Environment variables defined with plugins.</li></ul></li><li>A build does not start (trigger is ignored) in following cases:<ul><li>No groovy script is configured even though Groovy Label Assignment is enabled in the job.</li><li>The groovy script contains syntax errors.</li><li>The groovy script throws an exception at the runtime.</li></ul></li></ul><h2 id="GroovyLabelAssignmentplugin-Usecases">Use cases</h2><h3 id="GroovyLabelAssignmentplugin-Usecase1">Use case 1</h3><p>Think a following scenario:</p><ul><li>You have to build a project for multiple platforms: arm, win, linux</li><li><p>There are following nodes:</p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Node</p></th><th class="confluenceTh"><p>Label</p></th><th class="confluenceTh"><p>arm</p></th><th class="confluenceTh"><p>win</p></th><th class="confluenceTh"><p>linux</p></th></tr><tr><td class="confluenceTd"><p>win1</p></td><td class="confluenceTd"><p>vs2010,armcc</p></td><td class="confluenceTd"><p>O</p></td><td class="confluenceTd"><p>O</p></td><td class="confluenceTd"><p>X</p></td></tr><tr><td class="confluenceTd"><p>win2</p></td><td class="confluenceTd"><p>armcc</p></td><td class="confluenceTd"><p>X</p></td><td class="confluenceTd"><p>O</p></td><td class="confluenceTd"><p>X</p></td></tr><tr><td class="confluenceTd"><p>linux</p></td><td class="confluenceTd"><p>gcc</p></td><td class="confluenceTd"><p>X</p></td><td class="confluenceTd"><p>X</p></td><td class="confluenceTd"><p>O</p></td></tr></tbody></table></div></li></ul><p>You can manage this by using multi-configuration project as followings:</p><ul><li>Define a User-defined axis &quot;platform&quot;: arm, win, linux</li><li>Define a Slaves axis &quot;slave&quot;: armcc, vs2010, gcc</li><li><p>Define &quot;Combination Filter&quot; as following:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">(platform == &quot;arm&quot; &amp;&amp; slave==&quot;armcc&quot;) || (platform == &quot;win&quot; &amp;&amp; slave==&quot;vs2010&quot;) || (platform == &quot;linux&quot; &amp;&amp; slave==&quot;gcc&quot;)
+</pre>
+</div></div></li></ul><p>Groovy Label Assignment plugin provides following alternate solution:</p><ul><li>Define a User-defined axis &quot;platform&quot;: arm, win, linux</li><li><p>Define &quot;Groovy script to restrict where this project can be run&quot;:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def labelMap = [
+    arm: &quot;armcc&quot;,
+    win: &quot;vs2010&quot;,
+    linux: &quot;gcc&quot;,
+];
+return labelMap.get(binding.getVariables().get(&quot;platform&quot;));
+</pre>
+</div></div></li></ul><h3 id="GroovyLabelAssignmentplugin-Usecase2">Use case 2</h3><p>Consider to create a job with which developers build a source tree.</p><ul><li>You want developers can build both a release build and a snapshot with that job. Developers select release or snapshot when they trigger a build.</li><li>Release build must be built on nodes labeled &quot;RELEASE&quot; for releasing. Snapshot build must be built not on those nodes, but on other nodes.</li></ul><p>You can create a satisfying job by using Groovy Label Assignment plugin:</p><ul><li>Parameterize the job.</li><li>Define a Boolen Value parameter &quot;release&quot;, which specifies the triggering build is for release.</li><li><p>Define &quot;Groovy script to restrict where this project can be run&quot;:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">return (release == &quot;true&quot;)?&quot;RELEASE&quot;:&quot;!RELEASE&quot;
+</pre>
+</div></div></li></ul><h2 id="GroovyLabelAssignmentplugin-Limitations">Limitations</h2><ul><li>Some variables may not be properly binded:<ul><li>Some type of parameters may be not properly binded.</li><li>Environment variables of some type of plugins may be not properly binded.</li><li>This is for Groovy Label Assignment plugin works when a build is going to be created, and is not created. Parameters and plugins that refers build information does not work properly.</li></ul></li><li>When Groovy Label Assignment plugin fails, a build is rejected silently. Failures happen in following cases. You can refer the system log to see why Groovy Label Assignment plugin failed.<ul><li>Groovy script is not defined.</li><li>Groovy script contains syntax errors.</li><li>Groovy script failed at the runtime.<ul><li><p>Especially in case referring non-binded variables. It often happens when running with multi-configuration project. In that case, you can access the variable safely as following:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">binding.getVariables().get(&quot;variable-name&quot;);
+</pre>
+</div></div></li></ul></li><li>Returned value cannot be parsed as a label expression.</li></ul></li></ul><h2 id="GroovyLabelAssignmentplugin-Screenshots">Screenshots</h2><p>TODO</p><h2 id="GroovyLabelAssignmentplugin-Issues">Issues</h2><p>To report a bug or request an enhancement to this plugin please create a ticket in JIRA (you need to login or to sign up for an account). Also have a look on <a href="How-to-report-an-issue.html">How to report an issue</a></p><ul><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=1&amp;components=17655&amp;priority=4&amp;assignee=ikedam" class="external-link" rel="nofollow">Bug report</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=4&amp;components=17655&amp;priority=4" class="external-link" rel="nofollow">Request or propose an improvement of existing feature</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=2&amp;components=17655&amp;priority=4" class="external-link" rel="nofollow">Request or propose a new feature</a></li></ul><p>
+
+
+
+
+
+<div id="refresh-module--1409326790" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues--1409326790" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            <th style="text-align: left; text-transform: capitalize;"
+                            class="jira-macro-table-underline-pdfexport">T</th>
+                                                                                <th style="text-align: left; text-transform: capitalize;"
+                            class="jira-macro-table-underline-pdfexport">P</th>
+                                                                                <th style="text-align: left; text-transform: capitalize;"
+                            class="jira-macro-table-underline-pdfexport">Key</th>
+                                                                                <th style="text-align: left; text-transform: capitalize;"
+                            class="jira-macro-table-underline-pdfexport">Summary</th>
+                                                </tr>
+                                                                                    <tr>
+                    <td colspan="4">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                            <a rel="nofollow" href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%2C+%22In+Review%22%2C+Verified%29+AND+component+%3D+%27groovy-label-assignment-plugin%27+&amp;src=confmacro">
+                                <span>No issues found</span>
+                            </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><h2 id="GroovyLabelAssignmentplugin-Howdoesthiswork?">How does this work?</h2><p>This plugin works as following:</p><ol><li>When a new build is triggerd, <code>GroovyLabelAssignmentQueueDecisionHandler</code> is called.</li><li>If <code>GroovyLabelAssignmentProperty</code> is assigned to the job, call it.</li><li><code>EnvironmentContributingAction#buildEnvVars()</code> is called for retrieving variables to bind to the Groovy script.<ul><li>Parameters are defined here.</li></ul></li><li>Retrieve axes values configured to that job and bind to the Groovy script.</li><li>Run Groovy script.</li><li>Parse returned value as a label expression.</li><li>Assign it with <code>LabelAssignmentAction</code>.</li></ol><h2 id="GroovyLabelAssignmentplugin-ChangeLog">Change Log</h2><h3 id="GroovyLabelAssignmentplugin-Version1.2.0(May8,2016)">Version 1.2.0 (May 8, 2016)</h3><ul><li>Now targets Jenkins 1.509 and later (was 1.466).</li><li><strong>Groovy scripts run with <a href="Script-Security-Plugin.html">Script Security Plugin</a></strong> (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27535">JENKINS-27535</a>)<ul><li>Existing scripts are configured to run in the Groovy sandboxes.</li><li>You may have to approve some methods to allow run in the sandbox, or approve your scripts to allow run out of the sandbox.</li><li>See <a href="Script-Security-Plugin.html">Script Security Plugin</a> for details.</li></ul></li></ul><h3 id="GroovyLabelAssignmentplugin-Version1.1.1(Sep13,2015)">Version 1.1.1 (Sep 13, 2015)</h3><ul><li>Fixed: fails to find nodes with a specified label when the label is once removed from all nodes (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30135">JENKINS-30135</a>)</li></ul><h3 id="GroovyLabelAssignmentplugin-Version1.1.0(Mar21,2015)">Version 1.1.0 (Mar 21, 2015)</h3><ul><li>Expose current Jenkins job to the Groovy script as &quot;currentJob&quot; variable (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27424">JENKINS-27424</a>)</li></ul><h3 id="GroovyLabelAssignmentplugin-Version1.0.0(Jun05,2013)">Version 1.0.0 (Jun 05, 2013)</h3><ul><li>Initial release.</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:26</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

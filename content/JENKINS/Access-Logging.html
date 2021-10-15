@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Access Logging</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Access Logging
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rchekaluk)</span>, last modified by <span class='editor'> Unknown User (zionyx)</span> on Sep 23, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h3 id="AccessLogging-Stepstoenableanaccesslog">Steps to enable an access log</h3>
+
+<h4 id="AccessLogging-ForUbuntu:">For Ubuntu:</h4>
+
+<ol>
+	<li>Add these lines to /etc/default/jenkins above JENKINS_ARGS:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# Enable access log
+JENKINS_ACCESSLOG=&quot;--accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=/var/log/jenkins/access.log&quot;
+</pre>
+</div></div></li>
+	<li>Edit /etc/default/jenkins and add  $JENKINS_ACCESSLOG to JENKINS_ARGS</li>
+	<li>Enable log rotation: edit /etc/logrotate.d/jenkins and change /var/log/jenkins/jenkins.log to /var/log/jenkins/*.log</li>
+</ol>
+
+
+<h4 id="AccessLogging-ForWindowsservice:">For Windows service:</h4>
+
+<ol>
+	<li>Add the line to %JENKINS_HOME%/jenkins.xml in &lt;arguments&gt; block.
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence"> --accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=&quot;%BASE%/logs/access.log&quot;
+</pre>
+</div></div></li>
+	<li>Restart Jenkins service after edit.
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Updated jenkins.xml</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;service&gt;
+  &lt;id&gt;jenkins&lt;/id&gt;
+  &lt;name&gt;Jenkins&lt;/name&gt;
+  &lt;description&gt;This service runs Jenkins continuous integration system.&lt;/description&gt;
+  &lt;env name=&quot;JENKINS_HOME&quot; value=&quot;%BASE%&quot;/&gt;
+  &lt;!--
+    if you&#39;d like to run Jenkins with a specific version of Java, specify a full path to java.exe.
+    The following value assumes that you have java in your PATH.
+  --&gt;
+  &lt;executable&gt;%JAVA_HOME%\bin\java&lt;/executable&gt;
+
+  &lt;arguments&gt;-Xrs -Xmx3072m -Dhudson.lifecycle=hudson.lifecycle.WindowsServiceLifecycle -jar &quot;%BASE%\jenkins.war&quot; --httpPort=8080 --webroot=&quot;%BASE%\war&quot; --accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=&quot;%BASE%/logs/access.log&quot;&lt;/arguments&gt;
+
+  &lt;!--
+    interactive flag causes the empty black Java window to be displayed.
+    I&#39;m still debugging this.
+  &lt;interactive /&gt;
+  --&gt;
+  &lt;logmode&gt;rotate&lt;/logmode&gt;
+
+  &lt;onfailure action=&quot;restart&quot; /&gt;
+&lt;/service&gt;
+</pre>
+</div></div></li>
+	<li>Access logs will be created in &quot;%BASE%/logs/access.log&quot; but <img class="emoticon emoticon-warning" src="images/icons/emoticons/warning.svg" data-emoticon-name="warning" alt="(warning)"/> log will be lost on service restart.</li>
+</ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

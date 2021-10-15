@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sun&#39;s Hudson deployment : Slow builds on Jennings</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Sun&#39;s Hudson deployment</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Investigation-Notes.html">Investigation Notes</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Sun&#39;s Hudson deployment : Slow builds on Jennings
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Jul 08, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Bhakti noticed that GlassFish v3 dev builds run very slowly on jennings. It used to build normally in 5 minutes, but now it doesn't finish after an hour and gets aborted by the time out.</p>
+
+<p>Running the same command from the shell on the same machine reproduces the problem. By using jstack while the build is stuck, I was able to obtain the stack dump:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Thread 5309: (state = IN_NATIVE)
+ - java.net.SocketInputStream.socketRead0(java.io.FileDescriptor, byte[], int, int, int) @bci=0 (Interpreted frame)
+ - java.net.SocketInputStream.read(byte[], int, int) @bci=84, line=129 (Interpreted frame)
+ - java.io.BufferedInputStream.fill() @bci=175, line=218 (Interpreted frame)
+ - java.io.BufferedInputStream.read1(byte[], int, int) @bci=44, line=256 (Interpreted frame)
+ - java.io.BufferedInputStream.read(byte[], int, int) @bci=49, line=313 (Interpreted frame)
+ - sun.net.www.http.HttpClient.parseHTTPHeader(sun.net.www.MessageHeader, sun.net.ProgressSource, sun.net.www.protocol.http.HttpURLConnection) @bci=51, line=606 (Interpreted frame)
+ - sun.net.www.http.HttpClient.parseHTTP(sun.net.www.MessageHeader, sun.net.ProgressSource, sun.net.www.protocol.http.HttpURLConnection) @bci=30, line=554 (Interpreted frame)
+ - sun.net.www.protocol.http.HttpURLConnection.getInputStream() @bci=280, line=936 (Interpreted frame)
+ - org.apache.maven.wagon.providers.http.LightweightHttpWagon.fillInputData(org.apache.maven.wagon.InputData) @bci=44, line=83 (Interpreted frame)
+ - org.apache.maven.wagon.StreamWagon.getIfNewer(java.lang.String, java.io.File, long) @bci=32, line=94 (Interpreted frame)
+ - org.apache.maven.artifact.manager.DefaultWagonManager.getRemoteFile(org.apache.maven.artifact.repository.ArtifactRepository, java.io.File, java.lang.String, org.apache.maven.wagon.events.TransferListener, java.lang.String, boolean) @bci=344, line=446 (Interpreted frame)
+ - org.apache.maven.artifact.manager.DefaultWagonManager.getArtifact(org.apache.maven.artifact.Artifact, org.apache.maven.artifact.repository.ArtifactRepository) @bci=175, line=347 (Interpreted frame)
+ - org.apache.maven.artifact.resolver.DefaultArtifactResolver.resolve(org.apache.maven.artifact.Artifact, java.util.List, org.apache.maven.artifact.repository.ArtifactRepository, boolean) @bci=447, line=181 (Interpreted frame)
+ - org.apache.maven.artifact.resolver.DefaultArtifactResolver.resolve(org.apache.maven.artifact.Artifact, java.util.List, org.apache.maven.artifact.repository.ArtifactRepository) @bci=5, line=73 (Interpreted frame)
+ - org.apache.maven.artifact.resolver.DefaultArtifactResolver.resolveTransitively(java.util.Set, org.apache.maven.artifact.Artifact, java.util.Map, org.apache.maven.artifact.repository.ArtifactRepository, java.util.List, org.apache.maven.artifact.metadata.ArtifactMetadataSource, org.apache.maven.artifact.resolver.filter.ArtifactFilter, java.util.List) @bci=80, line=294 (Interpreted frame)
+ - org.apache.maven.artifact.resolver.DefaultArtifactResolver.resolveTransitively(java.util.Set, org.apache.maven.artifact.Artifact, java.util.Map, org.apache.maven.artifact.repository.ArtifactRepository, java.util.List, org.apache.maven.artifact.metadata.ArtifactMetadataSource, org.apache.maven.artifact.resolver.filter.ArtifactFilter) @bci=73, line=272 (Interpreted frame)
+ - org.apache.maven.plugin.DefaultPluginManager.resolveTransitiveDependencies(org.apache.maven.execution.MavenSession, org.apache.maven.artifact.resolver.ArtifactResolver, java.lang.String, org.apache.maven.artifact.factory.ArtifactFactory, org.apache.maven.project.MavenProject) @bci=89, line=1238 (Interpreted frame)
+ - org.apache.maven.plugin.DefaultPluginManager.executeMojo(org.apache.maven.project.MavenProject, org.apache.maven.plugin.MojoExecution, org.apache.maven.execution.MavenSession) @bci=190, line=397 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoals(java.util.List, java.util.Stack, org.apache.maven.execution.MavenSession, org.apache.maven.project.MavenProject) @bci=184, line=539 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoalWithLifecycle(java.lang.String, java.util.Stack, org.apache.maven.execution.MavenSession, java.util.Map, org.apache.maven.project.MavenProject, org.apache.maven.lifecycle.Lifecycle) @bci=28, line=480 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoal(java.lang.String, org.apache.maven.execution.MavenSession, org.apache.maven.project.MavenProject) @bci=50, line=459 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoalAndHandleFailures(java.lang.String, org.apache.maven.execution.MavenSession, org.apache.maven.project.MavenProject, org.apache.maven.monitor.event.EventDispatcher, java.lang.String, org.apache.maven.execution.ReactorManager, long, java.lang.String) @bci=4, line=311 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeTaskSegments(java.util.List, org.apache.maven.execution.ReactorManager, org.apache.maven.execution.MavenSession, org.apache.maven.project.MavenProject, org.apache.maven.monitor.event.EventDispatcher) @bci=554, line=278 (Interpreted frame)
+ - org.apache.maven.lifecycle.DefaultLifecycleExecutor.execute(org.apache.maven.execution.MavenSession, org.apache.maven.execution.ReactorManager, org.apache.maven.monitor.event.EventDispatcher) @bci=90, line=143 (Interpreted frame)
+ - org.apache.maven.DefaultMaven.doExecute(org.apache.maven.execution.MavenExecutionRequest, org.apache.maven.monitor.event.EventDispatcher) @bci=442, line=334 (Interpreted frame)
+ - org.apache.maven.DefaultMaven.execute(org.apache.maven.execution.MavenExecutionRequest) @bci=26, line=125 (Interpreted frame)
+ - org.apache.maven.cli.MavenCli.main(java.lang.String[], org.codehaus.classworlds.ClassWorld) @bci=730, line=280 (Interpreted frame)
+ - sun.reflect.NativeMethodAccessorImpl.invoke0(java.lang.reflect.Method, java.lang.Object, java.lang.Object[]) @bci=0 (Interpreted frame)
+ - sun.reflect.NativeMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) @bci=87, line=39 (Interpreted frame)
+ - sun.reflect.DelegatingMethodAccessorImpl.invoke(java.lang.Object, java.lang.Object[]) @bci=6, line=25 (Interpreted frame)
+ - java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) @bci=111, line=585 (Interpreted frame)
+ - org.codehaus.classworlds.Launcher.launchEnhanced(java.lang.String[]) @bci=50, line=315 (Interpreted frame)
+ - org.codehaus.classworlds.Launcher.launch(java.lang.String[]) @bci=2, line=255 (Interpreted frame)
+ - org.codehaus.classworlds.Launcher.mainWithExitCode(java.lang.String[]) @bci=99, line=430 (Interpreted frame)
+ - org.codehaus.classworlds.Launcher.main(java.lang.String[]) @bci=1, line=375 (Interpreted frame)
+</pre>
+</div></div>
+
+<p>It's not clear exactly why, but Maven seems to be blocked on accessing some slow remote repository. This is consistent with the observation that the artifact retrieval like the following lines seem to run slow, too:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from glassfish-repository
+[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from glassfish-repository-wsinterop
+[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from java-dev-repository
+[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from repo1.maven.org
+[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from maven2.java.net
+[INFO] snapshot org.glassfish.common:glassfish-mbeanserver:10.0-SNAPSHOT: checking for updates from maven2.java.net-backup
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from glassfish-repository
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from glassfish-repository-wsinterop
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from java-dev-repository
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from repo1.maven.org
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from maven2.java.net
+[INFO] snapshot org.glassfish.common:amx-api:10.0-SNAPSHOT: checking for updates from maven2.java.net-backup
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from glassfish-repository
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from glassfish-repository-wsinterop
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from java-dev-repository
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from repo1.maven.org
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from maven2.java.net
+[INFO] snapshot org.glassfish.connectors:connectors-internal-api:10.0-SNAPSHOT: checking for updates from maven2.java.net-backup
+</pre>
+</div></div>
+
+<p>netstat -p shows that the target is &quot;192.18.49.13&quot; — except that there seems to be no such host. &quot;192.18.49.133&quot; is &quot;wsinterop.sun.com&quot;, so that sounds more like it. Don't know why the output is crippled.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>tcp6       0      0 jennings.SFBay.Su:43163 ::ffff:192.18.49.13:www ESTABLISHED5309/java           
+</pre>
+</div></div>
+
+<p>wsinterop.sun.com is not under heavy load. I browsed the Maven repository in Firefox, but that doesn't seem to show too much lag.</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>last pid: 27109;  load avg:  0.03,  0.03,  0.02;       up 41+22:28:08                                                                                                           14:56:45
+214 processes: 212 sleeping, 1 zombie, 1 on cpu
+CPU states: 97.7% idle,  0.9% user,  1.4% kernel,  0.0% iowait,  0.0% swap
+Memory: 3647M phys mem, 1477M free mem, 2047M swap, 2047M free swap
+
+   PID USERNAME LWP PRI NICE  SIZE   RES STATE    TIME    CPU COMMAND
+ 18924 kohsuke   59  59    0  482M  443M sleep   24:19  1.50% java
+ 27109 kohsuke    1  59    0 2628K 1520K cpu      0:00  0.26% top
+  3886 beuchelt 127  59    0  636M  448M sleep   97:16  0.15% java
+  3971 beuchelt 132  59    0  524M  416M sleep   97:06  0.15% java
+   805 ritzmann  59  59    0  259M  149M sleep   45:17  0.08% java
+ 26628 nobody     1  59    0 4804K 2464K sleep    0:00  0.03% httpd
+   434 root       1  59    0   16M   17M sleep   15:53  0.03% Xorg
+ 26865 nobody     1  59    0 4248K 2508K sleep    0:00  0.03% httpd
+ 26655 nobody     1  59    0 4804K 2464K sleep    0:00  0.03% httpd
+ 26859 nobody     1  59    0 4576K 2536K sleep    0:00  0.03% httpd
+ 26660 nobody     1  59    0 4120K 2412K sleep    0:00  0.03% httpd
+ 26851 nobody     1  59    0 4128K 2400K sleep    0:00  0.02% httpd
+ 16544 beuchelt  17  59    0  148M   40M sleep    8:42  0.02% java
+ 26863 nobody     1  59    0 4416K 2468K sleep    0:00  0.02% httpd
+ 26625 nobody     1  59    0 4548K 2468K sleep    0:00  0.02% httpd
+</pre>
+</div></div>
+
+<p>Perhaps we just need to fork more Apache processes?</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Compress Build Log Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Compress Build Log Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (oleg_nenashev)</span>, last modified by <span class='editor'> Unknown User (broussar)</span> on Dec 20, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Compress Build Log <a href="https://plugins.jenkins.io/compress-buildlog" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><h2 id="CompressBuildLogPlugin-About">About</h2><p>The Compress Build Log Plugin allows to configure jobs to have their build logs compressed. For a long time, Jenkins has supported showing gzipped build logs on the UI and through its APIs, but had no facility to compress build logs. This plugin implements that.</p><h2 id="CompressBuildLogPlugin-Configuringbuildlogcompression">Configuring build log compression</h2><p>In a job configuration, check &quot;Compress Build Log&quot; and save. You're done! From then on, when builds finish, their build log will be compressed to a <code>log.gz</code> file, after which the original <code>log</code> file will be removed. Jenkins will transparently access the <code>log.gz</code> file when the build log is viewed or downloaded.</p><h2 id="CompressBuildLogPlugin-PipelineCompatibility">Pipeline Compatibility</h2><p>From version 1.1, the Compress Build Log Plugin supports compressing full pipeline build logs.</p><p>Note:<a href="https://plugins.jenkins.io/workflow-job" class="external-link" rel="nofollow"> Pipeline: Job</a> plugin prior to version 2.26 stored per-step build logs. This plugin does not support compressing these, only the main log file. As of version 2.26 there is now only 1 log file for pipeline jobs.</p><p>It can be configured either through the UI, or by adding <code>compressBuildLog()</code> to the <code>properties()</code> defined in the Pipeline DSL or Jenkinsfile.</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Changes effective immediately</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Due to how this plugin is implemented, the change to the property will be effective immediately, so that the current build's log will be compressed after it completes. This is different from some other properties that only take effect for subsequent builds (e.g. defining build parameters).</p></div></div><h2 id="CompressBuildLogPlugin-KnownIssues">Known Issues</h2><p>Some plugins may assume that the build log is a text file and just append to it. If that happens after this plugin rewrites the build log, the <code>log.gz</code> file will contain invalid contents. Examples:</p><p>
+<span class="jira-issue" data-jira-key="JENKINS-24171" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-24171?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-24171</a>
+                            -
+            <span class="summary">BFA is blindly adding text to gzipped log</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+     jira-macro-single-issue-export-pdf">Open</span>
+                </span>
+</p><p>As of Pipeline: Job plugin version 2.26, this plugin appears to be broken</p><p>
+<span class="jira-issue" data-jira-key="JENKINS-54678" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54678?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-54678</a>
+                            -
+            <span class="summary">Compression trick not supported by JEP-210</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+     jira-macro-single-issue-export-pdf">Open</span>
+                </span>
+</p><h2 id="CompressBuildLogPlugin-Changelog">Changelog</h2><h3 id="CompressBuildLogPlugin-Version1.2(2017-08-14)">Version 1.2 (2017-08-14)</h3><ul><li><strong>Requires Jenkins 2.7.4</strong></li><li>Add support for compressing full Pipeline build logs (but not per-step logs)</li><li>Add <code>compressBuildLog()</code> symbol for use in Pipeline DSL</li><li>Add support for compressing the logs of matrix configuration builds (i.e. those doing the actual work)</li></ul><h3 id="CompressBuildLogPlugin-Version1.1–releasewasskipped">Version 1.1 – release was skipped</h3><h3 id="CompressBuildLogPlugin-Version1.0(2014-10-13)">Version 1.0 (2014-10-13)</h3><ul><li>Initial release to address the request 
+<span class="jira-issue resolved" data-jira-key="JENKINS-2551" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-2551?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-2551</a>
+                            -
+            <span class="summary">Option to compress build logs</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:17</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

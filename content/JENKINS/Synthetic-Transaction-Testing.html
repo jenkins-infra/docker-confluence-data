@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Synthetic Transaction Testing</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Quality-Engineering.html">Quality Engineering</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Synthetic Transaction Testing
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rtyler)</span>, last modified by <span class='editor'> Unknown User (rarabaolaza)</span> on Jan 31, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class='plugin-tabmeta-details'><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">Target release</th><td class="confluenceTd"></td></tr><tr><th class="confluenceTh">Epic</th><td class="confluenceTd"></td></tr><tr><th class="confluenceTh">Document status</th><td class="confluenceTd"><div class="content-wrapper"><span class="status-macro aui-lozenge">DRAFT</span></div></td></tr><tr><th class="confluenceTh">Document owner</th><td class="confluenceTd"><div class="content-wrapper"><p><a class="confluence-userlink user-mention" data-username="rtyler" href="https://wiki.jenkins.io/display/~rtyler" data-linked-resource-id="37749786" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (rtyler)</a></p></div></td></tr><tr><th class="confluenceTh">Designer</th><td class="confluenceTd"></td></tr><tr><th class="confluenceTh">Developers</th><td class="confluenceTd"><div class="content-wrapper"><p><a class="confluence-userlink user-mention" data-username="rtyler" href="https://wiki.jenkins.io/display/~rtyler" data-linked-resource-id="37749786" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (rtyler)</a></p></div></td></tr><tr><th class="confluenceTh">QE</th><td class="confluenceTd"><div class="content-wrapper"><p><a class="confluence-userlink user-mention" data-username="rarabaolaza" href="https://wiki.jenkins.io/display/~rarabaolaza" data-linked-resource-id="103088463" data-linked-resource-version="1" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (rarabaolaza)</a></p></div></td></tr></tbody></table></div></div><h2 id="SyntheticTransactionTesting-Goals">Goals</h2><ul><li>To run &quot;like-real&quot; user transactions in Jenkins in order to validate that it will perform the tasks that a normal user would expect to function with each change submitted by a Jenkins developer. <span>This would effectively be the first &quot;real&quot; traffic we get in the essentials instance and it will allow us to be the first ones to know if something went wrong and react fast to impact the least users possible.</span></li></ul><h2 id="SyntheticTransactionTesting-Backgroundandstrategicfit">Background and strategic fit</h2><p>Similar to the Acceptance Tests, the goal for Synthetic Transaction tests are to validate key  &quot;user scenarios&quot; within Jenkins, which span multiple plugins that provide functionality to users. Such as &quot;Creating a new Pipeline in Blue Ocean&quot; which may exercise aspects of multiple plugins which work together. Unlike Acceptance Tests, these tests are not intended to cover <em>everything</em> but rather a smaller subset of &quot;smoke tests&quot; to rapidly validate whether Jenkins is behaving how an end-user would expect use Jenkins &quot;for real.&quot;</p><p>Additionally, the long-term goal for Synthetic Transaction tests are that it should be possible to run <em>post-release</em> in a live Jenkins environment, similar to &quot;production synthetic checks&quot; and monitoring for web services.</p><h2 id="SyntheticTransactionTesting-Assumptions">Assumptions</h2><ul><li>Jenkins can drive the testing of itself.</li></ul><h2 id="SyntheticTransactionTesting-Requirements">Requirements</h2><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/><col/></colgroup><tbody><tr><th class="numberingColumn confluenceTh">#</th><th class="confluenceTh">Title</th><th class="confluenceTh">User Story</th><th class="confluenceTh">Notes</th></tr><tr><td class="numberingColumn confluenceTd">1</td><td class="confluenceTd">Execute a synthetic test in a pre-existing Jenkins</td><td class="confluenceTd"><div class="content-wrapper"><p>An existing Jenkins instance must be capable of executing synthetic tests. That is to say, the tests must not require a &quot;full setup of a Jenkins Under Test.&quot;</p></div></td><td class="confluenceTd"> </td></tr><tr><td class="numberingColumn confluenceTd" colspan="1">2</td><td colspan="1" class="confluenceTd">No side-effects</td><td colspan="1" class="confluenceTd"><span class="inline-comment-marker" data-ref="5e03befe-2ebb-4d05-ae9e-e72426e35eb3">Execution of a synthetic check must have no side-effects on the Jenkins instance, i.e. idempotent.</span></td><td colspan="1" class="confluenceTd"> </td></tr><tr><td class="numberingColumn confluenceTd">3</td><td class="confluenceTd">A synthetic test must be fast</td><td class="confluenceTd">Each synthetic test must be able to complete in a matter of seconds or under a couple minutes, such as not to adversely tax the system.</td><td class="confluenceTd"> </td></tr><tr><td class="numberingColumn confluenceTd" colspan="1">4</td><td colspan="1" class="confluenceTd">A synthetic test must provide  consistent results</td><td colspan="1" class="confluenceTd">Each test should not have any flakiness, the results of a test should be <em>very</em> trustworthy to Jenkins developers.</td><td colspan="1" class="confluenceTd"> </td></tr><tr><td class="numberingColumn confluenceTd" colspan="1">5</td><td colspan="1" class="confluenceTd">Each post-release synthetic test must be useful to a user</td><td colspan="1" class="confluenceTd">Post-release synthetic tests should appear, or be understood, by end-users as tutorials, or examples of how to use Jenkins Pipeline (for example).</td><td colspan="1" class="confluenceTd"> </td></tr><tr><td class="numberingColumn confluenceTd" colspan="1">6</td><td colspan="1" class="confluenceTd">Each synthetic test should be runnable pre- and post-release</td><td colspan="1" class="confluenceTd">The Pipeline for Jenkins should execute synthetic tests at the end of the Pipeline, but also the tests should be able to be executed post-release/post-upgrade.</td><td colspan="1" class="confluenceTd"> </td></tr></tbody></table></div><p> </p><h2 id="SyntheticTransactionTesting-Questions">Questions</h2><p>Below is a list of questions to be addressed as a result of this requirements document:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">Question</th><th class="confluenceTh">Outcome</th></tr><tr><td class="confluenceTd"><p>Do we want to have one test or several? Do we want to do it via UI or via CLI?</p></td><td class="confluenceTd">We will need several test cases, one for each key user transaction</td></tr><tr><td colspan="1" class="confluenceTd">Cleanup of the test environment?</td><td colspan="1" class="confluenceTd">???</td></tr><tr><td colspan="1" class="confluenceTd">Will the listed User Transactions catch &quot;known&quot; past-issues released to the Jenkins user base.</td><td colspan="1" class="confluenceTd">???</td></tr><tr><td colspan="1" class="confluenceTd">For Jenkins Developers, are many of their initiatives able to be validated with immutable (no side-effect) synthetic tests.</td><td colspan="1" class="confluenceTd"> </td></tr><tr><td colspan="1" class="confluenceTd">How are synthetic tests updated?</td><td colspan="1" class="confluenceTd"> </td></tr></tbody></table></div><h2 id="SyntheticTransactionTesting-UserTransactions">User Transactions</h2><ul><li><span class="inline-comment-marker" data-ref="b38488df-a704-46f8-a816-2da259e28389">Execute</span> a Pipeline with JUnit test results and an Artifact</li><li>Execute a (Declarative) Pipeline with an email notification in the post directive</li><li>Execute a Multibranch Pipeline which must load a <code>Jenkinsfile</code> from GitHub in order to execute.</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

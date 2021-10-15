@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : PXE Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : PXE Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'pxe' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin enhances Jenkins to support network-booting PCs for rapid, hands-free installations of various OSes, thereby making new slave installations easier.</p>
+
+<p>More specifically, this plugin adds the TFTP service and proxy DHCP service to Jenkins. These two combinations enable PCs on the same network to <a href="http://en.wikipedia.org/wiki/Preboot_Execution_Environment" class="external-link" rel="nofollow">network boot (also known as PXE boot)</a> and install OSes such as Linux, Solaris, and Windows.</p>
+
+<p>This plugin assumes that your network already has a functioning DHCP server, running on a computer different from Jenkins master.</p>
+
+<h2 id="PXEPlugin-Setup">Set up</h2>
+
+<p>Download the <code>*.iso</code> files for OSes that you want to install. Currently, the following OSes are supported. See the respective page for what ISO file you need.</p>
+
+<ul>
+	<li><a href="OpenSolaris-PXE-boot-ISO-images.html">OpenSolaris</a></li>
+	<li><a href="Ubuntu-PXE-boot-ISO-images.html">Ubuntu</a></li>
+	<li><a href="Fedora-PXE-boot-ISO-images.html">Fedora</a></li>
+	<li><a href="CentOS-PXE-boot-ISO-images.html">CentOS</a></li>
+	<li><a href="VMWare-ESXi-PXE-boot-ISO-images.html">VMWare ESXi</a></li>
+	<li><a href="OracleVM-Server-PXE-boot-ISO-images.html">OracleVM Server</a></li>
+</ul>
+
+
+<p>Place those ISO files on the Jenkins master, and tell Jenkins where they are. Go to &quot;Manage Jenkins&quot; &gt; &quot;Network Slave Installation Management&quot; &gt; &quot;Configure&quot;:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37323889/37519476.png" data-image-src="attachments/37323889/37519476.png" data-unresolved-comment-count="0" data-linked-resource-id="37519476" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pxe-cd.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323889" data-linked-resource-container-version="37"></span></p>
+
+<p>Configure Jenkins about the additional configuration information. This is necessary because TFTP and DHCP services require the root privilege on Unix.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37323889/37519477.png" data-image-src="attachments/37323889/37519477.png" data-unresolved-comment-count="0" data-linked-resource-id="37519477" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pxe-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323889" data-linked-resource-container-version="37"></span></p>
+
+<h2 id="PXEPlugin-InstallingPCs">Installing PCs</h2>
+
+<p>Put a PC on the same network as the Jenkins master (IOW, topology-wise close enough so that broadcast UDP packets from PCs get to Jenkins), and boot from network (on most PCs, this is done by pressing F12 during the BIOS POST screen.)</p>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">If pressing F12 doesn&#39;t help</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Some BIOS has a separate configuration entry to enable/disable PXE boot. Some BIOS requires you to tweak boot priority list to boot from network. If your PC can't seem to boot from network, go into BIOS set up, and look for keywords like 'PXE', 'LAN', 'boot priority', 'boot device', etc.</p></div></div>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Installing PCs on the remote network</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If your PCs to be network booted are located in a different network, run &quot;<code>java -jar</code> <code><a href="http://maven.dyndns.org/2/org/jvnet/hudson/pxeboot/hudson-proxy-service/" class="external-link" rel="nofollow">hudson-proxy-service-jar-with-dependencies.jar</a></code> <code>UrlOfJenkins</code>&quot; on a computer in the same network as the new PC to have it relay the request.</p></div></div>
+
+<p>Once the network boot menu appears. Choose the OS that you want to install.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37323889/37519478.png" data-image-src="attachments/37323889/37519478.png" data-unresolved-comment-count="0" data-linked-resource-id="37519478" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pxe-bootmenu.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323889" data-linked-resource-container-version="37"></span></p>
+
+<p>Depending on the OSes, you can choose to install interactively or automatically. The interactive installation option can be convenient for installing PCs for use outside Jenkins.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/37323889/37519479.png" data-image-src="attachments/37323889/37519479.png" data-unresolved-comment-count="0" data-linked-resource-id="37519479" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pxe-ubuntu-menu.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="37323889" data-linked-resource-container-version="37"></span></p>
+
+<p>If you choose automatic installation, PCs will install itself and reboot by itself.</p>
+
+<h2 id="PXEPlugin-FutureWork">Future Work</h2>
+
+<ul>
+	<li>Documenting Windows auto installation</li>
+	<li>Advanced mode that lets people specify the full kickstart/preseed/ai-manifest files</li>
+	<li>Automatically register newly installed PCs as Jenkins slaves</li>
+</ul>
+
+
+<ul>
+	<li>OS support is extensible. Contributions of new OS types are welcome.</li>
+</ul>
+
+
+<h2 id="PXEPlugin-Changelog">Changelog</h2>
+
+
+<h5 id="PXEPlugin-Version1.5(Feb22010)">Version 1.5 (Feb 2 2010)</h5>
+
+<ul>
+	<li>Supported booting OracleVM Server.</li>
+	<li>Supported booting VMWare ESXi.</li>
+</ul>
+
+
+<h5 id="PXEPlugin-Version1.4(Jan92010)">Version 1.4 (Jan 9 2010)</h5>
+
+<ul>
+	<li>Allow override of root URL with <code>hudson.plugins.pxe.PXE.rootURL</code> system property.</li>
+</ul>
+
+
+<h5 id="PXEPlugin-Version1.3(Sep32009)">Version 1.3 (Sep 3 2009)</h5>
+
+<ul>
+	<li>Ubuntu installer exposes more configuration options now.</li>
+	<li>DHCP proxy service can now selectively respond to requests, allowing multiple network boot services to co-exist.</li>
+</ul>
+
+
+<h5 id="PXEPlugin-Version1.2(May152009)">Version 1.2 (May 15 2009)</h5>
+
+<ul>
+	<li>Added <a href="http://partedmagic.com/" class="external-link" rel="nofollow">Parted Magic</a> support for disk re-partitioning</li>
+	<li>Updated Ubuntu preseeding file to work with 9.04.</li>
+</ul>
+
+
+<h5 id="PXEPlugin-Version1.1(May102009)">Version 1.1 (May 10 2009)</h5>
+
+<ul>
+	<li>Corrected typo</li>
+</ul>
+
+
+<h5 id="PXEPlugin-Version1.0(May32009)">Version 1.0 (May 3 2009)</h5>
+
+<ul>
+	<li>Initial version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323889/37519476.png">pxe-cd.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323889/37519477.png">pxe-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323889/37519478.png">pxe-bootmenu.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/37323889/37519479.png">pxe-ubuntu-menu.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:40</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

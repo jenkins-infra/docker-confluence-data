@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Consul-KV-Builder Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Consul-KV-Builder Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jimmyraywv)</span>, last modified on Oct 26, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Consul KV Builder <a href="https://plugins.jenkins.io/consul-kv-builder" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+ <br/> This plugin adds a new build step and build wrapper that are used to read/write/delete Key/Value data from/to specified HashiCorp <a href="https://www.consul.io/" class="external-link" rel="nofollow">Consul</a> servers. or clusters.</p><h1 id="Consul-KV-BuilderPlugin-UseCase">Use Case</h1><p>* You have a build that needs to read data from Consul Key/Value store and use those data later in the build or even in downstream parameterized builds.</p><p>* You have a build that needs to deploy, and part of that deployment is to configure Consul Key/Value settings.</p><h1 id="Consul-KV-BuilderPlugin-BuildWrapperUsage">Build Wrapper Usage</h1><p>The Consul K/V Builder Plugin can be used as a Build Wrapper, so it is added to the project configuration by selecting under the &quot;Build Environment&quot; checkboxes. As a build wrapper, it can be added multiple times to read multiple Key/Value pairs.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/99123209.png" data-image-src="attachments/98402775/99123209.png" data-unresolved-comment-count="0" data-linked-resource-id="99123209" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="BuildWrapper.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h1 id="Consul-KV-BuilderPlugin-BuildStepUsage">Build Step Usage</h1><p>The Consul K/V Builder Plugin can also be used as a Build Step, so it is added to the project configuration via the “Add Build Step” button towards the bottom of the project configuration window. As a build step, it can be added multiple times to read/write/delete multiple Key/Value pairs.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="200" src="attachments/98402775/98598946.png" data-image-src="attachments/98402775/98598946.png" data-unresolved-comment-count="0" data-linked-resource-id="98598946" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-step.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h3 id="Consul-KV-BuilderPlugin-ToreaddatafromConsul,youconfigurethebuildstepwiththefollowingsettings:">To read data from Consul, you configure the build step with the following settings:</h3><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Field name</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td class="confluenceTd"><p>ACL Token</p></td><td class="confluenceTd"><p>optional, supplies the Consul ACL entry ID that is used to access data</p></td></tr><tr><td class="confluenceTd"><p>Host URL</p></td><td class="confluenceTd"><p>URL of the Consul server/cluster</p></td></tr><tr><td class="confluenceTd"><p>Key</p></td><td class="confluenceTd"><p>Key used to store and lookup data in Consul</p></td></tr><tr><td class="confluenceTd"><p>ENV Variable Key</p></td><td class="confluenceTd"><p>Key used to store the data into a Jenkins build environment variable</p></td></tr></tbody></table></div><p><br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/98598948.png" data-image-src="attachments/98402775/98598948.png" data-unresolved-comment-count="0" data-linked-resource-id="98598948" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="read.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h3 id="Consul-KV-BuilderPlugin-TowriteConsuldata,youmustexposethe&quot;Advanced&quot;settings.">To write Consul data, you must expose the &quot;Advanced&quot; settings.</h3><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Field name</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td class="confluenceTd"><p>Request Mode</p></td><td class="confluenceTd"><p>Set to write</p></td></tr><tr><td class="confluenceTd"><p>Debug Mode</p></td><td class="confluenceTd"><p>Optionally enable debug mode for additional logging</p></td></tr><tr><td class="confluenceTd"><p>Value</p></td><td class="confluenceTd"><p>Value to write to Consul with the specified key from above</p></td></tr><tr><td class="confluenceTd"><p>API URL Override</p></td><td class="confluenceTd"><p>optional, used to specify the non-default URI for the Consul server RESTful HTTP API endpoints</p></td></tr><tr><td class="confluenceTd"><p>Connection timeout</p></td><td class="confluenceTd"><p>optional, used to specify connection timeout, default is 10 seconds</p></td></tr><tr><td class="confluenceTd"><p>Response timeout</p></td><td class="confluenceTd"><p>optional, used to specify response timeout, default is 30 seconds</p></td></tr></tbody></table></div><p><br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/98598953.png" data-image-src="attachments/98402775/98598953.png" data-unresolved-comment-count="0" data-linked-resource-id="98598953" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="write.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><div class="confluence-information-macro confluence-information-macro-tip"><p class="title">Handy Hint</p><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This example shows the use of a build parameter <em>acl_token</em></p></div></div><h3 id="Consul-KV-BuilderPlugin-TodeleteConsuldata,youmustexposethe&quot;Advanced&quot;settings,andchoosedelete.">To delete Consul data, you must expose the &quot;Advanced&quot; settings, and choose delete.</h3><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Field name</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td class="confluenceTd"><p>Request Mode</p></td><td class="confluenceTd"><p>Set to delete</p></td></tr><tr><td class="confluenceTd"><p>Debug Mode</p></td><td class="confluenceTd"><p>Optionally enable debug mode for additional logging</p></td></tr><tr><td class="confluenceTd"><p>Value</p></td><td class="confluenceTd"><p>N/A</p></td></tr><tr><td class="confluenceTd"><p>API URL Override</p></td><td class="confluenceTd"><p>optional, used to specify the non-default URI for the Consul server RESTful HTTP API endpoints</p></td></tr><tr><td class="confluenceTd"><p>Connection timeout</p></td><td class="confluenceTd"><p>optional, used to specify connection timeout, default is 10 seconds</p></td></tr><tr><td class="confluenceTd"><p>Response timeout</p></td><td class="confluenceTd"><p>optional, used to specify response timeout, default is 30 seconds</p></td></tr></tbody></table></div><p><br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/98598952.png" data-image-src="attachments/98402775/98598952.png" data-unresolved-comment-count="0" data-linked-resource-id="98598952" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="delete.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h1 id="Consul-KV-BuilderPlugin-PipelineUsage">Pipeline Usage</h1><p>This plugin can be used in Jenkins Pipeline scripts with &quot;wrap&quot; and &quot;step&quot; constructs:</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/99123211.png" data-image-src="attachments/98402775/99123211.png" data-unresolved-comment-count="0" data-linked-resource-id="99123211" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Pipeline_step_wrap.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="150" src="attachments/98402775/135467505.png" data-image-src="attachments/98402775/135467505.png" data-unresolved-comment-count="0" data-linked-resource-id="135467505" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pipeline-read-wrap.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h1 id="Consul-KV-BuilderPlugin-Features">Features</h1><p> </p><h3 id="Consul-KV-BuilderPlugin-BuildWrapper">Build Wrapper</h3><p>* Read Key/Value data from Consul server/cluster, write to ENV variable</p><h3 id="Consul-KV-BuilderPlugin-BuildStep">Build Step</h3><p>* Read Key/Value data from Consul server/cluster, write to ENV variable<br/> * Write Key/Value data to Consul server/cluster<br/> * Delete Key/Value data from Consul server/cluster<br/> * Optional debug mode for additional logging<br/> * Supports Consul ACL ids, including using build parameters for ACL ids<br/> * Optional override Consul RESTful HTTP API URI<br/> * Optional override connection timeout<br/> * Optional override response timeout</p><h3 id="Consul-KV-BuilderPlugin-GlobalSettings">Global Settings</h3><p>* Set global settings that can be leveraged in jobs</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="800" src="attachments/98402775/101580819.png" data-image-src="attachments/98402775/101580819.png" data-unresolved-comment-count="0" data-linked-resource-id="101580819" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="global-settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98402775" data-linked-resource-container-version="32"></span></p><h1 id="Consul-KV-BuilderPlugin-Changelog">Changelog</h1><h3 id="Consul-KV-BuilderPlugin-Version1.0.6(May112016)">Version 1.0.6 (May 11 2016)</h3><p>* Initial release</p><h3 id="Consul-KV-BuilderPlugin-Version2.0.4(June32016)">Version 2.0.4 (June 3 2016)</h3><p>* Added Build Wrapper and Jenkins Pipeline compatibility</p><h3 id="Consul-KV-BuilderPlugin-Version2.0.7(September202016)">Version 2.0.7 (September 20 2016)</h3><p>* Added build/run failure model settings<br/> * Added listener error settings</p><h3 id="Consul-KV-BuilderPlugin-Version2.0.12(October32016)">Version 2.0.12 (October 3 2016)</h3><p>* Added global Consul settings that can used/ignored at the job-config level</p><h3 id="Consul-KV-BuilderPlugin-Version2.0.13(November22016)">Version 2.0.13 (November 2 2016)</h3><p>* Attempted to Fix issue: <a href="https://github.com/jenkinsci/consul-kv-builder-plugin/issues/5" class="external-link" rel="nofollow">https://github.com/jenkinsci/consul-kv-builder-plugin/issues/5</a>. Pipeline Steps implementing the SimpleBuildStep interface cannot write data to run-level environment variables.</p><p>The workaround may be to write a single-value custom step that returns a string, or use the wrapper to set a local var in the node.</p><div class="code panel pdl" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;border-bottom-style: solid;"><b>Pipeline Wrapper Workarounds</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node(&#39;master&#39;) {
+    TEST_KEY = &#39;&#39;
+
+    wrap([$class: &#39;ConsulKVReadWrapper&#39;, reads: [[aclToken: &#39;&#39;, apiUri: &#39;&#39;, debugMode: &#39;ENABLED&#39;, envKey: &#39;test_key&#39;, hostUrl: &#39;&#39;, key: &#39;test/test-key&#39;]]]) {
+        echo env.test_key
+        TEST_KEY = env.test_key
+    }
+
+    echo TEST_KEY
+}
+
+//or for a global var:
+
+import groovy.transform.Field
+@Field String TEST_KEY
+
+node(&#39;master&#39;) {
+
+    wrap([$class: &#39;ConsulKVReadWrapper&#39;, reads: [[aclToken: &#39;&#39;, apiUri: &#39;&#39;, debugMode: &#39;ENABLED&#39;, envKey: &#39;test_key&#39;, hostUrl: &#39;&#39;, key: &#39;test/test-key&#39;]]]) {
+        echo env.test_key
+        TEST_KEY = env.test_key
+    }
+
+    echo TEST_KEY
+}
+
+node (&#39;master&#39;) {
+    echo TEST_KEY
+}
+
+//Use Wrapper to get multiple key/values
+
+node (&#39;master&#39;) {
+    wrap([$class: &#39;ConsulKVReadWrapper&#39;, reads: [[aclToken: &#39;&#39;, apiUri: &#39;&#39;, debugMode: &#39;ENABLED&#39;, envKey: &#39;test_key&#39;, hostUrl: &#39;&#39;, key: &#39;test/test-key&#39;], [aclToken: &#39;&#39;, apiUri: &#39;&#39;, debugMode: &#39;ENABLED&#39;, envKey: &#39;test_key2&#39;, hostUrl: &#39;&#39;, key: &#39;test/test-key&#39;], [aclToken: &#39;&#39;, apiUri: &#39;&#39;, debugMode: &#39;ENABLED&#39;, envKey: &#39;test_key3&#39;, hostUrl: &#39;&#39;, key: &#39;test/test-key&#39;]]]) {
+    	echo env.test_key
+    	echo env.test_key2
+    	echo env.test_key3
+	}
+}
+
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/98598947.png">build-step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/98598946.png">build-step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/98598948.png">read.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/98598952.png">delete.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/98598953.png">write.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/99123210.png">BuildWrapper.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/99123209.png">BuildWrapper.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/99123211.png">Pipeline_step_wrap.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/101580819.png">global-settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98402775/135467505.png">pipeline-read-wrap.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

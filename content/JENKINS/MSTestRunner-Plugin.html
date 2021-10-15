@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : MSTestRunner Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : MSTestRunner Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ido_ran)</span>, last modified by <span class='editor'> Unknown User (armfergom)</span> on Sep 08, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View MSTestRunner <a href="https://plugins.jenkins.io/mstestrunner" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>This plugin allow you to execute test using MSTest command line tool.</p></p>
+
+<h2 id="MSTestRunnerPlugin-Description">Description</h2>
+
+<p>This plugin allow you to execute test using MSTest command line tool.</p>
+
+<p>MSTest are test classes for .NET framework which are integrated into Visual Studio. You should use a plugin to process the result files, I recommend using <a href="https://wiki.jenkins-ci.org/display/JENKINS/MSTest+Plugin" class="external-link" rel="nofollow">MSTest Jenkins Plugin</a>. You can read my post about <a href="http://dotdotnet.blogspot.co.il/2011/11/building-net-application-with-jenkins.html" class="external-link" rel="nofollow">how to setup Jenkins with MSTest</a> in my blog.</p>
+
+<h2 id="MSTestRunnerPlugin-Configuration">Configuration</h2>
+
+<p>To configure a MSTest installation, go to <em>Manage Jenkins -&gt; Configure System</em> (or <em>Manage Jenkins -&gt; Global Tool Configuration</em> in Jenkins 2.8, possibly earlier) and add a MSTest installation. <strong>Name</strong> is mandatory. If <strong>Path to MSTest</strong> is left blank, the default is <em>MSTest.exe</em>.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="680" src="attachments/59510156/98598917.png" data-image-src="attachments/59510156/98598917.png" data-unresolved-comment-count="0" data-linked-resource-id="98598917" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="install.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59510156" data-linked-resource-container-version="24"></span></p>
+
+
+<p>MSTestRunner can be used as a build step. The screenshot below shows the configuration parameters available where the <strong>Test Files</strong> and the <strong>Result File Name</strong> are mandatory. The MSTest Version is not mandatory. If the default is used, the plugin will look for <em>MSTest.exe</em>, so ideally it should be in the path.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="680" src="attachments/59510156/98598913.png" data-image-src="attachments/59510156/98598913.png" data-unresolved-comment-count="0" data-linked-resource-id="98598913" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="mstestrunner-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59510156" data-linked-resource-container-version="24"></span></p>
+
+
+<p>For further configuration tips, see each field's inline help.</p>
+
+<h2 id="MSTestRunnerPlugin-VersionHistory">Version History</h2>
+
+<h3 id="MSTestRunnerPlugin-Version1.3.0(25/05/2016)">Version 1.3.0 (25/05/2016)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34392" class="external-link" rel="nofollow">JENKINS-34392 </a> Upgrade to new plugin parent POM</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30457" class="external-link" rel="nofollow">JENKINS-30457 </a> Relative paths to test files with dots failing.</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34378" class="external-link" rel="nofollow">JENKINS-34378 </a> Validation for the test result filename field.</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version1.2.0(09/12/2015)">Version 1.2.0 (09/12/2015)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28869" class="external-link" rel="nofollow">JENKINS-28869</a> - Fixes problem with newline tokennization (thanks to Thomas Blitz)</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29389" class="external-link" rel="nofollow">JENKINS-29389</a> - Quotation marks for /testcategories argument, must beused only when multiple category was specifed (thanks to Nikolas Falco)</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29391" class="external-link" rel="nofollow">JENKINS-29391</a> - add support to full path in testFiles (thanks to Nikolas Falco)</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30292" class="external-link" rel="nofollow">JENKINS-30292</a> - Not visible in Conditional BuildStep Plugin (thanks to Ido Ran)</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version1.1.0(06/04/2014)">Version 1.1.0 (06/04/2014)</h3>
+
+<ul>
+	<li>Add Continue On Failed Test checkbox which allows to report success even when test have failed (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20367" class="external-link" rel="nofollow">JENKINS-20367</a>)</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version1.0.1(06/06/2013)">Version 1.0.1 (06/06/2013)</h3>
+
+<ul>
+	<li>Use workspace path instead of module path to support multi-module build (<a href="https://github.com/jenkinsci/mstestrunner-plugin/pull/2" class="external-link" rel="nofollow">#2</a> by <a href="https://github.com/blazee" class="external-link" rel="nofollow">blazee</a>)</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version1.0.0(31/05/2013)">Version 1.0.0 (31/05/2013)</h3>
+
+<ul>
+	<li>Path to test containers (DLLs) are allowed to have space in them.</li>
+	<li>Test containers can now only be separated with new lines because they are allowed to have space in them.</li>
+	<li>The license of this plugin is now MIT.</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version0.2.1(09/14/2012)">Version 0.2.1 (09/14/2012)</h3>
+
+<ul>
+	<li>Fix the bug in which the flag /noisolation was not added by default.</li>
+	<li>Add new option in MSTest config (Manage Jenkins -&gt; Configure System -&gt; MSTest) name Omit Noisolation. Checking this option will omit the /noisolation flag from the call to MSTest.</li>
+</ul>
+
+
+<h3 id="MSTestRunnerPlugin-Version0.2(09/02/2012)">Version 0.2 (09/02/2012)</h3>
+
+<ul>
+	<li>Add parameter for running MSTest with or without isolation (thanks to <a href="https://github.com/roicp" class="external-link" rel="nofollow">roicp</a> <a href="https://github.com/jenkinsci/mstestrunner-plugin/pull/1" class="external-link" rel="nofollow">#1</a>)</li>
+</ul>
+
+
+<p><span style="text-decoration: underline;">Notice</span><br/>
+Due to update in version 0.2 the plugin do not add /noisolation flag by default which break MSTest on some systems.</p>
+
+<p>To work around this problem until then either downgrade to 0.1 or add /noisolation flag in Manage Jenkins -&gt; Configure System -&gt; MSTest -&gt; Default Paramters.</p>
+
+<p>You can upgrade to version 0.2.1 which fix the problem.</p>
+
+
+<h3 id="MSTestRunnerPlugin-Version0.1(01/15/2012)">Version 0.1 (01/15/2012)</h3>
+
+<ul>
+	<li>Initial release </li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510156/98598914.png">mstestrunner-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510156/98598913.png">mstestrunner-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510156/98598916.png">mstestrunnner-install.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510156/98598915.png">mstestrunnner-install.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59510156/98598917.png">install.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

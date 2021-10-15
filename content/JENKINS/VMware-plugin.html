@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : VMware plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : VMware plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stephenconnolly2)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'vmware' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>This plugin is up for adoption.</strong> Want to help improve this plugin? <a href="/display/JENKINS/Adopt+a+Plugin" title="Adopt a Plugin">Click here to learn more</a>!</p></div></div>
+<p>This plugin allows you to start a <a href="http://www.vmware.com/" class="external-link" rel="nofollow">VMware</a> Virtual Machine before a build and stop it again after the build completes.</p>
+
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p>This plugin is unmaintained. Significant changes were made in 2008-2009, but they were not completed or released. This plugin may be deprecated and removed from the Update Center if a new maintainer does not volunteer.</p>
+</div></div>
+
+<h1 id="VMwareplugin-ConfiguringtheVMwarePlugin">Configuring the VMware Plugin</h1>
+
+<ol>
+	<li>Install VMware VIX on the Hudson Server (Currently the plugin only works with VMware Server, the recommended version of VMware VIX for use with VMware Server is VMware VIX 1.0)</li>
+	<li>Install the vmware Hudson plugin.</li>
+	<li>You need to configure the VMware hosts in the Hudson System Configuration:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/2916596/3080248.gif" data-image-src="attachments/2916596/3080248.gif" data-unresolved-comment-count="0" data-linked-resource-id="3080248" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="global_config.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="2916596" data-linked-resource-container-version="17"></span></li>
+	<li>Enable the &quot;VMware Server VIX Virtual Machine Activation&quot; option in the Build Environment for your Job.</li>
+	<li>Configure the required options<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/2916596/3080247.gif" data-image-src="attachments/2916596/3080247.gif" data-unresolved-comment-count="0" data-linked-resource-id="3080247" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_config.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="2916596" data-linked-resource-container-version="17"></span><br class="atl-forced-newline"/></li>
+</ol>
+
+
+<p>Meaning of parameters:</p>
+<ul>
+	<li>Path to VMware VIX Libraries - this is the path to the directory containing the vix shared libraries / DLL</li>
+	<li>Host - This is the IP address or DNS name of the machine running VMware Server</li>
+	<li>Username - This is the username used to login to the machine running VMware Server</li>
+	<li>Password - This is the password used to login to the machine running VMware Server</li>
+	<li>Port - This is normally 902.  It is the port on the machine running VMware Server that VMware VIX should attempt to connect on</li>
+	<li>VMX Config File - This is the virtual machine to control.  Note: it must be registered in VMware Server in order to control it.</li>
+	<li>Pre-build - What to do with this virtual machine before starting the build.</li>
+	<li>Post-build - What to do with this virtual machine after the build completes.</li>
+</ul>
+
+
+<h1 id="VMwareplugin-Deployment">Deployment</h1>
+
+<p>Here is an example deployment diagram: <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/2916596/3080244.gif" data-image-src="attachments/2916596/3080244.gif" data-unresolved-comment-count="0" data-linked-resource-id="3080244" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="deployment-diag.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="2916596" data-linked-resource-container-version="17"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<h1 id="VMwareplugin-EnvironmentVariableInjection">Environment Variable Injection</h1>
+
+<p>If you are running in a DHCP or other dynamic IP address assignment network and you do not have control over DNS servers, or if you are running Guest operating systems that do not work with dynamic DNS, it may not be possible to know what the IP addresses of the VMs you are running are.</p>
+
+<p>The VMware plugin can help you.</p>
+
+<p>Have the guest machine make a HTTP GET request of the following URL:http://_yourhudsonserverurl_/plugin/vmware/set?name=BLAH<br/>
+This will set the environment variable BLAH to the IP address of the last machine to make the GET request.</p>
+
+<p>If your machine is working through a proxy server, you can usehttp://<em>yourhudsonserverurl</em>/plugin/vmware/set?name=BLAH&amp;override=192.168.1.45<br/>
+To clear an IP address use the URL
+<br class="atl-forced-newline"/>  http://_yourhudsonserverurl_/plugin/vmware/unset?name=BLAH<br class="atl-forced-newline"/>
+And finally, if your guest machine needs to link itself up with other guest machines, the URLhttp://<em>yourhudsonserverurl</em>/plugin/vmware/query?name=BLAH<br/>
+will return the last IP address registered with the name BLAH 
+<br class="atl-forced-newline"/></p>
+
+<h1 id="VMwareplugin-VersionHistory">Version History</h1>
+
+
+<h3 id="VMwareplugin-Version0.8(09/04/2008)">Version 0.8 (09/04/2008)</h3>
+
+<ul>
+	<li>Hopefully fixed <a href="https://hudson.dev.java.net/issues/show_bug.cgi?id=1419" class="external-link" rel="nofollow">ISSUE-1419</a></li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.6(04/12/2007)">Version 0.6 (04/12/2007)</h3>
+
+<ul>
+	<li>Adds the ability to cause the build to wait until VM has reported it's IP address via the HTTP GET mechanism introduced in 0.5 </li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.5(03/12/2007)">Version 0.5 (03/12/2007)</h3>
+
+<ul>
+	<li>Now provides a mechanism to feed VM ip addresses into the build environment.  </li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.4.0(07/11/2007)">Version 0.4.0 (07/11/2007)</h3>
+
+<ul>
+	<li>Synchronizing with the latest version of the JNA library. </li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.3(23/10/2007)">Version 0.3 (23/10/2007)</h3>
+
+<ul>
+	<li>Updated plugin internal documentation to remove <strong>WARNINGS</strong> as these are now redundant</li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.2(01/10/2007)">Version 0.2 (01/10/2007)</h3>
+
+<ul>
+	<li>First Alpha release. </li>
+</ul>
+
+
+<h3 id="VMwareplugin-Version0.1(28/09/2007)">Version 0.1 (28/09/2007)</h3>
+
+<ul>
+	<li>Initial (pre-alpha) release. <strong>WARNING!</strong> there are issues with individual jobs hanging if VMware VIX looses connectivity with the VM while waiting for it to start up.  It is not recommended to use this plugin on a Hudson instance that cannot be restarted (To free up the job.  i.e. the job will sit  there until the JVM is restarted. VIX is a native library, and the Hudson JVM cannot kill the thread that VIX starts to wait for the VM to start.  The next version will use timeouts, or use a Java thread to allow Hudson to kill a Job).</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916596/3080243.gif">vmware-setup.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916596/3080244.gif">deployment-diag.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916596/3080247.gif">job_config.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916596/3080248.gif">global_config.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:57</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

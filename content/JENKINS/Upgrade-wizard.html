@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Upgrade wizard</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins-2.0.html">Jenkins 2.0</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Upgrade wizard
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Mar 18, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><a href="https://issues.jenkins-ci.org/browse/JENKINS-33568">JENKINS-33568</a> tracks this</p></div></div>
+
+<h1 id="Upgradewizard-Motivations">Motivations</h1>
+<p>Users upgrading to 2.0 should get the same level of functionalities to users who are installing 2.0 from scratch.</p>
+
+<h1 id="Upgradewizard-StagedFixes">Staged Fixes</h1>
+<p>In the interest of solving this in time for 2.0, the fix will be staged:</p>
+
+<h3 id="Upgradewizard-Step0:stop-gapfix()">Step 0: stop-gap fix (<a href="https://issues.jenkins-ci.org/browse/JENKINS-33662">JENKINS-33662</a>)</h3>
+<p>You upgrade your binary from 1.x to 2.x (imagine <code>apt-get install jenkins=2.0</code>), you reboot Jenkins (imagine <code>service jenkins restart</code>), then your Jenkins comes up in operational status like your past 1.x→1.y upgrade. It will start executing builds and otherwise function normally.</p>
+
+<p>When a user with administrative right access Jenkins web UI, s/he gets a highly visible notice that cannot be ignored on every page of Jenkins to steer him/her into going through the wizard. The following image is an example of this for illustration only:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96076729/96305211.png" data-image-src="attachments/96076729/96305211.png" data-unresolved-comment-count="0" data-linked-resource-id="96305211" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="upgrade-wizard.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96076729" data-linked-resource-container-version="8"></span></p>
+
+<p>(The wording will be changed to &quot;Install the rest of 2.0 functionalities&quot; or something like that.)</p>
+
+<p>In more practical terms, this means the followings:</p>
+
+<ul>
+	<li>if the instance is unsecured (the default state of 1.x installation), then every anonymous user visiting the page will see this banner</li>
+	<li>if the instance is secured, only subset of users will see this after logging in.</li>
+</ul>
+
+
+
+<p>Clicking this link will hit the endpoint that schedules the installation of Pipeline as Code plugins and take the user to the update center UI.</p>
+
+<p>As the admin user is going through the setup wizard, Jenkins will continue to function as usual for non-admin users.</p>
+
+
+
+<h3 id="Upgradewizard-Step1:recommendedplugininstallation()">Step 1: recommended plugin installation (<a href="https://issues.jenkins-ci.org/browse/JENKINS-33663">JENKINS-33663</a>)</h3>
+<p>Instead of taking users straight to the update center UI, we'll take users through a modified version of the setup wizard. Some wording changes might be needed (TODO: try the setup wizard to see if the flow is adequate from the perspective of upgrading users.)</p>
+
+
+<p>The user gets a choice of installing the recommended set of plugins (ongoing discussion on whether or not that set should be different from what we already have), or skip the plugin addition altogether.</p>
+
+
+
+<h3 id="Upgradewizard-Step2:securebydefault">Step 2: secure by default</h3>
+<p>Build on step 1, and add the security part of the setup wizard.</p>
+
+<p>If Jenkins is already secured, this part shall be skipped.</p>
+
+
+
+<h1 id="Upgradewizard-Timeline">Timeline</h1>
+<p>Step 0 is expected to land before beta. Step 1 development shall begin ASAP, but it's targeted to 2.1, which is the release that happens one week after 2.0. Step 2 development should begin after step 1 is completed.</p>
+
+<h1 id="Upgradewizard-Considerations">Considerations</h1>
+<ul>
+	<li>Due to the release time line, the amount of effort we can spend on this is limited. I think this proposal minimizes the amount of changes that need to happen to get this in.</li>
+	<li>This design ensures that Jenkins comes up functional. Jenkins admin can come in later and go through the upgrade wizard when s/he is ready.</li>
+	<li>The default path for upgrading users should be to get the recommended set of functionalities. This design does that by reusing the existing setup wizard.</li>
+	<li>There should be an option for people who know what they are doing to stay minimal and opt out of 2.0 functionalities. This design does that by reusing the existing setup wizard.</li>
+</ul>
+
+
+<h1 id="Upgradewizard-ImplementationNotes">Implementation Notes</h1>
+<p><code>PageDecorator</code> provides a means to put up this kind of banner.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96076729/96305211.png">upgrade-wizard.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

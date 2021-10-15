@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : PcLint options</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Warnings-Plugin.html">Warnings Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : PcLint options
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (ralf_hain)</span> on Aug 07, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Warning plugin expects PcLint warnings in the following format:</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p>foo.h(5): Info 701: This is an info message from PcLint</p>
+</div></div>
+<p><br class="atl-forced-newline"/>
+Add these options to PcLint to produce the proper output:</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p>+ffn // force full path names<br/>
+-width(0) // don't insert line breaks (unlimited output width).<br/>
+-hf1 // message height one<br/>
+-&quot;format=%f(%l): %t %n: %m&quot;</p>
+</div></div>
+<p><br class="atl-forced-newline"/>
+These -format option will add hyperlinks to the &quot;Details&quot; - pane (damaged in 4.28):</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p>...<br/>
+-&quot;format=%f(%l): %t %n: %m (%t &lt;a href=\qhttp://&lt;your-jenkins-server&gt;/userContent/LintMsgRef.html#%n\q&gt;%n&lt;/a&gt;)&quot;</p>
+</div></div>
+<p>LintMsgRef.html is a local copy of <a href="http://gimpel-online.com/MsgRef.html" class="external-link" rel="nofollow">http://gimpel-online.com/MsgRef.html</a> to relieve the gimpel-server; moreover the copy can be extended with own comments and advices.<br/>
+Unfortunately the tooltips are not clickable.<br/>
+.<br/>
+Here is a workaround for versions &gt;= 4.28:<br/>
+Removing all &amp; escapes from PCLint-warnings.xml. With <a href="https://wiki.jenkins-ci.org/display/JENKINS/Post+build+task" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/JENKINS/Post+build+task</a> plugin, sed and windows batch:<br/>
+(The <a href="https://wiki.jenkins-ci.org/display/JENKINS/Any+Build+Step+Plugin" class="external-link" rel="nofollow">https://wiki.jenkins-ci.org/display/JENKINS/Any+Build+Step+Plugin</a> might work also)</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<p>sed -i &quot;s|[&amp;]amp;|\&amp;|g&quot; %WORKSPACE:workspace=jobs%\builds%BUILD_NUMBER%\PCLint-warnings.xml<br/>
+rem  (using braces with [&amp;]: otherwise the Post+build+task plugin will not properly escape it.)</p>
+</div></div>
+
+
+
+
+
+
+
+
+<p>Here are two bash-sipplets that might also be helpful:</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>"'back to the sixties', Warnings+Plugin - format"</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# ie &#39;Drill down&#39; the collective message 960 MISRA X.Y to 30XY. (1960 MISRA X.Y.Z to 4XYZ)(961/1963 also)
+#
+sed -i \
+-e &#39;s|\(Note \)\(96[01]\)\(.* Rule \)\([0-9]*\)\.\([0-9]*\)|Warning 30_____0\4_____0\5\3\4\.\5|g&#39; \
+-e &#39;s|\(Note \)\(196[03]\)\(.* Rule \)\([0-9]*\)\-\([0-9]*\)-\([0-9]*\)|Warning 4_____0\4_____0\5_____0\6\3\4-\5-\6|g&#39; \
+-e &#39;s|_____[0-9]*\([0-9][0-9]\)|\1|g&#39; \
+output.lnt
+#
+# subst1: c     &quot;…960 … Rule 2.10&quot;  -&gt;  &quot;300210 … Rule 2.10&quot;         (Preceding 30, notice leading zero, also for 961)
+# subst2: cpp  &quot;…1960 … Rule 1.20.3&quot; -&gt; &quot;4012003 … Rule 1.20.3&quot;  (Preceeding 4, …, also 1963)
+#   c and cpp:
+#      Add always a preceeding _____ and always a leading zero.
+#      The &quot;Note&quot; is elevated to &quot;Warning&quot;. If that is not desired, replace &quot;Warning &quot; by &quot;\1&quot;.
+# subst3: then remove again the _____ and the superfluous leading zeros
+</pre>
+</div></div>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>"'back to the sixties', env-xml.lnt - format"</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# (eg for aloa, eg for excel-import.)
+sed -i \
+-e &#39;s|&lt;type&gt;Note\(.*\)\(&lt;code&gt;96[01]\)\(&lt;/code&gt;.* Rule \)\([0-9]*\)\.\([0-9]*\)| &lt;type&gt;Warning\1&lt;code&gt;30_____0\4_____0\5\3\4\.\5|g&#39; \
+-e &#39;s|&lt;type&gt;Note\(.*\)\(&lt;code&gt;196[03]\)\(&lt;/code&gt;.* Rule \)\([0-9]*\)\-\([0-9]*\)-\([0-9]*\)|&lt;type&gt;Warning\1&lt;code&gt;4_____0\4_____0\5_____0\6\3\4-\5-\6|g&#39; \
+-e &#39;s|_____[0-9]*\([0-9][0-9]\)|\1|g&#39; \
+output.lnt
+
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:57</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Unleash Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Unleash Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (shillner)</span>, last modified on May 13, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Unleash Maven <a href="https://plugins.jenkins.io/unleash" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This is a Jenkins Build Wrapper for Maven Jobs. It enables you to perform Maven releases using the <a href="https://github.com/shillner/unleash-maven-plugin" class="external-link" rel="nofollow">unleash-maven-plugin</a>.<h1 id="UnleashPlugin-HowToUseThePlugin?">How To Use The Plugin?</h1><p>This section describes the project configuration options as well as the actual usage of the plugin when building Maven releases.</p><h3 id="UnleashPlugin-ProjectConfiguration">Project Configuration</h3><p>In order to use the plugin for building Maven releases you will have to enable it first in the configuration of your Maven build job. Go to the <strong>Build Environment</strong> section and enable the build wrapper by checking the <strong>Unleash</strong> box.<br/> Then you will see some input fields for basic settings. There you can add the required profiles and options for your release build. The goals are pre-defined because currently unleash:perform is the only goals that makes sense there.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/100859920.png" data-image-src="attachments/99451637/100859920.png" data-unresolved-comment-count="0" data-linked-resource-id="100859920" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-08-25_14h50_44.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>Clicking the Advanced... button shows some additional settings for workflow overriding, SCM-related settings and some checkboxes that affect the actual release form that we use later.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/100859921.png" data-image-src="attachments/99451637/100859921.png" data-unresolved-comment-count="0" data-linked-resource-id="100859921" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-08-25_14h51_17.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>The Hook Data section can then be used for really advanced stuff. If you f.i. extend the default workflow and add an exec-hook to the workflow, you will be able to provide data for the hook execution at this point.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/100859922.png" data-image-src="attachments/99451637/100859922.png" data-unresolved-comment-count="0" data-linked-resource-id="100859922" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-08-25_14h52_08.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><h3 id="UnleashPlugin-UseThePlugin">Use The Plugin</h3><p>The usage of the plugin is pretty simple and is nothing more than submitting a form on a subpage of the project.<br/> After you've enabled the plugin a link will be shown on the left side of the screen called <strong>Trigger Unleash Maven Plugin</strong>:<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/99614791.png" data-image-src="attachments/99451637/99614791.png" data-unresolved-comment-count="0" data-linked-resource-id="99614791" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>After clicking on this link you will be directed to the form page where you can start the release build for your project.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/100859923.png" data-image-src="attachments/99451637/100859923.png" data-unresolved-comment-count="0" data-linked-resource-id="100859923" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-08-25_14h53_56.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>On this page you can either specify a global version for all modules of the project (for release and dev) or you stick to the versions provided by the plugin and listed in the table which allows idependent versioning of modules.<br/> You can also provide custom SCM credentials and reqeuest some other stuff.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/100859924.png" data-image-src="attachments/99451637/100859924.png" data-unresolved-comment-count="0" data-linked-resource-id="100859924" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-08-25_14h54_06.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><h3 id="UnleashPlugin-ReleaseInfo">Release Info</h3><p>Once you have some successful or failed release builds you can also get some project-related release information, such as the badge icons indicating successful or failed releases.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/99614797.png" data-image-src="attachments/99451637/99614797.png" data-unresolved-comment-count="0" data-linked-resource-id="99614797" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016-07-27_14h05_10.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>There are also two permalinks available, one for successful and one for failed releases.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/99614795.png" data-image-src="attachments/99451637/99614795.png" data-unresolved-comment-count="0" data-linked-resource-id="99614795" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot-1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><p>Finally there are some ListView columns:<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/99451637/99614794.png" data-image-src="attachments/99451637/99614794.png" data-unresolved-comment-count="0" data-linked-resource-id="99614794" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot-5.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451637" data-linked-resource-container-version="15"></span></p><h1 id="UnleashPlugin-Support">Support</h1><p>Issues around this plugin are tracked in the Jenkins Issue Tracker. To browse open issues please visit <a href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open,+%22In+Progress%22,+Reopened)+AND+component+%3D+unleash-plugin" class="external-link" rel="nofollow">this page</a>. There you can also file new ones if necessary.</p><p>General information about the usage of the Maven plugin can be found here: <a href="https://github.com/shillner/unleash-maven-plugin" class="external-link" rel="nofollow">unleash-maven-plugin</a>.</p><h1 id="UnleashPlugin-CopyrightInformation">Copyright Information</h1><p>Substantial parts of the plugin sources have been extracted from the M2 Release Plugin. It served as a base for getting started since the feature set was very similar.<br/> Please find further copyright notes in the source code.</p><h1 id="UnleashPlugin-VersionHistory">Version History</h1><h3 id="UnleashPlugin-1.0.0(July28,2016)">1.0.0 (July 28, 2016)</h3><p>The intial version of the plugin.</p><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 1.0.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-1.1.0(August25,2016)">1.1.0 (August 25, 2016)</h3><p>Added support for credentials managed by the credentials plugin. These credentials are passed to the Maven plugin as environment variables.<br/> The plugin supports Username/Password credentials as well as SSH credentials. In case of SSH credentials only the passphrase is used for the SCM providers. The private key must be present in the .ssh directory.</p><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-1.2.0(August29,2016)">1.2.0 (August 29, 2016)</h3><ul><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-37752" class="external-link" rel="nofollow">JENKINS-37752</a>: Release profile appending is buggy</li><li>Implemented <a href="https://issues.jenkins-ci.org/browse/JENKINS-37408" class="external-link" rel="nofollow">JENKINS-37408</a>: Add checkboxes for -X and -e on the formular site</li></ul><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-1.2.1(August29,2016)">1.2.1 (August 29, 2016)</h3><p>The release profilesof the configuration are now also used for the unleash invocation since there was some confusion and some issues when building reactor projects that enable modules depending on profiles (the release build has built the modules which have been enabled by the profiles but the unleash build did not install and deploy them since these modules were not active during the unleash build).</p><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-2.0.0(September29,2016)">2.0.0 (September 29, 2016)</h3><p>There are no funktional or non-functional changes of the plugin sources. The only reason this release has been published was that the licensing of this plugin has been switched. The plugin is now published under MIT license to better fit into the Jenkins ecosystem.</p><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-2.1.0(November02,2016)">2.1.0 (November 02, 2016)</h3><ul><li>Implemented <a href="https://issues.jenkins-ci.org/browse/JENKINS-36981" class="external-link" rel="nofollow">JENKINS-36981</a>: keep release builds. The advanced section of the unleash project configuration now contains an input field for the number of successful release builds to lock in the history.</li></ul><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-2.1.1(November15,2016)">2.1.1 (November 15, 2016)</h3><ul><li>Implemented <a href="https://issues.jenkins-ci.org/browse/JENKINS-39714" class="external-link" rel="nofollow">JENKINS-39714</a>: No badge shown for unstable builds. A yellow badge icon is now shown for running release builds as well as unstable ones. The latest successful relase permalink and the appropriate list view column now also show unstable builds</li></ul><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-2.2.0(April25,2017)">2.2.0 (April 25, 2017)</h3><ul><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-36983" class="external-link" rel="nofollow">JENKINS-36983</a>: The version calculation for the badge icons as well as the list view columns and the release overview page has been changed <span class="short_text" lang="en"><span>thoroughly</span></span>. It shouldn't happen again that the badges or the columns show unknown versions.</li><li>Added an additional input field for the development version upgrade strategy. For more information about that feature please see <a href="https://github.com/shillner/unleash-maven-plugin/wiki/unleash%3Aperform#versionupgradestrategy" class="external-link" rel="nofollow">Unleash Maven Plugin Wiki - VersionUpgradeStrategy</a>.</li></ul><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.1.0<br/> <strong>Maximum supported:</strong></p><h3 id="UnleashPlugin-2.3.0(May11,2017)">2.3.0 (May 11, 2017)</h3><ul><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-44050" class="external-link" rel="nofollow">JENKINS-44050</a>: Improved SSH-based authentication by passing the private key that was referenced as a credential to the maven plugin. The private key will not be visible in the logs but will be set as an environment variable during the build.</li></ul><p><strong>Unleash Maven Plugin versions:</strong><br/> <strong>Minimum required:</strong> 2.6.0<br/> <strong>Maximum supported:</strong></p><p><strong><br/></strong></p><p><strong><br/></strong></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614788.png">Screenshot-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614789.png">Screenshot-3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614790.png">Screenshot-4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614791.png">Screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614792.png">2016-07-27_13h54_04.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614793.png">2016-07-27_13h54_17.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614796.png">Screenshot-5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614795.png">Screenshot-1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614794.png">Screenshot-5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/99614797.png">2016-07-27_14h05_10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859920.png">2016-08-25_14h50_44.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859921.png">2016-08-25_14h51_17.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859922.png">2016-08-25_14h52_08.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859923.png">2016-08-25_14h53_56.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859924.png">2016-08-25_14h54_06.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451637/100859931.png">2016-08-29_11h13_51.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:55</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : App.io Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : App.io Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Sep 01, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'appio' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>This plug-in allows you to upload an iOS application package to App.io so that you can see the app running on a remote iPhone/iPad simulator: if successful, the simulator will be displayed embedded on the main project page as shown below, and there is also a link that will take you to the App.io site, where you can customize your application view. There is an example of the plugin in use on the <a href="https://partnerdemo.ci.cloudbees.com/job/iOS-dev/job/stockfish-ios-appio/" class="external-link" rel="nofollow">CloudBees</a> partnerdemo site, with the Jenkins configuration.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/67569493/69402771.png" data-image-src="attachments/67569493/69402771.png" data-unresolved-comment-count="0" data-linked-resource-id="69402771" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot gasp-test.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67569493" data-linked-resource-container-version="22"></span></p>
+
+<h2 id="App.ioPlugin-KnownLimitations">Known Limitations</h2>
+
+<p>Limitations that I am aware of in the current implementation include:</p>
+
+<ul>
+	<li>Need for Proxy Server support</li>
+	<li>Allow user to configure simulator iPad/iPhone Landscape/Portrait orientation</li>
+	<li>More generic mechanism for file upload (currently uses a simple Amazon S3 scheme</li>
+</ul>
+
+
+<h2 id="App.ioPlugin-ConfiguringthePlugin"><strong>Configuring the Plugin</strong></h2>
+
+<h3 id="App.ioPlugin-GlobalConfigurationParameters">Global Configuration Parameters</h3>
+
+<p>The plugin uses Amazon's S3 service to upload the zipped .app iOS build: use Jenkins-&gt;Manage Jenkins-&gt;Manage Credentials to enter the AWS Access and Secret Key and S3 bucket to use for uploading.  We strongly recommend that you create an IAM user specifically for this purpose and configure a security profile that limits access to that specific bucket, like this:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;AllowPublicRead&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:GetObject&quot;,
+                &quot;s3:PutObject&quot;,
+                &quot;s3:PutObjectAcl&quot;
+            ],
+
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::mqp-appio/*&quot;
+            ]
+        }
+    ]
+}
+</pre>
+</div></div>
+
+<p>The following properties are configured via the Credentials page:</p>
+<ul>
+	<li>AWS Access Key: (used for S3 file uploads)</li>
+	<li>AWS Secret Key: (used for S3 file uploads)</li>
+	<li>AWS S3 Bucket Name: (used for S3 file uploads)</li>
+	<li>App.io API Key: (used for App.io REST API calls) - see <a href="https://app.io/account/api" class="external-link" rel="nofollow">https://app.io/account/api</a></li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/67569493/67895405.png" data-image-src="attachments/67569493/67895405.png" data-unresolved-comment-count="0" data-linked-resource-id="67895405" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-06-19 at 11.06.03 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67569493" data-linked-resource-container-version="22"></span></p>
+
+<h3 id="App.ioPlugin-ConfiguringaPost-buildAction">Configuring a Post-build Action</h3>
+
+<p>The following parameters need to be set:</p>
+<ul>
+	<li>Build package: the name of the .app iOS build package to upload to App.io.  This must be a simulator build - typically this would be something like WORKSPACE/build/Debug-iphonesimulator/&lt;package&gt;.app.  The package will be zipped and uploaded to App.io via S3.</li>
+	<li>Application name: the name that App.io will use for this application (validation is performed via the App.io API).</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/67569493/67895406.png" data-image-src="attachments/67569493/67895406.png" data-unresolved-comment-count="0" data-linked-resource-id="67895406" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-06-19 at 11.06.51 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67569493" data-linked-resource-container-version="22"></span></p>
+
+
+<h1 id="App.ioPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="App.ioPlugin-Version1.3(Sep10,2013)">Version 1.3 (Sep 10, 2013)</h3>
+
+<ul>
+	<li>Added App.io logo to Action and ProminentProjectAction links</li>
+</ul>
+
+
+<h3 id="App.ioPlugin-Version1.2(Sep8,2013)">Version 1.2 (Sep 8, 2013)</h3>
+
+<ul>
+	<li>Fixed bug in AppioAppObject: changed model classes to include only required fields</li>
+	<li>Changed plugin to use &quot;prismadrop&quot; as default URL where no succesful build exists</li>
+	<li>Added Application Name validation to AppioRecorder descriptor  </li>
+</ul>
+
+
+<h3 id="App.ioPlugin-Version1.0(Jun18,2013)">Version 1.0 (Jun 18, 2013)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67569493/67895400.png">Screen Shot 2013-06-17 at 7.01.54 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67569493/67895405.png">Screen Shot 2013-06-19 at 11.06.03 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67569493/67895406.png">Screen Shot 2013-06-19 at 11.06.51 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67569493/69402771.png">Screen Shot gasp-test.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

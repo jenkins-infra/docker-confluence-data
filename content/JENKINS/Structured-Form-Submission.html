@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Structured Form Submission</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Structured Form Submission
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (aeoris)</span> on Nov 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="StructuredFormSubmission-Why?">Why?</h1><p>The data model of HTML form submission is a map — each form field has a name, and when submit it, the server retrieves the values by names. This model has several problems.</p><p>One is the lack of structure; if you have a repeated structure in a form, which in turn contains a nested repeated structure, just giving it a name doesn't allow you to distinguish the nesting structure. IOW, you can't tell ((A,B),(C,D)) from ((A,B,C),(D)) because the map just gives you a single list of 4 items. A similar related issue is when you put a checkbox in a repeated part of a form. If some are checked by some are not, the server can never figure out which ones are checked because that information is lost when a form is submitted.</p><p>Another issue is the scope of the name. In HTML, all the form fields need to have unique names. This is akin to have all your variables as global in a programming language, and in a modular extensible system like Jenkins, this is not preferable. Scoping of names also prevent a part of the form to be reused elsewhere in the same form.</p><p>To avoid these issues and further simplify the server side, in Jenkins the notion of the &quot;structured form submission&quot; is introduced.</p><h1 id="StructuredFormSubmission-Whatisstructuredformsubmission?">What is structured form submission?</h1><p>Structured form submission is a form submission where the data model is a JSON object tree, not a map. This is done by having a client compute the JSON representation at the form submission time, and send that to the server as a hidden text field (along with all the other fields.)</p><p>Structure is determined by several factors. First, the name of the form field becomes the JSON property name. For compatibility reasons, a name can have any &quot;abc.def.&quot; kind of prefix, and the prefix portion will be ignored. So for example, in the simplest case, the following form will produce the JSON result on the right.</p><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;form&gt;
+  &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+  &lt;input type=&quot;checkbox&quot; name=&quot;my.optin&quot;/&gt; Send me e-mails
+&lt;/form&gt;
+</pre>
+</div></div></div><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{ name: &quot;Kohsuke&quot;, optin: true }
+</pre>
+</div></div></div></div></div></div><p>Any intermediate tag can have the 'name' attribute, and that would group the descendants into an intermediate object. Consider the following example:</p><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;form&gt;
+  &lt;div name=&quot;first&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;my.optin&quot;/&gt; Send me e-mails
+  &lt;/div&gt;
+  &lt;div name=&quot;second&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;my.optin&quot;/&gt; Send me e-mails
+  &lt;/div&gt;
+  ...
+  &lt;div&gt;
+    &lt;input type=&quot;password&quot; name=&quot;my.password&quot; /&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+</div></div></div><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+  first: { name: &quot;Kohsuke&quot;, optin: true },
+  second: { name: &quot;Jesse&quot;, optin: false },
+  password:&quot;secret&quot;
+}
+</pre>
+</div></div></div></div></div></div><p>If there are multiple elements with the same name, their values are aggregated into an array. Consider the following example:</p><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;form&gt;
+  &lt;div name=&quot;person&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;my.optin&quot;/&gt; Send me e-mails
+  &lt;/div&gt;
+  &lt;div name=&quot;person&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;checkbox&quot; name=&quot;my.optin&quot;/&gt; Send me e-mails
+  &lt;/div&gt;
+  ...
+  &lt;div&gt;
+    &lt;input type=&quot;password&quot; name=&quot;my.password&quot; /&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+</div></div></div><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+  person: [
+    { name: &quot;Kohsuke&quot;, optin: true },
+    { name: &quot;Jesse&quot;, optin: false }
+  ],
+  password:&quot;secret&quot;
+}
+</pre>
+</div></div></div></div></div></div><p>The nesting can be arbitrarily deep.</p><h3 id="StructuredFormSubmission-Fileuploads">File uploads</h3><p>This section applies to Stapler 1.81/Hudson 1.246 and onward.</p><p>File uploads in the structured form are renamed to unique names, and the JSON tree will have the name of this unique form name. To remain backward compatible, this processing requires that the file INPUT element contains <code>jsonAware=&quot;yes&quot;</code> attribute:</p><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;form&gt;
+  &lt;div name=&quot;person&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;file&quot; name=&quot;my.key&quot; jsonAware=&quot;yes&quot;/&gt;
+  &lt;/div&gt;
+  &lt;div name=&quot;person&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;my.name&quot;/&gt;
+    &lt;input type=&quot;file&quot; name=&quot;my.key&quot; jsonAware=&quot;yes&quot;/&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</pre>
+</div></div></div><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+  person: [
+    { name: &quot;Kohsuke&quot;, key: &quot;randomId1234567&quot; },
+    { name: &quot;Jesse&quot;, key: &quot;randomIdabcdefg&quot; }
+  ]
+}
+</pre>
+</div></div></div></div></div></div><p><code>staplerRequest.getFileItem(&quot;randomId1234567&quot;)</code> would return the file uploaded for Kohsuke, and<br/> <code>staplerRequest.getFileItem(&quot;randomIdabcdefg&quot;)</code> would return the file uploaded for Jesse.</p><h3 id="StructuredFormSubmission-Advancedtopics">Advanced topics</h3><p>Sometimes, the mark up and the layout of the form makes it impossible for a grouped form fields to have a single common ancestor element (for example, often in a grouped form elements are spread across multiple table rows.) In such a case, you can put the nameref attribute to merge multiple tree of elements into one. This mechanism is mostly used inside Jenkins form layout tags behind the scene, so it's not something plugin developers would need to worry about.<br/> Consider the following example:</p><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;form&gt;
+  &lt;table&gt;
+    &lt;tr name=&quot;cvs&quot; id=&quot;abc&quot;&gt;&lt;td&gt;
+      &lt;input type=&quot;text&quot; name=&quot;CVSROOT&quot; /&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+    &lt;tr nameref=&quot;abc&quot;&gt;&lt;td&gt;
+      &lt;input type=&quot;text&quot; name=&quot;module&quot; /&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+    &lt;tr name=&quot;svn&quot; id=&quot;def&quot;&gt;&lt;td&gt;
+      &lt;input type=&quot;text&quot; name=&quot;URL&quot; /&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+    &lt;tr nameref=&quot;def&quot;&gt;&lt;td&gt;
+      &lt;input type=&quot;text&quot; name=&quot;module&quot; /&gt;
+    &lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/form&gt;
+</pre>
+</div></div></div><div class="columnMacro"><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+  cvs: { CVSROOT:&quot;...&quot;, module:&quot;...&quot; },
+  svn: { URL:&quot;...&quot;, module:&quot;...&quot; }
+}
+</pre>
+</div></div></div></div></div></div><p>If the nameref attribute points to a check box or a radio button INPUT element, the subordinate structure is only submitted when the INPUT element is selected/checked. This is convenient when such an INPUT element is used to control the visibility of nested form parts.</p><h1 id="StructuredFormSubmission-Writingservercode">Writing server code</h1><p>You can access the entire JSON tree by calling <code>StructuredForm.get(request)</code>, but such code is generally only necessary when you are in charge of the entire form submission. <code>Descriptor.configure()</code> and <code>Descriptor.newInstance()</code> take <code>JSONObject</code>, which corresponds to the form fragment that you contributed via <code>config.jelly</code>/<code>global.jelly</code>.</p><p>See some of the Descriptor implementations in Jenkins core as an example.</p><h3 id="StructuredFormSubmission-Databinding">Databinding</h3><p><code>StaplerRequest</code> provides several data-binding methods from <code>JSONObject</code>, which greatly simplifies the object instantiaion from form data. See the javadoc of the <code>StaplerRequest.bindJSONXXX</code> methods for details.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

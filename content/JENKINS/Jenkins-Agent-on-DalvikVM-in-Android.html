@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins Agent on DalvikVM in Android</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins Agent on DalvikVM in Android
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (gardner)</span>, last modified by <span class='editor'> Unknown User (slide_o_mix)</span> on Sep 26, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><p class="title">Please Help</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This is a work in progress. Please help by adding a comment, or making contributions or edits to this wiki doc. Please also see the jenkinsci-dev mailing list <a href="https://groups.google.com/group/jenkinsci-dev/browse_thread/thread/4894c54384ba32cf" class="external-link" rel="nofollow">thread</a>.</p></div></div><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020171601 {padding: 0px;}
+div.rbtoc1631020171601 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020171601 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020171601'>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-Overview'>Overview</a></li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-Approach'>Approach</a></li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-Issues'>Issues</a>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-Agentdownloadsclassesdynamically'>Agent downloads classes dynamically</a></li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-Dalvikbytecode'>Dalvik bytecode</a></li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-NotthewholeRuntime'>Not the whole Runtime</a></li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-OurOwnCustomRemoteClassLoader'>Our Own Custom RemoteClassLoader</a></li>
+</ul>
+</li>
+<li><a href='#JenkinsAgentonDalvikVMinAndroid-TheImplementation'>The Implementation</a></li>
+</ul>
+</div></p><h3 id="JenkinsAgentonDalvikVMinAndroid-Overview">Overview</h3><p>While compiling code on an Android device does not make any sense, driving tests on Android devices does. The <a href="Android-Emulator-Plugin.html">Android Emulator Plugin</a> by Christopher Orr exploits multi configuration jobs to test Android applications on many different screen sizes and configurations. Unfortunately, the Emulator only emulates ARMv5 and it lacks a real GPU. This means that some software must be tested on bare-metal hardware. Running the agent jar on a host PC machine to communicate with USB devices introduces undesired complexity and, as some of you may know, the Android Debug Bridge has some <a href="https://code.google.com/p/android/issues/detail?id=10255" class="external-link" rel="nofollow">issues</a>, especially while under a stressful load. <br/> Currently our solution employs multiple pc agents each with multiple usb adb connections to many devices. The pc agents send commands to the phones over a tcp connection established using busybox, netcat, and bash. To prevent more than one job using the same phone at a time the devices are locked as a &quot;busy resource&quot; using an external web application.<br/> This configuration ads more complexity and maintenance than is needed by duplicating much of the jenkins distributed execution core. Ideally we could leverage all of the work that has already been implemented in Jenkins by running the agent jar directly on the Android device (or emulator).</p><h3 id="JenkinsAgentonDalvikVMinAndroid-Approach">Approach</h3><p>Convert the agent jar to Dalvik bytecode and launch it from adb shell or include it in an Android application and launch it from an Android <a href="http://developer.android.com/reference/android/app/Service.html" class="external-link" rel="nofollow">Service</a>. This worked swimmingly until the agent attempted to download java classes from the master using a RemoteClassLoader.</p><h3 id="JenkinsAgentonDalvikVMinAndroid-Issues">Issues</h3><h4 id="JenkinsAgentonDalvikVMinAndroid-Agentdownloadsclassesdynamically">Agent downloads classes dynamically</h4><p>A different set of classes can always be remotely loaded by any client. Some classes come from plugin configurations.</p><h4 id="JenkinsAgentonDalvikVMinAndroid-Dalvikbytecode">Dalvik bytecode</h4><p>A major issue is that Android does not run native java bytecode. All bytecode must be converted to Dalvik bytecode before being executed on the Android device. The Apache Felix Project has an <a href="https://felix.apache.org/site/apache-felix-framework-and-google-android.html" class="external-link" rel="nofollow">excellent article</a> about deploying the OSGi client to Android which details how to convert java bytecode to dex bytecode at compile time. We need to be able to do this at runtime.</p><h4 id="JenkinsAgentonDalvikVMinAndroid-NotthewholeRuntime">Not the whole Runtime</h4><p>The following packages are not supported in Android:</p><ul><li>java.applet</li><li>java.awt</li><li>java.beans</li><li>java.lang.management</li><li>java.rmi</li><li>javax.accessibility</li><li>javax.activity</li><li>javax.imageio</li><li>javax.management</li><li>javax.naming</li><li>javax.print</li><li>javax.rmi</li><li>javax.security.auth.kerberos</li><li>javax.security.auth.spi</li><li>javax.security.sasl</li><li>javax.swing</li><li>javax.transaction</li><li>javax.xml (except javax.xml.parsers)</li><li>org.ietf.*</li><li>org.omg.*</li><li>org.w3c.dom.* (sub-packages)<br/> From <a href="http://www.zdnet.com/blog/burnette/java-vs-android-apis/504" class="external-link" rel="nofollow">http://www.zdnet.com/blog/burnette/java-vs-android-apis/504</a>. Fortunately there are <a href="http://stackoverflow.com/questions/3902943/how-to-includ-additional-javax-packages-in-android-app-with-eclipse" class="external-link" rel="nofollow">work-arounds</a> to this issue.</li></ul><h4 id="JenkinsAgentonDalvikVMinAndroid-OurOwnCustomRemoteClassLoader">Our Own Custom RemoteClassLoader</h4><p>It seems that the most reliable way to run the agent jar on an Android device is to create an overloaded ClassLoader that converts the java bytecode to Dalvik bytecode before attempting to load it.<br/> <a href="http://stackoverflow.com/questions/2610995/dynamically-generating-dalvik-bytecode-into-a-running-dalvik-android-application" class="external-link" rel="nofollow">This question</a> has been asked before on different ways to load java bytecode into DalvikVM at runtime. It seems that the Dalvik team does have it <a href="https://code.google.com/p/android/issues/detail?id=6322" class="external-link" rel="nofollow">on their radar</a> but as Jesse Wilson explains in his Stack Overflow post:</p><blockquote><p>The Dalvik team would like to build a first-class runtime code generation library. We're tracking the feature request as Android bug 6322. Unfortunately, we have a very long list of performance and correctness issues, so I can't give you a timeline for when we'll spend time on this issue.</p><p>There are some alternatives, but they will all take some work:</p><ul><li>Run your application on a standard JVM and exercise all runtime code generation there. Dump the .class files from memory to files, and then run dx on those files. If you're quite sophisticated, you could integrate all of this work into your build.</li></ul><ul><li>Include the open source dx tool as a project library, and execute it programatically from within your application, possibly in your application's classloader. This will bloat your application's binary.</li></ul></blockquote><h3 id="JenkinsAgentonDalvikVMinAndroid-TheImplementation">The Implementation</h3><p>I like the second option and dx.jar comes with the Android SDK. Upon reviewing the source it appears that most of the work is done by <a href="http://www.java2s.com/Open-Source/Android/android-core/platform-dalvik/com/android/dx/dex/cf/CfTranslator.java.htm" class="external-link" rel="nofollow">com.android.dx.dex.cf.CfTranslator.translate()</a>. There is some example code that converts java classes to dex at runtime over at Jythonroid: <a href="https://jythonroid.googlecode.com/svn-history/r34/branches/Jythonroid/src/org/python/debug/FixMe.java" class="external-link" rel="nofollow">https://jythonroid.googlecode.com/svn-history/r34/branches/Jythonroid/src/org/python/debug/FixMe.java</a></p><p>It seems to me that the most elegant solution would be to update <em>hudson.remoting.RemoteClassLoader</em> to do a System.getProperty() check against <a href="http://developer.android.com/reference/java/lang/System.html#getProperty%28java.lang.String%29" class="external-link" rel="nofollow">java.vm.name</a> to check for &quot;Dalvik&quot; and then insert the branch to the conversion logic at runtime.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

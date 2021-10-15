@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : reFit Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : reFit Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (hwellmann)</span>, last modified on Apr 05, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View reFit <a href="https://plugins.jenkins.io/refit" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>A plugin for publishing Fit test reports created by <a href="http://refit.googlecode.com" class="external-link" rel="nofollow">reFit</a>, an implementation of the Framework for Integrated Test (Fit).</p></p>
+
+<h1 id="reFitPlugin-Overview">Overview</h1>
+
+<p>The reFit plugin collects and archives the test output and summaries created by a Fit test suite. The reports of the latest build are published under <a href="http://JENKINS/jobs/YOURJOB/refit/" class="external-link" rel="nofollow">http://JENKINS/jobs/YOURJOB/refit/</a>. An icon on the job status page links to this URL:</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="900" src="attachments/57180458/57409559.png" data-image-src="attachments/57180458/57409559.png" data-unresolved-comment-count="0" data-linked-resource-id="57409559" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsReFit.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57180458" data-linked-resource-container-version="12"></span></p>
+
+<p> Click on this icon to see the reFit test report, containing links to the individual test results:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/57180458/57409560.png" data-image-src="attachments/57180458/57409560.png" data-unresolved-comment-count="0" data-linked-resource-id="57409560" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsReFitReport.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57180458" data-linked-resource-container-version="12"></span></p>
+
+<h2 id="reFitPlugin-FAQ">FAQ</h2>
+
+<h3 id="reFitPlugin-WhatisFitandreFit?">What is Fit and reFit?</h3>
+
+<p>See the <a href="http://code.google.com/p/refit/wiki/FitInANutshell" class="external-link" rel="nofollow">reFit Wiki</a>.</p>
+
+
+<h3 id="reFitPlugin-HowdoesthereFitpluginrelatetotheFitplugin?">How does the reFit plugin relate to the Fit plugin?</h3>
+
+<ul>
+	<li>The Fit plugin was never released, the reFit plugin will available via Jenkins' update centre soon.</li>
+	<li>The Fit plugin is based on the original Fit implementation. The reFit plugin is based on <a href="http://code.google.com/p/refit" class="external-link" rel="nofollow">reFit</a>, a recent alternative implementation of Fit.</li>
+</ul>
+
+
+<h3 id="reFitPlugin-HowdoesthereFitpluginrelatetotheFitnesseplugin?">How does the reFit plugin relate to the Fitnesse plugin?</h3>
+
+<p>It doesn't. Fitnesse is incompatible with Fit. It is one of the driving forces of reFit to go back to the Fit roots and to create an up-to-date and maintained version of Fit, without any of the incompatible extensions introduced in Fitnesse.</p>
+
+
+<h3 id="reFitPlugin-HowcanIrunFittestsinaJenkinsproject?">How can I run Fit tests in a Jenkins project?</h3>
+
+<p>If your project is based on Maven, just use the refit-maven-plugin. Otherwise, you can wrap your Fit tests in a JUnit suite or run reFit programmatically, e.g. from an Ant script. See <a href="http://code.google.com/p/refit/wiki/RunningFitTests" class="external-link" rel="nofollow">Running Fit Tests</a> for details.</p>
+
+<h3 id="reFitPlugin-CanIusethefit-maven-pluginorotherold-schoolFitrunnersinstead?">Can I use the fit-maven-plugin or other old-school Fit runners instead?</h3>
+
+<p>No, the reFit plugin parses an XML report produced by reFit. This is an added feature of reFit. If you have an existing Fit suite, it should also run under reFit. You need <strong>reFit 1.7.0</strong> or higher to produce XML reports.</p>
+
+
+<h3 id="reFitPlugin-DoesthereFitpluginincludereFit?">Does the reFit plugin include reFit?</h3>
+
+<p>No, and it has no compile-time or run-time dependencies on reFit either. The Jenkins reFit plugin only works with the files generated by reFit. For this reason, the reFit plugin can be released under the MIT license used by Jenkins, whereas reFit is released under GPL, being a derived work from the original Fit framework which is also released under GPL.</p>
+
+<h2 id="reFitPlugin-ChangeHistory">Change History</h2>
+
+
+<h3 id="reFitPlugin-Version0.3(5Apr2011)">Version 0.3 (5 Apr 2011)</h3>
+
+<ul>
+	<li>Reports get archived per build. Before, only the reports from the last build were archived for the project.</li>
+	<li>There is a trend graph for the Fit test results.</li>
+</ul>
+
+
+<h3 id="reFitPlugin-Version0.2(28Mar2011)">Version 0.2 (28 Mar 2011)</h3>
+
+<ul>
+	<li>Initial public release.</li>
+	<li>Archives Fit reports and publishes them via a link on the project page.</li>
+	<li>Usable both for Maven and Freestyle builds, but the plugin does not automatically extract configuration info from the Maven POM.</li>
+	<li>No aggregation for multi-module Maven builds. You can only publish the reports from one subproject.</li>
+	<li>The plugin only archives the results of the last successful build.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180458/57409559.png">JenkinsReFit.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57180458/57409560.png">JenkinsReFitReport.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:42</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : File Leak Detector Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : File Leak Detector Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (mramonleon)</span> on Nov 05, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View CloudBees File Leak Detector <a href="https://plugins.jenkins.io/file-leak-detector" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Runtime diagnosis tool for &quot;too many open files&quot; problem.This plugin watches file descriptor open/close activities of JVM and allow you to see the list of what's currently opened, and Java call stack that opened the file. If you are suffering from the <a href="42469144.html">too many open files</a> problem, this report enables the developers to fix the leak.</p><h1 id="FileLeakDetectorPlugin-Usage">Usage</h1><p>This plugin adds &quot;Open File Handles&quot; item in the &quot;Manage Jenkins&quot; page. Go to this page and click &quot;activate&quot; button to activate the monitoring. Once this is done, a Java agent is installed on the JVM and starts monitoring new file open/close activities. Revisit the &quot;Open File Handles&quot; page and you'll see the currently opened files.</p><p>To help the developers, activate this, and let Jenkins run for a while, then come back and capture the report and attach it to a ticket. Do get a few reports with intervals of 10 mins or so, so that we can distinguish real leaks from false positives.</p><h1 id="FileLeakDetectorPlugin-Changelog">Changelog</h1><h3 id="FileLeakDetectorPlugin-Version1.6(Nov2,2018)">Version 1.6 (Nov 2, 2018)</h3><ul><li>Avoid killing Jenkins when the arguments are wrong [
+<span class="jira-issue resolved" data-jira-key="JENKINS-53394" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-53394?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-53394</a>
+                            -
+            <span class="summary">A invalid property set on the configuration from the UI of file-leak-detector kills the Jenkins instance</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+]</li></ul><h3 id="FileLeakDetectorPlugin-Version1.5(Apr16,2018)">Version 1.5 (Apr 16, 2018)</h3><ul><li>Add support for detecting file descriptors used by the following resources: <ul><li>Files opened via <span style="font-family: monospace;">java.nio.channels.FileChannel#open</span></li><li>Selectors opened via <code>java.nio.channels.Selector#open</code></li><li>Pipes opened via <code>java.nio.channels.Pipe#open</code> (Unix only)</li></ul></li></ul><h3 id="FileLeakDetectorPlugin-Version1.4(Jun08,2015)">Version 1.4 (Jun 08, 2015)</h3><ul><li>Metadata fixed.</li></ul><h3 id="FileLeakDetectorPlugin-Version1.3(Sep11,2013)">Version 1.3 (Sep 11, 2013)</h3><ul><li>?</li></ul><h3 id="FileLeakDetectorPlugin-Version1.2(Apr3,2012)">Version 1.2 (Apr 3, 2012)</h3><ul><li>Improved the compatibility with the monitoring plugin by forking a separate JVM to do the attachment.</li></ul><h3 id="FileLeakDetectorPlugin-Version1.1(Apr3,2012)">Version 1.1 (Apr 3, 2012)</h3><ul><li>First public release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:23</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

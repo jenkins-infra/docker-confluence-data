@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Understanding Jelly Tags</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Understanding Jelly Tags
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (bshine@yahoo-inc.com)</span>, last modified by <span class='editor'> Unknown User (stevengbrown)</span> on Jan 04, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins developers will soon notice that jelly files are made up of many diverse jelly tags, and that jelly files live in many places in the Jenkins source tree. The mapping from jelly tag to jelly file or other implementation is tricky to figure out; this page attempts to explain it.</p>
+
+<p>A Jenkins page usually starts with a jelly page named index.jelly. Let's consider src/main/resources/hudson/model/Job/index.jelly. Here's the first line of jelly:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;j:jelly
+   xmlns:j=&quot;jelly:core&quot;
+   xmlns:st=&quot;jelly:stapler&quot;
+   xmlns:d=&quot;jelly:define&quot;
+   xmlns:l=&quot;/lib/layout&quot;
+   xmlns:t=&quot;/lib/hudson&quot;
+   xmlns:f=&quot;/lib/form&quot;
+   xmlns:i=&quot;jelly:fmt&quot;
+   xmlns:p=&quot;/lib/hudson/project&quot;&gt;
+</pre>
+</div></div>
+
+<p>That tag tells us where to find the jelly files or other implementation of tags in the specified namespace:</p>
+
+<p>xmlns:<em>namespace_name</em>=&quot;<em>where to find resources in that namespace</em>&quot;</p>
+
+<p>The path <code>/lib/foo</code> refers to <code>hudson/main/core/src/main/resources/lib/</code>.</p>
+
+<p>Let's look at the rest of index.jelly; I've pulled out a few of the interesting pieces:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+   &lt;l:layout .... &gt;
+      &lt;st:include page=&quot;sidepanel.jelly&quot; /&gt;
+      &lt;l:main-panel&gt; ...
+         &lt;t:editableDescription ... /&gt;
+         &lt;j:if test=&quot;...&quot;&gt; &lt;/j:if&gt;
+      &lt;/l:main-panel&gt;
+     &lt;/l:layout&gt;
+... &lt;/j:jelly&gt;
+</pre>
+</div></div>
+
+<p>The first tag we encounter is &lt;l:layout&gt;. The &quot;l&quot; tells us to look in &quot;/lib/layout&quot;, because that's what was declared in the j:jelly tag:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"> xmlns:l=&quot;/lib/layout&quot;</pre>
+</div></div>
+
+<p>I happen to know that <code>/lib/layout</code> means <code>core/src/main/resources/lib/layout/</code> so to find the source for the l:layout tag, I simply look at <code>core/src/main/resources/lib/layout/layout.jelly</code>.</p>
+
+<p>The next tag we encounter is <code>st:include</code> which declares the <code>st</code> namespace as somehow related to &quot;jelly:stapler&quot;. I suspect this is a jelly feature that I don't know about yet; probably it sends us to a stapler jar for the implementation of the <code>include</code> tag.</p>
+
+<p>Let's skip over <code>l:main-panel</code>, which should be clear already, and jump to <code>t:editableDescription</code>. The namespace declaration <code>xmlns:t=&quot;/lib/hudson&quot;</code> points us to<br/>
+<code>core/src/main/resources/lib/hudson/editableDescription.jelly</code>.</p>
+
+<p>Using these simple rules, you can now find the source for jelly tags implemented by Jenkins.</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Jelly Tags</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p><a class="external-link" href="https://github.com/jenkinsci/jenkins/tree/master/core/src/main/resources/lib" rel="nofollow">https://github.com/jenkinsci/jenkins/tree/master/core/src/main/resources/lib</a></p></div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

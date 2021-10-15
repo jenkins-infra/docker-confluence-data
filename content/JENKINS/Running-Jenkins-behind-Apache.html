@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Running Jenkins behind Apache</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Running Jenkins behind Apache
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (dnusbaum)</span> on Oct 04, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In situations where you have existing web sites on your server, you may find it useful to run Jenkins (or the servlet container that Jenkins runs in) behind Apache, so that you can bind Jenkins to the part of a bigger website that you may have. This document discusses some of the approaches for doing this.</p><p><strong>Make sure that you change the Jenkins httpListenAddress from its default of 0.0.0.0 to 127.0.0.1 or any Apache-level restrictions can be easily bypassed by hitting the Jenkins port directly.</strong></p><h1 id="RunningJenkinsbehindApache-mod_proxy">mod_proxy</h1><p><a href="http://httpd.apache.org/docs/2.0/mod/mod_proxy.html" class="external-link" rel="nofollow">mod_proxy</a> works by making Apache perform &quot;reverse proxy&quot; — when a request arrives for certain URLs, Apache becomes a proxy and further forward that request to Jenkins, then it forwards the response back to the client.</p><p>The following Apache modules must be installed :</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>a2enmod proxy
+a2enmod proxy_http
+a2enmod headers
+</pre>
+</div></div><p>A typical set up for mod_proxy would look like this:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyPass         /jenkins  http://localhost:8081/jenkins nocanon
+ProxyPassReverse  /jenkins  http://localhost:8081/jenkins
+ProxyRequests     Off
+AllowEncodedSlashes NoDecode
+
+# Local reverse proxy authorization override
+# Most unix distribution deny proxy by default (ie /etc/apache2/mods-enabled/proxy.conf in Ubuntu)
+&lt;Proxy http://localhost:8081/jenkins*&gt;
+  Order deny,allow
+  Allow from all
+&lt;/Proxy&gt;
+</pre>
+</div></div><p>This assumes that you run Jenkins on port 8081.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>For this set up to work, the context path of Jenkins <strong>must be the same</strong> between your Apache and Jenkins (that is, you can't run Jenkins on <a href="http://localhost:8081/ci" class="external-link" rel="nofollow">http://localhost:8081/ci</a> and have it exposed at <a href="http://localhost:80/jenkins" class="external-link" rel="nofollow">http://localhost:80/jenkins</a>).<br/> Set the context path in Windows by modifying the <code>jenkins.xml</code> configuration file and adding --prefix=/jenkins (or similar) to the &lt;arguments&gt; entry.<br/> Set the context path  when using the Ubuntu package by adding <code>--prefix=/jenkins</code> to <code>JENKINS_ARGS</code> in <code>/etc/default/jenkins</code> ( or in <code>/etc/sysconfig/jenkins</code> for RHEL/CentOS package)</p><p>When running on a dedicated server and you are using / as context, make sure you add a slash at the end of all URLs in proxy params in apache. Otherwise you might run into proxy errors. So</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyPass / http://localhost:8080/ nocanon</pre>
+</div></div><p>instead of</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyPass / http://localhost:8080 nocanon     # wont work</pre>
+</div></div><p>Note that this does <strong>not</strong> apply to the <code>ProxyPassMatch</code> directive, which behaves differently than <code>ProxyPass</code>. Below is an example of <code>ProxyPassMatch</code> to proxy all URLs other than <code>/.well-known</code> (a URL required by letsencrypt):</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyPassMatch  ^/(?\!.well-known)  http://localhost:8080 nocanon</pre>
+</div></div></div></div><p>The <em>ProxyRequests Off</em> prevents Apache from functioning as a forward proxy server (except for <em>ProxyPass</em>), it is advised to include it unless the server should function as a proxy.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Both the <code>nocanon</code> option to <code>ProxyPass</code>, <em>and</em> <code>AllowEncodedSlashes NoDecode</code>, are required for certain Jenkins features to work.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are running Apache on a Security-Enhanced Linux (SE-Linux) machine it is essential to make SE-Linux do the right thing by issuing as root</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>setsebool -P httpd_can_network_connect true
+</pre>
+</div></div><p>If this is not issued Apache will not be allowed to forward proxy requests to Jenkins and only an error message will be displayed.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Because Jenkins already compress its output, you can not use the normal proxy-html filter to modify urls:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>SetOutputFilter proxy-html</pre>
+</div></div><p>Instead you can use the following:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>SetOutputFilter INFLATE;proxy-html;DEFLATE
+ProxyHTMLURLMap http://your_server:8080/jenkins /jenkins</pre>
+</div></div><p><a href="http://wiki.uniformserver.com/index.php/Reverse_Proxy_Server_2:_mod_proxy_html_2" class="external-link" rel="nofollow">http://wiki.uniformserver.com/index.php/Reverse_Proxy_Server_2:_mod_proxy_html_2</a><br/> But since Jenkins seems to be well behaved it's even better to just not use SetOutputFilter and ProxyHTMLURLMap.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If there are problems with Jenkins sometimes servicing random garbage pages, then the following may help:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>SetEnv proxy-nokeepalive 1</pre>
+</div></div></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Some plug-ins determine URLs from client requests from Host header, so if you experience some problems with wrong URLs, you can try to switch on <code>ProxyPreserveHost</code> directive, which is switched off by default:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyPreserveHost On</pre>
+</div></div></div></div><h3 id="RunningJenkinsbehindApache-mod_proxywithHTTPS">mod_proxy with HTTPS</h3><p>If you'd like to run Jenkins with reverse proxy in HTTPS, one user reported that HTTPS needs to be terminated at Jenkins, not at the front-end Apache. See <a href="http://hudson.361315.n4.nabble.com/Hudson-behind-an-Apache-Reverse-Proxy-w-SSL-td370997.html" class="external-link" rel="nofollow">this e-mail thread</a> for more discussion.</p><p>Note that you also may need to have access to your host via regular http, else the admin interface test will report a broken proxy setup.</p><p>Alternatively, you can add an additional <code>ProxyPassReverse</code> directive to redirect non-SSL URLs generated by Jenkins to the SSL side. Assuming that your webserver is <code>your.host.com</code>, placing the following within the SSL virtual host definition will do the trick:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyRequests     Off
+ProxyPreserveHost On
+AllowEncodedSlashes NoDecode
+
+&lt;Proxy http://localhost:8081/jenkins*&gt;
+  Order deny,allow
+  Allow from all
+&lt;/Proxy&gt;
+
+ProxyPass         /jenkins  http://localhost:8081/jenkins nocanon
+ProxyPassReverse  /jenkins  http://localhost:8081/jenkins
+ProxyPassReverse  /jenkins  http://your.host.com/jenkins
+</pre>
+</div></div><p>Yet another option is to rewrite the Location headers that contain non-ssl URL's generated by Jenkins. If you want to access Jenkins from <a href="https://www.example.com/jenkins" class="external-link" rel="nofollow">https://www.example.com/jenkins</a>, placing the following within the SSL virtual host definition also works:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>ProxyRequests     Off
+ProxyPreserveHost On
+ProxyPass /jenkins/ http://localhost:8081/jenkins/ nocanon
+AllowEncodedSlashes NoDecode
+
+&lt;Location /jenkins/&gt;
+  ProxyPassReverse /
+  Order deny,allow
+  Allow from all
+&lt;/Location&gt;
+
+Header edit Location ^http://www.example.com/jenkins/ https://www.example.com/jenkins/
+</pre>
+</div></div><p>But it may also work fine to just use simple forwarding as above (the first HTTPS snippet), and add</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>RequestHeader set X-Forwarded-Proto &quot;https&quot;
+RequestHeader set X-Forwarded-Port &quot;443&quot;
+</pre>
+</div></div><p>in the HTTPS site configuration, as the Docker demo (below) does. (<code>X-Forwarded-Port</code> is not interpreted by Jenkins prior to <a href="https://issues.jenkins-ci.org/browse/JENKINS-23294">JENKINS-23294</a> so it may also be desirable to configure the servlet container to specify the originating port.)</p><p>The collection of snippets above simply don't work out of the box (July 2014), here is a full Apache-oriented &quot;sites-enabled&quot; file (ex: &quot;sites-enabled/example&quot;) for a dedicated Jenkins host, combining the ideas from snippets #1 and #3. This was formulated on the TurnKeyLinux Jenkins appliance (v 13.0), after having updated Jenkins to &quot;1.572&quot;. TODO (if anyone understands how to do so): Define a more selective path for the &lt;Proxy *&gt; tag, instead of *; I currently have the impression that the &lt;Proxy&gt; section is not even needed.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>NameVirtualHost *:80
+NameVirtualHost *:443
+
+&lt;VirtualHost *:80&gt;
+    ServerAdmin  webmaster@localhost
+    Redirect permanent / https://www.example.com/
+&lt;/VirtualHost&gt;
+
+&lt;VirtualHost *:443&gt;
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/cert.pem
+    ServerAdmin  webmaster@localhost
+    ProxyRequests     Off
+    ProxyPreserveHost On
+    AllowEncodedSlashes NoDecode
+    &lt;Proxy *&gt;
+        Order deny,allow
+        Allow from all
+    &lt;/Proxy&gt;
+    ProxyPass         /  http://localhost:8080/ nocanon
+    ProxyPassReverse  /  http://localhost:8080/
+    ProxyPassReverse  /  http://www.example.com/
+    RequestHeader set X-Forwarded-Proto &quot;https&quot;
+    RequestHeader set X-Forwarded-Port &quot;443&quot;
+&lt;/VirtualHost&gt;
+</pre>
+</div></div><h1 id="RunningJenkinsbehindApache-mod_ajp/mod_proxy_ajp">mod_ajp/mod_proxy_ajp</h1><p>More info welcome. Probably we should move the contents from <a href="Tomcat.html">here</a></p><p>I wanted to have Jenkins running in a different workspace than my normal Tomcat server, but both available via the Apache web server. So, first up, modify Jenkins to use a different web and ajp port than Tomcat:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>HTTP_PORT=9080
+AJP_PORT=9009
+...
+nohup java -jar &quot;$WAR&quot; --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=/jenkins &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 &amp;
+</pre>
+</div></div><p>Then setup Apache so that it knows that the prefix <code>/jenkins</code> is being served by AJP in the httpd.conf file:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>LoadModule jk_module          libexec/httpd/mod_jk.so
+
+AddModule     mod_jk.c
+
+#== AJP hooks ==
+JkWorkersFile /etc/httpd/workers.properties
+JkLogFile     /private/var/log/httpd/mod_jk.log
+JkLogLevel    info
+JkLogStampFormat &quot;[%a %b %d %H:%M:%S %Y] &quot;
+JkOptions     +ForwardKeySize +ForwardURICompat -ForwardDirectories
+JkRequestLogFormat     &quot;%w %V %T&quot;
+# Here are 3 sample applications - 2 that are being served by Tomcat, and Jenkins
+JkMount  /friki/* worker1
+JkMount  /pebble/* worker1
+JkMount  /jenkins/* worker2
+</pre>
+</div></div><p>Then finally the workers.conf file specified above, that just tells AJP which port to use for which web application:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Define 2 real workers using ajp13
+worker.list=worker1,worker2
+# Set properties for worker1 (ajp13)
+worker.worker1.type=ajp13
+worker.worker1.host=localhost
+worker.worker1.port=8009
+worker.worker1.lbfactor=50
+worker.worker1.cachesize=10
+worker.worker1.cache_timeout=600
+worker.worker1.socket_keepalive=1
+# Set properties for worker2 (ajp13)
+worker.worker2.type=ajp13
+worker.worker2.host=localhost
+worker.worker2.port=9009
+worker.worker2.lbfactor=50
+worker.worker2.cachesize=10
+worker.worker2.cache_timeout=600
+worker.worker2.socket_keepalive=1
+worker.worker2.recycle_timeout=300
+</pre>
+</div></div><h1 id="RunningJenkinsbehindApache-mod_proxy_ajp+SSL">mod_proxy_ajp+SSL</h1><p>AJP is an arguably cleaner alternative for an SSL-enabled reverse proxy, since Jenkins will get all pertinent HTTP headers untouched. Configuration is a snap too, in three simple steps:</p><p>1. Configure an AJP port for Jenkins (as mentioned above)</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>HTTP_PORT=-1
+AJP_PORT=9009
+...
+nohup java -jar &quot;$WAR&quot; --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=/jenkins &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 &amp;
+</pre>
+</div></div><p>2. Enable mod_proxy_ajp in Apache:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># a2enmod proxy_ajp
+</pre>
+</div></div><p>3. Include the following snippet in your SSL-enabled VirtualHost:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;VirtualHost *:443&gt;
+...
+	SSLEngine on
+...
+	AllowEncodedSlashes NoDecode
+	ProxyRequests Off
+	ProxyPass /jenkins ajp://localhost:9009/jenkins nocanon
+&lt;/VirtualHost&gt;</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Note the use of <code>AllowEncodedSlashes</code> and <code>ProxyPass...nocanon</code> to persuade Apache to leave PATH_INFO alone.</p></div></div><h1 id="RunningJenkinsbehindApache-mod_rewrite">mod_rewrite</h1><p>Some people attempted to use mod_rewrite to do this, but this will never work if you do not add a <em>ProxyPassReverse</em>.<br/> See <a href="http://www.nabble.com/Manage-Hudson--Hudson-URL-tt14864607.html" class="external-link" rel="nofollow">the thread</a> if you'd like to know why.</p><p>The following Apache modules must be installed :</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>a2enmod rewrite
+a2enmod proxy
+a2enmod proxy_http
+</pre>
+</div></div><p>A typical set up for mod_rewrite would look like this:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Use last flag because no more rewrite can be applied after proxy pass
+RewriteRule       ^/jenkins(.*)$  http://localhost:8081/jenkins$1 [P,L]
+ProxyPassReverse  /jenkins        http://localhost:8081/jenkins
+ProxyRequests     Off
+
+# Local reverse proxy authorization override
+# Most unix distribution deny proxy by default (ie /etc/apache2/mods-enabled/proxy.conf in Ubuntu)
+&lt;Proxy http://localhost:8081/jenkins*&gt;
+  Order deny,allow
+  Allow from all
+&lt;/Proxy&gt;
+</pre>
+</div></div><p>This assumes that you run Jenkins on port 8081. For this set up to work, the context path of Jenkins must be the same between your Apache and Jenkins (that is, you can't run Jenkins on <a href="http://localhost:8081/ci" class="external-link" rel="nofollow">http://localhost:8081/ci</a> and have it exposed at <a href="http://localhost:80/jenkins" class="external-link" rel="nofollow">http://localhost:80/jenkins</a>)</p><p>The <em>ProxyRequests Off</em> prevents Apache from functioning as a forward proxy server (except for <em>ProxyPass</em>), it is advised to include it unless the server should function as a proxy.</p><h1 id="RunningJenkinsbehindApache-Testingcompatibilityfromplugins">Testing compatibility from plugins</h1><p>Try <a href="https://index.docker.io/u/jglick/jenkins-demo-reverse-proxy/" class="external-link" rel="nofollow">https://index.docker.io/u/jglick/jenkins-demo-reverse-proxy/</a> to see if your plugin works behind an Apache reverse proxy.</p><h1 id="RunningJenkinsbehindApache-ProxyingCLIcommandsusingtheHTTP(S)transportwithJenkins&gt;=2.54">Proxying CLI commands using the HTTP(S) transport with Jenkins &gt;= 2.54</h1><p>Using the plain CLI protocol with the HTTP(S) transport to access Jenkins &gt;= 2.54 through an Apache reverse proxy does not work. (See 
+<span class="jira-issue resolved" data-jira-key="JENKINS-47279" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-47279?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-47279</a>
+                            -
+            <span class="summary">Full-duplex HTTP(S) transport with plain CLI protocol does not work with Apache reverse proxy in Jenkins &gt;= 2.54</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+, and update it if you have settings that do work!) As a workaround, you can use the <a href="https://jenkins.io/doc/book/managing/cli/#ssh" class="external-link" rel="nofollow">CLI over SSH</a>.</p><p> </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

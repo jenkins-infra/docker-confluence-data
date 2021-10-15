@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Coordinator</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Coordinator
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ace_jl_han)</span>, last modified by <span class='editor'> Unknown User (kymair)</span> on Jul 14, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Coordinator <a href="https://plugins.jenkins.io/coordinator" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>This plugin acts like a coordinator that makes other jobs to build in a particular sequence as pre-defined.</p>
+
+<p>There are <span style="color: rgb(51,102,255);"><strong>serial</strong></span> and <span style="color: rgb(51,102,255);"><strong>parallel</strong></span> building patterns, which should have already covered most scenarios.</p></p>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020733970 {padding: 0px;}
+div.rbtoc1631020733970 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020733970 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020733970'>
+<ul class='toc-indentation'>
+<li><a href='#Coordinator-Why?'>Why?</a></li>
+<li><a href='#Coordinator-Demo'>Demo</a>
+<ul class='toc-indentation'>
+<li><a href='#Coordinator-LiveDemo'>Live Demo</a></li>
+<li><a href='#Coordinator-ConfigurePage'>Configure Page</a></li>
+<li><a href='#Coordinator-TriggerPage'>Trigger Page</a></li>
+<li><a href='#Coordinator-BuildingPage'>Building Page</a></li>
+</ul>
+</li>
+<li><a href='#Coordinator-ChangeLog'>Change Log</a>
+<ul class='toc-indentation'>
+<li><a href='#Coordinator-Version1.0.0(Nov1,2014)'>Version 1.0.0 (Nov 1, 2014)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="Coordinator-Why?">Why?</h1>
+
+<p>I've seen different organizations spending their own effort to customize their CI tools, especially for job running dependency definitions. </p>
+
+<p>Say first run <span style="color: rgb(255,102,0);"><strong>Job A</strong></span>, then <span style="color: rgb(255,102,0);"><strong>Job B</strong></span> &amp; <span style="color: rgb(255,102,0);"><strong>Job C</strong></span> in parallel, then <span style="color: rgb(255,102,0);"><strong>Job D</strong></span>, then others, etc.</p>
+
+<p>This plugin is meant to make this by drag &amp; drop, and clicks. It would be easy to trace the building histories including the person who triggers the job,</p>
+
+<p>build number, launch time, duration &amp; status in each atomic job.</p>
+
+<p>In a word, it's more like a dash board to keep all relevant information in a page view.</p>
+
+<h1 id="Coordinator-Demo">Demo</h1>
+
+<h3 id="Coordinator-LiveDemo">Live Demo</h3>
+
+<p>For a running Jenkins instance with Coordinator plugin installed, go to jenkins.unendedquest.com</p>
+
+<h3 id="Coordinator-ConfigurePage">Configure Page</h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-left" src="attachments/74055951/74285084.png" data-image-src="attachments/74055951/74285084.png" data-unresolved-comment-count="0" data-linked-resource-id="74285084" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configure-page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055951" data-linked-resource-container-version="11"></span> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="Coordinator-TriggerPage">Trigger Page</h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><h4 id="Coordinator-ExecutionPlan"><span style="color: rgb(255,0,0);">Execution Plan</span> </h4></td>
+<td class="confluenceTd"><h4 id="Coordinator-ParametersPassingToAtomicJobs"><span style="color: rgb(255,0,0);">Parameters Passing To Atomic Jobs</span> </h4></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-left" src="attachments/74055951/74285082.png" data-image-src="attachments/74055951/74285082.png" data-unresolved-comment-count="0" data-linked-resource-id="74285082" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="trigger-page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055951" data-linked-resource-container-version="11"></span> </p></td>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-left" src="attachments/74055951/74285081.png" data-image-src="attachments/74055951/74285081.png" data-unresolved-comment-count="0" data-linked-resource-id="74285081" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="parameter.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055951" data-linked-resource-container-version="11"></span> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="Coordinator-BuildingPage">Building Page</h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper image-left-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-left" src="attachments/74055951/74285085.png" data-image-src="attachments/74055951/74285085.png" data-unresolved-comment-count="0" data-linked-resource-id="74285085" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="running.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74055951" data-linked-resource-container-version="11"></span> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h1 id="Coordinator-ChangeLog">Change Log</h1>
+
+<h3 id="Coordinator-Version1.0.0(Nov1,2014)">Version 1.0.0 (Nov 1, 2014)</h3>
+
+<ul>
+	<li>basics</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285071.jpg">442253138.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285080.png">Capture.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285081.png">parameter.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285083.png">trigger-page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285082.png">trigger-page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285084.png">configure-page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74055951/74285085.png">running.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

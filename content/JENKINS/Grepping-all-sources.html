@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Grepping all sources</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Source-code.html">Source code</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Grepping all sources
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jglick)</span>, last modified on Nov 24, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If you find yourself needing to look for a certain pattern among all sources files in Jenkins and its plugins - anything in <a class="external-link" href="https://github.com/jenkinsci" rel="nofollow">https://github.com/jenkinsci</a> - try cloning <a class="external-link" href="http://git.jenkins-ci.org/all.git" rel="nofollow">http://git.jenkins-ci.org/all.git</a> and then running this handy one-liner in it (replace the &quot;basic&quot;-syntax regexp with whatever you need, or use <code>-E</code> for extended regexp):</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+git branch -a | fgrep -v &#39;*&#39; | xargs git grep &#39;SomeClass\.staticMethod&#39; | perl -n -e &#39;print &quot;$repo/$fname: $text\n&quot; if ($repo, $fname, $text) = /^remotes\/origin\/(.+)\/master:([^:]+):(?:[ \t]*)(.+)$/&#39;
+</pre>
+</div></div>
+
+<p>(This greps files as of the tip of the master branch only. Checking historical versions is much slower.)</p>
+
+<p>To limit the search to particular paths:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+(git branch -a | fgrep -v &#39;*&#39;; echo -- pom.xml) | xargs git grep &#39;credentials&#39; | perl -n -e &#39;print &quot;$repo/$fname: $text\n&quot; if ($repo, $fname, $text) = /^remotes\/origin\/(.+)\/master:([^:]+):(?:[ \t]*)(.+)$/&#39;
+</pre>
+</div></div>
+
+<p>Another useful trick is to collect the full text of all source files matching the pattern, so you evaluate matches in context:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+git show `git branch -a | fgrep /master | xargs git grep -l &#39;SomeClass\.staticMethod&#39;`
+</pre>
+</div></div>
+
+<p>Similarly, to grep file names and not from file contents:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+for b in $(git branch -a | fgrep /master)
+do
+  git ls-tree -r --name-only $b | grep some/path/name | sed -e &quot;s|^|$b:|g&quot;
+done
+</pre>
+</div></div>
+
+<p>To show hyperlinks to GitHub sources, change the Perl print statement to:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+print &quot;https://github.com/jenkinsci/$repo/blob/master/$fname\n&quot;
+</pre>
+</div></div>
+
+<p><a class="external-link" href="http://ci.jenkins-ci.org/view/Infrastructure/job/infra_backend-merge-all-repo/" rel="nofollow">http://ci.jenkins-ci.org/view/Infrastructure/job/infra_backend-merge-all-repo/</a> updates this repo weekly.</p>
+
+<p>You can also:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+git clone git@github.com:jenkinsci/backend-merge-all-repo.git
+./backend-merge-all-repo/clone.groovy
+</pre>
+</div></div>
+
+<p>to clone all repositories separately, then use regular shell tools to search them:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">
+find */src/main/java -type f -name \*.java -exec fgrep -q &#39;SomeClass.staticMethod&#39; {} \; -print
+</pre>
+</div></div>
+
+<p>But the easiest method is to skip checkouts entirely and use GitHub:</p>
+
+<p><a class="external-link" href="https://github.com/search?type=Code&amp;q=user%3Ajenkinsci+SomeClass.staticMethod" rel="nofollow">https://github.com/search?type=Code&amp;q=user%3Ajenkinsci+SomeClass.staticMethod</a></p>
+
+<p>Or right-click your browser search bar, add a new provider with name <code>github</code> and URL pattern:</p>
+
+<p><a class="external-link" href="https://github.com/search?ref=simplesearch&amp;type=Code&amp;q=user%3Ajenkinsci+%s" rel="nofollow">https://github.com/search?ref=simplesearch&amp;type=Code&amp;q=user%3Ajenkinsci+%s</a></p>
+
+<p>Now just: Ctrl-K github TAB SomeClass.staticMethod ENTER</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

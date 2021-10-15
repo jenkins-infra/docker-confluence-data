@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : mabl Integration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Hosting-Plugins.html">Hosting Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : mabl Integration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mabl)</span>, last modified on Oct 04, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="table-wrap"><table class="wrapped confluenceTable"><thead><tr><th class="confluenceTh"><p>View mabl Integration <a href="https://plugins.jenkins.io/mabl-integration" class="external-link" rel="nofollow">on the plugin site</a> for more information.</p></th></tr></thead></table></div><p>This plugin allows you to integrate <a href="https://www.mabl.com" class="external-link" rel="nofollow">mabl</a> test journeys with your CI/CD workflow.</p><h3 id="mablIntegration-Features"><span style="color: rgb(210,73,57);">Features</span></h3><ul><li>Launch mabl journeys as a project step</li><li>Fail your Jenkins build if the mabl journeys fail<ul><li>Optionally continue on failure</li></ul></li></ul><h3 id="mablIntegration-Requirements">Requirements</h3><ul><li>Minimum Jenkins version <em>1.580.1</em></li><li>mabl API key<ul><li>See <a href="https://help.mabl.com/v1.0/docs/integrating-mabl-with-your-cicd-workflow#section-the-mabl-deployment-events-api" class="external-link" rel="nofollow">integration docs</a> for details<br/><br/></li></ul></li></ul><h3 id="mablIntegration-AddingamablProjectStep">Adding a mabl Project Step</h3><p>Add a <em>Run mabl journeys </em>step to your new or existing project.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138453951/138453945.png" data-image-src="attachments/138453951/138453945.png" data-unresolved-comment-count="0" data-linked-resource-id="138453945" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-4-12 17:30:23.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138453951" data-linked-resource-container-version="13"></span></p><p>Configure the API key. Then select environment, and application from the drop-down. At least one of environment and application must be supplied.  All matching plans and their journeys will be run during this step. The step will block until the tests are complete/failed, or one hour has elapsed.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138453951/138456345.png" data-image-src="attachments/138453951/138456345.png" data-unresolved-comment-count="0" data-linked-resource-id="138456345" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2018-05-16 at 4.57.48 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138453951" data-linked-resource-container-version="13"></span></p><p>You make continue on failure using the advanced configurations.</p><ul><li>Filter by plan labels to run only plans tagged with the selected labels. (You can select multiple labels using shift/ctrl click.)</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/138453951/177474032.png" data-image-src="attachments/138453951/177474032.png" data-unresolved-comment-count="0" data-linked-resource-id="177474032" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2019-07-30 at 2.35.43 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138453951" data-linked-resource-container-version="13"></span></p><ul><li>Continue if your plan/journeys fail</li><li>Continue if there is an unexpected error in the mabl API</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="600" src="attachments/138453951/138453950.png" data-image-src="attachments/138453951/138453950.png" data-unresolved-comment-count="0" data-linked-resource-id="138453950" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2018-4-12 17:35:57.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138453951" data-linked-resource-container-version="13"></span></p><h3 id="mablIntegration-AddingamablPipelineStep">Adding a mabl Pipeline Step</h3><p>In a pipeline step, select 'Configure'. In the pipeline script, insert a pipeline step for mabl. This can be written by hand or created via the 'Pipeline Syntax' tool. Here is an example output:</p><ul><li>mabl: The pipeline function to be called. - <span style="color: rgb(255,0,0);">Required</span></li><li>applicationId: Selects the application to run deployments against <span style="color: rgb(255,0,0);">(one of </span>environmentId<span style="color: rgb(255,0,0);"> or </span>applicationId<span style="color: rgb(255,0,0);"> is required)</span></li><li>continueOnMablError: Continue if there is an unexpected error in the mabl API</li><li>continueOnPlanFailure: Continue if your plan/journeys fail</li><li>environmentId: Selects the environment to run deployments against <span style="color: rgb(255,0,0);">(one of </span>environmentId<span style="color: rgb(255,0,0);"> or </span>applicationId<span style="color: rgb(255,0,0);"> is required)</span></li><li>restApiKey: The apiKey of the desired deployment workspace - <span style="color: rgb(255,0,0);">Required</span><br/><span style="color: rgb(255,0,0);"><br/></span></li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline Step Setup</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">mabl applicationId: &#39;APP-ID-a&#39;, continueOnMablError: true, continueOnPlanFailure: true, environmentId: &#39;ENV-ID-e&#39;, restApiKey: &#39;REST-API-KEY&#39;</pre>
+</div></div><p>OR something like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline Step Setup</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node {
+   stage(&#39;mabl&#39;) {
+       node {
+           step([$class: &#39;MablStepBuilder&#39;, restApiKey: &#39;REST-API-KEY&#39;, environmentId: &#39;ENV-ID-e&#39;, applicationId: &#39;APP-ID-a&#39;])
+       }
+   }
+}</pre>
+</div></div><h3 id="mablIntegration-EnvironmentVariableCollection"><br/>Environment Variable Collection</h3><p>The mabl plugin will optionally collect build and repository information to send along with mabl deployments. This will give more information and insights into testing environment state for journey runs. We will not collect sensitive information like passwords or API keys.</p><p>To enable this feature:</p><ul><li>Go to the 'Manage Jenkins' page from the 'Dashboard'</li><li>Go to the 'Configure System' page</li><li>Find the 'mabl' section and check the 'Send build environment variables to mabl' checkbox</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="600" src="attachments/138453951/138458432.png" data-image-src="attachments/138453951/138458432.png" data-unresolved-comment-count="0" data-linked-resource-id="138458432" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Jenkins Send build Variables Checkbox.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138453951" data-linked-resource-container-version="13"></span></p><p>Now you'll see the environment and build information collected in the output log of future runs that use a mabl plugin step.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Example Variable Collections</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">Send build environment variables is set. Collecting the following information:
+  &#39;GIT_BRANCH&#39; =&gt; &#39;origin/master&#39;
+  &#39;GIT_COMMIT&#39; =&gt; &#39;a246e0c756791965bdb6fc9caa1a36775422fcec&#39;
+  &#39;GIT_URL&#39; =&gt; &#39;git@github.com:example/my_repository.git&#39;
+  &#39;GIT_PREVIOUS_COMMIT&#39; =&gt; &#39;a246e0c73a691935bdb6fc9caa1a36775422fce5&#39;
+  &#39;JOB_NAME&#39; =&gt; &#39;mabl integration&#39;
+  &#39;BUILD_NUMBER&#39; =&gt; &#39;47&#39;
+  &#39;RUN_DISPLAY_URL&#39; =&gt; &#39;http://127.0.0.1:9090/job/mabl%20integration/47/display/redirect&#39;</pre>
+</div></div><p><br/></p><h3 id="mablIntegration-ChangeLog">Change Log</h3><h4 id="mablIntegration-v0.0.16(04October2019)">v0.0.16 (04 October 2019)</h4><ul><li>Fix bug when displaying status for multi-stage plans.</li></ul><h4 id="mablIntegration-v0.0.15(05September2019)">v0.0.15 (05 September 2019)</h4><ul><li>The output of failed run with link is now available</li></ul><h4 id="mablIntegration-v0.0.13(30July2019)">v0.0.13 (30 July 2019)</h4><ul><li>Support for plan label filtering in the mabl build step</li></ul><h4 id="mablIntegration-v0.0.10(08June2018)">v0.0.10 (08 June 2018)</h4><ul><li>The mabl plugin is now available to use a pipeline step</li><li>Optionally allow mabl to collect environment information to enhance deployment journey insights</li></ul><h4 id="mablIntegration-v0.0.9(08June2018)">v0.0.9 (08 June 2018)</h4><ul><li>The output of mabl tests are now available as junit XML in the workspace directory for reports and download  </li></ul><h4 id="mablIntegration-v0.0.8(18May2018)">v0.0.8 (18 May 2018)</h4><ul><li>Environment and Application drop downs automatically populated from API key</li></ul><h4 id="mablIntegration-v0.0.7(17May2018)">v0.0.7 (17 May 2018)</h4><ul><li>More resilient to failures</li></ul><h4 id="mablIntegration-v0.0.6(18April2018)">v0.0.6 (18 April 2018)</h4><ul><li>Advanced form validation support added</li></ul><h4 id="mablIntegration-v0.0.5(13April2018)">v0.0.5 (13 April 2018)</h4><ul><li>Support for Windows console output and encodings</li></ul><h4 id="mablIntegration-v0.0.4(12April2018)">v0.0.4 (12 April 2018)</h4><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138453945.png">image2018-4-12 17:30:23.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138453949.png">image2018-4-12 17:34:31.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138453950.png">image2018-4-12 17:35:57.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138454430.png">image2018-4-18 18:24:38.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138456345.png">Screen Shot 2018-05-16 at 4.57.48 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/138458432.png">Jenkins Send build Variables Checkbox.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138453951/177474032.png">Screen Shot 2019-07-30 at 2.35.43 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

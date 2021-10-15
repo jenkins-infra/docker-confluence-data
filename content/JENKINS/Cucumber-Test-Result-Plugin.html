@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Cucumber Test Result Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Cucumber Test Result Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (teilo)</span>, last modified on Jan 31, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Cucumber json test reporting <a href="https://plugins.jenkins.io/cucumber-testresult-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>This plugin is up for adoption.</strong> Want to help improve this plugin? <a href="/display/JENKINS/Adopt+a+Plugin" title="Adopt a Plugin">Click here to learn more</a>!</p></div></div>This plugin allows you to show the results of <a href="http://cukes.info/" class="external-link" rel="nofollow">Cucumber tests</a> within Jenkins.</p><h1 id="CucumberTestResultPlugin-ProjectConfiguration">Project Configuration</h1><p>To enable the plugin add the &quot;Publish Cucumber test result report&quot; post build action for classic Jobs.</p><p>To record the results in Pipeline use the following syntax:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">cucumber &#39;glob&#39;
+</pre>
+</div></div><p>where <code>glob</code> is a glob syntax - e.g. <code>feature.json</code> or <code>results/*.json</code> or <code>**/target/*.json</code></p><p>At the end of the build the cucumber json files will be parsed and displayed as standard test results.</p><h1 id="CucumberTestResultPlugin-ExampleScreenshots">Example Screenshots</h1><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/69764746/69959827.png" data-image-src="attachments/69764746/69959827.png" data-unresolved-comment-count="0" data-linked-resource-id="69959827" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="top level view.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764746" data-linked-resource-container-version="55"></span> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/69764746/69959830.png" data-image-src="attachments/69764746/69959830.png" data-unresolved-comment-count="0" data-linked-resource-id="69959830" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="scenario.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764746" data-linked-resource-container-version="55"></span> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/69764746/69959829.png" data-image-src="attachments/69764746/69959829.png" data-unresolved-comment-count="0" data-linked-resource-id="69959829" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="tags.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764746" data-linked-resource-container-version="55"></span> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/69764746/69959828.png" data-image-src="attachments/69764746/69959828.png" data-unresolved-comment-count="0" data-linked-resource-id="69959828" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="feature.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764746" data-linked-resource-container-version="55"></span></p><h1 id="CucumberTestResultPlugin-FAQ">FAQ</h1><h2 id="CucumberTestResultPlugin-Whydidyouwriteanewcucumberreporter?">Why did you write a new cucumber reporter?</h2><p>There where limitations in the way that the existing support for Cucumber was handled that was suboptimal.</p><p>There is nothing wrong with the <a href="https://github.com/masterthought/jenkins-cucumber-jvm-reports-plugin-java" class="external-link" rel="nofollow">cucumber jvm reports plugin</a> and they can be used in tandem - however that plugin doesn't offer the normal jenkins testresult interfaces. Namely there is no trend reports or test history. There is also no API that you can integrate with.</p><p>Likewise you could output junit xml style reports from cucumber - but this also has limitations. Namely the output is less than stellar, you have no view of tags or the nice goodness that the previous mentioned plugin provides.</p><p>This plugin solves both of these issues so you only need one place to look. We also have some grand plans to integrate this with the <a href="https://github.com/samsta/quarantine" class="external-link" rel="nofollow">quarantine</a> and <a href="Test-stability-plugin.html">test stability</a> plugins.</p><h2 id="CucumberTestResultPlugin-CanIstillusetheothercucumberplugin.">Can I still use the other cucumber plugin.</h2><p>Yes both can work side by side - but why?</p><h1 id="CucumberTestResultPlugin-HelpandSupport">Help and Support</h1><p>For Help and support please use the <a href="https://groups.google.com/group/jenkinsci-users" class="external-link" rel="nofollow">Jenkins Users</a> mailing list.<br/> To report a bug please <a href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open,+%22In+Progress%22,+Reopened)+AND+component+%3D+cucumber-testresulthttp://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open,+%22In+Progress%22,+Reopened)+AND+component+%3D+cucumber-testresulthttp://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open,+%22In+Progress%22,+Reopened)+AND+component+%3D+cucumber-testresult-plugin" class="external-link" rel="nofollow">check the bug tracker</a> to see if the issue has been reported before <a href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=show&amp;createNew=true" class="external-link" rel="nofollow">creating a new issue</a>.</p><h1 id="CucumberTestResultPlugin-VersionHistory">Version History</h1><h2 id="CucumberTestResultPlugin-0.11(notyetreleased)">0.11 (not yet released)</h2><p>build from <a href="Source-code.html">source</a> or download from <a href="https://jenkins.ci.cloudbees.com/job/plugins/job/cucumber-testresult-plugin/lastStableBuild/org.jenkins-ci.plugins$cucumber-testresult-plugin/" class="external-link" rel="nofollow">here</a> if interested</p><h2 id="CucumberTestResultPlugin-0.10.1(31Jan2018)">0.10.1 (31 Jan 2018)</h2><ul><li>Additional Fix <span style="color: rgb(5,38,76);"><a href="https://issues.jenkins-ci.org/browse/JENKINS-49101" class="external-link" rel="nofollow">JENKINS-49101</a> - Cucumber plugin not compatible with JEP-200 in Jenkins <span style="color: rgb(41,43,44);">2.102</span></span></li></ul><h2 id="CucumberTestResultPlugin-0.10(25Jan2018)">0.10 (25 Jan 2018)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-38286">JENKINS-38286</a> - <code>NullPointerException</code> in pipeline snippet generator.</li><li>Prevent the action link appearing twice in builds.</li><li>add symbol support so you can now just use <code>cucumber '*<strong>/</strong>.json'</code> in your pipeline</li><li>Fix <span style="color: rgb(5,38,76);"><a href="https://issues.jenkins-ci.org/browse/JENKINS-49101" class="external-link" rel="nofollow">JENKINS-49101</a> - Cucumber plugin not compatible with JEP-200 in Jenkins <span style="color: rgb(41,43,44);">2.102</span></span></li></ul><h2 id="CucumberTestResultPlugin-0.9.7(15Sept2016)">0.9.7 (15 Sept 2016)</h2><ul><li>Implement <a href="https://issues.jenkins-ci.org/browse/JENKINS-26340">JENKINS-26340</a> - Pipeline support. Thanks to <a href="https://github.com/helloeve" class="external-link" rel="nofollow">Haoyu Wang</a> for pushing this over the finishing line.</li></ul><h2 id="CucumberTestResultPlugin-0.8.2(27May2015)">0.8.2 (27 May 2015)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-28588">JENKINS-28588</a> Plugin failed in a master/slave environment.</li></ul><h2 id="CucumberTestResultPlugin-0.8.1(21May2015)">0.8.1 (21 May 2015)</h2><ul><li>No changes - 0.8 release failed.</li></ul><h2 id="CucumberTestResultPlugin-0.8(21May2015)">0.8 (21 May 2015)</h2><ul><li>Add support for <a href="http://cukes.info/reports.html#embedding-screenshots" class="external-link" rel="nofollow">embedded items</a> in the report (e.g. images)</li></ul><h2 id="CucumberTestResultPlugin-0.8-beta2(30Oct2014)">0.8-beta2 (30 Oct 2014)</h2><ul><li>Fix incorrect logging statements</li></ul><h2 id="CucumberTestResultPlugin-0.8-beta1(30Oct2014)">0.8-beta1 (30 Oct 2014)</h2><p><strong>Note:</strong> this plugin now requires Jenkins 1.580 or higher</p><ul><li>Workaround <a href="https://issues.jenkins-ci.org/browse/JENKINS-21835">JENKINS-21835</a> plugin fails on malformed json produced by some buggy cucumber implementation (enable &quot;Ignore Bad Steps&quot; option). (<a href="https://github.com/jenkinsci/cucumber-testresult-plugin/pull/2" class="external-link" rel="nofollow">pull #2</a> thanks to <a href="https://github.com/KostyaSha" class="external-link" rel="nofollow">Kanstantsin Shautsou</a>)</li><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-25280">JENKINS-25280</a> test failures where not expanded correctly.</li></ul><h2 id="CucumberTestResultPlugin-0.7.0(23Oct2014)">0.7.0 (23 Oct 2014)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-25021">JENKINS-25021</a> background failure was not always causing tests to be marked as failed.</li><li>Workaround <a href="https://issues.jenkins-ci.org/browse/JENKINS-25280">JENKINS-25280</a> test failures where not expanded correctly.</li><li>individual test results are now exported from the build api.</li></ul><h2 id="CucumberTestResultPlugin-0.6.0(6Oct2014)">0.6.0 (6 Oct 2014)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-24061">JENKINS-24061</a> pending steps are not handled correctly.</li><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-24435">JENKINS-24435</a> Test results are not joined properly when used with standard junit test result publisher (<a href="https://github.com/jenkinsci/cucumber-testresult-plugin/pull/1" class="external-link" rel="nofollow">pull #1</a> thanks to <a href="https://github.com/bubenkoff" class="external-link" rel="nofollow">Anatoly Bubenkov</a>)</li></ul><h2 id="CucumberTestResultPlugin-0.5.2(22July2014)">0.5.2 (22 July 2014)</h2><ul><li>fixed release</li></ul><h2 id="CucumberTestResultPlugin-0.5.1(22July2014)-botchedrelease">0.5.1 (22 July 2014) - botched release</h2><ul><li>fix release</li></ul><h2 id="CucumberTestResultPlugin-0.5(3rdJuly2014)-botchedrelease">0.5 (3rd July 2014) - botched release</h2><ul><li>Test result age would sometimes show &quot;1&quot; rather than the true age of the failure.</li></ul><h2 id="CucumberTestResultPlugin-0.4(24thDecember2013)">0.4 (24th December 2013)</h2><ul><li>If a scenario is undefined the test should be marked as failed - and the html overview should show the undefined step.</li></ul><h2 id="CucumberTestResultPlugin-0.3(24thDecember2013)">0.3 (24th December 2013)</h2><ul><li>upgrade to released version of gherkin so we no loner have to maintain a fork now that our changes are upstream.</li><li>If a scenario failed due to a background failure the error details where empty in the overview page.</li></ul><h2 id="CucumberTestResultPlugin-0.2(24thDecember2013)">0.2 (24th December 2013)</h2><p><strong>Note</strong> requires a custom Gherkin build to build from source.</p><ul><li>Background results where not tallyed prior to being propagated to the scenario</li></ul><h2 id="CucumberTestResultPlugin-0.1-beta(3rdNovember2013)">0.1-beta (3rd November 2013)</h2><p>Initial release.</p><p><strong>Note</strong> requires a custom Gherkin build to build from source.</p><p><strong>The comment list below is not monitored.</strong></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764746/69959827.png">top level view.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764746/69959828.png">feature.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764746/69959829.png">tags.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764746/69959830.png">scenario.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:19</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

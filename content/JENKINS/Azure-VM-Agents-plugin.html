@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure VM Agents plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure VM Agents plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (clguiman)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Sep 18, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Azure VM Agents <a href="https://plugins.jenkins.io/azure-vm-agents" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-03-06/#SECURITY-1331" class="external-link" rel="nofollow">Unauthorized users could change agent IP configuration</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-03-06/#SECURITY-1330" class="external-link" rel="nofollow">Information disclosure</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-03-06/#SECURITY-1332" class="external-link" rel="nofollow">Users with Overall/Read access can enumerate credential IDs</a></li>
+</ul>
+
+</div></div>
+<p>A Jenkins Plugin to create Jenkins agents in Azure Virtual Machines (via Azure ARM template).</p><p>Supported features:</p><ol><li>Windows Agents on Azure Cloud using SSH and JNLP<ul><li>For Windows images to launch via SSH, the image needs to be preconfigured with SSH.</li><li>For preparing custom windows image, refer to <a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-capture-image-windows-server/" class="external-link" rel="nofollow">Azure documentation</a></li></ul></li><li>Linux Agents on Azure Cloud using SSH<ul><li>For preparing custom linux image, refer to <a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/" class="external-link" rel="nofollow">Azure documentation</a></li></ul></li></ol><h2 id="AzureVMAgentsplugin-HowtoInstall">How to Install</h2><p>You can install/update this plugin in Jenkins update center (Manage Jenkins -&gt; Manage Plugins, search Azure VM Agents Plugin).</p><p>You can also manually install the plugin if you want to try the latest feature before it's officially released. To manually install the plugin:</p><ol><li><p>Clone the repo and build:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">mvn package</pre>
+</div></div></li><li>Open your Jenkins dashboard, go to Manage Jenkins -&gt; Manage Plugins.</li><li>Go to Advanced tab, under Upload Plugin section, click Choose File.</li><li>Select <code>azure-vm-agents.hpi</code> in <code>target</code> folder of your repo, click Upload.</li><li>Restart your Jenkins instance after install is completed.</li></ol><h2 id="AzureVMAgentsplugin-Prerequisites">Prerequisites</h2><p>To use this plugin to create VM agents, first you need to have an Azure Service Principal in your Jenkins instance.</p><ol><li>Create an Azure Service Principal through <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json" class="external-link" rel="nofollow">Azure CLI</a> or <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal" class="external-link" rel="nofollow">Azure portal</a>.</li><li>Open Jenkins dashboard, go to Credentials, add a new Microsoft Azure Service Principal with the credential information you just created.</li></ol><h2 id="AzureVMAgentsplugin-ConfigurethePlugin">Configure the Plugin</h2><h3 id="AzureVMAgentsplugin-AddaNewAzureVMAgentsCloud">Add a New Azure VM Agents Cloud</h3><ol><li>Within the Jenkins dashboard, click Manage Jenkins -&gt; Configure System -&gt; Scroll to the bottom of the page and find the section with the dropdown &quot;Add a new cloud&quot; -&gt; click on it and select &quot;Microsoft Azure VM Agents&quot;</li><li>Provide a name for the cloud (plugin will generate one for you if you leave it empty, but it's recommended to give it a meaningful name).</li><li>Select an existing account from the Azure Credentials dropdown or add new &quot;Microsoft Azure Service Principal&quot; credentials in the Credentials Management page by filling out the Subscription ID, Client ID, Client Secret and the OAuth 2.0 Token Endpoint.</li><li>Click on “Verify configuration” to make sure that the profile configuration is done correctly.</li><li>Save and continue with the template configuration (See instructions below).</li></ol><h3 id="AzureVMAgentsplugin-AddaNewAzureVMAgentTemplate">Add a New Azure VM Agent Template</h3><ol><li><p>Click the &quot;Add&quot; in &quot;Add Azure Virtual Machine Template&quot; to add a template. A template is used to define an Azure VM Agent configuration, like its VM size, region, or retention time.</p></li><li><p>Provide meaningful name and description for your new template.</p></li><li><p>Provide one or more meaningful labels, e.g. &quot;Windows&quot; or &quot;Linux&quot;. Label is used by job to determine which agents will be selected to run the job, so please make sure you give it a meaningful label.</p></li><li><p>Select the desired region, and VM size from dropdown list.</p></li><li><p>Select the Storage Account Type, either Standard_LRS or Premium_LRS. Note that some VM size only supports Standard_LRS.</p></li><li><p>Specify the Azure Storage account name or select an existing Storage account name for storing VM's OS disk. If you choose to create a new one but leave the name blank the plugin will generate a name for you.</p></li><li><p>Select the disk type between Managed Disk (recommended) or Unmanaged Disk.</p></li><li><p>Select the retention strategy</p><ul><li>Idle Retention Strategy. You can specify the retention time in minutes. This defines the number of minutes Jenkins can wait before automatically deleting an idle agent. Specify 0 if you do not want idle agents to be deleted automatically.</li><li>Pool Retention Strategy. This retention strategy help you to maintain amount of agents in a specific number. You can specify the retention time in hour and the pool size.</li><li>Once Retention Strategy. This retention strategy make sure to use one agent only once.</li></ul><p>Retention time define the time of hour before automatically deleting since the agent created. And the pool size define the agent pool size you want to maintain. If you change your cloud name, template name or most of parameters (e.g. Region, Image), we will delete the existing agents at once and provision the new one according to your new template. But if you only change your Retention Time or Pool Size, we will only scale in, scale out or do nothing for you.</p></li><li><p>Select a usage option:</p><ul><li>If &quot;Utilize this node as much as possible&quot; is selected, then Jenkins may run any job on the agent as long as it is available.</li><li>If &quot;Only build jobs with label expressions matching this node&quot; is selected, Jenkins will only build a project on this node when that project is restricted to certain nodes using a label expression, and that expression matches this node's name and/or labels. This allows an agent to be reserved for certain kinds of jobs.</li></ul></li><li><p>Select a built-in image, you can choose between Windows Server 2016 and Ubuntu 16.04 LTS. You can also choose to install some tools on the agent, including Git, Maven and Docker (JDK is always installed).</p></li><li><p>Specify Admin Credentials (a username/password credentials), this is the username and password if you want to log into the agent VM.</p></li><li><p>Click Verify Template to make sure all your configurations are correct, then Save.</p></li></ol><h3 id="AzureVMAgentsplugin-RunJenkinsJobsonAzureVMAgents">Run Jenkins Jobs on Azure VM Agents</h3><p>After you configured an Azure VM agent template, when you run a new Jenkins job, Jenkins will automatically provision a new Azure VM only if there is no executor available.</p><p>A more common scenario is you want to restrict some jobs to always be running on a particular VM agent instead of Jenkins master. To achieve that:</p><ol><li>Open your Jenkins project, under General, check &quot;Restrict where this project can be run&quot;.</li><li>In Label Expression, fill in the label you assigned to your VM template.</li><li>Save and run the job, you'll see your job is running on the VM agent even if Jenkins master is free.</li></ol><p>For how to select agent in pipeline, refer to this <a rel="nofollow" href="https://jenkins.io/doc/book/pipeline/syntax/#agent" class="external-link">doc</a>.</p><h2 id="AzureVMAgentsplugin-UseaCustomVMImage">Use a Custom VM Image</h2><p>The built-in image only has a clean Windows or Ubuntu OS and some tools like Git and Maven installed, in some cases, you may want to have more customization on the image. To use a custom image:</p><ol><li><p>In Image Configuration, select &quot;Use Advanced Image Configurations&quot;.</p></li><li><p>Choose between two possible alternatives:</p><ul><li>Use a custom user image (provide image URL and OS type - note, your custom image has to be available into the same storage account in which you are going to create agent nodes);</li><li>Using any marketplace image by specifying an image reference (provide image reference by publisher, offer, sku and version). You can get the publisher, offer and sku by looking at the ARM template of that image.</li></ul></li><li><p>For the launch method, select SSH or JNLP.</p><ul><li>Linux agents can be launched only using SSH.</li><li>Windows agents can be launched using SSH or JNLP. For Windows agents, if the launch method is SSH then check Pre-Install SSH in Windows Slave or image needs to be custom-prepared with an SSH server pre-installed.</li></ul><p>We recommend to use SSH rather than JNLP, for you need less init codes and get much clearer logs.</p><blockquote style="margin-left: 0.0px;"><p>When using the JNLP launch option, ensure the following:</p><ul><li>Jenkins URL (Manage Jenkins -&gt; Configure System -&gt; Jenkins Location)</li><li>The URL needs to be reachable by the Azure agent, so make sure to configure any relevant firewall rules accordingly.</li><li>TCP port for JNLP agent agents (Manage Jenkins -&gt; Configure Global Security -&gt; Enable security -&gt; TCP port for JNLP agents).</li><li>The TCP port needs to be reachable from the Azure agent launched using JNLP. It is recommended to use a fixed port so that any necessary firewall exceptions can be made.</li></ul><p>If the Jenkins master is running on Azure, then open an endpoint for &quot;TCP port for JNLP agent agents&quot; and, in case of Windows, add the necessary firewall rules inside virtual machine (Run -&gt; firewall.cpl).</p></blockquote></li><li><p>For the Initialization Script, you can provide a script that will be executed after the VM is provisioned. This allows to install any app/tool you need on the agent. Please be noted you need to at least install JRE if the image does not have Java pre-installed. We prepared a sample script for Linux via SSH, Windows via SSH and Windows via JNLP. Please find details in help button.</p><p>If you hit the <a href="https://docs.microsoft.com/en-us/azure/storage/storage-scalability-targets" rel="nofollow" class="external-link">storage scalability limits</a> for your custom images on the storage account where the VHD resides, you should consider using the agent's <a rel="nofollow" href="https://blogs.msdn.microsoft.com/mast/2013/12/06/understanding-the-temporary-drive-on-windows-azure-virtual-machines" class="external-link">temporary storage</a> or copy your custom image in multiple storage accounts and use multiple VM templates with the same label within the same agent cloud.</p><p>For more details about how to prepare custom images, refer to the below links:</p><ul><li><a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-capture-image-windows-server/" rel="nofollow" class="external-link">Capture Windows Image</a></li><li><a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-capture-image/" rel="nofollow" class="external-link">Capture Linux Image</a></li></ul><p>Init script should finish in 20 minutes (this time can be configured in Deployment Timeout setting of Azure Profile Configuration). It's not recommended to run complex init script, if the init script is expected to take a long time to complete, it is recommended to use a custom-prepared image.</p></li></ol><h2 id="AzureVMAgentsplugin-AdvancedConfigurations">Advanced Configurations</h2><p>If you choose Use Advanced Image Configurations, you can click on Advanced button where you can find more VM configurations:</p><ol><li><p>Virtual Network Name, Virtual Network Resource Group Name and Subnet name: by default the VM does not belong to any virtual network, you can provide one if you want the VM to be in a virtual network for network security. Please be noted the virtual network must exist.</p></li><li><p>Make VM agent IP private: by default the plugin will create a public IP for the VM so it's public accessible on internet. Check this option if you don't want the public IP to be created.</p><blockquote style="margin-left: 0.0px;"><p>Make VM agent IP private can make the VM more secure, but if you configured to use SSH to launch agent, Jenkins master needs to be able to access the VM. So in this case you need to also specify virtual network and subnet name so the agent and Jenkins master are in the same subnet.</p></blockquote></li><li><p>Network Security Group Name: add the VM to a network security group.</p></li><li><p>JVM Options: specify JVM options.</p></li><li><p>Number of Executors: specify the number concurrent builds that a VM agent can run at the same time.</p></li><li><p>Disable template: disable this template temporarily.</p></li></ol><h2 id="AzureVMAgentsplugin-ConfigureVMTemplateusingGroovyScript">Configure VM Template using Groovy Script</h2><p><span style="color: rgb(36,41,46);">It is recommended that you use the<span> </span></span><code>configuration-as-code</code><span style="color: rgb(36,41,46);"><span> </span>plugin for automating the plugin configuration. If you can't do that for some reason then you can use groovy script.</span></p><p><span style="color: rgb(36,41,46);">Here is a sample groovy script that creates a new Azure cloud and VM template. You can run it in Manage Jenkins -&gt; Script Console.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Configure cloud with built-in image</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import com.microsoft.azure.vmagent.builders.*;
+
+def myCloud = new AzureVMCloudBuilder()
+    .withCloudName(&quot;myAzure&quot;)
+    .withAzureCredentialsId(&quot;&lt;your azure credential ID&gt;&quot;)
+    .withNewResourceGroupName(&quot;&lt;your Resource Group Name&gt;&quot;)
+    .addNewTemplate()
+        .withName(&quot;ubuntu&quot;)
+        .withLabels(&quot;ubuntu&quot;)
+        .withLocation(&quot;East US&quot;)
+        .withVirtualMachineSize(&quot;Standard_DS2_v2&quot;)
+        .withNewStorageAccount(&quot;&lt;your Storage Account Name&gt;&quot;)
+        .addNewBuiltInImage()
+            .withBuiltInImageName(&quot;Ubuntu 16.14 LTS&quot;)
+            .withInstallGit(true)
+            .withInstallMaven(true)
+            .withInstallDocker(true)
+        .endBuiltInImage()
+        .withAdminCredential(&quot;&lt;your admin credential ID&gt;&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Configure cloud with mutli-template of advanced images</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import com.microsoft.azure.vmagent.builders.*;
+
+def firstTemplate = new AzureVMTemplateBuilder()
+    .withName(&quot;first-template&quot;)
+    .withLabels(&quot;ubuntu&quot;)
+    .withLocation(&quot;East US&quot;)
+    .withVirtualMachineSize(&quot;Standard_DS2_v2&quot;)
+    .withNewStorageAccount(&quot;&lt;your Storage Account Name&gt;&quot;)
+    .addNewAdvancedImage()
+        .withReferenceImage(&quot;Canonical&quot;, &quot;UbuntuServer&quot;, &quot;16.04-LTS&quot;, &quot;latest&quot;)
+        .withInitScript(&quot;sudo add-apt-repository ppa:openjdk-r/ppa -y \n&quot; +
+                        &quot;sudo apt-get -y update \n&quot; +
+                        &quot;sudo apt-get install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y&quot;)
+    .endAdvancedImage()
+    .withAdminCredential(&quot;&lt;your admin credential ID&gt;&quot;)
+    .build();
+
+def myCloud = new AzureVMCloudBuilder()
+    .withCloudName(&quot;myAzure&quot;)
+    .withAzureCredentialsId(&quot;&lt;your azure credential ID&gt;&quot;)
+    .withNewResourceGroupName(&quot;&lt;your Resource Group Name&gt;&quot;)
+    .addToTemplates(firstTemplate)
+    .addNewTemplate()
+        .withName(&quot;second-template&quot;)
+        .withLabels(&quot;windows&quot;)
+        .withLocation(&quot;Southeast Asia&quot;)
+        .withVirtualMachineSize(&quot;Standard_DS2_v2&quot;)
+        .withNewStorageAccount(&quot;&lt;your Storage Account Name&gt;&quot;)
+        .addNewAdvancedImage()
+            .withReferenceImage(&quot;MicrosoftWindowsServer&quot;, &quot;WindowsServer&quot;, &quot;2016-Datacenter&quot;, &quot;latest&quot;)
+        .endAdvancedImage()
+        .withAdminCredential(&quot;&lt;your admin credential ID&gt;&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>inherit existing template</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import com.microsoft.azure.vmagent.builders.*;
+import com.microsoft.azure.vmagent.*;
+
+AzureVMAgentTemplate baseTemplate = new AzureVMTemplateBuilder()
+    .withLocation(&quot;Southeast Asia&quot;)
+    .withVirtualMachineSize(&quot;Standard_DS2_v2&quot;)
+    .withStorageAccountType(&quot;Premium_LRS&quot;)
+    .withNewStorageAccount(&quot;&lt;your Storage Account Name&gt;&quot;)
+    .addNewAdvancedImage()
+         .withReferenceImage(&quot;Canonical&quot;, &quot;UbuntuServer&quot;, &quot;16.04-LTS&quot;, &quot;latest&quot;)
+    .endAdvancedImage()
+    .withAdminCredential(&quot;&lt;your admin credential ID&gt;&quot;)
+    .build();
+
+def myCloud = new AzureVMCloudBuilder()
+    .withCloudName(&quot;myAzure&quot;)
+    .withAzureCredentialsId(&quot;&lt;your azure credential ID&gt;&quot;)
+    .withNewResourceGroupName(&quot;&lt;your Resource Group Name&gt;&quot;)
+    .addNewTemplateLike(baseTemplate)
+        .withName(&quot;inherit&quot;)
+        .withLabels(&quot;inherit&quot;)
+        .addNewAdvancedImageLike(baseTemplate.getAdvancedImageInside())
+            .withInitScript(&quot;sudo add-apt-repository ppa:openjdk-r/ppa -y \n&quot; +
+                            &quot;sudo apt-get -y update \n&quot; +
+                            &quot;sudo apt-get install openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk -y&quot;)
+        .endAdvancedImage()
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);</pre>
+</div></div><p><span style="color: rgb(36,41,46);">This sample only contains a few arguments of builder, please find all the arguments in folder </span><a href="https://github.com/jenkinsci/azure-vm-agents-plugin/blob/dev/src/main/java/com/microsoft/azure/vmagent/builders" class="external-link" rel="nofollow">builders</a><span style="color: rgb(36,41,46);">.</span></p><h2 id="AzureVMAgentsplugin-Changelog">Changelog</h2><h3 id="AzureVMAgentsplugin-Version1.2.2,2019-09-18">Version 1.2.2, 2019-09-18</h3><ul><li>Revert images to previous API version</li></ul><h3 id="AzureVMAgentsplugin-Version1.2.1,2019-09-12">Version 1.2.1, 2019-09-12</h3><ul><li>Fix invalid template error for custom image</li></ul><h3 id="AzureVMAgentsplugin-Version1.2.0,2019-09-04">Version 1.2.0, 2019-09-04</h3><ul><li>Enable adding custom tags for created resources</li><li>Support purchase plan for custom image</li><li>Fix possible NullPointer exception for template</li><li>Bump arm template version</li></ul><h3 id="AzureVMAgentsplugin-Version1.1.1,2019-07-02">Version 1.1.1, 2019-07-02</h3><ul><li>Fix UAMI for reference image id template</li></ul><h3 id="AzureVMAgentsplugin-Version1.1.0,2019-06-18">Version 1.1.0, 2019-06-18</h3><ul><li>Add more location options like UK</li><li>Add support for user assigned managed identity</li></ul><h3 id="AzureVMAgentsplugin-Version1.0.1,2019-05-22">Version 1.0.1, 2019-05-22</h3><ul><li><pre>Fix deserialize losing configuration issue</pre></li></ul><h3 id="AzureVMAgentsplugin-Version1.0.0,2019-05-22">Version 1.0.0, 2019-05-22</h3><ul><li>Bump Jenkins baseline to 2.60.3</li><li>Add IMDS credential type</li><li>Support configuration as code</li><li>Support incrementalified plugin</li><li>Add management tags for plugin created resource group and storage account</li><li>Fix not support different templates in different regions</li></ul><h3 id="AzureVMAgentsplugin-Version0.9.0,2019-03-11">Version 0.9.0, 2019-03-11</h3><ul><li><p>Support Image Gallery as an option for agents</p></li><li><p>Fix configuration with error pages <a href="https://issues.jenkins-ci.org/browse/JENKINS-55935" class="external-link" rel="nofollow">JENKINS-55935</a></p></li></ul><h3 id="AzureVMAgentsplugin-Version0.8.1,2019-03-06">Version 0.8.1, 2019-03-06</h3><ul><li><a href="https://jenkins.io/security/advisory/2019-03-06/" class="external-link" rel="nofollow">Fix multiple security issues</a></li></ul><h3 id="AzureVMAgentsplugin-Version0.8.0,2019-01-28">Version 0.8.0, 2019-01-28</h3><ul><li>Add Availability Set support <a href="https://issues.jenkins-ci.org/browse/JENKINS-40635" class="external-link" rel="nofollow">JENKINS-40635</a></li><li>Remove periodic jobs' log from Jenkins default log level <a href="https://issues.jenkins-ci.org/browse/JENKINS-51282" class="external-link" rel="nofollow">JENKINS-51282</a></li><li>Specify OS disk size for agents <a href="https://issues.jenkins-ci.org/browse/JENKINS-51528" class="external-link" rel="nofollow">JENKINS-51528</a></li><li>Fix customer image version fixed as latest issue</li></ul><h3 id="AzureVMAgentsplugin-Version0.7.5,2018-11-28">Version 0.7.5, 2018-11-28</h3><ul><li>Fix storage account name already exists issue <a href="https://issues.jenkins-ci.org/browse/JENKINS-54885" class="external-link" rel="nofollow">JENKINS-54885</a></li><li>Use https when communicating with storage account <a href="https://issues.jenkins-ci.org/browse/JENKINS-52967" class="external-link" rel="nofollow">JENKINS-52967</a></li></ul><h3 id="AzureVMAgentsplugin-Version0.7.4,2018-10-18">Version 0.7.4, 2018-10-18</h3><ul><li>Support MSI for agents <a href="https://issues.jenkins-ci.org/browse/JENKINS-53945" class="external-link" rel="nofollow">JENKINS-53945</a></li></ul><h3 id="AzureVMAgentsplugin-Version0.7.3,2018-08-06">Version 0.7.3, 2018-08-06</h3><ul><li>Fixed Jackson version conflicts caused by Azure client runtime lib updates <a href="https://issues.jenkins-ci.org/browse/JENKINS-52838" class="external-link" rel="nofollow">JENKINS-52838</a></li></ul><h3 id="AzureVMAgentsplugin-Version0.7.2.1,2018-08-01">Version 0.7.2.1, 2018-08-01</h3><ul><li>Fixed an issue that built-in images may fail to provision</li></ul><h3 id="AzureVMAgentsplugin-Version0.7.2,2018-07-25">Version 0.7.2, 2018-07-25</h3><ul><li><div>Fix missing plan information for some images in reference image configuration <span><a href="https://issues.jenkins-ci.org/browse/JENKINS-52407" class="external-link" rel="nofollow">JENKINS-52407</a></span></div></li></ul><h3 id="AzureVMAgentsplugin-Version0.7.1,2018-05-23">Version 0.7.1, 2018-05-23</h3><ul><li>Update Provision retry strategy in order to prevent hitting Azure request rate limit</li><li>Update validate logic to avoid bad template by accidentally issue</li><li>Change the way of generating name of VMs to resolve the same name conflict</li><li>Remove sleep while shutting down VMs in OnceRetentionStrategy</li></ul><h3 id="AzureVMAgentsplugin-Version0.7.0,2018-04-09">Version 0.7.0, 2018-04-09</h3><ul><li>Support custom managed disk <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-48076" class="external-link">JENKINS-48076</a></li><li>Add more checks in Template Name, Admin/Password <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-49150" class="external-link">JENKINS-49150</a></li><li>Add sync logic to prevent issues when using only shutdown <a href="https://issues.jenkins-ci.org/browse/JENKINS-49021" rel="nofollow" class="external-link">JENKINS-49021</a></li><li>Clean unused warning logs <a href="https://issues.jenkins-ci.org/browse/JENKINS-48901" rel="nofollow" class="external-link">JENKINS-48901</a></li><li>Add Cloud Statistics cleaner <a href="https://issues.jenkins-ci.org/browse/JENKINS-48345" rel="nofollow" class="external-link">JENKINS-48345</a></li><li>Add blank choice for storage account to reduce UI issues related to existing storage account <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-48253" class="external-link">JENKINS-48253</a></li><li>Check whether reuse existing storage account <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-47923" class="external-link">JENKINS-47923</a></li><li>Show detail error message when the template cannot be deployed. <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-46337" class="external-link">JENKINS-46337</a></li><li>Resolve vm delete issue if related cloud have been deleted. <a rel="nofollow" href="https://issues.jenkins-ci.org/browse/JENKINS-49473" class="external-link">JENKINS-49473</a></li></ul><h3 id="AzureVMAgentsplugin-Version0.6.2,2018-02-24">Version 0.6.2, 2018-02-24</h3><ul><li>Use Tls1.2 to fix the bug in SSH initialization</li><li>Support Windows Server 1709 as SSH slave</li></ul><h3 id="AzureVMAgentsplugin-Version0.6.1,2018-02-09">Version 0.6.1, 2018-02-09</h3><ul><li>Fix location verification on non-global clouds</li></ul><h3 id="AzureVMAgentsplugin-Version0.6.0,2018-01-02">Version 0.6.0, 2018-01-02</h3><ul><li>Use deallocation instead of powerOff when configured shutdown only</li><li>Add built-in windows image with docker</li><li>Redesign verification task to improve performance</li><li>Fix launching issues when using performance limited vms</li></ul><h3 id="AzureVMAgentsplugin-Version0.5.0,2017-11-29">Version 0.5.0, 2017-11-29</h3><ul><li>Add support for the Managed Service Identity (MSI) as credential</li><li>Clean init scripts after the deployment</li><li>Fix some minor bugs</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.8,2017-11-07">Version 0.4.8, 2017-11-07</h3><ul><li>Add Cloud and Template builder with fluent interface</li><li>Add pool retention strategy and once retention strategy</li><li>Fix bugs and improve performance</li><li>Maven version in built-in image update to 3.5.2</li><li>Add Third Party Notice</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.7.1,2017-08-10">Version 0.4.7.1, 2017-08-10</h3><ul><li>Fixed an issue that built-in init script cannot run correctly under Linux.</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.7,2017-08-01">Version 0.4.7, 2017-08-01</h3><ul><li>Built-in image support. Now besides manually fill in image reference and init script, you can select from two built-in images, Windows Server 2016 and Ubuntu 16.04 LTS.</li><li>Auto tool installation on VM agents. If you're using built-in image, you can choose to install Git, Maven or Docker.</li><li>SSH support for Windows agent. You can now use SSH to launch Windows agent.</li><li>Support managed disk for VM agent.</li><li>Allow user to specify the name for the cloud. This fixes the issue that one cloud will be ignored if you have two with same subscription ID and resource group name.</li><li>Various minor bug fixes.</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.6,2017-06-20">Version 0.4.6, 2017-06-20</h3><ul><li>Add LogRecorder for Azure VM Agent plugin to make it easier for troubleshooting</li><li>Fix an issue that Jenkins crashes in some cases when CloudStatistics is enabled</li><li>Improve VM template creation, you're now able to select from existing resource groups and storage accounts.</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.5.1Beta,2017-06-09">Version 0.4.5.1 Beta, 2017-06-09</h3><ul><li>Fixed a backward compatibility issue that storage type becomes empty when reading a configuration created from an older version. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-44750" class="external-link" rel="nofollow">JENKINS-44750</a>)</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.5Beta,2017-06-02">Version 0.4.5 Beta, 2017-06-02</h3><ul><li>Added the option to specify different resource group for virtual network. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-43909" class="external-link" rel="nofollow">JENKINS-43909</a>)</li><li>Support multiple cloud profiles with the same subscription ID (<a href="https://issues.jenkins-ci.org/browse/JENKINS-43704" class="external-link" rel="nofollow">JENKINS-43704</a>)</li><li>Support premium storage account for VM template (<a href="https://issues.jenkins-ci.org/browse/JENKINS-43097" class="external-link" rel="nofollow">JENKINS-43097</a>)</li><li>Support Cloud Statistics Plugin (<a href="https://issues.jenkins-ci.org/browse/JENKINS-42799" class="external-link" rel="nofollow">JENKINS-42799</a>)</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.4Beta,2017-04-12">Version 0.4.4 Beta, 2017-04-12</h3><ul><li>Added the option to deploy VM Agents without a public IP. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40620" class="external-link" rel="nofollow">JENKINS-40620</a>)</li><li>Added the ability to attach a public IP for an already deployed agent. The user need to go to the Nodes management page and configure the desired Azure VM Agent.</li><li>Added the option to attach an existing Azure Network Security Group to the provisioned agents</li><li>Fixed the 'Usage' parameter. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-42037" class="external-link" rel="nofollow">JENKINS-42037</a>)</li><li>Fixed a Null Pointer Exception while trying to fill the VM Size dropdown. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-42853" class="external-link" rel="nofollow">JENKINS-42853</a>)</li><li>The agent password verification now allows more special characters. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-43243" class="external-link" rel="nofollow">JENKINS-43243</a>)</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.3Beta,2017-03-03">Version 0.4.3 Beta, 2017-03-03</h3><ul><li>The plugin now depends on the Azure Credentials plugin</li><li>Existing credentials are now working when upgrading the plugin (<a href="https://issues.jenkins-ci.org/browse/JENKINS-42479" class="external-link" rel="nofollow">JENKINS-42479</a>)</li><li>Fixed an issue where deployments in some existing Azure Resource Groups might have failed</li><li>The plugin now removes the leftover empty containers after a custom-image agent was deleted.</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.2Beta,2017-01-16">Version 0.4.2 Beta, 2017-01-16</h3><ul><li>Extend support to all Azure regions and available VM sizes (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40488" class="external-link" rel="nofollow">JENKINS-40488</a>)</li><li>Fixed an edge case where provisioned VMs were not removed after they were used (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41330" class="external-link" rel="nofollow">JENKINS-41330</a>)</li><li>The fix will ensure that newly created resources are properly disposed, but it won't disposed of any resources deployed with the plugin before and including version 0.4.1</li><li>Updated the 'Max Jenkins Agents Limit' label in the cloud configuration page to reflect the quota on the number of agents the plugin is allowed to deploy in a resource group (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41568" class="external-link" rel="nofollow">JENKINS-41568</a>)</li><li>Other minor fixes and improvements</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.1Beta,2016-12-13">Version 0.4.1 Beta, 2016-12-13</h3><ul><li>Verify that the storage account name is valid during template verification (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40289" class="external-link" rel="nofollow">JENKINS-40289</a>)</li><li>The auto-generated storage account name is unique across Azure (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40288" class="external-link" rel="nofollow">JENKINS-40288</a>)</li><li>The SSH session is re-established after the init script runs (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40291" class="external-link" rel="nofollow">JENKINS-40291</a>)</li><li>Other minor fixes and improvements</li></ul><h3 id="AzureVMAgentsplugin-Version0.4.0Beta,2016-12-06">Version 0.4.0 Beta, 2016-12-06</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088270/135468958.png">image2017-11-16 19:41:13.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088270/135469031.txt">log1.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088270/135469032.txt">log1.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088270/135469030.txt">log1.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/103088270/138454892.png">2018-04-26 13_58_48-Activity log - Microsoft Azure.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

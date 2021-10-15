@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Authorize Project plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Authorize Project plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ikedam)</span>, last modified on Oct 15, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Authorize Project <a href="https://plugins.jenkins.io/authorize-project" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Configure projects to run with specified authorization.</p><h2 id="AuthorizeProjectplugin-What&#39;sthis?">What's this?</h2><p>This plugin provides following features:</p><ul><li>You can configure projects to have their builds run with specified authorization.<ul><li>This is an implementation for <a href="http://javadoc.jenkins-ci.org/jenkins/security/QueueItemAuthenticator.html" class="external-link" rel="nofollow">QueueItemAuthenticator</a>.</li></ul></li><li>Provides following ways to specify authorization.<ul><li>Run as the user who triggered the build.<ul><li>Does not work for scheduled, or polled builds.</li><li>Configuring projects are allowed only to users with the BUILD permission.</li></ul></li><li>Run as anonymous.</li><li>Run as the specified user.<ul><li>You are requested to enter the password of the specified user except following cases:<ul><li>You are an administrator.</li><li>You are the specified user.</li><li>The specified user is not changed from the last configuration, and &quot;No need for re-authentication&quot; is checked.<ul><li>This can threaten your Jenkins security. Be careful to use.</li></ul></li></ul></li><li>Configuring projects are allowed only to administrators and the user configured as the authorization.<ul><li>&quot;Don't restrict job configuration&quot; allows other users (with the CONFIGURE permission) to configure the project. Ensure that only appropriate users have CONFIGURE permission for that project.</li></ul></li></ul></li><li>Run as SYSTEM<ul><li>This is provided only to cancel the global configuration. SYSTEM authorization is often considered as &quot;unconfigured&quot;, features provided by plugins may treat it as anonymous.</li></ul></li></ul></li><li>Provides an extension point to add new ways to specify authorization.</li></ul><h2 id="AuthorizeProjectplugin-Screenshots">Screenshots</h2><ul><li>After installed Authorize Project plugin, you will find &quot;Access Control for Builds&quot; in &quot;Manage Jenkins&quot; &gt; &quot;Configure Global Security&quot;. Adding &quot;Configure Build Authorizations in Project Configuration&quot; enables Authorize Project plugin.<br/> <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/70877566/71008279.png" data-image-src="attachments/70877566/71008279.png" data-unresolved-comment-count="0" data-linked-resource-id="71008279" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="authorize-project_01_globalsecurity.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70877566" data-linked-resource-container-version="19"></span><ul><li>You can also disable specific strategies in this page. Disabled strategies are never used for authorization.</li></ul></li><li>A new side bar menu &quot;Authorization&quot; will appear in project pages.<br/> <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/70877566/105676815.png" data-image-src="attachments/70877566/105676815.png" data-unresolved-comment-count="0" data-linked-resource-id="105676815" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="sidebar.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70877566" data-linked-resource-container-version="19"></span></li><li>You can select how to authorize builds of the project in the &quot;Authorization&quot; page.<br/> <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/70877566/105676816.png" data-image-src="attachments/70877566/105676816.png" data-unresolved-comment-count="0" data-linked-resource-id="105676816" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="authorization-page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70877566" data-linked-resource-container-version="19"></span></li><li>When selecting &quot;Run as Specific User&quot;, you can enter User ID with whose authorization builds will run. If you enter a user ID except yourself and have no administrative privilege, you are required to enter the password of that user.<br/> <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/70877566/105676817.png" data-image-src="attachments/70877566/105676817.png" data-unresolved-comment-count="0" data-linked-resource-id="105676817" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="authorization-page-specific-user.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70877566" data-linked-resource-container-version="19"></span><ul><li>You can also use API token, especially for non password-based security realms.</li></ul></li><li>Configuring project settings by unauthorized users are forbidden when you configure the authorization for the project. See <a href="#AuthorizeProjectplugin-What'sthis?">#What's this?</a> for details.<br/> <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-center" src="attachments/70877566/105676818.png" data-image-src="attachments/70877566/105676818.png" data-unresolved-comment-count="0" data-linked-resource-id="105676818" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="access-denied.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70877566" data-linked-resource-container-version="19"></span></li></ul><h2 id="AuthorizeProjectplugin-Extensionpoint">Extension point</h2><p>A new way to authorize projects can be added with extending <code>org.jenkinsci.plugins.authorizeproject.AuthorizeProjectStrategy</code>, overriding the following method:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public abstract Authentication authenticate(hudson.model.AbstractProject&lt;?, ?&gt; project, hudson.model.Queue.Item item);
+</pre>
+</div></div><p>Use <code>AuthorizeProjectStrategyDescriptor</code> for <code>Descriptor</code>.<br/> If you want to provide global configuration properties, do as following:</p><ul><li><code>global-security.jelly</code> is displayed in &quot;Configure Global Security&quot; page.</li><li>Override <code>AuthorizeProjectStrategyDescriptor#configureFromGlobalSecurity</code> to save configuration.</li></ul><h2 id="AuthorizeProjectplugin-Issues">Issues</h2><p>To report a bug or request an enhancement to this plugin please create a ticket in JIRA (you need to login or to sign up for an account). Also have a look on <a href="How-to-report-an-issue.html">How to report an issue</a></p><ul><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=1&amp;components=18155&amp;priority=4&amp;assignee=ikedam" class="external-link" rel="nofollow">Bug report</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=4&amp;components=18155&amp;priority=4" class="external-link" rel="nofollow">Request or propose an improvement of existing feature</a></li><li><a href="https://issues.jenkins-ci.org/secure/CreateIssueDetails!init.jspa?pid=10172&amp;issuetype=2&amp;components=18155&amp;priority=4" class="external-link" rel="nofollow">Request or propose a new feature</a></li></ul><p>
+
+
+
+
+
+<div id="refresh-module-360167334" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues-360167334" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66201?src=confmacro">JENKINS-66201</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66201?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14688&amp;avatarType=issuetype"
+                                                alt="Task"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66201?src=confmacro">
+                                            user not able to deploy application
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66065?src=confmacro">JENKINS-66065</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66065?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66065?src=confmacro">
+                                            Cannot access currentBuild with TriggeringUsersAuthorizationStrategy but correct user permissions
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-65375?src=confmacro">JENKINS-65375</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-65375?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-65375?src=confmacro">
+                                            Poll SCM started by an SCM change and Running as SYSTEM
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63170?src=confmacro">JENKINS-63170</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63170?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63170?src=confmacro">
+                                            Queue Item Authorization appears to not be propagated
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62826?src=confmacro">JENKINS-62826</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62826?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-62826?src=confmacro">
+                                            Authorize project plugin may break with the tables to divs changes
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61990?src=confmacro">JENKINS-61990</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61990?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61990?src=confmacro">
+                                            StackOverflowError on boot related to QueueItemAuthenticatorConfiguration
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61902?src=confmacro">JENKINS-61902</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61902?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61902?src=confmacro">
+                                            &quot;authenticated&quot; group doesn&#39;t work with Authorize Project plugin
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61818?src=confmacro">JENKINS-61818</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61818?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61818?src=confmacro">
+                                            AUTH: IllegalStateException: Singleton is called recursively returning different results
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61803?src=confmacro">JENKINS-61803</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61803?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-61803?src=confmacro">
+                                            Configure Global Security should accept both entries: default and per project
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60508?src=confmacro">JENKINS-60508</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60508?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60508?src=confmacro">
+                                            Nodes Patterns 
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60302?src=confmacro">JENKINS-60302</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60302?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60302?src=confmacro">
+                                            Support configuring build authorization at folder level
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58840?src=confmacro">JENKINS-58840</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58840?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58840?src=confmacro">
+                                            Clarify documentation on selecting project authorization for project/job types
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56774?src=confmacro">JENKINS-56774</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56774?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56774?src=confmacro">
+                                            Support Configuration as Code
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50559?src=confmacro">JENKINS-50559</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50559?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50559?src=confmacro">
+                                            Authorization Folder property for Multibranch jobs
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50101?src=confmacro">JENKINS-50101</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50101?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-50101?src=confmacro">
+                                            Support for declarative pipeline
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-47518?src=confmacro">JENKINS-47518</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-47518?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-47518?src=confmacro">
+                                            ~30-35 second queue when using Run as User who Triggered Build
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-44478?src=confmacro">JENKINS-44478</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-44478?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-44478?src=confmacro">
+                                            Support QueueItemAuthenticator.authenticate(Task)
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38219?src=confmacro">JENKINS-38219</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38219?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38219?src=confmacro">
+                                            Restrict Job.CONFIGURE permissions by plugins
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38217?src=confmacro">JENKINS-38217</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38217?src=confmacro"><img
+                                                src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"
+                                                alt="Epic"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-38217?src=confmacro">
+                                            Roadmap of authorize-project-plugin
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33494?src=confmacro">JENKINS-33494</a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33494?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33494?src=confmacro">
+                                            LastConfiguredUserAuthorizeStrategy
+                                        </a>
+                                                                    </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="4">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%2C+%22In+Review%22%2C+Verified%29+AND+component+%3D+%27authorize-project-plugin%27+&amp;src=confmacro">
+                                                            20 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><h2 id="AuthorizeProjectplugin-ChangeLog">Change Log</h2><h3 id="AuthorizeProjectplugin-Version1.3.0(Feb12,2017)">Version 1.3.0 (Feb 12, 2017)</h3><ul><li>Split the configuration of authentication into a separate screen (<a href="https://issues.jenkins-ci.org/browse/JENKINS-35081">JENKINS-35081</a>)<ul><li>See <a href="#AuthorizeProjectplugin-Screenshots">#Screenshots</a> for details.</li></ul></li></ul><h3 id="AuthorizeProjectplugin-Version1.2.2(May28,2016)">Version 1.2.2 (May 28, 2016)</h3><ul><li>Fixed: Builds aren't start when security realm fail to find the user for authorization (e.g. Bind DN is not set for Active Directory plugin) (<a href="https://issues.jenkins-ci.org/browse/JENKINS-34279">JENKINS-34279</a>)</li></ul><h3 id="AuthorizeProjectplugin-Version1.2.1(Apr03,2016)">Version 1.2.1 (Apr 03, 2016)</h3><ul><li>Fixed: password / api token fields for &quot;Run as Specific User&quot; are broken <a href="https://issues.jenkins-ci.org/browse/JENKINS-33897">JENKINS-33897</a></li></ul><h3 id="AuthorizeProjectplugin-Version1.2.0(Mar27,2016)">Version 1.2.0 (Mar 27, 2016)</h3><ul><li><strong>Targets Jenkins 1.625</strong></li><li>SECURITY FIX: Reject unauthenticated configurations via REST / CLI (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28298">JENKINS-28298</a>)<ul><li>See <a href="JENKINS-28298.html">JENKINS-28298</a> for details.</li></ul></li><li>Support global default authorization strategy (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30574">JENKINS-30574</a>)</li><li>Displays an error when a built-in user is used for &quot;Run as Specific User&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-32769">JENKINS-32769</a>)</li><li>Added &quot;Run as SYSTEM&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-32770">JENKINS-32770</a>)<ul><li>Disabled by default for projects. You have to enable it in the global security configuration page.</li></ul></li></ul><h3 id="AuthorizeProjectplugin-Version1.1.0(Aug9,2015)">Version 1.1.0 (Aug 9, 2015)</h3><ul><li>Added a feature to enable / disable strategies. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28298">JENKINS-28298</a>)<ul><li><strong>&quot;Run as Specific User&quot; is disabled by default. You need to enable it after upgrading from a prior version if you use it.</strong></li></ul></li><li>Supports workflow (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26670">JENKINS-26670</a>)</li><li>Supports apitoken for authentication. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22470">JENKINS-22470</a>)</li><li>Add support for upcoming $class annotation change (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25403">JENKINS-25403</a>)</li></ul><h3 id="AuthorizeProjectplugin-Version1.0.3(Apr14,2014)">Version 1.0.3 (Apr 14, 2014)</h3><ul><li><strong>SECURITY FIX</strong>: Authentication of &quot;Run as Specific User&quot; is easily bypassed by REST/CLIadded (Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-22469">JENKINS-22469</a>)</li><li>Replaced radio buttons to dropdown selecting authorization strategies (Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-20786">JENKINS-20786</a>)</li></ul><h3 id="AuthorizeProjectplugin-Version1.0.2(Feb22,2014)">Version 1.0.2 (Feb 22, 2014)</h3><ul><li>added <code>AuthorizeProjectStrategyDescriptor</code> <a href="https://issues.jenkins-ci.org/browse/JENKINS-20812">JENKINS-20812</a></li><li>Not to send the password value to test whether password is required.</li></ul><h3 id="AuthorizeProjectplugin-Version1.0.1(Nov30,2013)">Version 1.0.1 (Nov 30, 2013)</h3><ul><li>Fix a problem that a new user created if you authenticate with non-existent user (Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-20784">JENKINS-20784</a>)</li><li>Works with MatrixProject (Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-20785">JENKINS-20785</a>)</li></ul><h3 id="AuthorizeProjectplugin-Version1.0.0(Nov24,2013)">Version 1.0.0 (Nov 24, 2013)</h3><ul><li>Initial release.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/71008280.png">authorize-project_02_jobproperty.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/71008281.png">authorize-project_03_specifyuser.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/82280503.png">authorize-project_01_globalsecurity.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/82280504.png">authorize-project_04_passwordrequired.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/71008279.png">authorize-project_01_globalsecurity.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/71008278.png">authorize-project_04_passwordrequired.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/105676815.png">sidebar.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/105676816.png">authorization-page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/105676817.png">authorization-page-specific-user.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70877566/105676818.png">access-denied.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

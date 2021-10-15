@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SSH2Easy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SSH2Easy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jerrycai)</span>, last modified on May 11, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022566877 {padding: 0px;}
+div.rbtoc1631022566877 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022566877 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022566877'>
+<ul class='toc-indentation'>
+<li><a href='#SSH2EasyPlugin-QuickIntroduce'>Quick Introduce</a></li>
+<li><a href='#SSH2EasyPlugin-1.SSH2accountsgroupmanagement'>1. SSH2 accounts group management</a></li>
+<li><a href='#SSH2EasyPlugin-2.SSH2remoteshellandcommand'>2. SSH2 remote shell  and command</a></li>
+<li><a href='#SSH2EasyPlugin-3.SFTPremoteuploadanddownload'>3. SFTP remote upload and download</a></li>
+<li><a href='#SSH2EasyPlugin-4.ProjectandViewpatternbasedACLstrategy'>4. Project and View pattern based ACL strategy</a></li>
+</ul>
+</div>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View SSH2 Easy <a href="https://plugins.jenkins.io/ssh2easy" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>This plugin allows you to ssh2 remote server to execute linux commands , shell , sftp upload, downlaod etc</p></p>
+<h4 id="SSH2EasyPlugin-QuickIntroduce">Quick Introduce</h4>
+
+<p>I ever worked at cloud system CI  related tasks , Till now , There are several SSH and ACL plugins , But  they didn't fulfill our team's requirements towards its management  design and function , Base on that , I  redesign and rebuild this new  plugin during my daily work , As time went by , This plugin always  provide good solution and resolve SSH and ACL requirements almost  compared with others , Its main advantages includes :</p>
+
+<p>1, In a cloud based large scale company , Its development environment  and testing environment is so complicated , its application deploy mode  is multi-styles base on different product , Some of others SSH plugin  can't work on such as Nohup start related features , when its SSH2 input  stream and output stream is keep alive , their build process will hung  on etc , This Plugin - SSH2Easy can resolve this problem .</p>
+
+<p>2, When there are so many servers need to management by Jenkins , We  will need to input so many redundancy SSH info , such as SSH port , SSH  username , password with the other SSH plugins , Actually , the most of  VM and Servers have the same information for these items , Just only its  host IP is different , So If you use this plugin - SSH2Easy , it is  more convenient to manage them by SeverGroup mode .</p>
+
+<p>3, This plugin also provide &quot;Disable&quot; feature for its build steps , During daily work , this feature is also very convenient .</p>
+
+<p>4. This plugin also provide to support Multi-Projects and Multi-Teams  share the same Jenkins System but with JobName level and ViewTab level  ACL strategy </p>
+
+<p>Overall , This plugin want to provide very simple and easy ways for  its useful features of SSH2  and ACL related features , So I want to  share it on public Jenkins Plugin Center here , Hope helpful to some of  us towards on SSH2 and ACL related requirements  .</p>
+
+<h4 id="SSH2EasyPlugin-1.SSH2accountsgroupmanagement">1. SSH2 accounts group management</h4>
+
+<p><span class="confluence-embedded-file-wrapper image-left-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border image-left" height="664" width="851" src="attachments/79167688/79298569.png" data-image-src="attachments/79167688/79298569.png" data-unresolved-comment-count="0" data-linked-resource-id="79298569" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="79167688" data-linked-resource-container-version="20"></span> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="903" width="852" src="attachments/79167688/79298570.png" data-image-src="attachments/79167688/79298570.png" data-unresolved-comment-count="0" data-linked-resource-id="79298570" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="79167688" data-linked-resource-container-version="20"></span></p>
+
+
+<h4 id="SSH2EasyPlugin-2.SSH2remoteshellandcommand">2. SSH2 remote shell  and command</h4>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="393" width="853" src="attachments/79167688/79298571.png" data-image-src="attachments/79167688/79298571.png" data-unresolved-comment-count="0" data-linked-resource-id="79298571" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="79167688" data-linked-resource-container-version="20"></span></p>
+
+
+<h4 id="SSH2EasyPlugin-3.SFTPremoteuploadanddownload">3. SFTP remote upload and download</h4>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="497" width="855" src="attachments/79167688/79298572.png" data-image-src="attachments/79167688/79298572.png" data-unresolved-comment-count="0" data-linked-resource-id="79298572" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="79167688" data-linked-resource-container-version="20"></span></p>
+
+
+
+<h4 id="SSH2EasyPlugin-4.ProjectandViewpatternbasedACLstrategy">4. Project and View pattern based ACL strategy</h4>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/79167688/79298569.png">1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/79167688/79298570.png">2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/79167688/79298571.png">3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/79167688/79298573.png">4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/79167688/79298572.png">4.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:49</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

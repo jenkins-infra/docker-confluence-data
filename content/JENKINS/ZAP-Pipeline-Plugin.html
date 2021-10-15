@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ZAP Pipeline Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ZAP Pipeline Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vrondakis)</span>, last modified on Feb 14, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ZAP Pipeline <a href="https://plugins.jenkins.io/zap-pipeline" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-07-02/#SECURITY-1811" class="external-link" rel="nofollow">Content-Security-Policy protection for user content disabled</a></li>
+</ul>
+
+</div></div>
+<p><br/><span>OWASP ZAP is one of the world's most popular free security tools, it can help you automatically find security vulnerabilities in your web applications. This plugin allows you to control ZAP in Jenkins pipeline builds, and also adds additional functionality like the ability to fail a build if a certain amount of alerts are found, a graph, and much more! It is recommended you proxy your tests through ZAP for maximum coverage, but you can also import a list of URLs to scan or load a session to attack.</span></p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="900" src="attachments/165576941/165577034.png" data-image-src="attachments/165576941/165577034.png" data-unresolved-comment-count="0" data-linked-resource-id="165577034" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="zap.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165576941" data-linked-resource-container-version="15"></span></p><h2 id="ZAPPipelinePlugin-Features">Features</h2><ul><li>Gives you full control over ZAP through Pipeline, including starting ZAP, running the crawler, running an attack, importing a list of URLs,  importing scan policies, loading a session &amp; user, ect.</li><li>Generates a graph showing amount of ZAP alerts over builds</li><li>Generates an interactive report (viewable after ZAP has run through the sidebar button). This report incorporates the results of the previous build to show you new alerts, automatically filters out false-positives, and more!</li><li>Ability to fail builds if a certain amount of high/medium/low alerts are found</li><li>Allows you to provide a false positive file</li><li>Support for distributed builds</li><li>Supports Windows &amp; Linux</li><li>Simple &amp; easy to use</li></ul><h2 id="ZAPPipelinePlugin-InstallationSteps">Installation Steps</h2><ol><li>Go to the Jenkins Dashboard</li><li>Click on &quot;Manage Jenkins&quot; in the sidebar</li><li>Click on &quot;Manage Plugins&quot;</li><li>Press the &quot;Available&quot; tab next to the &quot;Updates&quot; tab</li><li>Search for &quot;zap pipeline&quot; and select the checkbox, then press &quot;Download now and install after restart&quot;</li><li>Tick the &quot;Restart Jenkins when installation is complete and no jobs are running&quot; check box</li></ol><h2 id="ZAPPipelinePlugin-Howtouse">How to use</h2><p>The plugin provides additional functions for you to use in your Jenkinsfile. An example of a declarative pipeline is below, the functions work the same on a scripted pipeline. See the API below for more information.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {
+    agent any
+    stages { 
+        stage(&#39;Setup&#39;) {
+            steps {
+                script {
+                    startZap(host: &quot;127.0.0.1&quot;, port: 9091, timeout:500, zapHome: &quot;/opt/zaproxy&quot;, sessionPath:&quot;/somewhere/session.session&quot;, allowedHosts:[&#39;github.com&#39;]) // Start ZAP at /opt/zaproxy/zap.sh, allowing scans on github.com (if allowedHosts is not provided, any local addresses will be used
+                }
+            }
+        }
+        stage(&#39;Build &amp; Test&#39;) {
+            steps {
+                script {
+                    sh &quot;mvn verify -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=9091 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=9091&quot; // Proxy tests through ZAP
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                archiveZap(failAllAlerts: 1, failHighAlerts: 0, failMediumAlerts: 0, failLowAlerts: 0, falsePositivesFilePath: &quot;zapFalsePositives.json&quot;)
+            }
+        }
+    }
+}</pre>
+</div></div><h2 id="ZAPPipelinePlugin-Availablefunctions">Available functions</h2><p>Listed below are functions that you can use in your Jenkinsfile.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>startZap</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">startZap(host: &quot;127.0.0.1&quot;, port: 9095, timeout: 900, zapHome: &quot;/opt/zaproxy&quot;, allowedHosts:[&#39;10.0.0.1&#39;], sessionPath:&quot;/path/to/session.session&quot;)
+
+Starts the ZAP process and configures the plugin.
+
+host: 						The host to run the ZAP proxy server on. Passed to ZAP in the -host parameter.
+port: 						The port to run the proxy on
+timeout (optional): 		If a scan takes too long it will stop
+allowedHosts (optional): 	Once the active ZAP scan starts, it won&#39;t scan any hosts unless they are here. If you don&#39;t set this it will only scan if the host is localhost
+sessionPath (optional): 	If you want to load a previous ZAP session that you have expored, you can do that here. Useful when you want to run a scan but don&#39;t want to run all your tests through ZAP.</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>runZapCrawler</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">runZapCrawler(host: &quot;https://localhost&quot;)
+
+Runs ZAP&#39;s web crawler on a specific host</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>importZapScanPolicy</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">importZapScanPolicy(policyPath: &quot;/home/you/yourattackpolicy.policy&quot;)
+
+Imports a ZAP attack scan policy from the path you specify (Scan Policy Manager -&gt; Export). This is to be used with the runZapAttack function</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>importZapUrls</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">importZapUrls(path: &quot;/path/to/your/urls&quot;)
+
+Imports a list of URLs from a file. Usually you would use this with Report-&gt;Export all URLs to file in ZAP. </pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>runZapAttack</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">runZapAttack(userId: 5, scanPolicyName: &quot;yourScanPolicy&quot;)
+
+Once you have proxied your tests through ZAP, imported a session in startZap or loaded a list of URLs, you can run the ZAP attack. This function runs an active scan on all the hosts that have been provided in the allowedHosts parameter in startZap. If the parameter is not provided it will default to local hosts only.
+
+userId (optional): 			Run the scan with a specific user, loaded from the session
+scanPolicyName (optional): 	The attack policy to use when running the scan. Loaded with importScanPolicy</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>archiveZap</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; first-line: 1; theme: Confluence" data-theme="Confluence">archiveZap(failAllAlerts: 1, failHighAlerts: 0, failMediumAlerts: 0, failLowAlerts: 0, falsePositivesFilePath: &quot;zapFalsePositives.json&quot;)
+
+Reads the alerts found by ZAP, filters out any false positives if a false positives file is provided in the project, checks if there are any alerts that are higher than the fail build parameters - and fails the build if so - generates a report, and finally shuts down ZAP. This should be the last thing you run.
+
+failAllAlerts (optional): 			The maximum number of total alerts required to fail a build.
+failHighBuild (optional): 			Maximum amount of high risk alerts that can happen before a build will fail
+failMediumAlerts (optional):		The maximum number of medium alerts required to fail a build.
+failLowAlerts (optional): 			The maximum number of low alerts required to fail a build.
+falsePositivesFilePath (optional):	The path relative to your workspace / project of the false positives file. See below for information on creating this file.</pre>
+</div></div><h2 id="ZAPPipelinePlugin-Proxyingyourtests">Proxying your tests</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Proxying tests example</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">sh &quot;mvn verify -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=9095 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=9095&quot;</pre>
+</div></div><p>You may need to exclude some hosts from ZAP. If so you can use the -Dhttp.nonProxyHosts parameter, eg -Dhttp.nonProxyHosts=.com\|.co.uk</p><h2 id="ZAPPipelinePlugin-Proxyinglocalhost">Proxying localhost</h2><p>By default Java will not proxy localhost, 127.0.0.1, or any common loopback addresses. There is no way to disable this unless you set -Dhttp.nonProxyHosts= (empty). This means it is impossible to proxy just localhost without editing project code. You can mitigate this issue by changing your applications host to localhost.localdomain, which isn't checked by Java. An alternative to this is to edit your machines 'hosts' file and add your own local hostname.</p><h2 id="ZAPPipelinePlugin-Generatingafalsepositivesfile"><span style="color: rgb(210,73,57);">Generating a false positives file</span></h2><p>You can provide a JSON file of false positive definitions from your workspace to the plugin during the archive step. The default filename is zapFalsePositives.json. The file must consist of a JSON array of false positive objects. For example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>False positive example</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: js; gutter: false; theme: Confluence" data-theme="Confluence">[
+  {
+    &quot;name&quot;: &quot;Cross Site Scripting (Reflected)&quot;,
+    &quot;cweid&quot;: &quot;79&quot;,
+    &quot;wascid&quot;: &quot;8&quot;,
+    &quot;uri&quot;: &quot;https:\/\/yourdomain.com\/a\/certain\/url&quot;,
+    &quot;method&quot;: &quot;POST&quot;,
+    &quot;param&quot;: &quot;param1&quot;,
+    &quot;attack&quot;: &quot;&lt;script&gt;alert(1);&lt;/script&gt;&quot;,
+    &quot;evidence&quot;: &quot;&lt;script&gt;alert(1);&lt;/script&gt;&quot;
+  },
+  {
+    &quot;uri&quot;: &quot;https:\/\/yourdomain.com\/another/*.&quot;,
+    &quot;method&quot;: &quot;GET&quot;
+  }
+]</pre>
+</div></div><p>All alert instances that match to a false positive object are ignored when the plugin decided whether to fail your build or not, and are initially hidden in the UI report. A match is when ALL fields provided in the false positive object are equal to an alert instance. It is best practice to be as specific as possible to not hide true positives that may occur. The false positive URI is a regex string, alert instance URIs will be tested against this, it is useful to use if you have a dynamic path.</p><p>To aid in the generation of a false positives file, the UI report provides a 'Copy to Clipboard' button under each instance. This copies the alert instance as JSON, which can be used as a false positive object in the false positives file.</p><h2 id="ZAPPipelinePlugin-VersionHistory">Version History</h2><h3 id="ZAPPipelinePlugin-1.9.0(14thJanuary2019)">1.9.0 (14th January 2019)</h3><p>Fixed start-up error on certain networks </p><h3 id="ZAPPipelinePlugin-1.8.0(9thJanuary2019)">1.8.0 (9th January 2019)</h3><p>Added export as XML and export as JSON buttons to the report.</p><p>Stopped spamming the console with scan progress messages</p><h3 id="ZAPPipelinePlugin-1.5.1(31stOctober2018)">1.5.1 (31st October 2018)</h3><p>Lowered minimum required Jenkins version from 2.7.3 to 2.121.1</p><h3 id="ZAPPipelinePlugin-1.5.0(23rdOctober2018)">1.5.0 (23rd October 2018)</h3><p>Added 32 unit and integration tests. </p><p>ImportZapUrls fails the build if you do not provide the path parameter or if the file failed to load.</p><p>RunZapCrawler no longer provides a default host to start the crawler on and will fail if you do not provide the host parameter.</p><p>If zapHome in startZap is not set the build will now fail, instead of carrying on silently.</p><p>Changed &quot;Zap alert instances&quot; to &quot;Alert instances&quot; on the chart, so the text is larger. Additionally, the chart now counts the alert instances rather than the number of alerts (bug)</p><p>Improved the UI report.</p><h3 id="ZAPPipelinePlugin-1.4.1(15thOctober2018)">1.4.1 (15th October 2018)</h3><p>Fixed archiving, general bug fixes and code improvements. If you were using a previous version before this the report view button will be lost on your old builds due to naming changes.</p><h3 id="ZAPPipelinePlugin-1.4(9thOctober2018)">1.4 (9th October 2018)</h3><p>Instead of comparing alerts to the previous build, you can now provide a false positives file in your projects, and alerts will be filtered using this file.</p><p>There is now a graph that displays on the Jenkins job page that shows you the amount of alert instances over your builds.</p><p>Previously, it was impossible to know that the build failed due to ZAP without checking the build console. There is now text on the build page which makes that clear.</p><p>The plugin was renamed since the previous version, remember to uninstall zap-comp.hpi so you don't have it installed twice.</p><h3 id="ZAPPipelinePlugin-1.2.0(14thSeptember2018)">1.2.0 (14th September 2018)</h3><p>You can now have multiple nodes running at once</p><h3 id="ZAPPipelinePlugin-1.1.0(12thSeptember2018)">1.1.0 (12th September 2018)</h3><p><span style="color: rgb(36,41,46);">Added support for Windows</span></p><h3 id="ZAPPipelinePlugin-1.0.0(11thSeptember2018)">1.0.0 (11th September 2018)</h3><p>Initial release</p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165576941/165576940.png">plugin 1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165576941/165577034.png">zap.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:00</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

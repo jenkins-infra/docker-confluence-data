@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ClearCase UCM Plugin Usage</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="ClearCase-UCM-Plugin.html">ClearCase UCM Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ClearCase UCM Plugin Usage
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (lars_kruse)</span>, last modified by <span class='editor'> Unknown User (mdeboeck)</span> on Feb 21, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="ClearCaseUCMPluginUsage-Shareyoursetup!">Share your setup!</h2>
+
+<p><span style="color: rgb(255,102,0);"><em>At Praqma we are really curious to learn about how you use our plugin.</em></span></p>
+
+<p><span style="color: rgb(255,102,0);"><em>We encourage you to share a few details about your setup, how you use ClearCase UCM, how you use Jenkins. Treats us with all your hard earned experiences - tell us what you like and don't like about our plugin.</em></span></p>
+<hr/>
+<h4 id="ClearCaseUCMPluginUsage-FreddieMac">Freddie Mac</h4>
+
+<p>As part of our Evaluation on Continuous Integration tools , I have installed this plug in . This is the only plug in that supports UCM clearcase. So easy  to configure. Major draw back of this plugin i sit only supports on windows. I am looking forward to it work on Unix/Linux.</p>
+
+<p>Jagan Kalluri</p>
+
+<p> </p>
+<hr/>
+<h4 id="ClearCaseUCMPluginUsage-PassengerSolutions(subsidiaryoftheNationalBelgianRailroads)">Passenger Solutions (subsidiary of the National Belgian Railroads)</h4>
+
+<p>Here is how we use this plugin:</p>
+
+<ul>
+	<li>For each UCM-project, we first run a job which creates new  baselines in the integration stream: the job creates a dynamic view (attached to the integration  stream), runs the command &quot;cleartool mkbl” in this dynamic view and then deletes the view  again. After this job is run, new baselines may or may not be created in the stream, depending on the fact whether new changes/activities have  been delivered from the development streams to the integration stream.  The new baseline will have the promotion level INITIAL. It typical takes a few seconds to run such a job.</li>
+	<li>Then we have the actual build job, which uses the ClearCase UCM  plugin. This job is triggered via an SCM change (polling the integration stream in self-mode). In the case of the ClearCase UCM plugin, this means the existence/creation of a new INITIAL baseline. It's important that this job is triggered by an SCM change, and not by a post-build action of the first job. Otherwise this job would run even if no new baselines have been created. When a build starts, a script determines what has changed since the last BUILT baseline (not necessarily the previous baseline). When  these changes are identified, we determine to which modules these elements  belong. Then a bottom-up build is started: starting from the changed  modules and then up to the modules that have dependencies to these  changed modules. We use a combination of Ant and Ivy to determine these  dependencies (for those who are familiar with Ivy: the Ivy task  buildlist is used in combination with the leafs-attribute).<br/>
+When the build completes successfully, the baseline is promoted by  the UCM-plugin to BUILT. When the build fails, the baseline is demoted  to REJECTED. In that case a correction will have to be delivered, and a  new run will try to build again the complete set of changes since the  last BUILT baseline. This way, we are sure that every baseline with  promotion level BUILT contains a successful build of our complete  system.</li>
+</ul>
+
+
+<p>We have been running this setup for several UCM projects on Windows and on Linux servers. I would encourage everybody who is using ClearCase UCM and wants to  automate their build process to use this plugin with Jenkins. It’s all  very logical and is perfectly tuned to the UCM processes. If your change set between two baselines is very big, the initial step of the job may take some time, because the plugin tries to determine all changes between the current and previous baselines (I think it uses cleartool diffbl and cleartool describe commands for this).</p>
+
+<p>Marc De Boeck</p>
+
+<hr/>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ALM Integration</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Micro-Focus-Application-Automation-Tools.html">Micro Focus Application Automation Tools</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ALM Integration
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jay_hershko)</span>, last modified on Dec 19, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>You can use this plugin to run ALM tests sets and use ALM Lab Management with the Jenkins continuous integration.</p><p>If you are working with Quality Center 10.00 or earlier, and QuickTest Professional 9.x or 10.x, use the <a class="external-link" rel="nofollow" href="https://wiki.jenkins-ci.org/display/JENKINS/Quality+Center+Plugin">Quality Center Plugin</a>.</p><p>If you are working with Quality Center 10.00 or earlier, and QuickTest Professional 9.x or 10.x, use the <a class="external-link" rel="nofollow" href="https://wiki.jenkins-ci.org/display/JENKINS/Quality+Center+Plugin">Quality Center Plugin</a>.</p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021647306 {padding: 0px;}
+div.rbtoc1631021647306 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021647306 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021647306'>
+<ul class='toc-indentation'>
+<li><a href='#ALMIntegration-ConfiguretheconnectiontoyourALMServer'>Configure the connection to your ALM Server</a></li>
+<li><a href='#ALMIntegration-RunningTestSetsfromALM'>Running Test Sets from ALM</a></li>
+<li><a href='#ALMIntegration-RunningServerSideTestsUsingALMLabManagement'>Running Server Side Tests Using ALM Lab Management</a></li>
+<li><a href='#ALMIntegration-Create/UpdatetheAUTEnvironmentConfigurationUsingALMLabManagement'>Create/Update the AUT Environment Configuration Using ALM Lab Management</a></li>
+<li><a href='#ALMIntegration-UploadTestResultstoALM'>Upload Test Results to ALM</a></li>
+</ul>
+</div></p><p><br/></p><h1 id="ALMIntegration-ConfiguretheconnectiontoyourALMServer">Configure the connection to your ALM Server</h1><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>Manage Jenkins</strong> link in the left pane. </li><li>In the Manage Jenkins Page click <strong>Configure System</strong>.</li><li>In the Configuration tab, scroll down to the <strong>Application Lifecycle Management</strong> section.</li><li>Click <strong>Add ALM server</strong>, if no server is currently configured.</li><li>Specify a meaningful server name and URL. When specifying an ALM Server URL, use the full string: <span class="nolink"><a href="http://http/myserver.mydomain/qcbin" class="external-link" rel="nofollow">http:/myserver.mydomain/qcbin</a>.</span></li></ol><h1 id="ALMIntegration-RunningTestSetsfromALM">Running Test Sets from ALM</h1><p><br/></p><p> <strong style="letter-spacing: 0.0px;">Set up a job</strong></p><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>New Job</strong> link or select an existing job.</li><li>Enter a Job name (for a new job).</li><li>Select <strong>Build a free-style software project</strong> and click <strong>OK</strong>.</li><li>In the Project Configuration section scroll down to the <strong>Build</strong> section.</li><li>Expand the <strong>Add build</strong> <strong>step</strong> drop-down and select <strong>Execute functional tests from ALM</strong>.</li><li>Select one of the ALM servers that you configured in the previous step.</li><li>Enter the server credentials, project and domain. For ALM 14, use the API Key client ID and secret as the username and password. <strong>Note:</strong> If you are using the ALM scheduler, it will run under the Jenkins agent user. For example, if Jenkins is running as a <strong>System</strong> user, the scheduler will run the tests as a <strong>System</strong> user. This will not affect test execution. </li><li><p>Add the test set folders or specific test sets that you want to include, using the ALM path. To add a specific test, add the test name after the test set path.To add multiple entries, click the down arrow on the right of the field and enter each item on a separate line. See the example below.</p></li><li>Optionally, indicate a timeout in seconds after which the job will fail.</li><li>Click <strong>Advanced</strong> to indicate a Run mode (local, remote, or planned host) If you specify a remote host mode, specify a host name. This must be a machine with a valid installation of the testing tool.</li><li><p>Click <strong>Apply</strong> to save your changes and continue with more build steps. Click <strong>Save</strong> when you are finished adding build steps.</p><p><br/></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">Root\testfolder1\testset_a
+Root\testfolder1\testset_b
+Root\testlab_folder
+Root\testlab_folder\testset_a\test-name</pre>
+</div></div></li></ol><p><strong>Set up the Post Build actions</strong></p><ol><li>In the <strong>Post-build Actions</strong> section, expand the <strong>Add post-build action</strong> drop-down and select <strong>Publish test result</strong>.<br/><strong>Run the job</strong></li><li>Run or schedule the job as you would with any standard Jenkins job. </li></ol><p><strong>Review the results</strong></p><ol><li>From the dashboard, click on the job.</li><li>Click the Console link to view the ALM information.</li><li>Copy the ALM link to your Internet Explorer browser and view the Test Set results from within ALM.</li></ol><p><br/></p><hr/><h1 id="ALMIntegration-RunningServerSideTestsUsingALMLabManagement">Running Server Side Tests Using ALM Lab Management</h1><p>If you have Lab Management activated in ALM, you can run server-side tests from functional test sets and build verification suites. After setting up the test sets and build verification suites, you can configure a Jenkins build step to execute your tests.</p><p><strong>Set up a job</strong></p><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>New Job</strong> link or select an existing job.</li><li>Enter a Job name (for a new job).</li><li>Select <strong>Build a free-style software project</strong> and click <strong>OK</strong>.</li><li>In the Project Configuration section scroll down to the <strong>Build</strong> section.</li><li>Expand the <strong>Add build</strong> <strong>step</strong> drop-down and select <strong>Execute tests using ALM Lab Management</strong>.</li><li>Select one of the ALM servers that you configured in the previous step.</li><li>Enter the server credentials, project, and domain. </li><li>If your ALM server version is 12.60 or higher, enter the <strong>Client type</strong>.</li><li>Select a Run Type from the drop down menu (functional test set or build verification suite).</li><li>Enter the ID of your run entity (either the test set ID or the build verification suite ID).</li><li><strong>Optional:</strong> Enter a description of the build step.</li><li>Enter a duration (in minutes) for the timeslot. The minimum time is 30 minutes.</li><li><strong>Optional</strong>: If you have defined an AUT environment configuration in ALM, you can enter the ID here in order to execute your timeslot with specific AUT parameters.<br/>If you have CDA configured in ALM and want to implement it for this time slot, select the <strong>Use CDA for provisioning and deployment</strong> checkbox and enter your CDA details.<br/><strong>Set up the Post Build actions</strong></li><li>In the <strong>Post-build Actions</strong> section, expand the <strong>Add post-build action</strong> drop-down and select <strong>Publish test result</strong>.</li></ol><p><strong>Run the job</strong></p><p>Run or schedule the job as you would with any standard Jenkins job. </p><p><strong>Review the results</strong></p><ol><li>From the dashboard, click on the job.</li><li>Click the Console link to view the ALM information.</li><li>Copy the ALM link to your Internet Explorer browser and view the Test Set results from within ALM.</li></ol><p><strong>Note:</strong> For environments with Internet Explorer 9 and ALM version 12.20 or later: The report, normally accessible through a link in the console log, will not be available.</p><hr/><h1 id="ALMIntegration-Create/UpdatetheAUTEnvironmentConfigurationUsingALMLabManagement">Create/Update the AUT Environment Configuration Using ALM Lab Management</h1><p>If you have Lab Management activated in ALM, you can create/update an AUT Environment Configuration for an existing AUT Environment in ALM.<br/> <strong>Set up a job</strong></p><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>New Job</strong> link or select an existing job.</li><li>Enter a Job name (for a new job).</li><li>Select <strong>Build a free-style software project</strong> and click <strong>OK</strong>.</li><li>In the Project Configuration section scroll down to the <strong>Build</strong> section.</li><li>Expand the <strong>Add build</strong> <strong>step</strong> drop-down and select <strong>Execute AUT Environment preparation using ALM Lab Management</strong>.</li><li>Select one of the ALM servers that you configured in the <strong>Configure the connection to your ALM server</strong> step.</li><li>Enter the server credentials, project name, and domain. </li><li>Enter the ID of the environment for which you want to create/update a configuration.</li><li>Select one of the following options to Indicate whether or not to create a new AUT Environment Configuration or update an existing one.<ol><li>For <strong>Create a new configuration named</strong>, enter a name for the new configuration.</li><li>For <strong>Use an existing configuration with ID</strong>, enter the ID of your AUT Environment Configuration in ALM.</li></ol></li><li><strong>Optional:</strong> Enter a path for a JSON file that contains values for the AUT Environment parameters for the relevant configuration.</li><li><strong>Optional:</strong> Enter a name of a build environment parameter in order to save the ID of the created/updated configuration for future use.</li><li>Add the AUT Environment parameters that you want to update for the created/updated configuration. For each parameter:<ol><li>Select the type of the parameter from the drop-down menu (Manual, Environment, From JSON).</li><li>Enter the full path of the parameter as it appears in ALM.</li><li>Enter the value you want to assign to this parameter.</li></ol></li></ol><p><strong>Run the job</strong></p><p>Run or schedule the job as you would with any standard Jenkins job. </p><p><br/></p><hr/><h1 id="ALMIntegration-UploadTestResultstoALM">Upload Test Results to ALM</h1><p>You can upload tests running in JUnit, NUnit, or TestNG frameworks to ALM as part as the run job or as a separate job. ALM will create tests and test sets (of External type) corresponding to the executed tests.</p><p> <strong>Set up a job</strong></p><ol><li>Go to the Jenkins Server home page.</li><li>Click the <strong>New Job</strong> link or select an existing job.</li><li>Enter a Job name (for a new job).</li><li>Select <strong>Build a free-style software project</strong> and click <strong>OK</strong>.</li></ol><p><strong>Set up the Post Build actions</strong></p><ol><li>In the Project Configuration section, scroll down to the <strong>Post-build Actions</strong> section.</li><li>Expand the <strong>Add post-build action</strong> drop-down and select <strong>Upload test result to ALM</strong>.</li><li>Select one of the ALM servers that you configured in the <strong>Configure the connection to your ALM server</strong> step.</li><li>Enter the server credentials, project name, and domain. </li><li>Select a testing framework from the drop-down list: JUnit, NUnit, or TestNG.</li><li><strong>Optional:</strong> Enter the name of the Testing Tool name, to be used in the corresponding entity in ALM.</li><li>Enter the ALM Test folder path, in which to store the external tests. Do not include the Root test folder (Subject).</li><li>Enter the ALM Test Set folder path, in which to store the external test sets. Do not include the Root test sets folder.</li><li>Enter the Testing result file condition, relative to the root path of the job. For example, use **/junitResult.xml for Junit Plugin results.</li><li><strong>Optional:</strong> Enter the Jenkins server URL.</li></ol><p><strong>Run the job</strong></p><ol><li>Run or schedule the job as you would with any standard Jenkins job. </li></ol><p><strong>Review the results</strong></p><ol><li>From the dashboard, click on the job.</li><li>Click the <strong>Console</strong> link to view the ALM information.</li><li>Copy the ALM link to Internet Explorer and view the tests, test sets, and test runs that were created within ALM.</li></ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:34</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Static Analysis in Pipelines</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Static-Code-Analysis-Plug-ins.html">Static Code Analysis Plug-ins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Static Analysis in Pipelines
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (drulli)</span>, last modified on Aug 10, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><p class="title">Attention</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Please note that this wiki page sometimes does not show the changed content. In order to see the latest results you may need to add the <em>?cache</em> attribute to the <a href="https://wiki.jenkins.io/display/JENKINS/Static+Analysis+in+Pipelines?cache" rel="nofollow">URL</a>.</p></div></div><p>Up to now the static analysis plug-ins are optimized for freestyle builds:</p><ol><li>Configuration is done using a user interface, i.e. all possible options are visible and could be easily selected or edited using UI controls.</li><li>Reporting of the static analysis results has been provided as a black box, i.e. users need not to hassle about intermediate steps, they just see the final result.</li></ol><p>A user friendly approach for editing pipelines is not yet available, at least not for complex use cases: So pipelines with static analysis steps suffer from the same problems. This is something the Jenkins core team needs to fix, hopefully there will be some progress in the future. I don't think that a plug-in can provide a solution here.</p><p>The second point, however, can be addressed by the plug-in. Rather than providing all steps in a black box, these steps should be made accessible for pipelines. In the following sections these steps are described in detail. Moreover, all relevant issues are listed, so all requirements should be visible from here. If you have additional requirements, or if you need something different, please use this wiki page as discussion platform.</p><h1 id="StaticAnalysisinPipelines-Structureofstaticanalysissteps">Structure of static analysis steps</h1><p>In the following sections, the current structure is explained. Then, a first sketch of the new implementation for pipelines is given.</p><h2 id="StaticAnalysisinPipelines-Currentimplementation">Current implementation </h2><p>All static analysis plug-ins basically are composed of several similar steps. In a freestyle job you can configure these steps using <strong>one </strong>configuration object. In a freestyle build this configuration is the input for a <strong>post build publisher</strong>. This publisher parses a set of files (or the console log) for warnings and attaches the recorded warnings as an action to the build of the job. This action is visualized afterwards from Jenkins' UI. There you can view the warnings or the trend report. Additionally, you can also set the build status and health depending on the set of recorded warnings.</p><h2 id="StaticAnalysisinPipelines-Pipelinefriendlyimplementation">Pipeline friendly implementation</h2><p>For pipelines, this approach has several drawbacks, see the issues below. In order to provide a better experience for pipelines, the plugin needs to divide the big step into two sub-steps. In the next sections, a sketch of the planned functionality is given. In these sections, the word issue is used as placeholder for warnings, bugs, open tasks, duplications, etc. </p><p><strong>Note: </strong>if not described otherwise all steps can be called several times.</p><h3 id="StaticAnalysisinPipelines-scanForIssues">scanForIssues</h3><p>Scans a set of files or the console log for issues. All parsers from the warnings plugin as well as all parsers or scanners from the other static analysis plugin can be used in this step. The result is an unfiltered set of issues. Depending on the selected parsers, the associated filenames might be still relative.</p><p>Input:</p><ul><li>See implementation <a href="https://github.com/jenkinsci/warnings-plugin/blob/5.0/src/main/java/io/jenkins/plugins/analysis/core/steps/ScanForIssuesStep.java" class="external-link" rel="nofollow">ScanForIssuesStep</a>.</li></ul><p>Output</p><ul><li>a report that contains a set of unique issues</li></ul><p>TODO (After Release 2):</p><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-44450" class="external-link" rel="nofollow">JENKINS-44450</a>: How to handle scanning the console log for only a subset of the pipeline (including just one branch of a parallel pipeline)? Either this step needs to support block-scoped usage (taking a closure that specifies the steps to include in the console log scan), or pipeline should provide a separate (possibly more generic) step to capture the console log for a group of steps that could then be passed to this step.</li></ul><h5 id="StaticAnalysisinPipelines-publishIssues"><span style="color: rgb(210,73,57);font-size: 16.0px;">publishIssues</span></h5><p>Makes the issues visible in a run: creates an associated action that will be persisted by Jenkins. Responsible for detail views and trend graphs and so on. Merges all issues of the provided parsers into a single result. Copies all conflicting files from a build agent to the master so that these files are available for rendering of the warnings details.</p><p>Input: </p><ul><li>1, ..., <em>n</em> sets of issues: each set contains the issues from one <strong>scanForIssues</strong> calls.</li><li>strategy to pick the reference build (that is used as a baseline to compute the new issues): currently the freestyle options <strong>usePreviousBuildAsReference</strong> and <strong>useStableBuildAsReference</strong> are available. I'm not sure if it must be possible to provide the reference build as parameter or if additional strategies must be provided or implemented.</li><li>defaultEncoding: Encoding to use when reading input files.</li><li>thresholds for health reporting: healthy, unhealthy, minimumPriority (see freestyle project).</li><li>thresholds for run status evaluation: unstableAll, etc. (see freestyle project).</li><li>include or exclude filters (filename, type, package, etc.) to specify the set of issues that should be stored  </li><li>id: the ID of the result. If not provided, then the ID of the parser in the <strong>scanForIssues</strong> step is used. This ID is used as URL to the results and to get the correct labels for the user interface.</li><li>name: the name of the result. If not provided, then the name of the parser in the <strong>scanForIssues</strong> step is used. This name is used in all labels for the user interface.</li><li>See implementation <a href="https://github.com/jenkinsci/warnings-plugin/blob/5.0/src/main/java/io/jenkins/plugins/analysis/core/steps/PublishIssuesStep.java" class="external-link" rel="nofollow">PublishIssuesStep</a></li></ul><p>Output</p><ul><li>the created action object (which contains a reference to the created result)</li><li>side effect: current run has a new action attached.</li></ul><p>TODO (After Release 2): </p><ul><li>Hierarchy of results: Would it make sense to have hierarchy in the warnings container object so that the necessary warnings can all be added to the same container, but different groups are distinguishable from each other? Then only a few steps would need to be aware of this hierarchy, others could just go through all items. Or could this publishing step create such a hierarchy in the web UI?</li><li><p>Blame: Compute the authors and commits for a set of issues (this works for freestyle jobs, it is not clear yet if the required information is available in pipelines).</p></li></ul><h5 id="StaticAnalysisinPipelines-Prototype"><span style="font-size: 20.0px;font-weight: normal;color: rgb(210,73,57);">Prototype </span></h5><p>The development of this feature still is in progress. The implementation is visible in the 5.0 branch of the <a href="https://github.com/jenkinsci/warnings-plugin/tree/5.0/" class="external-link" rel="nofollow">warnings</a> plug-in. The base plugin analysis-core has not been changed, the latest version 1.95 will be used as a dependency (in the long term, this dependency will be removed). The other static analysis plugins (checkstyle, pmd, dry, findbugs, android-lint, ccm) are obsolete now: their parsers habe been integrated into the warnings plug-in, so these plugins can be removed if all jobs have been migrated. Support for the analysis-collector plugin will be added later on. (A CI build is already available: <a href="https://ci.jenkins.io/job/Plugins/job/warnings-plugin/job/5.0/" class="external-link" rel="nofollow">warnings plug-in</a>.) </p><p>The prototype works quite well, most of the requirements from the issues below will be satisfied. Below is an example script that shows the new feature in action.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: true; first-line: 1; theme: Confluence" data-theme="Confluence">node {
+    stage (&#39;Checkout&#39;) {
+        git branch:&#39;master&#39;, url: &#39;file:///Users/hafner/Development/git/analysis-model&#39;
+    }
+
+    stage (&#39;Build&#39;) {
+        def mvnHome = tool &#39;mvn-default&#39;
+
+        sh &quot;${mvnHome}/bin/mvn --batch-mode -V -U -e clean test -Dsurefire.useFile=false&quot;
+
+        junit testResults: &#39;**/target/surefire-reports/TEST-*.xml&#39;
+
+        def java = scanForIssues tool: [$class: &#39;Java&#39;]
+        def javadoc = scanForIssues tool: [$class: &#39;JavaDoc&#39;]
+        
+        publishIssues issues:[java]
+        publishIssues issues:[javadoc]
+    }
+
+    stage (&#39;Analysis&#39;) {
+        def mvnHome = tool &#39;mvn-default&#39;
+
+        sh &quot;${mvnHome}/bin/mvn -batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs spotbugs:spotbugs&quot;
+
+        def checkstyle = scanForIssues tool: [$class: &#39;CheckStyle&#39;], pattern: &#39;**/target/checkstyle-result.xml&#39;
+        publishIssues issues:[checkstyle]
+   
+        def pmd = scanForIssues tool: [$class: &#39;Pmd&#39;], pattern: &#39;**/target/pmd.xml&#39;
+        publishIssues issues:[pmd]
+        
+        def cpd = scanForIssues tool: [$class: &#39;Cpd&#39;], pattern: &#39;**/target/cpd.xml&#39;
+        publishIssues issues:[cpd]
+        
+        def findbugs = scanForIssues tool: [$class: &#39;FindBugs&#39;], pattern: &#39;**/target/findbugsXml.xml&#39;
+        publishIssues issues:[findbugs]
+
+        def spotbugs = scanForIssues tool: [$class: &#39;SpotBugs&#39;], pattern: &#39;**/target/spotbugsXml.xml&#39;
+        publishIssues issues:[spotbugs]
+    }
+}
+</pre>
+</div></div><h2 id="StaticAnalysisinPipelines-RelatedIssues">Related Issues</h2><p>The following issues are related. Note that not all of them are from pipeline jobs, some will also benefit from the splitting shown above.</p><p>
+<span class="jira-issue" data-jira-key="JENKINS-44450" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-44450?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-44450</a>
+                            -
+            <span class="summary">Block scoped usage</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+     jira-macro-single-issue-export-pdf">Open</span>
+                </span>
+</p><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-43155" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-43155?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-43155</a>
+                            -
+            <span class="summary">Multiple links and graphics when there are several branches</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+</p><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-40164" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-40164?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-40164</a>
+                            -
+            <span class="summary">Obtain parallel warnings results in pipeline</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-37325" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-37325?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-37325</a>
+                            -
+            <span class="summary">Make multiple static analysis results visible in a pipeline script</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-31812" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-31812?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-31812</a>
+                            -
+            <span class="summary">Set reference build explicitly</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-31633" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-31633?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-31633</a>
+                            -
+            <span class="summary">Only first execution is tracked</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-30551" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-30551?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-30551</a>
+                            -
+            <span class="summary">Make Warnings Plugin compatible with parallel Workflow</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-22526" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-22526?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-22526</a>
+                            -
+            <span class="summary">Health threshold rebaseline command</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-22874" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-22874?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-22874</a>
+                            -
+            <span class="summary">Ability to configure thresholds for each Warnings parser used</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-18708" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-18708?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-18708</a>
+                            -
+            <span class="summary">Make it possible to have several files as input for one parser </span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p class="_mce_tagged_br">
+<span class="jira-issue resolved" data-jira-key="JENKINS-17196" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-17196?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-17196</a>
+                            -
+            <span class="summary">Add an action that allows to reset the reference build</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-13056" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-13056?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-13056</a>
+                            -
+            <span class="summary">Obtain reference build from SCM/Trigger</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><h2 id="StaticAnalysisinPipelines-NonFunctionalAPIRequirements">Non Functional API Requirements</h2><p>These changes will change the API of the analysis-core plug-in. Since I do not have the time to make such big changes backward compatible, a new major release of analysis-core is required:</p><ul><li>All changes will be part of analysis-core 2.0 release</li><li>analysis-core 2.0 API will be not backward compatible</li><li>analysis-core 2.0 will be based on Java 8</li><li>analysis-core 2.0 will not contain a dependency to the maven project</li><li>analysis-core 2.0 will remove all @Deprecated methods</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/135465715.jpg">taskScannerPlugin.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/138458135.png">Screenshot_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/138458156.png">Screenshot_4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/138458479.png">Screenshot_5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/138458478.png">Screenshot_5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956397/138458560.png">Screenshot_6.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

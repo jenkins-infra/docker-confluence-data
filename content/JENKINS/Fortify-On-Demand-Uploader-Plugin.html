@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Fortify On Demand Uploader Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Fortify On Demand Uploader Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ryanblack)</span>, last modified by <span class='editor'> Unknown User (vodriemf)</span> on Aug 15, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Fortify on Demand <a href="https://plugins.jenkins.io/fortify-on-demand-uploader" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-07-02/#SECURITY-1691" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-03-25/#SECURITY-992" class="external-link" rel="nofollow">SSRF vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-16/#SECURITY-1433" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2020-07-02/#SECURITY-1690" class="external-link" rel="nofollow">Users with Overall/Read access could enumerate credentials IDs</a></li>
+</ul>
+
+</div></div>
+Fortify on Demand is a Software as a Service (SaaS) solution that enables your organization to easily and quickly build and expand a Software Security Assurance program. The Fortify on Demand Plugin enables users to upload code directly from Jenkins for Static Application Security Testing (SAST). This plugin features the following tasks:<br/><br/>    Run a static assessment for each build triggered by Jenkins.<br/>    Monitor scan completion and poll for results. If the results do not meet the application security policy as set by the organization, the build can be marked as failed or unstable.<br/>    <br/>This plugin requires a Fortify on Demand account. For more information on Fortify on Demand and to request a free trial, go to <a href="https://software.microfocus.com/en-us/software/fortify-on-demand" class="external-link" rel="nofollow">https://software.microfocus.com/en-us/software/fortify-on-demand</a></p><p>This plugin is maintained by the Fortify on Demand team. If you have any issues, or enhancement requests or would like to contribute to the code please let us know through the <a href="https://github.com/jenkinsci/fortify-on-demand-uploader-plugin/issues" class="external-link" rel="nofollow">GitHub Issues</a> page.</p><h1 id="FortifyOnDemandUploaderPlugin-Installation">Installation</h1><p>Note: If your Jenkins server requires a proxy for web access, in the Jenkins Dashboard, select <strong>Jenkins &gt; Manage Jenkins &gt; Manage Plugins</strong>. Select the <strong>Advanced</strong> tab and configure your proxy settings.</p><ol><li>Select the <strong>Available</strong> tab.</li><li>In the <strong>Filter</strong> search box, type “Fortify on Demand Uploader.” The plugin list refreshes with Fortify on Demand Uploader.</li><li>Select the plugin and click <strong>Download now and install after restart</strong>.</li></ol><h1 id="FortifyOnDemandUploaderPlugin-Setup">Setup</h1><h2 id="FortifyOnDemandUploaderPlugin-CreateanAPIKeyPairoraPersonalAccessTokeninFortifyonDemand">Create an API Key Pair or a Personal Access Token in Fortify on Demand</h2><p>The Fortify on Demand Plugin connects to Fortify on Demand through the Fortify on Demand API. Authentication requires an API key and secret pair or a personal access token.</p><ul><li>To create an API key and secret pair: Within Fortify on Demand, navigate to the Settings page under the Administration view, and then to the <strong>API</strong> tab. Create an API key with the Start Scans permission. Make sure to copy the secret as it is only shown once.<br/>Note that only Security Leads can create API keys.</li><li><p>To create a personal access token: Within Fortify on Demand, select your account name &gt; <strong>Personal Access Tokens</strong>. Create a personal access token with the api-tenant scope. Make sure to copy the token as it is only shown once.</p></li></ul><h2 id="FortifyOnDemandUploaderPlugin-GenerateaBuildServerIntegration(BSI)TokeninFortifyonDemand">Generate a Build Server Integration (BSI) Token in Fortify on Demand</h2><p>Within Fortify on Demand, navigate to the application release that you wish to assess, and then to the Static Scan Setup page. Configure the static assessment settings and the BSI token will be automatically generated. Make sure to save the settings.</p><p>Note that this procedure requires a user role with the Start Static Scans-Configure permission.</p><h2 id="FortifyOnDemandUploaderPlugin-ConfigureGlobalAuthenticationSettings">Configure Global Authentication Settings</h2><ol><li>In the Jenkins Dashboard, select <strong>Jenkins &gt; Manage Jenkins &gt; Configure System</strong>.</li><li>In the <strong>Fortify on Demand</strong> section, provide your data center's domain URL and API root URL.</li><li>Select the method of authentication:<ul><li><strong>Use API Key for authentication</strong>: Provide the API key and secret.</li><li><strong>Use Personal Access Token for authentication</strong>: Provide your account username, your personal access token, and the tenant ID.</li></ul></li><li>Click<strong> Test Connection</strong>. If the authentication is successful, a success message will appear.</li></ol><h2 id="FortifyOnDemandUploaderPlugin-ConfigureFortifyonDemandStaticAssessmentTasks">Configure Fortify on Demand Static Assessment Tasks</h2><p>The Fortify on Demand Plugin supports freestyle projects and pipelines.</p><h3 id="FortifyOnDemandUploaderPlugin-ConfigureaFreestyleProject">Configure a Freestyle Project</h3><p>The plugin adds the Fortify on Demand Static Assessment and Poll Fortify on Demand for Results post-build tasks.</p><ol><li>In a freestyle project, click <strong>Configure</strong>.</li><li>In the <strong>Post-build Actions</strong> section, click <strong>Add post-build action</strong> and select <strong>Add Fortify on Demand Static Assessment</strong>.</li><li><p>Complete the following fields:</p><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 83.5066%;"><colgroup><col style="width: 25.4803%;"/><col style="width: 74.5197%;"/></colgroup><tbody><tr><th class="confluenceTh">Field</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd">BSI Token</td><td class="confluenceTd">Provide the BSI token.</td></tr><tr><td class="confluenceTd">Configure Personal Access Token (optional)</td><td class="confluenceTd">Select this option to override the global authentication settings. Provide your account username, your personal access token, and the tenant ID.</td></tr><tr><td class="confluenceTd">Entitlement Preference</td><td class="confluenceTd">Select the entitlement preference: <strong>Single Scan</strong> or <strong>Subscription</strong>.</td></tr><tr><td colspan="1" class="confluenceTd">Purchase Entitlements (optional)</td><td colspan="1" class="confluenceTd">Select the check box to purchase an entitlement if the feature is enabled.</td></tr><tr><td colspan="1" class="confluenceTd">Bundled Assessment (optional)</td><td colspan="1" class="confluenceTd">Select the check box to specify the assessment is a part of a bundled assessment.</td></tr><tr><td colspan="1" class="confluenceTd"><p>Prefer Remediation if Available (optional)</p></td><td colspan="1" class="confluenceTd">Select the check box to run a remediation scan if one is available.</td></tr><tr><td colspan="1" class="confluenceTd">Include all project files</td><td colspan="1" class="confluenceTd">Select the check box to include all project files in the zip file.</td></tr></tbody></table></div></li><li><p>Click <strong>Add post-build action</strong> and select <strong>Poll Fortify on Demand for Results.</strong> Complete the following fields:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">Field</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd">BSI Token</td><td class="confluenceTd">Provide the BSI token.</td></tr><tr><td colspan="1" class="confluenceTd">Configure Personal Access Token (optional)</td><td colspan="1" class="confluenceTd">Select this option to override the global authentication settings. Provide your account username, your personal access token, and the tenant ID.</td></tr><tr><td class="confluenceTd">Polling Interval</td><td class="confluenceTd">Type the length of time in minutes between polling Fortify on Demand to check if the scan has completed.</td></tr><tr><td class="confluenceTd">Action if Failing Security Policy</td><td class="confluenceTd">Select whether to take no action or mark the build as Failed or Unstable based on the application security policy as set by your organization.</td></tr></tbody></table></div></li><li>Save the settings.</li></ol><h3 id="FortifyOnDemandUploaderPlugin-ConfigureaPipeline">Configure a Pipeline</h3><p>The Fortify on Demand Plugin adds the fodStaticAssessment and fodPollResults tasks. Use the Snippet Generator to create code for these tasks.</p><p>Note: The Pipeline Plugin needs to installed.</p><ol><li>In a pipeline, click <strong>Configure</strong>.</li><li>In the <strong>Pipeline</strong> section, click <strong>Pipeline Syntax</strong>.<br/>The Snippet Generator appears.</li><li>Select<strong> fodStaticAssessment</strong> in the <strong>Sample Step</strong> list.</li><li><p>Complete the following fields:</p><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 83.5066%;"><colgroup><col style="width: 25.4803%;"/><col style="width: 74.5197%;"/></colgroup><tbody><tr><th class="confluenceTh">Field</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd">BSI Token</td><td class="confluenceTd">Provide the BSI token.</td></tr><tr><td class="confluenceTd">Configure Personal Access Token (optional)</td><td class="confluenceTd">Select this option to override the global authentication settings. Provide your account username, your personal access token, and the tenant ID.</td></tr><tr><td class="confluenceTd">Entitlement Preference</td><td class="confluenceTd">Select the entitlement preference: <strong>Single Scan</strong> or <strong>Subscription</strong>.</td></tr><tr><td colspan="1" class="confluenceTd">Purchase Entitlements (optional)</td><td colspan="1" class="confluenceTd">Select the check box to purchase an entitlement if the feature is enabled.</td></tr><tr><td colspan="1" class="confluenceTd">Bundled Assessment (optional)</td><td colspan="1" class="confluenceTd">Select the check box to specify the assessment is a part of a bundled assessment.</td></tr><tr><td colspan="1" class="confluenceTd"><p>Prefer Remediation if Available (optional)</p></td><td colspan="1" class="confluenceTd">Select the check box to run a remediation scan if one is available.</td></tr><tr><td colspan="1" class="confluenceTd">Include all project files</td><td colspan="1" class="confluenceTd">Select the check box to include all project files in the zip file.</td></tr></tbody></table></div></li><li>Click <strong>Generate Pipeline Script.</strong> Copy the code and add it to your pipeline script.</li><li>Select <strong>fodPollResults</strong> in the <strong>Sample Step</strong> list.</li><li><p>Complete the following fields:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">Field</th><th class="confluenceTh">Description</th></tr><tr><td class="confluenceTd">BSI Token</td><td class="confluenceTd">Provide the BSI token.</td></tr><tr><td colspan="1" class="confluenceTd">Configure Personal Access Token (optional)</td><td colspan="1" class="confluenceTd">Select this option to override the global authentication settings. Provide your account username, your personal access token, and the tenant ID.</td></tr><tr><td class="confluenceTd">Polling Interval</td><td class="confluenceTd">Type the length of time in minutes between polling Fortify on Demand to check if the scan has completed.</td></tr><tr><td class="confluenceTd">Action if Failing Security Policy</td><td class="confluenceTd">Select whether to take no action or mark the build as Failed or Unstable based on the application security policy as set by your organization.</td></tr></tbody></table></div></li><li>Click <strong>Generate Pipeline Script</strong>. Copy the code and add it to your pipeline script.</li><li>Save the settings.</li></ol><h2 id="FortifyOnDemandUploaderPlugin-RuntheBuild">Run the Build</h2><p>Run the build. Diagnostic information is available in the console output. The console output will display a success message if the assessment was successfully submitted. The Fortify on Demand Scans page will display an in-progress scan for the release.</p><h1 id="FortifyOnDemandUploaderPlugin-AdditionalConsiderationsForMavenUsers">Additional Considerations For Maven Users</h1><p>For the most complete assessment of your application it is important to ensure all dependencies for deployment are satisfied. Maven provides a simple means of outputting these libraries by the <strong>maven-dependency-plugin</strong>. The section, <strong>&lt;excludeGroupIds&gt;</strong> may be used to ensure test framework code, for example, is not included.</p><p><strong>Example POM Section:</strong></p><div class="code panel pdl" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;border-bottom-style: solid;"><b>POM Plugins Entry</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+  &lt;version&gt;2.6&lt;/version&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;copy-dependencies&lt;/id&gt;
+      &lt;phase&gt;prepare-package&lt;/phase&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;copy-dependencies&lt;/goal&gt;
+      &lt;/goals&gt;
+      &lt;configuration&gt;
+        &lt;outputDirectory&gt;target/classes/lib&lt;/outputDirectory&gt;
+        &lt;overWriteIfNewer&gt;true&lt;/overWriteIfNewer&gt;
+        &lt;excludeGroupIds&gt;
+          junit,org.easymock,${project.groupId}
+        &lt;/excludeGroupIds&gt;
+      &lt;/configuration&gt;
+    &lt;/execution&gt;
+    &lt;execution&gt;
+      &lt;phase&gt;generate-sources&lt;/phase&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;sources&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+  &lt;configuration&gt;
+    &lt;verbose&gt;true&lt;/verbose&gt;
+    &lt;detail&gt;true&lt;/detail&gt;
+    &lt;outputDirectory&gt;${project.build.directory}&lt;/outputDirectory&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+
+...
+
+
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;attach-sources&lt;/id&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;jar&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;
+
+</pre>
+</div></div><h1 id="FortifyOnDemandUploaderPlugin-KnownLimitations">Known Limitations</h1><ul><li>The 2.0.9 (Obsolete) plugin version is slow to populate the pull down menu's in Redhat 7 machines.  Please wait a minute or two and the first field should populate.</li></ul><h1 id="FortifyOnDemandUploaderPlugin-ChangeLog">Change Log</h1><h5 id="FortifyOnDemandUploaderPlugin-Version3.0.12(4-05-2019)">Version 3.0.12 (4-05-2019)</h5><p><span style="color: rgb(34,34,34);text-decoration: none;">The Jenkins Plugin now supports pipelines. The fodStaticAssessment and fodPollResults tasks have been added; they mirror the Fortify on Demand post-build actions in freestyle projects.</span></p><h5 id="FortifyOnDemandUploaderPlugin-Version3.0.11(3-22-2019)">Version 3.0.11 (3-22-2019)</h5><ul><li>Fixed SSRF vulnerability</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version3.0.1(10-9-2017)">Version 3.0.1 (10-9-2017)</h5><p><strong>Upgrade Note:</strong> - please be aware that builds will need to be reconfigured with the BSI Url/Token.</p><ul><li>Scans are now configured with the BSI Url/Token from the Static Scan Setup page of the release to be scanned in the Fortify on Demand Portal.</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version2.0.6(1-6-2017)">Version 2.0.6 (1-6-2017)</h5><ul><li>Fixed bug that causes plugin to crash configuration pages when incomplete information was saved.</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version2.0(4-28-2016)">Version 2.0 (4-28-2016)</h5><ul><li>Fixed bug when that causes plugin to crash when particular proxy configurations cause authentication to fail.</li><li>Finalized update to FoD API V3</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.10(4-28-2016)">Version 1.10 (4-28-2016)</h5><p>*<strong>Bug Fix:</strong>* This release addresses a rare issue in which release information may not be retrieved for certain applications.</p><ul><li>Corrected encoding issue for application names which can prevent release information calls from working properly</li><li>Additional validation for global polling interval</li><li>Removed unsupported language level settings for .NET and Java</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.09(4-25-2016)">Version 1.09 (4-25-2016)</h5><ul><li>Code changes to resolve distributed Jenkins defect (credit to Ruud Senden)</li><li>Minor language support changes in preparation for potential new mobile assessment types</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.08(4-15-2016)">Version 1.08 (4-15-2016)</h5><ul><li>Added support for Jenkins proxy configuration</li><li>Added connection configuration test button that validates reachability of the portal and tests credentials</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.07(4-6-2016)">Version 1.07 (4-6-2016)</h5><ul><li>Added option to include/exclude identified third-party libraries from analysis results</li><li>Changed order, and description, of advanced options for consistency with the Fortify on Demand portal</li><li>Polling for results is no longer default. Applications set to poll will reflect your organization's security policy in Jenkins via build stability.</li><li>Minor branding changes</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.06">Version 1.06</h5><p>*<strong>Bug Fix:</strong>* This release addresses a bug where the Assessment Type may not correctly set under certain conditions</p><ul><li>Assessment Type no longer has a suggested default selection; the user must choose the proper type for enabled entitlement</li><li>Added .NET as a supported language to Sonatype help text</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.05">Version 1.05</h5><p><strong>Upgrade Note:</strong> - please ensure you reconfigure any existing builds so that the filer filter may be set by the plugin; this functionality has changed with this version.</p><ul><li>Added support for all language/assessment types except MBS and C/C++, which require pre-processing with Fortify SCA prior to submission to Fortify on Demand</li><li>Files selected for upload are automatically set based on language type and Fortify on Demand requirements; users may opt to package all files, including extraneous types like media, under advanced options. Using the automated default is <em>highly</em> encouraged</li><li>The result report link added with the Detailed Reports option now refers to the Overview page in the Customer Portal</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.04">Version 1.04</h5><p><strong>Upgrade Note:</strong> - please ensure you reconfigure any existing builds so that <em>Assessment Type</em> may be set by the plugin as this field is new with this version.</p><ul><li>Static-related assessment types may be selected at upload, defaults to &quot;Static Assessment&quot;</li><li>API calls for information lookup are now more resilient with retries, and have additional logging of any issues, e.g. lack of assessment entitlement</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.03">Version 1.03</h5><ul><li>Star rating and total issue count display in the standard log results</li><li>Detailed build log table output includes a deep link to the FoD customer portal for the application release, issue counts by criticality, and Fortify on Demand star rating</li><li>Minor code cleanup for readability</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.02">Version 1.02</h5><ul><li>Minor branding changes</li><li>Updated UI API token secret validation due to changed 5.0 portal format</li></ul><h5 id="FortifyOnDemandUploaderPlugin-Version1.01">Version 1.01</h5><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

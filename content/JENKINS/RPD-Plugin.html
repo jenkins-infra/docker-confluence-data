@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : RPD Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : RPD Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (khryts)</span>, last modified by <span class='editor'> Unknown User (aivaniuk)</span> on Apr 26, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View BMC Release Package and Deployment <a href="https://plugins.jenkins.io/bmc-rpd" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-02-12/#SECURITY-1547" class="external-link" rel="nofollow">Credential stored in plain text</a></li>
+</ul>
+
+</div></div>
+<br class="atl-forced-newline"/>  The RPD Plugin integrates Jenkins with BMC Release Package and Deployment (RPD) by adding two build and post-build actions to your Jenkins build configuration,<br/>
+which can be executed separately or combined sequentially:</p>
+
+<ul>
+	<li>Create an instance</li>
+	<li>Deploy an instance</li>
+</ul>
+
+
+
+<h3 id="RPDPlugin-Requirements">Requirements</h3>
+
+<ul>
+	<li>RPD 4.4.00 and later</li>
+	<li>Jenkins 1.639 and later</li>
+</ul>
+
+
+<h4 id="RPDPlugin-Dependencies">Dependencies</h4>
+
+<ul>
+	<li>Apache Maven 3.0.5 or later</li>
+</ul>
+
+
+<p>To build this plugin from the source code, in the project root directory, run the following command:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">shell
+mvn package
+</pre>
+</div></div>
+
+
+<p>This command will generate the <strong>.hpi</strong> file for you.</p>
+
+<h4 id="RPDPlugin-Localinstallation">Local installation</h4>
+
+<ol>
+	<li>Run the <strong>mvn package</strong> command to generate <strong>/target/bmc-rpd.hpi</strong>.</li>
+	<li>Remove the previous <strong>bmc-rpd.hpi</strong> file from <strong>$user.home/.jenkins/plugins/</strong> and copy a new one into the same location.</li>
+	<li>Restart Jenkins.</li>
+</ol>
+
+
+
+
+
+
+<h3 id="RPDPlugin-RPDPluginConfiguration">RPD Plugin Configuration</h3>
+
+
+<h5 id="RPDPlugin-ToconfiguretheRPDPlugin:"><strong>To configure the RPD Plugin:</strong></h5>
+
+<ol>
+	<li>Go to <strong>Manage Jenkins &gt; Configure System</strong>.</li>
+	<li>In the <strong>BMC Release Package and Deployment Configuration</strong> section, click <strong>Add</strong>, and provide the following information:
+	<ul>
+		<li><strong>Set as Default Server Profile</strong>: Select this option to set the specified profile as the default one.<br/>
+If you do not select the default profile, the first one will be selected by default.</li>
+		<li><strong>Server Profile Name</strong>: Custom name for the RPD server profile.</li>
+		<li><strong>RPD Server URL</strong>: The URL that identifies the RPD Server on which processing will occur.</li>
+		<li><strong>RPD User Token</strong>: User token that will be used to authenticate against RPD. For more information,<br/>
+see <a href="https://docs.bmc.com/docs/display/rpd48/Creating+authentication+tokens" class="external-link" rel="nofollow">https://docs.bmc.com/docs/display/rpd48/Creating+authentication+tokens</a>.</li>
+	</ul>
+	</li>
+	<li><em>(Optional)</em> To verify connection to the RPD server, click <strong>Test Connection</strong>.</li>
+	<li>Click <strong>Save</strong>.</li>
+</ol>
+
+
+
+<p>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/96077024/96731223.png" data-image-src="attachments/96077024/96731223.png" data-unresolved-comment-count="0" data-linked-resource-id="96731223" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96077024" data-linked-resource-container-version="56"></span></p>
+
+
+<h3 id="RPDPlugin-JobConfiguration">Job Configuration</h3>
+
+
+<h5 id="RPDPlugin-TocreateaRPDinstance:"><strong>To create a RPD instance:</strong></h5>
+
+<ol>
+	<li><span style="color: rgb(0,0,0);">Click</span> <span style="color: rgb(0,0,0);"><strong>New Item</strong></span> <span style="color: rgb(0,0,0);">to create a new job.</span></li>
+	<li>In the <strong>Build</strong> section, from the <strong>Add build step</strong> list, select <strong>RPD Create Instance</strong>.</li>
+	<li>In the <strong>RPD Create Instance</strong> section, provide the following information:
+	<ul>
+		<li><strong>Server Profile Name</strong>: Custom name for the RPD server profile.</li>
+		<li><strong>Package Name</strong>: Name of the package where you want to create the RPD instance.</li>
+		<li><strong>Instance Name</strong>: <em>(Optional)</em> Custom name for the RPD instance that you want to create.<br/>
+If you do not specify an instance name, the name specified in RPD will be used.</li>
+	</ul>
+	</li>
+	<li>Click <strong>Save</strong>.</li>
+</ol>
+
+
+
+
+<p>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/96077024/96731224.png" data-image-src="attachments/96077024/96731224.png" data-unresolved-comment-count="0" data-linked-resource-id="96731224" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96077024" data-linked-resource-container-version="56"></span></p>
+
+
+<h5 id="RPDPlugin-TodeployaRPDinstance:"><strong>To deploy a RPD instance:</strong></h5>
+
+<ol>
+	<li>Click <strong>New Item</strong> to create a new job.</li>
+	<li>In the <strong>Build</strong> section, from the <strong>Add build step</strong> list, select <strong>RPD Deploy Instance</strong>.</li>
+	<li>In the <strong>RPD Deploy Instance</strong> section, provide the following information:
+	<ul>
+		<li><strong>Server Profile Name</strong>: Custom name for the RPD server profile.</li>
+		<li><strong>Package Name</strong>: Name of the package where you want to deploy the RPD instance.</li>
+		<li><strong>Instance Name</strong>: <em>(Optional)</em> Custom name for the RPD instance that you want to deploy.<br/>
+If you do not specify an instance name, the name specified in RPD will be used.</li>
+		<li><strong>Route Name</strong>: Route where to deploy the RPD instance.</li>
+		<li><strong>Environment Name</strong>: Environment where to deploy the RPD instance.</li>
+	</ul>
+	</li>
+	<li>Click <strong>Save</strong>.</li>
+</ol>
+
+
+
+
+<p>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/96077024/96731225.png" data-image-src="attachments/96077024/96731225.png" data-unresolved-comment-count="0" data-linked-resource-id="96731225" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96077024" data-linked-resource-container-version="56"></span></p>
+
+
+<h3 id="RPDPlugin-JobConfigurationasaPost-buildAction">Job Configuration as a Post-build Action</h3>
+
+
+<h5 id="RPDPlugin-TocreateaRPDinstance:.1"><strong>To create a RPD instance:</strong></h5>
+
+<ol>
+	<li><span style="color: rgb(0,0,0);">Click</span> <span style="color: rgb(0,0,0);"><strong>New Item</strong></span> <span style="color: rgb(0,0,0);">to create a new job.</span></li>
+	<li>In the <strong>Post-b</strong><strong>uild</strong> <strong>Actions</strong> section, from the <strong>Add post-build action</strong> list, select <strong>RPD Create Instance</strong>.</li>
+	<li>In the <strong>RPD Create Instance</strong> section, provide the following information:
+	<ul>
+		<li><strong>Server Profile Name</strong>: Custom name for the RPD server profile.</li>
+		<li><strong>Package Name</strong>: Name of the package where you want to create the RPD instance.</li>
+		<li><strong>Instance Name</strong>: <em>(Optional)</em> Custom name for the RPD instance that you want to create.<br/>
+If you do not specify an instance name, the name specified in RPD will be used.</li>
+	</ul>
+	</li>
+	<li>Click <strong>Save</strong>.</li>
+</ol>
+
+
+
+<p>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/96077024/96731226.png" data-image-src="attachments/96077024/96731226.png" data-unresolved-comment-count="0" data-linked-resource-id="96731226" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96077024" data-linked-resource-container-version="56"></span></p>
+
+
+<h5 id="RPDPlugin-TodeployaRPDinstance:.1"><strong>To deploy a RPD instance:</strong></h5>
+
+<ol>
+	<li>Click <strong>New Item</strong> to create a new job.</li>
+	<li>In the <strong>Post-b</strong><strong>uild Actions</strong> section, from the <strong>Add build step</strong> list, select <strong>RPD Deploy Instance</strong>.</li>
+	<li>In the <strong>RPD Deploy Instance</strong> section, provide the following information:
+	<ul>
+		<li><strong>Server Profile Name</strong>: Custom name for the RPD server profile.</li>
+		<li><strong>Package Name</strong>: Name of the package where you want to deploy the RPD instance.</li>
+		<li><strong>Instance Name</strong>: <em>(Optional)</em> Custom name for the RPD instance that you want to deploy.<br/>
+If you do not specify an instance name, the name specified in RPD will be used.</li>
+		<li><strong>Route Name</strong>: Route where to deploy the RPD instance.</li>
+		<li><strong>Environment Name</strong>: Environment where to deploy the RPD instance.</li>
+	</ul>
+	</li>
+	<li>Click <strong>Save</strong>.</li>
+</ol>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Note</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>For the post-build action, you can create and deploy only one instance. </p></div></div>
+
+
+<p>  <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="700" src="attachments/96077024/96731227.png" data-image-src="attachments/96077024/96731227.png" data-unresolved-comment-count="0" data-linked-resource-id="96731227" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="5.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96077024" data-linked-resource-container-version="56"></span></p>
+
+
+<h3 id="RPDPlugin-Variables">Variables</h3>
+
+<p>When creating an instance, use the following custom variables:</p>
+<ul>
+	<li>RPD_&lt;Package name&gt;_instance_name – allows using an instance name for the next deployment or in some kind of notifications.</li>
+	<li>RPD_&lt;Package name&gt;_instance_id – allows using an instance name for the next deployment or in some kind of notifications.</li>
+</ul>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Notes</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>• If you create an instance, deploy an instance, and specify the same package name for both actions<br/>
+  but without a specified instance name, then the instance name will be uploaded from RPD.</p>
+
+<p>• If you create an instance with both package name and instance name specified, deploy an instance with the same package name<br/>
+  but without a specified instance name, then RPD will deploy the instance that you have just created.</p></div></div>
+<p>You can also use standard Jenkins variables. To see the list of standard variables, go to ﻿<a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project#Buildingasoftwareproject-JenkinsSetEnvironmentVariables." class="external-link" rel="nofollow">Jenkins Set Environment Variables</a>.</p>
+
+
+
+<h3 id="RPDPlugin-RPDInstanceLogs">RPD Instance Logs</h3>
+
+<h5 id="RPDPlugin-ToseetheRPDinstancecreateanddeploylogs:"><strong>To see the</strong> <strong>RPD instance create and deploy</strong> <strong>logs</strong><strong>:</strong></h5>
+
+<p>Click <strong>Jenkins</strong>, select the necessary job, and click <strong>Console Output</strong>.</p>
+
+<h3 id="RPDPlugin-RPDSecureConnection">RPD Secure Connection</h3>
+
+
+<h5 id="RPDPlugin-Toinstallthecertificateauthority(CA):"><strong>To install the certificate authority (CA):</strong></h5>
+
+<ol>
+	<li>Go to the necessary URL, click the HTTPS certificate chain, and then click <strong>Certificate information</strong>.</li>
+	<li>On the <strong>Details</strong> tab, click <strong>Copy to File…</strong></li>
+	<li>Install the CA by running the following command: keytool -import -alias example -keystore/path/to/cacerts -file example.der.</li>
+</ol>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Note</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Ensure that you are installing the CA on the same computer where Jenkins is installed.</p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288198.png">1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288213.png">2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288215.png">3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288216.png">4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288217.png">5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288212.png">1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/96731223.png">1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/97288214.png">2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/96731224.png">2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/96731225.png">3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/96731226.png">4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96077024/96731227.png">5.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:43</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

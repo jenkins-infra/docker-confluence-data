@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : IBM Security AppScan Source Scanner Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : IBM Security AppScan Source Scanner Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kevinfealey)</span>, last modified on Oct 12, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View IBM Security AppScan Source Scanner <a href="https://plugins.jenkins.io/ibm-security-appscansource-scanner" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-ProjectDescription"> Project Description</h1>
+
+<p><strong>This plugin is supported by Aspect Security.</strong></p>
+
+<p>The purpose of this plugin is to allow Jenkins to perform static code analysis (SCA/SAST) with IBM AppScan Source for Analysis with minimal configuration. AppScan Source for Analysis is a security tool provided by IBM that will scan application source code for vulnerabilities. Configuring AppScan Source to perform automated scanning with custom batch jobs or shell scripts can be a time-consuming and error-prone process. This Jenkins plugin greatly simplifies the process of automating AppScan Source by providing global settings and simple scan configuration within Jenkins.For more information on IBM AppScan Source, please visit the official IBM site <a href="http://www-03.ibm.com/software/products/en/appscan-source" class="external-link" rel="nofollow">http://www-03.ibm.com/software/products/en/appscan-source</a></p>
+
+
+
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-Prerequisites">Prerequisites</h1>
+
+<p>This plugin requires the following:</p>
+
+<ul>
+	<li>A valid license for AppScan Source for Analysis and AppScan Source for Automation<br/>
+Note: The automation license is required to unlock the command-line interface (cli) functionality</li>
+	<li>AppScan Source for Analysis must be installed on the same server as Jenkins</li>
+	<li>The AppScan Source project or application files for the application(s) you are scanning (.PAF, .PPF, etc)</li>
+	<li>Application source code and dependencies must already be referenced in the AppScan Source project or application files</li>
+</ul>
+
+
+
+
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-PluginSetup">Plugin Setup</h1>
+
+<p>Before using this plugin, a login token must be generated via the AppScanSrcCLI application. To generate a login token:</p>
+<ol>
+	<li>Open a command prompt</li>
+	<li>Navigate to the bin folder in your AppScan Source install folder
+	<ol>
+		<li>Ex: cd c:\program files(x86)\IBM\AppScan Source\bin</li>
+	</ol>
+	</li>
+	<li>Execute the AppScan Source CLI login command
+	<ol>
+		<li>AppScanSrcCli.exe login <a href="http://hostname:9443/ase" class="external-link" rel="nofollow">http://hostname:9443/ase</a> username password -persist -acceptssl</li>
+		<li>Be sure to replace hostname, username, and password with valid values for your installation</li>
+	</ol>
+	</li>
+	<li>This will create a file called ouncecli.token under c:\users{username}\.ounce\. Verify that this file exists and make note of the location</li>
+</ol>
+
+
+<p>For additional reading on the login command, please see IBM's documentation: <a href="http://www-01.ibm.com/support/knowledgecenter/SSS9LM_9.0.3/com.ibm.rational.appscansrc.utilities.doc/topics/command_line_interface_commands_login.html" class="external-link" rel="nofollow">http://www-01.ibm.com/support/knowledgecenter/SSS9LM_9.0.3/com.ibm.rational.appscansrc.utilities.doc/topics/command_line_interface_commands_login.html</a></p>
+
+
+
+
+
+
+
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-PluginConfiguration">Plugin Configuration</h1>
+
+<ol>
+	<li>From the Jenkins homepage, click Manage Jenkins and then Configure System</li>
+	<li>Scroll down the page and locate the section titled AppScan Source<br/>
+  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98009351/98599010.png" data-image-src="attachments/98009351/98599010.png" data-unresolved-comment-count="0" data-linked-resource-id="98599010" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsPluginAddSource2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009351" data-linked-resource-container-version="12"></span></li>
+	<li>Click Add AppScan Source</li>
+	<li>Fill out the AppScan Source form<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98009351/98599011.png" data-image-src="attachments/98009351/98599011.png" data-unresolved-comment-count="0" data-linked-resource-id="98599011" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsPluginAddSourceDetails.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009351" data-linked-resource-container-version="12"></span>\
+	<ol>
+		<li>AppScan Source Name: A name for this instance of AppScan Source. This is just to help manage environments that may have multiple installations</li>
+		<li>AppScan Source Installation Directory: The path to the installation directory. Note: the default value is C:\Program Files (x86)\IBM\AppScanSource</li>
+	</ol>
+	</li>
+	<li>Scroll to the bottom and locate the section titled AppScan Source Configuration and fill out the form<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98009351/98599012.png" data-image-src="attachments/98009351/98599012.png" data-unresolved-comment-count="0" data-linked-resource-id="98599012" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsSourceConfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009351" data-linked-resource-container-version="12"></span>\
+	<ol>
+		<li>AppScan Enterprise Hostname/Domain Name: The host name of your AppScan Enterprise server</li>
+		<li>Login Token File Path: This is the path to the login token generated above. Default path is C:\Users{user}\.ounce\ouncecli.token</li>
+	</ol>
+	</li>
+	<li>Click Save</li>
+</ol>
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-Usingtheplugin">Using the plugin</h1>
+
+<ol>
+	<li>Create a new job or access an existing job</li>
+	<li>Select &quot;Configure&quot;</li>
+	<li>Select &quot;Add build step&quot; and select &quot;Run AppScan Source&quot;</li>
+	<li>Complete the fields that appear:
+	<ol>
+		<li>AppScan Source installation will show the name you provided for the installation on the global configuration screen. If you       have not added an installation, please go the the Jenkins Configure       System link under Manage Jenkins. If you only have one installation       configured, the installation should be selected for you. If you plan to       execute AppScan Source on multiple Jenkins nodes, you may need to       configure multiple installation paths.</li>
+		<li>Disable scan should be unchecked if you wish the scan       to run</li>
+		<li>Accept SSL Errors should be checked if you have not       created a trusted certificate for your AppScan Source installation. In an       Enterprise environment, this should not be checked, since you should be       using a trusted certificate.</li>
+		<li>Scan Workspace Directory is where scan artifacts, like       WAFL and staging files will be placed. Scan results (.ozasmt file) will       also be placed in this directory.</li>
+		<li>Application file should point to a PAF or SLN file to       scan.</li>
+	</ol>
+	</li>
+	<li>Click Save at the bottom</li>
+	<li>Run the job.</li>
+</ol>
+
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-Compatibility">Compatibility</h1>
+
+<p>This version of the plugin was tested with Jenkins 1.651.1 and IBM Security AppScan Source 9.0.3. Plugin should work with any version of AppScan Source 9.0.0 or newer.</p>
+
+<h1 id="IBMSecurityAppScanSourceScannerPlugin-Roadmap">Roadmap</h1>
+
+<p>Support automated publishing of scan results to AppScan Enterprise.<br/>
+Execute application scans with IBM Security AppScan Source</p>
+
+<p>For additional information about this plugin, please see the project's README ﻿<a href="https://github.com/jenkinsci/ibm-security-appscansource-scanner-plugin" class="external-link" rel="nofollow">on GitHub</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009351/98599009.png">JenkinsPluginAddSource.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009351/98599008.png">JenkinsPluginAddSource.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009351/98599010.png">JenkinsPluginAddSource2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009351/98599011.png">JenkinsPluginAddSourceDetails.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009351/98599012.png">JenkinsSourceConfig.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:27</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

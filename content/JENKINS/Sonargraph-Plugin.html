@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Sonargraph Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Sonargraph Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ingmarkellner)</span>, last modified by <span class='editor'> Unknown User (andreashoyerh2m)</span> on Mar 18, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'sonargraph-plugin' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="SonargraphPlugin-SonargraphPlugin">Sonargraph Plugin</h1>
+
+<p>
+<p>This plugin integrates <a href="https://www.hello2morrow.com/products/sonargraph" class="external-link" rel="nofollow">Sonargraph</a> version 7 into your build. Sonargraph allows to define an architecture for a software system and automatically checks how the code base conforms to it.</p>
+
+<p>For Sonargraph 8 and newer use <a href="https://wiki.jenkins-ci.org/display/JENKINS/Sonargraph+Integration+Plugin" class="external-link" rel="nofollow">Sonargraph Integration Plugin</a>.</p></p>
+
+<h4 id="SonargraphPlugin-Contents"><span style="color: rgb(217,73,57);"><strong>Contents</strong></span></h4>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022503706 {padding: 0px;}
+div.rbtoc1631022503706 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022503706 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022503706'>
+<ul class='toc-indentation'>
+<li><a href='#SonargraphPlugin-Introduction'>Introduction</a></li>
+<li><a href='#SonargraphPlugin-GettingStarted'>Getting Started</a>
+<ul class='toc-indentation'>
+<li><a href='#SonargraphPlugin-GlobalConfiguration'>Global Configuration</a></li>
+<li><a href='#SonargraphPlugin-SonargraphReportAnalysis-JobConfiguration'>Sonargraph Report Analysis - Job Configuration</a></li>
+<li><a href='#SonargraphPlugin-SonargraphReportGeneration&amp;Analysis-JobConfiguration'>Sonargraph Report Generation &amp; Analysis - Job Configuration</a></li>
+<li><a href='#SonargraphPlugin-Commonoptions'>Common options</a></li>
+<li><a href='#SonargraphPlugin-SonargraphJobPage'>Sonargraph Job Page</a></li>
+<li><a href='#SonargraphPlugin-ConfigureLogging'>Configure Logging</a></li>
+</ul>
+</li>
+<li><a href='#SonargraphPlugin-FAQ'>FAQ</a></li>
+<li><a href='#SonargraphPlugin-Changelog'>Changelog</a></li>
+<li><a href='#SonargraphPlugin-FollowUs!'>Follow Us!</a></li>
+</ul>
+</div>
+
+<h2 id="SonargraphPlugin-Introduction">Introduction</h2>
+
+<p><a href="https://www.hello2morrow.com/products/sonargraph" class="external-link" rel="nofollow">Sonargraph</a> analyzes the static (i.e. compile-time) dependencies of your software. The free-of-charge license for the integration with Jenkins and also <a href="http://www.sonarsource.org/" class="external-link" rel="nofollow">SonarQube</a> allows to detect cyclic dependencies and additional metrics. You can mark the build as &quot;unstable&quot; or &quot;failed&quot; if cyclic dependencies are detected.<br/>
+The real benefit of Sonargraph is that you can define a logical architecture and perform automatic checks how the code conforms to it. This functionality is only available for free, if you are working on a non-commercial Open-Source project or if your project is sufficiently small. More information is available on our <a href="https://www.hello2morrow.com" class="external-link" rel="nofollow">homepage</a>, you can check there if you are elligible for a <a href="https://www.hello2morrow.com/products/pricelist" class="external-link" rel="nofollow">free license</a>.</p>
+
+<p>The Sonargraph Build component integrates Sonargraph in Ant and Maven based builds. This Jenkins plugin allows to define if the build should be marked as &quot;unstable&quot; or &quot;failed&quot; if architecture violations, cyclic dependencies, etc. are detected. Trends of metrics are displayed in charts and additionally the generated detailed HTML report is available for each build.</p>
+
+
+
+<h2 id="SonargraphPlugin-GettingStarted">Getting Started</h2>
+
+<p>If you already have Sonargraph integrated in your build, use the post-build step called &quot;<a href="#SonargraphPlugin-SonargraphReportAnalysis-JobConfiguration">Sonargraph Report Analysis</a>&quot;.</p>
+
+<p>If you are new to Sonargraph, we advice you to register on our <a href="http://www.hello2morrow.com/" class="external-link" rel="nofollow">Sonargraph Web Site</a>, have a look at the whitepapers and screencasts to get an idea of Sonargraph's capabilities.<br/>
+You need to have a license in order to analyse a project. To get started an evaluation license or the free integration license is sufficient.<br/>
+Download and install the correct version for your platform. A detailed user manual is available in &lt;sonargraph-inst-dir/docs/pdf/Sonargraph-User-Manual.pdf that describes how to integrate the analysis into your build process.</p>
+
+
+
+<p>If you are new to Sonargraph and your build is based on Maven, use the post-build step called &quot;<a href="#SonargraphPlugin-SonargraphReportGeneration&amp;Analysis-JobConfiguration">Sonargraph Report Generation &amp; Analysis</a>&quot;.</p>
+
+<p>If you are new to Sonargraph and your build is not based on Maven, you need to install Sonargraph on your build server and generate the Sonargraph report during one of your build steps. This report can then be evaluated in the post-build step called &quot;<a href="#SonargraphPlugin-SonargraphReportAnalysis-JobConfiguration">Sonargraph Report Analysis</a>&quot;.</p>
+
+<p>NOTE: This Jenkins plugin requires Sonargraph version 7.1.9 and newer. For Sonargraph 8 and newer use <a href="https://wiki.jenkins-ci.org/display/JENKINS/Sonargraph+Integration+Plugin" class="external-link" rel="nofollow">Sonargraph Integration Plugin</a>.</p>
+
+
+
+<h3 id="SonargraphPlugin-GlobalConfiguration">Global Configuration</h3>
+
+<p>To see the global configuration options after installing the plugin, go to &quot;Manage Jenkins&quot; -&gt; &quot;Configure System&quot;. You will find the &quot;Sonargraph Plugin&quot; section </p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/75628705.png" data-image-src="attachments/66848794/75628705.png" data-unresolved-comment-count="0" data-linked-resource-id="75628705" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Selection_001.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+<p><strong>NOTE:</strong> This configuration is only required when you are going to use the &quot;Sonargraph Report Generation &amp; Analysis&quot; post-build action.</p>
+
+<p>Set the global options for Sonagraph as follows:</p>
+<ul>
+	<li>Sonargraph Product Type: Select either Sonargraph Architect or Sonargraph Quality according to the product that you have purchased.</li>
+	<li>Sonargraph Version: Provide the version of the product that you have purchased. Only versions equal or greater than 7.1.9 are supported by this plugin.</li>
+	<li>License File: Provide an absolute path to a Sonargraph valid license file in case you have one. License files are valid for up to 180 days.</li>
+	<li>Activation Code: Enter a valid Sonargraph activation code in case you have one. This operation requires Internet access as license tickets are renewed automatically.</li>
+</ul>
+
+
+<p>You can use the <a href="https://www.hello2morrow.com" class="external-link" rel="nofollow">hello2morrow web site</a>, section &quot;Your licenses&quot; for managing license files and activation codes.</p>
+
+<p><strong>NOTE:</strong> If you haven't already used Sonargraph in your Maven build, you have to make sure that you specify the following plugin repository either in Maven's settings.xml, or in the project's pom.xml:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+        &lt;pluginRepository&gt;
+          &lt;id&gt;hello2morrow.maven.repository&lt;/id&gt;
+          &lt;url&gt;http://maven.hello2morrow.com/repository&lt;/url&gt;
+        &lt;/pluginRepository&gt;
+</pre>
+</div></div>
+
+
+
+<p><strong>NOTE:</strong> If you have a M2_HOME environment variable configured on the machine executing the plugin, this Maven installation will be used by the &quot;Sonargraph Report Generation &amp; Analysis&quot; post build-step to generate the report. The Maven installation configured in the Jenkins-job itself will be ignored.<br/>
+This might lead to strange &quot;failed to resolve plugin&quot; error messages, if that Maven installation has not the hello2morrow repository configured as shown above.</p>
+
+
+<h3 id="SonargraphPlugin-SonargraphReportAnalysis-JobConfiguration">Sonargraph Report Analysis - Job Configuration</h3>
+
+<p>Use this post-build action for projects that are already using Sonargraph Build. This action analyses the generated report and allows to configure the overall result of the build depending on the results of the analysis. If you have a project that relies on ANT based builds this is the way to go to add Sonargraph functionality into your build job in Jenkins.</p>
+
+<p>Make sure that you use the same values for the parameters &quot;report directory&quot; and &quot;report name&quot; that you have configured in your existing Sonargraph Build integration.<br/>
+Additionally, add the flag &quot;prepareForJenkins=true&quot; to your existing Sonargraph build. (e.g. &lt;createReportTask ... prepareForJenkins=true ... /&gt;).</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/75628706.png" data-image-src="attachments/66848794/75628706.png" data-unresolved-comment-count="0" data-linked-resource-id="75628706" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Selection_002.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+<h4 id="SonargraphPlugin-ReportProcessingConfiguration"><span style="color: rgb(210,73,57);">Report Processing Configuration</span></h4>
+
+<p>The following parametern must be supplied to configure this post-build action:</p>
+
+<ul>
+	<li>Report Directory: Enter the path to the directory where the Sonargraph XML and HTML reports will be stored. This path must be relative to the workspace. If you are using the Sonargraph ANT task for report generation, make sure that the directories match.</li>
+	<li>Report Name: Enter the name of the XML report file that has been generated via the ANT or Maven integration of Sonargraph. If you are using the Sonargraph ANT task for report generation, make sure that the names match.</li>
+</ul>
+
+
+<h3 id="SonargraphPlugin-SonargraphReportGeneration&amp;Analysis-JobConfiguration">Sonargraph Report Generation &amp; Analysis - Job Configuration</h3>
+
+<p>Use this post-build action for integration of Sonargraph into Maven based projects that are not already configured to use Sonargraph Build. It will run Sonargraph's Maven goal generating XML and HTML reports for further analysis by this plugin.</p>
+
+
+<p>After installing the Sonargraph plugin into Jenkins, go to the &quot;Post-Build Actions&quot; and select &quot;Sonargraph Report Generation &amp; Analysis&quot;. The following options will be displayed:   </p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/75628708.png" data-image-src="attachments/66848794/75628708.png" data-unresolved-comment-count="0" data-linked-resource-id="75628708" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Selection_005.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+<h4 id="SonargraphPlugin-BuildConfiguration"><span style="color: rgb(210,73,57);">Build Configuration</span></h4>
+
+<p>The following parameters must be supplied to configure this post-build action:</p>
+<ul>
+	<li>Maven Installation: Select the Maven installation that will run Sonargraph's goal. The elements displayed in this list will match the Maven installations configured in &quot;Manage Jenkins&quot; -&gt; &quot;Configure System&quot;.<br/>
+<strong>NOTE:</strong> A M2_HOME environment variable overrides this configuration!</li>
+	<li>Sonargraph System File: Enter the path to the Sonargraph system (.sonargraph) file. This path must be relative to the workspace. In case you have a Sonargraph / Jenkins license you must not provide a system file.</li>
+	<li>Report directory: Enter the path to the directory where the Sonargraph XML and HTML reports will be stored. This path must be relative to the workspace.</li>
+	<li>Use Sonargraph Workspace: Select if you want to use the workspace defined in Sonargraph. If unselected, the source and target folders defined in your pom.xml are used. This option must be unselected, if you don't provide a Sonargraph system file.</li>
+	<li>Prepare for Sonar: Select this option, if you want to publish Sonargraph metrics to SonarQube.</li>
+</ul>
+
+
+<h3 id="SonargraphPlugin-Commonoptions">Common options</h3>
+
+<p>Both &quot;Sonargraph Report Analysis&quot; and &quot;Sonargraph Report Generation &amp; Analysis&quot; post-build steps share the same basic and advanced options: </p>
+
+<h4 id="SonargraphPlugin-Basicoptions">Basic options</h4>
+
+<p>For every Sonargraph metric supported by this plugin, you have the following options:</p>
+
+<ul>
+	<li>Don't mark: Will not change the build result in any way.</li>
+	<li>Build unstable: If the value for this metric is greater than zero, the build result will be set as &quot;unstable&quot;.</li>
+	<li>Build failed: If the value for this metric is greater than zero, the build result will be set as &quot;failure&quot;. </li>
+</ul>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/75628710.png" data-image-src="attachments/66848794/75628710.png" data-unresolved-comment-count="0" data-linked-resource-id="75628710" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Selection_003.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+
+
+
+<p>Take into account that if you have set to mark the build unstable for one metric, failed for any other and both metric's value are greater than zero, the worst state will prevail, so the build will be marked as failure in this case.</p>
+
+
+<p>Known issue: In multi-module projects the goal &quot;package&quot; is executed again (skipping the tests) as in some cases sub-modules are reported as missing.</p>
+
+<h4 id="SonargraphPlugin-Advancedoptions(Chartconfiguration)">Advanced options (Chart configuration)</h4>
+
+<p>Sonargraph post-build steps allow the configuration of metrics that will be displayed in the Sonargraph Job Page (See next section &quot;Sonargraph Job Page&quot;). You have the following options:</p>
+
+<ul>
+	<li>Append charts for additional metrics to default charts: The default set of metrics will be shown plus the supplied metrics.</li>
+	<li>Replace default charts: Only the supplied metrics will be displayed and the the default ones will be discarded, however, the default metrics will be available to be supplied.   </li>
+</ul>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/75628711.png" data-image-src="attachments/66848794/75628711.png" data-unresolved-comment-count="0" data-linked-resource-id="75628711" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Selection_004.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Changes will be visible only after the next build!</p></div></div>
+
+
+
+
+
+
+<h3 id="SonargraphPlugin-SonargraphJobPage">Sonargraph Job Page</h3>
+
+<p>For each job that the Sonargraph Jenkins Plugin is configured, a page is available that shows short-term trends of metrics for the last 25 builds and long-term trends of metrics for the complete job life-time.</p>
+
+<p>To achieve reasonable performance for the creation of the charts, the number of sampling points for the long-term charts is limited to 300. If there are more sampling points available the data set is reduced by calculating averages for adjacent points. The displayed long-term trend is a 24h moving average.</p>
+
+
+<h3 id="SonargraphPlugin-ConfigureLogging">Configure Logging</h3>
+
+<p>Sonargraph's Jenkins integration uses default Jekins mechanism to provide feedback to the user about the events that occur during the execution of the post-build actions or the generation of the graphics. To enable this feature follow these steps:</p>
+
+<ol>
+	<li>Go to &quot;Manage Jenkis&quot; -&gt; &quot;System Log&quot;.</li>
+	<li>Click &quot;Add new log recorder&quot; button.</li>
+	<li>Provide the name you wish for this log recorder.</li>
+	<li>In the field logger, provide the value with the exact value &quot;com.hello2morrow.sonargraph.jenkinsplugin&quot; (Without the quotation marks).</li>
+	<li>Select the logging level for this logger.</li>
+	<li>Click the save button.</li>
+</ol>
+
+
+<p>You will now see an entry for the Sonargraph logger as shown in the image:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66848794/67043498.png" data-image-src="attachments/66848794/67043498.png" data-unresolved-comment-count="0" data-linked-resource-id="67043498" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen9.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+<p>When first created this logger is going to be empty and you will be able to see messages as the post-build actions are executed and graphics are generated. Take into account that the messages will appear sorted by date in a descending order, meaning that most recent entries will be shown at the top.</p>
+
+<h2 id="SonargraphPlugin-FAQ">FAQ</h2>
+
+<p>Will be elaborated in the future.</p>
+
+<p>If your question is not answered here, please have a look at the Sonargraph_User_Manual.pdf contained in &lt;sonargraph-inst-dir&gt;/doc/pdf.<br/>
+Further questions should be sent to:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848794/67895309.png" data-image-src="attachments/66848794/67895309.png" data-unresolved-comment-count="0" data-linked-resource-id="67895309" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="supportEmail.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></p>
+
+<h2 id="SonargraphPlugin-Changelog">Changelog</h2>
+
+
+<h4 id="SonargraphPlugin-1.6.4">1.6.4</h4>
+
+<p><span style="text-decoration: underline;">Bug fixes:</span></p>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29187">JENKINS-29187</a> Support master-slave setup.</li>
+	<li>Use configured Maven installation.</li>
+</ul>
+
+
+
+<h4 id="SonargraphPlugin-1.6.3">1.6.3</h4>
+
+<p><span style="text-decoration: underline;">Bug fixes:</span></p>
+
+<ul>
+	<li>Fixed error after plugin update without saving the configuration.</li>
+</ul>
+
+
+<h4 id="SonargraphPlugin-1.6.2">1.6.2</h4>
+
+<p><span style="text-decoration: underline;">Improvements:</span></p>
+
+<ul>
+	<li>Show default set of metrics after plugin update.</li>
+</ul>
+
+
+<h4 id="SonargraphPlugin-1.6.1">1.6.1</h4>
+
+<p><span style="text-decoration: underline;">Bug fixes:</span></p>
+
+<ul>
+	<li>Fixed path validation for Sonargraph's license file.</li>
+</ul>
+
+
+<p><span style="text-decoration: underline;">Improvements</span>:</p>
+
+<ul>
+	<li>Sonargraph version is now supplied in a text field instead of being selected in a drop down list.</li>
+</ul>
+
+
+<p><span style="text-decoration: underline;">New features:</span></p>
+<ul>
+	<li>Charts for metrics displayed in the Sonargraph job page can now be configured in both post build steps.</li>
+</ul>
+
+
+<h4 id="SonargraphPlugin-1.3">1.3</h4>
+
+<p><span style="text-decoration: underline;">Bug fixes:</span></p>
+
+<ul>
+	<li>Fixed Sonargraph chart action not appearing for maven based projects.</li>
+</ul>
+
+
+<p><span style="text-decoration: underline;">Improvements:</span></p>
+
+<ul>
+	<li>Plugin now supports different locations for the pom.xml file relying on the maven build step configuration.</li>
+	<li>Now Sonargraph versions 7.1.9, 7.1.10 and 7.2.0 are supported</li>
+</ul>
+
+
+<h4 id="SonargraphPlugin-1.2">1.2</h4>
+
+<p><span style="text-decoration: underline;">Improvements:</span></p>
+
+<ul>
+	<li>Minor improvements</li>
+</ul>
+
+
+<h4 id="SonargraphPlugin-1.1">1.1</h4>
+
+<p>Initial version.</p>
+
+<h2 id="SonargraphPlugin-FollowUs!">Follow Us!</h2>
+
+<p><a href="https://www.facebook.com/sonargraph" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848794/75628719.png" data-image-src="attachments/66848794/75628719.png" data-unresolved-comment-count="0" data-linked-resource-id="75628719" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="facebook1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></a>   <a href="https://twitter.com/sonargraph" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848794/75628720.png" data-image-src="attachments/66848794/75628720.png" data-unresolved-comment-count="0" data-linked-resource-id="75628720" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="twitter1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></a>   <a href="https://www.linkedin.com/company/hello2morrow" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/66848794/75628721.png" data-image-src="attachments/66848794/75628721.png" data-unresolved-comment-count="0" data-linked-resource-id="75628721" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="linkedin1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66848794" data-linked-resource-container-version="67"></span></a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043487.png">Screenshot from 2013-04-14 22:02:54.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043488.png">screen1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043489.png">screen2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043493.png">screen3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043494.png">screen4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043495.png">screen5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043496.png">screen6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043497.png">screen7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043499.png">screen9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043498.png">screen9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043500.png">screen10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043501.png">screen11.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043502.png">screen12.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043503.png">screen13.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67043504.png">screen14.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/67895309.png">supportEmail.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628705.png">Selection_001.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628707.png">Selection_002.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628706.png">Selection_002.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628709.png">Selection_005.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628708.png">Selection_005.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628710.png">Selection_003.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628711.png">Selection_004.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628712.png">1422063393_social_facebook_box_blue.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628713.png">1422063378_social_twitter_box_white.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628714.png">1422063406_social_linkedin_box_blue.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628718.png">facebook.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628717.png">facebook.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628719.png">facebook1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628720.png">twitter1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66848794/75628721.png">linkedin1.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:48</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure Container Agents Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure Container Agents Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (chenkennt)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Oct 10, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Azure Container Agents <a href="https://plugins.jenkins.io/azure-container-agents" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>Azure Container Agents Plugin can help you to run a container as an agent in Jenkins</p><p>We have two different orchestrators:</p><ul><li>Azure Container Service (Kubernetes)</li><li>Azure Container Instance</li></ul><div class="table-wrap"><table class="wrapped confluenceTable" style="margin-left: 30.0px;"><colgroup><col/></colgroup><tbody><tr><th class="highlight-blue confluenceTh" style="margin-left: 90.0px;" data-highlight-colour="blue">Tutorial: <a href="https://aka.ms/jenkinsazureexp" class="external-link" rel="nofollow">run your build in Azure using Azure Container Instances (ACI)</a></th></tr></tbody></table></div><h2 id="AzureContainerAgentsPlugin-Howtoinstall">How to install</h2><p>You can install/update this plugin in Jenkins update center (Manage Jenkins -&gt; Manage Plugins, search Azure Container Agents Plugin).</p><p>You can also manually install the plugin if you want to try the latest feature before it's officially released. To manually install the plugin:</p><ol><li><p>Clone the repo and build:</p><pre><code> mvn package
+</code></pre></li><li><p>Open your Jenkins dashboard, go to Manage Jenkins -&gt; Manage Plugins</p></li><li><p>Go to Advanced tab, under Upload Plugin section, click Choose File.</p></li><li><p>Select <code>azure-container-agents.hpi</code> in target folder of your repo, click Upload.</p></li><li><p>Restart your Jenkins instance after install is completed.</p></li></ol><h2 id="AzureContainerAgentsPlugin-Pre-requirements">Pre-requirements</h2><ul><li>Service Principal: <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json" class="external-link" rel="nofollow">Create Service Principal via Azure CLI 2.0</a></li></ul><h2 id="AzureContainerAgentsPlugin-AzureContainerService(Kubernetes)">Azure Container Service (Kubernetes)</h2><p>With Azure Container Service (Kubernetes), you can create a container in you Kubernetes Cluster as agent.</p><p>You need to create your own Kubernetes Cluster in Azure and maintain the number of nodes.</p><p>You can also create containers in ACI using <a href="https://github.com/Azure/aci-connector-k8s" class="external-link" rel="nofollow">aci-connector-k8s</a> (experimental).</p><h2 id="AzureContainerAgentsPlugin-Pre-requirements.1">Pre-requirements</h2><p>If using Azure Container Service (Kubernetes), you need to <a href="https://docs.microsoft.com/en-us/azure/container-service/kubernetes/" class="external-link" rel="nofollow">create a Kubernetes Cluster</a> on Azure.</p><h2 id="AzureContainerAgentsPlugin-Configuretheplugin">Configure the plugin</h2><ol><li>Jenkins -&gt; Manage Jenkins -&gt; Configure System</li><li>Press <code>Add a new cloud</code> and choose <code>Azure Container Service(Kubernetes)</code></li><li>Specify <code>Cloud Name</code> and it should be unique.</li><li>Choose an existing <code>Azure Service Principal</code> or create a new credential.</li><li>Choose <code>Resource Group</code> and <code>Container Service Name</code>.</li><li>Specify <code>Namespace</code></li><li>Choose an existing <code>ACS Credential</code> or create a new one. You can choose one of two different kinds of credentials:<ul><li>SSH Username with private key</li><li>Microsoft Azure Container Service</li></ul></li><li>Press <code>Test Connection</code> to make sure the configurations above are correct.</li></ol><h2 id="AzureContainerAgentsPlugin-ConfigurethePodTemplate">Configure the Pod Template</h2><p>Although Kubernetes supports multi-containers in a Pod, but we only support one container per pod now.</p><p>Please ensure JenkinsURL, secret and nodeName passed to container via arguments or environment variables.</p><ol><li>Specify <code>Name</code> and <code>Labels</code></li><li>Choose a <code>Docker image</code>. Please note that the slave will connect with master via JNLP, so make sure JNLP installed in image. Default image is <code>jenkins/jnlp-slave</code> and you can also use it as base image.</li><li>If you use a private registry, you need to specify a credential and you have two choices:<ul><li>Use a Private Registry Secret. You need to <a href="https://kubernetes.io/docs/concepts/configuration/secret/" class="external-link" rel="nofollow">create a Secret</a> in your Kubernetes cluster in advance and then fill in the Secret name.</li><li>Use a Private Registry Credential. You just need to fill in the credential and we will create a Secret for you.</li></ul></li><li>Specify a <code>Command</code> to override the ENTRYPOINT or leave it blank.</li><li>Specify the <code>Arguments</code>. <code>${rootUrl}</code>, <code>${secret}</code> and <code>${nodeName}</code> will be replace with JenkinsUrl, Secret and ComputerNodeName automatically.</li><li>Specify the <code>Working Dir</code>. It's the root dir of you job. You must ensure login user have the write permission to this directory.</li><li>Add Environment Variables and Volumes. Please find details in help and you may need some manual operation to use specific Volumes.</li><li>Choose a retention strategy. You can get details in help.</li><li>Specify node where the container create on. If using Azure Disk or using aci-connector-k8s, you need to specify a node.</li><li>Check whether to run container in privileged mode.</li><li>Specify Request / Limit of the resource Cpu / Memory. Find details in <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" class="external-link" rel="nofollow">Managing Compute Resources for Containers</a></li></ol><h2 id="AzureContainerAgentsPlugin-UseAci-Connector-k8s(experimental)">Use Aci-Connector-k8s(experimental)</h2><p>Please note this software is experimental and should not be used for anything resembling a production workload.</p><ol><li>Clone and Install <a href="https://github.com/Azure/aci-connector-k8s" class="external-link" rel="nofollow">aci-connector-k8s</a>.</li><li>Specify <code>aci-connector</code> in <code>Specify Node</code>. Then all the container of this Pod Template will be created in ACI.</li></ol><p>Only very few configurations are supported now.</p><h2 id="AzureContainerAgentsPlugin-ConfigureAzureContainerService(Kubernetes)viaGroovyScript">Configure Azure Container Service (Kubernetes) via Groovy Script</h2><p>If you want to configure Azure Container Service (Kubernetes) via script rather than manually configure it in UI. You can use the sample below in Manage Jenkins -&gt; Script Console. The sample only contains a few of arguments. Find all the arguments in folder <a href="https://github.com/jenkinsci/azure-container-agents-plugin/blob/dev/src/main/java/com/microsoft/jenkins/containeragents/builders" class="external-link" rel="nofollow">builders</a>.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import com.microsoft.jenkins.containeragents.builders.*
+
+def myCloud = new KubernetesCloudBuilder()
+    .withCloudName(&quot;mycloud&quot;)
+    .withAzureCredentialsId(&quot;&lt;Azure Credentials Id&gt;&quot;)
+    .withResourceGroup(&quot;myResourceGroup&quot;)
+    .withServiceName(&quot;myServiceName&quot;)
+    .withAcsCredentialsId(&quot;&lt;ACS Credentials Id&gt;&quot;)
+    .addNewTemplate()
+        .withName(&quot;mytemplate&quot;)
+        .withLabel(&quot;k8s&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);
+
+//inherit template from existing template
+import com.microsoft.jenkins.containeragents.builders.*
+
+def baseTemplate = new PodTemplateBuilder()
+    .withImage(&quot;privateImage&quot;)
+    .addNewImagePullSecret(&quot;yourSecret&quot;)
+    .addNewEnvVar(&quot;key&quot;, &quot;value&quot;)
+    .build();
+
+def myCloud = new KubernetesCloudBuilder()
+    .withCloudName(&quot;mycloud&quot;)
+    .withAzureCredentialsId(&quot;&lt;Azure Credentials Id&gt;&quot;)
+    .withResourceGroup(&quot;myResourceGroup&quot;)
+    .withServiceName(&quot;myServiceName&quot;)
+    .withAcsCredentialsId(&quot;&lt;ACS Credentials Id&gt;&quot;)
+    .addNewTemplateLike(baseTemplate)
+        .withName(&quot;mytemplate&quot;)
+        .withLabel(&quot;k8s&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);</pre>
+</div></div><h2 id="AzureContainerAgentsPlugin-AzureContainerInstance">Azure Container Instance</h2><p><a href="https://docs.microsoft.com/en-us/azure/container-instances/" class="external-link" rel="nofollow">Azure Container Instances</a> offers the fastest and simplest way to run a container in Azure, without having to provision any virtual machines and without having to adopt a higher-level service.</p><h2 id="AzureContainerAgentsPlugin-Pre-requirements.2">Pre-requirements</h2><ul><li>Resource Group in West US or East US (ACI only support these two regions now)</li></ul><h2 id="AzureContainerAgentsPlugin-Configuretheplugin.1">Configure the plugin</h2><ol><li>Jenkins -&gt; Manage Jenkins -&gt; Configure System</li><li>Press <code>Add a new cloud</code> and choose <code>Azure Container Instance</code></li><li>Specify <code>Cloud Name</code> and it should be unique.</li><li>Choose an existing <code>Azure Service Principal</code> or create a new credential.</li><li>Choose <code>Resource Group</code>.</li></ol><h2 id="AzureContainerAgentsPlugin-ConfiguretheContainerTemplate">Configure the Container Template</h2><ol><li>Specify <code>Name</code> and <code>Labels</code></li><li>Set <code>Startup Timeout</code>.</li><li>Select <code>Image OS Type</code>, Windows or Linux.</li><li>Fill in <code>Docker Image</code>. Please note that the slave will connect with master via JNLP, so make sure JNLP installed in image. Default image is <code>jenkins/jnlp-slave</code> and you can also use it as base image.</li><li>If you use a private registry, you need to specify a credential. Please note the <code>URL</code> should not contain protocol (e.g. <a href="http://index.docker.io" class="external-link" rel="nofollow">index.docker.io</a>).</li><li>Specify a <code>Command</code>. Now the <code>Command</code> will override the ENTRYPOINT. <code>Arguments</code>. <code>${rootUrl}</code>, <code>${secret}</code> and <code>${nodeName}</code> will be replace with JenkinsUrl, Secret and ComputerNodeName automatically.</li><li>Specify the <code>Working Dir</code>. You must ensure login user have the write permission to this directory.</li><li>Add <code>Ports</code>, <code>Environment Variables</code> and <code>Volumes</code></li><li>Choose a retention strategy. You can get details in help.</li><li>Specify <code>Cpu Requirement</code> and <code>Memory Requirement</code>, ACI containers costs per second. Find more detail in <a href="https://azure.microsoft.com/en-us/pricing/details/container-instances/" class="external-link" rel="nofollow">Price Details</a>.</li></ol><h2 id="AzureContainerAgentsPlugin-ConfigureAzureContainerInstanceviaGroovyScript">Configure Azure Container Instance via Groovy Script</h2><p>If you want to configure Azure Container Instance via script rather than manually configure it in UI. You can use the sample below in Manage Jenkins -&gt; Script Console. The sample only contains a few of arguments. Find all the arguments in folder <a href="https://github.com/jenkinsci/azure-container-agents-plugin/blob/dev/src/main/java/com/microsoft/jenkins/containeragents/builders" class="external-link" rel="nofollow">builders</a>.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import com.microsoft.jenkins.containeragents.builders.*
+
+def myCloud = new AciCloudBuilder()
+    .withCloudName(&quot;mycloud&quot;)
+    .withAzureCredentialsId(&quot;&lt;Your Credentials Id&gt;&quot;)
+    .withResourceGroup(&quot;myResourceGroup&quot;)
+    .addNewTemplate()
+        .withName(&quot;mytemplate&quot;)
+        .withLabel(&quot;aci&quot;)
+        .addNewPort(&quot;80&quot;)
+        .addNewEnvVar(&quot;key&quot;,&quot;value&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);
+
+//inherit template from existing template
+import com.microsoft.jenkins.containeragents.builders.*
+
+def baseTemplate = new AciContainerTemplateBuilder()
+    .withImage(&quot;privateImage&quot;)
+    .addNewPort(&quot;80&quot;)
+    .addNewEnvVar(&quot;key&quot;, &quot;value&quot;)
+    .build();
+
+def myCloud = new AciCloudBuilder()
+    .withCloudName(&quot;mycloud&quot;)
+    .withAzureCredentialsId(&quot;&lt;Your Credentials Id&gt;&quot;)
+    .withResourceGroup(&quot;myResourceGroup&quot;)
+    .addNewTemplateLike(baseTemplate)
+        .withName(&quot;mytemplate&quot;)
+        .withLabel(&quot;aci&quot;)
+    .endTemplate()
+    .build();
+
+Jenkins.getInstance().clouds.add(myCloud);</pre>
+</div></div><h2 id="AzureContainerAgentsPlugin-Data/Telemetry"><span style="color: rgb(210,73,57);">Data/Telemetry</span></h2><p><span style="color: rgb(210,73,57);"> </span>Azure Container Agents Plugin collects usage data and sends it to Microsoft to help improve our products and services. Read our <a href="http://go.microsoft.com/fwlink/?LinkId=521839" class="external-link" rel="nofollow">privacy statement</a> to learn more.</p><p>You can turn off usage data collection in Manage Jenkins -&gt; Configure System -&gt; Azure -&gt; Help make Azure Jenkins plugins better by sending anonymous usage statistics to Azure Application Insights.</p><h2 id="AzureContainerAgentsPlugin-Changelog">Changelog</h2><h3 id="AzureContainerAgentsPlugin-Version1.1.1,2019-10-10">Version 1.1.1, 2019-10-10</h3><ul><li><p>Upgrade Windows storage plugin version</p></li></ul><h3 id="AzureContainerAgentsPlugin-Version1.1.0,2019-07-25">Version 1.1.0, 2019-07-25</h3><ul><li><p>Clean up deployments after timeout</p></li></ul><h3 id="AzureContainerAgentsPlugin-Version1.0.0,2019-05-23">Version 1.0.0, 2019-05-23</h3><ul><li><p>Bump Jenkins baseline to 2.60.3</p></li><li><p>Add support for IMDS credential type</p></li></ul><h3 id="AzureContainerAgentsPlugin-Version0.4.1,2018-01-10">Version 0.4.1, 2018-01-10</h3><ul><li>Fix AKS agents after AKS resource API change</li></ul><h3 id="AzureContainerAgentsPlugin-Version0.4.0,2018-01-02">Version 0.4.0, 2018-01-02</h3><ul><li><strong>Breaking Change</strong>: No longer mount Empty Volume to Working Dir automatically. Make sure that Jenkins have permission to R/W in Working Dir or mount Empty Volume by yourself</li><li>Add support for SSH</li><li>UI change: Hide AcsCredential when choosing AKS</li><li>Add more logs in provision ACI for inspecting errors conveniently</li></ul><h3 id="AzureContainerAgentsPlugin-Version0.3.0,2017-11-29">Version 0.3.0, 2017-11-29</h3><ul><li>Add support for MSI</li><li>Fix bugs in retention strategy</li></ul><h3 id="AzureContainerAgentsPlugin-Version0.2.0,2017-11-3">Version 0.2.0, 2017-11-3</h3><ul><li>Support Azure Kubernetes Service</li><li>Add Third Party Notice</li><li>Various bugs fix</li></ul><h3 id="AzureContainerAgentsPlugin-Version0.1.2,2017-10-18">Version 0.1.2, 2017-10-18</h3><ul><li>Remove runtime licenses</li></ul><h3 id="AzureContainerAgentsPlugin-Version0.1.1,2017-09-29">Version 0.1.1, 2017-09-29</h3><ul><li><div>Fixed a guava dependency issue</div></li></ul><h3 id="AzureContainerAgentsPlugin-Version0.1.0,2017-09-27">Version 0.1.0, 2017-09-27</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

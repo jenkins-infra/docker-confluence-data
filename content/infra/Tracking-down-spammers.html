@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins Infrastructure : Tracking down spammers</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins Infrastructure</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Ban-user-spamming-Wiki.html">Ban user spamming Wiki</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins Infrastructure : Tracking down spammers
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Sep 04, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Two of the users who spammed Wiki. Each created a few pages and left:</p>
+
+<p>This is when the user has signed up:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>kohsuke@cucumber:/srv/accountapp$ grep -C1 kumpulancara log
+- Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@6415f8f1: defining beans [propertyConfigurer,jiraSoapClient,contextSource,ldapTemplate,ldapClient,jiraLdapSyncer]; root of factory hierarchy
+- Adding new ldap user kumpulancara into Jira
+
+Aug 31, 2012 6:29:44 PM org.jenkinsci.account.Application createRecord
+INFO: User kumpulancara signed up: daenk2008@yahoo.co.id
+- Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@58796a05: display name [org.springframework.context.support.ClassPathXmlApplicationContext@58796a05]; startup date [Fri Aug 31 19:47:57 EDT 2012]; root of context hierarchy
+</pre>
+</div></div>
+
+<p>Corresponding record from Apache:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>123.136.106.150 - - [31/Aug/2012:18:27:14 -0400] &quot;GET /account HTTP/1.1&quot; 200 10558 &quot;https://wiki.jenkins-ci.org/display/JENKINS/Home&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:6.0) Gecko/20100101 Firefox/6.0&quot; 786 10558
+123.136.106.150 - - [31/Aug/2012:18:27:33 -0400] &quot;GET /account/ HTTP/1.1&quot; 200 6398 &quot;https://jenkins-ci.org/account&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:6.0) Gecko/20100101 Firefox/6.0&quot; 1106 6398
+123.136.106.150 - - [31/Aug/2012:18:27:53 -0400] &quot;GET /account/signup HTTP/1.1&quot; 200 746 &quot;https://jenkins-ci.org/account/&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:6.0) Gecko/20100101 Firefox/6.0&quot; 549 746
+123.136.106.150 - - [31/Aug/2012:18:29:42 -0400] &quot;POST /account/doSignup HTTP/1.1&quot; 302 5961 &quot;https://jenkins-ci.org/account/signup&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:6.0) Gecko/20100101 Firefox/6.0&quot; 1810 5961
+123.136.106.150 - - [31/Aug/2012:18:29:45 -0400] &quot;GET /account/doneMail HTTP/1.1&quot; 200 570 &quot;https://jenkins-ci.org/account/signup&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:6.0) Gecko/20100101 Firefox/6.0&quot; 789 570
+</pre>
+</div></div>
+
+
+<p>Another user:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>- Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@4ec2de5: defining beans [propertyConfigurer,jiraSoapClient,contextSource,ldapTemplate,ldapClient,jiraLdapSyncer]; root of factory hierarchy
+- Adding new ldap user farukganteng into Jira
+Sep 2, 2012 9:05:55 AM org.jenkinsci.account.Application createRecord
+INFO: User farukganteng signed up: aroblogaktiv4@gmail.com
+- Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@2cb2b77a: display name [org.springframework.context.support.ClassPathXmlApplicationContext@2cb2b77a]; startup date [Sun Sep 02 09:08:34 EDT 2012]; root of context hierarchy
+</pre>
+</div></div>
+
+<p>Same record from Apache:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>103.3.220.50 - - [02/Sep/2012:09:05:05 -0400] &quot;GET /account/signup HTTP/1.1&quot; 200 746 &quot;https://jenkins-ci.org/account/&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20100101 Firefox/14.0.1&quot; 778 746
+103.3.220.50 - - [02/Sep/2012:09:05:51 -0400] &quot;POST /account/doSignup HTTP/1.1&quot; 302 5961 &quot;https://jenkins-ci.org/account/signup&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20100101 Firefox/14.0.1&quot; 1771 5961
+103.3.220.50 - - [02/Sep/2012:09:05:56 -0400] &quot;GET /account/doneMail HTTP/1.1&quot; 200 570 &quot;https://jenkins-ci.org/account/signup&quot; &quot;Mozilla/5.0 (Windows NT 5.1; rv:14.0) Gecko/20100101 Firefox/14.0.1&quot; 778 570
+</pre>
+</div></div>
+
+<p>User agent is different.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

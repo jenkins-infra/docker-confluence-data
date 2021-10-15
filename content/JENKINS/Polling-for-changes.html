@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Polling for changes</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Writing-an-SCM-plugin.html">Writing an SCM plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Polling for changes
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (redsolo)</span>, last modified by <span class='editor'> Unknown User (swiest)</span> on Mar 01, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>There are three methods that are relevant when Hudson is determining if there has been a change in the SCM:</p>
+<ul>
+	<li><code>public boolean supportsPolling()</code></li>
+	<li><code>public boolean requiresWorkspaceForPolling()</code></li>
+	<li>before Hudson 1.346: <code>public boolean pollChanges(AbstractProject, Launcher, FilePath, TaskListener)</code></li>
+	<li>after Hudson 1.346: <code>public PollingResult compareRemoteRevisionWith(AbstractProject, Launcher, FilePath, TaskListener, SCMRevisionState)</code></li>
+	<li>after Hudson 1.346: <code>public SCMRevisionState calcRevisionsFromBuild(AbstractBuild, Launcher, TaskListener)</code></li>
+</ul>
+
+
+<h2 id="Pollingforchanges-supportsPolling">supportsPolling</h2>
+
+<p>This methods determines if the SCM plugin can be used for polling. Default method returns <code>true</code>.</p>
+
+<h2 id="Pollingforchanges-requiresWorkspaceForPolling">requiresWorkspaceForPolling</h2>
+
+<p>This method should return true if the SCM requires a workspace for polling. What to return depends on the SCM that the plugin is using. For instance the ClearCase plugin requires that a build has been performed before it can poll for changes, whereas Team Foundation Server does not require a workspace to poll for changes. Default method returns <code>true</code>.</p>
+
+<h2 id="Pollingforchanges-pollChanges(&lt;1.346)">pollChanges (&lt;1.346)</h2>
+
+<p>This method does the actual polling and should return <code>true</code> or <code>false</code> if there are any changes in the repository. The polling should be as quick as possible and does not need to output any other result than a <code>boolean</code>.</p>
+
+<p>To determine the date to get changes from, use the <code>AbstractProject.getLastBuild().getTimestamp()</code> to get a <code>Calendar</code> object.</p>
+
+<h2 id="Pollingforchanges-compareRemoteRevisionWith(&gt;=1.346)">compareRemoteRevisionWith (&gt;=1.346)</h2>
+
+<p>This method does the actual polling and returns a <code>PollingResult</code>. The change attribute of the <code>PollingResult</code> the significance of the changes deteced by this poll.</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Value of 'change' (enum)<br class="atl-forced-newline"/> </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <code>PollingResult.NO_CHANGES</code> </p></td>
+<td class="confluenceTd"><p> The were no changes since the last built. <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <code>PollingResult.INSIGNIFICANT</code> </p></td>
+<td class="confluenceTd"><p> There were changes since last build, but they are not significant enough to warrant a new build, e.g. because some SCMs allow certain commits to be marked as excluded. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <code>PollingResult.SIGNIFICANT</code> </p></td>
+<td class="confluenceTd"><p> There are changes between states that warrant a new build. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <code>PollingResult.INCOMPARABLE</code> </p></td>
+<td class="confluenceTd"><p> The state as of baseline is so different from the current state that they are incomparable, for example, the workspace and the remote repository point to two unrelated repositories because the configuration has changed. This forces Jenkins to schedule a build right away. <code>PollingResult.BUILD_NOW</code> is basically an alias to {{PollingResult.}}INCOMPARABLE </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+<h2 id="Pollingforchanges-calcRevisionsFromBuild(&gt;=1.346)">calcRevisionsFromBuild (&gt;=1.346)</h2>
+
+<p>Calculate the state of the workspace of the given build. The returned object is then fed into <code>compareRemoteRevisionWith</code> as the baseline <code>SCMRevisionState</code> to determine if the build is necessary, and is added to the build as an <code>Action</code> for later retrieval.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

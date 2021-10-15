@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : External Resource Dispatcher</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : External Resource Dispatcher
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (t_westling)</span>, last modified by <span class='editor'> Unknown User (neuralsandwich)</span> on Nov 04, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'externalresource-dispatcher' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin adds support for external resources in Jenkins. An external resource is something external<br/>
+attached to a Jenkins slave and can be locked by a build, which thus gets exclusive access to it, then released after the<br/>
+build is done. Examples of external resources are phones, printers and USB christmas trees.<br/>
+<strong>Note that even though the 'b' fell off in the latest release, this plugin is still considered to be in beta stage.</strong></p>
+
+<h2 id="ExternalResourceDispatcher-Quickusageguide">Quick usage guide</h2>
+
+<ul>
+	<li>Connect an external resource of some kind to a Jenkins node.</li>
+	<li>Create Metadata on the node for the ExternalResource.</li>
+	<li>Create a project in Jenkins. Click the Resource Selection Criteria check box and add a name-value pair that matches your ExternalResource.</li>
+	<li>Start a build of the project. Note on the node page that the external resource is locked to your build.</li>
+	<li>Start another build using the same selection criteria. Note that this build will wait for the first one to finish, due to no free resource.</li>
+</ul>
+
+
+<h4 id="ExternalResourceDispatcher-AddingExternalResourcestoanode">Adding ExternalResources to a node</h4>
+
+<p>Configure the node and click the Metadata check box. Add an ExternalResourceTreeNode with an ExternalResource as a child.<br/>
+An ExternalResourceTreeNode is a collection of ExternalResource objects and the only Metadata type that can contain ExternalResource objects.<br/>
+Fill in Name, Id and Description and add any amount of other Metadata for the resource.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65667720/65863709.png" data-image-src="attachments/65667720/65863709.png" data-unresolved-comment-count="0" data-linked-resource-id="65863709" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="dispatcher-edit-metadata.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65667720" data-linked-resource-container-version="11"></span><br/>
+<em>The External Resource metadata for a node.</em></p>
+
+<h4 id="ExternalResourceDispatcher-Selectioncriteria">Selection criteria</h4>
+
+<p>In any project, selection criteria can be added using the check box named &quot;Resource Selection Criteria&quot;.<br/>
+When the project is built, the plugin tries to find a slave among the slaves to run on (selected as usual via a label)<br/>
+that matches the selection criteria. It does this by matching metadata values on the external resource defined<br/>
+on the slave. If the plugin finds a match, it locks the resource to the build and starts the build on the matched slave.<br/>
+Once the build finishes, the resource is unlocked. Multiple selection criteria can be added, the current &quot;Simple Selection&quot;<br/>
+adds an implicit &quot;and&quot; between the criteria, so that all the criteria must be matched. We plan to add a more advanced<br/>
+resource selection in the future.</p>
+
+<p>Currently, only one selector type exists, the StringResourceSelection. This is extendable, so plugin developers<br/>
+can add their own. The String selection criteria tries to match a String value to a metadata value exactly.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65667720/65863710.png" data-image-src="attachments/65667720/65863710.png" data-unresolved-comment-count="0" data-linked-resource-id="65863710" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="dispatcher-selection.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65667720" data-linked-resource-container-version="11"></span><br/>
+<em>Selection criteria.</em></p>
+
+<h4 id="ExternalResourceDispatcher-Lockedresource">Locked resource</h4>
+
+<p>For a build with a locked resource, we expose all the properties of the resource as environment variables, with the names:<br/>
+MD_EXTERNAL_RESOURCES_LOCKED_<em>NAME_OF_THE_PROPERTY_IN_CAPS</em>. These can be used to refer to the locked resource from build steps.</p>
+
+<h2 id="ExternalResourceDispatcher-Administratorsettings">Administrator settings</h2>
+
+<p>To add ExternalResources to a node, write permission to the node is needed. The same goes for adding resource selection<br/>
+on a project, i.e. write permission to projects is needed.</p>
+
+<p>On the configure system page in Jenkins, under External Resource Dispatcher Configuration, a couple of new settings are available:</p>
+<ul>
+	<li>Release Key - not used yet, will be used for a &quot;Release All&quot; feature where all resources on a node can be released by clicking a button.</li>
+	<li>Reservation Time - the number of seconds to reserve an ExternalResource. Since we use a QueueTaskDispatcher, we can't say for sure that<br/>
+a build will run on a particular machine, so we reserve the resource and then lock it once it starts to run.</li>
+	<li>External Resource Manager - described in detail further down, this sets the default manager for the Jenkins master.</li>
+	<li>Admin Notifier File - the path to a file in which to log problems with the resource handling.</li>
+</ul>
+
+
+<h2 id="ExternalResourceDispatcher-Underthehood">Under the hood</h2>
+
+<p>Here we describe the different parts of the plugin in greater detail, with more focus on implementation details.</p>
+
+<h3 id="ExternalResourceDispatcher-DependencytoMetadataplugin">Dependency to Metadata plugin</h3>
+
+<p>This plugin has a dependency to the Metadata plugin and won't run without it. We use new Metadata types (ExternalResource and ExternalResourceTreeNode)<br/>
+to describe the external resources on the nodes.</p>
+
+<h3 id="ExternalResourceDispatcher-ExternalResourceMetadata">External Resource Metadata</h3>
+
+<p>We have added two new Metadata types, ExternalResource and ExternalResourceTreeNode. Only an ExternalResourceTreeNode can contain ExternalResources.</p>
+
+<h3 id="ExternalResourceDispatcher-ExternalResource">ExternalResource</h3>
+
+<p>An external resource is based on a TreeNodeMetadataValue, so it can contain other MetadataValues as children.<br/>
+Other than those, it should always contain the following properties:</p>
+<ul>
+	<li>Name - the name of the resource.</li>
+	<li>Id - a unique identifier for the resource.</li>
+	<li>Description - text describing the resource.</li>
+	<li>Enabled - true if the resource is up and running, ready to be used, false if not.</li>
+</ul>
+
+
+<h3 id="ExternalResourceDispatcher-ExternalResourceTreeNode">ExternalResourceTreeNode</h3>
+
+<p>This is also based on TreeNodeMetadataValue, but can only contain ExternalResources as children.<br/>
+It is also the only type of node that can contain ExternalResources. The reason for this is the resource handling.<br/>
+In addition to its children, an ExternalResourceTreeNode contains an ExternalResourceManager. All the children of the ExternalResourceTreeNode will use the same manager.</p>
+
+<h3 id="ExternalResourceDispatcher-ExternalResourceManagers">ExternalResourceManagers</h3>
+
+<p>An ExternalResourceManager is what takes care of the resource handling. It is responsible for locking and releasing the<br/>
+resources. Currently, two manager types exist, NoopExternalResourceManager and ResourceMonitorExternalResourceManager.<br/>
+Plugin developers can add their own managers.</p>
+
+<h4 id="ExternalResourceDispatcher-NoopExternalResourceManager">NoopExternalResourceManager</h4>
+
+<p>The easiest way of getting up and running with the External Resource Dispatcher. The NoopExternalResourceManager takes<br/>
+care of the resource handling all from within Jenkins. If other systems outside of Jenkins are using the same External<br/>
+Resources, this manager should not be chosen since the locking/releasing of resources will not look outside Jenkins.</p>
+
+<h4 id="ExternalResourceDispatcher-ResourceMonitorExternalResourceManager">ResourceMonitorExternalResourceManager</h4>
+
+<p>The difference between the NoopExternalResourceManager and this one is that the ResourceMonitor expects something external to Jenkins<br/>
+to take care of the resources, and communicates with the plugin through CLI or http requests. At Sony, we have a service running on the slave machines<br/>
+that can communicate with the ResourceMonitorExternalResourceManager which handles the locking and releasing of our Android phones.<br/>
+When a phone is connected via usb to a slave computer, it also automatically adds it to Jenkins via http.<br/>
+The service will hopefully soon be released as open source as well.</p>
+
+<h3 id="ExternalResourceDispatcher-CommandLineInterface(CLI)andHTTP">Command Line Interface (CLI) and HTTP</h3>
+
+<p>There are some CLI and HTTP commands intended primarily to be used by an ExternalResourceManager but can be used by a human or other system as well.<br/>
+Most of the commands give a response in JSON format for example</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+{type: &quot;OK&quot;, errorCode: 0, message: &quot;OK&quot;}
+</pre>
+</div></div>
+<p>for an ok response.<br/>
+All HTTP commands are placed under <a href="http://yourjenkins/external-resource-httpcli" class="external-link" rel="nofollow">http://yourjenkins/external-resource-httpcli</a><br/>
+Below is a brief description of each command, you can look in the Jenkins CLI help for information about their parameters.</p>
+
+<h4 id="ExternalResourceDispatcher-disable-external-resource">disable-external-resource</h4>
+
+<p>HTTP name: /disable<br/>
+Disables a resource on the slave. The resource can no longer be booked by jobs until it is enabled again.<br/>
+Requires that the user has the EnableDisable permission set for the node that the resource is on.</p>
+
+<h4 id="ExternalResourceDispatcher-enable-external-resource">enable-external-resource</h4>
+
+<p>HTTP name: /enable<br/>
+Enables a previously disabled resource.<br/>
+Requires that the user has the EnableDisable permission set for the node that the resource is on.</p>
+
+<h4 id="ExternalResourceDispatcher-expire-external-resource">expire-external-resource</h4>
+
+<p>HTTP name: /expireReservation<br/>
+Expires the lease of a reserved resource making it available again to be used by a build. The build that reserved it in the first place will probably fail when it starts and tries to lock the resource.</p>
+
+<h4 id="ExternalResourceDispatcher-lock-external-resource">lock-external-resource</h4>
+
+<p>HTTP name: /lockResource<br/>
+Adds the lock information to the resource so that no build can use it untill it is released. This is to inform Jenkins that another external process has locked it instead of a Jenkins build.<br/>
+Requires that the user has the LockRelease permission set for the node that the resource is on.</p>
+
+<h4 id="ExternalResourceDispatcher-reserve-external-resource">reserve-external-resource</h4>
+
+<p>HTTP name: /reserveResource<br/>
+Similar to the lock but for the reserve info instead.<br/>
+Requires that the user has the LockRelease permission set for the node that the resource is on.</p>
+
+<h4 id="ExternalResourceDispatcher-release-external-resource">release-external-resource</h4>
+
+<p>HTTP name: /releaseResource<br/>
+Removes any lock and reservation from the resource making it available again for builds to grab.<br/>
+Requires that the user has the LockRelease permission set for the node that the resource is on.</p>
+
+<h3 id="ExternalResourceDispatcher-IntegrationwiththeBuildFlowPlugin">Integration with the Build Flow Plugin</h3>
+
+<p>There is an extension point for <a href="Build-Flow-Plugin.html">Build Flow Plugin</a> that can be used for easy access to the resource manager from within the build flow script like:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+def manager = extension.&#39;externalresource-dispatcher&#39;
+manager.lock(...)
+</pre>
+</div></div>
+
+<h3 id="ExternalResourceDispatcher-ChangeLog">Change Log</h3>
+
+
+<h4 id="ExternalResourceDispatcher-Version1.0b(releasedNov22,2012)">Version 1.0b (released Nov 22, 2012)</h4>
+
+<p>Initial beta release</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667720/65863709.png">dispatcher-edit-metadata.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667720/65863712.png">dispatcher-selection.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667720/65863710.png">dispatcher-selection.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:23</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

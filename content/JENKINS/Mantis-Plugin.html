@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Mantis Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Mantis Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified on Feb 24, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Mantis <a href="https://plugins.jenkins.io/mantis" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-12-17/#SECURITY-1603" class="external-link" rel="nofollow">CSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<h1 id="MantisPlugin-MantisPlugin">Mantis Plugin</h1>
+
+<p><br class="atl-forced-newline"/>  This plugin integrates <a href="http://www.mantisbt.org/" class="external-link" rel="nofollow">Mantis Bug Tracker</a> to Jenkins. Mantis is a free popular web-based bugtracking system written in PHP scripting language.<br/>
+This plugin decorates Hudson &quot;Changes&quot; HTML to create links to your Mantis issues, and update issues with private / public notes.<br/>
+As an example, if you committed a change with the following log message (which is configurable see  Project Configuration):
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>fix issue #410
+</pre>
+</div></div>
+<p>Mantis keys in changelogs are now hyperlinked to the corresponding Mantis issue pages (complete with tooltips), <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/24510465/24641540.png" data-image-src="attachments/24510465/24641540.png" data-unresolved-comment-count="0" data-linked-resource-id="24641540" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="changelog.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span><br/>
+and Mantis issues are also updated with note as following.
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/24510465/24641541.png" data-image-src="attachments/24510465/24641541.png" data-unresolved-comment-count="0" data-linked-resource-id="24641541" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="mantis_note.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This plugin only supports <strong>Mantis 1.1.0 and above</strong>.</p></div></div>
+
+<h2 id="MantisPlugin-Configuration">Configuration</h2>
+
+
+<h3 id="MantisPlugin-SystemConfiguration">System Configuration</h3>
+
+<p>First, you need to go to system config screen to tell Jenkins where's your Mantis.</p>
+<ul>
+	<li>URL - the root URL of your Mantis installation, eg. <a href="http://example.org/mantis/" class="external-link" rel="nofollow">http://example.org/mantis/</a></li>
+	<li>Version - version of your Mantis installation. 1.1.X or 1.2.X(1.2.0a3 and later, this is experimental)</li>
+	<li>User Name, Password - user name and password of your Mantis installation to update relevant Mantis issues.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" vspace="4" src="attachments/24510465/24641537.png" data-image-src="attachments/24510465/24641537.png" data-unresolved-comment-count="0" data-linked-resource-id="24641537" data-linked-resource-version="5" data-linked-resource-type="attachment" data-linked-resource-default-alias="mantis_system_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span></li>
+</ul>
+
+
+<h3 id="MantisPlugin-ProjectConfiguration">Project Configuration</h3>
+
+<p>In the top section, select the url of your Mantis installation.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" vspace="2" src="attachments/24510465/24641538.png" data-image-src="attachments/24510465/24641538.png" data-unresolved-comment-count="0" data-linked-resource-id="24641538" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_config_select_site.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+<ul>
+	<li>%ID% is placeholder which means Mantis issue id.</li>
+	<li>Project and Category is mandatory for &quot;File a ticket when build is broken or unstable&quot;.</li>
+</ul>
+
+
+<h4 id="MantisPlugin-UpdateMantisissue">Update Mantis issue</h4>
+
+<p>In the Post-build Actions section, choose &quot;Updated relevant Mantis issues&quot; (option).
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" vspace="2" src="attachments/24510465/24641539.png" data-image-src="attachments/24510465/24641539.png" data-unresolved-comment-count="0" data-linked-resource-id="24641539" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_config_update_issues.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This plugin updates Mantis issues if build is stable or unstable.</p></div></div>
+
+<h4 id="MantisPlugin-Fileaticketifbuildisbrokenorunstable">File a ticket if build is broken or unstable</h4>
+
+<p>In the Post-build Actions section, choose &quot;File a ticket to Mantis&quot; (option).</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/24510465/59899911.png" data-image-src="attachments/24510465/59899911.png" data-unresolved-comment-count="0" data-linked-resource-id="59899911" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_config_add_issue.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span></p>
+
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>To Update Mantis issues, Mantis user must have at least &quot;DEVELOPER&quot;.</p></div></div>
+
+<h2 id="MantisPlugin-TroubleShooting">Trouble Shooting</h2>
+
+<p>If you have ran into trouble,</p>
+<ol>
+	<li>Select New Log Recorder in System log screen.<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" vspace="2" src="attachments/24510465/36732984.png" data-image-src="attachments/24510465/36732984.png" data-unresolved-comment-count="0" data-linked-resource-id="36732984" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="trouble_new_logrecorder.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span><br class="atl-forced-newline"/></li>
+	<li>Configure Log Recorder. Logger is &quot;hudson.plugins.mantis&quot;, log level is &quot;finest&quot;. and save. <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" vspace="2" src="attachments/24510465/36732985.png" data-image-src="attachments/24510465/36732985.png" data-unresolved-comment-count="0" data-linked-resource-id="36732985" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="trouble_configure_logger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="24510465" data-linked-resource-container-version="97"></span></li>
+	<li>Update Mantis issue...</li>
+	<li>See System log. Check SOAP request and response.</li>
+</ol>
+
+
+<h2 id="MantisPlugin-UseBASIC_AUTH(Workaround)"><a href="Use-BASIC_AUTH.html">Use BASIC_AUTH</a> (Workaround)</h2>
+
+<h2 id="MantisPlugin-Tips">Tips</h2>
+
+<ul>
+	<li>&quot;Array to string conversion&quot; while try to connect to mantis(<a href="https://issues.jenkins-ci.org/browse/JENKINS-27077">JENKINS-27077</a>).</li>
+</ul>
+
+
+<h2 id="MantisPlugin-ChangeLog">Change Log</h2>
+
+<h5 id="MantisPlugin-Version0.26(Feb16,2015)">Version 0.26 (Feb 16, 2015)</h5>
+
+<ul>
+	<li>Mantis password written in plain text in build.xml(<a href="https://issues.jenkins-ci.org/browse/JENKINS-26831">JENKINS-26831</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.25(May31,2013)">Version 0.25 (May 31, 2013)</h5>
+
+<ul>
+	<li>View state for newly created Mantis (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18038">JENKINS-18038</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.24(Apr,30,2012)">Version 0.24 (Apr, 30, 2012)</h5>
+
+<ul>
+	<li>Do not update mantis entry for all downstream jobs (<a href="https://issues.jenkins-ci.org/browse/JENKINS-11839">JENKINS-11839</a>).</li>
+</ul>
+
+
+
+<h5 id="MantisPlugin-Version0.23(Apr,1,2012)">Version 0.23 (Apr, 1, 2012)</h5>
+
+<ul>
+	<li>NullPointerException when Category have value : not selected (<a href="https://issues.jenkins-ci.org/browse/JENKINS-13215">JENKINS-13215</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.22(Mar,12,2012)">Version 0.22 (Mar, 12, 2012)</h5>
+
+<ul>
+	<li>NullPointerException when parsing changeset of Matrix project (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12849">JENKINS-12849</a>).</li>
+	<li>Mantis Plugin causes Configuration Loading Overlay to not disappear (<a href="https://issues.jenkins-ci.org/browse/JENKINS-13023">JENKINS-13023</a>).
+	<ul>
+		<li>added &quot;veiyfy&quot; button under advanced button to check credentials.</li>
+	</ul>
+	</li>
+	<li>Updated wsdl.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.21(Jan,1,2012)">Version 0.21 (Jan, 1, 2012)</h5>
+
+<ul>
+	<li>enable to select a subproject for filing a ticket.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.20(Oct,5,2011)(unstable)">Version 0.20 (Oct, 5, 2011) (unstable)</h5>
+
+<ul>
+	<li>File a ticket if build is broken or unstable</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.12(Oct9,2011)">Version 0.12 (Oct 9, 2011)</h5>
+
+<ul>
+	<li>updated wsdl to support Mantisbt 1.28</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.11(Apr29,2011)">Version 0.11 (Apr 29, 2011)</h5>
+
+<ul>
+	<li>Mantis-Plugin fails again to add a note.(<a href="https://issues.jenkins-ci.org/browse/JENKINS-9554">JENKINS-9554</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-9552">JENKINS-9552</a>)</li>
+	<li>Jenkins 1.399 or later required.</li>
+	<li>MalformedURLException if malformed url. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-9440">JENKINS-9440</a>)</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.10.1(May2,2010)">Version 0.10.1 (May 2, 2010)</h5>
+
+<ul>
+	<li>Fix 'update relevant mantis issue' is not saved'. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-6363">JENKINS-6363</a>)</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.10(April4,2010)">Version 0.10 (April 4, 2010)</h5>
+
+<ul>
+	<li>Support Mantis 1.2.0 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-6114">JENKINS-6114</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.9(Mar3,2010)">Version 0.9 (Mar 3, 2010)</h5>
+
+<ul>
+	<li>Update code for more recent Hudson.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.8.3(Jul26,2009)">Version 0.8.3 (Jul 26, 2009)</h5>
+
+<ul>
+	<li>Allow empty pattern in form validation.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.8.2">Version 0.8.2</h5>
+
+<ul>
+	<li>check if user has Job.CONFIGURE, not ADMINISTER when configuring project (<a href="https://issues.jenkins-ci.org/browse/JENKINS-4077">JENKINS-4077</a>).</li>
+	<li>fixed NPE in M2 project (<a href="https://issues.jenkins-ci.org/browse/JENKINS-4049">JENKINS-4049</a>).</li>
+	<li>replaced deprecated classes and methods.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.8.1">Version 0.8.1</h5>
+
+<ul>
+	<li>Support subversion plugin.</li>
+	<li>Saved regexp pattern per build, which enables link in old history even if configuration is changed.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.8.0">Version 0.8.0</h5>
+
+<ul>
+	<li>Regexp pattern support.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.7.1">Version 0.7.1</h5>
+
+<ul>
+	<li>Support Mercurial changelog, which requires Mercurial Plugin 1.15.</li>
+	<li>Support Git changelog, which requires Git Plugin 0.5.</li>
+	<li>Fixed a bit.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.7">Version 0.7</h5>
+
+<ul>
+	<li>Record changelog in Mantis note.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.6.1">Version 0.6.1</h5>
+
+<ul>
+	<li>Don't change build status if failing to add note. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-3005">JENKINS-3005</a>).</li>
+	<li>check permission.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.6">Version 0.6</h5>
+
+<ul>
+	<li>Hudson 1.281 and later required.</li>
+	<li>Supported Mantis 1.2.0a3 and later (experimental) (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2877">JENKINS-2877</a>).</li>
+	<li>Logged SOAP Request and Response.</li>
+	<li>Improved error diagnostics.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.5.2">Version 0.5.2</h5>
+
+<ul>
+	<li>Use default issue id pattern if project configuration has not saved after upgrading (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2307">JENKINS-2307</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.5.1">Version 0.5.1</h5>
+
+<ul>
+	<li>Improved performance of hyperlink to mantis.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.5">Version 0.5</h5>
+
+<ul>
+	<li>Configurable Mantis issue IDs patterns (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2117">JENKINS-2117</a>).</li>
+	<li>Hyperlink to mantis even if checkbox is not checked (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2117">JENKINS-2117</a>).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.4.3">Version 0.4.3</h5>
+
+<ul>
+	<li>Fixed UnknownFormatConversionException (<a href="https://issues.jenkins-ci.org/browse/JENKINS-2116">JENKINS-2116</a>).</li>
+	<li>Improved Japanese translation.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.4.2">Version 0.4.2</h5>
+
+<ul>
+	<li>Added more logging for debugging.</li>
+	<li>The username and password of Mantis installation is now optional.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.4.1">Version 0.4.1</h5>
+
+<ul>
+	<li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-2039">JENKINS-2039</a> (Mantis plugin breaks Job Save).</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.4">Version 0.4</h5>
+
+<ul>
+	<li>Update mantis issue if build status is unstable.</li>
+	<li>Support unsigned server certs.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.3.1">Version 0.3.1</h5>
+
+<ul>
+	<li>Fix JavaScript error</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.3">Version 0.3</h5>
+
+<ul>
+	<li>Support HTTP Basic Authentication(Not Mantis's BASIC_AUTH)</li>
+	<li>Fix small bug</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.2">Version 0.2</h5>
+
+<ul>
+	<li>Remove mantisconnect-client-api.jar.</li>
+</ul>
+
+
+<h5 id="MantisPlugin-Version0.1">Version 0.1</h5>
+
+<ul>
+	<li>First version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/30113793.png">mantis_system_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/36208656.png">job_config_select_site.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/37519463.png">job_config_update_issues.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641540.png">changelog.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641542.png">mantis_note.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/37519464.png">mantis_note.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/30113794.png">mantis_system_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/36732983.png">mantis_system_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899909.png">job_config_select_site.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899908.png">mantis_system_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899913.png">trouble_new_logrecorder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899915.png">trouble_configure_logger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899912.png">job_config_update_issues.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641541.png">mantis_note.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641537.png">mantis_system_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899910.png">job_config_select_site.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641538.png">job_config_select_site.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899911.png">job_config_add_issue.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/24641539.png">job_config_update_issues.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899914.png">trouble_new_logrecorder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/59899916.png">trouble_new_logrecorder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/36732985.png">trouble_configure_logger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/24510465/36732984.png">trouble_new_logrecorder.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:32</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

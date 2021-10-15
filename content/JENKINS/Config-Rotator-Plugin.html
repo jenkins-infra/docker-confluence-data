@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Config Rotator Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Config Rotator Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (wolfgang)</span>, last modified by <span class='editor'> Unknown User (madsnielsen)</span> on Aug 25, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="sectionColumnWrapper"><div class="sectionMacro">
+
+<div class="sectionMacroRow"><div class="columnMacro" style="width:15%;min-width:15%;max-width:15%;">
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Config Rotator <a href="https://plugins.jenkins.io/config-rotator" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</div>
+<div class="columnMacro" style="width:10%;min-width:10%;max-width:10%;">
+
+<h4 id="ConfigRotatorPlugin-Developedby">Developed by</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/60916476/65863842.jpg" data-image-src="attachments/60916476/65863842.jpg" data-unresolved-comment-count="0" data-linked-resource-id="65863842" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="praqma_logo_70x70.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<h4 id="ConfigRotatorPlugin-Sponsoredby">Sponsored by</h4>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="33" width="161" src="attachments/60916476/61112488.jpg" data-image-src="attachments/60916476/61112488.jpg" data-unresolved-comment-count="0" data-linked-resource-id="61112488" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="grundfos_logo.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p></div></div></div></div>
+
+<div class="sectionMacroWithBorder"><div class="sectionMacroRow"></div></div>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020703369 {padding: 0px;}
+div.rbtoc1631020703369 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020703369 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020703369'>
+<ul class='toc-indentation'>
+<li><a href='#ConfigRotatorPlugin-ConfigRotator,nowwithGitsupport'>Config Rotator, now with Git support</a></li>
+</ul>
+<li><a href='#ConfigRotatorPlugin-Introduction'>Introduction</a>
+<ul class='toc-indentation'>
+<li><a href='#ConfigRotatorPlugin-SupportedSCMs'>Supported SCMs</a></li>
+</ul>
+</li>
+<li><a href='#ConfigRotatorPlugin-Featurehighlights'>Feature highlights</a></li>
+<li><a href='#ConfigRotatorPlugin-Requirementsandrecommendedsetup'>Requirements and recommended setup</a>
+<ul class='toc-indentation'>
+<li><a href='#ConfigRotatorPlugin-ClearCaseUCM'>ClearCase UCM</a></li>
+<li><a href='#ConfigRotatorPlugin-Git'>Git</a></li>
+</ul>
+</li>
+<li><a href='#ConfigRotatorPlugin-GettingStartedGuide'>Getting Started Guide</a></li>
+<li><a href='#ConfigRotatorPlugin-Featuredescription'>Feature description</a>
+<ul class='toc-indentation'>
+<li><a href='#ConfigRotatorPlugin-Tryingaseriesofconfigurations'>Trying a series of configurations</a></li>
+<li><a href='#ConfigRotatorPlugin-Usingfeeds'>Using feeds</a></li>
+<li><a href='#ConfigRotatorPlugin-Resettooldconfiguration'>Reset to old configuration</a></li>
+<li><a href='#ConfigRotatorPlugin-Changeslinkworkingoncomponentbaselines'>Changes link working on component baselines</a></li>
+</ul>
+</li>
+<li><a href='#ConfigRotatorPlugin-KnownIssues(currentversion)'>Known Issues (current version)</a></li>
+<li><a href='#ConfigRotatorPlugin-Changes'>Changes</a></li>
+</ul>
+</div>
+
+<h2 id="ConfigRotatorPlugin-ConfigRotator,nowwithGitsupport">Config Rotator, now with Git support</h2>
+
+<h1 id="ConfigRotatorPlugin-Introduction">Introduction</h1>
+
+<p>In ClearCase UCM a composite baseline describes dependencies between different baselines of components in a parent/child relation.</p>
+
+<p>This 'dependency graph' in a composite baseline describes a configuration, where one specific baselines defines a relation to other specific baselines – potentially nested in several layers.</p>
+
+<p>But it can also be regarded as a more generic structure that simply describes a hierarchy of components.</p>
+
+<p>When viewed as a hierarchy it's interesting to know, if another (newer) component in the structure would still be compliant with the configuration as a whole. Somebody ought to test<br/>
+that each time a new baseline of a component in the hierarchy is released.</p>
+
+<p>The Config Rotator monitors the SCM for newer versions of components in the structure, and executes this test when necessary. The configuration is only created temporary and only the<br/>
+result of the try-out is stored. The actual tested configuration is not persisted. Component developers can subscribe to test results involving their components through ATOM feeds on the Jenkins job running the Config Rotator.</p>
+
+
+
+<h2 id="ConfigRotatorPlugin-SupportedSCMs">Supported SCMs</h2>
+
+<ul>
+	<li>ClearCase UCM</li>
+	<li>Git, from version 1.1.0</li>
+</ul>
+
+
+<h1 id="ConfigRotatorPlugin-Featurehighlights">Feature highlights</h1>
+
+<ul>
+	<li>Try-out new configuration of components, including reset to old configuration to try again</li>
+	<li>Be able to subscribe to Atom feeds, by component, with information about new compatible or incompatible configuration with the component</li>
+</ul>
+
+
+
+<h1 id="ConfigRotatorPlugin-Requirementsandrecommendedsetup">Requirements and recommended setup</h1>
+
+<h2 id="ConfigRotatorPlugin-ClearCaseUCM">ClearCase UCM</h2>
+
+<ol>
+	<li>You need a working ClearCase environment for the user running the Jenkins build on the host (Jenkins master or slave) where the build is executed</li>
+	<li>Plugin is in current version only tested on Windows</li>
+	<li>Freestyle builds must be used</li>
+	<li>Jenkins slaves are tested running as a service, or Java Webstart (it's important user running service or Java has a working ClearCase environment)</li>
+</ol>
+
+
+<p>Future plans might be Linux support or other ways to setup job and master/slave. If you are using the plugin in other setups than the above, kindly let us know if it works or not.</p>
+
+<ul>
+	<li>Issue or inquiry use Jenkins Jira and see <a href="#ConfigRotatorPlugin-KnownIssues">Known Issues</a> below</li>
+	<li>Other questions: <a href="http://www.praqma.net/support" class="external-link" rel="nofollow">http://www.praqma.net/support</a></li>
+</ul>
+
+
+<h2 id="ConfigRotatorPlugin-Git">Git</h2>
+
+<p>Git requires no special setup.</p>
+
+<h1 id="ConfigRotatorPlugin-GettingStartedGuide">Getting Started Guide</h1>
+
+<p>In the Source Code Management section select the Config rotator option</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/67043491.png" data-image-src="attachments/60916476/67043491.png" data-unresolved-comment-count="0" data-linked-resource-id="67043491" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configure1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<h5 id="ConfigRotatorPlugin-ClearCaseUCMConfiguration">ClearCase UCM Configuration</h5>
+
+<p>The <strong>Context Project VOB</strong> is where the UCM project of the temporary stream is located. In this Project VOB a special UCM Project must be created and named jenkins <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/82280557.png" data-image-src="attachments/60916476/82280557.png" data-unresolved-comment-count="0" data-linked-resource-id="82280557" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="CR_Contribute.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span><br/>
+<strong>Contribute data globally</strong> will write the resulting action of a config rotator build to a database specified in global configuration under the global configuration page:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/82280555.png" data-image-src="attachments/60916476/82280555.png" data-unresolved-comment-count="0" data-linked-resource-id="82280555" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Contribute.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<p>The <strong>UCM configuration</strong> is a series of baselines describing the configurations.</p>
+
+<ul>
+	<li><strong>Baseline</strong> A baseline describing a component of the configuration</li>
+	<li><strong>Promotion level</strong> The required promotion level for the baseline</li>
+	<li><strong>Fixed</strong> Fixation of configuration component. Can this component be rotated or not.</li>
+</ul>
+
+
+
+<h5 id="ConfigRotatorPlugin-Git.1">Git</h5>
+
+<ul>
+	<li><strong>Name</strong> Source location of the workspace. If empty, the name of the repository is used.</li>
+	<li><strong>Repository</strong> The URL of the Git repository.</li>
+	<li><strong>Branch</strong> The branch to rotate. Master is used if empty.</li>
+	<li><strong>Commit</strong> Offset commit to rotate from, either a SHA1 or tag.</li>
+	<li><strong>Fixed</strong> Fixation of configuration component. Can this component be rotated or not.</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/67043492.png" data-image-src="attachments/60916476/67043492.png" data-unresolved-comment-count="0" data-linked-resource-id="67043492" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="gitconfigure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<h1 id="ConfigRotatorPlugin-Featuredescription">Feature description</h1>
+
+<h2 id="ConfigRotatorPlugin-Tryingaseriesofconfigurations">Trying a series of configurations</h2>
+
+<ul>
+	<li>Set Your job up to poll the SCM</li>
+	<li>When Config Rotator finds new baselines, it starts building</li>
+</ul>
+
+
+<p>Picture show a series of successfull build. The project/job page will show latest result for the configuration. If You click on the a build the tested configuration from the build is shown.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112512.png" data-image-src="attachments/60916476/61112512.png" data-unresolved-comment-count="0" data-linked-resource-id="61112512" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="projectpage.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<p>Click the Config Rotator link in the left menu on the project/job to view all tried configurations</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112516.png" data-image-src="attachments/60916476/61112516.png" data-unresolved-comment-count="0" data-linked-resource-id="61112516" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="overviewofconfiguration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+
+<h2 id="ConfigRotatorPlugin-Usingfeeds">Using feeds</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112507.png" data-image-src="attachments/60916476/61112507.png" data-unresolved-comment-count="0" data-linked-resource-id="61112507" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configrotatormainmenulink.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span> </p></td>
+<td class="confluenceTd"><p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112508.png" data-image-src="attachments/60916476/61112508.png" data-unresolved-comment-count="0" data-linked-resource-id="61112508" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configrotatorfeedpage.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<ul>
+	<li>Main page of Jenkins shows a link to the Config Rotator feed page</li>
+	<li>For every component in a build earlier executed, a feed for the component contains information about the outcome of the test showing compatible or incompatible. |</li>
+	<li>Use your favorite RSS/Atom feed reader and subscribe the links.</li>
+</ul>
+
+
+
+<h2 id="ConfigRotatorPlugin-Resettooldconfiguration">Reset to old configuration</h2>
+
+<p>If You wan't to try a configuration once more, and continue from that time on, go to the job, click a build and on the build page click <strong>Reset to this configuration</strong></p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112511.png" data-image-src="attachments/60916476/61112511.png" data-unresolved-comment-count="0" data-linked-resource-id="61112511" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="reset2conf.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+<ul>
+	<li><strong>Note that resetting to a configuration applies only on the next build, thus the project/job page is first updated after next build.</strong></li>
+</ul>
+
+
+
+
+<h2 id="ConfigRotatorPlugin-Changeslinkworkingoncomponentbaselines">Changes link working on component baselines</h2>
+
+<p>We have implement the <strong>Changes</strong> feature to show changes between the baselines of the changes component in the configuration.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/60916476/61112510.png" data-image-src="attachments/60916476/61112510.png" data-unresolved-comment-count="0" data-linked-resource-id="61112510" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="changes2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span></p>
+
+
+
+
+<h1 id="ConfigRotatorPlugin-KnownIssues(currentversion)">Known Issues (current version)</h1>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" height="100" src="attachments/60916476/67043376.jpeg" data-image-src="attachments/60916476/67043376.jpeg" data-unresolved-comment-count="0" data-linked-resource-id="67043376" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="url-1.jpeg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="60916476" data-linked-resource-container-version="90"></span><strong><a href="http://www.praqma.com/services/jcisupport" class="external-link" rel="nofollow">If it's broken ...We Can Fix It!</a></strong></p>
+
+<ul>
+	<li>We've had people reporting issues when trying to copy existing jobs using the config rotator SCM component, where the copied data is different from the target job. </li>
+	<li>There are issues with changesets prior to 1.0.1. The changeset would not properly recognize the user of the change. This should is fixed in the most recent version. We've had to change the format of the changes.xml files created by the job, so only changesets generated with 1.0.2 will work as designed, and 1.0.1 changeset will still show the user as 'unknown'.</li>
+	<li>&quot;Build has failed&quot; mails are sent even though the build is marked as &quot;nothing to do&quot;. Make sure the email plugin is run <span style="text-decoration: underline;">after</span> the config rotator post build step. Yes, there is such a thing. Normally it is added automatically, inserted at random. It is required and cannot be disabled.</li>
+</ul>
+
+
+ <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                    </tr>
+
+        <tr>
+            <td colspan="3">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20&#39;config-rotator-plugin&#39;&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p><br class="atl-forced-newline"/></p>
+
+
+<h1 id="ConfigRotatorPlugin-Changes">Changes</h1>
+
+
+<h4 id="ConfigRotatorPlugin-Version2.0.0(August25,2016)">Version 2.0.0(August 25, 2016)</h4>
+
+<ul>
+	<li>Fixed an issue with the Git implementation not releasing file handles on windows (<a href="https://github.com/Praqma/config-rotator-plugin/issues/10" class="external-link" rel="nofollow">#10</a>)</li>
+	<li>Fixed an issue that prevented job being saved on Jenkins 2.13+ (<a href="https://github.com/Praqma/config-rotator-plugin/issues/9" class="external-link" rel="nofollow">#9</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.3.1(October12,2015)">Version 1.3.1(October 12, 2015)</h4>
+
+<ul>
+	<li>Added support for JobDSL (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30904" class="external-link" rel="nofollow">JENKINS-30904</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.3.0(August28,2015)">Version 1.3.0(August 28, 2015)</h4>
+
+<ul>
+	<li>Add 'Use newest' option for Config Rotator when using ClearCase as SCM (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28983" class="external-link" rel="nofollow">JENKINS-28983</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.2.1(August18,2015)">Version 1.2.1(August 18, 2015)</h4>
+
+<ul>
+	<li>Fixed an issue with Filters not working properly in ClearCase (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29975" class="external-link" rel="nofollow">JENKINS-29975</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.2.0(July6,2015)">Version 1.2.0(July 6, 2015)</h4>
+
+<ul>
+	<li>Introduced the ability to add data for subscription (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27215" class="external-link" rel="nofollow">JENKINS-27215</a>)</li>
+	<li>Added the ability to turn this feature on/off (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28065" class="external-link" rel="nofollow">JENKINS-28065</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.8(Januar29,2015)">Version 1.1.8(Januar 29, 2015)</h4>
+
+<ul>
+	<li>Fixed an issue with empty dep. components (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26623" class="external-link" rel="nofollow">JENKINS-26623</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.8(November17,2014)">Version 1.1.8(November 17, 2014)</h4>
+
+<ul>
+	<li>Properly trigger reset, when job altered and saved (<a href="https://issues.jenkins-ci.org/browse/JENKINS-24822" class="external-link" rel="nofollow">JENKINS-24822</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.7(August16,2014)">Version 1.1.7(August 16, 2014)</h4>
+
+<ul>
+	<li>Improved performance (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23653" class="external-link" rel="nofollow">JENKINS-23653</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.6(June23,2014)">Version 1.1.6(June 23, 2014)</h4>
+
+<ul>
+	<li>Fixed an issue with clearcase, unable to create workspace when view is deleted (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22832" class="external-link" rel="nofollow">JENKINS-22832</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.5(May2,2014)">Version 1.1.5(May 2, 2014)</h4>
+
+<ul>
+	<li>Fixed an issue where an invalid configuration could cause an infifinite build loop. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22533" class="external-link" rel="nofollow">JENKINS-22533</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-22842" class="external-link" rel="nofollow">JENKINS-22842</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.4(March11,2014)">Version 1.1.4(March  11, 2014)</h4>
+
+<ul>
+	<li>Improved the layout in IE9. The layout is now longer garbled when usiing IE9. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20981" class="external-link" rel="nofollow">JENKINS-20981</a>)</li>
+	<li>Fixed an issue with rebasing, the plugin will now attempt to cancel a rebase if it underway (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22058" class="external-link" rel="nofollow">JENKINS-22058</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.3(December20,2013)">Version 1.1.3(December 20, 2013)</h4>
+
+<ul>
+	<li>ClearCase UCM: Clarified error message (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21068" class="external-link" rel="nofollow">JENKINS-21068</a>)</li>
+	<li>ClearCase UCM: Improved checkout performance (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21069" class="external-link" rel="nofollow">JENKINS-21069</a>)</li>
+	<li>Fixed an issue where polling could result in 'Nothing to do' grey builds (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21066" class="external-link" rel="nofollow">JENKINS-21066</a>)</li>
+	<li>ClearCase UCM: Handling hijacked files (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21065" class="external-link" rel="nofollow">JENKINS-21065</a>)</li>
+</ul>
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.2(August26,2013)">Version 1.1.2(August 26, 2013)</h4>
+
+<ul>
+	<li>View tag now uses remote computername as postfix (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18603" class="external-link" rel="nofollow">JENKINS-18603)</a></li>
+</ul>
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.1(June4,2013)">Version 1.1.1(June 4, 2013)</h4>
+
+<ul>
+	<li>Config Rotator triggers, but nothing new is found (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18194" class="external-link" rel="nofollow">JENKINS-18194</a>)</li>
+	<li>Config spec for ClearCase UCM is not created correctly (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17803" class="external-link" rel="nofollow">JENKINS-17803</a>)</li>
+</ul>
+
+
+<h4 id="ConfigRotatorPlugin-Version1.1.0(April14,2013)">Version 1.1.0(April 14, 2013)</h4>
+
+<ul>
+	<li>Git for Config Rotator (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17604" class="external-link" rel="nofollow">JENKINS-17604</a>)</li>
+	<li>Unload component from Config Rotator job does not work (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17230" class="external-link" rel="nofollow">JENKINS-17230</a>)</li>
+	<li>Config Rotator does not trig on new baseline (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17229" class="external-link" rel="nofollow">JENKINS-17229</a>)</li>
+</ul>
+
+
+<h4 id="ConfigRotatorPlugin-Version1.0.4(April3,2013)">Version 1.0.4(April 3, 2013)</h4>
+
+<ul>
+	<li>Config Rotator does not trig on new baseline (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17229" class="external-link" rel="nofollow">JENKINS-17229</a>)</li>
+	<li>Use nothing to build (grey builds) if there is no new baselines (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14746" class="external-link" rel="nofollow">JENKINS-14746</a>)</li>
+</ul>
+
+
+<h4 id="ConfigRotatorPlugin-Version1.0.3(April2,2013),faultyrelease">Version 1.0.3(April 2, 2013), faulty release</h4>
+
+<h4 id="ConfigRotatorPlugin-Version1.0.2">Version 1.0.2</h4>
+
+<ul>
+	<li>Changesets are now visualized like they are in the ClearCase UCM Plugin</li>
+	<li>Fixed user identity in changeset - <a href="https://issues.jenkins-ci.org/browse/JENKINS-15481" class="external-link" rel="nofollow">JENKINS-15481</a></li>
+</ul>
+
+
+
+
+<h4 id="ConfigRotatorPlugin-Version1.0.1">Version 1.0.1</h4>
+
+<ul>
+	<li>Fixed missing icon in rotated configuration - <a href="https://issues.jenkins-ci.org/browse/JENKINS-13989" class="external-link" rel="nofollow">JENKINS-13989</a></li>
+	<li>Fixed incorrect feed urls - <a href="https://issues.jenkins-ci.org/browse/JENKINS-13988" class="external-link" rel="nofollow">JENKINS-13988</a></li>
+</ul>
+
+
+<h5 id="ConfigRotatorPlugin-Releasenote">Release note</h5>
+
+<p>We have implemented two levels of check of configuration. The first check is if configuration is loadable in ClearCase. The second level of check is if the configuration added make sense in a context of configuration rotation. Eg. config-rotator does not allow the same component more the once.</p>
+
+<p>Polling check the first level, and abort polling if check is not passed.<br/>
+Builds do both checks and fail if not passed.</p>
+
+
+<h4 id="ConfigRotatorPlugin-Version1.0.0,initialversion">Version 1.0.0, initial version</h4>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112395.png">Screen Shot 2012-04-20 at 4.02.35 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112396.png">Screen Shot 2012-04-20 at 4.29.53 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112397.png">Screen Shot 2012-04-20 at 4.35.23 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112412.png">onlyOneComponentError.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112417.png">cc_ucmconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112418.png">cc_ucmconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112416.png">cc_ucmconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112487.png">praqma_logo.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112488.jpg">grundfos_logo.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112504.png">dump2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112505.png">cc_ucmconfig2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112507.png">configrotatormainmenulink.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112508.png">configrotatorfeedpage.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112509.png">changes.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112514.png">changes2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112513.png">reset2conf.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112515.png">projectpage.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112511.png">reset2conf.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112510.png">changes2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112512.png">projectpage.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/61112516.png">overviewofconfiguration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/65863842.jpg">praqma_logo_70x70.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/67043376.jpeg">url-1.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/67043490.png">ccucmconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/67043491.png">configure1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/67043492.png">gitconfigure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/82280555.png">Contribute.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/82280556.png">ccucm_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60916476/82280557.png">CR_Contribute.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

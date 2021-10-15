@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Chatter Notifier Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Chatter Notifier Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sfell)</span>, last modified by <span class='editor'> Unknown User (justinharringa)</span> on Sep 05, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Chatter Notifier <a href="https://plugins.jenkins.io/chatter-notifier" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-1050%20%282%29" class="external-link" rel="nofollow">Unprivileged users with Overall/Read access are able to enumerate credential IDs</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2018-09-25/#SECURITY-1050%20%281%29" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allowed capturing credentials</a></li>
+</ul>
+
+</div></div>
+Allows users to send build results to <a href="http://www.salesforce.com/chatter/overview/" class="external-link" rel="nofollow">Salesforce Chatter</a> in a Post-Build step or to send custom text via a build / pipeline step.<h2 id="ChatterNotifierPlugin-Features">Features</h2><p>This is a plugin for Jenkins that will post build results or custom text during a build to a Chatter feed in Salesforce. You can configure it to post to a specific User (e.g. a build user), a specific group (e.g. a group that owns the build), or a specific record (perhaps you have a custom object that tracks build configs).</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Minimum Requirements</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plugin requires at least version 1.22 of the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Credentials+Plugin" class="external-link" rel="nofollow">Credentials Plugin</a>.</p></div></div><h2 id="ChatterNotifierPlugin-Configure">Configure</h2><ol><li>Install the Chatter Plugin using the Jenkins Plugin Manager and restart the server</li><li>Create new credentials of the kind &quot;Username with Password&quot;<ol><li>Remember to include your users API security token if needed as part of the password<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/82019201/82280549.png" data-image-src="attachments/82019201/82280549.png" data-unresolved-comment-count="0" data-linked-resource-id="82280549" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Jenkins Credentials Snapshot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82019201" data-linked-resource-container-version="9"></span></li></ol></li><li>Create or update a Freestyle Job:<br/><ol><li>Add post-build action -&gt; Chatter Results <strong>or</strong> Add build step → Post to Chatter</li><li>Populate the fields as needed (see the inline help for more details):<ol><li>Credentials</li><li>Optional server URL to login to</li><li>Record id (record, user, or group) to post results to (leave this blank to post to the user's wall)<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/82019201/82280550.png" data-image-src="attachments/82019201/82280550.png" data-unresolved-comment-count="0" data-linked-resource-id="82280550" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Chatter Post-build Actions.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82019201" data-linked-resource-container-version="9"></span></li></ol></li></ol></li><li>Add a step to a Pipeline Job:<ol><li>Configure a step within the context of a node: <ol><li>Example: <pre><code>chatterPost body: &quot;This is a Chatter post from a pipeline! ${env.JOB_NAME} ${env.BUILD_DISPLAY_NAME}&quot;, credentialsId: 'JENKINS_CREDENTIAL_ID', recordId: 'SOME_RECORD_ID'</code></pre></li></ol></li><li>See the <a href="https://github.com/jenkinsci/chatter-notifier-plugin#post-to-chatter-during-build" class="external-link" rel="nofollow">README in GitHub</a> or the <a href="https://jenkins.io/doc/book/pipeline/getting-started/#snippet-generator" class="external-link" rel="nofollow">Jenkins Snippet Generator</a> for more information.</li></ol></li></ol><h2 id="ChatterNotifierPlugin-Changelog">Changelog</h2><h3 id="ChatterNotifierPlugin-v2.1.0">v2.1.0</h3><ul><li>Add a build step which can also be used as a pipeline step to post custom text to Chatter.</li></ul><h3 id="ChatterNotifierPlugin-v2.0.5">v2.0.5</h3><ul><li>Security release to address a potential issue where any user with Jenkins.READ to invoke the method against a custom credentials-capturing server. It allowed leaking credentials if they were not scoped properly. It also allowed any attacker with Jenkins.READ to easily get a list of credential IDs vulnerable to the attack.</li></ul><h3 id="ChatterNotifierPlugin-v2.0.4">v2.0.4</h3><ul><li>Utilize proxy configuration (authenticated and unauthenticated from Manage Jenkins → Manage Plugins → Advanced (No Proxy Hosts remains unimplemented)</li></ul><h3 id="ChatterNotifierPlugin-v2.0.3">v2.0.3</h3><ul><li><p>Give contextual build status (FIXED, STILL FAILING)</p></li></ul><h3 id="ChatterNotifierPlugin-v2.0.2">v2.0.2</h3><ul><li>Hosted on jenkins-ci.org</li><li>Now requires at least version 1.22 of the Credentials Plugin</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82019201/82280549.png">Jenkins Credentials Snapshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82019201/82280550.png">Chatter Post-build Actions.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:15</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

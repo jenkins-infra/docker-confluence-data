@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jetty</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Containers.html">Containers</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jetty
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (timp)</span>, last modified by <span class='editor'> Unknown User (carlosrodlop)</span> on Nov 01, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins 1.535 and above bundles on Jetty, so you can just run <code>java -jar jenkins.war</code>. On Jenkins CI, <a href="https://github.com/jenkinsci/winstone" class="external-link" rel="nofollow">Winstone 2.0</a> is the command line interface around Jetty. The following instructions apply when you want to run your own Jetty installation.</p>
+
+<h2 id="Jetty-Installation">Installation</h2>
+
+<p>Copy the <code>jenkins.war</code> file to webapp directory, under debian this may be <code>/usr/share/jetty/webapp</code></p>
+
+<p>Hudson before 1.344 causes a problem with Jetty that results in a failure to retrieve update center data. If you need to work around this problem without upgrading, see <a href="https://issues.jenkins-ci.org/browse/JENKINS-5210">JENKINS-5210</a>.</p>
+
+<p>You may see:<br/>
+<strong>Unable to create the home directory '/usr/share/jetty/.jenkins'. This is most likely a permission problem. </strong></p>
+
+<p>This worked for me:<br/>
+as root</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">mkdir /home/jetty
+chown jetty:adm /home/jetty
+echo export JENKINS_HOME=/home/jetty/ &gt; /etc/profile.d/systemwide.sh
+</pre>
+</div></div>
+<p> restart jetty
+<br class="atl-forced-newline"/></p>
+
+<p>or add</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;Call class=&quot;java.lang.System&quot; name=&quot;setProperty&quot;&gt;
+  &lt;Arg&gt;JENKINS_HOME&lt;/Arg&gt;
+  &lt;Arg&gt;/home/jetty&lt;/Arg&gt;
+&lt;/Call&gt;
+</pre>
+</div></div>
+<p>to <code>jetty.xml</code></p>
+
+<p>As of Jetty 8.1.0 due to a <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=368773" class="external-link" rel="nofollow">bug fix</a> an explicit security realm is required.  This can be given in the context (e.g. <code>contexts/jenkins.xml</code>) like the example below.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;Configure class=&quot;org.eclipse.jetty.webapp.WebAppContext&quot;&gt;
+  &lt;Set name=&quot;contextPath&quot;&gt;/jenkins&lt;/Set&gt;
+  &lt;Set name=&quot;war&quot;&gt;&lt;SystemProperty name=&quot;jetty.home&quot; default=&quot;.&quot;/&gt;/webapps/jenkins.war&lt;/Set&gt;
+  &lt;Get name=&quot;securityHandler&quot;&gt;
+    &lt;Set name=&quot;loginService&quot;&gt;
+      &lt;New class=&quot;org.eclipse.jetty.security.HashLoginService&quot;&gt;
+        &lt;Set name=&quot;name&quot;&gt;Jenkins Realm&lt;/Set&gt;
+        &lt;Set name=&quot;config&quot;&gt;&lt;SystemProperty name=&quot;jetty.home&quot; default=&quot;.&quot;/&gt;/etc/realm.properties&lt;/Set&gt;
+      &lt;/New&gt;
+    &lt;/Set&gt;
+  &lt;/Get&gt;
+&lt;/Configure&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

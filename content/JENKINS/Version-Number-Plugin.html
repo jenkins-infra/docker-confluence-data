@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Version Number Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Version Number Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (clischeske@gmail.com)</span>, last modified by <span class='editor'> Unknown User (bahadir)</span> on Nov 17, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Version Number <a href="https://plugins.jenkins.io/versionnumber" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>This plugin is up for adoption.</strong> Want to help improve this plugin? <a href="/display/JENKINS/Adopt+a+Plugin" title="Adopt a Plugin">Click here to learn more</a>!</p></div></div>This plugin creates a new version number and stores it in the environment variable whose name you specify in the configuration.</p><h1 id="VersionNumberPlugin-Configuration">Configuration</h1><p>In many cases, the Jenkins build number isn't rich enough to express the information you'd like the version number to have, and generating externally (as part of the build) may not be an optimal solution. This plugin allows you to generate a version number that contains much more information.</p><h3 id="VersionNumberPlugin-Projectstartdate">Project start date</h3><p>The version number system has the concept of builds per day / week / month / year / all time. Each of these is the calendar day / week / month / year; that is, all builds in October will have the same build month, all builds in 2009 will have the same build year. These are based on the project start date, which is one of the user-configurable options.</p><h3 id="VersionNumberPlugin-VersionNumberFormatString">Version Number Format String</h3><p>The version number format string is processed to create the version number that's stored in the named environment variable. Every character in the version number format string is passed through to the final version number, with the exception of variables enclosed in ${}. For example, the version format string 1.0.${BUILDS_THIS_YEAR}, if this were the 10th build this calendar year, would return 1.0.10.</p><p>The following are valid variables for use in the version number format string:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>name</p></th><th class="confluenceTh"><p>function</p></th></tr><tr><td class="confluenceTd"><p>BUILD_DATE_FORMATTED</p></td><td class="confluenceTd"><p>Takes the second argument and returns a java-formatted date string for the given build date. For example, ${BUILD_DATE_FORMATTED, &quot;yyyy-MM-dd&quot;} would return the date (and not the time) as something like 2009-10-01. The date format string must be surrounded by quotes, and any whitespace within the format string is significant.</p></td></tr><tr><td class="confluenceTd"><p>BUILD_DAY</p></td><td class="confluenceTd"><p>With no arguments, it just returns the day of the build as an integer. If there is an argument, it takes the number of characters in the argument and uses that pad the date string. For example, if it's the third of the month, ${BUILD_DAY} would return 3, ${BUILD_DAY, X} would return 3, and ${BUILD_DAY, XX} would return 03.</p></td></tr><tr><td class="confluenceTd"><p>BUILD_WEEK</p></td><td class="confluenceTd"><p>Returns the week, with the same argument convention for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILD_MONTH</p></td><td class="confluenceTd"><p>Returns the month, with the same argument convention for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILD_YEAR</p></td><td class="confluenceTd"><p>Returns the year, with the same argument convention for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILDS_TODAY</p></td><td class="confluenceTd"><p>Returns the number of builds that have happened today, including this one. This resets at midnight. The argument convention is the same as for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILDS_THIS_WEEK</p></td><td class="confluenceTd"><p>Returns the number of builds that have happened this week, including this one. This resets at the start of the week. The argument convention is the same as for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILDS_THIS_MONTH</p></td><td class="confluenceTd"><p>Returns the number of builds that have happened this month, including this one. This resets at the first of the month. The argument convention is the same as for BUILD_DAY</p></td></tr><tr><td class="confluenceTd"><p>BUILDS_THIS_YEAR</p></td><td class="confluenceTd"><p>Returns the number of builds that have happened this year. This resets at the first of the year. The argument convention is the same as for BUILD_DAY.</p></td></tr><tr><td class="confluenceTd"><p>BUILDS_ALL_TIME</p></td><td class="confluenceTd"><p>Returns the number of builds that have happened since the project has begun. This is distinct from the hudson build number, in that it can be reset periodically (for example, when moving from 1.0.${BUILDS_ALL_TIME} to 2.0.${BUILDS_ALL_TIME}, and can be configured to start at an arbitrary number instead of the standard begin date.</p></td></tr><tr><td class="confluenceTd"><p>MONTHS_SINCE_PROJECT_START</p></td><td class="confluenceTd"><p>The number of months since the project start date. This is strictly dependent on the month of the current build and the month of the project start date; if the project was begun October 31st and the build was November 1st, then this would return 1. If the project was begin October 1st and the build was November 30th, this would also return 1. The argument convention is the same as for BUILD_DAY.</p></td></tr><tr><td class="confluenceTd"><p>YEARS_SINCE_PROJECT_START</p></td><td class="confluenceTd"><p>The number of years since the project start date. Like MONTHS_SINCE_PROJECT_START, this is dependent only on the year;</p></td></tr><tr><td class="confluenceTd"><p>(anything else)</p></td><td class="confluenceTd"><p>Any other argument enclosed in ${} is replaced by an environment variable of the same name if one is available, or failing that, is just ignored. This can be used to integrate source control version numbers, for example.</p></td></tr></tbody></table></div><h3 id="VersionNumberPlugin-InitializationValues">Initialization Values</h3><p>Before the build is started, the number of builds this year / month / week / day can be specified on the command line or via the job's plugin-configuration web-GUI. If they are specified, then they will override whatever values are currently in production. This allows you to migrate your version number from another system to Jenkins if you choose to do so.</p><p>Additionally, it is possible to automatically override the number of builds this year / month / week / day with values taken from environment-variables. Instead of just providing a simple number in the form-fields of the job's plugin-configuration which overrides the value for the next build (as described above), you can instead provide an environment-variable whose value will be extracted and used during the next builds. If it is not set or its value is not convertible to a positive integer (without loosing precision), the value of the previous build will be taken instead and increased by one (as is the standard behavior).</p><h1 id="VersionNumberPlugin-Releases">Releases</h1><h3 id="VersionNumberPlugin-Version1.9">Version 1.9</h3><ul><li>Release Nov 17, 2017</li><li>Accepted <a href="https://github.com/jenkinsci/versionnumber-plugin/pull/12" class="external-link" rel="nofollow">merge-request #12</a>. (&quot;Adding functionality to limit the number of characters from a variable.&quot;)</li><li>Fixed bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-18171" class="external-link" rel="nofollow">JENKINS-18171</a>. (&quot;<span style="color: rgb(41,41,41);">Version Number plugin doesn't increment build numbers after an unstable build</span>.&quot;)<br/><ul><li><span style="color: red;"><strong><span>NOTE:</span></strong></span> This changes the checkbox for &quot;skipping failed builds&quot; (which actually meant to not increase the version-number if the former run was not successful) to a combobox of values.<br/>The transition works smoothly and does not change the former behavior. However, <strong>you should update the configuration of each job that had this checkbox checked (and save it)!<br/></strong>(This assures that later updates of this plugin will not break your behavior due to this change.)</li></ul></li></ul><p> </p><ul class="inline-task-list" data-inline-tasks-content-id="38928617"><li data-inline-task-id="2"><strong><span style="color: red;">IMPORTANT:</span> </strong>This might be the last update for this plugin in a long time, because I (user: bahadir) cannot maintain it any longer.<strong><br/> Please volunteer to become the new maintainer of this plugin!</strong></li></ul><h3 id="VersionNumberPlugin-Version1.8.1">Version 1.8.1</h3><ul><li>Release Oct 11, 2016</li><li>Fixed bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-26729" class="external-link" rel="nofollow">JENKINS-26729</a>. (&quot;Endless loop when evaluating environment variables&quot;)</li></ul><h3 id="VersionNumberPlugin-Version1.8">Version 1.8</h3><ul><li>Release Oct 11, 2016</li><li>Pipeline-jobs now allow overriding values of BUILDS_ALL_TIME etc. by environment variables (or fixed values), too, similar to Freestyle-jobs.<br/> (Use variables <code>overrideBuildsToday</code>, <code>overrideBuildsThisWeek</code>, <code>overrideBuildsThisMonth</code>, <code>overrideBuildsThisYear</code>, <code>overrideBuildsAllTime</code>.)</li><li>Fixed minor bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-15371" class="external-link" rel="nofollow">JENKINS-15371</a>. (&quot;Displayed Build version does not interpret parameters.&quot;)</li><li>Added minor logging.</li></ul><h3 id="VersionNumberPlugin-Version1.7.2">Version 1.7.2</h3><ul><li>Release Aug 22, 2016</li><li>Fixed a regression-bug. <a href="https://issues.jenkins-ci.org/browse/JENKINS-36831" class="external-link" rel="nofollow">JENKINS-36831</a>. (&quot;Regression breakage in version number after upgrade.&quot;)</li></ul><h3 id="VersionNumberPlugin-Version1.7.1">Version 1.7.1</h3><ul><li><span style="color: red;"><strong><span style="text-decoration: underline;">IMPORTANT:</span></strong></span> Lost in transaction. <strong>Update to version 1.7.2!</strong></li></ul><h3 id="VersionNumberPlugin-Version1.7">Version 1.7</h3><ul><li>Release Jul 11, 2016</li><li>Added feature <a href="https://issues.jenkins-ci.org/browse/JENKINS-34829" class="external-link" rel="nofollow">JENKINS-34829</a>. (&quot;Pipeline-Support for Version Number Plugin.&quot;)</li><li>Fixed some XSS-vulnerabilities.</li><li>Minor corrections / changes (of typos, formatting etc.).</li><li>Updated minimal required Jenkins versions to 1.625.3.</li><li>Updated minimal required Java-version to 7.</li><li><span style="color: red;"><strong><span style="text-decoration: underline;">IMPORTANT:</span></strong></span> This version has a regression-bug. <strong>Update to version 1.7.2!</strong></li></ul><h3 id="VersionNumberPlugin-Version1.6">Version 1.6</h3><ul><li>Release Oct 26, 2015</li><li>Support for BUILD_WEEK and BUILDS_THIS_WEEK.</li><li>Added feature <a href="https://issues.jenkins-ci.org/browse/JENKINS-29134" class="external-link" rel="nofollow">JENKINS-29134</a>. (&quot;Overriding values of BUILDS_ALL_TIME etc. by environment variables.&quot;)</li><li>Fixed issue <a href="https://issues.jenkins-ci.org/browse/JENKINS-30224" class="external-link" rel="nofollow">JENKINS-30224</a>. (&quot;NPE thrown when a job uses an automatically installed JDK.&quot;)</li><li>Minor corrections / changes (of typos, formatting etc.).</li></ul><h3 id="VersionNumberPlugin-Version1.4">Version 1.4</h3><ul><li>Release Dec 17, 2011</li><li>Display name for every build can now be set to the formatted version number generated by this plugin.</li></ul><h3 id="VersionNumberPlugin-Version1.3">Version 1.3</h3><ul><li>Released Dec 21, 2009</li><li>Largely for compatibility reasons - was using rather old deprecated methods and wouldn't actually work with modern Hudson builds.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928617/82280490.png">BuildNumber.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928617/96305220.jpg">version plugin .jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:56</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

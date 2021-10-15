@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SimpleUpdateSite Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SimpleUpdateSite Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (junoyoon)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Sep 01, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View SimpleUpdateSite <a href="https://plugins.jenkins.io/simpleupdatesite" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>This plugin make Jenkins connect to the custom support site which provide custom plugin update info and announcements.</p></p>
+<ul>
+	<li>Compatible with Jenkin 1.398 or after</li>
+</ul>
+
+
+
+<h2 id="SimpleUpdateSitePlugin-Feature">Feature</h2>
+
+<ul>
+	<li>access to custom update site and shows the plugin update info</li>
+	<li>provide the announcements from RSS</li>
+	<li>provide the &quot;Ask a support&quot; button to the custom Jenkins support site</li>
+</ul>
+
+
+<p>           <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/58001806/58196140.png" data-image-src="attachments/58001806/58196140.png" data-unresolved-comment-count="0" data-linked-resource-id="58196140" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pic1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001806" data-linked-resource-container-version="16"></span></p>
+
+
+<h2 id="SimpleUpdateSitePlugin-Configuration">Configuration</h2>
+
+<ul>
+	<li>After installing this plugin, You will see the following screen in top when you access Jenkins with admin permission.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/58001806/58196141.png" data-image-src="attachments/58001806/58196141.png" data-unresolved-comment-count="0" data-linked-resource-id="58196141" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pic2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001806" data-linked-resource-container-version="16"></span></li>
+</ul>
+
+
+<ul>
+	<li>Click Jenkins configuration link</li>
+	<li>Provide the custom plugin update site url, announcements url, and ask a support url.
+	<ul>
+		<li>simpleupdatesite plugin needs a server which sends the support information to the plugins.</li>
+		<li>How to create URL is up to you. Easiest way is using simpleupdatesiterepo utility and googlecode.</li>
+		<li>See &quot;How to create create custom support site&quot; section.</li>
+	</ul>
+	</li>
+	<li>Save configuration</li>
+	<li>See what is in the Jenkins top page.</li>
+</ul>
+
+
+<h2 id="SimpleUpdateSitePlugin-Release">Release</h2>
+
+<ul>
+	<li>1.1.2 
+	<ul>
+		<li>First official release in public.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="SimpleUpdateSitePlugin-Howtocreatecustomsupportsite">How to create custom support site</h2>
+
+<ul>
+	<li>Prepare CMS server 
+	<ul>
+		<li>It should provide the following.
+		<ul>
+			<li>Issue Tracker for the support request.</li>
+			<li>BuiltIn Board with RSS support for announcement</li>
+		</ul>
+		</li>
+		<li>They should be accessible by URL.</li>
+	</ul>
+	</li>
+	<li>Create custom update-center.json
+	<ul>
+		<li>Precondition
+		<ul>
+			<li>URL based download enabled server(WEB-DAV support is best&quot;).</li>
+		</ul>
+		</li>
+		<li>How to make it.
+		<ul>
+			<li>Create a basefolder in which plugins folder exists</li>
+			<li>Put custom plugins info basefolder/plugins 
+			<ul>
+				<li>﻿﻿pluginname.hpi, pluginname.wiki, pluginname.info</li>
+				<li>*.wiki should contain the detailed usage link about the plugin. (If not exists, wiki link assigned in the plugin's pom.xml is used for update-center.json)</li>
+				<li>*.info should contain the short description about plugin (I may have the release info.)</li>
+			</ul>
+			</li>
+			<li>Download simpleupdatesiterepo util.
+			<ul>
+				<li><a href="http://github.com/junoyoon/simpleupdatesiterepo" class="external-link" rel="nofollow">http://github.com/junoyoon/simpleupdatesiterepo</a></li>
+			</ul>
+			</li>
+			<li>Run following.
+			<ul>
+				<li>java -jar simpleupdatesiterepo-1.0.0-jar-with-dependencies.jar -u (siteUrl)  -f (basefolder)</li>
+				<li>siteUrl should be the base url of the update-center.json in the web server.</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Upload the basefolder into the web server.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>One of the easiest way is to use googlecode.
+	<ul>
+		<li>TBD</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h2 id="SimpleUpdateSitePlugin-Reference">Reference</h2>
+
+<ul>
+	<li><a href="http://www.cloudbees.com/jenkins-user-conference-2011.cb" class="external-link" rel="nofollow">http://www.cloudbees.com/jenkins-user-conference-2011.cb</a></li>
+</ul>
+
+
+<h2 id="SimpleUpdateSitePlugin-ToKorean">To Korean</h2>
+
+<ul>
+	<li>이 플러그인은 NHN에 의해 제공됩니다. 관련된 정보가 필요하시면 junoyoon at 엔에이치엔닷컴(영어로..) 으로 메일 주세요.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001806/58196140.png">pic1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001806/58196141.png">pic2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:47</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

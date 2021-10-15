@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Keychains and Provisioning Profiles Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Keychains and Provisioning Profiles Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (michaelb)</span>, last modified by <span class='editor'> Unknown User (einwaller)</span> on Sep 07, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Keychains and Provisioning Profiles Management <a href="https://plugins.jenkins.io/kpp-management-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021474691 {padding: 0px;}
+div.rbtoc1631021474691 ul {list-style: disc;margin-left: 0px;padding-left: 20px;}
+div.rbtoc1631021474691 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021474691'>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Configuration'>Configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Mainpluginconfiguration'>Main plugin configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Uploadkeychainandprovisioningprofilefilessection'>Upload keychain and provisioning profile files section</a></li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Managekeychainssection'>Manage keychains section</a>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Managecodesigningidentitiessection'>Manage code signing identities section</a></li>
+</ul>
+</li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Manageprovisioningprofiles'>Manage provisioning profiles</a></li>
+</ul>
+</li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Nodeconfiguration'>Node configuration</a></li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Buildjobconfiguration'>Build job configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Buildenvironmentconfigurationsection'>Build environment configuration section</a>
+<ul class='toc-indentation'>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-KeychainsandCodeSigningIdentities'>Keychains and Code Signing Identities</a></li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-MobileProvisioningProfiles'>Mobile Provisioning Profiles </a></li>
+</ul>
+</li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Buildstepintegration'>Build step integration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#KeychainsandProvisioningProfilesPlugin-Changelog'>Changelog</a></li>
+</ul>
+</div>
+<p>Description</p>
+
+<p>This plugin integrates a keychains and mobile provisioning profiles management for iOS and OSX projects into Jenkins. Simply upload keychain and provisioning profile files and configure your build job to use them. When the build is executed, than the keychain and provisioning profile files are automatically distributed to the Jenkins node (master or slave). There is no need to manage these files manually on each Jenkins node.<br/>
+Status: In Progress</p>
+
+
+<h1 id="KeychainsandProvisioningProfilesPlugin-Configuration">Configuration</h1>
+
+
+<h2 id="KeychainsandProvisioningProfilesPlugin-Mainpluginconfiguration">Main plugin configuration</h2>
+
+
+<ol>
+	<li>Go to the &quot;Manage Jenkins&quot; page.</li>
+	<li>Click on &quot;Keychains and Provisioning Profiles Management&quot; and the main plugin configuration page is shown.</li>
+</ol>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402710.png" data-image-src="attachments/68386839/69402710.png" data-unresolved-comment-count="0" data-linked-resource-id="69402710" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-09 at 10.29.46.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+<h3 id="KeychainsandProvisioningProfilesPlugin-Uploadkeychainandprovisioningprofilefilessection">Upload keychain and provisioning profile files section</h3>
+
+<p>1. Click on &quot;Choose File&quot; and select the keychain or provisioning profile file.</p>
+
+<p>2. Click on &quot;Upload&quot;. The keychain or provisioning profile file is automatically uploaded and stored on the jenkins.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402691.png" data-image-src="attachments/68386839/69402691.png" data-unresolved-comment-count="0" data-linked-resource-id="69402691" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Upload_keychain.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+<h3 id="KeychainsandProvisioningProfilesPlugin-Managekeychainssection">Manage keychains section</h3>
+
+<p><span style="color: rgb(0,0,0);"><strong>Filename</strong></span> <span style="color: rgb(0,0,0);">- The name of the keychain. The name is automatically filled by jenkins.</span></p>
+
+<p><strong>Password</strong> - Give the correct password for the keychain.</p>
+
+<p><strong>Description</strong> - Specify a short description for the keychain.</p>
+
+<p><strong>Identities</strong> - Lists all added code signing identities. </p>
+
+<p><strong>Delete/ Add Code Signing Identity</strong> - You can add more than one &quot;Code Signing Identity&quot; to the same keychain and also remove a code signing identity from the keychain.</p>
+
+<p><strong>Delete Keychain</strong> - Will delete your complete keychain after the configuration is saved.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402693.png" data-image-src="attachments/68386839/69402693.png" data-unresolved-comment-count="0" data-linked-resource-id="69402693" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-07 at 13.36.24.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+<h4 id="KeychainsandProvisioningProfilesPlugin-Managecodesigningidentitiessection">Manage code signing identities section</h4>
+
+<p>1. Open the program &quot;Keychain Access“.</p>
+
+<p>2. Select by category &quot;My Certificates“ and select your certificate.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402688.png" data-image-src="attachments/68386839/69402688.png" data-unresolved-comment-count="0" data-linked-resource-id="69402688" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="codesigning_Key_1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+<p>3. At next, click &quot;get info&quot; and copy the line &quot;Common Name&quot;. This is the common name of the code signing indentity.</p>
+
+<p>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402689.png" data-image-src="attachments/68386839/69402689.png" data-unresolved-comment-count="0" data-linked-resource-id="69402689" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="codesigning_Key_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+<h3 id="KeychainsandProvisioningProfilesPlugin-Manageprovisioningprofiles">Manage provisioning profiles</h3>
+
+
+<p>1. Only if iOS or OSX projects are to be built on the master, than type in the directory path where provisioning profiles are stored, that is optinal.<br/>
+    Generally: </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">/Users/&lt;USERNAME&gt;/Library/MobileDevice/Provisioning Profiles</pre>
+</div></div>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402694.png" data-image-src="attachments/68386839/69402694.png" data-unresolved-comment-count="0" data-linked-resource-id="69402694" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-07 at 14.17.05.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+<h2 id="KeychainsandProvisioningProfilesPlugin-Nodeconfiguration">Node configuration</h2>
+
+<p>1.Only if iOS or OSX projects are to be built on this node, than type in the directory path where provisioning profiles are stored on the node.<br/>
+   Generally: </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">/Users/&lt;USERNAME&gt;/Library/MobileDevice/Provisioning Profiles</pre>
+</div></div>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402697.png" data-image-src="attachments/68386839/69402697.png" data-unresolved-comment-count="0" data-linked-resource-id="69402697" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-07 at 15.26.50.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+<h2 id="KeychainsandProvisioningProfilesPlugin-Buildjobconfiguration">Build job configuration</h2>
+
+
+<h3 id="KeychainsandProvisioningProfilesPlugin-Buildenvironmentconfigurationsection">Build environment configuration section</h3>
+
+<p>There are two pre-build steps added to the job configuration page.</p>
+
+<h4 id="KeychainsandProvisioningProfilesPlugin-KeychainsandCodeSigningIdentities">Keychains and Code Signing Identities</h4>
+
+<p><strong>Keychain and Code Signing Identities</strong> - Mark this checkbox to use keychains and code signing identities.</p>
+
+<p><strong>Overwrite existing keychains</strong> - Mark this checkbox to override existing keychains on the node.</p>
+
+<p><strong>Delete copied keychains after build</strong> - Mark this checkbox, if copied keychains are to be deleted after the build.</p>
+
+<p><strong>Keychain</strong> - Select the keychain.</p>
+
+<p><strong>Variable Prefix</strong> - If more than one keychain is to be used, than set a prefix for the variable names to avoid variable name collisions.</p>
+
+<p><strong>Variables -</strong> Get the variable names. They can be used in other build steps.</p>
+
+<p><strong>Delete</strong> - Delete keychain configuration.</p>
+
+<p><strong>Add Keychain</strong> - Add keychain configuration.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402708.png" data-image-src="attachments/68386839/69402708.png" data-unresolved-comment-count="0" data-linked-resource-id="69402708" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="keyjjjchain.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+
+<h4 id="KeychainsandProvisioningProfilesPlugin-MobileProvisioningProfiles">Mobile Provisioning Profiles<span style="color: rgb(0,0,0);"> </span></h4>
+
+<p><strong>Mobile Provisioning Profiles</strong> - Mark this checkbox to use provisioning profiles.</p>
+
+<p><strong>Overwrite existing provisioning profiles</strong> - Mark this checkbox to override existing provisioning profiles on the node.</p>
+
+<p><strong>Delete copied provisioning profiles after build</strong> - Mark this checkbox, if copied provisioning profiles are to be deleted after the build.</p>
+
+<p><strong>Provisioning Profile</strong> - Select a provisioning profile.</p>
+
+<p><strong>Variable Prefix</strong> - If more than one provisioning profile is to be used, than set a prefix for the variable names to avoid variable name collisions.</p>
+
+<p><strong>Variable</strong> - Get the variable names. They can be used in other build steps.</p>
+
+<p><strong>Delete</strong> - Delete provisioning profile configuration.</p>
+
+<p><strong>Add Provisioning Profile</strong> - Add provisioning profile configuration.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402705.png" data-image-src="attachments/68386839/69402705.png" data-unresolved-comment-count="0" data-linked-resource-id="69402705" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-08 at 14.22.42.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+
+<h3 id="KeychainsandProvisioningProfilesPlugin-Buildstepintegration">Build step integration</h3>
+
+<p>Next, the integration of the &quot;Keychains and Provisioning Profiles Plugin&quot; into other build steps is explained on the example of the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Xcode+Plugin" class="external-link" rel="nofollow">Jenkins Xcode Plugin</a>.</p>
+
+
+
+<p><strong>Custom xcodebuild arguments</strong> - Give a reference to the provisioning profile. </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"> PROVISIONING_PROFILE=${PROVISIONING_PROFILE}</pre>
+</div></div>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402702.png" data-image-src="attachments/68386839/69402702.png" data-unresolved-comment-count="0" data-linked-resource-id="69402702" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-08 at 12.40.09.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+<p><span style="color: rgb(64,64,64);"><strong>Unlock Keychain</strong></span> <span style="color: rgb(64,64,64);">- Mark the checkbox to unlock the keychain.</span></p>
+
+<p><span style="color: rgb(64,64,64);"><strong>Keychain path</strong></span> <span style="color: rgb(64,64,64);">- Type in the variable name for the keychain path.</span></p>
+
+<p><span style="color: rgb(64,64,64);"><strong>Keychain password</strong></span> <span style="color: rgb(64,64,64);">- Type in the variable name for the keychain password.</span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/68386839/69402703.png" data-image-src="attachments/68386839/69402703.png" data-unresolved-comment-count="0" data-linked-resource-id="69402703" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-08-08 at 12.40.33.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="68386839" data-linked-resource-container-version="80"></span></p>
+
+
+<h1 id="KeychainsandProvisioningProfilesPlugin-Changelog">Changelog</h1>
+
+<p><strong>Release 1.0</strong></p>
+<ul>
+	<li>Initial Release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402678.png">Screen Shot 2013-08-06 at 10.44.18.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402677.png">Screen Shot 2013-08-06 at 10.44.18.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402680.jpg">codesigning_1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402679.jpg">codesigning_1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402681.tiff">codesigning_1.tiff</a> (image/tiff)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402682.jpeg">codesigning_1.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402683.png">Screen Shot 2013-08-06 at 10.44.46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402684.png">codesigning_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402685.png">g.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402686.png">Screen-Shot-2013-08-05-at-13.26_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402687.png">image_test.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402688.png">codesigning_Key_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402690.png">codesigning_Key_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402689.png">codesigning_Key_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402691.png">Upload_keychain.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402692.png">manage_Keychain.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402693.png">Screen Shot 2013-08-07 at 13.36.24.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402694.png">Screen Shot 2013-08-07 at 14.17.05.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402697.png">Screen Shot 2013-08-07 at 15.26.50.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402700.png">Screen Shot 2013-08-08 at 10.50.56.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402701.png">Screen Shot 2013-08-08 at 10.51.23.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402702.png">Screen Shot 2013-08-08 at 12.40.09.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402703.png">Screen Shot 2013-08-08 at 12.40.33.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402704.png">Screen Shot 2013-08-08 at 14.07.25.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402705.png">Screen Shot 2013-08-08 at 14.22.42.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402706.png">Screen Shot 2013-08-08 at 15.27.47.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402708.png">keyjjjchain.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402710.png">Screen Shot 2013-08-09 at 10.29.46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/68386839/69402711.png">iconde_bold.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:31</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

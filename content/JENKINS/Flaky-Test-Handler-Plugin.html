@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Flaky Test Handler Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Flaky Test Handler Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (qluo)</span>, last modified by <span class='editor'> Unknown User (integer)</span> on Nov 15, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Flaky Test Handler <a href="https://plugins.jenkins.io/flaky-test-handler" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-08-12/#SECURITY-1763" class="external-link" rel="nofollow">CSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p> This plugin is used to provide various support for handling flaky tests. It currently supports for Git and Maven.  It includes support for the latest version of the Maven surefire plug-in which produces additional data about test flakiness using the new &quot;rerunFailingTestsCount&quot; option. It also supports re-running  only failed tests for a failed build at the exact failed Git revision. Finally it aggregates statistics of tests (passes, fails and flakes) over Git revisions.</p></p>
+
+
+<h2 id="FlakyTestHandlerPlugin-IntroductionandPrerequisite">Introduction and Prerequisite</h2>
+
+<p>A flaky test is a test which could fail or pass for the same configuration. Flaky tests could be harmful for developers because their failures do not always indicate bugs in the code.</p>
+
+<p><span style="color: rgb(34,34,34);">This plugin is designed to handle flaky tests, including re-running failed tests, aggregate and report flaky tests statistics and so on.</span></p>
+
+<p><span style="color: rgb(210,73,57);"><strong>Note: Currently most features of this plugin are designed for Git, Maven and freestyle build projects.</strong></span></p>
+
+<h3 id="FlakyTestHandlerPlugin-Publishre-runinformationforflakytests">Publish re-run information for flaky tests</h3>
+
+<p>We recently made some contributions to Maven Surefire to add the new option &quot;rerunFailingTestsCount&quot;. It lets users to choose to re-run failed tests up to N times, and if it passes within any of those N times, the re-run will stop and the test will be marked as a &quot;Flake&quot;.  The build will be marked as successful if there is no failed tests but only &quot;flaky&quot; tests.</p>
+
+<p>The new option may be release with Maven Surefire 2.18 in the near future: <a href="https://github.com/apache/maven-surefire/commit/fefaae7f0534a59f52c046a64c96987e8561dd48" class="external-link" rel="nofollow">https://github.com/apache/maven-surefire/commit/fefaae7f0534a59f52c046a64c96987e8561dd48</a></p>
+
+<p><span style="color: rgb(34,34,34);">So the first part of our plugin is to integrate with this new feature from Maven Surefire. Once the &quot;rerunFailingTestsCount&quot; is used either by command line or in pom.xml, the plugin will parse the report and display flaky tests, output information of all the re-runs(stacktrace, output, etc) on test result page.</span></p>
+
+
+<h4 id="FlakyTestHandlerPlugin-Configuration:">Configuration:</h4>
+
+<p>After the plugin is installed and JUnit test report is published, check on “Publish JUnit flaky test reports” under “Additional test report features.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597041.png" data-image-src="attachments/73532941/73597041.png" data-unresolved-comment-count="0" data-linked-resource-id="73597041" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flaky_config1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></p>
+
+<h4 id="FlakyTestHandlerPlugin-Usage:">Usage:</h4>
+
+<p>Display all the re-runs in the test result page:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597039.png" data-image-src="attachments/73532941/73597039.png" data-unresolved-comment-count="0" data-linked-resource-id="73597039" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flaky_pass.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span><br/>
+Display flaky tests information in the test result table as a badge:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597040.png" data-image-src="attachments/73532941/73597040.png" data-unresolved-comment-count="0" data-linked-resource-id="73597040" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flaky_badge.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></p>
+
+<h3 id="FlakyTestHandlerPlugin-AggregatingTestsStatisticsoverRevisions">Aggregating Tests Statistics over Revisions</h3>
+
+
+<h4 id="FlakyTestHandlerPlugin-Configuration:.1">Configuration:</h4>
+
+<p>Add “Publish JUnit flaky stats” as a post build step</p>
+
+<p><strong>Note</strong>: This feature requires JUnit test result report being published, and this step has to be placed <strong>after</strong> “Publish JUnit test result report”.</p>
+
+
+<h4 id="FlakyTestHandlerPlugin-Usage:.1">Usage:</h4>
+
+<p><span style="color: rgb(34,34,34);">For each Git revision and each test, we count how many times it passed, how many times it failed. So if a test passed and failed for the both revision, we count it as a flake; if it always failed, then it's a fail, otherwise it's a pass.</span></p>
+
+<p>If Git is not used as scm, then we use build number as revision number.</p>
+
+<h4 id="FlakyTestHandlerPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597045.png" data-image-src="attachments/73532941/73597045.png" data-unresolved-comment-count="0" data-linked-resource-id="73597045" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flake_history_aggregated.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597046.png" data-image-src="attachments/73532941/73597046.png" data-unresolved-comment-count="0" data-linked-resource-id="73597046" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="flake_history_single.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></p>
+
+<h3 id="FlakyTestHandlerPlugin-&quot;Deflake&quot;ActionforBuildswithFailedTests">&quot;Deflake&quot; Action for Builds with Failed Tests</h3>
+
+
+<h4 id="FlakyTestHandlerPlugin-Usage:.2">Usage:</h4>
+
+<p><span style="color: rgb(34,34,34);">For each failing build we provide a &quot;Deflake&quot; action. It is different from rebuilding the project, as it will:</span><br/>
+<span style="color: rgb(34,34,34);">1) Checkout the exact revision of that failing build (GIT)</span><br/>
+<span style="color: rgb(34,34,34);">2) Only run all those failed tests.</span><br/>
+<span style="color: rgb(34,34,34);">So this will give developers a good idea about how many tests are flaky for this build.</span></p>
+
+<h4 id="FlakyTestHandlerPlugin-.1"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597042.png" data-image-src="attachments/73532941/73597042.png" data-unresolved-comment-count="0" data-linked-resource-id="73597042" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="deflake_label.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></h4>
+
+
+
+
+
+<h4 id="FlakyTestHandlerPlugin-Configuration:.2">Configuration:</h4>
+
+<p>When configuring project's scm with Git plugin, use Add button to add &quot;Strategy for choosing what to build&quot;, and then select &quot;Checkout failing revision when deflaking&quot;.</p>
+
+<p>This will tell the plugin to checkout the exact failing revision when deflaking a failed build. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597048.png" data-image-src="attachments/73532941/73597048.png" data-unresolved-comment-count="0" data-linked-resource-id="73597048" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="deflake_checkout_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span><br/>
+After clicking &quot;Deflake&quot;, there is another configuration window.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597047.png" data-image-src="attachments/73532941/73597047.png" data-unresolved-comment-count="0" data-linked-resource-id="73597047" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="deflake_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span><br/>
+&quot;rerunFailingTestsCount&quot; is the new Surefire option, it can be set and passed to the deflake build. However if this parameter is already set in the project pom.xml, then it cannot be overwritten.</p>
+
+<p>&quot;only run failing tests&quot;: when checked, the plugin will generate -Dtest=... to pass to Maven, so only previous failed tests will be re-run.</p>
+
+<p>Deflake build will show up as &quot;Deflake Build # ...&quot;.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73532941/73597043.png" data-image-src="attachments/73532941/73597043.png" data-unresolved-comment-count="0" data-linked-resource-id="73597043" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="deflake_build.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73532941" data-linked-resource-container-version="13"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597039.png">flaky_pass.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597040.png">flaky_badge.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597041.png">flaky_config1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597042.png">deflake_label.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597044.png">deflake_build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597043.png">deflake_build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597045.png">flake_history_aggregated.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597046.png">flake_history_single.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597047.png">deflake_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73532941/73597048.png">deflake_checkout_config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:23</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : FOSDEM UI Enhancement discussion notes 2013</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="UI-Enhancements.html">UI Enhancements</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="FOSDEM-UI-Enhancement-discussion-notes.html">FOSDEM UI Enhancement discussion notes</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : FOSDEM UI Enhancement discussion notes 2013
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Apr 24, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In the rough order of priorities,</p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Nostaledatainthepage/dynamiccontentupdate(P1)">No stale data in the page / dynamic content update (P1)</h1>
+<p>Much of the HTML pages served by Jenkins do not update by themselves in short of reloading. For example, the build status icon in the build page (such as <a href="https://ci.jenkins-ci.org/view/Jenkins%20core/job/jenkins_main_trunk/lastBuild/" class="external-link" rel="nofollow">this</a>) do not change the color when the result is determined. Jobs listed in views do not update themselves when a new build happens.</p>
+
+<p>The goal of this task is to identify those things that benefit from dynamic in-place update without page reloading, then fix them accordingly.</p>
+
+<p>To make it easy for plugins to do the right thing, we also need to list up existing mechanisms that can be used for this purpose, such as <a href="AJAX-with-JavaScript-proxy.html">JavaScript proxy</a>, and we probably need to come up with new ones, such as <a href="https://github.com/Atmosphere/atmosphere" class="external-link" rel="nofollow">Atmosphere</a> integration.</p>
+
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Contextmenuhoverbehaviour(P1)">Context menu hover behaviour (P1)</h1>
+<p>Many people reported that the automatically showing a context menu when the mouse hovers over a link is a bad idea. Kohsuke OTOH prefered not to provide an option to disable this.</p>
+
+<p>The proposal that won the consensus is to add one more indirection by showing a small arrow on the right (except it should be showing 'v' instead of '&gt;'), then activate the context menu upon clicking that.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66847528/67043394.png" data-image-src="attachments/66847528/67043394.png" data-unresolved-comment-count="0" data-linked-resource-id="67043394" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="contextMenu-step1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847528" data-linked-resource-container-version="10"></span> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66847528/67043395.png" data-image-src="attachments/66847528/67043395.png" data-unresolved-comment-count="0" data-linked-resource-id="67043395" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="contextMenu-step2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847528" data-linked-resource-container-version="10"></span></p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Performanceoftheconfigurationpageloading(P2)">Performance of the configuration page loading (P2)</h1>
+<p>People generally felt that the configuration page loading can get slow, and sometimes extremely slow (to the tunes of 10s of seconds)</p>
+
+<ul>
+	<li>Put more probes in the place to warn the users when they should be reporting this to us, and gather more data.</li>
+	<li>We need to find out if it's the generation of HTML that's slow, or if it's evaluation of JavaScript that's slow.</li>
+</ul>
+
+
+<h3 id="FOSDEMUIEnhancementdiscussionnotes2013-Separateread-onlyconfigpage">Separate read-only config page</h3>
+<p>Having a separate read only view of the configuration page would reduce the pain. This is because often people access the configuration page not to change it but to find out who it's configured. This is of course based on the assumption that the read-only view page can be shown a lot more quickly. Such a read-only configuration page can then possibly grow into editable configuration page if there are buttons that let people edit a specific section alone:</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/66847528/67043396.png" data-image-src="attachments/66847528/67043396.png" data-unresolved-comment-count="0" data-linked-resource-id="67043396" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="partial-config-before.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847528" data-linked-resource-container-version="10"></span> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/66847528/67043397.png" data-image-src="attachments/66847528/67043397.png" data-unresolved-comment-count="0" data-linked-resource-id="67043397" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="partial-config-after.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847528" data-linked-resource-container-version="10"></span></p>
+
+<h3 id="FOSDEMUIEnhancementdiscussionnotes2013-MoreUIcontrolsforconfigpage">More UI controls for config page</h3>
+<p>Expanding the &quot;/lib/form&quot; tag library to support more UI controls can help improve the performance, as well as improving the usability. Some of the ideas discussed are:</p>
+
+<h5 id="FOSDEMUIEnhancementdiscussionnotes2013-Tabview(example)">Tab view (<a href="http://twitter.github.com/bootstrap/javascript.html#tabs" class="external-link" rel="nofollow">example</a>)</h5>
+<p>We can split the configuration page into multiple sections and put each of them in a separate tab. Provided that invisible tabs are lazily loaded, we can reduce the amount of initial data loading for a page request.</p>
+
+<p>Plugins can also use this control within their <code>config.groovy</code> to save space and reduce the amount of data-loading.</p>
+
+<h5 id="FOSDEMUIEnhancementdiscussionnotes2013-Gridcontrol(example)">Grid control (<a href="http://dev.sencha.com/deploy/ext-4.0.0/examples/grid/array-grid.html" class="external-link" rel="nofollow">example</a>)</h5>
+<p>Provide a grid control, with the master/detail pattern, the modal dialog for editing, and/or in-place editing.</p>
+
+<p>This would reduce the amount of AJAX form validation request and hopefully help the performance. And perhaps more importantly, it'll save a lot of screen real estate in a long repetitive job configuration.</p>
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Grid control with no copyleft license?</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The example links to extJS, which is only available under a copyleft license. We need to find a control that has a liberal license.</p></div></div>
+
+<h5 id="FOSDEMUIEnhancementdiscussionnotes2013-Multi-columnlayoutsupport(example)">Multi-column layout support (<a href="https://wiki.jenkins-ci.org/download/attachments/45481993/gerritconf.PNG?version=3&amp;modificationDate=1348058737000" class="external-link" rel="nofollow">example</a>)</h5>
+<p>Some plugins already do multi-column layout to pack more into the same space.</p>
+
+<p>(This does not help the performance, but it'll be an usability improvement.)</p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Otherchildreninthesamecontainer&quot;menuinthebreadcrumb(P2)">Other children in the same container&quot; menu in the breadcrumb (P2)</h1>
+<p>Improve the breadcrumb to provide a quicker access to sibling objects, as can be seen in Windows Explorer.</p>
+
+<p>This sibling menu is activated by clicking the '&gt;' between the ancestors, whereas the current context menu gets activated by clicking the ancestor itself.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66847528/67043398.png" data-image-src="attachments/66847528/67043398.png" data-unresolved-comment-count="0" data-linked-resource-id="67043398" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="siblings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847528" data-linked-resource-container-version="10"></span></p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-CompletetheBootstrapintegrationwork(P3)">Complete the Bootstrap integration work (P3)</h1>
+<p>There's a branch that fell behind the master branch where we attempted to replace the current table-driven layout to the one driven by Bootstrap. Complete this work and integrate this into the master.</p>
+
+<p>This will give us some free UI eyecandy (such as animations), as well as some UI controls.</p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Extensionpointforwidgets(P4)(done)">Extension point for widgets (P4) (done)</h1>
+<p>In large instances, displaying and updating the build queue and showing the executor status is neither useful nor efficient. So they prefer to be able to just disable them altogether, or replace them with other implementations.</p>
+
+<p>This led to the conversation of making those widgets extensible, pluggable, then configurable by the admin. Some of this work has already been done, but we just need to finish up this work.</p>
+
+<h1 id="FOSDEMUIEnhancementdiscussionnotes2013-Buildhistorytabularview(P4)">Build history tabular view (P4)</h1>
+<p>We want a full-width tabular view of the build history, with a similar degree of extensibility as in the project view. We want to support custom columns, and we want to support filtering (so that for example I can see those builds that contain my commits.)</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847528/67043394.png">contextMenu-step1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847528/67043395.png">contextMenu-step2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847528/67043396.png">partial-config-before.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847528/67043397.png">partial-config-after.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847528/67043398.png">siblings.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

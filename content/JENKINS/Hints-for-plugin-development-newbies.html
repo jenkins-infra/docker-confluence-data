@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Hints for plugin-development newbies</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Hints for plugin-development newbies
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (fredg)</span> on Mar 09, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page is intended for people who start implementing Jenkins plugins. The information is presented in a question/answer style to give the page a structure. This way I hope that the required answers are found more easily. The hints presented have been collected during the implementation of my first Jenkins plugin which I did together with a friend of mine. Please feel free to add some of your hints too.</p>
+
+
+
+
+
+
+
+
+
+<h4 id="Hintsforplugin-developmentnewbies-JenkinsBuilderPlugin">Jenkins Builder Plugin</h4>
+
+
+<h5 id="Hintsforplugin-developmentnewbies-HowdoIexecuteashellcommand?">How do I execute a shell command?</h5>
+
+<p>Every time a build is invoked the <em>perform(Build, Launcher, BuildListener)</em> method is executed. Within this method of your builder you can use the <em>Launcher</em> to execute your command. The <em>Launcher</em> offers several <em>launch</em> methods with different parameter sets. For more details have a look on the API. I used the following method:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ launcher.launch(cmd, env, out, workDir)
+</pre>
+</div></div>
+<p>cmd:     the command that shall be executed as String<br/>
+env:      the environment variables as array of Strings (the elements of the array look like this: &quot;Variable=Value&quot;)<br/>
+out:        an OutputStream to which the output of the command is directed<br/>
+workDir: the working directory as FilePath</p>
+
+<p>An easy example would be something like this:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ launcher.launch(&quot;dir&quot;, new String[0], listener.getLogger(), build.getProject().getWorkspace());
+</pre>
+</div></div>
+<p>Whether a Jenkins-Build is successful or not depends on the return value of the <em>perform</em> method. In most cases this value depends on the <em>exit code</em> of the executed command or on thrown exceptions. If the <em>launch</em> method throws an exception this normally means that something went wrong so the return value should be a <em>false</em> (build fails). If no exception is thrown by the launch method the <em>exit code</em> has to be analysed. To get the exit code the following has to be done:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ Proc proc = launcher.launch(&quot;dir&quot;, build.getEnvVars(), listener.getLogger(), build.getProject().getWorkspace());
+ int exitCode = proc.join();
+</pre>
+</div></div>
+<p>The launch method returns a process to which we connect with the call of <em>join().</em> This way we wait until the command has been finished and get its exit code. To put all parts of this question together the following example is given:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ public boolean perform(Build build, Launcher launcher, BuildListener listener) {
+    try {
+      Proc proc = launcher.launch(&quot;dir&quot;, build.getEnvVars(), listener.getLogger(),build.getProject().getWorkspace());
+      int exitCode = proc.join();
+      return exitCode == 0;
+    } catch (IOException e) {
+      e.printStackTrace();
+      listener.getLogger().println(&quot;IOException !&quot;);
+      return false;
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      listener.getLogger().println(&quot;InterruptedException!&quot;);
+      return false;
+    }
+</pre>
+</div></div>
+
+<h5 id="Hintsforplugin-developmentnewbies-How-tointegrateyourownimages">How-to integrate your own images</h5>
+
+<p>Your images must be stored in a directory located in the src/main/webapp path.<br/>
+To get the correct location of your webapp directory from any of your jelly or java pages, you can use the following method :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public String getIconPath() {
+  PluginWrapper wrapper = Hudson.getInstance().getPluginManager().getPlugin([YOUR-PLUGIN-MAIN-CLASS].class);
+  return Hudson.getInstance().getRootUrl() + &quot;plugin/&quot;+ wrapper.getShortName()+&quot;/&quot;;
+}
+</pre>
+</div></div>
+
+<h5 id="Hintsforplugin-developmentnewbies-How-toaddaHTMLspace">How-to add a HTML space</h5>
+
+<p>Very simple, just use the following jelly tag :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;st:nbsp/&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

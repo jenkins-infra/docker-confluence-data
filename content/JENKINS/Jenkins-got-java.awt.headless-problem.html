@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins got java.awt.headless problem</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins got java.awt.headless problem
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (elifarley)</span> on Apr 12, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h5 id="Jenkinsgotjava.awt.headlessproblem-Problem">Problem</h5>
+
+
+<p>Jenkins got java.awt.headless problem</p>
+
+
+<p>I installed Jenkins in Ubuntu linux and run Jenkins in the tomcat6.</p>
+
+<p>I open any Jenkins page which is showing a trend chart. I get the following error on the page:</p>
+
+<p><em>Graphics N/A</em> <em>Unable to access X. You need to run the web container in the headless mode. Add -Djava.awt.headless=true to VM.</em></p>
+
+<p>I check the tomcat6 starting script, the JVM property java.awt.headless is set to true already.<br/>
+I check through the Jenkins' <strong><span style="text-decoration: underline;">Manage Jenkins-&gt;System Information</span></strong> page. It also shows the java.awt.headless is set to true.</p>
+
+
+<p>Looking through the Tomcat logs, the following error can be found:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre> java.lang.Error: Probable fatal error:No fonts found.
+</pre>
+</div></div>
+
+
+<h5 id="Jenkinsgotjava.awt.headlessproblem-Solution(forOpenJDK)">Solution (for Open JDK)</h5>
+
+<p>We had the same problem too using Jenkins in Tomcat6 on Ubuntu 9.10 server.</p>
+
+<p>Obviously graphics rendering needs access to font metrics. So check java /etc/java-6-openjdk/fontconfig.properties and install missing fonts. OpenJDK refers to DejaVu-Fonts. So type:</p>
+
+<p>On Ubuntu (or likely any Debian based Operating System)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo apt-get install ttf-dejavu
+</pre>
+</div></div>
+
+<p>On CentOS 6 (or likely any RHEL based Operating System)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo yum install dejavu-sans-fonts
+</pre>
+</div></div>
+
+<p>On OpenSUSE:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+zypper install dejavu-fonts
+</pre>
+</div></div>
+
+<p>In addition if you are using the OpenJDK Headless package (at least on CentOS 7) you will need to install fontconfig</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo yum install fontconfig
+</pre>
+</div></div>
+
+<p>On Alpine</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo apk add ttf-dejavu
+</pre>
+</div></div>
+
+<p>Restart Tomcat and enjoy graphics.</p>
+
+<p>If this doesn't work, you may also need some of type rendering libraries that are usually part of an X server – in a truly headless system, xvfb will do.</p>
+
+<p>On Ubuntu (or likely any Debian based Operating System)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo apt-get install xvfb
+</pre>
+</div></div>
+
+<p>On CentOS 6 (or likely any RHEL based Operating System)</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo yum install xorg-x11-server-Xvfb
+</pre>
+</div></div>
+
+
+<h5 id="Jenkinsgotjava.awt.headlessproblem-Solution(forSunJDK)">Solution (for Sun JDK)</h5>
+
+<p>I also had the same problem using Jenkins in Tomcat 6 on Ubuntu 9.10 Server, but this time with Sun's JDK6.</p>
+
+<p>I initially only installed the package 'sun-java6-jdk'. After seeing the above fonts error, I tried installing the 'sun-java6-fonts' package, but that didn't seem to solve my problem. I gave up trying to find the exact package I needed to get things working and just decided to remove what I had and reinstall the &quot;whole shebang&quot;:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo apt-get remove sun-java6*
+sudo apt-get install sun-java6*
+</pre>
+</div></div>
+<p>Maybe a little brute'ish, but it worked. Jenkins now makes all of its pretty charts.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

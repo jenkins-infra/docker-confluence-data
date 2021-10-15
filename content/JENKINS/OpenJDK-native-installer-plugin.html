@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OpenJDK native installer plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OpenJDK native installer plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vjuranek)</span>, last modified on Jan 16, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View openJDK-native-plugin <a href="https://plugins.jenkins.io/openJDK-native-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin adds auto installer for OpenJDK from native RPM packages and provides switching between OpenJDK vesrions using Linux alternatives</p>
+
+<h1 id="OpenJDKnativeinstallerplugin-Configuration">Configuration</h1>
+
+<p>Add Java installation, select &quot;Install automatically&quot; and choose OpenJDK installer</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59512004/59900219.png" data-image-src="attachments/59512004/59900219.png" data-unresolved-comment-count="0" data-linked-resource-id="59900219" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="openJDKInstaller.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512004" data-linked-resource-container-version="11"></span></p>
+
+<p>Select RPM package, which you want to install</p>
+
+<p><br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59512004/59900220.png" data-image-src="attachments/59512004/59900220.png" data-unresolved-comment-count="0" data-linked-resource-id="59900220" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="openJDKInstaller2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512004" data-linked-resource-container-version="11"></span><br/>
+ <br/>
+Alternatives and yum are run via sudo, therefore appropriate sudoers setup is requited (including switching off tty requirement which is turned on by default or run pseudo-tty e.g. by including -t param in ssh command).<br/>
+Example setup:
+<br class="atl-forced-newline"/></p>
+
+<div class="code panel pdl" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;border-bottom-style: solid;"><b>/etc/sudoers.d/jenkins</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+#Defaults    requiretty
+User_Alias JENKINS = test_user
+Cmnd_Alias OPENJDK_INSTALL = /usr/sbin/alternatives, /usr/bin/yum
+JENKINS ALL = NOPASSWD: OPENJDK_INSTALL
+</pre>
+</div></div>
+
+<h1 id="OpenJDKnativeinstallerplugin-Changelog">Changelog</h1>
+
+<h3 id="OpenJDKnativeinstallerplugin-Upcomingchanges">Upcoming changes<br class="atl-forced-newline"/></h3>
+
+<h3 id="OpenJDKnativeinstallerplugin-Release1.1(2015-01-16)">Release 1.1 (2015-01-16)</h3>
+
+<ul>
+	<li>Added OpenJDK8 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26434">JENKINS-26434</a>)</li>
+</ul>
+
+
+<h3 id="OpenJDKnativeinstallerplugin-Release1.0(2012-03-01)">Release 1.0 (2012-03-01)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512004/59900219.png">openJDKInstaller.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512004/59900220.png">openJDKInstaller2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

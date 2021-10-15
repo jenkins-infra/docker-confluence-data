@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Office 365 Connector Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Office 365 Connector Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (outconn)</span>, last modified on Apr 13, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Office 365 Connector <a href="https://plugins.jenkins.io/Office-365-Connector" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin from Microsoft Corp. allows sending running Jobs status notifications.</p><h1 id="Office365ConnectorPlugin-Description">Description</h1><p>Plugin is used to send actionable messages in Outlook, Office 365 Groups, and Microsoft Teams.</p><p><a href="https://docs.microsoft.com/en-us/outlook/actionable-messages/" class="external-link" rel="nofollow">Read more about it</a></p><p>Once the Office 365 Connector plugin is installed, webhooks for notifications are defined in <strong>Job Notification</strong> section of the configuration of job. Here is the screenshot for that section <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99057673/99123208.png" data-image-src="attachments/99057673/99123208.png" data-unresolved-comment-count="0" data-linked-resource-id="99123208" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Jenkins_Wiki.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99057673" data-linked-resource-container-version="32"></span><br/> Here are the steps to configure a webhook</p><ul><li>Click on the &quot;Add Webhook&quot; button.</li><li>Enter the webhook URL which is displayed when you create JenkinsCI connector in Office365.</li><li>Check the boxes for which you want to receive notifications.</li><li>Configure the timeout after which jenkins plugin would give on unavailable server.</li></ul><p>Once you configure this plugin, build related messages will appear in the workplace messaging system.</p><p>To send messages from inside pipeline script:</p><ul><li>Configure the webhook you want to send message following the steps mentioned above.</li><li>In the Pipeline script use the following command:<br/> <strong>office365ConnectorSend message: &quot;&lt;Your message&gt;&quot;, status:&quot;&lt;Build status&gt;&quot;</strong></li></ul><p>To send message from inside Jenkinsfile:</p><ul><li>In the script use the following command:<br/> <strong>office365ConnectorSend message: &quot;&lt;Your message&gt;&quot;, status:&quot;&lt;Build status&gt;&quot;, webhookUrl:'&lt;The connector webhook url&gt;'</strong></li></ul><h2 id="Office365ConnectorPlugin-Requirements">Requirements</h2><p>This plugin is created to work with Office 365 Groups.</p><h2 id="Office365ConnectorPlugin-Release4.5">Release 4.5</h2><ol><li>Added more logging and modified title of card to display branch name as well.</li></ol><h2 id="Office365ConnectorPlugin-Release4.4">Release 4.4</h2><ol><li>Added support for macros that allow to define when the connection is triggered. U<span style="color: rgb(36,41,46);">ser can define additional conditions that must be met to trigger the notification. For example having generic build that builds many envs it is possible to get notification only for one (eg based on build params).</span><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" height="250" src="https://raw.githubusercontent.com/jenkinsci/office-365-connector-plugin/master/.README/config.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/office-365-connector-plugin/master/.README/config.png"></span></li><li><p class="gh-header-title"><span class="js-issue-title">Allow additional parameter of &quot;color&quot; to be passed to office365ConnectorSend. </span>This will allow specifying the HEX color code of the card used to display when the 'message' attribute is set.</p><p>Example: office365ConnectorSend message: &quot;My Message&quot;, status: &quot;FAILURE&quot;, webhookUrl: &quot;https://....&quot;, color: &quot;d00000&quot;<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://raw.githubusercontent.com/jenkinsci/office-365-connector-plugin/master/.README/message.png" data-image-src="https://raw.githubusercontent.com/jenkinsci/office-365-connector-plugin/master/.README/message.png"></span></p></li></ol><h2 id="Office365ConnectorPlugin-Release3.0">Release 3.0</h2><ol><li>Allow webhook parameter to be expanded, so for a build you can define your webhook as <code>$webhook </code>and have the the ability to expand the <code>$webhook</code> value to an actual URL either by environment variables, build variables, build parameters and etc.</li><li>Fix job name with slashes. Main cause branch names ie. feature/abc</li><li>Add support for started card and completed card for pipeline.<br/><p><code>office365ConnectorSend status: &quot;Started&quot;, webhookUrl: &quot;${env.HOOK}&quot;</code><br/> For messages<br/><code>office365ConnectorSend message: &quot;Hello world&quot;, webhookUrl: &quot;${env.HOOK}&quot;</code></p></li><li><p>Made webhookUrl as new default.</p></li><li>Add the colors to the cards.<br/> See the effect in these screenshots:<p><a href="https://user-images.githubusercontent.com/1661688/29613785-d7f2bcaa-8807-11e7-9812-d7d99ef7f143.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="image" src="https://user-images.githubusercontent.com/1661688/29613785-d7f2bcaa-8807-11e7-9812-d7d99ef7f143.png" data-image-src="https://user-images.githubusercontent.com/1661688/29613785-d7f2bcaa-8807-11e7-9812-d7d99ef7f143.png"></span></a><br/><a href="https://user-images.githubusercontent.com/1661688/29613794-e47b2c6e-8807-11e7-991e-78826d908a17.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="image" src="https://user-images.githubusercontent.com/1661688/29613794-e47b2c6e-8807-11e7-991e-78826d908a17.png" data-image-src="https://user-images.githubusercontent.com/1661688/29613794-e47b2c6e-8807-11e7-991e-78826d908a17.png"></span></a><br/><a href="https://user-images.githubusercontent.com/1661688/29613808-f26fe256-8807-11e7-921a-5935cadbf94f.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="image" src="https://user-images.githubusercontent.com/1661688/29613808-f26fe256-8807-11e7-921a-5935cadbf94f.png" data-image-src="https://user-images.githubusercontent.com/1661688/29613808-f26fe256-8807-11e7-921a-5935cadbf94f.png"></span></a></p></li></ol><h2 id="Office365ConnectorPlugin-Release2.5">Release 2.5</h2><ol><li>When selected notification type as &quot;Failure&quot;, then notification is sent only when previous build is success and current build failed. No notification would be sent for repeated failure. If user wants to receive notification for repeated failure, then he/she should select &quot;Repeated Failure&quot; notification type.</li><li>Details about test cases and developers would be displayed in the card only if those details are availble, else they would not be displayed.</li></ol><h2 id="Office365ConnectorPlugin-Release2.4.1">Release 2.4.1</h2><ol><li>Removed unwanted logging on the console.</li></ol><h2 id="Office365ConnectorPlugin-Release2.4">Release 2.4</h2><ol><li>Removed Build Start Time from the office365ConnectorSend message card.</li></ol><h2 id="Office365ConnectorPlugin-Release2.3">Release 2.3</h2><ol><li>Added support to set &quot;Status&quot; of the card from office365ConnectorSend command.</li><li>Added facts culprits and developers when the build is triggered due to SCM commit.</li></ol><h2 id="Office365ConnectorPlugin-Release2.2">Release 2.2</h2><ol><li>Added support to send notification from inside Jenkinsfile. </li><li>Added option webhookUrl for the office365ConnectorSend command.</li></ol><h2 id="Office365ConnectorPlugin-Release2.1">Release 2.1</h2><ol><li>Fixed Back To Normal Time showing some invalid time issue.</li></ol><h2 id="Office365ConnectorPlugin-Release2.0">Release 2.0</h2><ol><li>Added support to send notification from inside the pipeline script. The user can use office365ConnectorSend command to send any notification.</li></ol><h2 id="Office365ConnectorPlugin-Release1.4">Release 1.4</h2><ol><li>Included author name and number of files changed if the build is due to SCM change.</li></ol><h2 id="Office365ConnectorPlugin-Release1.3.3">Release 1.3.3</h2><ol><li>Tracks UNSTABLE to SUCCESS build status changes with Notify Back To Normal event.</li></ol><h2 id="Office365ConnectorPlugin-Release1.3">Release 1.3</h2><ol><li>Supports notification for pipeline jobs.</li></ol><h2 id="Office365ConnectorPlugin-Release1.2.1">Release 1.2.1</h2><ol><li>Initial version.</li></ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99057673/99123208.png">Jenkins_Wiki.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99057673/138452730.png">image2018-3-27 11:11:5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99057673/170000603.png">Jenkins MS Team Messages.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

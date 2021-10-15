@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins Sounds plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins Sounds plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (edward@hurst-frost.net)</span>, last modified by <span class='editor'> Unknown User (oxcafebabe)</span> on Jun 25, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Sounds <a href="https://plugins.jenkins.io/sounds" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-01-15/#SECURITY-814" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allow OS command execution</a></li>
+</ul>
+
+</div></div>
+
+<p>This plugin allows Jenkins to play arbitrary audio clips as build actions and notifications.</p>
+
+<h1 id="JenkinsSoundsplugin-Playsoundsonbuildevents">Play sounds on build events</h1>
+
+
+<h2 id="JenkinsSoundsplugin-Overview">Overview</h2>
+
+<p>This plugin is able to play audio clips locally through sound hardware, remotely by piping them through an operating system command, or simultaneously through all browsers that are on a Jenkins page.</p>
+
+<p>When outputting through local hardware, Sounds requires that the Jenkins' server machine has a working sound card and speaker that is not in a remote server room where there's no one around to hear it.</p>
+
+<p>Jenkins can execute a command on a remote machine to play a sound sent through a pipe. This is normally an SSH command to a remote Linux based host that has a working sound card (e.g. 'ssh &lt;host&gt; play -').</p>
+
+<p>If you have HTML5 Audio capable browsers you can configure Sounds to play sounds through all the browsers that are on a Jenkins page.</p>
+
+
+
+<h2 id="JenkinsSoundsplugin-Compatibility">Compatibility</h2>
+
+<p><span style="color: rgb(0,0,0);">For all of the options there are varying degrees of support for the multitude of audio file formats. The most widely supported (but the most inefficient) is WAV.</span></p>
+
+<h2 id="JenkinsSoundsplugin-TriggeringSounds">Triggering Sounds</h2>
+
+
+
+
+
+<h3 id="JenkinsSoundsplugin-Configuredbuildaction">Configured build action</h3>
+
+<p>A job can be configured to play a sound as part of its action. You can have jobs dedicated to playing sounds on a schedule, or have the job play a sound as it does other actions.</p>
+
+<h3 id="JenkinsSoundsplugin-Configuredpost-buildactions">Configured post-build actions</h3>
+
+<p>The build configuration allows you to select a sound to be played for any build state transition. You can configure:</p>
+<ul>
+	<li>for any possible build result</li>
+	<li>a list of previous build results</li>
+	<li>the sound to play</li>
+</ul>
+
+
+<h3 id="JenkinsSoundsplugin-Externaltrigger">External trigger</h3>
+
+<p>A sound can also be triggered by making an HTTP request and passing a URL to the sound to be played. This enables external tools to play sounds through Jenkins.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+http://jenkins/sounds/playSound?src=file:///home/jenkins/sounds/somesound.wav
+</pre>
+</div></div>
+
+<h3 id="JenkinsSoundsplugin-Customisingthesoundarchive">Customising the sound archive</h3>
+
+
+<h6 id="JenkinsSoundsplugin-Makingasoundarchive">Making a sound archive</h6>
+
+<p>The sound archive is a simple .zip or .jar file containing sound files.</p>
+
+<p>Jenkins analyses each file to detect whether it is a valid sound file supported by JavaSound. JavaSound supports AIFF, AU and WAV, see <a href="http://java.sun.com/products/java-media/sound/techReference/javasoundfaq.html#formats" class="external-link" rel="nofollow">formats</a>.</p>
+
+<p>NOTE: The filename extension does not guarantee that the format is supported. If you have a file that doesn't play, try passing it though a conversion tool like <a href="http://www.youconvertit.com/" class="external-link" rel="nofollow">http://www.youconvertit.com/</a>.</p>
+
+
+<p>Jenkins ignores the archive folder structure (to simplify packaging) and uses the file name less extension as an ID, so keep the archive flat, or avoid having the same filename in multiple folders.</p>
+
+<h6 id="JenkinsSoundsplugin-Publishingyoursoundarchive">Publishing your sound archive</h6>
+
+<p>Jenkins Sounds can read an archive from the local filing system, or an HTTP URL.</p>
+<ul>
+	<li>publish the archive on a local web server and use <code>http://</code></li>
+	<li>put the archive in Jenkins' local filing system and use <code>file:</code><code>//</code></li>
+</ul>
+
+
+<p>NOTE: Jenkins streams the audio from the archive for each event (to reduce memory requirements), so make sure it's not too far away.</p>
+
+<h6 id="JenkinsSoundsplugin-ConfigureJenkinstouseyourarchive">Configure Jenkins to use your archive</h6>
+
+<p>Within the Configure System section of Jenkins Management locate the settings for Jenkins Sounds.</p>
+
+<p>Enter the path to the archive.</p>
+<ul>
+	<li>Absolute <code>http://</code> and <code>file:</code><code>//</code> URLs will be used unmodified.</li>
+	<li>URIs without a protocol will be assumed to be filing system references and converted to <code>file:</code><code>//</code> URLs.</li>
+</ul>
+
+
+<p>After changing the sound archive location URL you must save the form before being able to test the sounds.</p>
+
+<p>The Test Sound advanced option shows a list of the sounds found in the archive and their supported format.</p>
+
+
+
+<h2 id="JenkinsSoundsplugin-Changelog">Changelog</h2>
+
+
+
+
+<h4 id="JenkinsSoundsplugin-Version0.5(Jun25th,2016)">Version 0.5 (Jun 25th, 2016)</h4>
+
+<ul>
+	<li>Allow environment variables in piped command (<a href="https://github.com/tommikiviniemi-srs" class="external-link" rel="nofollow">tommikiviniemi-srs</a>).</li>
+</ul>
+
+
+<h4 id="JenkinsSoundsplugin-Version0.4.3(Oct8th,2013)">Version 0.4.3 (Oct 8th, 2013)</h4>
+
+<ul>
+	<li>Allowed local mute to be used by anonymous user when security is enabled (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20081" class="external-link" rel="nofollow">JENKINS-20081</a>).</li>
+	<li>Fixed incompatibility with Jenkins version 1.445 and upwards causing configuration of system command in pipe mode to fail (<a href="https://issues.jenkins-ci.org/browse/JENKINS-13825" class="external-link" rel="nofollow">JENKINS-13825</a>).</li>
+	<li>Fixed error message when 'Sound archive location' field is left empty (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19540" class="external-link" rel="nofollow">JENKINS-19540</a>).</li>
+</ul>
+
+
+<h4 id="JenkinsSoundsplugin-Version0.4(Sep1st,2011)">Version 0.4 (Sep 1st, 2011)</h4>
+
+<ul>
+	<li>Major update to provide option where sounds are played simultaneously through all browsers showing a Jenkins page.</li>
+</ul>
+
+
+<h4 id="JenkinsSoundsplugin-Version0.3(Mar1st,2011)">Version 0.3 (Mar 1st, 2011)</h4>
+
+<ul>
+	<li>Added capability of piping sounds through a system command (e.g. play on remote linux host)</li>
+	<li>Added the sad trombone - the best build breaking sound effect .... ever!</li>
+</ul>
+
+
+<h4 id="JenkinsSoundsplugin-Version0.2(Dec6th,2009)">Version 0.2 (Dec 6th, 2009)</h4>
+
+<ul>
+	<li>Internal sound archive restored if empty archive location submitted</li>
+	<li>Use classpath URI to internal archive</li>
+</ul>
+
+
+<h4 id="JenkinsSoundsplugin-Version0.1(Dec2nd,2009)">Version 0.1 (Dec 2nd, 2009)</h4>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

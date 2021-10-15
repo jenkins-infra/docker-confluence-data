@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Claim plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Claim plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (redsolo)</span>, last modified by <span class='editor'> Unknown User (greybird)</span> on May 03, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Claim <a href="https://plugins.jenkins.io/claim" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-02-24/#SECURITY-2188%20(1)" class="external-link" rel="nofollow">XSS vulnerability</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-02-24/#SECURITY-2188%20(2)" class="external-link" rel="nofollow">CSRF vulnerability</a></li>
+</ul>
+
+</div></div>
+Allows users to take responsibility for failed builds and to comment on them. Shows up as a build badge (small icon in build history), so teammates can see who is working on what along with notes.</p><p>Claims may be made <em>sticky</em> to follow the user claiming the failure until the build is successful again.</p><p>To claim a build:</p><ul><li>Ensure you are logged in, it doesn't work with anonymous accounts.</li><li>Configure jobs that should be claimable by adding an <em>Allow broken build claiming</em> post-build action.</li><li>When a build breaks, open its page and there will be a link to claim it, right under the <em>Started by user</em> bit.</li></ul><p>Emails for assigning/claiming builds:<br/> Send emails when builds are assigned or claimed by checking &quot;Send emails when assigning/claiming builds&quot; in the general System Configuration page. Enabling requires the mailer plugin.</p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Limitations</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>As the plugin uses a post build action to do its magic, it will not add anything to failed builds which were run prior to enabling the plugin (via the above mentioned post-build action).</p></div></div><h4 id="Claimplugin-Claimedbuild">Claimed build</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/13565953/13664258.png" data-image-src="attachments/13565953/13664258.png" data-unresolved-comment-count="0" data-linked-resource-id="13664258" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="claim-claimed.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="13565953" data-linked-resource-container-version="44"></span><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/13565953/13664257.png" data-image-src="attachments/13565953/13664257.png" data-unresolved-comment-count="0" data-linked-resource-id="13664257" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="claim-buildhistory.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="13565953" data-linked-resource-container-version="44"></span></p><h4 id="Claimplugin-Claimedshowninbuildhistory">Claimed shown in build history</h4><p> </p><h4 id="Claimplugin-IntegrationwithBuildFailureAnalyzerplugin(fromv2.8)">Integration with Build Failure Analyzer plugin (from v2.8)</h4><p>Users may claim additional information: given the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Build+Failure+Analyzer" class="external-link" rel="nofollow">Build-Failure-Analyzer(BFA)</a> plugin is installed and enabled,<br/> users can claim failure causes stored in the BFA knowledge base and keep the indication stored in the build.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/13565953/91947018.png" data-image-src="attachments/13565953/91947018.png" data-unresolved-comment-count="0" data-linked-resource-id="91947018" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ClaimWithBuildFailureAnalyzer.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="13565953" data-linked-resource-container-version="44"></span><br/> <strong>The Claim menu when BFA is installed</strong></p><p>To claim a build with a failure cause:</p><ul><li>Upon claiming the build, the &quot;Error&quot; drop-down will be populated with all failure causes defined in the knowledge base.<br/> Selecting a failure cause will update the &quot;Description&quot; field with the cause description</li><li>By default, selecting &quot;None&quot; will result in the default claim plugin behaviour.</li><li>If there are already failure causes automatically detected by BFA, the claimed cause will be added to the list of identified problems.<br/> Claiming without a failure cause selected will result in no additional causes specified under &quot;Identified Problems&quot;</li><li>The user may also input a claim reason, which is saved in the claim report as per default functionality.</li></ul><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Limitations</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p> Upon upgrading the claim plugin, old builds that do not have BFA indications will not be able to be claimed with a failure cause. This can be fixed by rebuilding the job with BFA enabled.</p></div></div><p> </p><h1 id="Claimplugin-Changelog">Changelog</h1><h3 id="Claimplugin-v2.15(03May2018)">v2.15 (03 May 2018)</h3><ul><li>Added a link to the claimed test case in the claim mail when claiming a test <a href="https://issues.jenkins-ci.org/browse/JENKINS-42090" rel="nofollow" class="external-link">JENKINS-42090</a></li></ul><h3 id="Claimplugin-v2.14.1(14Feb2018)">v2.14.1 (14 Feb 2018)</h3><ul><li>Fixed a Jenkins deadlock on startup in specific configurations <a href="https://issues.jenkins-ci.org/browse/JENKINS-49038" rel="nofollow" class="external-link">JENKINS-49038</a></li></ul><h3 id="Claimplugin-v2.14(30Jan2018)">v2.14 (30 Jan 2018)</h3><ul><li>Groovy script is lost when upgrading the plugin <a href="https://issues.jenkins-ci.org/browse/JENKINS-49015" rel="nofollow" class="external-link">JENKINS-49015</a></li><li>Fixed obsolete data message following field removal</li></ul><h3 id="Claimplugin-v2.13.1(07Jan2018)">v2.13.1 (07 Jan 2018)</h3><ul><li>Fixed claim message inversion between assignee and claimer</li></ul><h3 id="Claimplugin-v2.13(06Jan2018)">v2.13 (06 Jan 2018)</h3><ul><li>Added an option to prevent autorefresh when claiming (Experimental)</li><li>Allow propagating claims to following failed builds <a href="https://issues.jenkins-ci.org/browse/JENKINS-12437" rel="nofollow" class="external-link">JENKINS-12437</a></li><li>Use initial claim date for sticky/propagated claims <a href="https://issues.jenkins-ci.org/browse/JENKINS-48037" rel="nofollow" class="external-link">JENKINS-48037</a></li></ul><h3 id="Claimplugin-v2.12(30Dec2017)">v2.12 (30 Dec 2017)</h3><ul><li>Fixed a Null Reference Exception when migrating old data <a href="https://issues.jenkins-ci.org/browse/JENKINS-18809" rel="nofollow" class="external-link">JENKINS-18809</a></li><li>Use a dedicated claim icon eveywhere <a href="https://issues.jenkins-ci.org/browse/JENKINS-6936" rel="nofollow" class="external-link">JENKINS-6936</a></li><li>Made Build-Failure-Analyzer description text appear on form display, and be readonly <a href="https://issues.jenkins-ci.org/browse/JENKINS-44066" rel="nofollow" class="external-link">JENKINS-44066</a></li><li>Render run description using the configured formatter in Claim Report screen <a href="https://issues.jenkins-ci.org/browse/JENKINS-42579" rel="nofollow" class="external-link">JENKINS-42579</a></li><li>Made claim colum icon-size aware</li><li>Standardized claim messages &amp; improved them (user link, use of display name)</li><li>Removed Claim Report broken rss links</li></ul><h3 id="Claimplugin-v2.11(24Dec2017)">v2.11 (24 Dec 2017)</h3><ul><li>Fixed a regression introduced in 2.10 preventing the plugin to start <a href="https://issues.jenkins-ci.org/browse/JENKINS-47972" class="external-link" rel="nofollow">JENKINS-47972</a></li></ul><h3 id="Claimplugin-v2.10(8Nov2017)">v2.10 (8 Nov 2017)</h3><ul><li>Fixed an arbitrary code execution vulnerability <a href="https://issues.jenkins-ci.org/browse/JENKINS-43811" class="external-link" rel="nofollow">JENKINS-43811</a></li><li>Added an option to sort users by their full name in the claim page <a href="https://issues.jenkins-ci.org/browse/JENKINS-47437" class="external-link" rel="nofollow">JENKINS-47437</a></li><li>Fixed an Index Out of Bounds Exception when claiming a test failure <a href="https://issues.jenkins-ci.org/browse/JENKINS-44024" class="external-link" rel="nofollow">JENKINS-44024</a></li></ul><h3 id="Claimplugin-v2.9(14Nov2016)">v2.9 (14 Nov 2016)</h3><ul><li>Fixed single quote failure introduced in 2.8 <a href="https://issues.jenkins-ci.org/browse/JENKINS-28722" class="external-link" rel="nofollow">JENKINS-28722</a></li><li>Removed unused json2.js <a href="https://issues.jenkins-ci.org/browse/JENKINS-33078" class="external-link" rel="nofollow">JENKINS-33078</a></li><li>Fix Class Cast Exception when claiming test <a href="https://issues.jenkins-ci.org/browse/JENKINS-33715" class="external-link" rel="nofollow">JENKINS-33715</a></li><li>Support new version of build failure plugin</li><li>&quot;Claim it&quot; link for tests didn't work when BFA plugin isn't installed <a href="https://issues.jenkins-ci.org/browse/JENKINS-39538" class="external-link" rel="nofollow">JENKINS-39538</a></li><li>Claiming tests isn't compatible with Jenkins 2.0 pipelines <a href="https://issues.jenkins-ci.org/browse/JENKINS-39537" class="external-link" rel="nofollow">JENKINS-39537</a></li></ul><h3 id="Claimplugin-v2.8(14Jan2016)">v2.8 (14 Jan 2016)</h3><ul><li><span style="color: rgb(51,51,51);">Integrate Build-Failure-Analyzer Plugin </span><a href="https://issues.jenkins-ci.org/browse/JENKINS-28722" class="external-link" rel="nofollow">JENKINS-28722</a></li><li><span style="color: rgb(51,51,51);">Add support for workflow (use SimpleBuildStep) </span><a href="https://issues.jenkins-ci.org/browse/JENKINS-27206" class="external-link" rel="nofollow">JENKINS-27206</a></li></ul><h3 id="Claimplugin-v2.7(12May2015)">v2.7 (12 May 2015)</h3><ul><li><span style="color: rgb(51,51,51);">Fixed compatibility with Jenkins Core 1.577 and newer </span><a href="https://issues.jenkins-ci.org/browse/JENKINS-27091" class="external-link" rel="nofollow">JENKINS-27091</a></li></ul><h3 id="Claimplugin-v2.6(9Mar2015)">v2.6 (9 Mar 2015)</h3><ul><li>Claim stickiness default value is now a globally configurable <a href="https://issues.jenkins-ci.org/browse/JENKINS-27002" class="external-link" rel="nofollow">JENKINS-27002</a></li><li>Added support for running a global groovy script whenever a claim is changed</li></ul><h3 id="Claimplugin-v2.5(8Dec2014)">v2.5 (8 Dec 2014)</h3><ul><li>You can now claim for other users than yourself <a href="https://issues.jenkins-ci.org/browse/JENKINS-7824" class="external-link" rel="nofollow">JENKINS-7824</a></li></ul><h3 id="Claimplugin-v2.3(18Nov2013)">v2.3 (18 Nov 2013)</h3><ul><li>Add support for hierarchical projects <a href="https://issues.jenkins-ci.org/browse/JENKINS-17734" class="external-link" rel="nofollow">JENKINS-17734</a></li></ul><h3 id="Claimplugin-v2.2(27Mar2013)">v2.2 (27 Mar 2013)</h3><ul><li>Added support for translations and added Chinese translation</li><li>Added new icon to make claim plugin more visible</li><li>All jobs are now visible in claim report <a href="https://issues.jenkins-ci.org/browse/JENKINS-16801" class="external-link" rel="nofollow">JENKINS-16801</a></li></ul><h3 id="Claimplugin-v2.1(12Feb2013)">v2.1 (12 Feb 2013)</h3><ul><li>Fixed HTML rendering issue introduced in 2.0 <a href="https://issues.jenkins-ci.org/browse/JENKINS-16766" class="external-link" rel="nofollow">JENKINS-16766</a></li></ul><h3 id="Claimplugin-v2.0(6Feb2013)">v2.0 (6 Feb 2013)</h3><ul><li>Store and display a date of when a claim was added.</li><li><span style="text-decoration: line-through;">Option to sticky claim test failures if the failure is &quot;similiar&quot;</span></li><li>Improved Matrix claim information</li></ul><h3 id="Claimplugin-v1.7(4Maj2010)">v1.7 (4 Maj 2010)</h3><ul><li>Show user names in claims instead of ids.</li><li>Support for claiming Matrix builds.</li></ul><h3 id="Claimplugin-v1.6(28Nov2009)">v1.6 (28 Nov 2009)</h3><ul><li>Updated claim plugin to match updated Jenkins API</li></ul><h3 id="Claimplugin-v1.5(17July2009)">v1.5 (17 July 2009)</h3><ul><li>Made sure that the claim plugin runs after all the other extensions that can change the build status run. (<a href="http://www.nabble.com/claim-plugin-text-finder-plugin-conflict-td24535708.html" class="external-link" rel="nofollow">report</a>)</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/13565953/13664257.png">claim-buildhistory.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/13565953/13664258.png">claim-claimed.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/13565953/91947018.png">ClaimWithBuildFailureAnalyzer.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

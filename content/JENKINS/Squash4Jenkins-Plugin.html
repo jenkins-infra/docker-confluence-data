@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Squash4Jenkins Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Squash4Jenkins Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dev_squash)</span>, last modified on Sep 28, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Squash TM Publisher (Squash4Jenkins) <a href="https://plugins.jenkins.io/squashtm-publisher" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<br/><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022563084 {padding: 0px;}
+div.rbtoc1631022563084 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022563084 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022563084'>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-Summary'>Summary</a>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-Description'>Description</a></li>
+<li><a href='#Squash4JenkinsPlugin-Usage'>Usage</a></li>
+<li><a href='#Squash4JenkinsPlugin-Dependencies'>Dependencies</a></li>
+</ul>
+</li>
+<li><a href='#Squash4JenkinsPlugin-Jenkinsconfiguration'>Jenkins configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-Globalsettings'>Global settings</a></li>
+<li><a href='#Squash4JenkinsPlugin-JobSettings'>Job Settings</a></li>
+</ul>
+</li>
+<li><a href='#Squash4JenkinsPlugin-SquashTMconfiguration'>Squash TM configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-ConfigureSquashTMproperties'>Configure Squash TM properties</a></li>
+<li><a href='#Squash4JenkinsPlugin-AddaJenkinsinstancetoSquashTM'>Add a Jenkins instance to Squash TM</a>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-CreateaTestAutomationServerUser'>Create a Test Automation Server User</a></li>
+<li><a href='#Squash4JenkinsPlugin-CreateaTestAutomationServer'>Create a Test Automation Server</a></li>
+</ul>
+</li>
+<li><a href='#Squash4JenkinsPlugin-ConfigureaSquashprojectforautomation'>Configure a Squash project for automation</a></li>
+</ul>
+</li>
+<li><a href='#Squash4JenkinsPlugin-Userguide'>User guide</a>
+<ul class='toc-indentation'>
+<li><a href='#Squash4JenkinsPlugin-Createanautomatedtest'>Create an automated test</a></li>
+<li><a href='#Squash4JenkinsPlugin-Runanautomatedtest'>Run an automated test</a></li>
+</ul>
+</li>
+<li><a href='#Squash4JenkinsPlugin-ComparisonwithSquashTA'>Comparison with Squash TA</a></li>
+</ul>
+</div></p><h1 id="Squash4JenkinsPlugin-Summary">Summary</h1><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Description">Description</h2><p>This plugin publishes the test results of a Jenkins build in Squash TM when a build completes. It works on top of other publisher plugins dedicated to the test technology that used in the build (junit, nunit, mstest etc), before pushing the results.</p><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Usage"><span class="anchor">Usage</span></h2><p>The plugin leverages the workflow implemented in the <a href="https://sites.google.com/a/henix.fr/wiki-squash-ta/tm---ta-guide/user-guide" class="external-link" rel="nofollow">Squash TM / Squash TA integration scenario</a>. In a few words, it allows Squash TM to list the tests of a job, trigger a build and gather the test results, with some restrictions (listed in section Comparison with Squash TA). The job can be of any nature (free-style or else) and use any test technology (if a Jenkins plugin is also configured for it).</p><p>Also, due to the nature of that workflow please note that in this version the publisher will process the results <strong>only if the build was triggered by Squash TM</strong>. This limitation will be addressed in future developments.</p><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Dependencies"><span class="anchor">Dependencies</span></h2><p>This plugin works for Jenkins version 1.651.3 or higher and requires JUnit plugin v1.19+ (not tested with earlier versions).</p><p><br/></p><h1 id="Squash4JenkinsPlugin-Jenkinsconfiguration">Jenkins configuration</h1><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Globalsettings">Global settings</h2><p>As an administrator, go to the system configuration (first item in the administrator view). Scroll down to the TM Publisher section. From there, you can add one or several TM servers by clicking on the <strong>[Add]</strong> button and filling the following informations :</p><ul><li>server name : a label that identify a given instance of Squash TM</li><li>server URL : the base URL of the TM server</li><li>login : the login of the account on Squash TM that Jenkins will use to push the results. NB : that user must belong to the 'Test Automation Server' user group.</li><li>password : the password of that user.</li></ul><p><span class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image image-center" width="1109" src="attachments/135462990/135463317.png" data-image-src="attachments/135462990/135463317.png" data-unresolved-comment-count="0" data-linked-resource-id="135463317" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_global_settings.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span>These will allow the plugin to identify instances of Squash TM that request for result update, and to authenticate on them.</p><p>The <strong>[Validate]</strong> button (next to <strong>[Delete]</strong>) will test that the server is reachable and up. For now the credentials aren't validated yet. Potential errors in your configuration will issue a warning. Once you are done save the configuration as usual. You can save the configuration even if warnings were reported, e.g. when the endpoint is down at the moment yet the URL is correct nonetheless.</p><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-JobSettings">Job Settings</h2><p>As a job manager, go to the configuration page of your job.</p><p>Jobs of all nature are supported. As a job manager, go to the configuration page of your job. In order to work the plugin requires two simple items. First, on the general job properties, tick the box '<em>Enable integration with Squash TM</em>'.</p><p><span class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image image-center" height="400" src="attachments/135462990/135463319.png" data-image-src="attachments/135462990/135463319.png" data-unresolved-comment-count="0" data-linked-resource-id="135463319" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_general.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><p><br/></p><p>Then add a new post-build step : 'Publish your tests results on Squash TM'.</p><p><span class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image image-center" width="1109" src="attachments/135462990/135463318.png" data-image-src="attachments/135462990/135463318.png" data-unresolved-comment-count="0" data-linked-resource-id="135463318" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_publish_tm.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><p><br/></p><p>That's all you need to configure TM-publisher per-se. However you will also need to configure additional test result publishers such as <a href="https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin" class="external-link" rel="nofollow">JUnit plugin</a>, <a href="https://wiki.jenkins-ci.org/display/JENKINS/NUnit+Plugin" class="external-link" rel="nofollow">NUnit plugin</a>, <a href="https://wiki.jenkins-ci.org/display/JENKINS/JSUnit+plugin" class="external-link" rel="nofollow">JSUnit plugin</a> etc. Remember that TM-publisher simply pushes tests results, it does not generate them.</p><p>Note that 'Maven project' job style implicitly handle jUnit test results : if you run a Maven job and your tests are run by a jUnit runner you don't need to configure extra test results publishers.</p><p><br/></p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">In some cases, further configuration is needed to access the reports.</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The following example is a Junit test with Gradle :</p><ul><li>As a job manager, go to the configuration page of your job then to the ‘<em>Post-build Actions</em>’ tab</li><li>Add a new post-build action: ‘<em>Publish Junit test result report</em>’</li><li>Fill in the ‘<em>Test report XMLs field</em>’ with the path of your test reports</li><li>Make sure the ‘<em>Publish Junit test result report</em>’ action is <u>above</u> ‘<em>Publish your tests results on Squash TM</em>’.</li></ul><p><span class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image image-center" width="1109" src="attachments/135462990/135463322.png" data-image-src="attachments/135462990/135463322.png" data-unresolved-comment-count="0" data-linked-resource-id="135463322" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_publish_junit.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span><span class="confluence-embedded-file-wrapper image-center-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image image-center" height="150" src="attachments/135462990/135463323.png" data-image-src="attachments/135462990/135463323.png" data-unresolved-comment-count="0" data-linked-resource-id="135463323" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_path.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p></div></div><p><br/></p><h1 id="Squash4JenkinsPlugin-SquashTMconfiguration">Squash TM configuration</h1><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-ConfigureSquashTMproperties">Configure Squash TM properties</h2><ul><li>Open the<strong> squash.tm.cfg.properties</strong> file located in the conf folder of Squash TM installation folder (ex : C:\Squash-TM\conf)</li><li>Look for <strong>tm.test.automation.server.callbackurl</strong> and uncomment it</li><li>Add the Squash TM url (ex: <a title="Linkification: http://192.168.2.138:8080/squash" href="http://192.168.2.138:8080/squash" class="external-link" rel="nofollow">http://192.168.2.138:8080/squash</a>. This URL will be used by Squash4Jenkins to notify Squash TM of the execution progress</li><li>Restart Squash TM</li></ul><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-AddaJenkinsinstancetoSquashTM">Add a Jenkins instance to Squash TM</h2><h3 style="margin-left: 60.0px;" id="Squash4JenkinsPlugin-CreateaTestAutomationServerUser">Create a Test Automation Server User</h3><p>You only need to create one automated server user, even if you want to add several automated servers.</p><ul><li>In Squash TM, as an administrator, click on <em>Administration</em> (in the upper corner) then click on <em>Users.</em></li><li>Click on <strong>[Add]</strong>. A popup displays</li><li>In the <em>Group</em> field, select <em>Test Automation Server</em>.</li><li>Fill in the <em>Login</em> and <em>Password</em> fields with the login and password you have configured in Jenkins (in system configuration).</li><li>Click on <strong>[Add].</strong></li></ul><p style="margin-left: 120.0px;"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="470" src="attachments/135462990/135463365.jpg" data-image-src="attachments/135462990/135463365.jpg" data-unresolved-comment-count="0" data-linked-resource-id="135463365" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_add_user.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><h3 style="margin-left: 60.0px;" id="Squash4JenkinsPlugin-CreateaTestAutomationServer">Create a Test Automation Server</h3><ul><li>In Squash TM, click on <em>Administration</em> (in the upper corner) then click on <em>Automation servers</em>.</li><li>Click on <strong>[Add]</strong>. A popup displays.</li><li>Fill in the URL field with the Jenkins url (ex : <a href="http://localhost:9080/jenkins)." class="external-link" rel="nofollow">http://localhost:9080/jenkins).</a></li><li>Fill in the <em>Login</em> and <em>Password</em> fields with the login and password of the Jenkins user dedicated to automation.</li><li>Click on <strong>[Add].</strong></li></ul><p style="margin-left: 120.0px;"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="470" src="attachments/135462990/135463366.jpg" data-image-src="attachments/135462990/135463366.jpg" data-unresolved-comment-count="0" data-linked-resource-id="135463366" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_add_automation_server.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><p><br/></p><div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Login must be unique for each URL </p></div></div><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-ConfigureaSquashprojectforautomation">Configure a Squash project for automation</h2><ul><li>Click on <em>Administration</em> (in the upper corner) then click on <em>Projects</em>.</li><li>Select an existing project, scroll down to <em>Test automation management</em>.</li><li>Click on <em>No server</em>. A drop down menu displays with the test automation displays.</li><li>Select the server you have previously added and click on<strong> [Confirm]</strong>.</li><li>In the Test automation management you should see a new section called Jobs.</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/135462990/135463369.png" data-image-src="attachments/135462990/135463369.png" data-unresolved-comment-count="0" data-linked-resource-id="135463369" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_project_automation_server.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><ul><li>Click on <strong>[+]</strong>. A popup <em>Add a job</em> displays with all the jobs you have in Jenkins</li></ul><p style="margin-left: 90.0px;"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="550" src="attachments/135462990/135463371.png" data-image-src="attachments/135462990/135463371.png" data-unresolved-comment-count="0" data-linked-resource-id="135463371" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_project_jobs.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><ul><li>Select the job(s) you want to add. You can change their label in Squash TM.</li></ul><div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">Job's name can't be blank and must be unique</div></div><ul><li>Click on <strong>[Confirm]</strong></li></ul><p><br/></p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can edit your job (pencil button) if you want to further configure it.</p><p style="margin-left: 60.0px;"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="550" src="attachments/135462990/135463370.png" data-image-src="attachments/135462990/135463370.png" data-unresolved-comment-count="0" data-linked-resource-id="135463370" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_project_edit_job.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p></div></div><p><br/></p><p>The Squash TM project is now automation-ready. Please consult the user guide to trigger Jenkins builds from Squash TM and get the results.</p><p><br/></p><h1 id="Squash4JenkinsPlugin-Userguide">User guide</h1><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Createanautomatedtest">Create an automated test</h2><ul><li>In the <em>Test Cases Workspace</em>, select a project that is automation-ready</li><li>Click on <strong>[+]</strong> to create a new test case</li><li>Fill in the '<em>Name</em>' field and click on <strong>[Add]</strong></li><li>On the <em>Auto. script</em> field, click on '<strong>Click to edit...</strong>'</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="1220" src="attachments/135462990/135463385.png" data-image-src="attachments/135462990/135463385.png" data-unresolved-comment-count="0" data-linked-resource-id="135463385" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_tc_auto_script.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><ul><li>Associate the automation script to the test case. You can type the name of the script (/TM_JOB_NAME/Path_to_the_script) or use the<strong> [Pick...]</strong> button</li></ul><div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">The TM_JOB_NAME will be checked, but the path_to_the_script won't. To be safe use the Pick...button.</div></div><ul><li>Click on <strong>[Confirm]</strong></li></ul><p><br/></p><h2 style="margin-left: 30.0px;" id="Squash4JenkinsPlugin-Runanautomatedtest">Run an automated test</h2><ul><li>In the <em>Campaign Workspace</em>, select a project and click on <strong>[+]</strong></li><li>Create a new campaign and an iteration</li><li>Select the iteration and in the '<em>Execution Plan</em>' tab, click on <strong>[+ Add]</strong></li><li>Drag and drop the automated test from the Test Case Library to the Execution Plan and click on <strong>[Back]</strong></li><li>To run the test, use one of the button on the screen below:</li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="1220" src="attachments/135462990/135463388.png" data-image-src="attachments/135462990/135463388.png" data-unresolved-comment-count="0" data-linked-resource-id="135463388" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_iteration.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><ul><li>A popup <em>Overview of automated test executions</em> displays. Once the execution is over, the status and the progress bar are updated. Click on <strong>[Close]</strong>.</li></ul><p style="margin-left: 120.0px;"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="550" src="attachments/135462990/135463390.png" data-image-src="attachments/135462990/135463390.png" data-unresolved-comment-count="0" data-linked-resource-id="135463390" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_results.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><ul><li>On the execution plan, click on the test case name to show all executions of the test.</li><li>Click on an Execution to access execution details where are displayed: <br/><ul><li>the status (Squash TM status)</li><li>the automated test status</li><li>a link to the report (result URL)</li><li>a link to the job (job URL)</li></ul></li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="1220" src="attachments/135462990/135463391.png" data-image-src="attachments/135462990/135463391.png" data-unresolved-comment-count="0" data-linked-resource-id="135463391" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="squash_execution_details.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="135462990" data-linked-resource-container-version="18"></span></p><p><br/></p><h1 id="Squash4JenkinsPlugin-ComparisonwithSquashTA">Comparison with Squash TA</h1><p>The main user stories implemented by a regular Squash TM-TA stack are fullfiled by the TM-publisher, but not all. Because the TM-publisher plugin makes no assumption about the actual build tools and test runners involved in the Jenkins build, many advanced features from Squash TA are not available here due to integration problems.</p><p>The following features are supported :</p><ul><li>TM user can bind a test case to a remote test hosted on Jenkins</li><li>TM user can start automated test suites</li><li>Test statuses are updated automatically on build completion</li></ul><p>The following features are <strong>NOT</strong> supported :</p><ul><li>Passing datasets to the automated tests</li><li>Running only a subset of the test suite : the job will run entirely and all tests will be run</li><li>Dispatch the tests on available slave nodes</li><li>Running tests in a specified order</li><li>Real-time status updates : all results will be pushed at the end of the build</li></ul><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463317.png">jenkins_global_settings.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463318.png">jenkins_publish_tm.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463319.png">jenkins_general.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463322.png">jenkins_publish_junit.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463323.png">jenkins_path.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463368.jpg">squash_add_user.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463367.jpg">squash_add_automation_server.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463366.jpg">squash_add_automation_server.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463365.jpg">squash_add_user.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463369.png">squash_project_automation_server.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463372.png">squash_project_jobs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463373.png">squash_project_edit_job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463371.png">squash_project_jobs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463370.png">squash_project_edit_job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463385.png">squash_tc_auto_script.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463388.png">squash_iteration.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463390.png">squash_results.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/135462990/135463391.png">squash_execution_details.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:49</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

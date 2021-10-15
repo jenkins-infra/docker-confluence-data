@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Active Choices Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Active Choices Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kinow)</span>, last modified on Sep 12, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Active Choices <a href="https://plugins.jenkins.io/uno-choice" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-02-24/#SECURITY-2192" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-10-08/#SECURITY-1954" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-10-08/#SECURITY-2008" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2017-10-23/" class="external-link" rel="nofollow">Stored cross-site scripting vulnerability</a></li>
+</ul>
+
+</div></div>
+The Active Choices plugin allows the creation of <strong>dynamic and interactive parameters</strong> for freestyle Jenkins jobs. Active Choice <strong>parameters </strong>can be <strong>dynamically updated </strong>and<strong> </strong>can be<strong> rendered as combo-boxes, check-boxes, radio-buttons or rich HTML</strong>.<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Active Choices will load two extra Javascript files, JQuery and unochoice.js. Starting with v2.0 the plugin is again available in the Jenkins update center.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Starting with Active Choices v2.0, sandboxed </strong>Groovy scripts for <strong>Active Choices Reactive Reference Parameter</strong> will no longer emit HTML that is considered unsafe, such as <code>&lt;script&gt;</code> tags. This may result in behavior changes on <em>Build With Parameters </em>forms, such as missing elements. To resolve this issue, Groovy scripts emitting HTML will need to be configured to run outside the script security sandbox, possibly requiring separate administrator approval in <em>In-Process Script Approval</em>.</p><p>Earlier versions can be installed manually. Read this <a href="https://groups.google.com/forum/#!topic/biouno-users/Y7RfkOvizZ8" class="external-link" rel="nofollow">https://groups.google.com/forum/#!topic/biouno-users/Y7RfkOvizZ8</a> and download the plugin manually from: <a href="https://repo.jenkins-ci.org/releases/org/biouno/uno-choice/" class="external-link" rel="nofollow">https://repo.jenkins-ci.org/releases/org/biouno/uno-choice/</a></p><p>Before filing issues, please take a look at the <a href="Troubleshooting.html">Troubleshooting Page</a></p></div></div><h2 id="ActiveChoicesPlugin-Overview">Overview</h2><p>The Active Choices plug-in provides additional Jenkins parameter types that can be rendered as user interface (UI) controls in job forms. It supports using system environment variables, global node properties, and you also have at least the Jenkins project in the Groovy context for Freestyle jobs at least.</p><p>Once the plugin is installed three new parameter types become available:</p><ol><li>Active Choices Parameter</li><li>Active Choices Reactive Parameter</li><li>Active Choices Reactive Reference Parameter</li></ol><p>Active Choices parameters allow users to select value(s) for a job parameter. Parameter values can be:</p><ul><li>dynamically generated (using Groovy or a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin" class="external-link" rel="nofollow">Scriptler </a>script)</li><li>dynamically updated based on other UI parameters</li><li>multi-valued (can have more than one value)</li><li>rendered with a variety of UI controls, including dynamic HTML</li></ul><p>We will introduce the Active Choices based UI controls by briefly describing their behavior and rendering characteristics. We will then provide a guide to their configuration</p><h2 id="ActiveChoicesPlugin-ActiveChoicesParameter">Active Choices Parameter</h2><h3 id="ActiveChoicesPlugin-Behavior">Behavior</h3><ul><li>An Active Choices parameter dynamically generates a list of value options for a build parameter using a Groovy script or a  script from the Scriptler catalog.</li></ul><h3 id="ActiveChoicesPlugin-Rendering">Rendering</h3><ul><li>Active Choices parameters can be rendered as standard selection lists, check boxes and radio buttons.</li><li>A text box filter can be optionally shown to aid in filtering the value options.</li><li><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/78938195.jpg" data-image-src="attachments/74875908/78938195.jpg" data-unresolved-comment-count="0" data-linked-resource-id="78938195" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Untitled_Clipping_050415_011719_PM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></li></ul><h2 id="ActiveChoicesPlugin-ActiveChoicesReactiveandReactiveReferenceParameters">Active Choices Reactive and Reactive Reference Parameters</h2><p>Both of these parameters have additional useful behaviors and Reactive Reference has some unique rendering options.</p><h3 id="ActiveChoicesPlugin-Behavior.1">Behavior</h3><p>Similarly to Active Choices Parameter above:</p><ul><li>Active Choices Reactive and Reactive Reference parameters dynamically generate value options for a build parameter using a Groovy script or a Scriptler script</li></ul><p>In addition:</p><ul><li>Active Choices Reactive and Reactive Reference parameters can be <strong>dynamically updated</strong> (cascade update) when the value of other job UI control(s) change(s)</li></ul><h3 id="ActiveChoicesPlugin-RenderingOptions">Rendering Options</h3><h4 id="ActiveChoicesPlugin-ActiveChoicesReactive">Active Choices Reactive</h4><ul><li>Active Choices Reactive parameters can be rendered as standard selection lists, check boxes and radio buttons.</li><li>A text box filter can be optionally shown to aid in filtering the value options.</li></ul><h4 id="ActiveChoicesPlugin-ActiveChoicesReactiveReference">Active Choices Reactive Reference</h4><p>Active Choices Reactive Reference parameters are used to enhance a Jenkins job form UI with reference information.</p><p>With this use case in mind, a Reactive Reference UI control can be rendered as:</p><ul><li>An HTML list (bulleted or numbered)</li><li>An HTML input text box</li><li>Dynamically generated HTML (image, iframe, etc.);</li></ul><p>The dynamically generated HTML option, works with any well-formatted HTML returned by the Groovy script.It enables rendering of a variety of HTML elements, including <strong>pictures, inline-frames, hyperlinks, richly formatted text</strong> etc.</p><p>In addition, Reactive Reference parameters can be <strong>hidden</strong> from the UI and thus provide the option of dynamically generating hidden build parameters. These options are further discussed in the Reactive Reference configuration section.</p><h3 id="ActiveChoicesPlugin-RenderingExample">Rendering Example</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871454.gif" data-image-src="attachments/74875908/80871454.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871454" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACRR_b03_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>In the example above the value options for the 'Professions' parameter get updated when the 'Gender' parameter changes.</p><p>In addition, the Reactive Reference parameter 'Gender_Balance' rendered as a picture is also dynamically updated when the 'Gender' parameter is updated.</p><h3 id="ActiveChoicesPlugin-BehaviorandRenderingSummary">Behavior and Rendering Summary</h3><p>The following table summarizes the behavior and rendering characteristics of the three Active Choices parameter types.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/78938196.jpg" data-image-src="attachments/74875908/78938196.jpg" data-unresolved-comment-count="0" data-linked-resource-id="78938196" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Untitled_Clipping_050415_012955_PM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><h2 id="ActiveChoicesPlugin-ActiveChoicesParameterTypeConfiguration">Active Choices Parameter Type Configuration</h2><p>The following parameters are included in the plug-in:</p><ul><li>Active Choices Parameter</li><li>Active Choices Reactive Parameter</li><li>Active Choices Reactive Reference Parameter</li></ul><p>We now describe the details of their configuration.</p><h3 id="ActiveChoicesPlugin-ActiveChoicesParameter:ConfigurationOptions(Example01)">Active Choices Parameter: Configuration Options (Example 01)</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871447.gif" data-image-src="attachments/74875908/80871447.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871447" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="AC_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>An Active Choices Parameter is configured by setting the following options in the parameter configuration</p><h4 id="ActiveChoicesPlugin-The&#39;Name&#39;and&#39;Description&#39;">The 'Name' and 'Description'</h4><p>These are the typical parameter Name and Description that are common to all Jenkins parameters</p><h4 id="ActiveChoicesPlugin-The&#39;Script&#39;">The 'Script'</h4><p>The 'Script' is the <strong>Groovy code or Scriptlet script</strong> that will dynamically generate the parameter value options</p><ul><li>By selecting either of the two radio button options you can either type a Groovy script directly or use a Scriptler script</li><li><p>The script must return a <strong>java.util.List</strong>, an <strong>Array</strong> or a <strong>java.util.Map</strong>, as in the example below:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">return [&#39;Option 1&#39;, &#39;Option 2&#39;, &#39;Option 3&#39;]</pre>
+</div></div></li></ul><h4 id="ActiveChoicesPlugin-The&#39;FallbackScript&#39;">The 'Fallback Script'</h4><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The 'Fallback Script' configuration option provides alternate parameter value options in case the main Script fails either by throwing an Exception, or by not return a java.util.List, Array or java.util.Map.</p></div></div><h4 id="ActiveChoicesPlugin-The&#39;ChoiceType&#39;">The 'Choice Type'</h4><p>The <strong>'Choice Type</strong>' option provides four different rendering options for the option values:</p><ol><li>A list box where a single selection is allowed</li><li>A list box where multiple selections are allowed</li><li>A list of check boxes (multiple selections allowed)</li><li>A list of radio buttons (a single selection is allowed)</li></ol><h4 id="ActiveChoicesPlugin-The&#39;EnableFilter&#39;">The 'Enable Filter'</h4><p>The '<strong>Enable Filter</strong>' option will provide a text box filter in the UI control where a text filter can be typed. Only value options that contain the text are then listed.</p><p>This filer is case independent.</p><h3 id="ActiveChoicesPlugin-ActiveChoiceParameterRendering(Example01)">Active Choice Parameter Rendering (Example 01)</h3><p>The Example 01 Active Choice parameter configuration generates the following build form UI control. The user can select a single 'State' option from a filterable drop down list.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871449.gif" data-image-src="attachments/74875908/80871449.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871449" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AC_b01_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><h4 id="ActiveChoicesPlugin-Making&#39;Default&#39;selections">Making 'Default' selections</h4><p>It is possible to have some of the options displayed in an Active Choices UI control selected by default when the control is initialized.</p><p>You can <strong>define the default value selections</strong> by adding the suffix; <strong>:selected</strong> to the element you want to be the default selection from those returned by the script.<br/>In the example below, we will make the State of 'Parana' the default selection when the parameter UI control is rendered.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/74875908/80871450.gif" data-image-src="attachments/74875908/80871450.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871450" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AC_cb01_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>We credit the developers of the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Dynamic+Parameter+Plug-in" class="external-link" rel="nofollow">Dynamic Parameter plugin</a> with some of the initial concepts and code on which Active Choices was implemented. However, there are several important differences and improvements between the  Active Choices plugin and the original Dynamic Parameter plugin:</p><ol><li>An Active Choices parameter can be <strong>rendered</strong> as a multi-select control (combo-box or check-box) allowing users to <strong>select more than one value</strong> for the parameter </li><li>The parameter <strong>options value list can be filtered</strong>. If the &quot;<strong>Enable Filters</strong>&quot; option is checked, an extra input box will be displayed allowing users to filter the options.</li><li>You can define a '<strong>fallback</strong>' behavior if the value generator script raises an exception.</li><li>You can define <strong>default value selections</strong> in the dynamically generated value list</li></ol><h3 id="ActiveChoicesPlugin-ActiveChoicesReactiveParameter:ConfigurationOptions(Example02)">Active Choices Reactive Parameter: Configuration Options (Example 02)</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871451.gif" data-image-src="attachments/74875908/80871451.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871451" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_c02_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>An Active Choices Reactive parameter is configured with a set of similar options as those shown above for the Active Choices parameter. However, a Reactive parameter provides the additional '<strong>Referenced parameters</strong>' configuration option.</p><ul><li>This option, takes a list of job parameters that trigger an <strong>auto-refresh of the Reactive Parameter when any of the 'Referenced parameters' change</strong></li></ul><h4 id="ActiveChoicesPlugin-The&#39;Referencedparameters&#39;">The 'Referenced parameters'</h4><p>The '<strong>Referenced parameters</strong>' text field contains <strong>a list of comma separated parameter Names</strong> (from the current job) that will trigger a refresh of the Reactive Parameter when their values change. The values of these parameters are passed to the script binding context before the script is re-executed to generate a new set of option values for the Active Choices control. </p><h3 id="ActiveChoicesPlugin-ActiveChoicesReactiveParameterRendering(Example02)">Active Choices Reactive Parameter Rendering (Example 02)</h3><p>Let's examine a Jenkins build form rendered with Active Choice parameters that satisfies the following requirements. The form:</p><ul><li>Allows users to select one of several Brazilian States</li><li>Provides an additional control where a set of Cities belonging to the selected State is dynamically displayed</li><li>Allows the user to select one or more of the displayed Cities</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871452.gif" data-image-src="attachments/74875908/80871452.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871452" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_b02_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>The job UI is composed of two parameters:</p><h4 id="ActiveChoicesPlugin-1)States:AnActiveChoiceParameter">1) States: An Active Choice Parameter</h4><p>The first parameter is the <strong>States</strong> Active Choice Parameter from Example 01. It allows the user to select one of several Brazilian States.<br/>We could have just as easily used a Jenkins Choice Parameter, but we use an Active Choice parameter (as shown from Example 01). The Groovy script for this is:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">return[
+&#39;Sao Paulo&#39;,
+&#39;Rio de Janeiro&#39;,
+&#39;Parana&#39;,
+&#39;Acre&#39;
+]</pre>
+</div></div><h4 id="ActiveChoicesPlugin-2)Cities:AnActiveChoicesReactiveParameter">2) Cities: An Active Choices Reactive Parameter</h4><p>The second parameter is the <strong>Cities</strong> Active Choices Reactive Parameter that <strong>dynamically displays</strong> a set of cities belonging to the selected State and allows users to select multiple values. The Cities parameter configuration is shown above in Example 02.</p><p>Note that:</p><ul><li>The Cities Reactive parameter references the previously defined States parameter ('Referenced parameters'=States);</li><li>The 'Choice Type' is set to Check Boxes.This will allow the user to select one or more Cities by selecting multiple check boxes.</li><li>A custom 'Groovy Script' will be used to generate the Cities value options as shown below (the last list value returned by the script)</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">if (States.equals(&quot;Sao Paulo&quot;)) {
+  return [&quot;Barretos&quot;, &quot;Sao Paulo&quot;, &quot;Itu&quot;]
+} else if (States.equals(&quot;Rio de Janeiro&quot;)) {
+  return [&quot;Rio de Janeiro&quot;, &quot;Mangaratiba&quot;]
+} else if (States.equals(&quot;Parana&quot;)) {
+  return [&quot;Curitiba&quot;, &quot;Ponta Grossa&quot;]
+} else if (States.equals(&quot;Acre&quot;)) {
+  return [&quot;Rio Branco&quot;, &quot;Acrelandia&quot;]
+} else {
+  return [&quot;Unknown state&quot;]
+}</pre>
+</div></div><p>Whenever the user changes the option of the States parameter, the Cities parameter will get dynamically updated. Note how that the <strong>States</strong> referenced parameter is in the script binding and can be used directly.</p><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can use a Reactive parameter type for things like displaying the list of Maven artifacts, given a group ID.</p></div></div><h3 id="ActiveChoicesPlugin-ActiveChoicesReactiveReferenceParameter:ConfigurationOptions">Active Choices Reactive Reference Parameter: Configuration Options</h3><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871455.gif" data-image-src="attachments/74875908/80871455.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871455" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACRR_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>A Reactive Reference parameter is configured with a set of similar options as those shown above for the Active Choices Reactive parameter.</p><p>However, a <strong>Reactive Reference parameter provides a unique set of rendering options</strong> (see 'Choice Type').</p><ul><li>Input text box</li><li>Numbered list</li><li>Bullet items list</li><li>Formatted HTML</li><li>Formatted Hidden HTML</li></ul><p>Given the wide variety of rendering options the Active Choices Groovy script must return the following types of variables for each option:</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Choice Type</p></th><th class="confluenceTh"><p>Groovy Returns</p></th><th class="confluenceTh"><p>Comment</p></th></tr><tr><td class="confluenceTd"><p>Input text box</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>The return String appears in a simple text box</p></td></tr><tr><td class="confluenceTd"><p>Numbered list</p></td><td class="confluenceTd"><p>List</p></td><td class="confluenceTd"><p>The return List displays as a numbered list</p></td></tr><tr><td class="confluenceTd"><p>Bullet items list</p></td><td class="confluenceTd"><p>List</p></td><td class="confluenceTd"><p>The return List displays as a bulleted list</p></td></tr><tr><td class="confluenceTd"><p>Formatted HTML</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>The return String must be well formatted HTML to display correctly. You can include any HTML tags here, e.g.: some &lt;table&gt;, or a &lt;form&gt; to another web site.</p></td></tr><tr><td class="confluenceTd"><p>Formatted Hidden HTM</p></td><td class="confluenceTd"><p>String</p></td><td class="confluenceTd"><p>The parameter won't be displayed in the UI</p></td></tr></tbody></table></div><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>A typical application of a Reactive Reference parameter is to dynamically display reference information that can be used to guide the user in making an appropriate value selection of another job parameter.</p></div></div><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>By design, the values of Reactive Reference parameters are NOT passed to the build environment with one important exception. When the choice type is set to <strong>Formatted HTML</strong> or <strong>Formatted Hidden HTML</strong> and the HTML is an 'input' element the value can be passed to the build. See the 'Advanced Usage' section for additional instructions.</p></div></div><h3 id="ActiveChoicesPlugin-ExampleConfiguration:ActiveChoicesReactiveReferenceParameter">Example Configuration: Active Choices Reactive Reference Parameter</h3><p>Below we present 3 examples of Reactive References with different Choice Types and their corresponding renderings in the Jenkins job UI.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871456.gif" data-image-src="attachments/74875908/80871456.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871456" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACRR_r03_param.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><p>Consider an example where the user needs to make a meal selection that complements the available wine selection. The food selection would be easier if some useful reference info could be offered when users considered a particular wine. We call this reference information the WINE_RULE and we can easily implement it using a Reactive Reference parameter.</p><p>The WINE_RULE gets automatically updated when a user makes a new selection from the WINE_MENU (Note Referenced parameters=WINE_MENU). As a result, when we make a WINE_MENU selection we also get a WINE_RULE that can guide the FOOD_MENU selection.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871461.gif" data-image-src="attachments/74875908/80871461.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871461" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_r03.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><h3 id="ActiveChoicesPlugin-ReactiveReferenceConfiguration(Example03)">Reactive Reference Configuration (Example 03)</h3><p>The complete configuration of the WINE_RULE parameter is shown below.<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871462.png" data-image-src="attachments/74875908/80871462.png" data-unresolved-comment-count="0" data-linked-resource-id="80871462" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_c03.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><h3 id="ActiveChoicesPlugin-ReactiveReferenceGroovyscript(Example03)">Reactive Reference Groovy script (Example 03)</h3><p>The groovy script that generates the WINE_RULE <strong>formatted HTML</strong> for each of the choices is shown below.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">switch(WINE_MENU){
+ case~/.*Champagne.*/:
+	winerec=&#39;Champagne is perfect with anything salty&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+case ~/.*Sauvignon Blanc.*/:
+	winerec=&#39;Sauvignon Blanc goes with tart dressings and sauces&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+break
+ case~/.*Grüner Veltliner.*/:
+	winerec=&#39;Choose Grüner Veltliner when a dish has lots of fresh herbs&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+case~/.*Pinot Grigio.*/:
+	winerec=&#39;Pinot Grigio pairs well with light fish dishes&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+case ~/.*Chardonnay.*/:
+	winerec=&#39;Choose Chardonnay for fatty fish or fish in a rich sauce&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+break
+ case~/.*Off-Dry Riesling.*/:
+	winerec=&#39;Off-Dry Riesling pairs with sweet &amp; spicy dishes&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+ case~/.*Moscato dAsti.*/:
+	winerec=&#39;Moscato dAsti loves fruit desserts&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+case ~/.*dry Rosé.*/:
+	winerec=&#39;Pair a dry Rosé with rich, cheesy dishes&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+break
+ case~/.*Pinot Noir.*/:
+	winerec=&#39;Pinot Noir is great for dishes with earthy flavors&#39;
+	return &quot;&lt;b&gt;${winerec}&lt;/b&gt;&quot;
+ break
+}
+</pre>
+</div></div><h2 id="ActiveChoicesPlugin-AdvancedUsageNotes">Advanced Usage Notes</h2><h3 id="ActiveChoicesPlugin-ConsiderationswhilewritingyourGroovyscript">Considerations while writing your Groovy script</h3><p>Your Groovy script binding has access to two additional variables for use:</p><ul><li>jenkinsProject -&gt; The Jenkins Project object</li><li>jenkinsBuild -&gt; The Jenkins Build object</li></ul><h3 id="ActiveChoicesPlugin-PassingReactiveReferenceValuestothebuild">Passing Reactive Reference Values to the build</h3><p>As was mentioned earlier, in general the values of reactive reference parameters are not passed to the build. However, there are some scenarios where the ability to pass these values would be of interest. For a more extensive discussion of this feature you can read <a href="https://github.com/biouno/uno-choice-plugin/wiki/Using-Uno-Choice-for-Dynamic-Input-Text-Box-Defaults" class="external-link" rel="nofollow">here</a>.</p><h4 id="ActiveChoicesPlugin-Scenario1:Passadynamicallycreatedvaluethatcanbeeditedbytheuser">Scenario 1: Pass a dynamically created value that can be edited by the user</h4><p>In this scenario, we want to provide the user a dynamic default value that is also editable. This can be accomplished with the following reactive reference configuration:</p><ul><li>Choice Type: <strong>Formatted HTML</strong></li><li>Groovy Script returning an <strong>HTML input element</strong> with the dynamic default value</li><li>Advanced Option set to <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871463.png" data-image-src="attachments/74875908/80871463.png" data-unresolved-comment-count="0" data-linked-resource-id="80871463" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_c03_Advanced.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></li></ul><h4 id="ActiveChoicesPlugin-Scenario2:Passadynamicallycreatedvaluethatishidden(can&#39;tbeeditedbytheuser)">Scenario 2: Pass a dynamically created value that is <strong>hidden</strong> (can't be edited by the user)</h4><p>In this scenario, we want <strong>the build to have access to a dynamic parameter generated from user input/option selections</strong> in the UI. The parameter is created programmatically, and is not user-editable. This can be accomplished with the following reactive reference configuration:</p><ul><li>Choice Type: <strong>Formatted Hidden HTML</strong></li><li>Groovy Script returning an <strong>HTML input element</strong> with the dynamic default value</li><li><p>Advanced Option set to <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871463.png" data-image-src="attachments/74875908/80871463.png" data-unresolved-comment-count="0" data-linked-resource-id="80871463" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_c03_Advanced.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>A 'Formatted Hidden HTML' Choice type is useful when you want to calculate values to use in the build, but these values should not be modified by the user(e.g. to compute the deploy URL).</p></div></div><p>In both scenarios the groovy script must return an HTML element formatted as follows:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">return &quot;&lt;input name=\&quot;value\&quot; value=\&quot;${ReactiveRefParam}\&quot; class=\&quot;setting-input\&quot; type=\&quot;text\&quot;&gt;&quot;
+</pre>
+</div></div><p><strong>ReactiveRefParam</strong> is the Reactive Reference value that will be passed to the build</p></li></ul><h4 id="ActiveChoicesPlugin-Scenario3:CreateaninputcontrolwithdynamicHTMLandpassitsvaluetothebuild">Scenario 3: Create an input control with dynamic HTML and pass its value to the build</h4><p>This is an interesting application of the Reactive Reference parameter. It allows you to create custom UI parameter controls with improved interactivity. See <a href="https://wiki.jenkins-ci.org/display/JENKINS/Reactive+Reference+Dynamic+Parameter+Controls" class="external-link" rel="nofollow">example</a></p><h3 id="ActiveChoicesPlugin-AdvancedOption:OmitValueField">Advanced Option: Omit Value Field</h3><p>By default Reactive References pass to the build a hidden &lt;input name=&quot;value&quot; value=&quot;&quot;&gt;. It means that your Reactive Reference parameter will always be empty, but you can use a Formatted HTML parameter and instruct the plug-in to not include this hidden value parameter.</p><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can click the Advanced button and there you will find an option to omit the value field. This will you let you define a value for the hidden parameter.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/80871464.gif" data-image-src="attachments/74875908/80871464.gif" data-unresolved-comment-count="0" data-linked-resource-id="80871464" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ACR_c03_advanced.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p></div></div><h3 id="ActiveChoicesPlugin-UsingActiveChoiceswithScriptlerscripts">Using Active Choices with Scriptler scripts</h3><p>We assume users that need to use Scriptler generated parameters are already familiar with the Scriptler Plug-in. If you need further information on how to use the Scriptler Plug-in, please refer to <a href="https://wiki.jenkins-ci.org/display/JENKINS/Scriptler+Plugin" class="external-link" rel="nofollow">its Wiki page</a> first.</p><p>Similarly to a Groovy script, a Scriptler script is also written in Groovy and used to render the parameter. Your Scriptler script is also expected to return a java.util.List, Array or java.util.Map for Active Choices and Reactive parameters, or custom HTML elements for the Reactive Reference parameter. Note that the value of other build parameters (when using Scriptler in combination with Active Choices) will be available in the Scriptler script context. You do not need to define such parameters in the Scriptler interface, or during the job definition. </p><p>However, <strong>the main advantage that the Scriptler Plug-in</strong> provides is the creation of a <strong>reusable</strong> <strong>Groovy script catalog</strong> that can be used across multiple jobs or even for automation.</p><p>To make your Scriptler scripts reusable across multiple projects you should parameterize them and assign script parameters using build parameters.</p><p>TODO: Provide an example</p><h3 id="ActiveChoicesPlugin-FilterSupportsRegularExpressions">Filter Supports Regular Expressions</h3><p>Note that although the text 'Filter' box available for Active Choices parameters provides easy, case insensitive filtering by simply typing some text, it also support more sophisticated filtering using regular expressions.</p><p>The following example shows such an example where a complex options list is filtered using a regular expression.<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74875908/78938197.jpg" data-image-src="attachments/74875908/78938197.jpg" data-unresolved-comment-count="0" data-linked-resource-id="78938197" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Untitled_Clipping_050415_022629_PM.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></p><h2 id="ActiveChoicesPlugin-LanguagesSupported">Languages Supported</h2><ol><li>English</li><li><span style="text-decoration: line-through;">Portuguese (Brazil)</span>) Work in Progress</li><li>If you want to include yours, send us a pull request with the messages.properties files or get in touch!</li></ol><h2 id="ActiveChoicesPlugin-KnownLimitations">Known Limitations</h2><ol><li>- The parameters are supposed to be handled only by humans, and at the moment do not work when the job is triggered by plug-ins, API or scripts. Please see <a href="https://issues.jenkins-ci.org/browse/JENKINS-28735" class="external-link" rel="nofollow">this issue</a> for more.</li></ol><h1 id="ActiveChoicesPlugin-CompatibilityMatrix"><span style="color: rgb(210,73,57);"><strong>Compatibility Matrix</strong></span></h1><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plug-in is not developed for Hudson, and we don't fix bugs happening in any version of Hudson.</p></div></div><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Plugin</p></th><td class="confluenceTd"><p>1.0</p></td><td class="confluenceTd"><p>1.1</p></td><td class="confluenceTd"><p>1.2</p></td></tr><tr><th class="confluenceTh"><p>Jenkins</p></th><td class="confluenceTd"><p>1.580.1+</p></td><td class="confluenceTd"><p>1.580.1+</p></td><td class="confluenceTd"><p>1.580.1+</p></td></tr></tbody></table></div><h2 id="ActiveChoicesPlugin-OpenIssues">Open Issues</h2><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20active-choices-plugin&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h2 id="ActiveChoicesPlugin-Sponsors">Sponsors</h2><h2 id="ActiveChoicesPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/74875908/75071574.png" data-image-src="attachments/74875908/75071574.png" data-unresolved-comment-count="0" data-linked-resource-id="75071574" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="tupilabs.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></h2><p>For commercial support, please get contact us via <a href="https://twitter.com/tupilabs" class="external-link" rel="nofollow">@tupilabs</a></p><h2 id="ActiveChoicesPlugin-.1"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/74875908/76054583.png" data-image-src="attachments/74875908/76054583.png" data-unresolved-comment-count="0" data-linked-resource-id="76054583" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="bio1-200x102.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74875908" data-linked-resource-container-version="142"></span></h2><p><a href="http://biouno.org" class="external-link" rel="nofollow">BioUno</a></p><h2 id="ActiveChoicesPlugin-Resources">Resources</h2><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>URL</p></th><th class="confluenceTh"><p>Description</p></th></tr><tr><td class="confluenceTd"><p><a href="http://biouno.org/publications.html" class="external-link" rel="nofollow">http://biouno.org/publications.html</a> </p></td><td class="confluenceTd"><p>Contains a list of resources for several plug-ins created in the <a href="http://biouno.org" class="external-link" rel="nofollow">BioUno</a> project, including Active Choices, R, and Image Gallery.</p></td></tr><tr><td class="confluenceTd"><p><a href="https://www.cloudbees.com/event/topic/jenkins-ci-open-source-continuous-integration-system-scientific-data-and-image" class="external-link" rel="nofollow">https://www.cloudbees.com/event/topic/jenkins-ci-open-source-continuous-integration-system-scientific-data-and-image</a></p></td><td class="confluenceTd"><p>In Ioannis Moutsatsos' talk, you can find slides about the Active Choices (née Uno-Choice) plug-in, as well as watch it being used too.</p></td></tr></tbody></table></div><h2 id="ActiveChoicesPlugin-ReleaseNotes">Release Notes</h2><h5 id="ActiveChoicesPlugin-Version2.2(2019/09/13)">Version 2.2 (2019/09/13)</h5><ol><li>Updated minimum version of Jenkins to 2.60.3</li><li>Updated dependency ssh-cli-auth to 1.4,</li><li>Updated dependency script-security to 1.39</li><li>Updated stapler-adjunct-jquery to 1.12.4-0</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-51296" class="external-link" rel="nofollow">JENKINS-51296</a>: Project renaming is not propagated to Active Choices projectName (thanks to sebcworks)</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39665" class="external-link" rel="nofollow">JENKINS-39665</a>: Unnecessary Scrollbars on build with parameters screen when using Active Choices Plugin (thanks to Lubomir Stanko)</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-53356" class="external-link" rel="nofollow">JENKINS-53356</a>: Scriptlet 'ViewScript' link and Required Parameters not displayed in configuration</li><li>Fixed javadocs issues, missing license headers, simplified if expressions, and other minor code improvements</li><li><a href="https://github.com/jenkinsci/active-choices-plugin/pull/25" class="external-link" rel="nofollow">Pull Request #25</a>: Initial version. Allow to disable any select option with :disable (thanks to Ivan Aragonés Muniesa)</li></ol><h5 id="ActiveChoicesPlugin-Version2.1.1(2018/08/25)">Version 2.1.1 (2018/08/25)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-49260" class="external-link" rel="nofollow">JENKINS-49260</a>: <span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit">this.binding.jenkinsProject not returning project of current build</span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://issues.jenkins-ci.org/browse/JENKINS-51296" class="external-link" rel="nofollow">JENKINS-51296</a>: <span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit">Project renaming is not propagated to Active Choices projectName</span></span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit">Updates to dependencies from Jenkins and plugins, in pom.xml<br/></span></span></li></ol><h5 id="ActiveChoicesPlugin-Version2.1(2018/01/01)">Version 2.1 (2018/01/01)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-48230" class="external-link" rel="nofollow">JENKINS-48230</a>: Discover parameters on jobs' wrappers<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"> </span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://issues.jenkins-ci.org/browse/JENKINS-47908" class="external-link" rel="nofollow">JENKINS-47908</a>: After upgrade to v2.0, the active choices updates randomly in the browser<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"> </span></span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://issues.jenkins-ci.org/browse/JENKINS-48448" class="external-link" rel="nofollow">JENKINS-48448</a>: Add a variable with the parameter name</span></span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://issues.jenkins-ci.org/browse/JENKINS-43380" class="external-link" rel="nofollow">JENKINS-43380</a>: Input parameter HTML description not working<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"> </span><br/></span></span></li></ol><h5 id="ActiveChoicesPlugin-Version2.0(2017/10/23)">Version 2.0 (2017/10/23)</h5><ol><li><a href="https://jenkins.io/security/advisory/2017-10-23/" class="external-link" rel="nofollow">Fix security vulnerability</a><ol><li><p><strong>Important:</strong> <strong>Sandboxed</strong> Groovy scripts for <strong>Active Choices Reactive Reference Parameter</strong> will no longer emit HTML that is considered unsafe, such as &lt;script&gt; tags. This may result in behavior changes on <em>Build With Parameters</em> forms, such as missing elements. To resolve this issue, Groovy scripts emitting HTML will need to be configured to run outside the script security sandbox, possibly requiring separate administrator approval in <em>In-Process Script Approval</em>.</p></li></ol></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-42685" class="external-link" rel="nofollow">JENKINS-42685</a>: Remove custom stapler proxy as we can now use assync requests</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31625" class="external-link" rel="nofollow">JENKINS-31625</a>: Add configuration parameter, which defines, when filter must started work</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-36158" class="external-link" rel="nofollow">JENKINS-36158</a>: Active choice reactive reference parameter not working on checkbox reference<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"> </span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://issues.jenkins-ci.org/browse/JENKINS-43380" class="external-link" rel="nofollow">JENKINS-43380</a>: Input parameter HTML description not working<span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"> </span></span></li><li><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><span class="overlay-icon aui-icon aui-icon-small aui-iconfont-edit"><a href="https://github.com/jenkinsci/active-choices-plugin/pull/15" class="external-link" rel="nofollow">Pull request #15</a>: Make Scriptler dependency optional (thanks to Daniel Beck)<br/></span></span></li></ol><h5 id="ActiveChoicesPlugin-Version1.5.3(2017/03/11)">Version 1.5.3 (2017/03/11)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34487" class="external-link" rel="nofollow">JENKINS-34487</a>: Do not hang the browser when parameter re-evaluated (thanks to Vladimir Fedorov)</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-38532" class="external-link" rel="nofollow">JENKINS-38532</a>: Active Choices Reactive Reference Parameters don't parse equals character ('=') properly.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34188" class="external-link" rel="nofollow">JENKINS-34188</a>: jenkins.log noise: &quot;script parameter ... is not an instance of Java.util.Map.&quot;</li></ol><h5 id="ActiveChoicesPlugin-Version1.5.2(2016/11/16)">Version 1.5.2 (2016/11/16)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39620" class="external-link" rel="nofollow">JENKINS-39620</a>: Saving a job with Active Choice 1.4 parameters after upgrade to v1.5 resets scriptlet parameters</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39760" class="external-link" rel="nofollow">JENKINS-39760</a>: Active Choices Parameters lost of Job Config save</li></ol><h5 id="ActiveChoicesPlugin-Version1.5.1(2016/11/11)">Version 1.5.1 (2016/11/11)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-36590" class="external-link" rel="nofollow">JENKINS-36590</a>: Active-Choice jenkinsProject variable is not available under Folder or Multibranch-Multiconfiguration job</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-37027" class="external-link" rel="nofollow">JENKINS-37027</a>: 'View selected script option' in build configuration displays wrong scriptler script</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34988" class="external-link" rel="nofollow">JENKINS-34988</a>: this.binding.jenkinsProject not returning project of current build</li><li>Upgraded build plug-ins</li><li>Fixed Findbugs issues</li><li>Upgraded parent in order to be able to release to Jenkins plug-in repositories</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39620" class="external-link" rel="nofollow">JENKINS-39620</a>: Saving a job with Active Choice 1.4 parameters after upgrade to v1.5 resets scriptlet parameters</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39534" class="external-link" rel="nofollow">JENKINS-39534</a>: When Jenkins restarts, the groovy scripts are lost</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34818" class="external-link" rel="nofollow">JENKINS-34818</a>: Active Choice reactive parameter cannot access global parameters</li></ol><h5 id="ActiveChoicesPlugin-Version1.5.0(2016/11/04)">Version 1.5.0 (2016/11/04)</h5><ol><li>Removed from the update center. Read more about it <a href="http://biouno.org/2016/11/11/what-happens-when-you-make-a-java-member-variable-transient-in-a-jenkins-plugin" class="external-link" rel="nofollow">here</a></li></ol><h5 id="ActiveChoicesPlugin-Version1.4(2016/02/14)">Version 1.4 (2016/02/14)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-32405" class="external-link" rel="nofollow">JENKINS-32405</a>: Groovy script failed to run if build started by timer</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-32461" class="external-link" rel="nofollow">JENKINS-32461</a>: jenkinsProject variable is not available in Multi-configuration project</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-32566" class="external-link" rel="nofollow">JENKINS-32566</a>: Render an AC Reactive reference as a functional Jenkins File Parameter</li></ol><h5 id="ActiveChoicesPlugin-Version1.3(2015/12/24)">Version 1.3 (2015/12/24)</h5><ol><li><a href="https://github.com/jenkinsci/active-choices-plugin/pull/6" class="external-link" rel="nofollow">pull-request/6</a>: Let &quot;PhantomJS Unit Testing&quot; be able to run on both linux and windows...</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30824" class="external-link" rel="nofollow">JENKINS-30824</a>: Active Choice Reactive Parameter - radios button value not passed to build (thanks to lyen liang for his PR showing how to fix it</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-32044" class="external-link" rel="nofollow">JENKINS-32044</a>: Fail to evaluate Boolean parameter to &quot;on&quot; when checked</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30592" class="external-link" rel="nofollow">JENKINS-30592</a>: An AC Reactive Reference is always displayed unless it references a parameter</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-32149" class="external-link" rel="nofollow">JENKINS-32149</a>: Create random parameter name only once</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29476" class="external-link" rel="nofollow">JENKINS-29476</a>: The 'jenkinsProject' variable is not set in the binding after restarting Jenkins (thanks to @perfhector for PR/5)</li></ol><h5 id="ActiveChoicesPlugin-Version1.2(2015/07/22)">Version 1.2 (2015/07/22)</h5><ol><li><a href="https://github.com/jenkinsci/active-choices-plugin/pull/1" class="external-link" rel="nofollow">pull-request/1</a>: Use value of Reactive Reference dynamic input controls as build parameters. See <a href="https://wiki.jenkins-ci.org/display/JENKINS/Reactive+Reference+Dynamic+Parameter+Controls" class="external-link" rel="nofollow">example</a></li><li><a href="https://github.com/jenkinsci/active-choices-plugin/pull/2" class="external-link" rel="nofollow">pull-request/2</a>: Update unochoice.js</li></ol><h5 id="ActiveChoicesPlugin-Version1.1(2015/06/28)">Version 1.1 (2015/06/28)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29055" class="external-link" rel="nofollow">JENKINS-29055</a>: Problem with Active Choices 1.0 and jQuery</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28764" class="external-link" rel="nofollow">JENKINS-28764</a>: Environment variables are not expanded and thus cannot be used as parameter values to Scriptler scripts</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28785" class="external-link" rel="nofollow">JENKINS-28785</a>: Referenced Parameters Not Passed to Scriptler Scripts</li></ol><h5 id="ActiveChoicesPlugin-Version1.0(2015/06/03)">Version 1.0 (2015/06/03)</h5><ol><li>Initial release to Jenkins update center, with Choice, Cascade Dynamic Choice and Dynamic Reference parameter types.</li></ol><h5 id="ActiveChoicesPlugin-VersionsreleasedtoBioUnoupdatecenter">Versions released to BioUno update center</h5><p>The first commit happened on 2014/03/13, and the initial release on 2014/03/21. There were 24 releases to the BioUno update center, the last one being on 2015/03/26, when the project decided to publish it via Jenkins update center.</p><h2 id="ActiveChoicesPlugin-Roadmap(wishlist)">Roadmap (wish list)</h2><h5 id="ActiveChoicesPlugin-Version1.x">Version 1.x</h5><ol><li> Bug fixes based on user's feedback, and more unit tests.</li></ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071567.png">uno1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071568.png">uno2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071569.png">uno3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071570.png">uno4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071571.png">uno5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071572.png">uno6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071573.png">uno7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071574.png">tupilabs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071575.png">uno8.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071576.png">uno9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071577.png">uno10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071629.jpg">Untitled_Clipping_120314_015234_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071630.jpg">Untitled_Clipping_120314_021028_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071631.jpg">Untitled_Clipping_120314_025932_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071632.jpg">Untitled_Clipping_120314_032025_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071633.jpg">Untitled_Clipping_120314_032212_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071637.jpg">Untitled_Clipping_120314_043957_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071638.jpg">Untitled_Clipping_120314_044947_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071639.jpg">Untitled_Clipping_120314_050042_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071644.jpg">Untitled_Clipping_120614_075352_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071645.jpg">ikm_uno1_2.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071646.jpg">ikm_uno2_3.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071654.jpg">CascadeParameter_Configuration_121014_102718_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071655.jpg">DynamicChoice_Configuration_121014_103019_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071661.jpg">CascadeExample_121114_013308_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071662.jpg">CascadeConfig_121114_020935_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071663.jpg">StatesChoice_Uno6.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071664.jpg">DynamicReferenceConfig.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071665.jpg">SimpleDynRef_Rendering.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071666.jpg">SimpleRendering_Config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071669.jpg">Summary_Behavior_Rendering.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071668.jpg">WINE_RULE_Config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/75071667.jpg">Summary_Behavior_Rendering.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/76054583.png">bio1-200x102.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/78938195.jpg">Untitled_Clipping_050415_011719_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/78938196.jpg">Untitled_Clipping_050415_012955_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/78938197.jpg">Untitled_Clipping_050415_022629_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/79298561.gif">ACReactive_01_StateCities.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871448.gif">AC_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871447.gif">AC_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871449.gif">AC_b01_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871450.gif">AC_cb01_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871451.gif">ACR_c02_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871453.gif">ACR_b02_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871452.gif">ACR_b02_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871454.gif">ACRR_b03_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871455.gif">ACRR_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871456.gif">ACRR_r03_param.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871461.gif">ACR_r03.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871462.png">ACR_c03.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871463.png">ACR_c03_Advanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/80871464.gif">ACR_c03_advanced.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/85426193.jpg">Screenshot_112815_104814_AM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/85753857.jpg">Screenshot_120115_073640_AM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/99123217.jpg">Excel testsheet.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/99614798.png">RI.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/99614799.png">RI_BUILD.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/101580801.png">active.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/135470483.xml">config[1].xml</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/135470484.gif">AC_2xcascade.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138445417.gif">ServerFileLines03.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454315.xml">config.xml</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138447208.png">Screenshot from 2018-01-18 12-46-29.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138447209.png">Screenshot from 2018-01-18 12-47-11.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138447210.png">Screenshot from 2018-01-18 12-47-50.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453655.png">image2018-4-10 14:55:23.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453656.png">image2018-4-10 14:58:31.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453919.png">Selection_261.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453920.png">Selection_260.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453921.png">Selection_259.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138453922.png">Selection_258.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454285.png">Selection_263.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454417.xml">config.xml</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454316.gif">appendToAC.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454416.png">Selection_265.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138454413.png">Selection_265.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138445425.xml">config.xml</a> (text/xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/138458317.png">image2018-6-18 10:33:1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/154599464.png">Screen Shot 2018-09-11 at 08.49.41.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/154599466.png">Screen Shot 2018-09-11 at 08.50.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/164560921.png">MultiLevel_Jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/164560922.png">MultiLevel_Jenkins1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/165577436.png">Screen Shot 2018-10-23 at 10.39.27 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/165581880.png">Screen Shot 2018-12-30 at 4.46.54 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/165581881.png">Screen Shot 2018-12-30 at 4.49.07 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74875908/165581925.png">Screen Shot 2019-01-01 at 12.23.48 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

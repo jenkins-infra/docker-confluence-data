@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Themis Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Themis Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rdelamare)</span>, last modified on Jan 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Themis <a href="https://plugins.jenkins.io/themis" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+ </p><p>A Jenkins plugin to communicate with a Themis instance. It can send report files to be analyzed by Themis and send a refresh request for a project.</p><h2 id="ThemisPlugin-Usage">Usage</h2><h3 id="ThemisPlugin-CreateaThemisinstance">Create a Themis instance</h3><p>In global configuration (“Manage Jenkins” ⇒ “Configure System”), add a Themis instance in the Themis configuration section. You need to fill the following fields:</p><ul><li><strong>instance name</strong>: the name of the instance, used to identify it if there are several instances.</li><li><strong>URL</strong>: the base url of your Themis instance (e.g., “<a href="https://themis.example.com" class="external-link" rel="nofollow">https://themis.example.com</a>”).</li><li><strong>API key</strong>: a Themis API key, generated from the administration page of your Themis instance. Used for authentication.</li></ul><h3 id="ThemisPlugin-RefreshingThemis">Refreshing Themis</h3><p>The action will send a request for refreshing the project, but will not wait for its completion. You should thus check your Themis instance to see the refresh status. By default errors will not mark the build as failed, but you can change this behavior by checking the “Error fails build” checkbox.</p><h4 id="ThemisPlugin-Freestyleproject">Freestyle project</h4><p>In the configuration of your job, add the post-build action “Refresh Themis Project”. Select the Themis instance where the project to refresh is located, then enter the project key, which is available in the project administration page of Themis.</p><h3 id="ThemisPlugin-Pipeline">Pipeline</h3><p>The Themis refresh step is available in pipeline mode:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">themisRefresh(instanceName: &#39;Some instance&#39;, projectKey: &#39;key&#39;)</pre>
+</div></div><p>If you want errors to fail the build, add the <code>failBuild</code> parameter, set as <code>true</code>.</p><h3 id="ThemisPlugin-Sendingreportfiles">Sending report files</h3><p>The action will gather report files (e.g., test coverage reports) to Themis. You need to specify the Themis instance to use, the key of the source that was analyzed by the reports, and a list of report files.</p><p>Report files have a type and paths. If several paths are required to match all the files for a type, you can add several report files with the same type or use a single report file with all the paths separated by commas. Paths can match several files using ant-style wildcards (e.g., “<code>target/**/*.xml</code>”).</p><p>By default errors will not mark the build as failed, but you can change this behavior by checking the “Error fails build” checkbox.</p><h4 id="ThemisPlugin-Freestyleproject.1">Freestyle project</h4><p>In the configuration of your job, add the post-build action “Send report files to Themis”. Select the Themis instance and enter the source key. You can then add as many report files as needed.</p><h4 id="ThemisPlugin-Pipeline.1">Pipeline</h4><p>You can send report files in a pipeline job using the `themisReport` function:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">themisReport(instanceName: &#39;Some instance&#39;, sourceKey: &#39;key&#39;, reports: [[type: &#39;type1&#39;, path: &#39;path&#39;], [type: &#39;type2&#39;, path: &#39;path&#39;]])</pre>
+</div></div><p>Reports are specified as a list of maps, each containing a type (key <code>type</code>) and a path (key <code>path</code>).</p><p>If you want errors to fail the build, add the <code>failBuild</code> parameter, set as <code>true</code>.</p><h5 id="ThemisPlugin-⚠RetrievingSCMversion">⚠ Retrieving SCM version</h5><p>To properly analyze the reports, Themis requires the SCM version. In a freestyle project it is automatically retrieved from environments variable. Due to limitations of pipeline, these environment variables are not set in a pipeline project and you will need to manually add it in the environment. This can be done using the <a href="https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#code-withenv-code-set-environment-variables" class="external-link" rel="nofollow"><code>withDev</code> step</a> (recommended) or the <a href="https://jenkins.io/doc/book/pipeline/syntax/#environment" class="external-link" rel="nofollow"><code>environment</code> directive</a>.</p><p>For git:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">withEnv([&quot;GIT_COMMIT=${sh(returnStdout: true, script: &#39;git rev-parse HEAD&#39;).trim()}&quot;]) {
+	themisReport(…)
+}</pre>
+</div></div><p>For SVN:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">withEnv([&quot;SVN_REVISION=${sh(returnStdout: true, script: &#39;svn info --show-item last-changed-revision .&#39;).trim()}&quot;]) {
+	themisReport(…)
+}</pre>
+</div></div><h2 id="ThemisPlugin-Proxy"><span style="color: rgb(210,73,57);">Proxy</span></h2><p>The plugin uses the Jenkins proxy configuration, in the “Advanced” tab of the “Manage plugins” configuration page. <br/>Authentication, HTTPS, and exclusions are all supported.</p><h2 id="ThemisPlugin-Changelog">Changelog</h2><p><strong>1.4.1</strong>:</p><ul><li>Add Cppchecker to the list of supported tools</li></ul><p><strong>1.4</strong>:</p><ul><li>Add Jacoco to the list of supported tools</li><li>Fix an issue that could occur if report files archiving failed</li></ul><p><strong>1.3</strong>:</p><ul><li>Add a button to test connection with Themis instance in global configuration</li></ul><p><strong>1.2.3:</strong></p><ul><li>Modify the version of workflow step api to be more inclusive</li></ul><p><strong>1.2.1</strong>:</p><ul><li>Fix a bug where old commit ID was sent</li></ul><p><strong>1.2</strong>:</p><ul><li>Add a post build action and a step to send report files to Themis</li></ul><p><strong>1.1</strong>:</p><ul><li>Add support for http proxy</li></ul><p><strong>1.0</strong>:</p><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:53</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

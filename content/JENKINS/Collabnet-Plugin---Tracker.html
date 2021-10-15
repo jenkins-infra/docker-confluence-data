@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Collabnet Plugin - Tracker</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="CollabNet-Plugin.html">CollabNet Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Collabnet Plugin - Tracker
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dharmsheta)</span>, last modified on Mar 05, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div id="expander-335656750" class="expand-container"><div id="expander-control-335656750" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Set up a Jenkins build to generate CollabNet tracker artifacts</span></div><div id="expander-content-335656750" class="expand-content">
+<p><em>General instructions on how to setup the Tracker component</em></p>
+
+
+<p>Before you set up the plugin, make sure the following are in place in the CollabNet project:</p>
+<ul>
+	<li>A valid tracker where artifacts can be created or updated</li>
+	<li>A user who is a project member, and has view, submit and edit permissions for the tracker# In the Jenkins interface for the job, click <strong>Configure</strong>.</li>
+</ul>
+
+
+<ol>
+	<li>In the Jenkins interface for the job, click <strong>Configure</strong>.</li>
+	<li>In the <strong>Post-build Actions</strong> section, select <strong>CollabNet Tracker</strong>.</li>
+	<li>Enter the URL of the CollabNet site. For example, <a href="https://forge.collab.net" class="external-link" rel="nofollow">https://forge.collab.net</a>.</li>
+	<li>Enter the username and password of the SourceForge or Teamforge project member responsible for creating and updating tracker artifacts in the project.</li>
+	<li>Enter the name of the project containing the tracker.<br/>
+*Note:*If the user specified is not a member of this project, the plugin will not be able to locate the project.      </li>
+	<li>Enter the name of the tracker where artifacts will be created or updated.<br/>
+*Note:*If the user specified does not have the requisite permissions in this tracker, the plugin will not be able to identify the tracker.</li>
+	<li>Enter a title for the tracker artifact. You may use environment variables in the title. For example, ${BUILD_ID). Entering a title that could change causes a new artifact to be opened every time the build fails. For a title that does not change, all build results affect a single tracker artifact.</li>
+	<li>Specify the individual to whom the artifact should be assigned.<br/>
+*Note:*If the project administrator has configured the tracker to automatically assign artifacts to individuals based on artifact criteria, skip this step. If not, and you do not select a user, the artifact is assigned to &quot;None&quot;. The artifact is also assigned to &quot;None&quot; in case the username is not valid.</li>
+	<li>Enter a priority or the artifact.</li>
+	<li>Select whether you want the Jenkins build log attached to the artifact. Attaching the build log could be especially useful when a build fails, since you would not need to check the Jenkins console output for details.</li>
+	<li>Specify whether you want the artifact to be updated irrespective of the outcome of the build.<br/>
+**Select yes if you always want to update the issue after each build, regardless of whether the build succeeds or fails.<br/>
+**Select no if you only want to track build failures.</li>
+	<li>Select whether you want an open artifact to be automatically closed when the build succeeds.<br/>
+*Note: Make sure your selection does not potentially conflict with a tracker workflow rule you may have set up. For example, assume you had defined a status transition rule that an open artifact can be closed only when the &quot;Fixed in Release&quot; field is specified. If you select the &quot;Yes&quot; option here to automatically close an open artifact without manual intervention, there will be a conflict because of the &quot;Fixed in Release&quot; requirement.</li>
+	<li>If the artifact represents a failed build for a file release, enter the release name in Reported Release.</li>
+</ol>
+
+
+<p>Tracker artifacts are created, updated or closed depending on your configuration and build results.</p></div></div>
+
+<p><span style="color: rgb(0,0,0);">The Tracker component can be used to open a new artifact on failure or always update an artifact.  You can choose to automatically close the issue once the build succeeds, or just update the last comment this this effect. </span></p>
+
+<p><span style="color: rgb(0,0,0);">If you give the issue title a name with a build variable in it, it will open a new issue on any failure (instead of updating).  The user needs to have the right to edit Tracker artifacts. </span> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://wiki.jenkins-ci.org/download/attachments/37323671/tracker.png?version=2&amp;modificationDate=1239098263000" data-image-src="https://wiki.jenkins-ci.org/download/attachments/37323671/tracker.png?version=2&amp;modificationDate=1239098263000"></span><span style="color: rgb(0,0,0);">The resulting tracker artifact will look something like:</span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://wiki.jenkins-ci.org/download/attachments/37323671/tracker-result.png?version=2&amp;modificationDate=1239098269000" data-image-src="https://wiki.jenkins-ci.org/download/attachments/37323671/tracker-result.png?version=2&amp;modificationDate=1239098269000"></span></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:17</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

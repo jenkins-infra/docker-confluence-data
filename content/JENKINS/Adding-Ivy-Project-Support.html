@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Adding Ivy Project Support</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Ivy-Plugin.html">Ivy Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Adding Ivy Project Support
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tbingaman)</span>, last modified on Feb 17, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p></p>
+
+<h1 id="AddingIvyProjectSupport-IvyProjectSupportforHudson">Ivy Project Support for Hudson</h1>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This feature has now been merged into the main Ivy plugin as of release 1.0</p></div></div>
+
+<h2 id="AddingIvyProjectSupport-Goal">Goal</h2>
+
+<p>To create a new Hudson project type with similar functionality to the maven project type.  I think it makes sense to add this into the existing Ivy plugin as that is how the maven plugin is packaged (project type, build trigger, etc. all in one plugin).</p>
+
+<h2 id="AddingIvyProjectSupport-Requirements(innoparticularorder)">Requirements (in no particular order)</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Requirement # </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+<th class="confluenceTh"><p> Issues </p></th>
+<th class="confluenceTh"><p> Proof of Concept Done </p></th>
+<th class="confluenceTh"><p> Implementation Complete </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 1 </p></td>
+<td class="confluenceTd"><p> Able to create a project based on a single module or multiple modules </p></td>
+<td class="confluenceTd"><p> Ivy has no notion of &quot;parent&quot; modules, so we need some way to specify multiple ivy.xml files </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2 </p></td>
+<td class="confluenceTd"><p> Monitor building of modules </p></td>
+<td class="confluenceTd"><p> The build uses ant and is not in our control, so we need some way to register and receive events during the build process. </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 3 </p></td>
+<td class="confluenceTd"><p> Provide a viewable list of all modules </p></td>
+<td class="confluenceTd"><p> Since Ivy has no &quot;parent&quot; module notion, we probably can't do a nice tree-view like in a Maven project </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 4 </p></td>
+<td class="confluenceTd"><p> Expose some of the Ivy reports in the UI (I'm not even sure what reports Ivy can do, but if it can generate a dependency graph image or some such thing that'd be cool to see) </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 5 </p></td>
+<td class="confluenceTd"><p> Auto-archive each module's ivy.xml file </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 6 </p></td>
+<td class="confluenceTd"><p> Auto-detect and auto-archive artifacts </p></td>
+<td class="confluenceTd"><p> Not sure if Ivy provides any hooks that we can use for this.  Even if it did, this would only work if the modules were published.  We can't just look at the ivy.xml for the artifacts since it doesn't tell us where to find them. </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 7 </p></td>
+<td class="confluenceTd"><p> Be able to trigger builds from a multi-module ivy build </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 8 </p></td>
+<td class="confluenceTd"><p> Separate the list of SCM changes for each module </p></td>
+<td class="confluenceTd"><p> No standard location of ivy.xml file in a module, so no way to figure out the base directory of the module for matching against changed paths. </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+<td class="confluenceTd"><p> <img class="emoticon emoticon-tick" src="images/icons/emoticons/check.svg" data-emoticon-name="tick" alt="(tick)"/> </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h2 id="AddingIvyProjectSupport-ImplementationIdeas">Implementation Ideas</h2>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Requirement # </p></th>
+<th class="confluenceTh"><p> Implementation Idea </p></th>
+<th class="confluenceTh"><p> Issues </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 1 </p></td>
+<td class="confluenceTd"><p> Provide a field for an ant-style include pattern to scan workspace for module descriptor files (eg. **/ivy.xml) </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2 </p></td>
+<td class="confluenceTd"><p> Ivy does have some events and triggers which can be extended, but it looks like this is only for pre/post resolve.  Maybe this is sufficient to say that a module is building. </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2 </p></td>
+<td class="confluenceTd"><p> Possible implementation 1 <br class="atl-forced-newline"/></p>
+<ol>
+	<li>On the first pre-resolve we can start the build progress of that module</li>
+	<li>On every other pre-resolve we can stop the progress of the previous module and then start the progress of the current module</li>
+	<li>On the build completion we can stop the progress of the last module
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+This should result in every successfully built module showing as blue and any modules that were never built (never triggered an Ivy resolve) showing as grey, just like in the Maven project.  If the build fails at a certain point then we can mark the currently building module as red. </li>
+</ol>
+</td>
+<td class="confluenceTd"><p> This could not handle the case where failures are ignored by the ant build script.  Would people do that though? </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2 </p></td>
+<td class="confluenceTd"><p> Possible implementation 2 <br class="atl-forced-newline"/></p>
+<ul>
+	<li>Does ant itself provide callbacks for monitoring the process? Being able to monitor the full build of each module would be a lot better.</li>
+</ul>
+</td>
+<td class="confluenceTd"><p> Even if ant can do this, how would we know when we enter/leave a module build?  Ant is too flexible to make any assumptions </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2 </p></td>
+<td class="confluenceTd"><p> <strong>Implementation which might actually work</strong> <br class="atl-forced-newline"/></p>
+<ul>
+	<li>load an embedded version of Ant from the ant home specified</li>
+	<li>register a custom listener for build events</li>
+	<li>call the specified ant targets on each module's build file and monitor the output</li>
+</ul>
+</td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 3 </p></td>
+<td class="confluenceTd"><p> We have all the ivy descriptors, so we can get all the module names and then ask Ivy to sort them in dependency order. (just a list, not a tree-view) </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 5 </p></td>
+<td class="confluenceTd"><p> This should be easy since we already have the list of ivy.xml files based on the ant include specified in the job config </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 6 </p></td>
+<td class="confluenceTd"><p> Ask for a relative path to the artifacts directory from the ivy.xml file in each module.  Then use the artifacts specified in the ivy.xml to match up with these and auto-archive, auto-fingerprint them.  If this is possible, then it'd work even if the modules are only built and not published. </p></td>
+<td class="confluenceTd"><p> Can we assume this will be the same for every module in a project? </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 6 </p></td>
+<td class="confluenceTd"><p> See if there is a publish-hook in Ivy or if we can add one and then grab the artifacts as they are published. </p></td>
+<td class="confluenceTd"><p> Wouldn't be able to do anything if the modules were not published. </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 7 </p></td>
+<td class="confluenceTd"><p> Modify the current Ivy build trigger to take multiple Ivy files into account. When the build finishes, trigger any builds in Hudson with dependent modules.  We'd need to take into account every module in the current project as well as every module in every other Hudson project (or maybe just every other Ivy-type project?). </p></td>
+<td class="confluenceTd"><p> If we only check for triggers amongst the Ivy projects in Hudson, this wouldn't be backwards-compatible.  Can we have two different trigger implementations then, one for freestyle projects and one for Ivy projects?  And would there be any benefit to doing that? </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 8 </p></td>
+<td class="confluenceTd"><p> Ask for a relative path to the module basedir from the ivy.xml file, allowing overrides in each module-specific config page if certain modules deviate from this.  We should then be able to grab the changes affecting these paths (Is this how the Maven projects figure it out?) </p></td>
+<td class="confluenceTd"><p> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 8 </p></td>
+<td class="confluenceTd"><p> Alternatively, instead of having an ant pattern for ivy.xml files, we could switch it around and have a pattern for module dirs and a relative path to the ivy.xml file (also overridable per module) </p></td>
+<td class="confluenceTd"><p> Won't work... we need the ivy.xml files first to generate the modules </p></td>
+</tr>
+</tbody></table></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468911/42631350.hpi">ivy.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468911/42631351.hpi">ivy.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468911/42631353.hpi">ivy.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468911/42631365.hpi">ivy.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42468911/42631349.hpi">ivy.hpi</a> (application/octet-stream)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:28</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

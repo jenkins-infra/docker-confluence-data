@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Running Jenkins behind Nginx</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Running Jenkins behind Nginx
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (njh)</span>, last modified by <span class='editor'> Jan Klass</span> on Oct 16, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In situations where you have existing web sites on your server, you may find it useful to run Jenkins (or the servlet container that Jenkins runs in) behind <a href="http://nginx.org/" class="external-link" rel="nofollow">Nginx</a>, so that you can bind Jenkins to the part of a bigger website that you may have. This document discusses some of the approaches for doing this.</p><p>When a request arrives for certain URLs, Nginx becomes a proxy and further forward that request to Jenkins, then it forwards the response back to the client. A typical set up for mod_proxy would look like this:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>upstream jenkins {
+  keepalive 32; # keepalive connections
+  server 127.0.0.1:8080; # jenkins ip and port
+}
+ 
+server {
+  listen          80;       # Listen on port 80 for IPv4 requests
+
+  server_name     jenkins.example.com;
+
+  #this is the jenkins web root directory (mentioned in the /etc/default/jenkins file)
+  root            /var/run/jenkins/war/;
+
+  access_log      /var/log/nginx/jenkins/access.log;
+  error_log       /var/log/nginx/jenkins/error.log;
+  ignore_invalid_headers off; #pass through headers from Jenkins which are considered invalid by Nginx server.
+
+  location ~ &quot;^/static/[0-9a-fA-F]{8}\/(.*)$&quot; {
+    #rewrite all static files into requests to the root
+    #E.g /static/12345678/css/something.css will become /css/something.css
+    rewrite &quot;^/static/[0-9a-fA-F]{8}\/(.*)&quot; /$1 last;
+  }
+
+  location /userContent {
+    #have nginx handle all the static requests to the userContent folder files
+    #note : This is the $JENKINS_HOME dir
+	root /var/lib/jenkins/;
+    if (!-f $request_filename){
+      #this file does not exist, might be a directory or a /**view** url
+      rewrite (.*) /$1 last;
+	  break;
+    }
+	sendfile on;
+  }
+
+  location / {
+      sendfile off;
+      proxy_pass         http://jenkins;
+      proxy_redirect     default;
+      proxy_http_version 1.1;
+
+      proxy_set_header   Host              $host;
+      proxy_set_header   X-Real-IP         $remote_addr;
+      proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+      proxy_set_header   X-Forwarded-Proto $scheme;
+      proxy_max_temp_file_size 0;
+
+      #this is the maximum upload size
+      client_max_body_size       10m;
+      client_body_buffer_size    128k;
+
+      proxy_connect_timeout      90;
+      proxy_send_timeout         90;
+      proxy_read_timeout         90;
+      proxy_buffering            off;
+      proxy_request_buffering    off; # Required for HTTP CLI commands in Jenkins &gt; 2.54
+      proxy_set_header Connection &quot;&quot;; # Clear for keepalive
+  }
+
+}
+</pre>
+</div></div><p>This assumes that you run Jenkins on port 8080. Remember to create the folder /var/log/nginx/jenkins.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>For this set up to work, the context path of Jenkins must be the same between your Nginx and Jenkins (that is, you can't run Jenkins on <a href="http://localhost:8081/ci" class="external-link" rel="nofollow">http://localhost:8081/ci</a> and have it exposed at <a href="http://localhost:80/jenkins" class="external-link" rel="nofollow">http://localhost:80/jenkins</a>).</p><p>Set the context path by modifying the hudson.xml configuration file and adding --prefix=/hudson (or similar) to the &lt;arguments&gt; entry.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are having problems with some paths (eg folders) with <strong>Blue Ocean</strong>, you may need to add the following snippet to your proxy configuration:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">if ($request_uri ~* &quot;/blue(/.*)&quot;) {
+    proxy_pass http://YOUR_SERVER_IP:YOUR_JENKINS_PORT/blue$1;
+    break;
+}</pre>
+</div></div></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>To give nginx permission to read Jenkins web root folder, add nginx to Jenkins group: </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">useradd \-aG Jenkins nginx</pre>
+</div></div></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are experiencing timeouts when attempting to run long CLI commands through a proxy in Jenkins &gt; 2.80, you can increase the <code>proxy_read_timeout</code> setting as necessary. Older versions of Jenkins may not respect the <code>proxy_read_timeout</code> setting.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are experiencing the following error when attempting to run long CLI commands in Jenkins &gt; 2.80<span>, and Jenkins is running behind Nginx, it is probably due to Nginx timing out the CLI connection</span>. You can increase the <code>proxy_read_timeout</code> setting as necessary so the command will complete successfully. Versions of Jenkins before 2.80 may not respect the <code>proxy_read_timeout</code> setting.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>WARNING: null
+hudson.cli.DiagnosedStreamCorruptionException
+Read back: 0x00 0x00 0x00 0x1e 0x07 &#39;Started reverse-proxy-test #68&#39; 0x00 0x00 0x00 0x01 0x07 0x0a
+Read ahead: 
+Diagnosis problem:
+    java.io.IOException: Premature EOF
+    	at sun.net.www.http.ChunkedInputStream.readAheadBlocking(ChunkedInputStream.java:565)
+    	...
+	at hudson.cli.FlightRecorderInputStream.analyzeCrash(FlightRecorderInputStream.java:82)
+	at hudson.cli.PlainCLIProtocol$EitherSide$Reader.run(PlainCLIProtocol.java:153)
+Caused by: java.io.IOException: Premature EOF
+	at sun.net.www.http.ChunkedInputStream.readAheadBlocking(ChunkedInputStream.java:565)
+	...
+	at java.io.DataInputStream.readInt(DataInputStream.java:387)
+	at hudson.cli.PlainCLIProtocol$EitherSide$Reader.run(PlainCLIProtocol.java:111)</pre>
+</div></div></div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

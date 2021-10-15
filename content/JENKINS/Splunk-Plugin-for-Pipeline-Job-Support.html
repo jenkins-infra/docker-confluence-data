@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Splunk Plugin for Pipeline Job Support</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Splunk Plugin for Pipeline Job Support
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fengxx)</span>, last modified on May 20, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Splunk Plugin Extension <a href="https://plugins.jenkins.io/splunk-devops-extend" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+Common utility implementations to build Pipeline jobs<h2 id="SplunkPluginforPipelineJobSupport-AcomponentofSplunkPluginforJenkinstosupportpipelinejobs.">A component of <a href="https://wiki.jenkins-ci.org/display/JENKINS/Splunk+plugin+for+Jenkins" class="external-link" rel="nofollow">Splunk Plugin for Jenkins</a> to support pipeline jobs.</h2><h2 id="SplunkPluginforPipelineJobSupport-Usage">Usage</h2><ul><li>sendSplunkFile</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/101483021/101580850.png" data-image-src="attachments/101483021/101580850.png" data-unresolved-comment-count="0" data-linked-resource-id="101580850" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="sendsplunkfile_pipeline.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="101483021" data-linked-resource-container-version="16"></span></p><ul><li><pre>sendSplunkConsoleLog</pre></li></ul><p><br/></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#scripted pipeline
+sendSplunkConsoleLog {
+  node{
+  	sh &quot;echo testjob&quot;;
+ }
+}
+
+ 
+#declarative pipeline
+pipeline {
+    agent any
+    options {
+        timeout(time: 1, unit: &#39;HOURS&#39;)
+        sendSplunkConsoleLog()
+    }
+    stages {
+        stage(&#39;Example&#39;) {
+            steps {
+                echo &#39;Hello World&#39;
+            }
+        }
+    }
+}</pre>
+</div></div><p><br/></p><h2 id="SplunkPluginforPipelineJobSupport-Changelog">Changelog</h2><h3 id="SplunkPluginforPipelineJobSupport-1.7.2(May20,2018)">1.7.2 (May 20, 2018)  </h3><ul><li><p>add pipeline execute diagram support (in graphviz format), data will be sent to index=jenkins_console source=&quot;BUILD_URL/graphviz&quot;, user could opt-in using job properties</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">properties([splunkinsJobOption(enableDiagram: true)])</pre>
+</div></div></li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.7.1(Dec7,2018)">1.7.1 (Dec 7, 2018)  </h3><ul><li>fix JENKINS-50993 Pipeline-Stage-View Plugin is unable to show stage logs</li><li>add exec_node and arguments information for pipeline step</li><li>improve support for parallel step</li><li>remove deprecated step SplunkMessageStep</li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.7.0(Aug29,2018)">1.7.0 (Aug 29, 2018)  </h3><ul><li>optimize sending log file</li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.5.2-1.6.4">1.5.2 -1.6.4</h3><ul><li><p>no code change, bundled with splunk-devops</p></li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.5.1(April24,2017)">1.5.1 (April 24, 2017)  </h3><ul><li>Extract step information for each pipeline stage</li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.5.0(April16,2017)">1.5.0 (April 16, 2017)  </h3><ul><li>Use SecureGroovyScript to address security issues mentioned on <a rel="nofollow" href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link">https://jenkins.io/security/advisory/2017-04-10/</a> </li><li>sendSplunkScript was disabled for security reason, please use &quot;splunkins&quot; directly, usage can be found on <a href="https://wiki.jenkins-ci.org/display/JENKINS/Splunk+Plugin+for+Jenkins" class="external-link" rel="nofollow">Link</a></li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.4(Dec19,2016)">1.4 (Dec 19, 2016)</h3><ul><li><span style="color: rgb(255,0,0);">sendSplunk was renamed to sendSplunkScript, user need update pipleline definition</span></li><li><p>added sendSplunkConsoleLog step</p></li></ul><h3 id="SplunkPluginforPipelineJobSupport-1.1-1.3">1.1-1.3</h3><p>No code change, bundled with splunk-devops, just update dependancy of splunk-devops to the same version</p><h3 id="SplunkPluginforPipelineJobSupport-1.0(Oct8,2016)">1.0 (Oct 8, 2016)</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/101483021/101580850.png">sendsplunkfile_pipeline.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:49</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

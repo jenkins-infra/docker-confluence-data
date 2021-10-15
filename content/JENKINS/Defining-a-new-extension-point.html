@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Defining a new extension point</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Defining a new extension point
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (batmat)</span> on Jan 16, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Just as Jenkins core defines a set of extension points, your plugin can define new extension points so that other plugins can contribute implementations. This page shows how to do that.</p>
+
+<p>Extension points may be defined in either of two ways:</p>
+<ol>
+	<li>Singleton pattern</li>
+	<li>Describable/Descriptor pattern (builds on singleton pattern)</li>
+</ol>
+
+
+<h1 id="Defininganewextensionpoint-SingletonPattern">Singleton Pattern</h1>
+
+<p>First, you define your contract in terms of an abstract class. (You can do this in interfaces, too, but then you'll have hard time adding new methods in later versions of your plugin.) This class should implement the marker <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.ExtensionPoint">hudson.ExtensionPoint</a> interface, to designate that it is an extension point.</p>
+
+<p>For convenience you can also define a static method conventionally named <code>all</code>. The returned <code>ExtensionList</code> allows you discover all the implementations at runtime.</p>
+
+<p>The following code shows this in a concrete example:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">/**
+ * Extension point that defines different kinds of animals
+ */
+public abstract class Animal implements ExtensionPoint {
+    ...
+
+    /**
+     * All registered {@link Animal}s.
+     */
+    public static ExtensionList&lt;Animal&gt; all() {
+        return Jenkins.getActiveInstance().getExtensionList(Animal.class); // getActiveInstance() starting with Jenkins 1.590, else getInstance()
+    }
+}
+</pre>
+</div></div>
+<p>In addition to these basic ingredients, your extension point can implement additional interfaces, extend from another base class, define all sorts of methods, etc. Because the extension implementations will be singletons, usually the default no-argument constructor suffices.</p>
+
+<p>Also, this system is only necessary when you need to discover the implementations at runtime. So if your extension point consists of a group of several classes and interfaces, normally only the entry point needs to follow this convention. Such an example can be seen in <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.scm.ChangeLogParser">hudson.scm.ChangeLogParser</a> in the core — <code>ChangeLogParser</code> implementations are always created by <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.scm.SCM">hudson.scm.SCM</a> implementations, so <code>ChangeLogParser</code> is not an extension point.</p>
+
+<h3 id="Defininganewextensionpoint-Enumeratingimplementationsatruntime">Enumerating implementations at runtime</h3>
+
+<p>The following code shows how you can list up all the <code>Animal</code> implementations contributed by other plugins.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">for (Animal a : Animal.all()) {
+    System.out.println(a);
+}
+</pre>
+</div></div>
+<p>There are other convenience methods to find a particular instance, and so on. See <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.ExtensionList">hudson.ExtensionList</a> for more details.</p>
+
+<h3 id="Defininganewextensionpoint-Implementingextensionpoints">Implementing extension points</h3>
+
+<p>Implementing an extension point defined in a plugin is no different from implementing an extension point defined in the core. See <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.Extension">hudson.Extension</a> for more details.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">@Extension
+public class Lion extends Animal { ... }
+</pre>
+</div></div>
+
+<h1 id="Defininganewextensionpoint-Describable/Descriptorpattern">Describable/Descriptor pattern</h1>
+
+<p>If you are going to define a new extension point that follows the <a href="http://javadoc.jenkins-ci.org/byShortName/hudson.model.Describable">hudson.model.Describable</a>/<a href="http://javadoc.jenkins-ci.org/byShortName/hudson.model.Descriptor">hudson.model.Descriptor</a> pattern, the convention is bit different. This pattern is used when users should be able to configure zero or more instances of some things you define.</p>
+
+<p>In this case the singleton is a <code>Descriptor</code>: a description of the kind of thing a user can create and configure. There is a matching <code>Describable</code> class which represents the actual things being created and configured. Confusingly, the convention is to place the <code>ExtensionPoint</code> marker on the <code>Describable</code> class, even though <code>@Extension</code> will be put on implementations of the <code>Descriptor</code>.</p>
+
+<p>For this, first you define your <code>Describable</code> subtype and <code>Descriptor</code> subtype.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public abstract class Food extends AbstractDescribable&lt;Food&gt; implements ExtensionPoint {
+    ...
+
+    @Override public FoodDescriptor getDescriptor() {
+        return (FoodDescriptor) super.getDescriptor();
+    }
+
+}
+
+public abstract class FoodDescriptor extends Descriptor&lt;Food&gt; {
+    protected FoodDescriptor() {
+    }
+    // optional constructor specifying class (the default one usually suffices however):
+    protected FoodDescriptor(Class&lt;? extends Food&gt; clazz) {
+        super(clazz);
+    }
+}
+</pre>
+</div></div>
+
+
+<p>An extension for Food would look like this:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public class MyFoodImpl extends Food {
+    private final boolean tasty;
+    @DataBoundConstructor public MyFoodImpl(boolean tasty) {
+        this.tasty = tasty;
+    }
+    public boolean isTasty() {return tasty;}
+    ...
+    @Extension
+    public static class DescriptorImpl extends FoodDescriptor {
+
+        @Override
+        public String getDisplayName() {
+            return &quot;MyFood&quot;;
+        }
+    }
+ }
+
+</pre>
+</div></div>
+
+<p>Typically you will also need a <code>src/main/resources/…/MyFoodImpl/config.jelly</code> providing its configuration form. The exact Jelly views needed for a describable vary according to how the extension point is used.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : My software builds on my computer but not on Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : My software builds on my computer but not on Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Mar 26, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Often, your build is sensitive to the environment in an unintended way and that causes a build failure. So before you suspect a bug in Jenkins, please go through the following check list.</p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-PATH/Environmentvariables">PATH / Environment variables</h3>
+
+<p>Especially when you run Jenkins as a service/daemon under a different user account, it often gets a different <code>PATH</code> environment variable than your shell does, and this results in failing to find some commands, or invoking different versions of the same commands. To check what environment variables Jenkins is seeing, go to <code>http:</code><code>//server/jenkins/systemInfo</code> and scroll down to see the environment variables.</p>
+
+<p>Many tools also change their behaviours on the values/presence/absence of some environment variables, so you might want to check those, aside from PATH.</p>
+
+<p>Each slave also gets different environment variables, depending on how it's started. To check their respective environment variables, visit <code>http:</code><code>//server/jenkins/computer/COMPUTERNAME/systemInfo</code>.</p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-Profiles,per-usersettingfiles">Profiles, per-user setting files</h3>
+<p>Tools often read per-user configuration files, and therefore, they can be reading different values when you run it from your shell vs when you run it from Jenkins. The best way to verify this is to login as the same user as Jenkins. See <a href="How-to-get-command-prompt-as-the-SYSTEM-user.html">How to get command prompt as the SYSTEM user</a>, and on Unix, see su/sudo.</p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-Networkdrivemappings(Windows)">Network drive mappings (Windows)</h3>
+
+<p>On Windows, network drive mappings are scoped to users. So if you run Jenkins in a different user account (such as a Windows service), they will not see the same drive mapping that you do. Use UNC notation (//server/path/to/file), or refer to <a href="How-to-get-command-prompt-as-the-SYSTEM-user.html">How to get command prompt as the SYSTEM user</a> and start a command prompt, then define drive mappings.</p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-Desktopaccess(Windows)">Desktop access (Windows)</h3>
+
+<p>On Windows, processes started as services do not have access to the <a href="http://msdn.microsoft.com/en-us/library/ms687096(VS.85).aspx" class="external-link" rel="nofollow">Window station</a> (unless &quot;interactive&quot; option is set for this process), and such processes cannot perform certain GUI-related system calls. This can affect your tests if your program involves GUI.</p>
+
+<p>The access to window station is inherited through the process chain, so for example, if you have a Cygwin ssh daemon running as a non-interactive service, a slave launched via ssh will not have the window station access. If you suspect you are seeing this error, go up the process tree, find the root service process, and enable the interactive flag in the Windows service manager.</p>
+
+<p>If you install Jenkins and slaves as Windows services via Jenkins' GUI, this flag is set by default.</p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-WindowsServiceSettings">Windows Service Settings</h3>
+
+<p>If you get the following error:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+fatal error C1902: Program database manager mismatch; please check your installation
+</pre>
+</div></div>
+<p>then you should try changing the &quot;Log on&quot; user for the Jenkins service. For Visual Studio projects, Jenkins will fail to build the project if running as service. This problem is caused by Jenkins running under Local System Account (used for Windows Services). To fix this problem, edit service details and set &quot;Log on&quot; details to a different local user. </p>
+
+<h3 id="MysoftwarebuildsonmycomputerbutnotonJenkins-ProjectName">Project Name</h3>
+
+<p>Spaces and special characters may cause build errors.  On Linux with Maven it is possible to get classpath errors from Maven when the project name contains a space(e.g., &quot;My Project&quot;).  A dash &quot;-&quot; seems to be a safe character instead of a space.  There are also some Jenkins JIRA issues reported but not duplicated about other special characters causing problems too.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

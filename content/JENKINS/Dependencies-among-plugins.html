@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Dependencies among plugins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Dependencies among plugins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (mbivol)</span> on Mar 17, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Dependenciesamongplugins-Mandatorydependencies">Mandatory dependencies</h1>
+
+<p>A plugin can declare dependencies to other plugins. When plugin X depends on Y, X can see all the classes in Y, as well as Y's libraries and dependencies. (That is, at runtime, Jenkins will set up classloaders in such a way that X classloader delegates to Y classloader.)</p>
+
+<p>To declare a dependency, add the following entry to plugin pom.xml</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.jvnet.hudson.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;javanet-uploader&lt;/artifactId&gt;
+    &lt;version&gt;1.5&lt;/version&gt;
+  &lt;/dependency&gt;
+...
+&lt;/dependencies&gt;
+
+</pre>
+</div></div>
+<p>The groupId, artifactId, version needs to be changed according to what you want to depend on. The maven mojos associated to the &quot;hpi&quot; packaging will use this information to put necessary information in the plugin manifest, which in turn is read by Jenkins at runtime.</p>
+
+<h1 id="Dependenciesamongplugins-Optionaldependencies">Optional dependencies</h1>
+
+<p>By default, dependencies are mandatory — if any of the dependencies are unavailable then the plugin will be disabled and can not be used.</p>
+
+<p>However, this is just the default. It is possible to declare dependencies to other plugins as optional. In this way, even if some of the optional dependencies are unavailable, the plugin will continue to be loaded and executed.</p>
+
+<p>To declare an optional dependency, add the <strong>&lt;optional/&gt;</strong> tag to the declared dependency in the plugin pom.xml</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.jvnet.hudson.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;javanet-uploader&lt;/artifactId&gt;
+    &lt;version&gt;1.5&lt;/version&gt;
+    &lt;optional&gt;true&lt;/optional&gt;
+  &lt;/dependency&gt;
+...
+&lt;/dependencies&gt;
+</pre>
+</div></div>
+<p>If any of the classes in the unavailable optional dependencies are used in the plugin a <strong>NoClassDefError</strong> will be thrown. It is still your responsibility to cope with these errors (although Jenkins itself does some of this handling. If your particular extension fails to load with LinkageError because of a missing dependency, it will gracefully disable just that extension and move on to try instantiating other extensions.</p>
+
+<p>You can mark your extension as an optional extension by changing the @Extension annotation to @Extension(optional = true) and Jenkins don't log any class loading errors when reading it.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@Extension(optional = true)
+public static class YourDescriptor extends Descriptor&lt;YourDescribable&gt; {
+    @Override
+    public String getDisplayName() {
+        return &quot;YourDisplayName&quot;;
+    }
+}
+</pre>
+</div></div>
+
+
+<p>To determine if an optional dependency is installed, the <strong>Jenkins.getPlugin(String)</strong> method can be used.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+if (Jenkins.getInstance().getPlugin(&quot;javanet-uploader&quot;) != null) {
+    // use classes in the &quot;javanet-uploader&quot; plugin
+}
+</pre>
+</div></div>
+
+<h2 id="Dependenciesamongplugins-Tipsforoptionaldependencies">Tips for optional dependencies</h2>
+
+<p><a href="Tips-for-optional-dependencies.html">Tips for optional dependencies</a></p>
+
+<h1 id="Dependenciesamongplugins-Versions">Versions</h1>
+
+
+<p>At the moment there is no built-in mechanism for creating a dependency on a specified version of a plugin. (But it's on the TODO list) So you have to ask for yourself:
+<br class="atl-forced-newline"/></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+PluginWrapper requiredPlugin = Jenkins.getInstance().getPlugin(&quot;javanet-uploader&quot;);
+if (requiredPlugin != null) {
+    // We know we have a &quot;javanet-uploader&quot; plugin, but no knowledge of the version
+    String reqVersion = requiredPlugin.getVersion();
+    // now compare the version of that plugin to the values you can work with
+}
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

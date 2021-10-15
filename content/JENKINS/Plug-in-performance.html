@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Plug-in performance</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="TestLink-Plugin.html">TestLink Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Plug-in performance
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kinow)</span>, last modified on Mar 13, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In release 3.1 we refactored many parts of the code, and the overall performance seems to be much better now. And the attachments now are optional, saving a lot of time and memory.</p>
+
+<h2 id="Plug-inperformance-Backgroundhistory"><span style="text-decoration: line-through;">Background history</span></h2>
+
+<p><span style="text-decoration: line-through;">John Siller was the first one to file issues complaining about the plug-in performance, due to some OutOfMemory errors the plug-in was running into. After that I asked for an open source license of YourKit (kindly given right away, thanks YourKit!) and profiled the plug-in. I was reproducing John's issue with ease using the same set of JUnit XML that he was using and a similar number of automated tests in TestLink. The issue was related to the number of messages that the plug-in was splitting in the console, generating a huge amount of garbage collection and putting a lot of objects in the memory heap. This was fixed in 3.0.0, however the issue persisted in 3.0.1 and 3.0.2.</span></p>
+
+<p><span style="text-decoration: line-through;">Now we are performing a deeper investigation on this issue.</span></p>
+
+<h2 id="Plug-inperformance-Theproblem"><span style="text-decoration: line-through;">The problem</span></h2>
+
+<p><span style="text-decoration: line-through;">The first bottleneck identified is the test results seeking process. The plug-in implements three strategies for seeking for test results: JUnit, TestNG and TAP. The latter is the simplest one, and quite different then the first two ones.</span></p>
+
+<p>-What happens in JUnit and TestNG is that the the current algorithm is at least O(n⁵) (I say at least as I didn't have time to perform a real analysis on it yet), something like:-</p>
+
+<p><span style="text-decoration: line-through;">- Iterate over test result files</span></p>
+
+<p><span style="text-decoration: line-through;">  - Iterate over suites</span></p>
+
+<p><span style="text-decoration: line-through;">    - Iterate over tests</span></p>
+
+<p><span style="text-decoration: line-through;">      - Iterate over TestLink automated tests</span></p>
+
+<p><span style="text-decoration: line-through;">        - Iterate over comma separated values of custom fields</span></p>
+
+
+<p><span style="text-decoration: line-through;">This is the result of several refactoring since the first version of the plug-in, which supported only TAP. So the plug-in performance is not affected at all when you have few tests to execute. However, in the worst case, where you have several files, with several tests within it mapped to several automated test cases in TestLink using custom fields with comma.</span></p>
+
+<p><span style="text-decoration: line-through;">And it gets worst, as the plug-in looks for test results against test suites and for test results against test cases.</span></p>
+
+<p><span style="text-decoration: line-through;">The plug-in allocates several objects in memory in each turn, and uses these objects in subsequent nested operations. Probably there are many ways to improve the memory use too.</span></p>
+
+
+<h2 id="Plug-inperformance-Improvementideas"><span style="text-decoration: line-through;">Improvement ideas</span></h2>
+
+<p><span style="text-decoration: line-through;">Here is a space for listing of ideas to improve the plug-in performance. Feel free to add any idea or suggestion that you may have.</span></p>
+<ol>
+	<li><span style="text-decoration: line-through;">Add an option in the plug-in configuration screen that lets the user decide whether the plug-in should use test suites or test cases. This way, the plug-in wouldn't need to execute twice for JUnit and TestNG. The caveat of this option is that we would break backward compatibility again (we broke from 2.x to 3.x).</span></li>
+	<li>-Add a different data structure, like ArrayListMultimap, where the custom field value would be key, with a list of testlink automated test cases (it would remove two iterations, reducing the overall complexity to O(n³).-</li>
+	<li>-Change the way the parsers return ﻿data structures. We could add a different method or parser that would return a java.util.List of tests (be it test case, test class, test method, etc). This could be used combined with the idea #1. This way,  the plug-in wouldn't need to iterate over test suites anymore, reducing its overall execution to O(n⁴) and if combined with idea #2, it would turn the algorithm into O(n²)!-</li>
+	<li><span style="text-decoration: line-through;">Use Soft and Weak references in some fields (including soft and weak data structures). This way we would help the garbage collection process.</span></li>
+</ol>
+
+
+<h2 id="Plug-inperformance-Finalnotes"><span style="text-decoration: line-through;">Final notes</span></h2>
+
+<ol>
+	<li><span style="text-decoration: line-through;">Although the ideas listed here focus on the test result seeking process, should you identify other points where we could increase the memory performance (process time, memory use, etc) feel free to create other topics.</span></li>
+	<li><span style="text-decoration: line-through;">After we have fixed this issue, this page will be modified to have a summary of the plug-in algorithm performance, and perhaps a background history including this initial discussion.</span></li>
+	<li><span style="text-decoration: line-through;">Many thanks to YourKit, for donating a license for this plug-in. If you are part of the plug-in team, you can mail them and ask for a license too (or mail Bruno P. Kinoshita and he will get in touch with them for you). That's the best tool for profiling Java applications (EE or not) that I've seen so far.</span></li>
+</ol>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:53</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

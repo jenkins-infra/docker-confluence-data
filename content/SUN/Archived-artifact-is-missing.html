@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sun&#39;s Hudson deployment : Archived artifact is missing</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Sun&#39;s Hudson deployment</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Investigation-Notes.html">Investigation Notes</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Sun&#39;s Hudson deployment : Archived artifact is missing
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Jun 17, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>The latest incarnation is in <a class="external-link" href="http://kohsuke.sfbay/hudson/view/GFv3/job/glassfish-v3/4524/" rel="nofollow">http://kohsuke.sfbay/hudson/view/GFv3/job/glassfish-v3/4524/</a></p>
+
+<p>The error is:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Deploying module: glassfish-v3 ? Phobos connector for Glassfish V3 #4524 timestamp=java.util.GregorianCalendar[time=1213668692269,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id=&quot;US/Pacific&quot;,offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=US/Pacific,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=2008,MONTH=5,WEEK_OF_YEAR=25,WEEK_OF_MONTH=3,DAY_OF_MONTH=16,DAY_OF_YEAR=168,DAY_OF_WEEK=2,DAY_OF_WEEK_IN_MONTH=3,AM_PM=1,HOUR=7,HOUR_OF_DAY=19,MINUTE=11,SECOND=32,MILLISECOND=269,ZONE_OFFSET=-28800000,DST_OFFSET=3600000]
+
+FATAL: Archived artifact is missing: /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/pom.xml
+java.io.IOException: Archived artifact is missing: /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/pom.xml
+	at hudson.maven.reporters.MavenArtifact.getFile(MavenArtifact.java:147)
+	at hudson.maven.reporters.MavenArtifactRecord.deploy(MavenArtifactRecord.java:93)
+	at hudson.maven.reporters.MavenAggregatedArtifactRecord.deploy(MavenAggregatedArtifactRecord.java:56)
+	at hudson.maven.RedeployPublisher.perform(RedeployPublisher.java:67)
+	at hudson.model.AbstractBuild$AbstractRunner.performAllBuildStep(AbstractBuild.java:309)
+	at hudson.maven.MavenModuleSetBuild$RunnerImpl.post2(MavenModuleSetBuild.java:434)
+	at hudson.model.AbstractBuild$AbstractRunner.post(AbstractBuild.java:282)
+	at hudson.model.Run.run(Run.java:789)
+	at hudson.maven.MavenModuleSetBuild.run(MavenModuleSetBuild.java:202)
+	at hudson.model.ResourceController.execute(ResourceController.java:70)
+	at hudson.model.Executor.run(Executor.java:82)
+</pre>
+</div></div>
+<p>First, what is the build number of 2008/06/16 19:11:32?</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>hudson@kohsuke2 ~/server/jobs/glassfish-v3/builds $ less 2008-06-16_19-11-20/build.xml 
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;hudson.maven.MavenModuleSetBuild&gt;
+  &lt;builtOn&gt;sebastian&lt;/builtOn&gt;
+  &lt;hudsonVersion&gt;1.226-SNAPSHOT (private-06/17/2008 01:22-kohsuke)&lt;/hudsonVersion&gt;
+  &lt;scm class=&quot;hudson.scm.SubversionChangeLogParser&quot;/&gt;
+  &lt;culprits/&gt;
+  &lt;number&gt;4524&lt;/number&gt;
+  &lt;result&gt;FAILURE&lt;/result&gt;
+</pre>
+</div></div>
+
+<p>The error is that POM is not archived. And indeed it is not. We just have jars:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>hudson@kohsuke2 ~/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/arc
+hive $ ls -lR
+.:
+total 2
+drwxr-sr-x   3 hudson   hudson       512 Jun 16 19:18 org.glassfish.extras
+
+./org.glassfish.extras:
+total 2
+drwxr-sr-x   3 hudson   hudson       512 Jun 16 19:18 gf-phobos-connector
+
+./org.glassfish.extras/gf-phobos-connector:
+total 2
+drwxr-sr-x   2 hudson   hudson       512 Jun 16 19:18 10.0-SNAPSHOT
+
+./org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT:
+total 30
+-rw-r--r--   1 hudson   hudson      5296 Jun 16 19:18 gf-phobos-connector-10.0-SNAPSHOT-sources.jar
+-rw-r--r--   1 hudson   hudson      8223 Jun 16 19:18 gf-phobos-connector-10.0-SNAPSHOT.jar
+</pre>
+</div></div>
+
+<p>But earlier we seem to be attempting to archive this:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>[HUDSON] Archiving /files/hudson/workspace/glassfish-v3/v3/extras/phobos/pom.xml to /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-12_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/pom.xml
+[HUDSON] Archiving /files/hudson/workspace/glassfish-v3/v3/extras/phobos/target/gf-phobos-connector-10.0-SNAPSHOT.jar to /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/gf-phobos-connector-10.0-SNAPSHOT.jar
+[HUDSON] Archiving /files/hudson/workspace/glassfish-v3/v3/extras/phobos/target/gf-phobos-connector-10.0-SNAPSHOT-sources.jar to /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/gf-phobos-connector-10.0-SNAPSHOT-sources.jar
+</pre>
+</div></div>
+
+<p>.... oh, wait!!! If I format the above 3 lines more nicely, we see that POM went to the wrong time stamp: 2008-06-12_19-11-32, not 2008-06-<strong>16</strong>_19-11-32</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>[HUDSON] Archiving
+  /files/hudson/workspace/glassfish-v3/v3/extras/phobos/pom.xml
+  to
+  /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-12_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/pom.xml
+[HUDSON] Archiving
+  /files/hudson/workspace/glassfish-v3/v3/extras/phobos/target/gf-phobos-connector-10.0-SNAPSHOT.jar
+  to
+  /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/gf-phobos-connector-10.0-SNAPSHOT.jar
+[HUDSON] Archiving
+  /files/hudson/workspace/glassfish-v3/v3/extras/phobos/target/gf-phobos-connector-10.0-SNAPSHOT-sources.jar
+  to 
+  /files/hudson/server/jobs/glassfish-v3/modules/org.glassfish.extras$gf-phobos-connector/builds/2008-06-16_19-11-32/archive/org.glassfish.extras/gf-phobos-connector/10.0-SNAPSHOT/gf-phobos-connector-10.0-SNAPSHOT-sources.jar
+</pre>
+</div></div>
+
+<p>... and this directory only contains pom.xml, so no such build exists. Also confirmed below:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>hudson@kohsuke2 ~/server/jobs/glassfish-v3/builds $ ls | less
+...
+2008-06-10_23-15-11
+2008-06-11_06-15-13
+2008-06-11_13-06-39
+2008-06-12_13-05-11
+2008-06-13_01-23-24
+2008-06-13_20-30-24
+2008-06-14_01-55-07
+...
+</pre>
+</div></div>
+
+<p>this points to a calendar corruption. Calendar doesn't say if it's thread safe or not, and <a href="http://calendardate.sourceforge.net/" class="external-link" rel="nofollow">various</a> <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6178997" class="external-link" rel="nofollow">documents</a> suggests it's not. The Calendar.updateTime() method (which is used from the getTimeInMillis()) is certainly thread unsafe, although it's hard to say if that's causing this error or not.</p>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

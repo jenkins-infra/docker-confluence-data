@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Backporting toolkit for LTS</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Release-Process.html">Release Process</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-Release-Line.html">LTS Release Line</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Backporting toolkit for LTS
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Apr 03, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><a href="https://github.com/jenkinsci/backend-commit-history-parser" class="external-link" rel="nofollow">Jenkins backporting toolkit</a> is a set of scripts that assist in backporting fixes from the master branch to the LTS branch. See <a href="LTS-Release-Line.html">LTS Release Line</a> for the process.</p>
+
+<h1 id="BackportingtoolkitforLTS-Prerequisite">Prerequisite</h1>
+
+<p>Part of this tool is written in Groovy, other part in Ruby. You'll also need to have a Java property file in <code>~/.jenkins-ci.org</code> file that contains <a href="https://jenkins-ci.org/account" class="external-link" rel="nofollow">your jenkins-ci.org user name and password</a> in &quot;userName&quot; and &quot;password&quot; keys. Example below:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>userName=kohsuke
+password=xxxxx
+</pre>
+</div></div>
+
+<h1 id="BackportingtoolkitforLTS-Tool:jenkins-backport-generate-list">Tool: jenkins-backport-generate-list</h1>
+
+<p><code>Usage: jenkins-backport-generate-list &lt;MASTER-REV-LIST&gt; &lt;STABLE-REV-LIST&gt;</code></p>
+
+<p>This command takes two parameters that represent (1) commits that are made in the master branch that are subject of the backporting (&quot;MASTER-REV-LIST&quot;) and (2) commits that are made in the stable branch (&quot;STABLE-REV-LIST&quot;). For more information about how to specify commits, refer to git-rev-parse man page. The command is a wrapper of <code>git</code>, and it expects you to be inside the Jenkins workspace.</p>
+
+<p>The typical approach is to run it like <code>jenkins-backport-generate-list 1.X..1.Y 1.X..stable&quot;</code> where 1.X is the main line release version from which LTS was branched off, and 1.Y is the latest main line release that satisfies the soaking criteria (last release -2).</p>
+
+<p>The script lists up all the tickets that are marked as fixed in the master branch, except all the ones that are also marked as fixed in the stable branch. For each ticket, it'll retrieve other information about the ticket from JIRA, such as # of votes, priority, description, etc., and the result will be tabluated into an HTML table:</p>
+
+<p>For each ticket it'll also list up all the commits that are needed for the fix. This process uses the commit log notation used in Jenkins, and the list of commits are written as text file in <code>./cherry-pick/&lt;TICKETID&gt;</code>. So for example one of them would look like the following:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>% cat cherry-pick/JENKINS-10030
+307fca204598d2496325455ee49b1b634e71fdf2
+6b5ef4bd4aa8703f26ca7bda421171b56f9d7db9               
+</pre>
+</div></div>
+
+<h1 id="BackportingtoolkitforLTS-Tool:jenkins-backport-cherry-pick">Tool: jenkins-backport-cherry-pick</h1>
+
+<p><code>Usage: jenkins-backport-cherry-pick &lt;TICKETID&gt;</code></p>
+
+<p>This command uses <code>./cherry-pick/*</code> that are left behind by <code>jenkins-backport-generate-list</code>, and assits the actual cherry-pick activity. It basically runs <code>git-cherry-pick</code> for each commit listed in the cherry-pick file. It will automatically resolve the conflict on <code>./changelog.html</code> that's very common during backporting, by always favoring the version in the stable branch — this is OK because the LTS changelog is generated automatically.</p>
+
+<p>If a conflict occurs, it'll launch interactive shell and ask you to resolve it. You'll do so, and exit from the shell, and the script will continue where it left off. It'll commit each cherry-picked change with the special header indicating the original commit ID (<code>git cherry-pick</code> doesn't do this for commits that have conflicts.)</p>
+
+
+<h1 id="BackportingtoolkitforLTS-TODO">TODO</h1>
+<ul>
+	<li>Switch to JIRA REST API client so that we can honor the 'lts-candidate' labels.</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

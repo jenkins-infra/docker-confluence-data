@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Groovy Events Listener Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Groovy Events Listener Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (nickg)</span>, last modified by <span class='editor'> Unknown User (jequals5)</span> on Aug 29, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="GroovyEventsListenerPlugin-Overview">Overview</h2><p>The reason I created the plugin was because I wanted to integrate Jenkins with an external application. Invoking a Jenkins jobs via the REST API was simple, but getting Jenkins to callback the external application wasn't straight forward.</p><p>All the plugins I'd seen either had to be individually configured per job (i.e. in a post build step), or their features were limited to making a HTTP GET/POST request (a bit restrictive).</p><p>Basically:</p><ul><li>I wanted to be able to write my own code</li><li>I didn't want to repeat myself</li></ul><p>So I wrote this plugin. Along the way, I realised it could have some other applications too:</p><ul><li>customised logging</li><li>performance monitoring</li><li>incident escalation</li><li>integration with 3rd party applications</li><li>???</li></ul><h2 id="GroovyEventsListenerPlugin-Building">Building</h2><p>Prerequisites:</p><ul><li>JDK 6 (or above)</li></ul><p>To setup for use with Intellij IDEA</p><p>To run Jenkins (<a href="http://localhost:8080/" rel="nofollow" class="external-link">http://localhost:8080</a>) locally with the plugin installed:</p><p>To build the Jenkins plugin (.jpi) file:</p><p>To publish/release the Jenkins plugin:</p><ol><li>Update the <code>version</code> in <code>gradle.properties</code>, to remove &quot;-SNAPSHOT&quot; (increment and re-add after publishing)</li></ol><h2 id="GroovyEventsListenerPlugin-BasicUsage">Basic Usage</h2><p>To get started:</p><ol><li>Install the plugin (or <a href="https://github.com/markyjackson-taulia/groovy-events-listener-plugin#building" class="external-link" rel="nofollow">run Jenkins locally</a>)</li><li>Navigate to the <em>Jenkins &gt; Manage Jenkins &gt; Configuration</em> page</li><li>You should now see a <em>Global Events Plugin</em> section (similar to the following screenshot).</li></ol><p><a href="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/blob/master/src/main/site/screenshot-version-1.005.png" style="text-decoration: underline;" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Version 1.0.0" src="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/raw/master/src/main/site/screenshot-version-1.005.png" data-image-src="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/raw/master/src/main/site/screenshot-version-1.005.png"></span></a></p><p>This plugin executes the supplied Groovy code, every time an event is triggered.</p><p>So lets get started with the simplest example.</p><p>Now save the changes, kick off a Jenkins job, and you will see &quot;hello world!&quot; written to the logs three times. Alternatively, there's now a <code>Test Groovy Code</code> button, which will execute the code with the <code>event</code>=<code>RunListener.onStarted</code>.</p><p>The plugin actually injects a couple of variables, which you can use in your code. Here's some examples using the <code>event</code>and <code>env</code> variables.</p><p>This code limits the logging to only occur when a Job is completed! <span>N.B.</span> this behaviour can also be replicated using the configuration options.</p><p>And this one filters on Job's whose name starts with &quot;Foobar&quot;...</p><p>There's also a <code>context</code> Map variable. You can add your own variables to this Map, by returning a Map from your code. E.g.</p><p>This will keep a record in memory, of how many times Jobs have finished. You can also achieve the same result, by adding variables directly to the Map variable... e.g.</p><p>You can also use <code>@Grab</code> annotations (<a href="https://issues.apache.org/jira/browse/GROOVY-6069" rel="nofollow" class="external-link">only where they are valid</a>) if you'd like to import external dependencies (thanks <a href="https://github.com/CoreMedia/job-dsl-plugin/commit/830fae7a0fd8a046c620600e46633166804190e3" class="external-link" rel="nofollow">Daniel</a>for your solution!).</p><p>Not bad! And finally, you can import groovy scripts, so you can hide away some of the heavy lifting... here I'm using a <a href="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/blob/master/src/main/site/includes/RestClient.groovy" class="external-link" rel="nofollow">RestClient.groovy</a> script.</p><p>You can pretty much do what ever you want from here... custom logging to a file, sending performance metrics to an elastic server, sending email or messenger notifications, calling a SOAP service... the world's your oyster. If you've got something cool that you want to share, let me know and I'll add it to the <a href="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/blob/master/src/main/site/examples" class="external-link" rel="nofollow">examples</a>!</p><p>For more details on which events trigger the code, what variables are available and details on configuring logging, please see the <a rel="nofollow" href="https://cdn.rawgit.com/jenkinsci/groovy-events-listener-plugin/master/src/main/resources/org/jenkinsci/plugins/globalEventsPlugin/GlobalEventsPlugin/help-onEventGroovyCode.html" class="external-link">plugin's help file</a>.</p><h2 id="GroovyEventsListenerPlugin-Authors">Authors</h2><p>Marky Jackson - <a href="mailto:marky.r.jackson@gmail.comn" class="external-link" rel="nofollow">marky.r.jackson@gmail.comn</a></p><h2 id="GroovyEventsListenerPlugin-License">License</h2><p>Licensed under the <a href="https://github.com/markyjackson-taulia/groovy-events-listener-plugin/blob/master/LICENSE" class="external-link" rel="nofollow">MIT License (MIT)</a></p><p><br/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:26</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

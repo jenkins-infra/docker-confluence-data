@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : pucm plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : pucm plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mab)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on May 05, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><p class="title">Deprecated: This plugin has been removed from the Jenkins Update Centre</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Please use the <a href="ClearCase-UCM-Plugin.html">ClearCase UCM Plugin</a> instead.<br/>
+<a href="http://archives.jenkins-ci.org/plugins/PUCM/" class="external-link" rel="nofollow">Archived versions</a> of this plugin remain available for download. </p></div></div>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'PUCM' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>A Praqmatic integration to ClearCase UCM - This plugin is renamed and replaced by the 'ClearCase UCM Plugin' - have a look at that instead!</p></p>
+
+
+
+<h2 id="pucmplugin-WhatcanPraqmaticUCMdo?"><strong>What can Praqmatic UCM do?</strong></h2>
+
+<ul>
+	<li>Monitor changes in your ClearCase UCM VOBs and polls for new baselines on a given stream, in a given component with a given promotion level.</li>
+	<li>Establish a snapshot view which your build- and post-build steps can use.</li>
+	<li>Promote or reject the baseline given the build result, success, unstable or failure.</li>
+	<li>Set the description of the individual job, listing the baseline built, the result and the new promotion level.</li>
+	<li>Recommend the baseline if it is promoted.</li>
+	<li>Tag the baseline with the result of each individual job, so that history and statistics are persisted, not only in Jenkins, but also in ClearCase itself.</li>
+	<li>Supports concurrent builds - without finding the same baseline twice even when previously started jobs are still in progress (currently only supported with one iterator per slave).</li>
+	<li>ClearCase MultiSite is fully supported, Slaves and masters can be in different ClearCase regions and even at completely different Sites.</li>
+	<li>Advanced features can deliver baselines from one stream to another and baseline the deliver including &quot;official&quot; four-level version numbers.</li>
+	<li>...and even a handful more of nice features.</li>
+</ul>
+
+
+<h2 id="pucmplugin-Prerequisites:"><strong>Prerequisites:</strong></h2>
+
+<ul>
+	<li>PUCM is designed to follow what we consider UCM best practice. Be 	inspired here:<a href="http://howto.praqma.net/cc/ucmpedia/best_practice" class="external-link" rel="nofollow">UCM Best Practice</a></li>
+	<li>PUCM assumes that a default view storage location is available in your region (it probably is, and if it's not you can easily create one using '<a href="http://publib.boulder.ibm.com/infocenter/cchelp/v7r0m1/index.jsp?topic=/com.ibm.rational.clearcase.cc_ref.doc/topics/ct_mkstgloc.htm" class="external-link" rel="nofollow">cleartool mkstgloc</a>').</li>
+	<li>If you want to use 	the 'tag' function in the post-build section, you have to set up a 	hyperlink type named 'tag' in your VOB (details below).</li>
+	<li>If you want to use the build number features in the advanced section you will have to create the buildnumber.* attributes (details below).</li>
+	<li>ClearCase Client must be installed on master and all slaves.</li>
+</ul>
+
+
+<h2 id="pucmplugin-Limitations">Limitations</h2>
+
+<ul>
+	<li>The plugin is only compliant with ClearCase Windows Clients.</li>
+	<li>PUCM supports concurrent builds. But currently you can only have one build at the time <em>per node</em>. Set # of executors to 1 in your node configuration if you want to use concurrent builds with PUCM.</li>
+</ul>
+
+
+<h2 id="pucmplugin-RunJenkinsserviceunderavalidClearCaseaccount">Run Jenkins service under a valid ClearCase account</h2>
+
+<p>Jenkins needs to be authenticated by ClearCase, so it's important that you run the Jenkins service under an account that has the sufficient access to ClearCase. PUCM fully supports that a slave can be in a different ClearCase region or even at a completely different ClearCase MultiSite than the master.If you utilize this feature, it's required that the slave is running Jenkins under an account which has the sufficient credential on the <em>remote</em> site</p>
+
+<h2 id="pucmplugin-MultiSite-tagyournodes">MultiSite - tag your nodes</h2>
+
+<p>If you have slaves in different MultiSites than the master, you can tie the jobs that monitors stream that has mastership on foreign sites to slaves that belongs to those sites. A simple strategy for this is that you add a tag to all you slaves telling which MultiSite they belong to and then you tie the jobs to those labeled slaves.</p>
+
+
+
+<h2 id="pucmplugin-TheSourceCodeManagementsectionsetup"><strong>The Source Code Management section setup</strong></h2>
+
+<p>When you install the PUCM plugin it will become available as an SCM option in the Source Code Management section. When you build (or poll) PUCM will look for baselines with the given <em>Promotion level</em> on the <em>Stream</em> and within the <em>Component</em> you have given.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/57409583.png" data-image-src="attachments/55935100/57409583.png" data-unresolved-comment-count="0" data-linked-resource-id="57409583" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmscm3.19.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+
+
+<ul>
+	<li><strong>Stream</strong> - The stream that PUCM shall monitor, you need to specify the fully qualified name, as shown in the example above.</li>
+	<li><strong>Component</strong> - The component in which to look for baselines. Currently PUCM supports only one component. To accommodate that, you should setup a rootless component and get into the habit of making <em>all</em> baselines composites on this component (Be 	inspired here:<a href="http://howto.praqma.net/cc/ucmpedia/best_practice" class="external-link" rel="nofollow">UCM Best Practice)</a>.</li>
+	<li><strong>Promotion level</strong> - The promotion level that qualifies the baseline for build. If your product is small and your build and validation is fast, you may only need one job that runs on INITIAL. But sometimes you will have so much validation to do on each baseline, that some level of <em>devide and concur</em> is needed. In that case you can set up one job that looks for INITIAL to do the initial validation (e.g. compile and link). Then another job can be setup that looks for promotion level BUILT which perhaps runs the unit tests and do the coverage metrics. And then again, after that, you could have a third job running which looks for the promotion level TESTED which could deliver the baseline to stable stream on which a new baseline is created, containing a neat four-level version number.</li>
+	<li><strong>Load modules</strong> - to save you the trouble of messing with load rules in the GUI of the PUCM plugin we have provided you with the option simply to load all modules contained in the UCM project which the found baselines belongs to or only the modifyable ones.</li>
+	<li><strong>Newest</strong> - If more than one baseline matches the query, then PUCM will default build the <em>next</em> baseline, but if you would rather just jump directly to the <em>Newest</em> and skip the intermediate ones you simply check Newest.</li>
+	<li><strong>MultiSite promotion level cache</strong> - In the internal Jenkins architecture it's by design the master that is responsible for the polling of the SCM and therefore a potential problem could occur when you have slaves on a different MultiSite than the master; When the master finds a baseline and tells the slave to build it, the slave will promote or reject the baseline, but the change of the promotion level is done on the remote site and it is not instantly replicated to the master. If the poll frequency is shorter than the MultiSite synchronization frequency, then the same baseline is found again by the master - only this time it shouldn't find it since the promotion level really doesn't match, the master just thinks so due to a synchronization delay between sites. The MultiSite cache is implemented to solves this issue. What happens is that the slave is instantly reporting the new baseline state to the master ahead of the MultiSite synchronization, and the master is then using that cached information rather than the real-time information local to the master. The validity of the cached information is set in the global Jenkins settings and is default set to 15 minutes. If an entry in the cache falls for this time limit it's purged. Wether or not the master should use real time information of the MultiSite cache is set on each individual job with this checkbox . You shouldn't enable it at all if you don't use MultiSite.</li>
+</ul>
+
+
+<h4 id="pucmplugin-AdvancedSCMsetup">Advanced SCM setup</h4>
+
+<p>Hidden underneath the &quot;advanced&quot; button is an additional setting:</p>
+
+<ul>
+	<li><strong>Build Project</strong> - The plugin creates a separate  read/only development stream and snapshot view for every  job on every slave that  executes the job. The stream and view is created the first time the job is  executed on the slave and then reused by successive job executions. If you just go with the defaults settings the streams will be create as child streams to the integration stream in the project holding the baseline that is being built, but despite the reuse of these Jenkins related streams, there is still a tendency  that you end up with a lot of extra streams on behalf of PUCM. You can remove tem if you want to, but the jobs will then just create them again next time it runs. In order to keep your ClearCase Project Explorer tidy we've made  the option to place them in an auxiliary  project made specifically for  this purpose (in general, development  streams <em>must</em> be in the same UCM  project as the baselines you rebase them against , but <a href="http://publib.boulder.ibm.com/infocenter/cchelp/v7r0m1/index.jsp?topic=/com.ibm.rational.clearcase.cc_ref.doc/topics/ct_rebase.htm" class="external-link" rel="nofollow">read/only streams are considered special cases</a> and they can live safely be in a separate project). Here's the deal: If you make a   project in ClearCase named 'hudson', PUCM will put the auxiliary   streams there. If you prefer another name for this special PUCM-related   project, you can specify it in the Build project box in the 'Advanced'   section</li>
+</ul>
+
+
+<h2 id="pucmplugin-PUCMgeneralsettings">PUCM general settings</h2>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/57409587.png" data-image-src="attachments/55935100/57409587.png" data-unresolved-comment-count="0" data-linked-resource-id="57409587" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmglobal3.19.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+<ul>
+	<li><strong>MultiSite cache</strong> - The number of minutes that the entries in the MultiSite cache is valid before they are automatically purged. Your should adjust this to reflect the synchronization scheme between sites and then add a few extra minutes to apply the packages in your  incoming bays.</li>
+</ul>
+
+
+
+
+<h3 id="pucmplugin-&quot;Nothingtodo&quot;">&quot;Nothing to do&quot;</h3>
+
+<p>PUCM differs from most other Jenkins SCM plugins in the way it behaves when you push the &quot;Build now&quot; button. Normally an SCM plugin will build <em>something</em> in that situation. Even if the latest commit has already been build, most other SCM plugins will typically just build the latest commit again. But PUCM is different, because it will always match the criteria you have specified (stream, component and promotion level), and there might not always be a baseline that satisfies your requirements - in that case the build will not be built the status &quot;not built&quot;.</p>
+
+
+
+<h3 id="pucmplugin-Buildaspecificbaselinewithaparameterizedbuild"><strong>Build a specific baseline with a parameterized build</strong></h3>
+
+<p>If you want a job that builds a specific baseline from ClearCase (e.g. a <em>rebuild</em>), then you can force PUCM to override the Stream, Component and Promotion level settings all together and build a specific named baseline. The way you do this, is simply  to make the job <em>parameterized </em> (check  'This build is parameterized' in the project options) and set up a String Parameter called <strong>pucm_baseline</strong>:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/56131599.png" data-image-src="attachments/55935100/56131599.png" data-unresolved-comment-count="0" data-linked-resource-id="56131599" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmparameter.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+
+
+<p>You still need to choose the Praqmatic UCM plugin in the Source Control Management  section, but when you have an environment variable with the magic name 'pucm_baseline' you don't need to set any of the component, stream or promotion level parameters.</p>
+
+<p>When you build the job, you just need to fill in a fully qualified baseline:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/56131601.png" data-image-src="attachments/55935100/56131601.png" data-unresolved-comment-count="0" data-linked-resource-id="56131601" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmbaseline.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+
+
+<h2 id="pucmplugin-BuildSection">Build Section</h2>
+
+<p>During the job execution the baseline being build is stored in the environment variable &quot;cc_baseline&quot;.</p>
+
+<p>The view root of the job is located in a directory named <em>view</em> in the jenkins workspace and can directly be referred to as:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>#perl style:
+${workspace}/view
+
+#Windows shell style:
+%WORKSPACE%/view
+</pre>
+</div></div>
+
+
+<h2 id="pucmplugin-PostBuildActions"><strong>Post Build Actions</strong></h2>
+
+<p>The plugin also offers your some post build actions. These post-build actions will only be invoked if you've selected PUCM as your Source Code management in the pre-build section.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/57409585.png" data-image-src="attachments/55935100/57409585.png" data-unresolved-comment-count="0" data-linked-resource-id="57409585" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmpostbuild3.19.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+
+
+<ul>
+	<li><strong>Promote</strong> - When the Promote option is in effect the baseline is guaranteed to have a different promotion level once the job execution is done. You should always use this setting when you have configured your job to poll the SCM, if you don't the poller will find the same baseline over and over again (both boring and unnecessary). PUCM uses the default promotion levels defined by UCM: INITIAL, BUILT,  TESTED, RELEASED and REJECTED. If you have redefined your promotion  levels to something else then PUCM will not be compliant.<br/>
+If a build fails it becomes REJECTED. If it succeeds then it's promoted  to the next level, both RELEASED and REJECTED are considered end-states  and can not be promoted.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/57409590.png" data-image-src="attachments/55935100/57409590.png" data-unresolved-comment-count="0" data-linked-resource-id="57409590" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="plevel_small.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span><br/>
+The promote drop-down has three possible options:
+	<ul>
+		<li><em>Do not promote</em> - Does not promote or reject the baseline, the promotion level is the same after the execution as it was before (don't use this setting if you have configured your job to poll the SCM).</li>
+		<li><em>Promote stable builds</em> - Stable (blue) builds are promoted. Unstable (yellow) and failed (red) builds are rejected.</li>
+		<li><em>Promote unstable builds</em> - Both stable (blue) builds as unstable (yellow) builds are promoted, only failed (red) builds are rejected.</li>
+	</ul>
+	</li>
+	<li><strong>Recommend baseline </strong> - when this option is checked, the baseline willl be recommended on the stream if the job was promoted but not if it was rejected.</li>
+	<li><strong>Make tag</strong> - option will make a tag on your baseline in ClearCase with information about the build status (it will make a hlink of hltype:tag using the -totext part of the hyperlink to describe the status). This way the job status is persisted, not only on the Jenkins server, but also in ClearCase itself. Remember, that if you want to use this option, you need a hyperlink type called tag as described in the prerequisites section.</li>
+	<li><strong>Set description</strong> - Will summarize the job result in the build description with the name of the baseline that was build, the new promotion level, and, if selected, whether it was recommended or not.</li>
+</ul>
+
+
+<p>A job will be set to unstable if the any of the options fails to be executed.</p>
+
+<h2 id="pucmplugin-AdvancedPostBuildActions">Advanced Post Build Actions</h2>
+
+<p>PUCM  is capable of deliver the baseline to another stream and create a baseline on that stream. The delivery will only occur on promoted job executions. It's possible to setup a job which has an empty build and only delivers baselines.</p>
+
+
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/55935100/57409586.png" data-image-src="attachments/55935100/57409586.png" data-unresolved-comment-count="0" data-linked-resource-id="57409586" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pucmadvancedpostbuild3.19.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></p>
+
+<p><strong>UCM deliver</strong> - Check this option if you want to use any of the advanced deliver options. You don't necessarily have to specify more details, the deliver can run on default values (described in detail below).</p>
+<ul>
+	<li><strong>Target stream </strong> - defines the stream that will receive the deliver. It must be specified using fully qualified notation (e.g thestream@\pvob). If you don't specify a stream, the default target of the stream holding the baseline is used. This field can not be left empty if this stream does not have a default target setup in ClearCase.</li>
+	<li><strong>New (target) baseline name </strong> - defines the name of the baseline that will be created on the target stream. You should avoid white space characters and you should only specify that base name (don't use the fully qualified notation in this setting). If this field is left empty no baseline is created.</li>
+	<li><strong>Get build attributes from UCM project and Component</strong> - If <em>New (target) baseline name</em> above is not empty and this option is checked, then the base name will automatically be suffixed with a four-level build number (major_minor_patch_sequence). The three first numbers will be taken from attributes attached to the UCM project which the target stream belongs to. The attributes that are looked for are:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>buildnumber.major
+buildnumber.minor
+buildnumber.patch
+</pre>
+</div></div></li>
+	<li><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/55935100/57409591.png" data-image-src="attachments/55935100/57409591.png" data-unresolved-comment-count="0" data-linked-resource-id="57409591" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="project_build_attr.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="55935100" data-linked-resource-container-version="54"></span></li>
+</ul>
+
+
+<p>The last level, the sequence, is fetched and automatically incremented from another attribute named:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>buildnumber.sequence
+</pre>
+</div></div>
+<p>which is attached to the component, in which the baseline is found. This attribute should be instantiated with either an integer (or nul) and hereafter it is incremented automatically.<br/>
+If you specify this option and anyone of these four attributes isn't found as described then the job will become unstable. When using this setting, it's required that the account under which the Jenkins service is running has write access to the buildnumber.sequence attribute attached to the component.</p>
+<ul>
+	<li><strong>Get attributes from settings</strong> - As described above, the basename will be suffixed with a four-level version number, but in this case the values aren't taken from from the four attributes described above, but from the settings below
+	<ul>
+		<li><strong>Major</strong> - the major build number (1st level)</li>
+		<li><strong>Minor</strong> - the minor build number (2nd level)</li>
+		<li><strong>Patch</strong> - the patch build number (3rd level)</li>
+		<li><strong>Sequence from component</strong> - as described above, the 4th level will be taken and automatically incremented from the buildnumber.sequence attribute attached to the component.</li>
+		<li><strong>Sequence is the job number</strong> - if you check this option the job number of the current Jenkins job is used as the 4th level.</li>
+	</ul>
+	</li>
+</ul>
+
+
+
+
+
+<p>The job will be set to unstable if the delivery is unsuccessful.</p>
+
+
+
+<h2 id="pucmplugin-InstallingVersionAttributes">Installing Version Attributes</h2>
+
+<p>If you choose to use any of the options that use some of our predefined types, then you must create these types as global types in the PVOB(s).<br/>
+We have created the attributes like this:</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ cleartool mkhltype -global -c &quot;Used to support the PUCM plugin, automatically attached to baselines&quot;                                   tag@\Cool_PVOB
+ cleartool mkattype -global -c &quot;Used to support the PUCM plugin, attach to UCM projects&quot;        -vtype integer -default 0 buildnumber.major@\Cool_PVOB
+ cleartool mkattype -global -c &quot;Used to support the PUCM plugin, attach to UCM projects&quot;        -vtype integer -default 0 buildnumber.minor@\Cool_PVOB
+ cleartool mkattype -global -c &quot;Used to support the PUCM plugin, attach to UCM projects&quot;        -vtype integer -default 0 buildnumber.patch@\Cool_PVOB
+ cleartool mkattype -global -c &quot;Used to support the PUCM plugin, attach to Top-level component&quot; -vtype integer -default 0 buildnumber.sequence@\Cool_PVOB
+</pre>
+</div></div>
+<p>If you put them in PVOBs (recommended) you must use the -global switch as above. If you are in a MultiSite environment consider using the -shared switch as well. In general when you create types (any) in a PVOB you should also consider using the -acquire switch too.</p>
+
+
+<p>To assign the buildnumber.* attributes correct you can either use the ClearCase Project Explorer or use the cleartool CLI, we went:</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+cleartool mkattr buildnumber.major 0   project:PUCM@\Cool_PVOB
+cleartool mkattr buildnumber.minor 3   project:PUCM@\Cool_PVOB
+cleartool mkattr buildnumber.patch 20  project:PUCM@\Cool_PVOB
+cleartool mkattr buildnumber.sequence  component:_System@\Cool_PVOB
+</pre>
+</div></div>
+<p>You can set the major, minor, patch and sequence to your your preferences. Notice, that if the attributes has default values, you don't have to specify a value.</p>
+
+
+<h2 id="pucmplugin-Changelog">Change log</h2>
+
+
+<h5 id="pucmplugin-Version0.3.22(2011-5-5)">Version 0.3.22(2011-5-5)</h5>
+
+<ul>
+	<li>Fixed a backwards compatibility issue, regarding global configuration</li>
+</ul>
+
+
+
+<h5 id="pucmplugin-Version0.3.21(2011-4-13)">Version 0.3.21(2011-4-13)</h5>
+
+<ul>
+	<li>Fixed deliver issues</li>
+	<li>Trimmed configuration UI</li>
+	<li>Nothing to do results in &quot;not build&quot; not &quot;failed&quot;</li>
+</ul>
+
+
+<h2 id="pucmplugin-Issues">Issues</h2>
+
+<p><br class="atl-forced-newline"/></p>
+ <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                    </tr>
+
+        <tr>
+            <td colspan="3">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20&#39;PUCM&#39;&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p><br class="atl-forced-newline"/></p>
+
+<p>Issues regarding PUCM are tracked at <a href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%29+AND+component+%3D+pucm" class="external-link" rel="nofollow">jenkins-ci.org</a> please report <em>any</em> issue or feature request you may have there.</p>
+
+<p>Feed-back in general is also welcome, please send us a mail at <a href="mailto:coolers@praqma.net" class="external-link" rel="nofollow">coolers@praqma.net</a>.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131597.png">pucmscm.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131600.png">pucmadvanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131599.png">pucmparameter.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131598.png">pucmadvanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131601.png">pucmbaseline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/56131602.png">pucmpostbuild.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409583.png">pucmscm3.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409584.png">pucmadvanced3.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409585.png">pucmpostbuild3.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409586.png">pucmadvancedpostbuild3.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409594.png">pucmglobal3.19.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409590.png">plevel_small.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409591.png">project_build_attr.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/55935100/57409587.png">pucmglobal3.19.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:40</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

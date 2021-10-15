@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JClouds Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JClouds Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mordred@inaugust.com)</span>, last modified by <span class='editor'> Unknown User (felfert)</span> on Aug 07, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This plugin uses <a href="http://jclouds.org/" class="external-link" rel="nofollow">JClouds</a> to provide slave launching on most of the currently usable Cloud infrastructures.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View JClouds <a href="https://plugins.jenkins.io/jclouds-jenkins" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-08-07/#SECURITY-1482" class="external-link" rel="nofollow">CSRF vulnerability and missing permission check allowed capturing credentials</a></li>
+</ul>
+
+</div></div>
+JClouds Jenkins plugin provides option to launch jenkins slaves on any Cloud provider supported by <a href="http://jclouds.apache.org/reference/providers/#compute-apis" class="external-link" rel="nofollow">JClouds</a>, or on a cloud provider implementing one of the APIs JClouds supports.</p><p><a href="https://ci.jenkins.io/job/Plugins/job/jclouds-plugin/job/master" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://ci.jenkins.io/buildStatus/icon?job=Plugins/jclouds-plugin/master" data-image-src="https://ci.jenkins.io/buildStatus/icon?job=Plugins/jclouds-plugin/master"></span></a></p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021344566 {padding: 0px;}
+div.rbtoc1631021344566 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021344566 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021344566'>
+<ul class='toc-indentation'>
+<li><a href='#JCloudsPlugin-Importantinformationforupgradingfromversions&lt;2.9ofthisplugin'>Important information for upgrading from versions &lt; 2.9 of this plugin</a></li>
+<li><a href='#JCloudsPlugin-AddinganewCloudProvider'>Adding a new Cloud Provider</a>
+<ul class='toc-indentation'>
+<li><a href='#JCloudsPlugin-Executingbuildontheslave'>Executing build on the slave</a></li>
+</ul>
+</li>
+<li><a href='#JCloudsPlugin-AddingaBlobstoreProfileforstoringbuildartifacts'>Adding a Blobstore Profile for storing build artifacts</a>
+<ul class='toc-indentation'>
+<li><a href='#JCloudsPlugin-Publishingartifactsafterabuild'>Publishing artifacts after a build</a></li>
+</ul>
+</li>
+<li><a href='#JCloudsPlugin-Mergedcloud-initYAMLdefinitions'>Merged cloud-init YAML definitions</a></li>
+<li><a href='#JCloudsPlugin-Usingthenewphone-homefeature'>Using the new phone-home feature</a></li>
+<li><a href='#JCloudsPlugin-Changelog'>Changelog</a>
+<ul class='toc-indentation'>
+<li><a href='#JCloudsPlugin-Version2.15(releasedAugust6,2019)'>Version 2.15 (released August 6, 2019)</a></li>
+<li><a href='#JCloudsPlugin-Version2.14(releasedFebruary14,2017)'>Version 2.14 (released February 14, 2017)</a></li>
+<li><a href='#JCloudsPlugin-Version2.13(releasedFebruary13,2017)'>Version 2.13 (released February 13, 2017)</a></li>
+<li><a href='#JCloudsPlugin-Version2.12(releasedDecember16,2016)'>Version 2.12 (released December 16, 2016)</a></li>
+<li><a href='#JCloudsPlugin-Version2.11(releasedDecember5,2016)'>Version 2.11 (released December 5, 2016)</a></li>
+<li><a href='#JCloudsPlugin-Version2.10(releasedNovember18,2016)'>Version 2.10 (released November 18, 2016)</a></li>
+<li><a href='#JCloudsPlugin-Version2.9(releasedNovember9,2016)'>Version 2.9 (released November 9, 2016)</a></li>
+<li><a href='#JCloudsPlugin-Version2.8.1-1(releasedDecember2,2015)'>Version 2.8.1-1 (released December 2, 2015)</a></li>
+<li><a href='#JCloudsPlugin-Version2.5.1(releasedMarch5,2014)'>Version 2.5.1 (released March 5, 2014)</a></li>
+<li><a href='#JCloudsPlugin-Version2.5(releasedFebruary5,2014)'>Version 2.5 (released February 5, 2014)</a></li>
+<li><a href='#JCloudsPlugin-Version2.4(releasedAugust27,2013)'>Version 2.4 (released August 27, 2013)</a></li>
+<li><a href='#JCloudsPlugin-Version2.3(releasedAugust31,2012)'>Version 2.3 (released August 31, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.2.2(releasedJuly18,2012)'>Version 2.2.2 (released July 18, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.2.1(releasedJuly11,2012)'>Version 2.2.1 (released July 11, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.2(releasedJune22,2012)'>Version 2.2 (released June 22, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.1.1(releasedMay24,2012)'>Version 2.1.1 (released May 24, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.1.0(releasedMay23,2012)'>Version 2.1.0 (released May 23, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.0.4(releasedMay1,2012)'>Version 2.0.4 (released May 1, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.0.3(releasedApr26,2012)'>Version 2.0.3 (released Apr 26, 2012)</a></li>
+<li><a href='#JCloudsPlugin-Version2.0.2(releasedApr25,2012)'>Version 2.0.2 (released Apr 25, 2012)</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h2 id="JCloudsPlugin-Importantinformationforupgradingfromversions&lt;2.9ofthisplugin">Important information for upgrading from versions &lt; 2.9 of this plugin</h2><p>Due to the fact that all credentals ar now handled by the credentials plugin, the config data must be converted during upgrade and therefore, a rollback can <strong>not</strong> be performed easily.<br/><strong>If</strong> you want to presevere config data, just in case you want to switch back to 2.8.1 you <strong>must</strong> backup config.xml and credentials.xml from your jenkins' home <strong>before</strong> performing the update.<br/>Then in case of rollback do the following:</p><ol><li>uninstall the plugin</li><li>shutdown jenkins</li><li>restore config.xml and credentials.xml</li><li>startup jenkins</li><li>install the old plugin version</li></ol><h2 id="JCloudsPlugin-AddinganewCloudProvider">Adding a new Cloud Provider</h2><ul><li>Goto Jenkins Configuration page by clicking on Manage menu or browsing to the URL <a href="http://localhost:8080/configure" class="external-link" rel="nofollow">http://localhost:8080/configure</a></li><li>Scroll down to Cloud Section</li><li>Click on the `Add a new cloud` pop-up menu button which should have an option - `Cloud (JClouds)`</li><li>Click on `Cloud (JClouds)`</li><li>Fill in the configuration options<ul><li>Profile : the name of the profile e.g, <code>aws-slave-profile</code></li><li>Provider Name: Select from the supported providers</li><li>End Point URL: if your provider API needs an endpoint configuration, add it here, otherwise leave this empty.</li><li>Max Number of Instances: The maximum number of instances to run from this cloud at one time.</li><li>Retention Time: How long, in minutes, to wait for a slave to remain idle before disconnecting and terminating it. Defaults to <code>30</code>.</li><li>Credentials: Depending on your provider, you either need a username/password pair or a username/privatekey pair. The first one<br/>is covered by the &quot;Username with password&quot; credentials of jenkins and for the second one, you simply can use the<br/>&quot;SSH Username with private key&quot; credentials which - despite of what their name suggests - can store <strong>any</strong> kind of PEM-encoded private key. For<br/>GCE, select the &quot;JClouds Username with key&quot; credential type and then click the Browse button in order to upload your JSON key from google.<br/>(In case of openstack-nova keystoneV2, the username is to be specified in the form <code>tenantName:userName</code>).<br/>New since 2.15 is support for OpenStack keystone-V3: Select &quot;OpenStack keystone V3 credentials&quot; and fill all the fields (The Domain usually is named <code>Default</code>)</li><li>RSA Private Key/Public Key: Like with the credentials, simply use a &quot;SSH Username with private key&quot; credential. The public key is derived automatically from that.</li><li>Click on `Test Connection` to validate the cloud settings.</li></ul></li><li>Add Cloud Instance Template by clicking on the Add button</li><li>Fill in configuration options:<ul><li>Name : the name of the instance template e.g. <code>aws-jenkins-slave</code></li><li>Number of Executors: How many executors each slave created from this template should have.</li><li>Description: notes/comments for your reference.</li><li>Image ID: Use one of the following options:<ul><li>Image ID to use for this slave template, such as EC2 AMIs. Note that EC2 AMIs must include the region as well, e.g., <code>us-east-1/ami-00000</code>. If unshure, you can enter a partial string and the hit the &quot;Check Image Id&quot; button. This searches for matching images and if there are ambiguties, a<br/>message is shown like: &quot;Did you mean &quot;....exact-image-id...&quot;?<br/><strong>or</strong></li><li>OSFamily: Specify the OSFamily - leave empty for default for a cloud provider</li><li>OS Version : Specify the OSVersion - leave empty for default for a cloud provider</li></ul></li><li>Hardware ID: Use one of the following options:<ul><li>Hardware ID on provider for this slave template, such as <code>t1.micro</code> on AWS EC2.<br/><strong>or</strong></li><li>RAM : in MB</li><li>No. of Cores: number of virtual processor cores.</li></ul></li><li>Location ID: Location ID where this slave will be deployed. If none is selected jclouds will automatically choose an available one.</li><li>Labels: (space-separated) labels/tags that you can use to attach a build to this slave template.</li><li>Init Script: A shell script to be run when the slave is created. A rather simple method for provisioning. If supported by your provider, you should<br/>prefer the variant using User-Data and cloud-init.</li><li>Stop on Terminate: If true, suspend slaves rather than terminating them.</li></ul></li></ul><ul><li>Click Save to save the configuration changes.</li><li>Goto Jenkins' home page, click on `Build Executor Status` link on the sidebar.</li><li>Verify that you have a button with `Provision via JClouds - (YOUR PROFILE NAME) drop down with the slave template name you configured.</li><li>Click on the slave and see if your slave launched successfully (please wait until the operation completes).</li></ul><h3 id="JCloudsPlugin-Executingbuildontheslave">Executing build on the slave</h3><ul><li>To run your build on the newly configured slave computer, just enable the `Restrict where this project can be run` option in the build configuration page.</li><li>Enter the label which you choose for the instance template in the `Label Expression` text field. This should auto-complete labels for you.</li><li>Click save to save the configuration options.</li><li>Schedule the build to check whether the build is executed on the selected slave template.</li><li>If your cloud provider is charging by the minute (GCE for example), you can enable the checkbox &quot;JClouds Single-use-slave&quot; which destroys the provisioned<br/>VM after the build job has finished (with a small delay of ~ 1min).</li></ul><h2 id="JCloudsPlugin-AddingaBlobstoreProfileforstoringbuildartifacts">Adding a Blobstore Profile for storing build artifacts</h2><p>The plugin also provides a way to store your build artifacts on JClouds supported cloud storage providers. You can configure multiple<br/>blobstore profiles and configure the build to copy different files/artifacts to the specified container. Here's how you configure the same.</p><ul><li>Goto Jenkins Configuration Page</li><li>Click Ad under the section `JClouds Cloud Storage Settings`</li><li>Provide the configuration Options:<ul><li>Profile Name: name of the profile e.g. aws-storage</li><li>Provider Name: Select one of the supported providers.</li><li>Credentials: Just like the cloud credentials.</li></ul></li><li>You can add multiple providers by clicking on Add.</li><li>Click Save on the bottom of the page, to save the settings.</li></ul><h3 id="JCloudsPlugin-Publishingartifactsafterabuild">Publishing artifacts after a build</h3><p>After you configure a cloudstorage provider, you can enable the publishing file by enabling it under `Post-build Actions` in the build job configuration page.</p><ul><li>Click on the checkbox `Publish artifacts to JClouds Clouds Storage`</li><li>You should now see a dropdown with configured storage profiles. Select the one you want to use for this build.</li><li>Click on Add button next to `Files to upload`.</li><li>Add the sourced file path (relative to workspace)</li><li>Add the destination container name.</li><li>Repeat to add more files if you want to copy.</li><li>Click save.</li></ul><p>When the build is complete and successful, the configured files will be published to the configured blobstore.</p><h2 id="JCloudsPlugin-Mergedcloud-initYAMLdefinitions">Merged cloud-init YAML definitions</h2><p>When using cloud-init you can provide multiple config data snippets. If you select YAML snippets, thos get merged. E.g:</p><p>If snippet 1 contains:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>packages:
+  - screen
+  - openjdk-8-jdk-headless
+</pre>
+</div></div><p>and snippet 2 contains:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>packages:
+  - gcc
+</pre>
+</div></div><p>Then the resulting YAML on the cloud-init (server) side becomes:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>packages:
+  - gcc
+  - screen
+  - openjdk-8-jdk-headless
+</pre>
+</div></div><h2 id="JCloudsPlugin-Usingthenewphone-homefeature">Using the new phone-home feature</h2><p>When provisioning slaves, there might be too much work on a slave for it to get ready (listening on port 22) in time for jenkins.<br/>Therefore, the plugin provides a new webhook, which is designed to be invoked by a http POST request using <a href="http://cloudinit.readthedocs.io/en/latest/topics/examples.html#call-a-url-when-finished" class="external-link" rel="nofollow">cloud-init</a> within the slave when everything is ready to use. When enabled, the usual slave connection setup is delayed until the http POST is received.</p><ul><li><p>The corresponding cloud-init configuration looks like this:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>#cloud-config
+phone_home:
+  url: http://your.jenkins.url/jclouds-phonehome/
+  tries: 3
+</pre>
+</div></div></li><li>You can put this into the User data field in the slave template for example.</li></ul><h2 id="JCloudsPlugin-Changelog">Changelog</h2><h3 id="JCloudsPlugin-Version2.15(releasedAugust6,2019)">Version 2.15 (released August 6, 2019)</h3><ul><li>Fixed SECURITY-1482 / CVE-2019-10368 (CSRF) and CVE-2019-10369 (permission check). [<a href="https://jenkins.io/security/advisory/2019-08-07/" class="external-link" rel="nofollow">Advisory</a>]</li><li>Suppress binary userData in logs (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41989" class="external-link" rel="nofollow">JENKINS-41989</a>)</li><li>Improve help for userData</li><li>Implement workaround for broken cloudbase-init mime handling</li><li>Added support for cloud statistics plugin (now a mandatory dependency)</li><li>Added packet provider (Thanks to Ignasi Barrera)</li><li>Added profitbricks provider (thanks to Ali Bazlamit)</li><li>Fixed GUI problem (<a href="https://issues.jenkins-ci.org/browse/JENKINS-48986" class="external-link" rel="nofollow">JENKINS-48986</a>) (thanks to <span class="view-issue-field"><span class="user-hover">Tomasz Wojtun</span></span>)</li><li>Upgrade to jclouds-2.1.0, (Fixes <a href="https://issues.jenkins-ci.org/browse/JENKINS-42005" class="external-link" rel="nofollow">JENKINS-42005</a>)</li><li>Added support for OpenStack keystone-V3 authentication</li></ul><h3 id="JCloudsPlugin-Version2.14(releasedFebruary14,2017)">Version 2.14 (released February 14, 2017)</h3><ul><li>Upgraded to config-file-provider-2.15.6 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41078">JENKINS-41078</a>)</li></ul><h3 id="JCloudsPlugin-Version2.13(releasedFebruary13,2017)">Version 2.13 (released February 13, 2017)</h3><ul><li>Fixed class loading problem with bouncycastle resulting in InvalidKeySpecException: key spec not recognised. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41186">JENKINS-41186</a>)</li></ul><h3 id="JCloudsPlugin-Version2.12(releasedDecember16,2016)">Version 2.12 (released December 16, 2016)</h3><ul><li>New template config option &quot;Preferred Address&quot; solves problem with multi-homed slaves. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40342">JENKINS-40342</a>)</li><li>Use gzip compression of userData on supporting cloud providers; (currently: aws-ec2, openstack-nova and openstack-nova-ec2)<br/>In the logs, the userData is shown as binary &quot;garbage&quot; if compression is in effect. Since that particular log entry is generated<br/>from within jclouds, that cannot be changed and works as designed.</li></ul><h3 id="JCloudsPlugin-Version2.11(releasedDecember5,2016)">Version 2.11 (released December 5, 2016)</h3><ul><li>Upgrade to jclouds-2.0 (Among many improvents, this adds official support for GCE (Google) and DigitalOcean2)</li><li>Do not send null userData (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21108">JENKINS-21108</a>)</li><li>Generate artificial suffix for Instances on EC2 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19935">JENKINS-19935</a>)</li><li>Added missing license (<a href="https://issues.jenkins-ci.org/browse/JENKINS-40028">JENKINS-40028</a>)</li><li>Now shows IP address on node details page (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14398">JENKINS-14398</a>)</li><li>Now uses the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Config+File+Provider+Plugin" class="external-link" rel="nofollow">config-file-provider-plugin</a> for initScripts and userData</li><li>Allows for multiple cloud-config snippets in userData</li><li>Merged OpenStack's assignFloatingIP setting into assignPublicIp (same semantic)</li><li>Improved automatic migration when upgrading the plugin. Now, upgrades from v2.8.1-1<br/>should go seamlessly.</li></ul><h3 id="JCloudsPlugin-Version2.10(releasedNovember18,2016)">Version 2.10 (released November 18, 2016)</h3><ul><li>Set Content-Length in blobstore requests (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23049">JENKINS-23049</a>)</li><li>Generally improved blobstore error handling.</li><li>Blobstore publisher now can be further configured (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22178">JENKINS-22178</a>)</li><li>Added missing dependency on ssh-credential plugin</li><li>Added config drive flag (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23454">JENKINS-23454</a>)</li><li>Improved deletion of expired slave nodes (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27471">JENKINS-27471</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-28403">JENKINS-28403</a>)</li><li>Supplmental instances now properly use phone home feature</li><li>Properly destroy stale instances after a forced reset/shutdown of jenkins</li></ul><h3 id="JCloudsPlugin-Version2.9(releasedNovember9,2016)">Version 2.9 (released November 9, 2016)</h3><ul><li>All credential related settings now use the credential-plugin</li><li>New webhook for synchronizing slave availability (aka. phone-home for slaves)</li><li>Added CLI commands (jclouds-templates, jclouds-provision)</li><li>Fixed several potential XSS issues</li><li>Upgrade to jclouds-1.9.2</li><li>Safer cleanup of expired slaves</li><li>Added many missing help texts</li><li>Fixed classloader isolation problem with jenkins 2.29 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-39505">JENKINS-39505</a>)</li><li>Upgrade to ne credentials API (<a href="https://issues.jenkins-ci.org/browse/JENKINS-35560">JENKINS-35560</a>)</li><li>Fixed reconnection to running slaves after jenkins restart (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30556">JENKINS-30556</a>)</li><li>Added workaround for image cache (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28815">JENKINS-28815</a>)</li><li>Fixed NPE when setting retention time (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29136">JENKINS-29136</a>)</li><li>Fixed floating ip bug on openstack (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26083">JENKINS-26083</a>)</li><li>Fixed scheduling of matrix jobs and added ability to configure node usage mode (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25865">JENKINS-25865</a>)</li><li>Fixed handling of OpenStack security groups (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22587">JENKINS-22587</a>)</li><li>Added validation of various number fields</li></ul><h3 id="JCloudsPlugin-Version2.8.1-1(releasedDecember2,2015)">Version 2.8.1-1 (released December 2, 2015)</h3><ul><li>Add flag for copying and executing <code>slave.jar</code> on Windows images</li></ul><h3 id="JCloudsPlugin-Version2.5.1(releasedMarch5,2014)">Version 2.5.1 (released March 5, 2014)</h3><ul><li>Switch back to Java 1.6</li><li>Jclouds version updated to 1.7.1</li><li>Allow shading guava and jclouds</li><li>Added the DigitalOcean provider</li><li>Added an option to let users install private key in the slave</li><li>Added option to specify networks requirements for any provider</li></ul><h3 id="JCloudsPlugin-Version2.5(releasedFebruary5,2014)">Version 2.5 (released February 5, 2014)</h3><ul><li>Added OpenStack zones parameter to restrict spawning cloud slaves to them</li><li>Added capability to run slaves by specifying image name regexp instead of image ID</li><li>Bumped Java version to 1.7</li><li>Credential field is now password type</li><li>JCloudSlave now inherited from AbstractCloudSlave</li></ul><h3 id="JCloudsPlugin-Version2.4(releasedAugust27,2013)">Version 2.4 (released August 27, 2013)</h3><ul><li>Bump up jclouds to 1.6.2-incubating.</li><li>Allow the user to not allocate a public IP address on CloudStack. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18461">JENKINS-18461</a>)</li><li>Various OpenStack fixes</li><li>Add support for user data and persisting credentials.</li><li>Various blobstore improvements</li><li>Don't print auth stack trace (<a href="https://issues.jenkins-ci.org/browse/JENKINS-16632">JENKINS-16632</a>)</li><li>Add forcible synchronized serial delay option (<a href="https://issues.jenkins-ci.org/browse/JENKINS-15970">JENKINS-15970</a>)</li></ul><h3 id="JCloudsPlugin-Version2.3(releasedAugust31,2012)">Version 2.3 (released August 31, 2012)</h3><ul><li>Bump up jclouds to 1.5.0-beta.11.</li><li>Add the ability to override retention time for an individual template.</li><li>Now able to specify &quot;Launch Instance&quot; template as a string with parameter replacement enabled.</li></ul><h3 id="JCloudsPlugin-Version2.2.2(releasedJuly18,2012)">Version 2.2.2 (released July 18, 2012)</h3><ul><li>Bump up jclouds to 1.5.0-beta.7.</li><li>Use Remote FS Root for Jenkins user home. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-14396">JENKINS-14396</a>)</li></ul><h3 id="JCloudsPlugin-Version2.2.1(releasedJuly11,2012)">Version 2.2.1 (released July 11, 2012)</h3><ul><li>Bump up jclouds to 1.5.0-beta.6.</li></ul><h3 id="JCloudsPlugin-Version2.2(releasedJune22,2012)">Version 2.2 (released June 22, 2012)</h3><ul><li>Based on JClouds 1.5.0-beta.4, adding support for a bunch of new cloud providers, including CloudStack 3.x, Greenqloud, and more.</li><li>Added Single Use Slave option - if enabled, the slave will only be used for one build and then deleted.</li><li>Dramatically improved performance of slave deletion, which should also help avoid lockups of Jenkins itself.</li></ul><h3 id="JCloudsPlugin-Version2.1.1(releasedMay24,2012)">Version 2.1.1 (released May 24, 2012)</h3><ul><li>Fixed a showstopper bug that actually broke everything UI-related. whoops!</li></ul><h3 id="JCloudsPlugin-Version2.1.0(releasedMay23,2012)">Version 2.1.0 (released May 23, 2012)</h3><ul><li>Bumped to JClouds 1.5.0-beta.1.</li><li>Initial support for spinning up non-slave instances as part of a build.</li><li>Don't create a Jenkins user on the slave if one already exists.</li><li>Add a configurable timeout for slave init.</li><li>Improved logging.</li></ul><h3 id="JCloudsPlugin-Version2.0.4(releasedMay1,2012)">Version 2.0.4 (released May 1, 2012)</h3><ul><li>Hardware ID wasn't being used.</li><li>Got rid of excess persisted NodeMetadata from slaves.</li><li>Cleaned up slave template UI.</li><li>Added option for infinite retention with retention time of -1.</li></ul><h3 id="JCloudsPlugin-Version2.0.3(releasedApr26,2012)">Version 2.0.3 (released Apr 26, 2012)</h3><ul><li>Modified package manifest to mask older guava jars from plugin's classloader, so that the plugin will work consistently on pre-1.463 Jenkins releases.</li></ul><h3 id="JCloudsPlugin-Version2.0.2(releasedApr25,2012)">Version 2.0.2 (released Apr 25, 2012)</h3><ul><li>First real release.</li><li>Support for multiple clouds on a single Jenkins instance.</li><li>Auto-provisioning functional.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46336245/71696541.png">Screen Shot 2014-02-26 at 8.43.28 AM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:29</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

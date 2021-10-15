@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Use BASIC_AUTH</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Mantis-Plugin.html">Mantis Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Use BASIC_AUTH
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified on Jan 29, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="UseBASIC_AUTH-UseBASIC_AUTH(Workaround)">Use BASIC_AUTH (Workaround)</h2>
+
+<p>If your mantis installation uses <strong>BASIC_AUTH</strong> as login method, you need to modify mantis sources as following(maybe bug).</p>
+<ul>
+	<li>api/soap/mc_api.php 44L, replace
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>api/soap/mc_api.php (Before)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+function mci_check_login( $p_username, $p_password ) {
+    if ( mci_is_mantis_offline() ) {
+        return false;
+    }
+
+    # if no user name supplied, then attempt to login as anonymous user
+</pre>
+</div></div>
+with
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>api/soap/mc_api.php (After)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+function mci_check_login( $p_username, $p_password ) {
+    if ( mci_is_mantis_offline() ) {
+        return false;
+    }
+
+    if ( BASIC_AUTH == config_get( &#39;login_method&#39; ) ) {
+        $p_username = $_SERVER[&#39;PHP_AUTH_USER&#39;];
+        $p_password = $_SERVER[&#39;PHP_AUTH_PW&#39;];
+    }
+
+    # if no user name supplied, then attempt to login as anonymous user
+</pre>
+</div></div></li>
+</ul>
+
+
+<ul>
+	<li>core/authentication_api.php replace
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>core/authentication_api.php (Before)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+function auth_attempt_script_login( $p_username, $p_password = null ) {
+    global $g_script_login_cookie, $g_cache_current_user_id;
+
+    $t_user_id = user_get_id_by_name( $p_username );
+
+    $t_user = user_get_row( $t_user_id );
+
+    # check for disabled account
+    if ( OFF == $t_user[&#39;enabled&#39;] ) {
+        return false;
+    }
+
+    # validate password if supplied
+    if ( null !== $p_password ) {
+        if ( !auth_does_password_match( $t_user_id, $p_password ) ) {
+            return false;
+        }
+    }
+</pre>
+</div></div>
+with
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>core/authentication_api.php (After)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+function auth_attempt_script_login( $p_username, $p_password = null ) {
+    global $g_script_login_cookie, $g_cache_current_user_id;
+
+    $t_user_id = user_get_id_by_name( $p_username );
+    if ( false === $t_user_id ) {
+        return false;
+    }
+
+    $t_user = user_get_row( $t_user_id );
+
+    # check for disabled account
+    if ( OFF == $t_user[&#39;enabled&#39;] ) {
+        return false;
+    }
+
+    # validate password if supplied
+    $t_login_method = config_get( &#39;login_method&#39; );
+    if ( null !== $p_password &amp;&amp; $t_login_method != BASIC_AUTH) {
+        if ( !auth_does_password_match( $t_user_id, $p_password ) ) {
+            return false;
+        }
+    }
+</pre>
+</div></div></li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

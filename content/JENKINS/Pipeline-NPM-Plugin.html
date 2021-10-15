@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Pipeline NPM Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Pipeline NPM Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (timdowney)</span>, last modified on Feb 11, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Pipeline NPM Integration <a href="https://plugins.jenkins.io/pipeline-npm" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>Allows pipelines to configure an NPM environment via managed npmrc files</p>
+
+<h1 id="PipelineNPMPlugin-Summary">Summary</h1>
+
+<p>This plugin provides integration with Pipeline by configuring an NPM environment to use within a pipeline job by calling <code>sh npm</code> or <code>bat npm</code>. This is accomplished by adding an <code>npmrc</code> as a custom config file to be centrally managed by Jenkins. This is useful for managing registries, authorizations, and any other npm settings that one would like to manage via Jenkins outside of the pipeline itself.</p>
+
+<p>This plugin works both with and without Docker containers as build steps.</p>
+
+<h1 id="PipelineNPMPlugin-Configuration">Configuration</h1>
+
+<p>Via Config File Management, Manage Jenkins -&gt; Managed Files, add an npmrc entry specifying the id that will be used in the pipeline configuration.</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/104104356/104333343.png" data-image-src="attachments/104104356/104333343.png" data-unresolved-comment-count="0" data-linked-resource-id="104333343" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Config File Management.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="104104356" data-linked-resource-container-version="8"></span></p>
+
+<h1 id="PipelineNPMPlugin-BasicUsage">Basic Usage</h1>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+withNPM(npmrcConfig: &#39;my-custom-nprc&#39;) {
+    sh &#39;npm install&#39;
+}
+</pre>
+</div></div>
+
+<p>In the above example, 'my-custom-npmrc' is a config file that had been added as a custom, Managed File.  Underneath, the custom <code>npmrc</code> is being copied to the workspace where it will serve as a local override during the build.  Nominally, npm would have a command line mechanism for specifying the npmrc, but for now the best choice to force an override is to place the <code>npmrc</code> in the workspace where it will be prioritized over the home and global <code>npmrc</code>.</p>
+
+<p>Here is another example using Docker and <a href="Pipeline-Model-Definition-Plugin.html">Pipeline Model Definition Plugin</a>.  When using the Docker based approach, the npmrc is installed to the user home location.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+stage(&#39;npm-build&#39;) {
+    agent {
+        docker {
+            image &#39;node:7.4&#39;
+        }
+    }
+
+    steps {
+        echo &quot;Branch is ${env.BRANCH_NAME}...&quot;
+
+        withNPM(npmrcConfig:&#39;my-custom-npmrc&#39;) {
+            echo &quot;Performing npm build...&quot;
+            sh &#39;npm install&#39;
+        }
+    }
+}
+</pre>
+</div></div>
+
+<h2 id="PipelineNPMPlugin-KnownIssues">Known Issues</h2>
+
+<ul>
+	<li>When not using a Docker based build, NPM must be installed on the build executor.</li>
+	<li>When not using a Docker based build, any local npmrc to the workspace will be replaced by this plugin.</li>
+</ul>
+
+
+<h2 id="PipelineNPMPlugin-Changelog">Changelog</h2>
+
+<ul>
+	<li>0.9.0 -- Initial Release</li>
+	<li>0.9.1 -- Removed wrapper script since there is no useful way to override the npmrc on the command line.  This simplifies things a fair bit in terms of the code.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/104104356/104333343.png">Config File Management.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:38</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Pipeline Milestone Step Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Pipeline Milestone Step Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (amuniz)</span>, last modified on Mar 28, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Pipeline: Milestone Step <a href="https://plugins.jenkins.io/pipeline-milestone-step" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>Provides the milestone step in Pipeline scripts.</p></p>
+
+<p>By default, Pipeline builds can run concurrently. The milestone step ensures an older build will not override a newer build, so the older build will never be allowed to pass a <code>milestone</code> (it is aborted) if a newer build already passed it.</p>
+
+<p>This step is specially useful in <strong>Continuous Delivery pipelines</strong>, where builds ordering is very important as the order defines what is going to be delivered, so it provides a control point that <strong>aborts any build trying to deliver an old commit when a newer one is already being delivered</strong>.</p>
+
+<p>In general this step grants:</p>
+
+<ul>
+	<li>Builds pass milestones in order (taking the build number as sorter field).</li>
+	<li>Older builds will not proceed (they are aborted) if a newer one already passed the milestone.</li>
+	<li>When a build passes a milestone, any older build that passed the previous milestone but not this one is aborted (see TIP 2 below).</li>
+</ul>
+
+
+<p>There are two optional parameters:</p>
+
+<ul>
+	<li><code>ordinal</code>: sequential number which makes milestones comparable. For any given two consecutive milestones, ordinal for the second milestone must be a greater integer than the ordinal for the first one. If not specified an auto-incremented ordinal is internally generated.</li>
+	<li><code>label</code>: just for displaying purposes in Pipeline visual representations (provided by other plugins).</li>
+</ul>
+
+
+<p>This examples are both valid:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>milestone 1
+... pipeline code here
+
+milestone 2
+... more pipeline code
+
+milestone 3
+... and more
+</pre>
+</div></div>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>milestone 100
+... pipeline code here
+
+milestone 200
+... more pipeline code
+
+milestone 300
+... and more
+</pre>
+</div></div>
+
+<p><span style="color: rgb(255,102,0);"><strong>TIP 1</strong></span>: A combination of this step and the <code>lock</code> step can be used to configure a reliable Continuous Delivery pipeline as both delivering latest code status and unique deployments are granted. There is an example of this pattern in the <a href="https://github.com/jenkinsci/workflow-aggregator-plugin/blob/master/demo/repo/Jenkinsfile" class="external-link" rel="nofollow">Pipeline CD demo Jenkinsfile</a>.</p>
+
+<p><span style="color: rgb(255,102,0);"><strong>TIP 2</strong></span>: retroactive builds abort, which is older builds being cancelled once a newer one passes a milestone that the older builds has not passed yet. For example, given this script:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>milestone 1
+input message: &#39;Continue?&#39;
+milestone 2
+</pre>
+</div></div>
+
+<p>If three builds (#1, #2 and #3) start concurrently they are all going to stop on <code>input</code> step waiting for user interaction. If the user allows build #3 to proceed  (so it passes milestone 2) then builds #2 and #1 will be automatically cancelled.</p>
+
+
+<h2 id="PipelineMilestoneStepPlugin-Changelog">Changelog</h2>
+
+<h3 id="PipelineMilestoneStepPlugin-1.3.1(Mar28,2017)">1.3.1 (Mar 28, 2017)</h3>
+
+<ul>
+	<li>NPE in CleanupJobsOnDelete (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41311" class="external-link" rel="nofollow">JENKINS-41311</a>)</li>
+</ul>
+
+
+<h3 id="PipelineMilestoneStepPlugin-1.3(Dec28,2016)">1.3 (Dec 28, 2016)</h3>
+
+<ul>
+	<li>Clean up milestone build counter on job delete (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38641" class="external-link" rel="nofollow">JENKINS-38641</a>)</li>
+</ul>
+
+
+<h3 id="PipelineMilestoneStepPlugin-1.2(Nov17,2016)">1.2 (Nov 17, 2016)</h3>
+
+<ul>
+	<li>Fix a small logging quirk (logging the wrong ordinal)</li>
+</ul>
+
+
+<h3 id="PipelineMilestoneStepPlugin-1.1(Oct5,2016)">1.1 (Oct 5, 2016)</h3>
+
+<ul>
+	<li>Fix milestone step being incorrectly detected as inside a parallel (<a href="https://issues.jenkins-ci.org/browse/JENKINS-38464" class="external-link" rel="nofollow">JENKINS-38464</a>)</li>
+</ul>
+
+
+<h3 id="PipelineMilestoneStepPlugin-1.0(Sep20,2016)">1.0 (Sep 20, 2016)</h3>
+
+
+<ul>
+	<li>First release</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:38</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

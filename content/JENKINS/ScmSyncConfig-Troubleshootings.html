@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ScmSyncConfig Troubleshootings</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SCM-Sync-configuration-plugin.html">SCM Sync configuration plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ScmSyncConfig Troubleshootings
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fcamblor)</span>, last modified by <span class='editor'> Unknown User (claudiopro)</span> on Sep 02, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page is intended to centralize troubleshooting info about the ScmSyncConfiguration plugin configuration.</p>
+
+<p>Lots of configuration types can be encountered, and lots of tricks can be made to help diagnose where the problem is.</p>
+
+<h1 id="ScmSyncConfigTroubleshootings-Firstofall...">First of all ...</h1>
+
+<h3 id="ScmSyncConfigTroubleshootings-DeclarealoggerforScmSyncConfigurationplugin">Declare a logger for ScmSyncConfiguration plugin</h3>
+
+<p>To do so, just go to to the Jenkins System configuration screen, then on the <strong>System log</strong> section.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59512165/59900227.jpeg" data-image-src="attachments/59512165/59900227.jpeg" data-unresolved-comment-count="0" data-linked-resource-id="59900227" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JenkinsSystemLogger.jpeg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="59512165" data-linked-resource-container-version="7"></span></p>
+
+<p>Here, create a new <strong>Log recorder</strong> with the name you want (for example : scm_sync_configuration) with logger <strong>hudson.plugins.scm_sync_configuration</strong> and log level <strong>all</strong>.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59512165/59900229.png" data-image-src="attachments/59512165/59900229.png" data-unresolved-comment-count="0" data-linked-resource-id="59900229" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ScmSyncConfigLogger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512165" data-linked-resource-container-version="7"></span><br/>
+<strong>Save</strong> your logger.</p>
+
+<p>Starting from here, everything logged by ScmSyncConfiguration plugin will be recorded in this logger (unfortunately, you cannot get back in the past for diagnosing previous problems : this is the reason why you should ensure you have the logger settled up before doing anything, in case you face problems).</p>
+
+<h3 id="ScmSyncConfigTroubleshootings-EnsureyoucanaccessyourScmrepositoryfromJenkins">Ensure you can access your Scm repository from Jenkins</h3>
+
+<p>There is a simple thing you can do to ensure you're repository is accessible from Jenkins (for various reasons, you could miss things like networks limitations, proxies or firewall).<br/>
+To be sure you can access your repository, the easiest thing is to configure a temporary Jenkins job which will checkout your repository and echo an &quot;Hello world&quot;.</p>
+
+<p>To do this, create a new <strong>Freestyle Job</strong> and :</p>
+<ul class="alternate">
+	<li>Ensure your job is run on your <strong>Jenkins master node</strong> (this is important : ScmSyncConfiguration plugin will be ran on the master only !)</li>
+	<li>Select your desired scm (svn for example) and configure the same url in the job you would configure in the Jenkins system page<br/>
+For example :<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59512165/59900230.png" data-image-src="attachments/59512165/59900230.png" data-unresolved-comment-count="0" data-linked-resource-id="59900230" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ScmSyncConfigJob1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512165" data-linked-resource-container-version="7"></span><br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/59512165/59900231.png" data-image-src="attachments/59512165/59900231.png" data-unresolved-comment-count="0" data-linked-resource-id="59900231" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ScmSyncConfigJob2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59512165" data-linked-resource-container-version="7"></span></li>
+	<li>Eventually, you will be prompted to enter credentials for your repository (see previous screenshot). If this is the case, enter the credentials you will use and store them in Jenkins.<br/>
+Once done, you could be able to edit the <strong>&lt;JENKINS_HOME&gt;/hudson.scm.&lt;YOUR_SCM&gt;</strong> (for example : /var/lib/jenkins/hudson.scm.SubversionSCM.xml) to see if your repository url realm's credentials are there.</li>
+	<li>Then create a simple echo &quot;hello world&quot; <strong>bash script</strong> <strong>build step</strong> on your job.</li>
+	<li>Once done, you should be able to run your job. Verify that Jenkins succeeds to checkout sources located at <a href="http://path/to/repository/where/you/want/to/store/your/jenkins/config" class="external-link" rel="nofollow">http://path/to/repository/where/you/want/to/store/your/jenkins/config</a> and then, echo &quot;hello world&quot;<br/>
+If so, you can freely remove the temporary job.</li>
+</ul>
+
+
+<p>If everything goes well, go to the Jenkins global configuration screen, and configure ScmSyncConfiguration plugin, it should be ok !</p>
+
+<p>If you use Git then you should use SSH key with default name. It's &quot;id_rsa&quot;. SCM Sync does not have option to specify ssh key path. SCM Sync uses .ssh/id_rsa from home directory of the jenkins process owner.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512165/59900227.jpeg">JenkinsSystemLogger.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512165/59900228.jpeg">ScmSyncConfigLogger.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512165/59900229.png">ScmSyncConfigLogger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512165/59900230.png">ScmSyncConfigJob1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59512165/59900231.png">ScmSyncConfigJob2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

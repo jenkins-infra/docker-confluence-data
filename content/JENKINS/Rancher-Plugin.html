@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Rancher Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Rancher Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (yunlzheng)</span>, last modified on Dec 11, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Rancher <a href="https://plugins.jenkins.io/rancher" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+Enables Jenkins to deploy or upgrade Rancher stack service instance</p><h2 id="RancherPlugin-Features">Features</h2><ul><li>Deploy docker image to Rancher </li><li>Upgrade exist service instance in Rancher</li><li>Support options to finish the upgrade automatically </li><li>Support build environment variable as docker image tag, e.q. busybox:${BUILD_NUMBER}</li></ul><h3 id="RancherPlugin-Potentialupcomingfeatures">Potential upcoming features</h3><ul><li>Provision rancher stack with docker-compose and rancher-compose file</li></ul><h2 id="RancherPlugin-Requirements">Requirements</h2><h3 id="RancherPlugin-Jenkins">Jenkins</h3><p>Jenkins <a href="https://jenkins.io/changelog-stable/#v2.11" class="external-link" rel="nofollow">version 2.11</a> or newer is required.</p><h3 id="RancherPlugin-Rancher">Rancher</h3><p>Rancher <a href="https://github.com/rancher/rancher/releases/tag/v1.2.2" class="external-link" rel="nofollow">version 1.2.2</a> or newer is required.</p><h2 id="RancherPlugin-Setup">Setup</h2><h4 id="RancherPlugin-Installplugin">Install plugin</h4><p>Install this plugin via the Jenkins plugin manager.</p><p>Or if installing the plugin via other means.</p><h4 id="RancherPlugin-CreateRancherAPIKey">Create Rancher API Key</h4><ol><li>To enable access to your rancher server, you must create a account api key:</li><li>Siigin in to rancher server dashboard</li><li>Select Menu → API</li><li>Click &quot;Add Account API Key&quot;</li><li>Give the  api key any name and description you like, e.g &quot;Jenkins&quot;</li><li>Click the &quot;Create Key&quot;</li><li>Save the &quot;Access Key&quot; and &quot;Secret Key&quot; any way you like, we will use it later</li><li>You can now close the dialog </li></ol><h4 id="RancherPlugin-AddtheRancherAPIKeytoJenkins">Add the Rancher API Key to Jenkins</h4><ol><li>Navigate to your Jenkins instance</li><li>Select &quot;Credentials&quot; from the Jenkins sidebar</li><li>Choose a credentials domain and click &quot;Add Credentials&quot;</li><li>From the &quot;Kind&quot; drop-down, choose &quot;Username with password&quot;</li><li>Enter a description for the credential — the actual value is not important</li><li>Click &quot;OK&quot; to create the credential</li></ol><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/133955969/133956149.png" data-image-src="attachments/133955969/133956149.png" data-unresolved-comment-count="0" data-linked-resource-id="133956149" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="secret_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="133955969" data-linked-resource-container-version="7"></span></p><h3 id="RancherPlugin-Per-jobconfiguration">Per-job configuration</h3><h4 id="RancherPlugin-Freestylejobconfiguration">Freestyle job configuration</h4><h5 id="RancherPlugin-DeployorUpgradeServiceInstance">Deploy or Upgrade Service Instance</h5><ol><li>Create a new free-style project</li><li>Ensure. via whatever build stepds you need, tha the Docker image you want to deploy to Rancher will be available in the docker registry</li><li>Add &quot;Deploy/Upgrade Rancher Service&quot; post-build action</li><li>Enter the target Rancher Service API endpoint, e.g '<a rel="nofollow">http://rancher-server/v2-beta'</a></li><li>Select the credential name from the drop-down list</li><li>Enter the target rancher environment id, e.g '1a5558'</li><li>Enter the target service name, e.g 'stack/service'</li><li>Enter the docker image name, e.g 'busybox' (image name support current build environment variable like 'busybox:${BUILD_NUMBER}' to support dynamic image tag)</li><li>Optionally choose &quot;Auto Confirm&quot; to finish the upgrade automatically</li><li>Optionally choose &quot;Public Ports&quot; to export service ports. mutil port shoule e split be &quot;,&quot;. e.g 8080:80,9191:91</li></ol><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/133955969/133956150.png" data-image-src="attachments/133955969/133956150.png" data-unresolved-comment-count="0" data-linked-resource-id="133956150" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="133955969" data-linked-resource-container-version="7"></span></p><h2 id="RancherPlugin-Versionhistory">Version history</h2><h3 id="RancherPlugin-Version1.0.0(July13,2017)">Version 1.0.0 (July 13, 2017)</h3><ul><li>Initial release</li></ul><h3 id="RancherPlugin-Version1.0.1(July17,2017)">Version 1.0.1 (July 17, 2017)</h3><ul><li>Fixed dependencies info missing issue.</li></ul><h3 id="RancherPlugin-Version1.0.2(August042017)">Version 1.0.2 (August 04 2017)</h3><ul><li>Preserves the log config while upgrading a service.</li></ul><h3 id="RancherPlugin-Version1.0.3(September032017)">Version 1.0.3 (September 03 2017)</h3><ul><li>Support export service ports.</li></ul><h3 id="RancherPlugin-Version1.0.4(September122017)">Version 1.0.4 (September 12 2017)</h3><ul><li>Support export environment variable.</li></ul><h3 id="RancherPlugin-Version1.0.5(October102017)"><a class="external-link" href="https://github.com/jenkinsci/rancher-plugin#version-105-october-10-2017" rel="nofollow">Version 1.0.5 (October 10 2017)</a></h3><ul><li>Support health check serialization.</li></ul><h3 id="RancherPlugin-Version1.0.7(December112017)"><a class="external-link" href="https://github.com/jenkinsci/rancher-plugin#version-107-december-11-2017" rel="nofollow">Version 1.0.7 (December 11 2017)</a></h3><ul><li>Support custom timeout, and build variable in all fields.</li></ul><p> </p><p> </p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/133956149.png">secret_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/133956150.png">job_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/133958242.png">stack_example.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/138453485.png">image2018-4-7 9:10:40.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/138453486.png">image2018-4-7 9:13:40.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/170919991.png">image2019-3-20_14-42-34.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133955969/170919992.png">image2019-3-20_14-48-52.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:41</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

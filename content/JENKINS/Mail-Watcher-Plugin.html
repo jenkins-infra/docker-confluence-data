@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Mail Watcher Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Mail Watcher Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (olivergondza)</span>, last modified on Aug 28, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Mail Watcher <a href="https://plugins.jenkins.io/mail-watcher-plugin" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="MailWatcherPlugin-Mailwatcherplugin">Mail watcher plugin</h1>
+<p>This plugin notifies configured email recipients on various events.</p>
+
+<h1 id="MailWatcherPlugin-Recipientsconfiguration">Recipients configuration</h1>
+
+<p>Plugin optional configuration section is attached to the watched entity and usually called &quot;Notify when ...&quot;.</p>
+
+<p>Configuration accepts list of addresses delimited by comas.</p>
+
+<h2 id="MailWatcherPlugin-Watchedevents">Watched events</h2>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Recommended Jenkins version for Mail Watcher Plugin is 1.554. Using earlier version (earlier than 1.551) will cause missing notification for events that was not supported in the particular version.</p></div></div>
+
+<h3 id="MailWatcherPlugin-Jobconfiguration">Job configuration</h3>
+
+<p><span class="confluence-embedded-file-wrapper image-right-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-right" src="attachments/63144688/69402651.png" data-image-src="attachments/63144688/69402651.png" data-unresolved-comment-count="0" data-linked-resource-id="69402651" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="mwp-job.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="63144688" data-linked-resource-container-version="26"></span></p>
+
+<p>Notify when Job configuration changes. Recipients are configured at job configuration page. Recipients are notified when one of these events occurs:</p>
+
+<ul>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/model/listeners/ItemListener.html#onRenamed(hudson.model.Item, java.lang.String, java.lang.String)" class="external-link" rel="nofollow">onRenamed</a></li>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/model/listeners/ItemListener.html#onDeleted(hudson.model.Item)" class="external-link" rel="nofollow">onDeleted</a></li>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/model/listeners/ItemListener.html#onUpdated(hudson.model.Item)" class="external-link" rel="nofollow">onUpdated </a></li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-Nodeonlinestatus">Node online status</h3>
+
+<p><span class="confluence-embedded-file-wrapper image-right-wrapper"><img class="confluence-embedded-image confluence-content-image-border image-right" src="attachments/63144688/69402652.png" data-image-src="attachments/63144688/69402652.png" data-unresolved-comment-count="0" data-linked-resource-id="69402652" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="mwp-node.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="63144688" data-linked-resource-container-version="26"></span></p>
+
+<p>Notify when Node online status changes. Recipients are configured at node configuration page, section Node Properties. Recipients are notified when one of these events occurs:</p>
+
+<ul>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/slaves/ComputerListener.html#onOffline(hudson.model.Computer)" class="external-link" rel="nofollow">onOffline</a></li>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/slaves/ComputerListener.html#onOnline(hudson.model.Computer, hudson.model.TaskListener)" class="external-link" rel="nofollow">onOnline</a></li>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/slaves/ComputerListener.html#onTemporarilyOffline(hudson.model.Computer, hudson.slaves.OfflineCause)" class="external-link" rel="nofollow">onTemporarilyOffline</a></li>
+	<li><a href="http://javadoc.jenkins-ci.org/hudson/slaves/ComputerListener.html#onTemporarilyOnline(hudson.model.Computer)" class="external-link" rel="nofollow">onTemporarilyOnline</a></li>
+</ul>
+
+
+<p>Computer configuration offers two recipients lists for users to be notified on either online or offline event.</p>
+
+<h3 id="MailWatcherPlugin-Implicitnotifications">Implicit notifications</h3>
+
+<ul>
+	<li>User is notified when the node he/she put offline becomes available. In other words: last build has finished and no new can be scheduled. (Since 1.551)</li>
+</ul>
+
+
+<h2 id="MailWatcherPlugin-Changelog">Changelog</h2>
+
+<h3 id="MailWatcherPlugin-1.12">1.12</h3>
+
+<ul>
+	<li>Optimization: Do not compose the message when there are no recipients (<a href="https://issues.jenkins-ci.org/browse/JENKINS-27503">JENKINS-27503</a>)</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.11">1.11</h3>
+
+<ul>
+	<li>Correctly identify node and initiator of computer idle event.</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.10">1.10</h3>
+
+<ul>
+	<li>Avoid assertion error thrown during maven build (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28888">JENKINS-28888</a>)</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.8">1.8</h3>
+
+<ul>
+	<li>JENKINS-23496: Notify user that put slave temporarily offline that it has become idle</li>
+	<li>JENKINS-23555: Fix NPE when no Reply-To address configured</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.7">1.7</h3>
+
+<ul>
+	<li>JENKINS-23482: Globally configured ReplyTo header is not sent </li>
+	<li>JENKINS-20538: No notification for master node going offline (effectively fixed once <a href="https://github.com/jenkinsci/jenkins/pull/1293" class="external-link" rel="nofollow">#1293</a> is merged to core)</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.6">1.6</h3>
+
+<ul>
+	<li>JENKINS-20535: Subject for bring a node back online is misleading</li>
+	<li>JENKINS-23174: Links for jobs within folders are invalid</li>
+</ul>
+
+
+<h3 id="MailWatcherPlugin-1.5">1.5</h3>
+
+<ul>
+	<li>User identity tracked in 'Initiator' field</li>
+	<li>Links to job config history diffs included in messages when plugin installed.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63144688/69402651.png">mwp-job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63144688/69402652.png">mwp-node.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:32</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

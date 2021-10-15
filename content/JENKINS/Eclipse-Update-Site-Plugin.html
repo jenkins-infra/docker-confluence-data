@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Eclipse Update Site Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Eclipse Update Site Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Sep 27, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Eclipse Update Site <a href="https://plugins.jenkins.io/eclipse-update-site" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This library plugin combines Eclipse update sites from all the installed plugins and expose it as a single update site. This plugin does not provide user-visible features by itself, but rather it is meant to be used by other plugins as a library.</p>
+
+<h3 id="EclipseUpdateSitePlugin-UserGuide">User Guide</h3>
+<p>When this plugin is installed, you'll see the &quot;Eclipse Update Site&quot; link in the Jenkins top page:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/63146385/63275121.png" data-image-src="attachments/63146385/63275121.png" data-unresolved-comment-count="0" data-linked-resource-id="63275121" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screenshot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="63146385" data-linked-resource-container-version="8"></span></p>
+
+<p>This URL itself is the update site URL that you can enter into Eclipse (click this link from the browser and you'll see more detailed instructions and what's in it.) This single update site contains all the features and Eclipse plugins contributed by all the Jenkins plugins installed in your system. In this way, you only need to manage one repository, as opposed to one per Jenkins plugin.</p>
+
+<h3 id="EclipseUpdateSitePlugin-DevelopersGuideforUsingThisPlugin">Developers Guide for Using This Plugin</h3>
+<p>Plugins who wish to expose Eclipse update site from Jenkins can take advantages of this plugin by following these steps:</p>
+
+<ol>
+	<li>have your plugin depend on this plugin
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.jenkins-ci.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;eclipse-update-site&lt;/artifactId&gt;
+      &lt;version&gt;1.0&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+</pre>
+</div></div></li>
+	<li>bundle files that constitute an Eclipse site into the <code>/eclipse.site/</code> directory of your <code>*.jpi</code> file. The following POM snippet (taken from <a href="Jenkow-Plugin.html">Jenkow plugin</a>) shows how to do this:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;id&gt;unpack&lt;/id&gt;
+            &lt;phase&gt;generate-resources&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;unpack&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+              &lt;artifactItems&gt;
+                &lt;artifactItem&gt;
+                  &lt;groupId&gt;com.cisco.step.jenkins.plugins&lt;/groupId&gt;
+                  &lt;artifactId&gt;com.cisco.surf.jenkow.site&lt;/artifactId&gt;
+                  &lt;version&gt;${project.version}&lt;/version&gt;
+                  &lt;type&gt;zip&lt;/type&gt;
+                  &lt;overWrite&gt;true&lt;/overWrite&gt;
+                  &lt;outputDirectory&gt;${project.build.directory}/generated-resources/eclipse.site&lt;/outputDirectory&gt;
+                &lt;/artifactItem&gt;
+              &lt;/artifactItems&gt;
+            &lt;/configuration&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.jenkins-ci.tools&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-hpi-plugin&lt;/artifactId&gt;
+        &lt;configuration&gt;
+          &lt;webResources&gt;
+            &lt;resource&gt;
+              &lt;directory&gt;${project.build.directory}/generated-resources&lt;/directory&gt;
+            &lt;/resource&gt;
+          &lt;/webResources&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+</pre>
+</div></div></li>
+</ol>
+
+
+<p>That's it.</p>
+
+<h1 id="EclipseUpdateSitePlugin-Changelog">Changelog</h1>
+
+<h3 id="EclipseUpdateSitePlugin-Version1.2(Sep27,2012)">Version 1.2 (Sep 27, 2012)</h3>
+<ul>
+	<li>The plugin wasn't serving <code>p2.index</code> file.</li>
+</ul>
+
+
+<h3 id="EclipseUpdateSitePlugin-Version1.1(Sep11,2012)">Version 1.1 (Sep 11, 2012)</h3>
+<ul>
+	<li>Fixed access check so that anonymous users can access the update site.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/63146385/63275121.png">screenshot.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:22</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

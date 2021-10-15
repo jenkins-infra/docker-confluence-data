@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Plugins affected by the SECURITY-534 fix</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Plugins affected by the SECURITY-534 fix
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danielbeck)</span>, last modified by <span class='editor'> Unknown User (chrijon3)</span> on Jul 29, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins uses the Stapler web framework to render its UI views. These views are frequently comprised of several view fragments, enabling plugins to extend existing views with more content.</p><p>In some cases attackers could directly access a view fragment containing sensitive information, bypassing any permission checks in the corresponding view.</p><p>The Stapler web framework has been extended with a Service Provider Interface (SPI) that allows preventing views from being rendered. The implementation of that SPI in Jenkins now prevents view fragments from being rendered. Further details are available in the <a href="https://jenkins.io/doc/developer/views/SECURITY-534" class="external-link" rel="nofollow">developer documentation</a>.</p><p>This change is expected to impact existing functionality in some plugins. The most likely effect is that some URLs now return <code>404 Not Found</code>. In rare cases, the responses returned might not be <code>404 Not Found</code>, but still different than expected.</p><h2 id="PluginsaffectedbytheSECURITY-534fix-Affectedplugins">Affected plugins</h2><p>The table below provides a list of plugin which were affected by the SECURITY-534 fix in Jenkins 2.176.2 and 2.186. &quot;Status&quot; column reflects the current state. Note that this list is not exhaustive.</p><p>If you encounter a plugin that no longer works as expected due to the fix, please add it to the list. If possible, include the necessary whitelist entry (or entries) to make the feature work.</p><p>More importantly, please file a bug report, if one doesn’t exist, to help ensure that the appropriate plugin maintainer is informed.</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh">Plugin Name</th><th class="confluenceTh">Impact / behavior</th><th class="confluenceTh">Whitelist addition</th><th class="confluenceTh">Issue / Pull Request</th><th colspan="1" class="confluenceTh">Status</th></tr><tr><td class="confluenceTd"><span class="shorten" style="color: rgb(23,43,77);"><a href="https://plugins.jenkins.io/gerrit-trigger" class="external-link" rel="nofollow">gerrit-trigger-plugin</a></span></td><td class="confluenceTd">&quot;Data Error&quot; when viewing Gerrit Server list</td><td class="confluenceTd">com.sonyericsson.hudson.plugins.gerrit.trigger.GerritManagement serverStatuses</td><td class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-58715" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58715?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58715</a>
+                            -
+            <span class="summary">Gerrit Trigger Plugin is affected by SECURITY-534 fix in Jenkins 2.176.2 and 2.186</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p></div></td><td colspan="1" class="confluenceTd"><span style="color: rgb(0,128,0);"><strong style="text-align: left;">Fixed</strong></span> in 2.29.0</td></tr></tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

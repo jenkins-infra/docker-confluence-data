@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : CloudBees Flow Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : CloudBees Flow Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (efpluginsdev)</span>, last modified on Sep 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View CloudBees CD <a href="https://plugins.jenkins.io/electricflow" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-02-19/#SECURITY-937" class="external-link" rel="nofollow">SSL/TLS certification validation in Jenkins globally disabled</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-06-11/#SECURITY-1411" class="external-link" rel="nofollow">SSL/TLS certificate validation globally and unconditionally disabled</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-06-11/#SECURITY-1410%20(2)" class="external-link" rel="nofollow">Missing permission checks</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-06-11/#SECURITY-1412" class="external-link" rel="nofollow">XSS vulnerability in build metadata</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-06-11/#SECURITY-1410%20(1)" class="external-link" rel="nofollow">CSRF vulnerability and missing permission checks allowed SSRF</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-06-11/#SECURITY-1420" class="external-link" rel="nofollow">XSS vulnerability affecting job configuration forms</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-04-21/#SECURITY-2309" class="external-link" rel="nofollow">Missing permission check allows scheduling builds</a></li>
+</ul>
+
+</div></div>
+<p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020608830 {padding: 0px;}
+div.rbtoc1631020608830 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020608830 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020608830'>
+<ul class='toc-indentation'>
+<li><a href='#CloudBeesFlowPlugin-Overview'>Overview</a></li>
+<li><a href='#CloudBeesFlowPlugin-Features'>Features</a></li>
+<li><a href='#CloudBeesFlowPlugin-ConnectionConfigurations'>Connection Configurations</a></li>
+<li><a href='#CloudBeesFlowPlugin-SupportedPostBuildActions'>Supported Post Build Actions</a>
+<ul class='toc-indentation'>
+<li><a href='#CloudBeesFlowPlugin-CreateApplicationfromDeploymentPackagetoCloudBeesFlow'>Create Application from Deployment Package to CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-PublishArtifacttoCloudBeesFlow'>Publish Artifact to CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-RunPipelineinCloudBeesFlow'>Run Pipeline in CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-CallRESTAPIofCloudBeesFlow'>Call REST API of CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-DeployApplicationusingCloudBeesFlow'>Deploy Application using CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-TriggerReleaseinCloudBeesFlow'>Trigger Release in CloudBees Flow</a></li>
+<li><a href='#CloudBeesFlowPlugin-RunProcedureinCloudBeesFlow'>Run Procedure in CloudBees Flow</a></li>
+</ul>
+</li>
+<li><a href='#CloudBeesFlowPlugin-SupportedWorkflowSteps'>Supported Workflow Steps</a>
+<ul class='toc-indentation'>
+<li><a href='#CloudBeesFlowPlugin-CallRESTAPIofCloudBeesFlow.1'>Call REST API of CloudBees Flow</a></li>
+</ul>
+</li>
+<li><a href='#CloudBeesFlowPlugin-ReleaseNotes'>Release Notes</a></li>
+</ul>
+</div></p><h1 id="CloudBeesFlowPlugin-Overview">Overview</h1><p><span style="color: rgb(52,61,71);">CloudBees Flow Application Release Orchestration.</span></p><p><span style="color: rgb(52,61,71);">CloudBees Flow is an enterprise-grade DevOps Release Automation platform that simplifies provisioning, build and release of multi-tiered applications. Our model-driven approach to managing environments and applications allows teams to collaborate on and coordinate multiple pipelines and releases across hybrid infrastructure in an efficient, predictable and auditable way. </span></p><h1 id="CloudBeesFlowPlugin-Features">Features</h1><p>With the CloudBees Flow plugin you can:</p><ul><li>Trigger a release in CloudBees Flow</li><li>Trigger a pipeline in CloudBees Flow</li><li>Deploy an application in CloudBees Flow</li><li>Publish an artifact from Jenkins into the CloudBees Flow artifact repository</li><li>Run a Procedure in CloudBees Flow</li><li>Call a REST API to invoke any action in CloudBees Flow</li><li>Create Application in CloudBees Flow from Deployment Package</li></ul><h1 id="CloudBeesFlowPlugin-ConnectionConfigurations">Connection Configurations</h1><p>In order to use and integrate with CloudBees Flow, you would have to create a connection configuration in Jenkins, that stores connection information of the CloudBees Flow Server you are connecting to. You can create one or more connection configurations depending on the number of Servers or Environments you are integrating with.</p><p><span style="color: rgb(52,61,71);letter-spacing: 0.0px;">Navigate to Manage Jenkins / Configure System and go to CloudBees Flow section. One or more configurations can be created to connect to and call APIs into CloudBees Flow system. For each configuration, the following attributes need to be specified:</span></p><ul><li><span style="color: rgb(52,61,71);letter-spacing: 0.0px;">Configuration Name: Specify the name to store this configuration, which is used to connect to the CloudBees Flow Server.</span></li><li style="list-style-type: disc;"><p><span style="color: rgb(52,61,71);">Server URL: CloudBees Flow Server URL</span></p></li><li style="list-style-type: disc;"><p><span style="color: rgb(52,61,71);">REST API Version: CloudBees Flow Server Rest API Version</span></p></li><li style="list-style-type: disc;"><p><span style="color: rgb(52,61,71);">User Name: CloudBees Flow user name for Connection</span></p></li><li style="list-style-type: disc;"><p><span style="color: rgb(52,61,71);">User Password: CloudBees Flow password for Connection</span></p></li><li style="list-style-type: disc;"><p><span style="color: rgb(52,61,71);">Override CloudBees Flow SSL Validation Check: By default SSL Validation Check will be performed. Choose this setting to override the check. If you do not want to override this check, perform the SSL certificate setup required in Jenkins and CloudBees Flow as per the CloudBees Flow Server documentation.</span></p></li></ul><p><span style="color: rgb(52,61,71);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581354.png" data-image-src="attachments/116097128/165581354.png" data-unresolved-comment-count="0" data-linked-resource-id="165581354" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span><br/></span></p><h1 id="CloudBeesFlowPlugin-SupportedPostBuildActions">Supported Post Build Actions</h1><p>Following post build actions are available in CloudBees Flow Plugin. These actions can be executed separately or combined sequentially.</p><h2 id="CloudBeesFlowPlugin-CreateApplicationfromDeploymentPackagetoCloudBeesFlow">Create Application from Deployment Package to CloudBees Flow</h2><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This integration allows you to create and deploy Java, .NET or any other application to any environment in CloudBees Flow. Deployment package would be generated as part of your Jenkins CI build, and contain a Manifest file and artifacts to be deployed. </span></p><p><span style="color: rgb(0,0,0);">Sample manifest.json file can be found at </span><a href="https://github.com/electric-cloud/DeploymentPackageManager/tree/master/SampleManifests" style="letter-spacing: 0.0px;" class="external-link" rel="nofollow"><span style="color: rgb(119,170,204);">https://github.com/electric-cloud/DeploymentPackageManager/tree/master/SampleManifests</span></a><span style="color: rgb(0,0,0);">. </span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action has following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Deployment Package Path: Location or path for the deployment package to be published to CloudBees Flow. For e.g., MyProject/target</span></p></li></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="141" src="attachments/116097128/165581355.png" data-image-src="attachments/116097128/165581355.png" data-unresolved-comment-count="0" data-linked-resource-id="165581355" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="CreateDeplApp.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><p><span style="color: rgb(0,0,0);">Note: pipelines are not supported for this post build action in this version of plugin.</span></p><h2 id="CloudBeesFlowPlugin-PublishArtifacttoCloudBeesFlow">Publish Artifact to CloudBees Flow</h2><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This integration allows you to publish the artifact for your application to CloudBees Flow. The Artifact will be generated as part of your Jenkins CI build. </span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action takes the following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Artifact Path: Location or path for the artifact files to be published to CloudBees Flow. For e.g., MyProject/**/*-$BUILD_NUMBER.war</span></p></li><li style="list-style-type: disc;"><p><span>Artifact Name: Name of the application artifact using the format &lt;group_id&gt;:&lt;artifact_key&gt;. For e.g., &quot;com.example:helloworld&quot;</span></p></li><li style="list-style-type: disc;"><p><span>Artifact Version: Version of the application artifact. For e.g., you can specify 1.0 or 1.0-$BUILD_TAG that is based on Jenkins environment variable</span></p></li><li style="list-style-type: disc;"><p><span>CloudBees Flow Repository Name: Name of the CloudBees Flow Repository</span></p></li></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581350.png" data-image-src="attachments/116097128/165581350.png" data-unresolved-comment-count="0" data-linked-resource-id="165581350" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="PublishArtifact.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><p><span style="color: rgb(0,0,0);">Note: pipelines are not supported for this post build action in this version of plugin.</span></p><h2 id="CloudBeesFlowPlugin-RunPipelineinCloudBeesFlow">Run Pipeline in CloudBees Flow</h2><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This integration allows you to run a pipeline in CloudBees Flow.</span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action takes the following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Project Name: Name of the CloudBees Flow project</span></p></li><li style="list-style-type: disc;"><p><span>Pipeline Name: Name of the CloudBees Flow pipeline</span></p></li><li style="list-style-type: disc;"><p><span>(Optional) Pipeline Parameters</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter name will be displayed as Label</span></p></li><li style="list-style-type: disc;"><p><span>Parameter value to be specified will be displayed as text input field</span></p></li></ul></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581351.png" data-image-src="attachments/116097128/165581351.png" data-unresolved-comment-count="0" data-linked-resource-id="165581351" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="RunPipeline.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Run Pipeline Example (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowPipelinePublisher&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            projectName: &#39;CloudBees&#39;,
+            pipelineName: &#39;CBFPipeline&#39;,
+            addParam: &#39;{&quot;pipeline&quot;:{&quot;pipelineName&quot;:&quot;CBFPipeline&quot;,&quot;parameters&quot;:&quot;[{\\\&quot;parameterName\\\&quot;: \\\&quot;PipelineParam\\\&quot;, \\\&quot;parameterValue\\\&quot;: \\\&quot;185\\\&quot;}]&quot;}}&#39;
+    ])
+}</pre>
+</div></div><h2 id="CloudBeesFlowPlugin-CallRESTAPIofCloudBeesFlow">Call REST API of CloudBees Flow</h2><p><span style="color: rgb(0,0,0);">This integration allows you to </span><span style="color: rgb(51,51,51);">call the CloudBees Flow REST API. Similar workflow step is available.</span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action takes the following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Specify the name of the CloudBees Flow configuration.</span></li><li style="list-style-type: disc;"><p><span>URL Path: Specify the URL Path for the REST API</span></p></li><li style="list-style-type: disc;"><p><span>HTTP Method: Specify the HTTP Method</span></p></li><li style="list-style-type: disc;"><p><span>Parameters: Specify the parameters for the REST API. Parameters are transformed into JSON object and used within body of HTTP request.</span></p></li><li style="list-style-type: disc;"><p><span>Body: Specify the body for the REST API. This parameter is not used if 'Parameters' are provided.</span></p></li><li style="list-style-type: disc;"><span>Environment variable name for storing result: If provided, result of calling CloudBees REST API (JSON output) will be stored within provided environment variable available within build.</span></li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/182486166.png" data-image-src="attachments/116097128/182486166.png" data-unresolved-comment-count="0" data-linked-resource-id="182486166" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-9-27_16-51-9.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Call REST API Example #1 (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowGenericRestApi&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            urlPath : &#39;/projects&#39;,
+            httpMethod : &#39;POST&#39;,
+            body : &#39;&#39;,
+            parameters : [
+                [$class: &#39;Pair&#39;, 
+                    key: &#39;projectName&#39;,
+                    value: &#39;EC-TEST-Jenkins-1.00.00.01&#39;
+                ],
+                [$class: &#39;Pair&#39;, 
+                    key: &#39;description&#39;,
+                    value: &#39;Native Jenkins Test Project&#39;
+                ]
+            ],
+            envVarNameForResult: &#39;CALL_REST_API_CREATE_PROJECT_RESULT&#39;
+    ])
+}</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/182486169.png" data-image-src="attachments/116097128/182486169.png" data-unresolved-comment-count="0" data-linked-resource-id="182486169" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-9-27_16-58-46.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Call REST API Example #2 (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowGenericRestApi&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            urlPath : &#39;/projects&#39;,
+            httpMethod : &#39;POST&#39;,
+            body : &#39;{&quot;projectName&quot;: &quot;EC-TEST-Jenkins-1.00.00.01&quot;, &quot;description&quot;: &quot;Native Jenkins Test Project&quot;}&#39;
+    ])
+}</pre>
+</div></div><h2 id="CloudBeesFlowPlugin-DeployApplicationusingCloudBeesFlow">Deploy Application using CloudBees Flow</h2><p><span style="color: rgb(0,0,0);">This integration allows you to </span><span style="color: rgb(51,51,51);">deploy an application using CloudBees Flow.</span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action takes the following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Specify the name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Project Name: Specify the CloudBees Flow project name</span></p></li><li style="list-style-type: disc;"><p><span>Application Name: Specify the CloudBees Flow application name</span></p></li><li style="list-style-type: disc;"><p><span>Application Process Name: Specify the CloudBees Flow application process name</span></p></li><li style="list-style-type: disc;"><p><span>Environment Name: Specify the CloudBees Flow environment name</span></p></li><li style="list-style-type: disc;"><p><span>(Optional) Deploy Parameters</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter name will be displayed as Label</span></p></li><li style="list-style-type: disc;"><p><span>Parameter value to be specified will be displayed as text input field</span></p></li></ul></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581349.png" data-image-src="attachments/116097128/165581349.png" data-unresolved-comment-count="0" data-linked-resource-id="165581349" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="DeployApplication.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Deploy Application Example (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowDeployApplication&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            projectName : &#39;CloudBees&#39;,
+            applicationName : &#39;DemoApplication&#39;,
+            applicationProcessName : &#39;RunCommand&#39;,
+            environmentName : &#39;CBFEnvironment&#39;,
+            deployParameters : &#39;{&quot;runProcess&quot;:{&quot;applicationName&quot;:&quot;DemoApplication&quot;,&quot;applicationProcessName&quot;:&quot;RunCommand&quot;,&quot;parameter&quot;:&quot;[{\\\&quot;actualParameterName\\\&quot;: \\\&quot;Parameter1\\\&quot;, \\\&quot;value\\\&quot;: \\\&quot;value1\\\&quot;}, {\\\&quot;actualParameterName\\\&quot;: \\\&quot;Parameter2\\\&quot;, \\\&quot;value\\\&quot;: \\\&quot;value2\\\&quot;}]&quot;}}&#39;
+    ])
+}</pre>
+</div></div><h2 id="CloudBeesFlowPlugin-TriggerReleaseinCloudBeesFlow"><span style="color: rgb(210,73,57);font-size: 20.0px;letter-spacing: -0.008em;">Trigger Release in CloudBees Flow</span></h2><p><span style="color: rgb(51,51,51);letter-spacing: 0.0px;">This Integration allows you to trigger a release in CloudBees Flow.</span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action has following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Specify the name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Project Name: Specify the CloudBees Flow project name</span></p></li><li style="list-style-type: disc;"><p><span>Release Name: Specify the CloudBees Flow release name</span></p></li><li style="list-style-type: disc;"><p><span>(Optional) Starting Stage: Specify starting stage to run in the CloudBees Flow pipeline</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter is required if ‘Stages to run’ isn’t used </span></p></li></ul><li style="list-style-type: disc;"><p><span>(Optional) Stages to run: Specify stages to run in the CloudBees Flow pipeline</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter is required if ‘Starting Stage’ isn’t used </span></p></li></ul><li style="list-style-type: disc;"><p><span> (Optional) Pipeline parameters: Specify parameters for the CloudBees Flow pipeline</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter name will be displayed as Label</span></p></li><li style="list-style-type: disc;"><p><span>Parameter value to be specified should go in the text input field</span></p></li></ul></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581348.png" data-image-src="attachments/116097128/165581348.png" data-unresolved-comment-count="0" data-linked-resource-id="165581348" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="TriggerRelease.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Trigger Release Example (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowTriggerRelease&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            projectName : &#39;CloudBees&#39;,
+            releaseName : &#39;CBFRelease1.1.5&#39;,
+            startingStage : &#39;&#39;,
+            parameters : &#39;{&quot;release&quot;:{&quot;releaseName&quot;:&quot;CBFRelease1.1.5&quot;,&quot;stages&quot;:&quot;[{\\\&quot;stageName\\\&quot;: \\\&quot;Stage 1\\\&quot;, \\\&quot;stageValue\\\&quot;: false}, {\\\&quot;stageName\\\&quot;: \\\&quot;Stage 2\\\&quot;, \\\&quot;stageValue\\\&quot;: true}]&quot;,&quot;parameters&quot;:&quot;[{\\\&quot;parameterName\\\&quot;: \\\&quot;ReleaseParam\\\&quot;, \\\&quot;parameterValue\\\&quot;: \\\&quot;parameter\\\&quot;}]&quot;}}&#39;
+    ])
+}</pre>
+</div></div><h2 id="CloudBeesFlowPlugin-RunProcedureinCloudBeesFlow">Run Procedure in CloudBees Flow</h2><p><span style="color: rgb(51,51,51);letter-spacing: 0.0px;">This Integration allows you run a procedure in CloudBees Flow.</span></p><p><span style="color: rgb(0,0,0);letter-spacing: 0.0px;">This build action has following parameters:</span></p><ul><li><span style="letter-spacing: 0.0px;">Configuration: Specify the name of the CloudBees Flow configuration</span></li><li style="list-style-type: disc;"><p><span>Project Name: Specify the CloudBees Flow project name</span></p></li><li style="list-style-type: disc;"><p><span>Procedure Name: Specify the CloudBees Flow procedure name</span></p></li><li style="list-style-type: disc;"><p><span> (Optional) Procedure Parameters</span></p></li><ul><li style="list-style-type: disc;"><p><span>Parameter name will be displayed as Label</span></p></li><li style="list-style-type: disc;"><p><span>Parameter value to be specified should go in the text input field</span></p></li></ul></ul><p><span style="color: rgb(0,0,0);"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/165581352.png" data-image-src="attachments/116097128/165581352.png" data-unresolved-comment-count="0" data-linked-resource-id="165581352" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="RunProcedure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Run Procedure Example (Pipeline Script)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+        step([$class: &#39;ElectricFlowRunProcedure&#39;, 
+            configuration: &#39;CBFConfiguration&#39;,
+            projectName : &#39;CloudBees&#39;,
+            procedureName : &#39;TomcatCheckServer&#39;,
+            procedureParameters : &#39;{&quot;procedure&quot;:{&quot;procedureName&quot;:&quot;TomcatCheckServer&quot;,&quot;parameters&quot;:&quot;[{\\\&quot;actualParameterName\\\&quot;: \\\&quot;max_time\\\&quot;, \\\&quot;value\\\&quot;: \\\&quot;10\\\&quot;}, {\\\&quot;actualParameterName\\\&quot;: \\\&quot;tomcat_config_name\\\&quot;, \\\&quot;value\\\&quot;: \\\&quot;EC-Tomcat config\\\&quot;}]&quot;}}&#39;
+    ])
+}</pre>
+</div></div><h1 id="CloudBeesFlowPlugin-SupportedWorkflowSteps">Supported Workflow Steps</h1><p>Following workflow steps are available in CloudBees Flow Plugin.</p><h2 id="CloudBeesFlowPlugin-CallRESTAPIofCloudBeesFlow.1">Call REST API of CloudBees Flow</h2><p><span style="color: rgb(0,0,0);">This integration allows you to </span><span style="color: rgb(51,51,51);">call the CloudBees Flow REST API. Similar post build action is available: <a href="#CloudBeesFlowPlugin-CallRESTAPIofCloudBeesFlow">CallRESTAPIofCloudBeesFlow</a>.</span></p><p><span style="color: rgb(51,51,51);">Function name: cloudBeesFlowCallRestApi</span></p><p><span style="color: rgb(0,0,0);">This workflow step takes the following parameters:</span></p><ul><li><span>Configuration: Specify the name of the CloudBees Flow configuration.</span></li><li style="list-style-type: disc;"><p><span>URL Path: Specify the URL Path for the REST API</span></p></li><li style="list-style-type: disc;"><p><span>HTTP Method: Specify the HTTP Method</span></p></li><li style="list-style-type: disc;"><p><span>Parameters: Specify the parameters for the REST API. Parameters are transformed into JSON object and used within body of HTTP request.</span></p></li><li style="list-style-type: disc;"><p><span>Body: Specify the body for the REST API. This parameter is not used if 'Parameters' are provided.</span></p></li><li style="list-style-type: disc;"><span>Environment variable name for storing result: If provided, result of calling CloudBees REST API (JSON output) will be stored within provided environment variable available within build.</span></li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/116097128/182486172.png" data-image-src="attachments/116097128/182486172.png" data-unresolved-comment-count="0" data-linked-resource-id="182486172" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2019-9-27_18-9-24.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097128" data-linked-resource-container-version="35"></span></p><p><br/></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Call REST API Example Workflow Step #1 (Scripted Pipeline)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node{
+    stage(&#39;Test&#39;) {
+        def result = cloudBeesFlowCallRestApi body: &#39;&#39;, configuration: &#39;CBFConfiguration&#39;, envVarNameForResult: &#39;CALL_REST_API_CREATE_PROJECT_RESULT&#39;, httpMethod: &#39;POST&#39;, parameters: [[key: &#39;projectName&#39;, value: &#39;EC-TEST-Jenkins-1.00.00.01&#39;], [key: &#39;description&#39;, value: &#39;Native Jenkins Test Project&#39;]], urlPath: &#39;/projects&#39;
+        echo &quot;result : $result&quot;
+        echo &quot;CALL_REST_API_CREATE_PROJECT_RESULT environment variable: $CALL_REST_API_CREATE_PROJECT_RESULT&quot;
+    }
+}
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Call REST API Example Workflow Step #2 (Declarative Pipeline)</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">pipeline{
+    agent none
+    stages {
+        stage(&#39;Example Build&#39;) {
+            steps {
+                cloudBeesFlowCallRestApi body: &#39;&#39;, configuration: &#39;CBFConfiguration&#39;, envVarNameForResult: &#39;CALL_REST_API_CREATE_PROJECT_RESULT&#39;, httpMethod: &#39;POST&#39;, parameters: [[key: &#39;projectName&#39;, value: &#39;EC-TEST-Jenkins-1.00.00.01&#39;], [key: &#39;description&#39;, value: &#39;Native Jenkins Test Project&#39;]], urlPath: &#39;/projects&#39;
+            }
+        }
+        stage(&#39;Example Build 2&#39;) {
+            steps {
+                echo &quot;CALL_REST_API_CREATE_PROJECT_RESULT environment variable: $CALL_REST_API_CREATE_PROJECT_RESULT&quot;
+            }
+        }
+    }
+}
+</pre>
+</div></div><h1 id="CloudBeesFlowPlugin-ReleaseNotes">Release Notes</h1><h2 id="CloudBeesFlowPlugin-Version1.1.10(Sep26,2019)">Version 1.1.10 (Sep 26, 2019)</h2><p>Updated &quot;CloudBees Flow - Call REST API&quot; related functionality:</p><ul><li>Added support of the new workflow step &quot;CloudBees Flow - Call REST API&quot; which is based on the same functionality as corresponded post build action. Snippet generator UI is available for the new workflow step</li><li>Result of calling CloudBees Flow REST API (JSON output) now can be <span>stored within environment variable available within build and also can be returned by the new workflow step within scripted pipelines</span></li><li><span>Fixed URL on summary page of Call REST API jobs</span></li></ul><p><span>Changed Jenkins baseline version for the plugin to 2.138.4</span></p><h2 id="CloudBeesFlowPlugin-Version1.1.9(Jun12,2019)">Version 1.1.9 (Jun 12, 2019)</h2><ul><li>Added basic unit tests</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.8(Jun12,2019)">Version 1.1.8 (Jun 12, 2019)</h2><ul><li>Re-branding: renaming from &quot;Electric Flow&quot; to &quot;CloudBees Flow&quot;</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.7(Jun11,2019)">Version 1.1.7 (Jun 11, 2019)</h2><ul><li><a href="https://jenkins.io/security/advisory/2019-06-11/" class="external-link" rel="nofollow">Fix security issue</a> (SECURITY-1420)</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.6(Jun11,2019)">Version 1.1.6 (Jun 11, 2019)</h2><ul><li><a href="https://jenkins.io/security/advisory/2019-06-11/" class="external-link" rel="nofollow">Fix security issues</a> (SECURITY-1410, SECURITY-1411, SECURITY-1412)</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.5(Dec19,2018)">Version 1.1.5 (Dec 19, 2018)</h2><p>Support for the following New Post Build Actions have been added:</p><ul><li>ElectricFlow - Deploy Application</li><li>ElectricFlow - Trigger Release</li><li>ElectricFlow - Call REST API</li><li>ElectricFlow - Run Procedure</li></ul><p>Post Build Action &quot;ElectricFlow - Run Pipeline&quot; modified as follows:</p><ul><li>It can now be run for pipelines without parameters</li></ul><p>Post Build Action &quot;ElectricFlow - Publish Artifact&quot; modified as follows:</p><ul><li>Added support for publishing to both directories and sub-directories</li><li>Explicit error messages added for build runs</li></ul><p>Usability Changes</p><ul><li>Post Build Action page shows dynamically retrieved values all the time</li><li>Two new buttons &quot;Validate Before Apply&quot; and &quot;Compare Before Apply&quot; added in Post Build Action Pages for Deploy Application, Trigger Release, Run Procedure and Run Pipeline, to make sure that failure to retrieve information is handled gracefully (no stack traces) and at the same time, users can understand the field errors before saving the configuration.</li><li>More descriptive Help tips.</li><li>More verbose messages when Test Connection fails with Electric Flow.</li><li>More verbose logging on response body for failed Rest API calls.</li><li>New option called &quot;Override Electric Flow SSL Validation Check&quot; introduced for testing connection with Electric Flow, where there is a need to test Electric Flow Post Build Actions before doing the SSL setup.</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.4(Nov22,2017)">Version 1.1.4 (Nov 22, 2017)</h2><p>Post Build Action &quot;ElectricFlow - Publish Artifact&quot; modified as follows:</p><ul><li>Fixed Scenarios where Build Step fails with exceptions</li><li>Added Support for remoting (build on remote windows machines)</li></ul><h2 id="CloudBeesFlowPlugin-Version1.1.3(May9,2017)">Version 1.1.3 (May 9, 2017)</h2><p>Support added for running plugin tasks from jenkins pipeline as per <a href="https://issues.jenkins-ci.org/browse/JENKINS-44084" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-44084</a>.</p><h2 id="CloudBeesFlowPlugin-Version1.1.2(Apr28,2017)">Version 1.1.2 (Apr 28, 2017)</h2><p>More detailed output from plugin on build page results.<br/>Hierarchy files output added to build page.</p><h2 id="CloudBeesFlowPlugin-Version1.1.1(Apr27,2017)">Version 1.1.1 (Apr 27, 2017)</h2><p>General clean up of code.</p><h2 id="CloudBeesFlowPlugin-Version1.0(Apr26,2017)">Version 1.0 (Apr 26, 2017)</h2><p>Initial Release.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/116064700.png">Screen Shot 2017-04-24 at 2.50.35 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/116064701.png">Screen Shot 2017-04-24 at 3.05.19 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/116064702.png">Screen Shot 2017-04-24 at 3.14.13 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/116064703.png">Screen Shot 2017-04-24 at 3.41.28 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581327.png">ECPublishArtifact.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581332.png">ECCallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581333.png">ECConfiguration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581343.png">ECCreateDeplApp.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581335.png">ECDeployApplication.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581336.png">ECRunPipeline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581337.png">ECRunProcedure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581338.png">ECTriggerRelease.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581334.png">ECCreateDeplApp.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581472.png">TriggerRelease.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581469.png">DeployApplication.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471688.png">PublishArtifact.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581470.png">RunPipeline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581471.png">RunProcedure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471691.png">CallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471685.png">Configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471687.png">CreateDeplApp.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471697.png">DeployApplication.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471689.png">RunPipeline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471699.png">RunProcedure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471698.png">TriggerRelease.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/173703312.png">CallRestApiExample2.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/173703313.png">CallRestApiExample1.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581354.png">Configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581355.png">CreateDeplApp.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581350.png">PublishArtifact.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471690.png">RunPipeline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581351.png">RunPipeline.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471692.png">CallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471694.png">CallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471693.png">CallREST_API_ex1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/177471695.png">CallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581353.png">CallREST_API.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581349.png">DeployApplication.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581348.png">TriggerRelease.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/165581352.png">RunProcedure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/182486166.png">image2019-9-27_16-51-9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/182486169.png">image2019-9-27_16-58-46.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097128/182486172.png">image2019-9-27_18-9-24.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

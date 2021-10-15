@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Thanks for using OSX Installer</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Native-Packages.html">Native Packages</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Thanks for using OSX Installer
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jinwoojeon)</span> on Mar 16, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This page is a landing page for those who have installed Jenkins via its OS X installer</p></div></div>
+
+<p>The installer sets up Jenkins as a launch daemon, listening on port 8080. (If you want to know more about launchd and daemons, see <a href="http://developer.apple.com/library/mac/#technotes/tn2083/_index.html" class="external-link" rel="nofollow">here</a> and <a href="http://developer.apple.com/library/mac/#documentation/MacOSX/Conceptual/BPSystemStartup/Articles/LaunchOnDemandDaemons.html" class="external-link" rel="nofollow">here</a>.)</p>
+
+<h1 id="ThanksforusingOSXInstaller-Changingbootconfiguration">Changing boot configuration</h1>
+
+<p>The launch daemon picks up the command line options from a standard preferences file, <code>/Library/Preferences/org.jenkins-ci.plist</code>. If the file does not exist, built-in defaults are used. The preference files are manipulated using the standard utility defaults.</p>
+
+<ul>
+	<li>To view all settings in the file, run: <code>defaults read /Library/Preferences/org.jenkins-ci</code></li>
+	<li>To get the value of a single setting, run: <code>defaults read /Library/Preferences/org.jenkins-ci SETTING</code></li>
+	<li>To set the value of a setting, run: <code>sudo defaults write /Library/Preferences/org.jenkins-ci SETTING VALUE</code></li>
+	<li>For more information, see <code>man defaults</code></li>
+</ul>
+
+
+<p>See <a href="Starting-and-Accessing-Jenkins.html">Starting and Accessing Jenkins</a> for various command line options that Jenkins support.</p>
+
+<h3 id="ThanksforusingOSXInstaller-SupportedSettings">Supported Settings</h3>
+
+<p>The list of settings supported by the Jenkins launch daemon (see documentation):</p>
+
+<ul>
+	<li>prefix</li>
+	<li>httpPort</li>
+	<li>httpListenAddress</li>
+	<li>httpsPort</li>
+	<li>httpsListenAddress</li>
+	<li>ajp13Port</li>
+	<li>ajp13ListenAddress</li>
+</ul>
+
+
+<p>Additionally, you can set also these:</p>
+
+<ul>
+	<li>war (Full path name to jenkins.war file.)</li>
+	<li>heapSize (Passed to java command-line -Xmx parameter.)</li>
+	<li>permGen (Passed to java command-line -XX:MaxPermSize parameter.) (SINCE 1.455?)</li>
+	<li>JENKINS_HOME (Full path to JENKINS_HOME directory where Jenkins keeps its files)</li>
+</ul>
+
+
+<h1 id="ThanksforusingOSXInstaller-Starting/stoppingtheservice">Starting/stopping the service</h1>
+
+<ul>
+	<li>To manually start the daemon: <code>sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist</code></li>
+	<li>To manually stop the daemon: <code>sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist</code></li>
+</ul>
+
+
+<h1 id="ThanksforusingOSXInstaller-InheritingyourexistingHudson/Jenkinsinstallation">Inheriting your existing Hudson/Jenkins installation</h1>
+
+<p>If you'd like your new installation to take over your existing Jenkins/Hudson data, copy your old data directory into the new JENKINS_HOME directory.</p>
+
+<h1 id="ThanksforusingOSXInstaller-JavaandOSX10.9Mavericksor10.10Yosemite">Java and OS X 10.9 Mavericks or 10.10 Yosemite</h1>
+
+<p>Oracle Java 8 on Mavericks or Yosemite needs Apple's Java 1.6 to function. However, all of the symlinks in /usr/bin point to Java 1.6, so when a Jenkins tries to run via /Library/Application Support/Jenkins/jenkins-runner.sh, it launches using Java 1.6. To run under Java 8, you need to do the following: </p>
+<ol>
+	<li>Install Apple's Java from <a href="http://support.apple.com/kb/DL1572" class="external-link" rel="nofollow">http://support.apple.com/kb/DL1572</a></li>
+	<li>Install Oracle Java 8</li>
+	<li>Edit jenkins-runner.sh: 
+	<ol>
+		<li>Add the line: 
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">export JAVA_HOME=&quot;/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home&quot;</pre>
+</div></div></li>
+		<li>Change the last two lines to read: 
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+echo &quot;/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java&quot; $javaArgs -jar &quot;$war&quot; $args
+exec &quot;/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java&quot; $javaArgs -jar &quot;$war&quot; $args
+</pre>
+</div></div></li>
+	</ol>
+	</li>
+</ol>
+
+
+<p>Jenkins will now run using Java 8. </p>
+
+<h1 id="ThanksforusingOSXInstaller-UninstallJenkins">Uninstall Jenkins</h1>
+
+<p>To uninstall Jenkins service from your Mac OS X computer, execute uninstall script from terminal:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&#39;/Library/Application Support/Jenkins/Uninstall.command&#39;</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

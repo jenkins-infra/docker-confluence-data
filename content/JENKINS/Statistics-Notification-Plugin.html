@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Statistics Notification Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Statistics Notification Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (hthakkallapally)</span>, last modified on Jul 06, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'statistics-notification' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+Plugin allows to capture job, build and queue statistics and send notifications to given URL.</p>
+
+<h1 id="StatisticsNotificationPlugin-Description">Description</h1>
+
+<ol>
+	<li>Plugin will capture job creation, deletion and update events and calls REST API. This also sends config.xml in the rest call.</li>
+	<li>It will record the queue time for each and every build calling REST API. It captures Queue entry time and Queue exit time and other related parameters.</li>
+	<li>It also records build information like start time, end time, build parameters, SCM parameters and Slave information and calls an API.</li>
+</ol>
+
+
+<p><span style="color: rgb(34,34,34);">All of the above stats are captured in real time. API can be used to write the data to DB or can be used to notify the people.</span></p>
+
+<p>Notification URL can be configured in system configuration page at <a href="http://localhost:9090/jenkins/configure" class="external-link" rel="nofollow">http://localhost:9090/jenkins/configure</a> as shown in below.</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="200" src="attachments/80642675/80871472.png" data-image-src="attachments/80642675/80871472.png" data-unresolved-comment-count="0" data-linked-resource-id="80871472" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="stats-plugin-system-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="80642675" data-linked-resource-container-version="10"></span></p>
+
+<p>Notification URL is the API end point that can be used for capturing statistics. For ex. <a href="http://cistats.mycompany.com/api/" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/</a> Final Queue end point will be <a href="http://cistats.mycompany.com/api/queues" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/queues</a> Projects/jobs end point will be <a href="http://cistats.mycompany.com/api/projects" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/projects</a> Builds end point will be <a href="http://cistats.mycompany.com/api/builds" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/builds</a>.</p>
+<ul>
+	<li>Notification URL is the API end point that can be used for capturing statistics. For ex. <a href="http://cistats.mycompany.com/api/" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/</a>.
+	<ul>
+		<li>Final Queue end point will be <a href="http://cistats.mycompany.com/api/queues" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/queues</a>.</li>
+		<li>Projects/jobs end point will be <a href="http://cistats.mycompany.com/api/projects" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/projects</a>.</li>
+		<li>Builds end point will be <a href="http://cistats.mycompany.com/api/builds" class="external-link" rel="nofollow">http://cistats.mycompany.com/api/builds</a>.</li>
+	</ul>
+	</li>
+	<li>Connection Timeout: Determines the timeout until a connection is established. Default value is 1000ms.</li>
+	<li>Socket Timeout: Defines the default socket timeout in milliseconds which is the timeout for waiting for data. Default value is 1000ms.</li>
+</ul>
+
+
+<p>These are the only 3 configurations that user need to do.</p>
+
+<p>Once they are set each time a job is created, deleted or updated an API will be called with following JSON.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Job API JSON</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+   &quot;name&quot;: &quot;create-10&quot;,
+   &quot;createdDate&quot;: &quot;Jul 1, 2015 10:10:37 AM&quot;,
+   &quot;userId&quot;: &quot;anonymous&quot;,
+   &quot;userName&quot;: &quot;anonymous&quot;,
+   &quot;ciUrl&quot;: &quot;http://localhost:9090/jenkins/&quot;,
+   &quot;status&quot;: &quot;ACTIVE&quot;,
+   &quot;configFile&quot;: &quot;&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;\n&lt;project&gt;\n  &lt;keepDependencies&gt;false&lt;\/keepDependencies&gt;\n  &lt;properties/&gt;\n  &lt;scm class=\&quot;hudson.scm.NullSCM\&quot;/&gt;\n  &lt;canRoam&gt;false&lt;\/canRoam&gt;\n  &lt;disabled&gt;false&lt;\/disabled&gt;\n  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;\/blockBuildWhenDownstreamBuilding&gt;\n  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;\/blockBuildWhenUpstreamBuilding&gt;\n  &lt;triggers/&gt;\n  &lt;concurrentBuild&gt;false&lt;\/concurrentBuild&gt;\n  &lt;builders/&gt;\n  &lt;publishers/&gt;\n  &lt;buildWrappers/&gt;\n&lt;\/project&gt;&quot;
+}</pre>
+</div></div>
+<p>Sample JSON for the Queue API.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Sample JSON for Queue API</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+   &quot;duration&quot;:47,
+   &quot;entryTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+   &quot;exitTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+   &quot;jenkinsQueueId&quot;:4,
+   &quot;jobName&quot;:&quot;test-2&quot;,
+   &quot;startedBy&quot;:&quot;anonymous&quot;,
+   &quot;status&quot;:&quot;LEFT&quot;,
+   &quot;queueCauses&quot;:{
+      &quot;buildable&quot;:{
+         &quot;entryTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+         &quot;exitTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+         &quot;reasonForWaiting&quot;:&quot;Waiting for next available executor&quot;
+      },
+      &quot;waiting&quot;:{
+         &quot;entryTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+         &quot;exitTime&quot;:&quot;2015-07-01T02:12:55.000Z&quot;,
+         &quot;reasonForWaiting&quot;:&quot;???&quot;
+      }
+   },
+   &quot;ciUrl&quot;:&quot;http://localhost:9090/jenkins/&quot;
+}</pre>
+</div></div>
+<p>Sample JSON for build API.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Sample Build API JSON</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+   &quot;jobName&quot;:&quot;test-job&quot;,
+   &quot;number&quot;:19,
+   &quot;startTime&quot;:&quot;2015-07-01T18:46:53.000Z&quot;,
+   &quot;startedUserId&quot;:&quot;anonymous&quot;,
+   &quot;startedUserName&quot;:&quot;anonymous&quot;,
+   &quot;result&quot;:&quot;SUCCESS&quot;,
+   &quot;duration&quot;:42451,
+   &quot;queueTime&quot;:14917,
+   &quot;endTime&quot;:&quot;2015-07-01T18:47:51.000Z&quot;,
+   &quot;ciName&quot;:&quot;corepayteconnector-ci&quot;,
+   &quot;scmInfo&quot;:{
+      &quot;url&quot;:&quot;git@github.com:plugins/testplugin.git&quot;,
+      &quot;branch&quot;:&quot;origin/develop&quot;,
+      &quot;commit&quot;:&quot;12345567e7ada45db02db5fb&quot;
+   },
+   &quot;parameters&quot;:{
+      &quot;EMAIL_NOTIFICATION&quot;:&quot;test@company.com&quot;
+   },
+   &quot;slaveInfo&quot;:{
+      &quot;slaveName&quot;:&quot;computer name&quot;,
+      &quot;vmName&quot;:&quot;VM name&quot;,
+      &quot;label&quot;:&quot;java&quot;,
+      &quot;remoteFs&quot;:&quot;/dev/hudson/&quot;
+   },
+   &quot;ciUrl&quot;:&quot;http://localhost:9090/jenkins&quot;
+}</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/80642675/80871473.png">stats-plugin-system-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/80642675/80871474.png">stats-plugin-system-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/80642675/80871475.png">stats-plugin-system-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/80642675/80871472.png">stats-plugin-system-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/80642675/80871476.png">stats-plugin-system-config-1.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

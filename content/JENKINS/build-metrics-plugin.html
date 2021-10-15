@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : build-metrics-plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : build-metrics-plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (javamllama)</span>, last modified by <span class='editor'> Unknown User (px3)</span> on Aug 22, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This plugin uses the results from the <a href="Global-Build-Stats-Plugin.html">Global Build Stats Plugin</a> to generate some basic build metrics.  It is really useful in combination with the <a href="Sidebar-Link-Plugin.html">sidebar links plugin</a>.</p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View build-metrics <a href="https://plugins.jenkins.io/build-metrics" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1490" class="external-link" rel="nofollow">Reflected XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<h2 id="build-metrics-plugin-Requirements">Requirements </h2>
+
+<p>This plugin requires Jenkins 1.509 or better and the <a href="Global-Build-Stats-Plugin.html">Global Build Stats plugin</a> 1.2 or better.</p>
+
+<h2 id="build-metrics-plugin-Installation">Installation</h2>
+
+<p>To install the build metrics plugin, Go to &quot;Manage Jenkins&quot; -&gt; &quot;Plugin Management&quot;. Check the latest version and install.  You will probably need to restart the Jenkins server after that.</p>
+
+
+<h2 id="build-metrics-plugin-HowToUsethePlugin">How To Use the Plugin</h2>
+
+<h3 id="build-metrics-plugin-ManageJenkinsScreen">Manage Jenkins Screen</h3>
+
+<p>Go to &quot;Manage Jenkins&quot;. You should see an icon of Jenkins with a little data grid in front.  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59511434/59900182.png" data-image-src="attachments/59511434/59900182.png" data-unresolved-comment-count="0" data-linked-resource-id="59900182" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-metrics.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59511434" data-linked-resource-container-version="25"></span>  Click that and it will take you to the Built Metrics Search screen (see below).</p>
+
+<h3 id="build-metrics-plugin-BuildMetricsSearchScreen">Build Metrics Search Screen</h3>
+
+<p>The search screen is where you tell the plugin which jobs you wish to report on and what timeframe should be included in the report.<br/>
+﻿ <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59511434/59900183.png" data-image-src="attachments/59511434/59900183.png" data-unresolved-comment-count="0" data-linked-resource-id="59900183" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-metrics-search.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59511434" data-linked-resource-container-version="25"></span></p>
+
+<p>Configure the following parameters:</p>
+<ul>
+	<li>Search Results Label: set this to whatever text you wish to be displayed at the top of the search results screen. Usually this would be some descriptive text for the build job metrics being summarized.</li>
+	<li>Select the time window: default is 2 weeks (must be an integer)</li>
+	<li>Configure the filters (for more information on this, see the <a href="Global-Build-Stats-Plugin.html">Global Build Stats Plugin</a> configuration since this part of the UI was copied directly from it).</li>
+</ul>
+
+
+<p>Click Search and the report will be generated and displayed (see Build Metrics Report Screen below)</p>
+
+<h3 id="build-metrics-plugin-BuildMetricsReportScreen">Build Metrics Report Screen</h3>
+
+<p>The build metrics report screen is split into two sections. The top section contains the selected jobs and their associated build metrics.  The bottom section contains a list of failed builds; complete with the job name, a link to the console output of the build, and a link to the build itself as well as a section to display the 'cause' for the build (see description of adding build failure cause below).<br/>
+﻿ <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/59511434/59900185.png" data-image-src="attachments/59511434/59900185.png" data-unresolved-comment-count="0" data-linked-resource-id="59900185" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-metrics-results.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="59511434" data-linked-resource-container-version="25"></span></p>
+
+<h4 id="build-metrics-plugin-AddingaCauseforabuildfailure">Adding a Cause for a build failure</h4>
+
+<p>I found it useful to have a description in the report for why the build failed. This way I could see trends as they happened over time.  To add a cause:</p>
+
+<ol>
+	<li>Click on the build number link in the failed build list (at the bottom of the build metrics report screen). This will take you to the home screen for the indicated build number.</li>
+	<li>Click the 'edit description' link (on the right hand side of the page).  Enter a description for the cause of the build failure and click the submit button.</li>
+	<li>Refresh the build metrics report screen and you will see the cause added to the build failure list.</li>
+</ol>
+
+
+<h2 id="build-metrics-plugin-IntendedUseCase">Intended Use Case</h2>
+
+<p>This plugin was created because the team I work on needed to deliver some concise build metrics for our Jenkins builds on a rolling two week iteration. These build metrics needed to have an overall failure rate and an individual one per job, as well as a list of failed builds (with associated causes).  This plugin provides that reporting mechanism.  To be really useful though, we needed to be able to pull it up quickly and easily every time we wanted to generate the report.  I use the <a href="Sidebar-Link-Plugin.html">sidebar links plugin</a> to accomplish this, by simply copying the url for the build metrics report screen for a given set of search criteria.  I then enter this URL as a sidebar link, using the icon that I created for the plugin and the description (1st parameter on the search page) as the txt of the link.  This way all of our users can just go to the main Jenkins dashboard and pull up the report as needed.  </p>
+
+<p>We currently take the results of the report, copy them into an email and send that to our development teams as a 'report card'.  A great next-step for the use of this plugin would be to have a job that ran the report and emailed out the contents on a scheduled basis.</p>
+
+
+<h2 id="build-metrics-plugin-Changelog">Changelog</h2>
+
+
+<h4 id="build-metrics-plugin-Version1.3-2016-08-22">Version 1.3 - 2016-08-22</h4>
+
+<ul>
+	<li>fixed the &quot;&amp; nbsp ; &quot; problem in output.</li>
+</ul>
+
+
+<h4 id="build-metrics-plugin-Version1.2-2016-08-21">Version 1.2 - 2016-08-21</h4>
+
+<ul>
+	<li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-37329" class="external-link" rel="nofollow">JENKINS-37329</a> : Bug in StatsMath.java DecimalFormat</li>
+	<li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-16270" class="external-link" rel="nofollow">JENKINS-16270</a> : Build metrics icon filename incorrect</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20945" class="external-link" rel="nofollow">JENKINS-20945</a> : New filter for causes</li>
+	<li>Updated to newer parent pom</li>
+	<li><strong>DO NOT USE THIS RELEASE USE 1.3 INSTEAD. The output in this release is broken.</strong></li>
+</ul>
+
+
+
+
+<h4 id="build-metrics-plugin-Version1.1-2016-03-08">Version 1.1 - 2016-03-08</h4>
+
+<ul>
+	<li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-32651" class="external-link" rel="nofollow">JENKINS-32651</a> : Incorrectly calculated reporting period can lead to an empty report</li>
+</ul>
+
+
+<h4 id="build-metrics-plugin-Version1.0-2012-02-17">Version 1.0 - 2012-02-17</h4>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/59900182.png">build-metrics.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/59900184.png">build-metrics-search.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/59900183.png">build-metrics-search.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/59900185.png">build-metrics-results.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/75628730.png">дж1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/75628731.png">дж2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/59511434/75628732.png">дж3.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:15</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : XL TestView Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : XL TestView Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (amolenaar)</span>, last modified by <span class='editor'> Unknown User (klaren)</span> on Aug 03, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-08-07/#SECURITY-1008" class="external-link" rel="nofollow">CSRF vulnerability and missing permission check allow capturing credentials</a></li>
+</ul>
+
+</div></div>
+
+<p>
+<p>The XL TestView Plugin integrates Jenkins with <a href="https://xebialabs.com/products/xl-test/" class="external-link" rel="nofollow">XebiaLabs XL TestView</a></p>
+by adding a post-build action to your Jenkins installation:</p>
+<ul>
+	<li>Send test results to XL TestView</li>
+</ul>
+
+
+<h2 id="XLTestViewPlugin-Requirements">Requirements</h2>
+
+<ul>
+	<li><strong>XL TestView</strong>: version 1.2.0 or higher.</li>
+	<li><strong>Jenkins</strong>: <strong>LTS</strong> version 1.609.1 or higher.</li>
+	<li><strong>Java</strong>: version 7 or higher.</li>
+</ul>
+
+
+<h2 id="XLTestViewPlugin-Features">Features</h2>
+
+<ul>
+	<li>Send test results to XL TestView</li>
+</ul>
+
+
+<h2 id="XLTestViewPlugin-Configuration">Configuration</h2>
+
+<p>There are 2 places to configure the XL TestView Jenkins Plugin: the global Jenkins configuration and job configuration.</p>
+
+<h3 id="XLTestViewPlugin-Pluginconfiguration">Plugin configuration</h3>
+
+<p>At <em>Manage Jenkins -&gt; Configure System</em> you can specify the XL TestView server URL and one or more sets of credentials. Different credentials can be used for different jobs.</p>
+
+<h3 id="XLTestViewPlugin-Jobconfiguration">Job configuration</h3>
+
+<p>In the Job Configuration page, choose <em>Post-build Actions -&gt; Add post-build action -&gt; Send test results to XL TestView</em>. Now you can configure a globbing pattern used to find the test results.</p>
+
+<h2 id="XLTestViewPlugin-Links">Links</h2>
+
+<ul>
+	<li><a href="https://docs.xebialabs.com/" class="external-link" rel="nofollow">XL TestView documentation</a></li>
+	<li><a href="https://support.xebialabs.com/forums/" class="external-link" rel="nofollow">XL TestView support forums</a></li>
+</ul>
+
+
+<h2 id="XLTestViewPlugin-ReleaseNotes">Release Notes</h2>
+
+
+<h3 id="XLTestViewPlugin-Version1.2.0(August3,2016)">Version 1.2.0 (August 3, 2016)</h3>
+
+<ul>
+	<li>Add the build duration to the metadata sent to XL TestView. This requires XL TestView 1.4.4 or higher. The duration is the time of the build up to the running of the build step.</li>
+</ul>
+
+
+<h3 id="XLTestViewPlugin-Version1.1.1(February15,2016)">Version 1.1.1 (February 15, 2016)</h3>
+
+
+<h4 id="XLTestViewPlugin-Bugfixes">Bug fixes</h4>
+
+<ul>
+	<li>Ensure that the 'Mark build as unstable if sending test results fails.' check box works properly.</li>
+</ul>
+
+
+
+
+<h3 id="XLTestViewPlugin-Version1.1.0(November23,2015)">Version 1.1.0 (November 23, 2015)</h3>
+
+
+<h4 id="XLTestViewPlugin-Possiblebreakingchanges">Possible breaking changes</h4>
+
+<ul>
+	<li>Build with Java 1.7 and depend on Jenkins 1.609.1. Starting with this version, Jenkins will need to run with Java 1.7.</li>
+</ul>
+
+
+<h4 id="XLTestViewPlugin-Bugfixes.1">Bug fixes</h4>
+
+<ul>
+	<li>Do not send extra slashes in the XL TestView REST calls when there are extra trailing slashes in the XL TestView server configuration.</li>
+	<li>Upload test data using chunked encoding.</li>
+</ul>
+
+
+<h4 id="XLTestViewPlugin-Improvements">Improvements</h4>
+
+<ul>
+	<li>Add option to not change the build status when there is a problem communicating with XL TestView.</li>
+	<li>Send user agent identifying the version of the plugin.</li>
+	<li>Explicitly deal with cases where the XL TestView license expired.</li>
+	<li>Improve exception handling for authentication and connection errors.</li>
+	<li>Improve help messages.</li>
+	<li>Improve error messages.</li>
+	<li>Fix IntelliJ project generation.</li>
+</ul>
+
+
+<h3 id="XLTestViewPlugin-Version1.0.1(June16,2015)">Version 1.0.1 (June 16, 2015)</h3>
+
+<ul>
+	<li>Fix filtering of test specification sets in the post build step.</li>
+	<li>Small textual improvements.</li>
+</ul>
+
+
+<h3 id="XLTestViewPlugin-Version1.0.0(June9,2015)">Version 1.0.0 (June 9, 2015)</h3>
+
+<ul>
+	<li>Upload test results to a test specification.</li>
+	<li>Upload different types of test results to test specifications.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676828/103940107.jpg">xi.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676828/103940106.jpg">xi.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:59</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

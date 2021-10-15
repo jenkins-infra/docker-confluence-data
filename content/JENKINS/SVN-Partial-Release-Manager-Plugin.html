@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SVN Partial Release Manager Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SVN Partial Release Manager Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (giliadis)</span>, last modified on Mar 31, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Subversion Partial Release Manager <a href="https://plugins.jenkins.io/svn-partial-release-mgr" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-06-03/#SECURITY-1726" class="external-link" rel="nofollow">XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+
+<p>This plugin provides the option to set up a job in Jenkins in order to build a partial release for a project.</p>
+
+<p>Based on the plugin <a href="https://wiki.jenkins-ci.org/display/JENKINS/Subversion+Release+Manager" class="external-link" rel="nofollow">Subversion Release Manager Plugin</a></p>
+<br class="atl-forced-newline"/></p>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022658428 {padding: 0px;}
+div.rbtoc1631022658428 ul {list-style: disc;margin-left: 0px;padding-left: 8px;}
+div.rbtoc1631022658428 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022658428'>
+<ul class='toc-indentation'>
+<li><a href='#SVNPartialReleaseManagerPlugin-Description'>Description</a></li>
+<li><a href='#SVNPartialReleaseManagerPlugin-Functionality'>Functionality</a></li>
+<li><a href='#SVNPartialReleaseManagerPlugin-Configuration'>Configuration</a></li>
+<li><a href='#SVNPartialReleaseManagerPlugin-ChangeLog'>Change Log</a></li>
+</ul>
+</div>
+
+<h2 id="SVNPartialReleaseManagerPlugin-Description">Description</h2>
+
+<p>Suppose you have released a major version into production and created a tag into Subversion for that release.</p>
+
+<p>The team developers start committing their code for the issues of the next release. For some reason (client needs it urgently, QA team has not signed off) you need to move into production only some of the issues you have committed into SVN.</p>
+
+<p>This plugin allows you to : </p>
+<ul>
+	<li>Select the issues you want to include into the partial release</li>
+	<li>Keep track of all the revisions you have already deployed into previous partial releases for the same tag</li>
+</ul>
+
+
+<p><em>Prerequisites: All revisions committed for the same issue must contain into their commit message the same issue identifier (e.g PRMG-102 ) where the PRMG- is the prefix configured into the job.</em></p>
+
+<p>Here is a screenshot of the job selection screen of the issues to be released.( By checking an issue we actually check the revisions that have been committed for that issue )  </p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/106823799/107020295.jpg" data-image-src="attachments/106823799/107020295.jpg" data-unresolved-comment-count="0" data-linked-resource-id="107020295" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_plugin.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="106823799" data-linked-resource-container-version="11"></span></p>
+
+<h2 id="SVNPartialReleaseManagerPlugin-Functionality">Functionality</h2>
+
+<p>After the user clicks the &quot;Release Version&quot; button the job will execute the following steps.</p>
+<ul>
+	<li>Checkout from SVN the tag revision source</li>
+	<li>Will get the selected revision file sources from svn.</li>
+	<li>Combine the source and proceed with normal build of a partial release.</li>
+</ul>
+
+
+
+<h2 id="SVNPartialReleaseManagerPlugin-Configuration">Configuration</h2>
+
+<p>To create a partial release manager job one can act as follows.</p>
+<ul>
+	<li>Create a new Maven Project Item</li>
+	<li>Be sure to select the checkbox &quot;Use- Svn Partial Relase Manager&quot; ( red circle in the screenshot 1 below )</li>
+	<li>Enter your svn repository url</li>
+	<li>Enter your latest major release tag to build the partial release uppon to</li>
+	<li>Enter the issue identifier prefixes ( comma delimeted if more than one )</li>
+</ul>
+
+
+<p>NOTE!! One might have more than one partial releases for the same tag so he/she will repeat the above execution many times.</p>
+
+
+
+<ul>
+	<li>In order to keep track of the previous release (aka the already moved to production releases ) one needs also to add a post build step ( screenshot 2 )</li>
+</ul>
+
+
+<p> <br/>
+Screenshot 1</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/106823799/107020301.png" data-image-src="attachments/106823799/107020301.png" data-unresolved-comment-count="0" data-linked-resource-id="107020301" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106823799" data-linked-resource-container-version="11"></span></p>
+
+
+
+
+
+<p>Screenshot 2<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/106823799/107020302.png" data-image-src="attachments/106823799/107020302.png" data-unresolved-comment-count="0" data-linked-resource-id="107020302" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="config2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106823799" data-linked-resource-container-version="11"></span></p>
+
+
+
+<h2 id="SVNPartialReleaseManagerPlugin-ChangeLog">Change Log</h2>
+
+
+<h5 id="SVNPartialReleaseManagerPlugin-Version0.1(2017-03-31)">Version 0.1 (2017-03-31)</h5>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020294.gif">jenkins-plugin.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020298.jpg">jenkins_plugin.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020300.jpg">jenkins_plugin.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020299.png">jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020295.jpg">jenkins_plugin.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020303.png">config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020302.png">config2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106823799/107020301.png">config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

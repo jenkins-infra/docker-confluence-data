@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Gerrit Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Gerrit Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jyrkiput@gmail.com)</span>, last modified by <span class='editor'> Unknown User (evernat)</span> on Dec 07, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><p class="title">Deprecated: This plugin has been removed from the Jenkins Update Centre</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The plugin is not maintained anymore, and there's a better alternative: <a href="Gerrit-Trigger.html">Gerrit Trigger</a>.</p></div></div>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'gerrit' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>You might want to check <a href="Gerrit-Trigger.html">Gerrit Trigger</a> also. See <a href="http://hudson.361315.n4.nabble.com/We-would-like-to-contribute-a-new-Gerrit-plugin-td2224606.html#a2224606" class="external-link" rel="nofollow">http://hudson.361315.n4.nabble.com/We-would-like-to-contribute-a-new-Gerrit-plugin-td2224606.html#a2224606</a> for information about main differences.</p>
+
+<p>This plugin integrates <a href="http://gerrit.googlecode.com/" class="external-link" rel="nofollow">Gerrit Code Review</a> to Jenkins.</p>
+
+<p>It will mark a change verified if the build of the change was successful, effectively implementing a <a href="Designing-pre-tested-commit.html">pre-tested commit</a> workflow with Gerrit and the Git plugin (0.8.2 or later)</p>
+
+<p>After build, the plugin just checks what revision is in workspace at the moment and uses Gerrits ssh command line tools for marking the result.</p>
+
+<h3 id="GerritPlugin-GettingStarted">Getting Started</h3>
+
+<p>Using the latest release of the Gerrit plugin, along with recent builds of Gerrit itself are recommended. Thanks to a recent addition to Gerrit, one can now create &quot;role accounts&quot; such as one for the Jenkins &lt;-&gt; Gerrit integration.</p>
+
+<h5 id="GerritPlugin-Pre-requisites">Pre-requisites</h5>
+
+<ol>
+	<li>Generate an SSH key for the Jenkins user, the private key will need to be placed on the Jenkins master node.</li>
+	<li>Create a &quot;hudson&quot; user in Gerrit: <code>cat hudson.pub | ssh gerrithost gerrit create-account --ssh-key - --full-name Hudson hudson</code></li>
+	<li>I recommend creating a group specifically for role accounts (such as &quot;Bots&quot; in the Admin &gt; Groups interface in Gerrit)</li>
+	<li>It is also useful to set up <a href="http://www.kernel.org/pub/software/scm/git-core/docs/git-daemon.html" class="external-link" rel="nofollow">git-daemon(1)</a> on the machine running Gerrit to allow your Jenkins slaves anonymous access to the repository, otherwise you'll need to set up all the slaves that will be running your Gerrit-enabled jobs with SSH access.</li>
+</ol>
+
+
+<h5 id="GerritPlugin-CreatingtheJob">Creating the Job</h5>
+
+<ol>
+	<li>Create a new job, adding your Git repository. Change the <strong>Refspec</strong> field to reference <code>+refs/changes/<strong>:refs/remotes/origin/*</strong></code><strong> instead of <code>+refs/heads/</code></strong><code>:refs/remotes/origin/*</code>. Also, make sure you have chosen the &quot;Gerrit-Plugin&quot; choosing strategy, NOT &quot;Gerrit&quot; as in the image below (Choosing strategy was moved from Git-plugin to Gerrit-plugin and the name haed to be changed).<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43352308/43843630.gif" data-image-src="attachments/43352308/43843630.gif" data-unresolved-comment-count="0" data-linked-resource-id="43843630" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="pyyajl_precommit.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="43352308" data-linked-resource-container-version="32"></span></li>
+	<li>Add your build steps as per usual</li>
+	<li>Check the &quot;Gerrit Integration&quot; checkbox in the <strong>Post-build Actions</strong> section.</li>
+	<li>Build!</li>
+	<li>Once you're certain your job is configured correctly, visit Gerrit and grant the &quot;hudson&quot; account's group (i.e. &quot;Bots&quot;) &quot;+1 Verified&quot; access to all projects, so it can annotate the changes with +1 or -1.</li>
+</ol>
+
+
+
+
+<h4 id="GerritPlugin-Versions">Versions</h4>
+
+
+<h5 id="GerritPlugin-0.7">0.7</h5>
+
+<ul>
+	<li>Added possibility to set Review values. If review or verify value is 0, it won't show up in Gerrit. Idea for this came from <a href="http://groups.google.com/group/repo-discuss/msg/354c62365a472e33" class="external-link" rel="nofollow">http://groups.google.com/group/repo-discuss/msg/354c62365a472e33</a></li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.6">0.6</h5>
+
+<ul>
+	<li>Aborted builds won't be marked as failed anymore</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.5">0.5</h5>
+
+<ul>
+	<li>Moved buildchooser from git-plugin, use &quot;Gerrit-Plugin&quot; choosing strategy from now on.</li>
+	<li>Fix for issue when using Cygwin+Git.</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.42010-04-08">0.4 2010-04-08</h5>
+
+<ul>
+	<li>Fixed issue when using slaves for build</li>
+	<li>SSH commands are now sent from master only.</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.32010-04-06">0.3 2010-04-06</h5>
+
+<ul>
+	<li>Internal restructuring</li>
+	<li>Added some unit tests</li>
+	<li>This version will lose settings when upgrading from 0.2*</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.22010-03-30">0.2 2010-03-30</h5>
+
+<ul>
+	<li>Close ssh connection to gerrit properly</li>
+	<li>Added configuration option for unstable build verify value.</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.1.1">0.1.1</h5>
+
+<ul>
+	<li>Failed release process forced to do a new release</li>
+</ul>
+
+
+<h5 id="GerritPlugin-0.1">0.1</h5>
+
+<ul>
+	<li>Initial version</li>
+</ul>
+
+
+<h4 id="GerritPlugin-TODO">TODO</h4>
+
+<ul>
+	<li>Perhaps add possibility to set review values also, for example when code analysis tools report errors. <a href="Analysis-Collector-Plugin.html">Analysis Collector Plugin</a> might be useful.</li>
+</ul>
+
+
+
+
+<h4 id="GerritPlugin-Settings">Settings</h4>
+
+<p>Basic settings for plugin, remember to add user into gerrit.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43352308/43483177.png" data-image-src="attachments/43352308/43483177.png" data-unresolved-comment-count="0" data-linked-resource-id="43483177" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="gerrit_basic_settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43352308" data-linked-resource-container-version="32"></span></p>
+
+<p>Settings for Git -plugin (Available in 0.8.2)<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43352308/43483175.png" data-image-src="attachments/43352308/43483175.png" data-unresolved-comment-count="0" data-linked-resource-id="43483175" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="git_settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43352308" data-linked-resource-container-version="32"></span></p>
+
+<h4 id="GerritPlugin-HowJenkinsshowsupingerrit">How Jenkins shows up in gerrit</h4>
+
+<p>Review matrix:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43352308/43483179.png" data-image-src="attachments/43352308/43483179.png" data-unresolved-comment-count="0" data-linked-resource-id="43483179" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_on_gerrit_1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43352308" data-linked-resource-container-version="32"></span></p>
+
+<p>Comment field:<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/43352308/43483176.png" data-image-src="attachments/43352308/43483176.png" data-unresolved-comment-count="0" data-linked-resource-id="43483176" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="hudson_on_gerrit_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="43352308" data-linked-resource-container-version="32"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43843604.png">git_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43843605.png">hudson_on_gerrit_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43483177.png">gerrit_basic_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43483178.png">gerrit_advanced_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43483179.png">hudson_on_gerrit_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43843606.png">git_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43483176.png">hudson_on_gerrit_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43483175.png">git_settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/43352308/43843630.gif">pyyajl_precommit.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

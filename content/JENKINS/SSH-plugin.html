@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SSH plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SSH plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (edmund_wagner)</span>, last modified by <span class='editor'> Unknown User (francolm)</span> on Nov 22, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View SSH <a href="https://plugins.jenkins.io/ssh" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-07-10/" class="external-link" rel="nofollow">Credentials are stored in unencrypted configuration files</a></li>
+</ul>
+
+</div></div>
+</p><h3 id="SSHplugin-Plugininfo">Plugin info</h3><p>This Plugin was derived from the very cool <a href="SCP-plugin.html">SCP Plugin</a>.You can use the SSH Plugin to run shell commands on a remote machine via ssh.</p><hr/><h3 id="SSHplugin-Usage">Usage</h3><p>First go to the global configuration page and add a SSH site.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="245" width="689" src="attachments/42470275/42631376.png" data-image-src="attachments/42470275/42631376.png" data-unresolved-comment-count="0" data-linked-resource-id="42631376" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ssh-global-cfg.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470275" data-linked-resource-container-version="35"></span></p><p>For your job select a configured site and enter the shell commands that should be executed before and after the build.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/42470275/42631377.png" data-image-src="attachments/42470275/42631377.png" data-unresolved-comment-count="0" data-linked-resource-id="42631377" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ssh-job-cfg.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470275" data-linked-resource-container-version="35"></span></p><p>Log will look like this.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/42470275/42631378.png" data-image-src="attachments/42470275/42631378.png" data-unresolved-comment-count="0" data-linked-resource-id="42631378" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ssh-job-log.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42470275" data-linked-resource-container-version="35"></span></p><hr/><h3 id="SSHplugin-TODO">TODO</h3><ul><li>i18n</li><li>we also need a post deploy script (ask some of the core team how to do that)</li><li>investigate stop behavior of Hudson jobs using the ssh Plugin</li><li>use same sites as scp plugin (plugin dependencies???)</li><li>...</li></ul><hr/><p><br/></p><h3 id="SSHplugin-Changelog">Changelog</h3><h5 id="SSHplugin-Version2.6.1(April132018)">Version 2.6.1 (April 13 2018)</h5><ul><li><p>[JENKINS-19973] Option to hide ssh command in log</p></li></ul><h5 id="SSHplugin-Version2.6(April72018)">Version 2.6 (April 7 2018)</h5><ul><li><p>[JENKINS-46172] Handle NPE when not all fields are specified &amp; save only properly configured sites</p></li><li>[JENKINS-10128] Set build to UNSTABLE when no SSH site is configured instead of NPE</li><li>Add Jenkinsfile to plugin</li><li>bump ssh-credentials dependency to 1.12</li><li>Add ajax validation to essential ssh host fields</li></ul><p>INFO: the &quot;Add Credentials&quot; button for SSH Site <strong>don't work</strong> in recent Jenkins 2.x versions - this will be fixed in upcoming 3.0 version.<br/>(major version since plugin will have to migrate it's configuration to new format)</p><h5 id="SSHplugin-Version2.5(July82017)">Version 2.5 (July 8 2017)</h5><ul><li><p>[JENKINS-21436] Integrate with the SSH Credentials Plugin; previous credentials are migrated</p></li><li><p>[JENKINS-23231] Add timeout parameter</p></li><li><p>[JENKINS-24913] Don't show sensitive build variables in console log</p></li><li><p>[JENKINS-12191] Restore resolving hostname from environment variables</p></li><li><p>[JENKINS-12191] Support build variables (substitution variables) during command execution (env variables are exported before the script)</p></li><li><p>[JENKINS-24402] Updated to latest version of JSch (0.1.54) to support modern algorithms</p></li><li><p>Pull JSch dependency via Jenkins hosted jsch-plugin to use recommended way of getting common dependencies in Jenkins</p></li><li><p>Set Jenkins 1.609.3 as the oldest supported version</p></li><li><p>Show warning for missing parameters during ajax form validation</p></li><li><p>Fix security issue</p></li></ul><p>Due to added integration with SSH Credentials Plugin,<strong> this version might NOT be fully compatibile</strong> with previous version. Sorry!</p><p>Please <strong>backup your org.jvnet.hudson.plugins.SSHBuildWrapper.xml </strong>before upgrading to version 2.5.<strong><br/></strong></p><h5 id="SSHplugin-Version2.4(Jan082014)">Version 2.4 (Jan 08 2014)</h5><ul><li>ability to use variables when defining SSH host</li><li>miscellaneous fixes</li><li>added keep alive interval</li></ul><h5 id="SSHplugin-Version2.3(Sep242012)">Version 2.3 (Sep 24 2012)</h5><ul><li>fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-15265" class="external-link" rel="nofollow">JENKINS-15265</a></li></ul><h5 id="SSHplugin-Version2.2(Sep032012)">Version 2.2 (Sep 03 2012)</h5><ul><li>fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-15005" class="external-link" rel="nofollow">JENKINS-15005</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-14420" class="external-link" rel="nofollow">JENKINS-14420</a></li></ul><h5 id="SSHplugin-Version2.1(Aug142012)">Version 2.1 (Aug 14 2012)</h5><ul><li>configurable pty mode</li></ul><h5 id="SSHplugin-Version2.0(Jun26,2012)">Version 2.0 (Jun 26, 2012)</h5><ul><li>support multiple sites on the same machine</li></ul><h5 id="SSHplugin-Version1.6(Jun24,2012)">Version 1.6 (Jun 24, 2012)</h5><ul><li>support parameterized builds</li></ul><h5 id="SSHplugin-Version1.3(Jun25,2011)">Version 1.3 (Jun 25, 2011)</h5><ul><li>Run script on build step.</li><li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-9240" class="external-link" rel="nofollow">JENKINS-9240</a></li></ul><h5 id="SSHplugin-Version1.2(Feb17,2011)">Version 1.2 (Feb 17, 2011)</h5><ul><li>Fix to avoid executing empty script.</li></ul><h5 id="SSHplugin-Version1.1(Jun2,2010)">Version 1.1 (Jun 2, 2010)</h5><ul><li>Removed isEmpty() for 1.5 comp; better input areas</li></ul><h5 id="SSHplugin-Version1.0(Feb24,2010)">Version 1.0 (Feb 24, 2010)</h5><ul><li>Initial release.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470275/42631376.png">ssh-global-cfg.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470275/42631377.png">ssh-job-cfg.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470275/42631378.png">ssh-job-log.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42470275/138450717.png">Screen Shot 2018-02-27 at 10.31.55 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:49</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Writing CLI commands</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Writing CLI commands
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Jan 14, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Plugins can contribute additional commands to <a href="Jenkins-CLI.html">Jenkins CLI</a> which, since Jenkins 1.445, will also be available via <a href="Jenkins-SSH.html">Jenkins SSH</a>.</p>
+
+<p>This is useful for (1) exposing administrative commands to admins, so that they can script some of the Jenkins babysitting work, and (2) exposing data and operations to builds executing inside Jenkins, so that they can interact with Jenkins in a richer way.</p>
+
+<p>Writing commands can be done in two ways.</p>
+
+<h1 id="WritingCLIcommands-Byputtingonmethodsofyourmodelobjects">By putting <a href="http://javadoc.jenkins-ci.org/byShortName/CLIMethod">CLIMethod</a> on methods of your model objects</h1>
+<p>If you are exposing behaviors of your model objects as CLI commands, the easiest way to achieve it is to put @<a href="http://javadoc.jenkins-ci.org/byShortName/CLIMethod">CLIMethod</a> on a method of your model object. See <a href="http://javadoc.jenkins-ci.org/byShortName/Queue">Queue</a>.clear() as an example. In addition to the command name as specified in the annotation, you also need to define &quot;CLI.<em>command-name</em>.shortDescription&quot; as a message resource, which captures one line human-readable explanation of the command (see <code>CLICommand.getShortDescription()</code>).</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public class AbstractItem {
+    @CLIMethod(name=&quot;delete-job&quot;)
+    public synchronized void delete() throws IOException, InterruptedException {
+        performDelete();
+
+        if(this instanceof TopLevelItem)
+            Hudson.getInstance().deleteJob((TopLevelItem)this);
+
+        Hudson.getInstance().rebuildDependencyGraph();
+    }
+    ...
+}
+</pre>
+</div></div>
+
+<p>Notice that the method is an instance method. So when the <code>delete-job</code> command is executed, which job is deleted? To resolve this, you also need to define a &quot;CLI resolver&quot;, which uses a portion of arguments and options to determine the instance object that receives a method call.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+@CLIResolver
+public static AbstractItem resolveForCLI(
+        @Argument(required=true,metaVar=&quot;NAME&quot;,usage=&quot;Job name&quot;) String name) throws CmdLineException {
+    AbstractItem item = Hudson.getInstance().getItemByFullName(name, AbstractItem.class);
+    if (item==null)
+        throw new CmdLineException(null,&quot;No such job exists:&quot;+name);
+    return item;
+}
+</pre>
+</div></div>
+
+<p>Of all the resolver methods that are discovered, Jenkins picks the one that returns the best return type. It doesn't matter where the resolver method is defined, or how it's named.</p>
+
+<p>Both resolver methods and CLI methods can have any number of <a href="https://args4j.dev.java.net/" class="external-link" rel="nofollow">args4j</a> annotations, which causes the parameters and arguments to be injected upon a method invocation. All the other unannotated parameters receive null. Combined with the stapler method binding, this enables you to make your method invokable from both CLI and HTTP.</p>
+
+
+<h1 id="WritingCLIcommands-Byextending">By extending <a href="http://javadoc.jenkins-ci.org/byShortName/CLICommand">CLICommand</a></h1>
+<p>You can also implement a CLI commmand as a subtype of <a href="http://javadoc.jenkins-ci.org/byShortName/CLICommand">CLICommand</a>, and put @<a href="http://javadoc.jenkins-ci.org/byShortName/Extension">Extension</a>. You can use existing implementations in the core, such as <a href="http://javadoc.jenkins-ci.org/byShortName/GroovyCommand">GroovyCommand</a>, as a starting point. CLICommand exposes a lower-level control of the CLI set up (such as a <a href="http://javadoc.jenkins-ci.org/byShortName/Channel">Channel</a>.)</p>
+
+<p>This approach is suitable for the commands that require more serious terminal interaction and remote code execution.</p>
+
+<p>See <a href="http://javadoc.jenkins-ci.org/byShortName/CLICommand">the javadoc of CLICommand</a> for more details.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Unicorn Validation Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Unicorn Validation Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (nej)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Unicorn Validation <a href="https://plugins.jenkins.io/unicorn" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin uses W3C's Unified Validator, which helps improve the quality of Web pages by performing a variety of checks.</p>
+
+<h1 id="UnicornValidationPlugin-General"><span style="color: rgb(92,53,102);"><strong>General</strong></span></h1>
+
+<p>The plugin uses gets number of errors/warnings from W3C's Unified Validator. W3C Unicorn Service (<a href="http://validator.w3.org/unicorn/" class="external-link" rel="nofollow">http://validator.w3.org/unicorn/</a>) helps to improve the quality of Web pages by performing a variety of checks (HTML validation, CSS validation,...). This plugins takes few arguments (url to check, w3c validator url and threshold for number of errors and warnings to decide the build result) ... look at the Configuration section.</p>
+
+<p><span style="color: rgb(0,0,0);">It outputs results to the console and to some properties files which can then be later used with Plot Plugin to output some build history graphs (see the template below for configuration).</span></p>
+
+<h5 id="UnicornValidationPlugin-Exampleofresults"><span style="color: rgb(92,53,102);"><strong>Example of results</strong></span></h5>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54722613/54951940.png" data-image-src="attachments/54722613/54951940.png" data-unresolved-comment-count="0" data-linked-resource-id="54951940" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen shot 2011-02-13 at 5.45.41 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="54722613" data-linked-resource-container-version="7"></span></p>
+
+<h5 id="UnicornValidationPlugin-ExampleoftheW3CUnicornhtmloutput">Example of the W3C Unicorn html output</h5>
+
+<h5 id="UnicornValidationPlugin-"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54722613/54951941.png" data-image-src="attachments/54722613/54951941.png" data-unresolved-comment-count="0" data-linked-resource-id="54951941" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen shot 2011-02-13 at 5.48.31 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="54722613" data-linked-resource-container-version="7"></span></h5>
+
+
+<h5 id="UnicornValidationPlugin-ExampleofaPlot"><span style="color: rgb(92,53,102);"><strong>Example of a Plot</strong></span></h5>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54722613/54951939.png" data-image-src="attachments/54722613/54951939.png" data-unresolved-comment-count="0" data-linked-resource-id="54951939" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen shot 2011-02-13 at 5.44.05 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="54722613" data-linked-resource-container-version="7"></span></p>
+
+<h1 id="UnicornValidationPlugin-Configuration"><span style="color: rgb(92,53,102);"><strong>Configuration</strong></span></h1>
+
+
+<h3 id="UnicornValidationPlugin-GlobalConfiguration"><span style="color: rgb(92,53,102);"><strong>Global Configuration</strong></span></h3>
+
+<p><span style="color: rgb(0,0,0);">None.</span></p>
+
+<h3 id="UnicornValidationPlugin-ProjectConfiguration"><span style="color: rgb(92,53,102);"><strong>Project Configuration</strong></span></h3>
+
+<p><span style="color: rgb(0,0,0);">For a project to use the Unicorn Validation plugin, you need to add it as a build step to your job:</span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/54722613/54951938.png" data-image-src="attachments/54722613/54951938.png" data-unresolved-comment-count="0" data-linked-resource-id="54951938" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen shot 2011-02-13 at 4.39.07 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="54722613" data-linked-resource-container-version="7"></span><br/>
+Here you can specify:</p>
+
+<p>Unicorn service URL - the w3c's url is the default one, but you can specify your own if you have custom unicorn service</p>
+
+<p>Site to validate - the url of the site to validate</p>
+
+<p>Max number of errors/warnings for build to be stable/unstable - this is your threshold to decide if the build should be stable/unstable/failed ... currently these number are the same for every aspect of unicorn result (html, css, rss).</p>
+
+<h3 id="UnicornValidationPlugin-PlotConfiguration"><span style="color: rgb(92,53,102);"><strong>Plot Configuration</strong></span></h3>
+
+
+<p>You can also get a pretty graph which shows you number of warnings/errors of previous builds. There a unicorn template for that to help you configure it.</p>
+
+<p>Plugins required:</p>
+
+<ul>
+	<li><a href="http://wiki.hudson-ci.org/display/HUDSON/Plot+Plugin" class="external-link" rel="nofollow">Plot plugin</a></li>
+</ul>
+
+
+<p>Steps to create a new job:</p>
+<ol>
+	<li>Check out the <a href="http://github.com/nej/unicorn-template" class="external-link" rel="nofollow">unicorn-template project</a> from Git: git@github.com:nej/unicorn-template.git</li>
+	<li>Reload Jenkins' configuration</li>
+	<li>Click on &quot;New Job&quot;.</li>
+	<li>Enter a &quot;Job name&quot;.</li>
+	<li>Select &quot;Copy existing job&quot; and enter &quot;unicorn-template&quot; into the &quot;Copy from&quot; field.</li>
+	<li>Click &quot;OK&quot;.</li>
+	<li>Disable the &quot;Disable Build&quot; option.</li>
+	<li>Setup your build trigger</li>
+	<li>Fill in your &quot;Site to validate&quot; url</li>
+	<li>Click &quot;Save&quot;.</li>
+</ol>
+
+
+<h1 id="UnicornValidationPlugin-TODO">TODO</h1>
+
+<p>- currently these number are the same for every aspect of unicorn result (html, css, rss) ... ability so specify numbers for each result specifically </p>
+
+<p>- currently all the test are executed that the unicorn validator offers ... ability to choose which ones to execute</p>
+
+<h1 id="UnicornValidationPlugin-VersionHistory"><span style="color: rgb(92,53,102);"><strong>Version History</strong></span></h1>
+
+
+<h4 id="UnicornValidationPlugin-0.1.0(Feb13,2011)"><span style="color: rgb(92,53,102);"><strong>0.1.0 (Feb 13, 2011)</strong></span></h4>
+
+<ul>
+	<li><span style="color: rgb(0,0,0);">Initial public release</span></li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54722613/54951938.png">Screen shot 2011-02-13 at 4.39.07 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54722613/54951939.png">Screen shot 2011-02-13 at 5.44.05 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54722613/54951940.png">Screen shot 2011-02-13 at 5.45.41 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54722613/54951942.png">Screen shot 2011-02-13 at 5.48.31 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54722613/54951941.png">Screen shot 2011-02-13 at 5.48.31 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:55</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

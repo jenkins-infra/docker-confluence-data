@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : HTTP Shared Libraries Retriever plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : HTTP Shared Libraries Retriever plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fabricepipart)</span>, last modified by <span class='editor'> Unknown User (cgallesio)</span> on Jun 25, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Pipeline: Shared Groovy Libraries through HTTP retrieval <a href="https://plugins.jenkins.io/workflow-cps-global-lib-http" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>The current official plugin <a href="https://github.com/jenkinsci/workflow-cps-global-lib-plugin/" class="external-link" rel="nofollow">workflow-cps-global-lib</a> does provide a way to retrieve shared libraries through a SCM, such as Git. The goal of this plugin is to provide another way to retrieve shared libraries via the <em>@Library</em> declaration in a Jenkinsfile.</p><p>This is a way to separate to concerns : source code (SCM) and built artefacts (binaries). Built artefacts are immutable, tagged and often stored on a different kind of infrastructure. Since pipelines can be used to make production loads, it makes sense to host the libraries on a server with a production-level SLA for example. You can also make sure that your artefact repository is close to your pipelines and share the same SLA. Having your Jenkins and your artefact repository close limitsr latency and limits network issues.</p><h1 id="HTTPSharedLibrariesRetrieverplugin-Context">Context</h1><p>The HTTP shared libraries retriever was implemented to retrieve <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/" class="external-link" rel="nofollow">shared libraries</a> through HTTP (or HTTPs) instead of a SCM.</p><h1 id="HTTPSharedLibrariesRetrieverplugin-Installationandusageoftheplugin">Installation and usage of the plugin</h1><p>The most complete and up-to-date insctructions can be found on <a href="https://github.com/AmadeusITGroup/workflow-cps-global-lib-http-plugin/blob/master/README.md" class="external-link" rel="nofollow">GitHub</a></p><h1 id="HTTPSharedLibrariesRetrieverplugin-Howtousetheplugin">How to use the plugin</h1><h3 id="HTTPSharedLibrariesRetrieverplugin-Pre-requisite:packagethelibrary">Pre-requisite: package the library</h3><p><br/>In order to be able to use this plugin, you need to package your library (probably durng a Continuous Integration build) and publish it in a location accessible via HTTPS.<br/>You should end up with a ZIP file with the following structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: RDark" data-theme="RDark">&gt; unzip -vl pipeline-libraries.zip
+Archive: pipeline-libraries.zip
+Length Method Size Cmpr Date Time CRC-32 Name
+-------- ------ ------- ---- ---------- ----- -------- ----
+xxx Defl:N xxx 37% 03-21-2019 12:14 7d354e1f resources/a-rsc-needed
+xxxx Defl:N xxxx 68% 03-21-2019 12:14 fefba77f src/your/package/YourGroovyClass.groovy
+xxx Defl:N xxx 33% 03-21-2019 12:14 5b6808ab vars/yourvar.groovy
+xxx Defl:N xxx 39% 03-21-2019 12:14 5842cc52 vars/yourvar.txt
+xx Defl:N xx -7% 03-21-2019 12:19 1bd0fa25 version.txt
+-------- ------- --- -------
+xxxxxx xxxxxx x% n files</pre>
+</div></div><h3 id="HTTPSharedLibrariesRetrieverplugin-Constraints">Constraints</h3><p><em>The plugin supports only ZIP shared libraries format for the moment.</em></p><h3 id="HTTPSharedLibrariesRetrieverplugin-Setupoftheplugin">Setup of the plugin</h3><p>The plugin is configurable on the Jenkins UI, at different levels:</p><ul><li>On Global System Configuration page (Administration)</li><li>On Folder Configuration page</li><li>On Pipeline Configuration page</li></ul><p>Jenkins administrators can set <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/#global-shared-libraries" class="external-link" rel="nofollow">global libraries on the Administration page</a>, while Jenkins users can set libraries either on the <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/#folder-level-shared-libraries" class="external-link" rel="nofollow">Folder view</a> or on the Pipeline view.</p><p>The generic documentation to reference a new shared library can be found <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/#using-libraries" class="external-link" rel="nofollow">here</a>.</p><h4 id="HTTPSharedLibrariesRetrieverplugin-IntheJenkinsUI">In the Jenkins UI</h4><p>In Administration / Folder / Pipeline configuration views:</p><ul><li>Go to the Global Pipeline Libraries section and add a new library. You should see 3 different retrieval methods: HTTP, Modern SCM and Legacy SCM.</li><li>Give it a name and a default version</li><li>Decide if you want to load it implicitly or not</li><li>Provide the URL and the credentials (only if needed) used to retrieve the shared libraries</li></ul><p>The URL of the HTTP retriever is version-dynamic, it follows the Jenkins standard annotation <em>${library.&lt;library_name&gt;.version}</em> that is afterwards replaced either by the default version provided by the admin, or the version specified by the user Jenkinsfile in the <em>@Library</em> annotation.</p><h4 id="HTTPSharedLibrariesRetrieverplugin-DirectlyintheJenkinsfile">Directly in the Jenkinsfile</h4><p>Users can also retrieve shared libraries from their Jenkinsfile, by defining it with this syntax:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: RDark" data-theme="RDark">library identifier: &#39;external-shared-libraries@4.1.0&#39;, retriever: http(
+credentialsId: &#39;CREDS_ID&#39;,
+httpURL: &#39;https://my-artifactory.com/mvn-repository/path/to/libraries/external-shared-libraries/${library.external-shared-libraries.version}/external-shared-libraries-${library.external-shared-libraries.version}.zip&#39;)
+</pre>
+</div></div><h1 id="HTTPSharedLibrariesRetrieverplugin-VersionHistory">Version History</h1><h3 id="HTTPSharedLibrariesRetrieverplugin-Version1.2.2(June25th2019)">Version 1.2.2 (June 25th 2019)</h3><p>Fix incorrect wiki URL</p><h3 id="HTTPSharedLibrariesRetrieverplugin-Version1.2.1(June18th2019)">Version 1.2.1 (June 18th 2019)</h3><p>First public version</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:27</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

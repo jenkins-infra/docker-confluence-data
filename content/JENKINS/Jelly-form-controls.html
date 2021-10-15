@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jelly form controls</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jelly form controls
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (redsolo)</span>, last modified by <span class='editor'> Unknown User (aeoris)</span> on Nov 24, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>WARNING: </strong>much of this document is old and suggests code patterns which are <em>not recommended</em>. As of this writing, the <a href="https://jenkins.io/doc/developer/forms/" class="external-link" rel="nofollow">official documentation</a> for this area of Jenkins has not been written. The <a href="https://github.com/jenkinsci/ui-samples-plugin" class="external-link" rel="nofollow">ui-samples plugin</a> is somewhat better maintained than this.</p></div></div><h1 id="Jellyformcontrols-Jellyformcontrols">Jelly form controls</h1><h2 id="Jellyformcontrols-BuildingTagLibraryDocumentation">Building Tag Library Documentation</h2><p><br/></p><p>Most of the the jelly files in the Jenkins source have embedded documentation. Unfortunately, this documentation is not currently published on the web (only an <a href="http://reports.jenkins.io/reports/core-taglib/jelly-taglib-ref.html" class="external-link" rel="nofollow">old version</a> is available). You can generate your own easily! First, get a Jenkins build going, following <a href="Building-Jenkins.html">these directions</a>. Then run &quot;mvn site&quot; which will generate the jelly tag library documentation in hudson/main/core/target/site/jelly-taglib-ref.html (on disk). If you are trying to understand Jenkins' jelly-isms, this document will help a lot.</p><h2 id="Jellyformcontrols-ValidationButton">Validation Button</h2><p>This tag creates a right-aligned button for performing server-side validation. It is suitable for situations where the validation depends on the values of multiple input fields, such as credential check that uses both username and password.</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Jelly code</p></th><th class="confluenceTh"><p>Example</p></th></tr><tr><td class="confluenceTd"><div class="content-wrapper"><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;f:entry title=&quot;${%Access Key ID}&quot; help=&quot;...&quot;&gt;
+  &lt;f:textbox field=&quot;accessId&quot; /&gt;
+&lt;/f:entry&gt;
+&lt;f:entry title=&quot;${%Secret Access Key}&quot; help=&quot;...&quot;&gt;
+  &lt;f:password field=&quot;secretKey&quot; /&gt;
+&lt;/f:entry&gt;
+&lt;f:validateButton
+   title=&quot;${%Test Connection}&quot; progress=&quot;${%Testing...}&quot;
+   method=&quot;testConnection&quot; with=&quot;secretKey,accessId&quot; /&gt;
+</pre>
+</div></div><p><br class="atl-forced-newline"/> </p></div></div></div></div></td><td class="confluenceTd"><div class="content-wrapper"><div class="sectionMacro"><div class="sectionMacroRow"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/36208714.png" data-image-src="attachments/4161570/36208714.png" data-unresolved-comment-count="0" data-linked-resource-id="36208714" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="validateButton.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span><br class="atl-forced-newline"/> </p></div></div></div></td></tr></tbody></table></div><p>The title attribute is used to determine the text written on the button. The progress attribute determines the message displayed while the server-side validation is in progress. The method attribute specifies the server-side method invoked by this button; this follows the stapler name mangling convention, so for example <code>method=&quot;testConnection&quot;</code> will invoke the <code>doTestConnection</code> method. This method needs to be on the <code>Descriptor</code> class that owns this form fragment.</p><p>Finally, the with attribute specifies the input fields sent to the server for the validation. They are matched against the <code>field</code> attribute or the <code>name</code> attribute of other input controls. The values of the nearest input fields <strong>above</strong> the <code>&lt;f:validateButton/&gt;</code> are sent to the server, so this means the button has to come after the input fields. Multiple fields can be specified by using ','.</p><p>On the server side, this tag invokes the standard &quot;do&quot;-style method like this:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">public FormValidation doTestConnection(@QueryParameter(&quot;accessId&quot;) final String accessId,
+        @QueryParameter(&quot;secretKey&quot;) final String secretKey) throws IOException, ServletException {
+    try {
+        ... do some tests ...
+        return FormValidation.ok(&quot;Success&quot;);
+    } catch (EC2Exception e) {
+        return FormValidation.error(&quot;Client error : &quot;+e.getMessage());
+    }
+}
+</pre>
+</div></div><p>The <code>doTestConnection</code> method contains the validation logic. In the end, this method has to call either <code>FormValidation.ok</code>, .<code>warning</code>, or .<code>error</code> method. Depending on which method you use, the appropriate HTML will be rendered on the client side to indicate the status to the user.</p><h2 id="Jellyformcontrols-Advanced">Advanced</h2><p>Expandable section that shows &quot;advanced...&quot; button by default. Upon clicking it, a section unfolds.</p><h5 id="Jellyformcontrols-Optionalattributes:">Optional attributes:</h5><ul><li>help (optional) If present, URL of the help HTML page.</li><li>title (optional) Overrides the button's text content. If not present &quot;Advanced&quot; is used.</li></ul><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Jelly code</p></th><th class="confluenceTh"><p>Example</p></th></tr><tr><td class="confluenceTd"><div class="content-wrapper"><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;f:section title=&quot;Advanced Project Options&quot;&gt;
+  &lt;f:advanced&gt;
+    &lt;p:config-quietPeriod /&gt;
+    &lt;st:include page=&quot;configure-advanced.jelly&quot; optional=&quot;true&quot; /&gt;
+  &lt;/f:advanced&gt;
+&lt;/f:section&gt;
+</pre>
+</div></div><p><br class="atl-forced-newline"/> </p></div></div></div></div></td><td class="confluenceTd"><div class="content-wrapper"><div class="sectionMacro"><div class="sectionMacroRow"><p>At start only button is shown: <br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/4325388.png" data-image-src="attachments/4161570/4325388.png" data-unresolved-comment-count="0" data-linked-resource-id="4325388" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="advanced_not_clicked.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span> <br class="atl-forced-newline"/> When the button is clicked it disappears, and the content is displayed instead <br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/4325389.png" data-image-src="attachments/4161570/4325389.png" data-unresolved-comment-count="0" data-linked-resource-id="4325389" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="advanced_clicked.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span><br class="atl-forced-newline"/> </p></div></div></div></td></tr></tbody></table></div><h2 id="Jellyformcontrols-OptionalBlock">OptionalBlock</h2><p>Foldable block expanded when the menu item is checked.</p><h5 id="Jellyformcontrols-Mandatoryattributes:">Mandatory attributes:</h5><ul><li>name Name of the checkbox.</li><li>title Human readable text that follows the checkbox</li><li>checked Initial checkbox status. true/false.</li></ul><h5 id="Jellyformcontrols-Optionalattributes:.1">Optional attributes:</h5><ul><li>help (optional) If present, URL of the help HTML page.</li></ul><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Jelly code</p></th><th class="confluenceTh"><p>Example</p></th></tr><tr><td class="confluenceTd"><div class="content-wrapper"><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;f:block&gt;
+  &lt;table&gt;
+    &lt;f:optionalBlock name=&quot;dynamic&quot; title=&quot;Use existing dynamic view&quot;&gt;
+      &lt;f:entry title=&quot;View drive&quot;&gt;
+        &lt;f:textbox name=&quot;drive&quot; value=&quot;${it.drive}&quot;/&gt;
+      &lt;/f:entry&gt;
+    &lt;/f:optionalBlock&gt;
+  &lt;/table&gt;
+&lt;/f:block&gt;
+</pre>
+</div></div><p><br class="atl-forced-newline"/> </p></div></div></div></div></td><td class="confluenceTd"><div class="content-wrapper"><div class="sectionMacro"><div class="sectionMacroRow"><p>Unchecked the text box will not be displayed: <br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/4325387.png" data-image-src="attachments/4161570/4325387.png" data-unresolved-comment-count="0" data-linked-resource-id="4325387" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="optional_block_unchecked.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span> <br class="atl-forced-newline"/> Checked the text box is displayed <br class="atl-forced-newline"/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/4325386.png" data-image-src="attachments/4161570/4325386.png" data-unresolved-comment-count="0" data-linked-resource-id="4325386" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="optional_block_checked.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span><br class="atl-forced-newline"/> </p></div></div></div></td></tr></tbody></table></div><h2 id="Jellyformcontrols-Select(drop-downmenu)">Select (drop-down menu)</h2><p>Use an &lt;f:entry&gt; tag to enclose the normal select tag.</p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Jelly code</p></th><th class="confluenceTh"><p>Example</p></th></tr><tr><td class="confluenceTd"><div class="content-wrapper"><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;f:entry name=&quot;goalType&quot; title=&quot;Choose Goal Type&quot; field=&quot;goalType&quot;&gt;
+    &lt;select name=&quot;goalType&quot;&gt;
+        &lt;option value=&quot;buildGoal&quot;&gt;Build Goal&lt;/option&gt;
+        &lt;option value=&quot;findBugsGoal&quot;&gt;FindBugs goal&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/f:entry&gt;
+</pre>
+</div></div><p><br class="atl-forced-newline"/> </p></div></div></div></div></td><td class="confluenceTd"><div class="content-wrapper"><div class="sectionMacro"><div class="sectionMacroRow"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/41975823.png" data-image-src="attachments/4161570/41975823.png" data-unresolved-comment-count="0" data-linked-resource-id="41975823" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="optionbox.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span> <br class="atl-forced-newline"/> <br class="atl-forced-newline"/> </p></div></div></div></td></tr></tbody></table></div><h2 id="Jellyformcontrols-Select(drop-downmenu)withmodelfilledvalues">Select (drop-down menu) with model filled values</h2><p>Basically the same as above. You need to define the following method in the descriptor of your Describable instance:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">        public ListBoxModel doFillGoalTypeItems() {
+            ListBoxModel items = new ListBoxModel();
+            for (BuildGoal goal : getBuildGoals()) {
+                items.add(goal.getDisplayName(), goal.getId());
+            }
+            return items;
+        }
+
+</pre>
+</div></div><p>Then, use an &lt;f:entry&gt; tag to enclose the normal select tag.</p><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><th class="confluenceTh"><p>Jelly code</p></th><th class="confluenceTh"><p>Example</p></th></tr><tr><td class="confluenceTd"><div class="content-wrapper"><div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;f:entry field=&quot;goalType&quot; title=&quot;Choose Goal Type&quot;&gt;
+   &lt;f:select /&gt;
+&lt;/f:entry&gt;
+</pre>
+</div></div><p><br class="atl-forced-newline"/> </p></div></div></div></div></td><td class="confluenceTd"><div class="content-wrapper"><div class="sectionMacro"><div class="sectionMacroRow"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/4161570/41975823.png" data-image-src="attachments/4161570/41975823.png" data-unresolved-comment-count="0" data-linked-resource-id="41975823" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="optionbox.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161570" data-linked-resource-container-version="33"></span> <br class="atl-forced-newline"/> <br class="atl-forced-newline"/> </p></div></div></div></td></tr></tbody></table></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/4325386.png">optional_block_checked.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/4325387.png">optional_block_unchecked.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/4325388.png">advanced_not_clicked.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/4325389.png">advanced_clicked.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/36208714.png">validateButton.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161570/41975823.png">optionbox.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

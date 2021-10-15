@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : New Relic Insights Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : New Relic Insights Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tiny_dancer)</span>, last modified on Apr 04, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'newrelic-insights' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+<p> </p><p>This is a Jenkins Plugin which allows users to send custom events to new relic insights.</p><h2 id="NewRelicInsightsPlugin-Setup"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#set-up" rel="nofollow">Set up</a></h2><h3 id="NewRelicInsightsPlugin-Credentials"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#credentials" rel="nofollow">Credentials</a></h3><p>Set up a &quot;New Relic Insights Key&quot; credential</p><p><a href="https://github.com/jenkinsci/newrelic-insights-plugin/blob/master/docs/jenkins-creds.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" alt="alt text" width="800" src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/jenkins-creds.png" data-image-src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/jenkins-creds.png"></span></a></p><h2 id="NewRelicInsightsPlugin-Usage"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#usage" rel="nofollow">Usage</a></h2><p>Add key value data points to submit with a custom event.</p><blockquote style="margin-left: 0.0px;"><p>eventType key is required</p></blockquote><h3 id="NewRelicInsightsPlugin-FreestyleJob"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#freestyle-job" rel="nofollow">Freestyle Job</a></h3><p><a href="https://github.com/jenkinsci/newrelic-insights-plugin/blob/master/docs/jenkins-freestyle.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" alt="alt text" width="800" src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/jenkins-freestyle.png" data-image-src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/jenkins-freestyle.png"></span></a></p><h3 id="NewRelicInsightsPlugin-ScriptedPipeline"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#scripted-pipeline" rel="nofollow">Scripted Pipeline</a></h3><p>Two options exist for sending data with a custom event in a scripted pipeline.</p><h4 id="NewRelicInsightsPlugin-KeyValueDataPoints"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#key-value-data-points" rel="nofollow">Key Value Data Points</a></h4><div class="highlight highlight-source-groovy"><pre>node {
+    <span class="pl-c" style="color: rgb(150,152,150);"><span class="pl-c">//</span> assemble key value keyValues points</span>
+    <span class="pl-k" style="color: rgb(167,29,93);">def</span> secrets <span class="pl-k" style="color: rgb(167,29,93);">=</span> [
+      [$<span class="pl-c1" style="color: rgb(0,134,179);">class</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>KeyValue<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,134,179);">key</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>eventType<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,134,179);">value</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>test_deployment<span class="pl-pds">'</span></span>],
+      [$<span class="pl-c1" style="color: rgb(0,134,179);">class</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>KeyValue<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,134,179);">key</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>appId<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,134,179);">value</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>888<span class="pl-pds">'</span></span>]
+    ]
+    
+    <span class="pl-c" style="color: rgb(150,152,150);"><span class="pl-c">//</span> call build step with key value keyValues points</span>
+    step([$<span class="pl-c1" style="color: rgb(0,134,179);">class</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>NewRelicInsights<span class="pl-pds">'</span></span>, 
+    <span class="pl-c1" style="color: rgb(0,134,179);">credentialsId</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>291ff5f2-a93f-4d5a-8e56-a43d61475fc7<span class="pl-pds">'</span></span>, 
+    <span class="pl-c1" style="color: rgb(0,134,179);">keyValues</span>: secrets])
+}</pre></div><h4 id="NewRelicInsightsPlugin-GroovyMap"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#groovy-map" rel="nofollow">Groovy Map</a></h4><div class="highlight highlight-source-groovy"><pre>node {
+    <span class="pl-c" style="color: rgb(150,152,150);"><span class="pl-c">//</span> a simpler option for pipelines</span>
+    <span class="pl-k" style="color: rgb(167,29,93);">def</span> json <span class="pl-k" style="color: rgb(167,29,93);">=</span> [<span class="pl-c1" style="color: rgb(0,134,179);">eventType</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>test_deployment<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,134,179);">appId</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>888<span class="pl-pds">'</span></span>]
+    
+    <span class="pl-c" style="color: rgb(150,152,150);"><span class="pl-c">//</span> call build step with map</span>
+    step([$<span class="pl-c1" style="color: rgb(0,134,179);">class</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>NewRelicInsights<span class="pl-pds">'</span></span>, 
+    <span class="pl-c1" style="color: rgb(0,134,179);">credentialsId</span>: <span class="pl-s" style="color: rgb(24,54,145);"><span class="pl-pds">'</span>291ff5f2-a93f-4d5a-8e56-a43d61475fc7<span class="pl-pds">'</span></span>, 
+    <span class="pl-c1" style="color: rgb(0,134,179);">json</span>: json])   
+}</pre></div><blockquote style="margin-left: 0.0px;"><p>Insights only accepts key-value pairs, not map/object or array values. Only floats and strings are supported data types. See <a href="https://docs.newrelic.com/docs/insights/explore-keyValues/custom-events/insert-custom-events-insights-api" class="external-link" rel="nofollow">Insights Docs</a> for more information.</p></blockquote><h3 id="NewRelicInsightsPlugin-QueryinginInsights"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#querying-in-insights" rel="nofollow">Querying in Insights</a></h3><p>All of the above examples would appear as below in insights:</p><p><a href="https://github.com/jenkinsci/newrelic-insights-plugin/blob/master/docs/insights-query-results.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" alt="awesome pic" width="800" src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/insights-query-results.png" data-image-src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/insights-query-results.png"></span></a></p><h2 id="NewRelicInsightsPlugin-InsightsDashboardExamples"><a class="external-link" href="https://github.com/jenkinsci/newrelic-insights-plugin#insights-dashboard-examples" rel="nofollow">Insights Dashboard Examples</a></h2><p>Deployment Metrics</p><p><a href="https://github.com/jenkinsci/newrelic-insights-plugin/blob/master/docs/nr-insights.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" alt="alt text" width="800" src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/nr-insights.png" data-image-src="https://github.com/jenkinsci/newrelic-insights-plugin/raw/master/docs/nr-insights.png"></span></a></p><p>For more information, please see <a href="https://newrelic.com/insights" class="external-link" rel="nofollow">new relic insights</a>.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:35</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

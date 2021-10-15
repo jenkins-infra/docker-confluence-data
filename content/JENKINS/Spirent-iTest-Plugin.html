@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Spirent iTest Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Spirent iTest Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jrz22)</span>, last modified by <span class='editor'> Unknown User (spirentitestdevter)</span> on Mar 26, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Spirent iTest <a href="https://plugins.jenkins.io/itest" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin enables Spirent iTest support in Jenkins.</p><p>Spirent iTest is a comprehensive suite creating an Agile enabled platform for agnostic network test automation that validates both virtual and physical environments for network communications, cloud services, mobile networks, IT teams and more. <a href="http://www.spirent.com/automation" class="external-link" rel="nofollow">http://www.spirent.com/automation</a></p><p>Note that this plugin does not come with Spirent iTest.<p>The code for this plugin is publicly available here: <a href="https://github.com/jenkinsci/itest-plugin" class="external-link" rel="nofollow">itest-plugin</a></p><pre>Wiki page for version 1.1.1: <a href="iTest-plugin-version-1.1.1-change-log.html">iTest plugin version 1.1.1 change log</a></pre><p><strong>Requirement: </strong></p><ul><li>Windows: iTestRT version 7.0.1 or later.</li><li>Unix: iTestRT version 6.0 or later.</li></ul><h3 id="SpirentiTestPlugin-GeneralTips:">General Tips:</h3><ul><li>Always “Save” or “Apply” any changes you make before clicking the validation buttons</li><li>Help text is available for all fields with the  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/73533344/73597077.gif" data-image-src="attachments/73533344/73597077.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597077" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="help.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span> icon next to it, and contain instructions for correctly entering values for each field (where applicable). </li><li>If you are generating test reports, iTestRT will use &quot;resources.itar&quot; in the &quot;iTestRT/tar&quot; directory for its report transforms. If you wish to customize the report transforms, remove &quot;resources.itar&quot; from the &quot;iTestRT/tar&quot; directory and place your customized &quot;resources.itar&quot; in the &quot;<span>iTest Workspace&quot; directory specified in the job's iTest configuration</span>. This plugin uses the HTML report transform when generating test reports. </li><li>To reference the Jenkins build workspace, use ${WORKSPACE}.<ul><li>See the following sections for examples of usage. </li></ul></li></ul><h3 id="SpirentiTestPlugin-Settingupforfirstuseinthe“ConfigureSystem”pageofJenkins"><span style="color: rgb(210,73,57);"><strong>Setting up for first use in the “Configure System” page of Jenkins</strong></span></h3><ul><li>Provide path to iTestRT if necessary (i.e., if it's not in PATH on your system)<ul><li>The “Verify Paths” button will ensure that the path specified point to the executable</li></ul></li><li>If you leave “Port Number” blank, the default of 27000 will be used<ul><li>The “Test Connection” button will check if a connection to the server can be made</li></ul></li><li>Click “Test Report Database options…” to expand the optional settings for external databases for test reports </li></ul><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" height="250" width="707" src="attachments/73533344/138451600.png" data-image-src="attachments/73533344/138451600.png" data-unresolved-comment-count="0" data-linked-resource-id="138451600" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins.config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><h3 id="SpirentiTestPlugin-Sendingtestreportstoanexternaldatabase"><span style="color: rgb(210,73,57);"><strong>Sending test reports to an external database</strong></span></h3><ul><li>External databases currently supported are MySQL and Postgresql</li><li>You must specify the “User ID” and “Password” fields</li><li>If you choose to specify a URI, you do not need to specify the “Database Name,” “Database Type,” “Database Host,” or “Port” fields.</li><li>The “Test Connection” button will generate a connection URI and will check if a connection to the database can be made </li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597071.gif" data-image-src="attachments/73533344/73597071.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597071" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="globaldbsettings.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><h3 id="SpirentiTestPlugin-Executingtestcases"><span style="color: rgb(210,73,57);"><strong>Executing test cases</strong></span></h3><ul><li>In the job configuration page, select “Add build step” and click “Execute iTest test case.”</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597072.gif" data-image-src="attachments/73533344/73597072.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597072" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="buildstep.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><ul><li>The following is a basic configuration to execute a single test case. At the very least the “Workspace,” “Name of Project,” and “Test cases” fields are required<ul><li>“Workspace” can be left blank if the iTest project files have been imported into the Jenkins workspace</li><li>Check “Generate test report?” to send a test report to the iTest internal database (or external database if you set one up) and render the HTML-formatted report in the Jenkins job build page. </li></ul></li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597086.gif" data-image-src="attachments/73533344/73597086.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597086" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jobconfig.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><h3 id="SpirentiTestPlugin-ViewingtestreportsinJenkins"><span style="color: rgb(210,73,57);"><strong>Viewing test reports in Jenkins</strong></span></h3><ul><li>In the job page, click on a build number.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597074.gif" data-image-src="attachments/73533344/73597074.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597074" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="clickonreportlink.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><ul><li>In the sidebar, click on iTest Report-name-of-testcase. </li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597075.gif" data-image-src="attachments/73533344/73597075.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597075" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="testreporticon.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><ul><li>Click “Back to project-name” to return to the job page.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/73533344/73597076.gif" data-image-src="attachments/73533344/73597076.gif" data-unresolved-comment-count="0" data-linked-resource-id="73597076" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="testreportexercpt.GIF" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="73533344" data-linked-resource-container-version="40"></span></p><h3 id="SpirentiTestPlugin-AnalyzingBuildResults">Analyzing Build Results</h3><ul><li>A build failure results if: <ul><li>A test case fails</li><li>An error occurs during execution </li><li>The specified license server/external database is down </li></ul></li></ul><h3 id="SpirentiTestPlugin-Troubleshooting:">Troubleshooting:</h3><ul><li>Error messages generated by iTestRT are printed to the “Console Output” of each build </li><li>In order to generate test reports, the default HTML template provided by iTest in the &quot;resources&quot; project is used. The &quot;resources&quot; project included with the iTestRT installation (in the itar directory) will be used, if present. Otherwise, the resources project in the job's workspace directory will be used. </li><li>Consult the iTestRT user guide and Spirent forums for more information about error messages not covered here. </li><li>In case the test report is not rendered as a hyperlink, Jenkins may be enforcing a security policy which could be relaxed.  See <a href="Configuring-Content-Security-Policy.html">Configuring Content Security Policy</a> for more information on this topic.  In some cases, an additional JAVA ARG can be added to the Jenkins startup.  For example, under /etc/defaults/jenkins, the following would be added: JAVA_ARGS=&quot;$JAVA_ARGS -Dhudson.model.DirectoryBrowserSupport.CSP=&quot;</li></ul><h3 id="SpirentiTestPlugin-ChangeLog"><span style="color: rgb(210,73,57);"><strong>Change Log</strong></span></h3><h5 id="SpirentiTestPlugin-Version1.0(September29,2014)">Version 1.0 (September 29, 2014)</h5><ul><li>Initial Release</li></ul><h5 id="SpirentiTestPlugin-Version1.1.1(March8,2018)">Version 1.1.1 (March 8, 2018)</h5><ul><li>Remove iTestCLI dependence</li></ul><h5 id="SpirentiTestPlugin-Version1.1.1(March12,2018)">Version 1.1.1 (March 12, 2018)</h5><ul><li>Remove documentation related to iTestCLI requirements</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597070.gif">globalconfigmain.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597071.gif">globaldbsettings.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597072.gif">buildstep.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597073.gif">basicconfigusethis.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597074.gif">clickonreportlink.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597075.gif">testreporticon.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597076.gif">testreportexercpt.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597077.gif">help.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/73597086.gif">jobconfig.GIF</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/138451598.png">Screen Shot 2018-03-12 at 10.13.37 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/73533344/138451600.png">jenkins.config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:48</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

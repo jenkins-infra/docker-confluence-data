@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Extended Choice Parameter plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Extended Choice Parameter plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mindless)</span>, last modified by <span class='editor'> Unknown User (h2oboy)</span> on Aug 01, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Extended Choice Parameter <a href="https://plugins.jenkins.io/extended-choice-parameter" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+Adds extended functionality to Choice parameter.<p><br/>For info on how to use groovy script feature use this <a href="http://stackoverflow.com/questions/24730186/jenkins-extended-parameter-plugin-groovy-script" class="external-link" rel="nofollow">Link</a></p><p><span style="color: rgb(210,73,57);"><strong>Change Log</strong></span></p><p><span style="color: rgb(210,73,57);"><strong>Version 0.64 (Apr 17, 2016)</strong></span></p><p>Show user friendly error message for script approval issues.</p><p>Script security has been incorporated into this plugin for security reasons. You may see warning messages related to security with groovy-script execution from this version on-wards.</p><p>A warning message is displayed on the screen if the user tries to execute groovy scripts that have not been approved. The message has a link that takes the user to the screen where the scripts can be approved. The user should have admin access to approve scripts.  <br class="atl-forced-newline"/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/97288234.png" data-image-src="attachments/46334385/97288234.png" data-unresolved-comment-count="0" data-linked-resource-id="97288234" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="script-security.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></p><p><span style="color: rgb(210,73,57);"><strong>Version 0.61 (Mar 30, 2016)</strong></span></p><p>Use Script Security plugin for authorizing groovy scripts</p><p>allow ${JOB_NAME}</p><p>variable in properties and groovy file path</p><p>expose project and jenkins bindings in groovy script.</p><p><span style="color: rgb(210,73,57);"><strong>Version 0.53 (Jun 02, 2015)</strong></span></p><p>Use faster Boon JSON parser instead of built in net.sef.JSON parser</p><h5 id="ExtendedChoiceParameterplugin-Version0.44(Jun02,2015)">Version 0.44 (Jun 02, 2015)</h5><p>Added JSON Parameter feature based on json html editor by <a href="https://github.com/jdorn/json-editor" class="external-link" rel="nofollow">Jeremy Dorn</a> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/80412699.png" data-image-src="attachments/46334385/80412699.png" data-unresolved-comment-count="0" data-linked-resource-id="80412699" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="json-parameter-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span><br/>The groovy script should return a JSON object that corresponds to the &quot;options&quot;  object referred to in  <a href="https://github.com/jdorn/json-editor" class="external-link" rel="nofollow">json-editor</a></p><p>Watched Fields Ex:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import org.boon.Boon;
+
+def jsonEditorOptions = Boon.fromJson(/{
+		disable_edit_json: true,
+        disable_properties: true,
+        no_additional_properties: true,
+        disable_collapse: true,
+        disable_array_add: true,
+        disable_array_delete: true,
+        disable_array_reorder: true,
+        theme: &quot;bootstrap2&quot;,
+        iconlib:&quot;fontawesome4&quot;,
+		schema: {
+		  &quot;type&quot;: &quot;object&quot;,
+		  &quot;title&quot;: &quot;Name&quot;,
+		  &quot;properties&quot;: {
+			&quot;first_name&quot;: {
+			  &quot;type&quot;: &quot;string&quot;,
+			  &quot;propertyOrder&quot; : 1
+			},
+			&quot;last_name&quot;: {
+			  &quot;type&quot;: &quot;string&quot;,
+			  &quot;propertyOrder&quot; : 2
+			},
+			&quot;full_name&quot;: {
+			  &quot;type&quot;: &quot;string&quot;,
+			  &quot;propertyOrder&quot; : 3,
+			  &quot;template&quot;: &quot;{{fname}} {{lname}}&quot;,
+			  &quot;watch&quot;: {
+				&quot;fname&quot;: &quot;first_name&quot;,
+				&quot;lname&quot;: &quot;last_name&quot;
+			  }
+			}
+		  }
+		},
+		startval: {
+			&quot;first_name&quot; : &quot;John&quot;,
+			&quot;last_name&quot; : &quot;Doe&quot;,
+			&quot;full_name&quot; : &quot;John Doe&quot;
+		}
+}/);
+ 
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/92962818.png" data-image-src="attachments/46334385/92962818.png" data-unresolved-comment-count="0" data-linked-resource-id="92962818" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nameparameter.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span><br/>Color Picker Ex:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import org.boon.Boon;
+
+def jsonEditorOptions = Boon.fromJson(/{
+		disable_edit_json: true,
+        disable_properties: true,
+        no_additional_properties: true,
+        disable_collapse: true,
+        disable_array_add: true,
+        disable_array_delete: true,
+        disable_array_reorder: true,
+        theme: &quot;bootstrap2&quot;,
+        iconlib:&quot;fontawesome4&quot;,
+		schema: {
+		  &quot;title&quot;: &quot;Color Picker&quot;,
+		  &quot;type&quot;: &quot;object&quot;,
+		  &quot;properties&quot;: {
+			&quot;color&quot;: {
+			  &quot;type&quot;: &quot;string&quot;,
+			  &quot;format&quot;: &quot;color&quot;
+			}
+		  }
+		},
+		startval: {
+			color :&quot;red&quot;
+		}
+}/);
+
+</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/92962817.png" data-image-src="attachments/46334385/92962817.png" data-unresolved-comment-count="0" data-linked-resource-id="92962817" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="colorpicker.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span><br/>Advanced Ex:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import org.boon.Boon;
+
+def jsonEditorOptions = Boon.fromJson(/{
+        disable_edit_json: true,
+        disable_properties: true,
+        no_additional_properties: true,
+        disable_collapse: true,
+        disable_array_add: true,
+        disable_array_delete: true,
+        disable_array_reorder: true,
+        theme: &quot;bootstrap2&quot;,
+        iconlib:&quot;fontawesome4&quot;,
+       &quot;schema&quot;:{
+  &quot;title&quot;: &quot;Applications&quot;,
+  &quot;type&quot;: &quot;array&quot;,
+  &quot;format&quot;:&quot;tabs&quot;,
+  &quot;items&quot;: {
+	 &quot;title&quot;: &quot;Application&quot;,
+	 &quot;headerTemplate&quot;: &quot;{{self.name}}&quot;,
+	 &quot;type&quot;: &quot;object&quot;,
+	 &quot;properties&quot;: {
+		&quot;name&quot; : {
+			 &quot;title&quot;: &quot;application&quot;,
+			 &quot;type&quot;: &quot;string&quot;,
+			 &quot;readOnly&quot;: &quot;true&quot;
+
+		 },
+		 &quot;environments&quot;: {
+			 &quot;title&quot;: &quot;Environments&quot;,
+			 &quot;type&quot;: &quot;array&quot;,
+			 &quot;format&quot;:&quot;tabs&quot;,
+			 &quot;items&quot;: {
+				 &quot;title&quot;: &quot;Environment&quot;,
+				 &quot;headerTemplate&quot;: &quot;{{self.name}}&quot;,
+				 &quot;type&quot;: &quot;object&quot;,
+				 &quot;properties&quot;: {
+					&quot;name&quot; : {
+						 &quot;title&quot;: &quot;environment&quot;,
+						 &quot;type&quot;: &quot;string&quot;,
+						 &quot;readOnly&quot;: &quot;true&quot;
+
+					 },
+					 &quot;properties&quot;: {
+						 &quot;type&quot;: &quot;array&quot;,
+						 &quot;format&quot;: &quot;table&quot;,
+						 &quot;items&quot;: {
+							 &quot;type&quot;: &quot;object&quot;,
+							  &quot;properties&quot;: {
+								  &quot;name&quot; : {
+									  &quot;type&quot;: &quot;string&quot;,
+									  &quot;readOnly&quot;: &quot;true&quot;
+								  },
+								  &quot;value&quot; : {
+									  &quot;type&quot;: &quot;string&quot;
+								  }
+							  }
+						 }
+					 },
+					 &quot;servers&quot;: {
+						 &quot;title&quot;: &quot;Servers&quot;,
+						 &quot;type&quot;: &quot;array&quot;,
+						 &quot;format&quot;:&quot;tabs&quot;,
+						 &quot;items&quot;: {
+							 &quot;title&quot;: &quot;Server&quot;,
+							 &quot;headerTemplate&quot;: &quot;{{self.name}}&quot;,
+							 &quot;type&quot;: &quot;object&quot;,
+
+							 &quot;properties&quot;: {
+								&quot;name&quot; : {
+									 &quot;title&quot;: &quot;server&quot;,
+									 &quot;type&quot;: &quot;string&quot;,
+									 &quot;readOnly&quot;: &quot;true&quot;
+
+								 },
+								 &quot;properties&quot;: {
+									 &quot;type&quot;: &quot;array&quot;,
+									 &quot;format&quot;: &quot;table&quot;,
+									 &quot;items&quot;: {
+										 &quot;type&quot;: &quot;object&quot;,
+										  &quot;properties&quot;: {
+											  &quot;name&quot; : {
+												  &quot;type&quot;: &quot;string&quot;,
+												  &quot;readOnly&quot;: &quot;true&quot;
+											  },
+											  &quot;value&quot; : {
+												  &quot;type&quot;: &quot;string&quot;
+											  },
+											  &quot;override&quot;: {
+												&quot;type&quot;: &quot;boolean&quot;
+											  }
+										  }
+									 }
+								 }
+							 }
+						 }
+					 }
+				 }
+			 }
+		 }
+	 }
+  }
+},
+       startval: [
+  {
+    &quot;name&quot;: &quot;agent&quot;,
+    &quot;environments&quot;: [
+      {
+        &quot;name&quot;: &quot;dev1&quot;,
+		&quot;properties&quot;: [
+		  {
+			&quot;name&quot;: &quot;database_url&quot;,
+			&quot;value&quot;: &quot;dev1_url&quot;
+		  },
+		  {
+			&quot;name&quot;: &quot;database_password&quot;,
+			&quot;value&quot;: &quot;dev1_password&quot;
+		  }
+		],
+        &quot;servers&quot;: [
+			{
+				&quot;name&quot;: &quot;agt11&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;agt11_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;agt11_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			},
+			{
+				&quot;name&quot;: &quot;agt12&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;agt12_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;agt12_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			}
+		]
+      },
+	  {
+        &quot;name&quot;: &quot;devprod&quot;,
+		&quot;properties&quot;: [
+		  {
+			&quot;name&quot;: &quot;database_url&quot;,
+			&quot;value&quot;: &quot;devprod_url&quot;
+		  },
+		  {
+			&quot;name&quot;: &quot;database_password&quot;,
+			&quot;value&quot;: &quot;devprod_password&quot;
+		  }
+		],
+        &quot;servers&quot;: [
+			{
+				&quot;name&quot;: &quot;agt11&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;agt11_prod_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;agt11_prod_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			},
+			{
+				&quot;name&quot;: &quot;agt12&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;agt12_prod_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;agt12_prod_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			}
+		]
+      }
+    ]
+  },
+  {
+    &quot;name&quot;: &quot;consumer&quot;,
+    &quot;environments&quot;: [
+      {
+        &quot;name&quot;: &quot;dev1&quot;,
+		&quot;properties&quot;: [
+		  {
+			&quot;name&quot;: &quot;database_url&quot;,
+			&quot;value&quot;: &quot;dev1_url&quot;
+		  },
+		  {
+			&quot;name&quot;: &quot;database_password&quot;,
+			&quot;value&quot;: &quot;dev1_password&quot;
+		  }
+		],
+        &quot;servers&quot;: [
+			{
+				&quot;name&quot;: &quot;app11&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;app11_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;app11_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			},
+			{
+				&quot;name&quot;: &quot;app12&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;app12_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;app12_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			}
+		]
+      },
+	  {
+        &quot;name&quot;: &quot;devprod&quot;,
+		&quot;properties&quot;: [
+		  {
+			&quot;name&quot;: &quot;database_url&quot;,
+			&quot;value&quot;: &quot;devprod_url&quot;
+		  },
+		  {
+			&quot;name&quot;: &quot;database_password&quot;,
+			&quot;value&quot;: &quot;devprod_password&quot;
+		  }
+		],
+        &quot;servers&quot;: [
+			{
+				&quot;name&quot;: &quot;app11&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;agt11_prod_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;app11_prod_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			},
+			{
+				&quot;name&quot;: &quot;agt12&quot;,
+				&quot;properties&quot;: [
+				  {
+					&quot;name&quot;: &quot;database_url&quot;,
+					&quot;value&quot;: &quot;app12_prod_url&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  },
+				  {
+					&quot;name&quot;: &quot;database_password&quot;,
+					&quot;value&quot;: &quot;app12_prod_password&quot;,
+					&quot;override&quot;: &quot;true&quot;
+				  }
+				]
+			}
+		]
+      }
+    ]
+  }
+]
+}
+
+}/);
+
+return jsonEditorOptions;</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/80412698.png" data-image-src="attachments/46334385/80412698.png" data-unresolved-comment-count="0" data-linked-resource-id="80412698" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="demo-json-parameter.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></p><h5 id="ExtendedChoiceParameterplugin-Version0.33(Jun09,2014)">Version 0.33 (Jun 09, 2014)</h5><p>Separated out multilevel single select and multilevel multi-select parameters into separate sections.  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/80412697.png" data-image-src="attachments/46334385/80412697.png" data-unresolved-comment-count="0" data-linked-resource-id="80412697" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="multilevel.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></p><h5 id="ExtendedChoiceParameterplugin-Version0.32(Jan07,2012)">Version 0.32 (Jan 07, 2012)</h5><p>Added ability to use groovy script to fetch options for parameter. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/72614036.png" data-image-src="attachments/46334385/72614036.png" data-unresolved-comment-count="0" data-linked-resource-id="72614036" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="extended-choice-parameter-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></p><h5 id="ExtendedChoiceParameterplugin-Version0.20(Jan07,2012)">Version 0.20 (Jan 07, 2012)</h5><ul><li>New field to configure number of items visible in selectbox without scrolling</li><li>New 'checkbox' and 'radio button' parameter types added</li><li>changed all validation error checks to warnings</li><li>added ability to specify an url instead of absolute directory path for property files </li><li>ability to specify property references for values, for example<ul><li>prop1=a,b,c,d,e</li><li>prop2=${prop1},f,g,h  --(prop2 will now evaluate to a,b,c,d,e,f,g,h)</li></ul></li></ul><ul><li><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/65863814.jpg" data-image-src="attachments/46334385/65863814.jpg" data-unresolved-comment-count="0" data-linked-resource-id="65863814" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="screenshot.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></li></ul><h5 id="ExtendedChoiceParameterplugin-Version0.5(Jan10,2012)">Version 0.5 (Jan 10, 2012)</h5><ul><li>Use a dropdown when using single select mode</li><li>Trim properties</li><li>When using a properties file, do not load the file content when editing the job</li><li>Load the 'latest' property at each build</li><li>Added some validation for properties file names <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/46334385/46563367.png" data-image-src="attachments/46334385/46563367.png" data-unresolved-comment-count="0" data-linked-resource-id="46563367" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Hudson Extended Choice Parameter plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></li></ul><h5 id="ExtendedChoiceParameterplugin-Version0.1(Jul14,2010)">Version 0.1 (Jul 14, 2010)</h5><ul><li>Initial release</li></ul><p>This plugin allows single select and multi select build parameters to be configured.</p><p>Here is a screenshot of the configuration page.<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/46334385/46563367.png" data-image-src="attachments/46334385/46563367.png" data-unresolved-comment-count="0" data-linked-resource-id="46563367" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Hudson Extended Choice Parameter plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="46334385" data-linked-resource-container-version="36"></span></p><p>The 'value' field is a comma separated list of values for the single select or multi-select box.<br/>This field can be left blank if the comma separated values need to be picked up from a properties file.<br/>In that case the fields 'Property File' and 'Property Key' need to be filled in.</p><p>The 'default value' field is used to set the initial selection of the single-select or mult-select box.<br/>in case of the multi-select box default value can be a comma separated string.<br/>This field can be left blank if the default value needs to be picked up from a properties file.<br/>In that case the fields 'Default Property File' and 'Default Property Key' need to be filled in.</p><p>Note: Neither &quot;Property File&quot; or &quot;Default Property File&quot; support referencing environment variables in their values. Thus, their values should be absolute paths specified without using environment variables.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/46563367.png">Hudson Extended Choice Parameter plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/59900157.jpg">未命名.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/65863815.jpg">screenshot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/65863814.jpg">screenshot.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/65863941.png">screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/65863943.png">double.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/67043402.jpg">jenkins_radio1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/72614036.png">extended-choice-parameter-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412694.png">Untitled.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412689.png">img1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412695.png">Untitled.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/133957520.png">Untitled.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412696.png">demo1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412697.png">multilevel.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412698.png">demo-json-parameter.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/80412699.png">json-parameter-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/83558404.png">Screenshot - 20_10.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/92962817.png">colorpicker.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/92962818.png">nameparameter.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/97288234.png">script-security.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/133957521.png">Untitled.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/72974378.png">Untitled.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/135469406.png">Снимок экрана 2017-11-22 в 15.55.55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/135469407.png">Снимок экрана 2017-11-22 в 15.55.30.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/152076310.txt">ecp_share.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/164560919.png">MultiLevel_Jenkins.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/165578477.png">image2018-11-5_22-24-50.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/165578479.png">image2018-11-5_22-26-45.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/46334385/165578481.png">image2018-11-5_22-30-56.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:23</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

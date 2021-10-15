@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Maven Info Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Maven Info Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mindless)</span>, last modified by <span class='editor'> Unknown User (emenaceb)</span> on Mar 05, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Maven Info <a href="https://plugins.jenkins.io/maven-info" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin add features related to Maven jobs info. Adds columns configurable in views (version, dependencies, modules, ...) and extract information from Maven jobs (update name and description from POM, ...) </p>
+
+
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021609133 {padding: 0px;}
+div.rbtoc1631021609133 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021609133 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021609133'>
+<ul class='toc-indentation'>
+<li><a href='#MavenInfoPlugin-Features'>Features</a>
+<ul class='toc-indentation'>
+<li><a href='#MavenInfoPlugin-Column:SelectedModuleLastVersion'>Column: Selected Module Last Version</a></li>
+<li><a href='#MavenInfoPlugin-Column:SelectedDependencies'>Column: Selected Dependencies</a></li>
+<li><a href='#MavenInfoPlugin-Column:MavenModules(Short)'>Column: Maven Modules (Short)</a></li>
+<li><a href='#MavenInfoPlugin-Column:MavenModules(Version)'>Column: Maven Modules (Version)</a></li>
+<li><a href='#MavenInfoPlugin-Column:MavenDependencies(withingroupId)'>Column: Maven Dependencies (within groupId)</a></li>
+<li><a href='#MavenInfoPlugin-Column:MavenDependencies'>Column: Maven Dependencies</a></li>
+<li><a href='#MavenInfoPlugin-Column:MavenModules(Full)'>Column: Maven Modules (Full)</a></li>
+<li><a href='#MavenInfoPlugin-AssignnamefromPOM'>Assign name from POM</a></li>
+<li><a href='#MavenInfoPlugin-AssigndescriptionfromPOM'>Assign description from POM</a></li>
+</ul>
+</li>
+<li><a href='#MavenInfoPlugin-Wishlist'>Wish list</a></li>
+<li><a href='#MavenInfoPlugin-Configuration'>Configuration</a>
+<ul class='toc-indentation'>
+<li><a href='#MavenInfoPlugin-Selectmainmodule'>Select main module</a></li>
+<li><a href='#MavenInfoPlugin-Selectinterestingdependencies'>Select interesting dependencies</a></li>
+<li><a href='#MavenInfoPlugin-HideSnapshots'>Hide Snapshots</a></li>
+<li><a href='#MavenInfoPlugin-Versionsstyles(CSS)'>Versions styles (CSS)</a></li>
+<li><a href='#MavenInfoPlugin-TemplateVariables'>Template Variables</a></li>
+</ul>
+</li>
+<li><a href='#MavenInfoPlugin-Changelog'>Changelog</a>
+<ul class='toc-indentation'>
+<li><a href='#MavenInfoPlugin-Version0.2.0'>Version 0.2.0</a></li>
+<li><a href='#MavenInfoPlugin-Version0.1.3'>Version 0.1.3</a></li>
+<li><a href='#MavenInfoPlugin-Version0.1.2'>Version 0.1.2</a></li>
+<li><a href='#MavenInfoPlugin-Version0.1.1'>Version 0.1.1</a></li>
+<li><a href='#MavenInfoPlugin-Version0.0.5'>Version 0.0.5</a></li>
+<li><a href='#MavenInfoPlugin-Version0.0.4&amp;previous'>Version 0.0.4 &amp; previous</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Tested On</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Jenkins: 1.500, 1.509.4<br/>
+Chrome: 30<br/>
+Internet Explorer: 10<br/>
+Firefox: 24</p></div></div>
+
+
+<h1 id="MavenInfoPlugin-Features">Features</h1>
+
+
+<h2 id="MavenInfoPlugin-Column:SelectedModuleLastVersion">Column: Selected Module Last Version</h2>
+
+<p>Shows last build version.</p>
+
+<p>If you move mouse over the version, an info panel is shown.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959823.png" data-image-src="attachments/42467779/69959823.png" data-unresolved-comment-count="0" data-linked-resource-id="69959823" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="LastVersion.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+<p>This panel shows main module's info and all modules grouped by <code>groupId</code>. If a module has different version then it's also shown between brackets.</p>
+
+<p>Main module is shown in <strong><em>bold italic</em></strong> .</p>
+
+<h2 id="MavenInfoPlugin-Column:SelectedDependencies">Column: Selected Dependencies</h2>
+
+<p>Show version of selected dependencies.</p>
+
+<p>If you move the mouse pointer over the version, an info panel is also shown.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959859.png" data-image-src="attachments/42467779/69959859.png" data-unresolved-comment-count="0" data-linked-resource-id="69959859" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SelectedDependencies.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+<p>Only one version by column. If there is more than one version by dependency, then the column is marked with an asterisk ( * ) and all the versions are shown in the info panel.</p>
+
+<p>This panel shows versions of selected dependencies grouped by <code>groupId</code>.</p>
+
+
+<h2 id="MavenInfoPlugin-Column:MavenModules(Short)">Column: Maven Modules (Short)</h2>
+
+<p>Show project modules.</p>
+
+<h2 id="MavenInfoPlugin-Column:MavenModules(Version)">Column: Maven Modules (Version)</h2>
+
+<p>Show project module versions.</p>
+
+<h2 id="MavenInfoPlugin-Column:MavenDependencies(withingroupId)">Column: Maven Dependencies (within groupId)</h2>
+
+<p>Show project dependencies within project groupId</p>
+
+<h2 id="MavenInfoPlugin-Column:MavenDependencies">Column: Maven Dependencies</h2>
+
+<p>Show all project dependencies</p>
+
+<h2 id="MavenInfoPlugin-Column:MavenModules(Full)">Column: Maven Modules (Full)</h2>
+
+<p>Show all project module info</p>
+
+<h2 id="MavenInfoPlugin-AssignnamefromPOM">Assign name from POM</h2>
+
+<p>Updates project Visible Name automatically from main module pom.xml (from tag <code>&lt;name&gt;</code>)</p>
+
+<p>You can configure a template to generate name using the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin" class="external-link" rel="nofollow">Token Macro Plugin</a> in Job configuration page :</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959824.png" data-image-src="attachments/42467779/69959824.png" data-unresolved-comment-count="0" data-linked-resource-id="69959824" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AssignName.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<p>It's useful to show checked out branch or some other label.</p>
+
+<p>By default module name is used.</p>
+
+
+<h2 id="MavenInfoPlugin-AssigndescriptionfromPOM">Assign description from POM</h2>
+
+<p>Updates project Description automatically from pom.xml (from tag <code>&lt;description&gt;</code>)</p>
+
+<p>You can configure a template to generate description using the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin" class="external-link" rel="nofollow">Token Macro Plugin</a> in Job configuration page :</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959825.png" data-image-src="attachments/42467779/69959825.png" data-unresolved-comment-count="0" data-linked-resource-id="69959825" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AssignDescription.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+
+<p>By default &quot;<code>&lt;pre&gt;$MAIN_DESCRIPTION&lt;/pre&gt;</code>&quot; is used.</p>
+
+
+<h1 id="MavenInfoPlugin-Wishlist">Wish list</h1>
+
+
+<ul>
+	<li>Last Release and Last Release dependencies columns</li>
+	<li>Exclude artifacts from selected dependencies column (multi pattern)</li>
+</ul>
+
+
+
+<h1 id="MavenInfoPlugin-Configuration">Configuration</h1>
+
+<p>This plugin has some configuration at Job level.</p>
+
+<p>You can find it at section:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959826.png" data-image-src="attachments/42467779/69959826.png" data-unresolved-comment-count="0" data-linked-resource-id="69959826" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Section.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<p>It also haves a plugin configuration at Jenkins Configuration page:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/71008272.png" data-image-src="attachments/42467779/71008272.png" data-unresolved-comment-count="0" data-linked-resource-id="71008272" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ConfigurePlugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+<h2 id="MavenInfoPlugin-Selectmainmodule">Select main module</h2>
+
+
+<p>If project is a multi-module project then you can select which module is used to extract info (main module). If no module is specified or found then root module is used as main module.</p>
+
+<p>It's useful if your root module has different version or if you want to focus only on one module.</p>
+
+
+
+<p>To select a module as main module you can use a &quot;module selector&quot;.</p>
+
+<p>A module selector is a pattern of the form &quot;<code>groupId:artifactId</code>&quot;. Both <code>groupId</code> and <code>artifactId</code> can contain wildcards (*). If <code>groupId</code> or <code>artifactId</code> is empty, they are treated as *.</p>
+
+<p>So, valid expressions are &quot;<code>*:my-artifact</code>&quot;, &quot;<code>:my-artifact</code>*&quot;, &quot;<code>*.plugin:main</code>&quot;, ...</p>
+
+<p>If more than one module is selected, modules are sorted lexicographically and first one is selected.</p>
+
+<p>You can configure the main module selector in Job configuration page (advaced options):</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959822.png" data-image-src="attachments/42467779/69959822.png" data-unresolved-comment-count="0" data-linked-resource-id="69959822" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SelectMainModule.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<h2 id="MavenInfoPlugin-Selectinterestingdependencies">Select interesting dependencies</h2>
+
+<p>You can select which dependencies are interesting for you in a project.</p>
+
+<p>It's useful to focus on some dependencies or dependency group (e.g.: commons-io version in all modules, spring framework dependencies, ...)</p>
+
+<p>You can configure the dependencies selector in Job configuration page (advaced options):</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/69959861.png" data-image-src="attachments/42467779/69959861.png" data-unresolved-comment-count="0" data-linked-resource-id="69959861" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="InterestingDependencies.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+<h2 id="MavenInfoPlugin-HideSnapshots">Hide Snapshots</h2>
+
+<p>You can hide the annoying suffix &quot;-SANPSHOT&quot; of snapshot versions to improve version readability.</p>
+
+<p>This can be done checking the checkbox at Plugin's Configuration section:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/71008273.png" data-image-src="attachments/42467779/71008273.png" data-unresolved-comment-count="0" data-linked-resource-id="71008273" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="HideSnapshots.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<p>If you check it, versions will be shown without the suffix and using an alternate style:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/71008274.png" data-image-src="attachments/42467779/71008274.png" data-unresolved-comment-count="0" data-linked-resource-id="71008274" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SnapshotHidden.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<p>instead of</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/71008275.png" data-image-src="attachments/42467779/71008275.png" data-unresolved-comment-count="0" data-linked-resource-id="71008275" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SnapshotVisible.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+
+<h2 id="MavenInfoPlugin-Versionsstyles(CSS)">Versions styles (CSS)</h2>
+
+<p>You can change the style of versions to improve readability.</p>
+
+<p>As example, you can use green for releases and italic red for snapshots.</p>
+
+<p>To do that you have two textboxes at Plugin's Configuration section:</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/42467779/71008276.png" data-image-src="attachments/42467779/71008276.png" data-unresolved-comment-count="0" data-linked-resource-id="71008276" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="VersionStyles.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467779" data-linked-resource-container-version="22"></span></p>
+
+<p>Versions are rendered inside an <code>&lt;span&gt;</code> : E.g: <code>&lt;span&gt;1.0.0&lt;/span&gt;</code></p>
+
+<p>CSS code entered here will apply only to this span.</p>
+
+<p>Note: if you leave empty snapshot version style and hide snapshots is checked, a default style is applied.</p>
+
+
+<h2 id="MavenInfoPlugin-TemplateVariables">Template Variables</h2>
+
+<p>In addition to <a href="https://wiki.jenkins-ci.org/display/JENKINS/Token+Macro+Plugin" class="external-link" rel="nofollow">Token Macro Plugin</a> and extensions variables, templates can use the following variables:</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Version </p></th>
+<th class="confluenceTh"><p> Variable </p></th>
+<th class="confluenceTh"><p> Description </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 0.0.5 </p></td>
+<td class="confluenceTd"><p> <code>MAVEN_NAME</code> </p></td>
+<td class="confluenceTd"><p> Main module's name </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 0.0.5 </p></td>
+<td class="confluenceTd"><p> <code>MAVEN_DESCRIPTION</code> </p></td>
+<td class="confluenceTd"><p> Main module's description </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+
+
+
+<h1 id="MavenInfoPlugin-Changelog">Changelog</h1>
+
+<h2 id="MavenInfoPlugin-Version0.2.0">Version 0.2.0</h2>
+
+<ul>
+	<li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-21450" class="external-link" rel="nofollow">JENKINS-21450</a></li>
+</ul>
+
+
+<h2 id="MavenInfoPlugin-Version0.1.3">Version 0.1.3</h2>
+
+<ul>
+	<li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-20929" class="external-link" rel="nofollow">JENKINS-20929</a></li>
+</ul>
+
+
+
+
+<h2 id="MavenInfoPlugin-Version0.1.2">Version 0.1.2</h2>
+
+<ul>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Hide snapshots feature</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Assign style (css) to version columns</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Delay before showing info panels</li>
+	<li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> NoSuchElementException showing dependencies version</li>
+	<li><img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/> Improved readability of old columns (pre 0.0.5)</li>
+</ul>
+
+
+<h2 id="MavenInfoPlugin-Version0.1.1">Version 0.1.1</h2>
+
+<ul>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Column: Selected Dependencies Version</li>
+	<li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Main Module Pattern not applied on Jenkins restart</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> More verbose exception on POM parse error</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> More verbose exception on pattern parse error</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Configurable caption for newest columns</li>
+</ul>
+
+
+<h2 id="MavenInfoPlugin-Version0.0.5">Version 0.0.5</h2>
+
+<ul>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Column: Selected Module Last Version</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Assign name from POM</li>
+	<li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Assign description from POM</li>
+	<li><img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/> Changed default visibility of columns</li>
+</ul>
+
+
+<h2 id="MavenInfoPlugin-Version0.0.4&amp;previous">Version 0.0.4 &amp; previous</h2>
+
+<ul>
+	<li>Column: Maven Modules (Short)</li>
+	<li>Column: Maven Modules (Version)</li>
+	<li>Column: Maven Dependencies (within groupId)</li>
+	<li>Column: Maven Dependencies</li>
+	<li>Column: Maven Modules (Full)</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959822.png">SelectMainModule.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959823.png">LastVersion.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959824.png">AssignName.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959825.png">AssignDescription.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959826.png">Section.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959859.png">SelectedDependencies.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/69959861.png">InterestingDependencies.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/71008272.png">ConfigurePlugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/71008273.png">HideSnapshots.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/71008274.png">SnapshotHidden.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/71008275.png">SnapshotVisible.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467779/71008276.png">VersionStyles.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

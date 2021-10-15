@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Eclipse alternative build setup</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugin-tutorial.html">Plugin tutorial</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Eclipse alternative build setup
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (hughperkins)</span>, last modified on Aug 04, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This document describes an alternative way of setting up a plugin build environment using Eclipse.  It's a bit more technically involved than directly using maven, but it can give faster code-compile-execute cycles, under some circumstances.  If it doesn't work, you're probably on your own.  If you want a build setup that 'just works', and want to be able to draw on community support if something goes wrong, then you probably want to stick to pure Maven builds.</p>
+
+<h1 id="Eclipsealternativebuildsetup-TableofContents">Table of Contents</h1>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020173378 {padding: 0px;}
+div.rbtoc1631020173378 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020173378 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020173378'>
+<ul class='toc-indentation'>
+<li><a href='#Eclipsealternativebuildsetup-TableofContents'>Table of Contents</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Background'>Background</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Procedure'>Procedure</a>
+<ul class='toc-indentation'>
+<li><a href='#Eclipsealternativebuildsetup-Create/downloadpluginproject,andcreatehplfile'>Create/download plugin project, and create hpl file</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Createhplfile'>Create hpl file</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Configuringjenkinsforfaststartup'>Configuring jenkins for fast startup</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Annotationprocessors'>Annotation processors</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Annotationprocessorfor@Extensions'>Annotation processor for @Extensions</a></li>
+<li><a href='#Eclipsealternativebuildsetup-AnnotationprocessorforStapler'>Annotation processor for Stapler</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Createlocalizer/.../Messages.java'>Create localizer/.../Messages.java</a></li>
+<li><a href='#Eclipsealternativebuildsetup-RegisteranyPluginextensionclass'>Register any Plugin extension class</a></li>
+</ul>
+</li>
+<li><a href='#Eclipsealternativebuildsetup-Thingsthatcangowrong'>Things that can go wrong</a>
+<ul class='toc-indentation'>
+<li><a href='#Eclipsealternativebuildsetup-Myextensionsaren&#39;trunning'>My extensions aren&#39;t running</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Igetanerrorabouttherebeingnoconstructorwithnoparameters,ornoconstructormarked@Injectable'>I get an error about there being no constructor with no parameters, or no constructor marked @Injectable</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Theannotationprocessorsallcompletelyfailtorun,ever,ononeparticularproject'>The annotation processors all completely fail to run, ever, on one particular project</a></li>
+<li><a href='#Eclipsealternativebuildsetup-Pluginclassdoesn&#39;trun'>Plugin class doesn&#39;t run</a></li>
+<li><a href='#Eclipsealternativebuildsetup-IgetlotsoferrormessagesaboutmissingsymbolsMessages.&lt;something&gt;'>I get lots of error messages about missing symbols Messages.&lt;something&gt;</a></li>
+</ul>
+</li>
+<li><a href='#Eclipsealternativebuildsetup-Howtodebuganannotationprocessor?'>How to debug an annotation processor?</a></li>
+</ul>
+</div>
+
+<h1 id="Eclipsealternativebuildsetup-Background">Background</h1>
+
+<p>Running the compiles using Maven are quite slow on my computer, so I wanted to avoid that, and I wanted to take advantage of the continuous build feature in Eclipse.  However, trying to do everything without maven turned out to be fairly masochistic: some things are simplest to leave to maven.</p>
+
+<h1 id="Eclipsealternativebuildsetup-Procedure">Procedure</h1>
+
+<h3 id="Eclipsealternativebuildsetup-Create/downloadpluginproject,andcreatehplfile">Create/download plugin project, and create hpl file</h3>
+
+<ul class="alternate">
+	<li>use maven to create the new plugin project, or download the existing plugin project from git</li>
+	<li>use maven to create the eclipse project, ie 'mvn eclipse:eclipse'
+	<ul class="alternate">
+		<li>you can now load the project from Eclipse, by using 'import' | 'Existing projects into workspace'</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h3 id="Eclipsealternativebuildsetup-Createhplfile">Create hpl file</h3>
+
+<p>An 'hpl' file is a text file, written like a manifest file, that goes in the 'plugins' directory of Jenkins home, and which tells Jenkins where to find our, unpackaged, plugin.  We need to modify it slightly to point to our eclipse classes, ie 'target/eclipse-classes':</p>
+
+<ul class="alternate">
+	<li>use maven to create and install an hpl file, ie 'mvn hpi:hpl -Dhudson_home=/your/jenkins/home/here'</li>
+	<li>open the hpl file, from the 'plugins' subdirectory of jenkins home, in a text editor. Change the first of the paths in the 'Libraries:' entry from 'classes' to 'eclipse-classes'</li>
+</ul>
+
+
+<h3 id="Eclipsealternativebuildsetup-Configuringjenkinsforfaststartup">Configuring jenkins for fast startup</h3>
+
+<p>On each build cycle, you will need to restart Jenkins.  Therefore, getting Jenkins to start quickly will decrease cycle time:</p>
+<ul class="alternate">
+	<li>remove all unnecessary optional plugins</li>
+	<li>create 'blahblah.hpl.disabled' files (where 'blahblah' is the name of a plugin), in the plugins directory, for the builtin plugins</li>
+	<li>use 'jar -xf' to extract the jenkins.war file somewhere, let's call this directory $JENKINSAPP</li>
+	<li>launch jenkins by 'java -jar $JENKINSAPP/winstone.jar --webroot=$JENKINSAPP'
+	<ul class="alternate">
+		<li>you probably want to create a batch script for this, to save typing</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>Now, whenever you make a change, just ctrl-c out of jenkins, and restart it.</p>
+
+<h3 id="Eclipsealternativebuildsetup-Annotationprocessors">Annotation processors</h3>
+
+<p>We need to register a couple of annotation processors.  These handle creating some meta-data/index files, specifically target/eclipse-classes/META-INF/annotations/hudson.Extension , and some files extending in '.staple', also in target/eclipse-classes.  Without these files, certain functionalities will either not exist at runtime, or won't work.</p>
+
+<h3 id="Eclipsealternativebuildsetup-Annotationprocessorfor@Extensions">Annotation processor for @Extensions</h3>
+
+<p>We need to register the @Extensions from our plugin, which is done using the sezproz annotation processor.  As of writing, we need a slightly patched version:</p>
+<ul class="alternate">
+	<li>git clone the patched sezproz from <a class="external-link" href="https://github.com/hughperkins/sezpoz" rel="nofollow">https://github.com/hughperkins/sezpoz</a></li>
+	<li>cd into the sezpoz/sezpoz directory</li>
+	<li>'mvn -DskipTests install'</li>
+</ul>
+
+
+<p>Back in your eclipse project, do 'properties' on your project, and:</p>
+<ul class="alternate">
+	<li>select 'java compiler'
+	<ul class="alternate">
+		<li>make sure compliance is set to 1.6 or higher</li>
+	</ul>
+	</li>
+	<li>go to 'java compiler' | 'annotation processing'
+	<ul class="alternate">
+		<li>click the three checkboxes</li>
+	</ul>
+	</li>
+	<li>go to 'java compiler' | 'annotation processing' | 'factory path'
+	<ul class="alternate">
+		<li>tick the 'Enable project specific settings' box</li>
+		<li>click 'add external jars...'</li>
+		<li>go into the 'target' folder of the sezpoz/sezpoz directory, and select the sezpoz SNAPSHOT jar file</li>
+		<li>click 'ok', then 'yes', then 'ok'</li>
+	</ul>
+	</li>
+	<li>check that your 'target/eclipse-classes' directory now contains a directory 'META-INF/annotations', and inside it is a file 'hudson.Extension'
+	<ul class="alternate">
+		<li>if that file exists then you're good to go!</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h3 id="Eclipsealternativebuildsetup-AnnotationprocessorforStapler">Annotation processor for Stapler</h3>
+
+<p>We need one more annotation processor to handle the creation of .Staple files, which are necessary for classes containing a @DataBoundConstructor constructor to work correctly.</p>
+
+<p>We need to add stapler-&lt;version number&gt;.jar  It depends on commons-io.jar, so we will also need to add that.  We need at least version 1.214 of Stapler to use Eclipse.  At least, the version 1.172 used by the ec2 plugin didn't work with Eclipse for me.</p>
+
+<ul class="alternate">
+	<li>In 'properties' on your project, go to 'java compiler' | 'annotation processing' | 'factory path'</li>
+	<li>click 'add external jars...'</li>
+	<li>go to your .m2/repository directory, and go to the subdirectory org/kohsuke/stapler/stapler
+	<ul class="alternate">
+		<li>pick an appropriate version, at least 1.214</li>
+		<li>change into that directory, and add the jar file (if there's no jar file, try a different version)</li>
+	</ul>
+	</li>
+	<li>add also the commons-io.jar file
+	<ul class="alternate">
+		<li>you can get this from your m2 repository, in the directory 'commons-io/commons-io/&lt;version&gt;</li>
+		<li>at least version 1.4 worked ok for me</li>
+	</ul>
+	</li>
+	<li>click 'ok', then 'yes', then 'ok'</li>
+	<li>if your target/eclipse-classes directory has some files ending in '.stapler', then this annotation processor is working ok (if there arent any, then perhaps you dont have any @DataBoundConstructor constructor classes?)</li>
+</ul>
+
+
+<h3 id="Eclipsealternativebuildsetup-Createlocalizer/.../Messages.java">Create localizer/.../Messages.java</h3>
+
+<p>The resource files 'Messages.properties' need to be converted to the Messages.java file(s), in target/generated-sources/localizer.  For now, an easy way of doing this is to use maven, ie 'mvn generate-sources'.  You will need to re-run this each time you update any of the .properties files.  Actually, running 'mvn eclipse:eclipse' will this for you anyway, though note that it will change the java compliance from '1.6' to '1.5', meaning your annotation processors will stop running until you change this back from project properties.</p>
+
+<h3 id="Eclipsealternativebuildsetup-RegisteranyPluginextensionclass">Register any Plugin extension class</h3>
+
+<p>If you have a Plugin extension class, the registration process is as follows:</p>
+<ul class="alternate">
+	<li>an annotation processor in jenkins-core finds the Plugin derived class, and creates META-INF/services/hudson.Plugin , in your classes output directory, eg target/classes for maven, and target/eclipse-classes for Eclipse</li>
+	<li>then, when you run hpi:hpl, target/classes/META-INF/services/hudson.Plugin gets read, and used to add the 'Plugin-class:' value to your hpl file</li>
+</ul>
+
+
+<p>Unfortunately, I couldn't find any way of telling hpi:hpl to look in target/eclipse-classes instead of target/classes.  Therefore, my current method to register any Plugin class is to run 'mvn compiler:compile' at least once after adding the Plugin extension class, or after moving or renaming it.</p>
+
+<h1 id="Eclipsealternativebuildsetup-Thingsthatcangowrong">Things that can go wrong</h1>
+
+<h3 id="Eclipsealternativebuildsetup-Myextensionsaren&#39;trunning">My extensions aren't running</h3>
+
+<p>That means the sezpoz annotation processor hasn't run correctly.  To confirm this is the cause, you can double-check this by doing 'hexdump -C target/eclipse/classes/META-INF/annotations/hudson.Extension'.  The file should exist, and should contain the name of your @Extension classes.</p>
+
+<h3 id="Eclipsealternativebuildsetup-Igetanerrorabouttherebeingnoconstructorwithnoparameters,ornoconstructormarked@Injectable">I get an error about there being no constructor with no parameters, or no constructor marked @Injectable</h3>
+
+<p>That means the stapler annotation processor hasn't run correctly.  To confirm this is the cause, check whether there are any .staple files in target/eclipse-classes.  If there aren't any, then the stapler processor hasn't run.  If there are some, then maybe they're old.  Try deleting the target/eclipse-classes directory, doing 'clean' from eclipse, and checking that the .staple files still exist.  If they do exist, then the stapler annotation processor is probably running ok.  If they dont, then maybe the stapler annotation processor didnt run correctly.</p>
+
+<h3 id="Eclipsealternativebuildsetup-Theannotationprocessorsallcompletelyfailtorun,ever,ononeparticularproject">The annotation processors all completely fail to run, ever, on one particular project</h3>
+
+<p>Sometimes, the line 'org.eclipse.jdt.core.compiler.processAnnotations=enabled' in .settings/org.eclipse.jdt.core.prefs gets mysteriously deleted.  The eclipse interface will continue to show annotations as activated (a bug?).  To correct this issue, you can go to 'project properties' | 'Java compiler' | 'annotation processing', then uncheck 'enable annotation processing', then 'apply' then recheck 'enable annotation processing', and 'apply'</p>
+
+<p>The other thing to check is that 'java compliance' in the project properties is set to at least 1.6 (or 1.7), and not 1.5.  Note that every time you rerun 'mvn eclipse:eclipse' this will switch back to 1.5.</p>
+
+<h3 id="Eclipsealternativebuildsetup-Pluginclassdoesn&#39;trun">Plugin class doesn't run</h3>
+
+<ul class="alternate">
+	<li>first, check if you have a file target/classes/META-INF/services/hudson.Plugin.  If you dont, then run 'mvn compiler:compile' once to create it</li>
+	<li>if you have this file, check that your hpl file contains a 'Plugin-Class: ' entry, and that the entry is incorrect.  If it doesn't exist, or it's wrong, then rerun 'mvn hpi:hpl' once to add the entry</li>
+</ul>
+
+
+<h3 id="Eclipsealternativebuildsetup-IgetlotsoferrormessagesaboutmissingsymbolsMessages.&lt;something&gt;">I get lots of error messages about missing symbols Messages.&lt;something&gt;</h3>
+
+<p>You need to generate the target/generated-sources/localizer/.../Messages.java file.</p>
+
+<h1 id="Eclipsealternativebuildsetup-Howtodebuganannotationprocessor?">How to debug an annotation processor?</h1>
+
+<p>Here's what I did.  It might not be the best way, but it does work.  If you know a better way, please add your ideas here too.</p>
+
+<ul class="alternate">
+	<li>download the appropriate annotation processor source code from github</li>
+	<li>add a bunch of System.out.printlns, especially in the entry points, such as the 'process' function</li>
+	<li>do 'mvn -DskipTests install'</li>
+	<li>close eclipse, and start it from the commandline.  This way any System.out.println output will appear in your commandline</li>
+	<li>remove the old annotation processor in eclipse, do 'ok' and 'yes'</li>
+	<li>add the new SNAPSHOT processor that you just compiled, and have a look at the output in your commandline</li>
+</ul>
+
+
+<p>Note that if you rebuild the annotation processor, you need to first remove the old in eclipse, and do 'ok' and 'yes' for the rebuild, then reopen the project properties, and add the new one.  It's not enough to just remove the old one in the properties, and immediately add the new one.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

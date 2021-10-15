@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Generic Webhook Trigger Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Generic Webhook Trigger Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tomasbjerre)</span>, last modified on Aug 26, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Generic Webhook Trigger <a href="https://plugins.jenkins.io/generic-webhook-trigger" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-06-18/#SECURITY-2330" class="external-link" rel="nofollow">XXE vulnerability</a></li>
+</ul>
+
+</div></div>
+Can receive any HTTP request, extract any values from JSON or XML and trigger a job with those values available as variables. Works with GitHub, GitLab, Bitbucket, Jira and many more.<p><a href="https://ci.jenkins.io/job/Plugins/job/generic-webhook-trigger-plugin" rel="nofollow" style="text-decoration: none;" class="external-link"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Build Status" src="https://camo.githubusercontent.com/3a78e02fe2db237f0de71c0549ddc88bd8049700/68747470733a2f2f63692e6a656e6b696e732e696f2f6a6f622f506c7567696e732f6a6f622f67656e657269632d776562686f6f6b2d747269676765722d706c7567696e2f6a6f622f6d61737465722f62616467652f69636f6e" data-image-src="https://camo.githubusercontent.com/3a78e02fe2db237f0de71c0549ddc88bd8049700/68747470733a2f2f63692e6a656e6b696e732e696f2f6a6f622f506c7567696e732f6a6f622f67656e657269632d776562686f6f6b2d747269676765722d706c7567696e2f6a6f622f6d61737465722f62616467652f69636f6e"></span></a></p><pre><br/></pre><p style="">This is a Jenkins plugin that can:</p><pre><br/></pre><ol style=""><li>Receive any HTTP request,<span> </span><code>JENKINS_URL/generic-webhook-trigger/invoke</code></li><li>Extract values</li></ol><pre><br/></pre><ul style=""><li>From<span> </span><code>POST</code><span> </span>content with<span> </span><a style="text-decoration: none;" href="https://github.com/json-path/JsonPath" class="external-link" rel="nofollow">JSONPath</a><span> </span>or<span> </span><a rel="nofollow" style="text-decoration: none;" href="https://www.w3schools.com/xml/xpath_syntax.asp" class="external-link">XPath</a></li><li>From the<span> </span><code>query</code><span> </span>parameters</li><li>From the<span> </span><code>headers</code></li></ul><pre><br/></pre><ol style=""><li>Trigger a build with those values contribute as variables</li></ol><pre><br/></pre><p style="">There is an optional feature to trigger jobs only if a supplied regular expression matches the extracted variables. Here is an example, let's say the post content looks like this:</p><pre><br/></pre><pre>{
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>before<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span><span class="pl-k" style="color: rgb(215,58,73);">:</span> <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>1848f1236ae15769e6b31e9c4477d8150b018453<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>after<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span><span class="pl-k" style="color: rgb(215,58,73);">:</span> <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>5cab18338eaa83240ab86c7b775a9b27b51ef11d<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>,
+  <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>ref<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span><span class="pl-k" style="color: rgb(215,58,73);">:</span> <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>refs/heads/develop<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>
+}</pre><pre><br/></pre><p style="">Then you can have a variable, resolved from post content, named<span> </span><code>ref</code><span> </span>of type<span> </span><code>JSONPath</code><span> </span>and with expression like<span> </span><code>$.ref</code><span> </span>. The optional filter text can be set to<span> </span><code>$ref</code><span> </span>and the filter regexp set to<span> </span><a style="text-decoration: none;" href="https://jex.im/regulex/#!embed=false&amp;flags=&amp;re=%5E(refs%2Fheads%2Fdevelop%7Crefs%2Fheads%2Ffeature%2F.%2B)%24" rel="nofollow" class="external-link">^(refs/heads/develop|refs/heads/feature/.+)$</a><span> </span>to trigger builds only for develop and feature-branches.</p><pre><br/></pre><p style="">There are more<span> </span><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/src/test/resources/org/jenkinsci/plugins/gwt/bdd" class="external-link" rel="nofollow">examples of use cases here</a>.</p><pre><br/></pre><p style="">Video showing an example usage:</p><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://www.youtube.com/watch?v=8mrJNkofxq4" rel="nofollow" class="external-link"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Generic Webhook Trigger Usage Example" src="https://camo.githubusercontent.com/7b7efe582e9c366c6d9a253f02c3d413bff3f700/68747470733a2f2f696d672e796f75747562652e636f6d2f76692f386d724a4e6b6f667871342f302e6a7067" data-image-src="https://camo.githubusercontent.com/7b7efe582e9c366c6d9a253f02c3d413bff3f700/68747470733a2f2f696d672e796f75747562652e636f6d2f76692f386d724a4e6b6f667871342f302e6a7067"></span></a></p><pre><br/></pre><p style="">It can trigger on any webhook, like:</p><pre><br/></pre><ul style=""><li><a href="https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html" style="text-decoration: none;" rel="nofollow" class="external-link">Bitbucket Cloud</a></li><li><a rel="nofollow" href="https://confluence.atlassian.com/bitbucketserver/managing-webhooks-in-bitbucket-server-938025878.html" style="text-decoration: none;" class="external-link">Bitbucket Server</a></li><li><a style="text-decoration: none;" href="https://developer.github.com/webhooks/" class="external-link" rel="nofollow">GitHub</a></li><li><a rel="nofollow" href="https://docs.gitlab.com/ce/user/project/integrations/webhooks.html" style="text-decoration: none;" class="external-link">GitLab</a></li><li><a rel="nofollow" href="https://gogs.io/docs/features/webhook" style="text-decoration: none;" class="external-link">Gogs</a><span> </span>and<span> </span><a rel="nofollow" style="text-decoration: none;" href="https://docs.gitea.io/en-us/webhooks/" class="external-link">Gitea</a></li><li><a style="text-decoration: none;" href="https://blog.assembla.com/AssemblaBlog/tabid/12618/bid/107614/Assembla-Bigplans-Integration-How-To.aspx" rel="nofollow" class="external-link">Assembla</a></li><li><a rel="nofollow" href="https://developer.atlassian.com/server/jira/platform/webhooks/" style="text-decoration: none;" class="external-link">Jira</a></li><li>And many many more!</li></ul><pre><br/></pre><p style="">The original use case was to build merge/pull requests. You may use the Git Plugin as described in<span> </span><a href="http://bjurr.com/continuous-integration-with-gitlab-and-jenkins/" rel="nofollow" style="text-decoration: none;" class="external-link">this blog post</a><span> </span>to do that. There is also an example of this on the<span> </span><a href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+GitLab+Plugin" style="text-decoration: none;" rel="nofollow" class="external-link">Violation Comments to GitLab Plugin</a><span> </span>page.</p><pre><br/></pre><p style="">You may want to report back to the invoking system.<span> </span><a href="https://wiki.jenkins-ci.org/display/JENKINS/HTTP+Request+Plugin" style="text-decoration: none;" rel="nofollow" class="external-link">HTTP Request Plugin</a><span> </span>is a very convenient plugin for that.</p><pre><br/></pre><p style="">If a node is selected, then all leafs in that node will be contributed. If a leaf is selected, then only that leaf will be contributed.</p><pre><br/></pre><h2 style="" id="GenericWebhookTriggerPlugin-Triggeronlyspecificjob">Trigger only specific job</h2><pre><br/></pre><p style="">When using the plugin in several jobs, you will have the same URL trigger all jobs. If you want to trigger only a certain job you can:</p><pre><br/></pre><ul style=""><li>Use the<span> </span><code>token</code>-parameter have different tokens for different jobs. Using only the token means only jobs with that exact token will be visible for that request. This will increase performance and reduce responses of each invocation.</li><li>Or, add some request parameter (or header, or post content) and use the<span> </span><strong>regexp filter</strong><span> </span>to trigger only if that parameter has a specific value.</li></ul><pre><br/></pre><h3 style="" id="GenericWebhookTriggerPlugin-Tokenparameter">Token parameter</h3><pre><br/></pre><p style="">There is a special<span> </span><code>token</code><span> </span>parameter. When supplied, the invocation will only trigger jobs with that exact token. The token also allows invocations without any other authentication credentials.</p><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/configure-token.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Parameter" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/configure-token.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/configure-token.png"></span></a></p><pre><br/></pre><p style="">The token can be supplied as a:</p><pre><br/></pre><ul style=""><li>Request parameter:<span> </span><code>curl -vs <a href="http://localhost:8080/jenkins/generic-webhook-trigger/invoke?token=abc123" class="external-link" rel="nofollow">http://localhost:8080/jenkins/generic-webhook-trigger/invoke?token=abc123</a> 2&gt;&amp;1</code></li><li>Token header:<span> </span><code>curl -vs -H &quot;token: abc123&quot; <a href="http://localhost:8080/jenkins/generic-webhook-trigger/invoke" class="external-link" rel="nofollow">http://localhost:8080/jenkins/generic-webhook-trigger/invoke</a> 2&gt;&amp;1</code></li><li><em>Authorization</em><span> </span>header of type<span> </span><em>Bearer</em><span> </span>:<span> </span><code>curl -vs -H &quot;Authorization: Bearer abc123&quot; <a href="http://localhost:8080/jenkins/generic-webhook-trigger/invoke" class="external-link" rel="nofollow">http://localhost:8080/jenkins/generic-webhook-trigger/invoke</a> 2&gt;&amp;1</code></li></ul><pre><br/></pre><h2 style="" id="GenericWebhookTriggerPlugin-Troubleshooting">Troubleshooting</h2><pre><br/></pre><p style="">If you want to fiddle with the plugin, you may use this repo:<span> </span><a href="https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox" style="text-decoration: none;" class="external-link" rel="nofollow">https://github.com/tomasbjerre/jenkins-configuration-as-code-sandbox</a></p><pre><br/></pre><p style="">If you are fiddling with expressions, you may want to checkout:</p><pre><br/></pre><ul style=""><li><a href="http://jsonpath.herokuapp.com/" style="text-decoration: none;" rel="nofollow" class="external-link">This JSONPath site</a></li><li><a style="text-decoration: none;" href="http://www.freeformatter.com/xpath-tester.html" rel="nofollow" class="external-link">This XPath site</a></li><li><a href="https://jex.im/regulex/" style="text-decoration: none;" rel="nofollow" class="external-link">This regexp site</a><span> </span>Also syntax<span> </span><a rel="nofollow" href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html" style="text-decoration: none;" class="external-link">here</a>.</li></ul><pre><br/></pre><p style="">It's probably easiest to do with<span> </span><code>curl</code>. Given that you have configured a Jenkins job to trigger on Generic Webhook, here are some examples of how to start the jobs.</p><pre><br/></pre><pre>curl -vs http://localhost:8080/jenkins/generic-webhook-trigger/invoke <span class="pl-k" style="color: rgb(215,58,73);">2&gt;&amp;1</span></pre><pre><br/></pre><p style="">This should start your job, if the job has no<span> </span><code>token</code><span> </span>configured and no security enabled. If you have security enabled you may need to authenticate:</p><pre><br/></pre><pre>curl -vs http://theusername:thepasssword@localhost:8080/jenkins/generic-webhook-trigger/invoke <span class="pl-k" style="color: rgb(215,58,73);">2&gt;&amp;1</span></pre><pre><br/></pre><p style="">If your job has a<span> </span><code>token</code><span> </span>you don't need to supply other credentials. You can specify the<span> </span><code>token</code><span> </span>like this:</p><pre><br/></pre><pre>curl -vs http://localhost:8080/jenkins/generic-webhook-trigger/invoke<span class="pl-k" style="color: rgb(215,58,73);">?</span>token=TOKEN_HERE <span class="pl-k" style="color: rgb(215,58,73);">2&gt;&amp;1</span></pre><pre><br/></pre><p style="">If you want to trigger with<span> </span><code>token</code><span> </span>and some post content,<span> </span><code>curl</code><span> </span>can dot that like this.</p><pre><br/></pre><pre>curl -v -H <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>Content-Type: application/json<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span> -X POST -d <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>{ &quot;app&quot;:{ &quot;name&quot;:&quot;some value&quot; }}<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span> http://localhost:8080/jenkins/generic-webhook-trigger/invoke<span class="pl-k" style="color: rgb(215,58,73);">?</span>token=TOKEN_HERE</pre><pre><br/></pre><h2 style="" id="GenericWebhookTriggerPlugin-Screenshots">Screenshots</h2><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/generic-trigger.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Generic trigger" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/generic-trigger.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/generic-trigger.png"></span></a></p><pre><br/></pre><h3 style="" id="GenericWebhookTriggerPlugin-Defaultvalues">Default values</h3><pre><br/></pre><p style="">The plugin can be configured with default values. Like below:</p><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/default-value.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Default Value" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/default-value.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/default-value.png"></span></a></p><pre><br/></pre><p style="">But if you execute the job manually (or replay a pipeline), this default value will not be used. Because the plugin will not be invoked at all. You can solve this by checking the &quot;This job is parameterized&quot; and add a parameter with the same name as the one you configured in the plugin. Like this:</p><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/default-value-parameter.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Default Value" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/default-value-parameter.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/default-value-parameter.png"></span></a></p><pre><br/></pre><p style="">Now this default value will be used both when you trigger the job manually, replaying pipeline, and when you trigger it with the plugin!</p><pre><br/></pre><h3 style="" id="GenericWebhookTriggerPlugin-Prebuildstep">Pre build step</h3><pre><br/></pre><p style="">If you need the resolved values in pre build steps, like git clone, you need to add a parameter with the same name as the variable.</p><pre><br/></pre><p style=""><a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/parameter-git-repo.png" style="text-decoration: none;" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Parameter" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/parameter-git-repo.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/parameter-git-repo.png"></span></a></p><pre><br/></pre><h2 style="" id="GenericWebhookTriggerPlugin-JobDSLPlugin">Job DSL Plugin</h2><pre><br/></pre><p style="">This plugin can be used with the Job DSL Plugin. There is also an example int he<span> </span><a rel="nofollow" href="https://wiki.jenkins-ci.org/display/JENKINS/Violation+Comments+to+GitLab+Plugin" style="text-decoration: none;" class="external-link">Violation Comments to GitLab Plugin</a><span> </span>wiki page.</p><pre><br/></pre><p style="">Job DSL supports injecting credenials when processing the DSL. You can use that if you want the<span> </span><code>token</code><span> </span>to be set from credentials.</p><pre><br/></pre><pre>pipelineJob(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>Generic Job Example<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>) {
+ parameters {
+  stringParam(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>VARIABLE_FROM_POST<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span><span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>)
+ }
+
+ triggers {
+  genericTrigger {
+   genericVariables {
+    genericVariable {
+     key(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>VARIABLE_FROM_POST<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+     value(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-cce">\$</span>.something<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+     expressionType(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>JSONPath<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>) <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to JSONPath</span>
+     regexpFilter(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>) <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to empty string</span>
+     defaultValue(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>) <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to empty string</span>
+    }
+   }
+   genericRequestVariables {
+    genericRequestVariable {
+     key(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>requestParameterName<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+     regexpFilter(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+    }
+   }
+   genericHeaderVariables {
+    genericHeaderVariable {
+     key(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>requestHeaderName<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+     regexpFilter(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+    }
+   }
+   token(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>abc123<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>)
+   printContributedVariables(<span class="pl-c1" style="color: rgb(0,92,197);">true</span>)
+   printPostContent(<span class="pl-c1" style="color: rgb(0,92,197);">true</span>)
+   silentResponse(<span class="pl-c1" style="color: rgb(0,92,197);">false</span>)
+   regexpFilterText(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span><span class="pl-cce">\$</span>VARIABLE_FROM_POST<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+   regexpFilterExpression(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>aRegExp<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>)
+  }
+ }
+
+ definition {
+  cps {
+   <span class="pl-c" style="color: rgb(106,115,125);">// Or just refer to a Jenkinsfile containing the pipeline</span>
+   script(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'''</span></span>
+<span class="pl-s" style="color: rgb(3,47,98);">    node {</span>
+<span class="pl-s" style="color: rgb(3,47,98);">     stage('Some Stage') {</span>
+<span class="pl-s" style="color: rgb(3,47,98);">      println &quot;VARIABLE_FROM_POST: &quot; + VARIABLE_FROM_POST</span>
+<span class="pl-s" style="color: rgb(3,47,98);">     }</span>
+<span class="pl-s" style="color: rgb(3,47,98);">    }</span>
+<span class="pl-s" style="color: rgb(3,47,98);">   <span class="pl-pds" style="color: rgb(3,47,98);">'''</span></span>)
+   sandbox()
+  }
+ }
+}</pre><pre><br/></pre><h2 style="" id="GenericWebhookTriggerPlugin-Pipeline">Pipeline</h2><pre><br/></pre><p style="">When configuring from pipeline (not multibranch pipeline), that pipeline needs to run once, to apply the plugin trigger config, and after that this plugin will be able to trigger the job. This is how Jenkins works, not something implemented in this plugin.</p><pre><br/></pre><p style="">This means that if you create a pipeline like this:</p><pre><br/></pre><p style=""><a style="text-decoration: none;" href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/pipeline-pre-run.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Parameter" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/pipeline-pre-run.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/pipeline-pre-run.png"></span></a></p><pre><br/></pre><p style="">You need to run it once to have the properties applied. You can verify that the properties has been applied by opening the configuration view (of view configuration if using multibranch pipeline) of the job. You will see that the &quot;Generic Webhook Trigger&quot; is checked and will now have values from your pipeline. Like this:</p><pre><br/></pre><p style=""><a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/sandbox/pipeline-post-run.png" style="text-decoration: none;" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Parameter" src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/pipeline-post-run.png" data-image-src="https://github.com/jenkinsci/generic-webhook-trigger-plugin/raw/master/sandbox/pipeline-post-run.png"></span></a></p><pre><br/></pre><p style="">You can avoid having to run twice, by using Job DSL and have Job DSL create pipeline jobs with the plugin configured in that DSL.</p><pre><br/></pre><p style="">This plugin can be used with the<span> </span><a href="https://jenkins.io/doc/pipeline/steps/workflow-multibranch/#properties-set-job-properties" rel="nofollow" style="text-decoration: none;" class="external-link">Pipeline Multibranch Plugin</a>.</p><pre><br/></pre><p style="">You can use the credentials plugin to provide the<span> </span><code>token</code><span> </span>from credentials.</p><pre><br/></pre><pre>withCredentials([string(<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>mycredentialsid<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">variable</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>credentialsVariable<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>)]) {
+ properties([
+  pipelineTriggers([
+   [$<span class="pl-c1" style="color: rgb(0,92,197);">class</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>GenericTrigger<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+    <span class="pl-c1" style="color: rgb(0,92,197);">token</span>: credentialsVariable,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+   ]
+  ])
+ ])
+}</pre><pre><br/></pre><p style="">Perhaps you want a different<span> </span><code>token</code><span> </span>for each job.</p><pre><br/></pre><pre> properties([
+  pipelineTriggers([
+   [$<span class="pl-c1" style="color: rgb(0,92,197);">class</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>GenericTrigger<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+    <span class="pl-c1" style="color: rgb(0,92,197);">token</span>: env<span class="pl-k" style="color: rgb(215,58,73);">.</span><span class="pl-c1" style="color: rgb(0,92,197);">JOB_NAME</span>,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+   ]
+  ])
+ ])</pre><pre><br/></pre><p style="">Or have a credentials string prefixed with the job name.</p><pre><br/></pre><pre>withCredentials([string(<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>mycredentialsid<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">variable</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>credentialsVariable<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>)]) {
+ properties([
+  pipelineTriggers([
+   [$<span class="pl-c1" style="color: rgb(0,92,197);">class</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>GenericTrigger<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+    <span class="pl-c1" style="color: rgb(0,92,197);">token</span>: env<span class="pl-k" style="color: rgb(215,58,73);">.</span><span class="pl-c1" style="color: rgb(0,92,197);">JOB_NAME</span> <span class="pl-k" style="color: rgb(215,58,73);">+</span> credentialsVariable,
+    <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+   ]
+  ])
+ ])
+}</pre><pre><br/></pre><p style="">With a scripted Jenkinsfile like this:</p><pre><br/></pre><pre>node {
+ properties([
+  pipelineTriggers([
+   [$<span class="pl-c1" style="color: rgb(0,92,197);">class</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>GenericTrigger<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    <span class="pl-c1" style="color: rgb(0,92,197);">genericVariables</span>: [
+     [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">value</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>$.ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>],
+     [
+      <span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>before<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+      <span class="pl-c1" style="color: rgb(0,92,197);">value</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>$.before<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+      <span class="pl-c1" style="color: rgb(0,92,197);">expressionType</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>JSONPath<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to JSONPath</span>
+      <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilter</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span><span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to empty string</span>
+      <span class="pl-c1" style="color: rgb(0,92,197);">defaultValue</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span><span class="pl-pds" style="color: rgb(3,47,98);">'</span></span> <span class="pl-c" style="color: rgb(106,115,125);">//Optional, defaults to empty string</span>
+     ]
+    ],
+    <span class="pl-c1" style="color: rgb(0,92,197);">genericRequestVariables</span>: [
+     [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>requestWithNumber<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilter</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>[^0-9]<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>],
+     [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>requestWithString<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilter</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span><span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>]
+    ],
+    <span class="pl-c1" style="color: rgb(0,92,197);">genericHeaderVariables</span>: [
+     [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>headerWithNumber<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilter</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>[^0-9]<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>],
+     [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>headerWithString<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilter</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span><span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>]
+    ],
+     
+    <span class="pl-c1" style="color: rgb(0,92,197);">causeString</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>Triggered on $ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    
+    <span class="pl-c1" style="color: rgb(0,92,197);">token</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>abc123<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    
+    <span class="pl-c1" style="color: rgb(0,92,197);">printContributedVariables</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+    <span class="pl-c1" style="color: rgb(0,92,197);">printPostContent</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+    
+    <span class="pl-c1" style="color: rgb(0,92,197);">silentResponse</span>: <span class="pl-c1" style="color: rgb(0,92,197);">false</span>,
+    
+    <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilterText</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>$ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+    <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilterExpression</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>refs/heads/<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span> <span class="pl-k" style="color: rgb(215,58,73);">+</span> <span class="pl-c1" style="color: rgb(0,92,197);">BRANCH_NAME</span>
+   ]
+  ])
+ ])
+
+ stage(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>build<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>) {
+  sh <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'''</span></span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo Variables from shell:</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo ref $ref</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo before $before</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo requestWithNumber $requestWithNumber</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo requestWithString $requestWithString</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo headerWithNumber $headerWithNumber</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  echo headerWithString $headerWithString</span>
+<span class="pl-s" style="color: rgb(3,47,98);">  <span class="pl-pds" style="color: rgb(3,47,98);">'''</span></span>
+ }
+}</pre><pre><br/></pre><p style="">With a declarative Jenkinsfile like this:</p><pre><br/></pre><pre>pipeline {
+  agent any
+  triggers {
+    <span class="pl-k" style="color: rgb(215,58,73);">GenericTrigger</span>(
+     <span class="pl-c1" style="color: rgb(0,92,197);">genericVariables</span>: [
+      [<span class="pl-c1" style="color: rgb(0,92,197);">key</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">value</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>$.ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>]
+     ],
+     
+     <span class="pl-c1" style="color: rgb(0,92,197);">causeString</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>Triggered on $ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+     
+     <span class="pl-c1" style="color: rgb(0,92,197);">token</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>abc123<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+     
+     <span class="pl-c1" style="color: rgb(0,92,197);">printContributedVariables</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+     <span class="pl-c1" style="color: rgb(0,92,197);">printPostContent</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+     
+     <span class="pl-c1" style="color: rgb(0,92,197);">silentResponse</span>: <span class="pl-c1" style="color: rgb(0,92,197);">false</span>,
+    
+     <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilterText</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>$ref<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>,
+     <span class="pl-c1" style="color: rgb(0,92,197);">regexpFilterExpression</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>refs/heads/<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span> <span class="pl-k" style="color: rgb(215,58,73);">+</span> <span class="pl-c1" style="color: rgb(0,92,197);">BRANCH_NAME</span>
+    )
+  }
+  stages {
+    stage(<span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>Some step<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span>) {
+      steps {
+        sh <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>echo <span class="pl-smi" style="color: rgb(36,41,46);">$ref</span><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span>
+      }
+    }
+  }
+}</pre><pre><br/></pre><p style="">It can be triggered with something like:</p><pre><br/></pre><pre>curl -X POST -H <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>Content-Type: application/json<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span> -H <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>headerWithNumber: nbr123<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span> -H <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span>headerWithString: a b c<span class="pl-pds" style="color: rgb(3,47,98);">&quot;</span></span> -d <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds" style="color: rgb(3,47,98);">'</span>{ &quot;before&quot;: &quot;1848f12&quot;, &quot;after&quot;: &quot;5cab1&quot;, &quot;ref&quot;: &quot;refs/heads/develop&quot; }<span class="pl-pds" style="color: rgb(3,47,98);">'</span></span> -vs http://admin:admin@localhost:8080/jenkins/generic-webhook-trigger/invoke<span class="pl-k" style="color: rgb(215,58,73);">?</span>requestWithNumber=nbr%20123<span class="pl-cce">\&amp;</span>requestWithString=a%20string</pre><pre><br/></pre><p style="">And the job will have this in the log:</p><pre><br/></pre><pre><code>Contributing variables:
+
+    headerWithString_0 = a b c
+    requestWithNumber_0 = 123
+    ref = refs/heads/develop
+    headerWithNumber = 123
+    requestWithNumber = 123
+    before = 1848f12
+    requestWithString_0 = a string
+    headerWithNumber_0 = 123
+    headerWithString = a b c
+    requestWithString = a string</code></pre><pre><br/></pre><h1 id="GenericWebhookTriggerPlugin-Changelog"><span style="color: rgb(210,73,57);">Changelog</span></h1><p><a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/CHANGELOG.md" class="external-link" rel="nofollow">https://github.com/jenkinsci/generic-webhook-trigger-plugin/blob/master/CHANGELOG.md</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267244/106496036.png">generic-trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267244/106496035.png">parameter-git-repo.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267244/107020293.png">generic-trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267244/106496030.png">generic-trigger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267244/133959386.png">configure-token.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

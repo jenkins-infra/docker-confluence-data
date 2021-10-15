@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Building a maven2 project</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Building a maven2 project
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (algoripper)</span> on Jun 09, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020102524 {padding: 0px;}
+div.rbtoc1631020102524 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020102524 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020102524'>
+<ul class='toc-indentation'>
+<li><a href='#Buildingamaven2project-Automaticbuildchainingfrommoduledependencies'>Automatic build chaining from module dependencies</a></li>
+<li><a href='#Buildingamaven2project-EnvironmentVariables(since2.1)'>Environment Variables (since 2.1)</a></li>
+<li><a href='#Buildingamaven2project-TheMavenIntegrationPlugin'>The Maven Integration Plugin</a>
+<ul class='toc-indentation'>
+<li><a href='#Buildingamaven2project-MavenSurefireTestResults'>Maven Surefire Test Results</a>
+<ul class='toc-indentation'>
+<li><a href='#Buildingamaven2project-CollectingTestResultsfromarbitrarytestplugins'>Collecting Test Results from arbitrary test plugins</a>
+<ul class='toc-indentation'>
+<li><a href='#Buildingamaven2project-Example'>Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Jenkins provides a job type dedicated to Maven 2/3. This job type integrates Jenkins deeply with Maven 2/3 and provides the following benefits compared to the more generic <a href="Building-a-software-project.html">free-style software project</a>.</p>
+<ul>
+	<li>Jenkins parses Maven POMs to obtain much of the information needed to do its work. As a result, the amount of configuration is drastically reduced.</li>
+	<li>Jenkins listens to Maven execution and figures out what should be done when on its own. For example, it will automatically record the JUnit report when Maven runs the test phase. Or if you run the javadoc goal, Jenkins will automatically record javadoc.</li>
+	<li>Jenkins automatically creates project dependencies between projects which declare SNAPSHOT dependencies between each other. See below.</li>
+</ul>
+
+
+<p>Thus mostly you just need to configure SCM information and what goals you'd like to run, and Jenkins will figure out everything else.</p>
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">TODO</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Talk about how maven modules gets represented in sub projects, and how build numbers among sub-projects are controlled. Use some screenshots.</p></div></div>
+
+<h2 id="Buildingamaven2project-Automaticbuildchainingfrommoduledependencies">Automatic build chaining from module dependencies</h2>
+
+<p>Jenkins reads dependencies of your project from your POM, and if they are also built on Jenkins, triggers are set up in such a way that a new build in one of those dependencies will automatically start a new build of your project. Jenkins understands all kinds of dependencies in POM. Namely,</p>
+
+<ul>
+	<li>parent POM</li>
+	<li>&lt;dependencies&gt; section of your project</li>
+	<li>&lt;plugins&gt; section of your project</li>
+	<li>&lt;extensions&gt; section of your project</li>
+	<li>&lt;reporting&gt; section of your project</li>
+</ul>
+
+
+<p>This process takes versions into account, so you can have multiple versions/branches of your project on the same Jenkins and it will correctly determine dependencies. Note that dependency version ranges are not supported, see <a href="https://issues.jenkins-ci.org/browse/JENKINS-2787" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-2787</a> for the reason.</p>
+
+<p>This feature can be disabled on demand - see configuration option <em>Build whenever a SNAPSHOT dependency is built</em></p>
+
+<h2 id="Buildingamaven2project-EnvironmentVariables(since2.1)">Environment Variables (since 2.1)</h2>
+
+<p>Maven project type exposes the following environment variables, allowing you to use them as variable expansions in build configuration. The sampe values are the values of the variables if you are building <a href="this-tree.html">this tree</a>(<a href="https://github.com/jenkinsci/jenkins/tree/jenkins-1.536" class="external-link" rel="nofollow">https://github.com/jenkinsci/jenkins/tree/jenkins-1.536</a>)</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Name </p></th>
+<th class="confluenceTh"><p> Example </p></th>
+<th class="confluenceTh"><p> Meaning </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> POM_DISPLAYNAME </p></td>
+<td class="confluenceTd"><p> Jenkins main module </p></td>
+<td class="confluenceTd"><p> Taken from &lt;name&gt; in POM </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> POM_VERSION </p></td>
+<td class="confluenceTd"><p> 1.536 </p></td>
+<td class="confluenceTd"><p> Taken from &lt;version&gt; in POM </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> POM_GROUPID </p></td>
+<td class="confluenceTd"><p> org.jenkins-ci.main </p></td>
+<td class="confluenceTd"><p> Taken from &lt;groupId&gt; in POM </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> POM_ARTIFACTID </p></td>
+<td class="confluenceTd"><p> pom </p></td>
+<td class="confluenceTd"><p> Taken from &lt;artifactId&gt; in POM </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> POM_PACKAGING </p></td>
+<td class="confluenceTd"><p> pom </p></td>
+<td class="confluenceTd"><p> Taken from &lt;packaging&gt; in POM </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+<h2 id="Buildingamaven2project-TheMavenIntegrationPlugin">The Maven Integration Plugin</h2>
+
+<p>The Maven 2 project type is contained in the Maven Integration plugin, which is bundled with Jenkins. If you are running any version of Jenkins earlier than the current release, it may show up in the list of plugins having available updates. It is recommended not to upgrade the Maven Integration plugin separately from Jenkins itself. While it is technically a plugin, it is developed, tested, and released as part of the Jenkins core.</p>
+
+<h3 id="Buildingamaven2project-MavenSurefireTestResults">Maven Surefire Test Results</h3>
+
+<p>The Maven Integration plugin understands the POM and knows about specific Maven testing plug-ins, such as org.apache.maven.plugins:maven-surefire-plugin, org.eclipse.tycho:tycho-surefire-plugin, etc. The definitive list of supported test plug-ins can be found at <a href="https://github.com/jenkinsci/maven-plugin/blob/master/src/main/java/hudson/maven/reporters/TestMojo.java" class="external-link" rel="nofollow">https://github.com/jenkinsci/maven-plugin/blob/master/src/main/java/hudson/maven/reporters/TestMojo.java</a>. For such known test plug-ins the Maven Integration plugin is able to collect test results from their default or POM-configured reports directory. Test results from Maven test-capable plug-ins unknown to the Maven Integration plugin can be collected if their execution goal is 'test', 'test-run', 'integration-test' and they have a 'reportsDirectory' configuration property containing the location of their test results. Other than that results from unknown test plug-ins (such as org.codehaus.mojo:exec-maven-plugin) will not be collected, even if they are returned in the configured test results location (default target/surefire-reports).</p>
+
+<h4 id="Buildingamaven2project-CollectingTestResultsfromarbitrarytestplugins">Collecting Test Results from arbitrary test plugins</h4>
+
+<p>As of org.jenkins-ci.main:maven-plugin:2.13, there is a mechanism to inform the Maven Integration plugin of the location of test results produced by an unknown Maven test plug-in. If the POM declares a property with a name matching the pattern 'jenkins.&lt;plugin-execution-id&gt;.reportsDirectory', where &lt;plugin-execution-id&gt; is the unknown test plug-in's execution identifier, the Maven Integration plugin will resolve the value of this property against the project base directory and collect any test results that it finds in the resulting directory.</p>
+
+<h5 id="Buildingamaven2project-Example">Example</h5>
+
+<p>In order to have Jenkins pick up the test results produced by an unknown plugin with a plugin execution ID 'e2eTests' which generates JUnit-compatible XML reports in the directory 'target/protractor-reports' in the project workspace, add the following property to your project POM:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;properties&gt;
+    &lt;jenkins.e2eTests.reportsDirectory&gt;target/protractor-reports&lt;/jenkins.e2eTests.reportsDirectory&gt;
+&lt;/properties&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

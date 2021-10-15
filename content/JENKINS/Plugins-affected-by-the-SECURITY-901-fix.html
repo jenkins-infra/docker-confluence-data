@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Plugins affected by the SECURITY-901 fix</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Plugins affected by the SECURITY-901 fix
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (danielbeck)</span>, last modified by <span class='editor'> Unknown User (farmgeek4life)</span> on Mar 07, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Several authentication related plugins do not work on Jenkins releases with the SECURITY-901 fix.</p><p>The fix requires that security realms call <code>SecurityListener#authenticated</code> or <code>SecurityListener#loggedIn</code> after successful authentication. If a security realm does not do either, sessions will be invalidated immediately, and users logged out again.</p><p>To disable this security fix when using a security realm that does not call <code>SecurityListener</code> as described above, set the <a href="https://wiki.jenkins.io/display/JENKINS/Features+controlled+by+system+properties" rel="nofollow"><span>Java</span> system property</a> <code>jenkins.security.seed.UserSeedProperty.disableUserSeed</code> to <code>true</code>.</p><div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Unsafe</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Setting this system property will undo the additional protection provided by the security fix.</p></div></div><h1 id="PluginsaffectedbytheSECURITY-901fix-Furtherreferences">Further references</h1><ul><li><a href="https://jenkins.io/security/advisory/2019-01-16/" class="external-link" rel="nofollow">2019-01-16 Security advisory</a></li><li><a href="https://jenkins.io/doc/upgrade-guide/2.150/#upgrading-to-jenkins-lts-2-150-2" class="external-link" rel="nofollow">Jenkins 2.150.2 upgrade guide</a></li></ul><h1 id="PluginsaffectedbytheSECURITY-901fix-Affectedplugins">Affected plugins</h1><p>The table below provides a list of plugin which were affected by the SECURITY-901 fix in Jenkins 2.150.2 and 2.160. &quot;Status&quot; column reflects the current state. Note that this list is not exhaustive.</p><p>If you encounter a plugin that no longer works as expected due to the fix, please add it to the list. More importantly, please file a bug report, if one doesn’t exist, to help ensure that the appropriate plugin maintainer is informed.</p><div class="table-wrap"><table class="wrapped relative-table confluenceTable" style="width: 99.9592%;"><colgroup><col style="width: 12.6696%;"/><col style="width: 37.6723%;"/><col style="width: 22.6696%;"/><col style="width: 27.0158%;"/></colgroup><tbody><tr><th class="confluenceTh">Plugin</th><th class="confluenceTh">Issue</th><th colspan="1" class="confluenceTh">Pull request</th><th class="confluenceTh">Status</th></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/azure-ad" class="external-link" rel="nofollow">Azure AD</a></td><td colspan="1" class="confluenceTd"><p><a href="https://github.com/jenkinsci/azure-ad-plugin/issues/34" class="external-link" rel="nofollow">https://github.com/jenkinsci/azure-ad-plugin/issues/34</a></p></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/azure-ad-plugin/pull/35" class="external-link" rel="nofollow">https://github.com/jenkinsci/azure-ad-plugin/pull/35</a></td><td colspan="1" class="confluenceTd"><strong>Fixed in 0.3.2</strong> (2019-01-18)</td></tr><tr><td class="confluenceTd"><a href="https://plugins.jenkins.io/bitbucket-oauth" class="external-link" rel="nofollow">Bitbucket OAuth</a></td><td class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55668" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55668?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55668</a>
+                            -
+            <span class="summary">Unable to login with Bitbucket Oauth plugin after Jenkins update (2.150.2)</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p><a href="https://github.com/mallowlabs/bitbucket-oauth-plugin/issues/18" class="external-link" rel="nofollow">https://github.com/mallowlabs/bitbucket-oauth-plugin/issues/18</a></p></div></td><td colspan="1" class="confluenceTd"><p><a href="https://github.com/jenkinsci/bitbucket-oauth-plugin/pull/3" class="external-link" rel="nofollow">https://github.com/jenkinsci/bitbucket-oauth-plugin/pull/3</a></p></td><td class="confluenceTd"><br/><p><strong>Fixed in 0.9</strong> (2019-01-19)</p></td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/cas-plugin" class="external-link" rel="nofollow">CAS</a></td><td colspan="1" class="confluenceTd"><p><a href="https://github.com/fcrespel/jenkins-cas-plugin/issues/9" class="external-link" rel="nofollow">https://github.com/fcrespel/jenkins-cas-plugin/issues/9</a></p></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/cas-plugin/pull/2" class="external-link" rel="nofollow">https://github.com/jenkinsci/cas-plugin/pull/2</a></td><td colspan="1" class="confluenceTd"><strong>Fixed in 1.4.3</strong> (2019-01-21)</td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/collabnet" class="external-link" rel="nofollow">CollabNet</a></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue" data-jira-key="JENKINS-55892" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55892?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55892</a>
+                            -
+            <span class="summary">CollabNet-Plugin is not compatible with SECURITY-901 fix (Upgrading to 2.160)</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+     jira-macro-single-issue-export-pdf">In Review</span>
+                </span>
+</p></div></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/collabnet-plugin/pull/27" class="external-link" rel="nofollow">https://github.com/jenkinsci/collabnet-plugin/pull/27</a></td><td colspan="1" class="confluenceTd">PR proposed (untested), in review</td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/google-login" class="external-link" rel="nofollow">Google Login</a></td><td colspan="1" class="confluenceTd">n/a</td><td colspan="1" class="confluenceTd">n/a</td><td colspan="1" class="confluenceTd"><strong>Compatible since 1.4</strong> (2018-05-30)</td></tr><tr><td class="confluenceTd"><a href="https://plugins.jenkins.io/kerberos-sso" class="external-link" rel="nofollow">Kerberos SSO</a></td><td class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55698" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55698?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55698</a>
+                            -
+            <span class="summary">SSO + CRSF causes 403 errors</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p></div></td><td class="confluenceTd"><a href="https://github.com/jenkinsci/kerberos-sso-plugin/pull/13" class="external-link" rel="nofollow">https://github.com/jenkinsci/kerberos-sso-plugin/pull/13</a></td><td class="confluenceTd"><strong>Fixed in 1.5</strong> (2019-02-14)</td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/keycloak" class="external-link" rel="nofollow">Keycloak Authentication</a></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55669" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55669?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55669</a>
+                            -
+            <span class="summary">Auth plugin doesn&#39;t work after upgrade to Jenkins 2.150.2</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p></div></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/keycloak-plugin/pull/5" class="external-link" rel="nofollow">https://github.com/jenkinsci/keycloak-plugin/pull/5</a></td><td colspan="1" class="confluenceTd"><p><strong>Fixed in 2.3.0 </strong>(2019-01-20)</p></td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/openid" class="external-link" rel="nofollow">OpenID</a></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55683" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55683?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55683</a>
+                            -
+            <span class="summary">Endless loop on login when using OpenID plugin after upgrading to 2.160 / 2.150.2, preventing user authentication</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p></div></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/openid-plugin/pull/14" class="external-link" rel="nofollow">https://github.com/jenkinsci/openid-plugin/pull/14</a></td><td colspan="1" class="confluenceTd"><p><strong>Fixed in 2.3</strong> (2018-01-25)</p></td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/oic-auth" class="external-link" rel="nofollow">OpenID Connect Authentication</a></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55654" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55654?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55654</a>
+                            -
+            <span class="summary">infinite redirect loop when auth provider is oidc (after update to 2.160)</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p><p><a href="https://github.com/jenkinsci/oic-auth-plugin/issues/54" class="external-link" rel="nofollow">https://github.com/jenkinsci/oic-auth-plugin/issues/54</a></p></div></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/oic-auth-plugin/pull/56" class="external-link" rel="nofollow">https://github.com/jenkinsci/oic-auth-plugin/pull/56</a></td><td colspan="1" class="confluenceTd"><p><strong>Fixed in 1.5</strong> (2019-01-20)</p></td></tr><tr><td colspan="1" class="confluenceTd"><a href="https://plugins.jenkins.io/NegotiateSSO" class="external-link" rel="nofollow">Windows Negotiate SSO</a></td><td colspan="1" class="confluenceTd"><div class="content-wrapper"><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55697" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55697?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55697</a>
+                            -
+            <span class="summary">NegotiateSSO Plugin is not compatible with SECURITY-901 FIX (Upgrading to 2.160/2.150.2)</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</p></div></td><td colspan="1" class="confluenceTd"><a href="https://github.com/jenkinsci/negotiatesso-plugin/pull/2" class="external-link" rel="nofollow">https://github.com/jenkinsci/negotiatesso-plugin/pull/2</a></td><td colspan="1" class="confluenceTd"><strong>Fixed in 1.2</strong> (2019-03-06)</td></tr></tbody></table></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

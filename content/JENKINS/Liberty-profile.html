@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Liberty profile</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Containers.html">Containers</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Liberty profile
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (not)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Aug 19, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Libertyprofile-Requirements">Requirements</h1><p>Jenkins works on all released versions of the Liberty profile, however it works best with the <a href="https://www.ibmdw.net/wasdev/downloads/websphere-application-server-liberty-profile/" class="external-link" rel="nofollow">latest version</a> (at the time of writing that was the copy shipped as a part of WebSphere Application Server v8.5.5.) and these instructions are based on 8.5.5.</p><h1 id="Libertyprofile-Installation">Installation</h1><p>There are two ways to deploy Jenkins to the Liberty profile.</p><h5 id="Libertyprofile-Dropins">Dropins</h5><p>To install Jenkins on Liberty profile, simply copy <code>jenkins.war</code> to <code>${server.config.dir}/dropins</code>, then access <code><a href="http://yourhost:9080/jenkins" class="external-link" rel="nofollow">http://yourhost:9080/jenkins</a></code>.</p><h5 id="Libertyprofile-Configured">Configured</h5><p>To install Jenkins on Liberty profile copy <code>jenkins.war</code> to <code>${server.config.dir}/apps</code>. Edit the server.xml to add</p><p><code>&lt;webApplication location=&quot;jenkins.war&quot; /&gt;</code></p><p>then access <code><a href="http://youhost:9080/jenkins" class="external-link" rel="nofollow">http://youhost:9080/jenkins</a></code>.</p><h1 id="Libertyprofile-Upgrade">Upgrade</h1><p>Simply overwrite your <code>jenkins.war</code> with the new version. Liberty profile should automatically redeploy the application.</p><h1 id="Libertyprofile-SettingJVMoptions">Setting JVM options</h1><p>Before starting Liberty profile create a <code>${server.config.dir}/jvm.options</code> file and add the following line:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>-DJENKINS_HOME=/path/to/jenkins_home/</pre>
+</div></div><p>Additionally, add the following lines to ensure HTTP requests without Content-Type header are decoded correctly (JENKINS-62987):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">-Dfile.encoding=UTF-8
+-Dclient.encoding.override=UTF-8</pre>
+</div></div><p>This file can also be used to increase the heap size. On a new line add:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>-Xmx512m</pre>
+</div></div><p><br/></p><h1 id="Libertyprofile-SecuringJenkinsonLibertyprofile">Securing Jenkins on Liberty profile</h1><p>To configure the user/group to role mappings in Liberty profile you need to deploy it via the server.xml. Users and groups can be picked up from LDAP, or can be stored in the server.xml.</p><ol><li><p>Configure security by enabling the <code>appSecurity-2.0</code> feature. This is done by editing the server.xml to add:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;featureManager&gt;
+   &lt;feature&gt;appSecurity-2.0&lt;/feature&gt;
+&lt;/featureManager&gt;</pre>
+</div></div></li><li><p>Configure the role mapping for the Jenkins application:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;webApplication location=&quot;jenkins.war&quot;&gt;
+  &lt;application-bnd&gt;
+    &lt;security-role name=&quot;admin&quot;&gt;
+      &lt;user name=&quot;jenkins-admin&quot;/&gt;
+      &lt;group name=&quot;jenkins-admins&quot;/&gt;
+    &lt;/security-role&gt;
+  &lt;/application-bnd&gt;
+&lt;/webApplication&gt;</pre>
+</div></div></li><li><p>Optional: Configure user in server.xml</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&lt;basicRegistry realm=&quot;jenkins&quot;&gt;
+  &lt;user name=&quot;jenkins-admin&quot; password=&quot;secret&quot;/&gt;
+  &lt;group name=&quot;jenkins-admins&quot;&gt;
+    &lt;member name=&quot;jenkins-admin&quot;&gt;
+  &lt;/group&gt;
+&lt;/basicRegistry&gt;</pre>
+</div></div><p>The securityUtility script in the bin folder can be used to generate a hashed password for this file. This can be done by running</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ ${wlp.install.dir}/bin/securityUtility encode --encoding=hash secret</pre>
+</div></div><p>Copy the printed hashed password into the <code>password</code> attribute in the server.xml. If <code>secret</code> is not passed in on the command line you will be prompted for it.</p><h4 id="Libertyprofile-Relatedreads">Related reads</h4></li></ol><ul><li>Visit <a href="http://www.ibmdw.net/wasdev" class="external-link" rel="nofollow">WASdev</a> for up-to-date information, download and get help with Liberty Profile</li><li>The infocenter for <a href="http://www14.software.ibm.com/webapp/wsbroker/redirect?version=phil&amp;product=was-libcore-mp&amp;topic=cwlp_core_about" class="external-link" rel="nofollow">Liberty profile</a>.</li><li><a href="https://www.ibmdw.net/wasdev/downloads/websphere-application-server-liberty-profile/" class="external-link" rel="nofollow">Download</a> Liberty profile.</li></ul><h1 id="Libertyprofile-RelevantIssues">Relevant Issues</h1>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

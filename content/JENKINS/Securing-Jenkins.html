@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Securing Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Securing Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (markewaite)</span> on Aug 15, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page has been superseded by the &quot;<a href="https://jenkins.io/doc/book/system-administration/security/" class="external-link" rel="nofollow">Securing Jenkins</a>&quot; section of the <a href="https://jenkins.io/doc/book/getting-started/" class="external-link" rel="nofollow">Jenkins User Handbook</a>.</p><p><span style="">In the default configuration of Jenkins 1.x, Jenkins does not perform any security checks.</span> This means the ability of Jenkins 1.x to launch processes and access local files is available to anyone with access to Jenkins.</p><p>Securing Jenkins has several aspects to it.</p><h1 id="SecuringJenkins-AccessControl">Access Control</h1><p>You should lock down the access to Jenkins UI so that users are authenticated and appropriate set of permissions are given to them. This setting is controlled mainly by two axes:</p><ul><li><strong>Security Realm</strong>, which determines users and their passwords, as well as what groups the users belong to.</li><li><strong>Authorization Strategy</strong>, which determines who has access to what.</li></ul><p>These two axes are orthogonal, and need to be individually configured. For example, you might choose to use external LDAP or Active Directory as the security realm, and you might choose &quot;everyone full access once logged in&quot; mode for authorization strategy. Or you might choose to let Jenkins run its own user database, and perform access control based on the permission/user matrix.</p><p>The following pages discuss various aspects of this feature in details</p><ul><li><a href="Quick-and-Simple-Security.html">Quick and Simple Security</a> — if you are running Jenkins like &quot;<code>java -jar jenkins.war</code>&quot; and only need a very simple set up</li><li><a href="Standard-Security-Setup.html">Standard Security Setup</a> — discusses the most common set up of letting Jenkins run its own user database and do finer-grained access control</li><li><a href="Apache-frontend-for-security.html">Apache frontend for security</a> — run Jenkins behind Apache and perform access control in Apache instead of Jenkins</li><li><a href="Authenticating-scripted-clients.html">Authenticating scripted clients</a> — if you need to programatically access security-enabled Jenkins web UI, use BASIC auth</li><li><a href="Disable-security.html">Help! I locked myself out!</a> — if something goes really wrong and you can't get full access anymore</li><li><a href="Matrix-based-security.html">Matrix-based security</a> — Granting and denying finer-grained permissions</li></ul><h1 id="SecuringJenkins-ProtectusersofJenkinsfromotherthreats">Protect users of Jenkins from other threats</h1><p>There are additional security subsystems in Jenkins that protect Jenkins and users of Jenkins from indirect attacks.</p><p>The following topics discuss features that are <strong>off by default</strong>. We recommend you read them first and act on them.</p><ul><li><a href="CSRF-Protection.html">CSRF Protection</a> — prevent a remote attack against Jenkins running inside your firewall</li><li><a href="Security-implication-of-building-on-master.html">Security implication of building on master</a> — protect Jenkins master from malicious builds</li><li><a href="Slave-To-Master-Access-Control.html">Slave To Master Access Control</a> — protect Jenkins master from malicious build agents</li><li><a href="Securing-JENKINS_HOME.html">Securing JENKINS_HOME</a> — protect Jenkins from users with local access</li></ul><p>The following topics discuss other security features that are on by default. You'll only need to look at them when they are causing problems.</p><ul><li><a href="Configuring-Content-Security-Policy.html">Configuring Content Security Policy</a> — protect users of Jenkins from malicious builds</li><li><a href="Markup-formatting.html">Markup formatting</a> — protect users of Jenkins from malicious users of Jenkins</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753718/5636097.jpg">BuildToken.jpg</a> (image/pjpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

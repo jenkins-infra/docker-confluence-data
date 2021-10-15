@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Setting up Eclipse to build Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Setting up Eclipse to build Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (jmcgeheeiv)</span> on Mar 04, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Audience: Jenkins developers who use Eclipse as their IDE<br/>
+Goal: To be able to modify Jenkins core source code, and run/debug it within Tomcat.<br/>
+Author: Brian Westrich (bw@mcwest.com)</p>
+
+<p><strong>Prerequisites: You have already completed the steps currently at</strong> <strong><a href="Building-Jenkins.html">Building Jenkins</a></strong><strong>, up to and including running &quot;mvn ... eclipse:eclipse&quot;.</strong></p>
+
+<h1 id="SettingupEclipsetobuildJenkins-Makesureyou&#39;reusingJava7orabove">Make sure you're using Java 7 or above</h1>
+
+<p>Select <em>Window &gt; Preferences...</em> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/4161557/96305163.png" data-image-src="attachments/4161557/96305163.png" data-unresolved-comment-count="0" data-linked-resource-id="96305163" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="installed-jres.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span><br/>
+Make sure JDK7 or above is present and checked.
+<br class="atl-forced-newline"/></p>
+<h1 id="SettingupEclipsetobuildJenkins-SetyourM2_REPOvariable">Set your M2_REPO variable</h1>
+
+<p>Select <em>Window &gt; Preferences...</em><br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325379.png" data-image-src="attachments/4161557/4325379.png" data-unresolved-comment-count="0" data-linked-resource-id="4325379" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="classpath.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>Click New, then specify your M2_REPO location, for example:<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325378.png" data-image-src="attachments/4161557/4325378.png" data-unresolved-comment-count="0" data-linked-resource-id="4325378" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="m2_repo.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span></p>
+
+<p>On UNIX platforms, the path will be in your home directory, for example /home/brian/.m2/repository.</p>
+
+<h1 id="SettingupEclipsetobuildJenkins-Importthemodulesyouwanttoworkwith">Import the modules you want to work with</h1>
+
+<p>In <em>File &gt; Import</em>, select <em>General &gt; Existing projects into Workspace</em>, and then click on <em>Next</em>.  The <em>Import Project</em> form appears.  In <em>Select root directory</em>, enter the path to your Eclipse workspace.  Type <em>&lt;tab&gt;</em> and <em>Import Projects</em> will recursively search for projects to import, and display them:<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325380.png" data-image-src="attachments/4161557/4325380.png" data-unresolved-comment-count="0" data-linked-resource-id="4325380" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="import.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span><br/>
+Click Finish to import the selected Jenkins projects into Eclipse.</p>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Even if you are modifying just one module, you must import all of them into Eclipse as they depend on each other.</p></div></div>
+
+<h1 id="SettingupEclipsetobuildJenkins-Othertips">Other tips</h1>
+
+<p>Setting up Jenkins to run as web app within tomcat/eclipse (using eclipse 3.3, tomcat 6.0, sysdeo tomcat plugin):</p>
+<ul>
+	<li>Add the plugin project you are currently working on into Tomcat's classpath using the Sysdeo plugin (Preferences, Tomcat, Advanced, ...)<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325381.png" data-image-src="attachments/4161557/4325381.png" data-unresolved-comment-count="0" data-linked-resource-id="4325381" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="otherTips.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span></li>
+	<li>Download a recent stable Jenkins war.</li>
+	<li>Copy war to tomcat webapps.</li>
+	<li>Start tomcat. This will explode the war into the tomcat webapps directory (needed for subsequent step).</li>
+	<li>Limitation: This setup does not deploy any non-Java artifacts to the web application. If you update any of these (e.g. html files), you'll need to manually copy these to the exploded directories in the tomcat webapps directory.</li>
+</ul>
+
+
+
+<p>If you are changing multiple modules, the most reliable way to have the correct version appear first on the tomcat classpath is to add the imported version of the module to the classpath of the plugin you're debugging, then only add the plugin project to Tomcat's classpath. For example, this shows the Jenkins-core project added to the build path of the perforce plugin.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325383.png" data-image-src="attachments/4161557/4325383.png" data-unresolved-comment-count="0" data-linked-resource-id="4325383" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-path.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<p>After you add the jenkins-core project to the classpath, use the 'Order and Export' tab to move the jenkins-core project before the jar version (in M2_REPO) of jenkins-core. Also, you must check the checkbox to the left of jenkins-core, otherwise Tomcat will not be able to load any of the classes in jenkins-core.
+<br class="atl-forced-newline"/>  <span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/4325384.png" data-image-src="attachments/4161557/4325384.png" data-unresolved-comment-count="0" data-linked-resource-id="4325384" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="override.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+
+<h1 id="SettingupEclipsetobuildJenkins-UseMylynandtheJenkinsissuetracker">Use Mylyn and the Jenkins issue tracker</h1>
+
+<p>It is possible to configure <a href="http://www.eclipse.org/mylyn/" class="external-link" rel="nofollow">Mylyn</a> so it will connect to the Jenkins issue tracker. To be able to connect to the tracker you need to install the <a href="http://help.open.collab.net/eclipse_cn_intro.html" class="external-link" rel="nofollow">CollabNet Desktop plugin</a>.</p>
+
+<h2 id="SettingupEclipsetobuildJenkins-Taskrepository">Task repository</h2>
+
+<p>When the plugin has been installed, create a new Task repository with the following settings:<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/23658497.png" data-image-src="attachments/4161557/23658497.png" data-unresolved-comment-count="0" data-linked-resource-id="23658497" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="mylyn_task_repository.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span></p>
+
+<h2 id="SettingupEclipsetobuildJenkins-Taskquery">Task query</h2>
+
+<p>To create a query to the issue tracker</p>
+<ol>
+	<li>Create a new Mylyn query</li>
+	<li>Select the newly create task repository</li>
+	<li>Select &quot;Create query using form&quot;</li>
+	<li>Enter a name for the query</li>
+	<li>Set the component to Jenkins</li>
+	<li>Configure the query<br/>
+<span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/4161557/23658498.png" data-image-src="attachments/4161557/23658498.png" data-unresolved-comment-count="0" data-linked-resource-id="23658498" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="mylyn_task_query.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="4161557" data-linked-resource-container-version="21"></span>!</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325377.png">java6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325378.png">m2_repo.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325379.png">classpath.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/59900069.png">import.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325381.png">otherTips.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325382.png">dependency-import.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325383.png">build-path.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325385.png">override.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325384.png">override.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/23658497.png">mylyn_task_repository.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/23658498.png">mylyn_task_query.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/4325380.png">import.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/96305164.png">installed-jres.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/4161557/96305163.png">installed-jres.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

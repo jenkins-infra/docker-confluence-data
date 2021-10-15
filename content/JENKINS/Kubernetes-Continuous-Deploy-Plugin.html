@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Kubernetes Continuous Deploy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Kubernetes Continuous Deploy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (chenkennt)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Aug 29, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Kubernetes Continuous Deploy <a href="https://plugins.jenkins.io/kubernetes-cd" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>A Jenkins plugin to deploy resource configurations to a Kubernetes cluster.</p><p>It provides the following features:</p><ul><li>Fetch the cluster credentials from the master node via SSH. You may also configure it manually.</li><li>Variable substitution for the resource configurations, allowing you to do dynamic resource deployment.</li><li>Docker login credentials management for the private Docker registry.</li><li>No need to install the <code>kubectl</code> tool on the Jenkins slave nodes.</li></ul><h2 id="KubernetesContinuousDeployPlugin-Breakingchangesinversion1.0.0">Breaking changes in version 1.0.0</h2><p>This plugin depends on <a href="https://github.com/fabric8io/kubernetes-client" class="external-link" rel="nofollow">Kubernetes &amp; OpenShift 3 Java Client</a>. To apply more features of Kubernetes in this plugin, we have to upgrade the version of the sdk. However the new version of the sdk does not support some legacy Kubernetes api versions any more. <strong>If you want to upgrade to version 1.0.0, please make sure your Kubernetes support related object api version and update your Kubernetes resource files</strong>. Following API objects are no more support extensions group, please change them to apps group.</p><ul><li> DaemonSet</li><li> Deployment</li><li> ReplicaSet</li></ul><h2 id="KubernetesContinuousDeployPlugin-Prerequisites">Prerequisites</h2><ul><li>A Kubernetes cluster.</li><li>Kubernetes resource configurations to be deployed.</li></ul><h2 id="KubernetesContinuousDeployPlugin-ConfigurethePlugin">Configure the Plugin</h2><p><a href="https://github.com/jenkinsci/kubernetes-cd-plugin/blob/dev/img/screenshot.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="screenshot" src="https://github.com/jenkinsci/kubernetes-cd-plugin/raw/dev/img/screenshot.png" data-image-src="https://github.com/jenkinsci/kubernetes-cd-plugin/raw/dev/img/screenshot.png"></span></a></p><ol><li><p>Within the Jenkins dashboard, select a Job and then select Configure</p></li><li><p>Scroll down and click the &quot;Add build step&quot; dropdown</p></li><li><p>Select &quot;Deploy to Kubernetes&quot;</p></li><li><p>In the &quot;Kubeconfig&quot; dropdown, select the <a href="https://kubernetes.io/docs/tasks/access-application-cluster/authenticate-across-clusters-kubeconfig/" rel="nofollow" class="external-link"><span>kubeconfig</span></a> stored in Jenkins. You can click the &quot;Add&quot; button on the right to add new kubeconfig (Kind: <code>Kubernetes configuration (kubeconfig)</code>).</p><p>You can choose one of the following methods to provide the kubeconfig details:</p><ul><li>Enter the kubeconfig content directly</li><li>Set the path to the kubeconfig on the Jenkins master</li><li>Fetch the kubeconfig from a remote SSH server</li></ul></li><li><p>Fill in the &quot;Config Files&quot; with the configuration file paths. Split multiple entries with comma (<code>,</code>). <a href="https://ant.apache.org/manual/dirtasks.html#patterns" class="external-link" rel="nofollow">Ant glob syntax</a> is supported for path patterns.</p></li><li><p>By checking &quot;Enable Variable Substitution in Config&quot;, the variables (in the form of <code>$VARIABLE</code> or `${VARIABLE}) in the configuration files will be replaced with the values from corresponding environment variables before they are fed to the Kubernetes management API. This allows you to dynamically update the configurations according to each Jenkins task, for example, using the Jenkins build number as the image tag to be pulled.</p></li><li><p>If your Kubernetes resources being deployed need to pull images from private registry, you can click the &quot;Docker Container Registry Credentials / Kubernetes Secrets...&quot; button and configure all the required registry credentials.</p><ul><li><p>Kubernetes Namespace for Secret: the namespace in which the secrets will be created with the credentials configured below. By default this will be <code>default</code>.</p></li><li><p>Secret Name: the name of the secret that will be generated or updated if exists. If left blank, a unique name will be generated. The name will be exposed as environment variable <code>KUBERNETES_SECRET_NAME</code> and you may reference it in your configuration with the &quot;Enable Variable Substitution in Config&quot; option turned on.</p><div class="highlight highlight-source-yaml"><pre><span class="pl-ent" style="color: rgb(34,134,58);">apiVersion</span>: <span class="pl-s" style="color: rgb(3,47,98);">extensions/v1beta1</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">kind</span>: <span class="pl-s" style="color: rgb(3,47,98);">Deployment</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">metadata</span>:
+  <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-deployment</span>
+<span class="pl-ent" style="color: rgb(34,134,58);">spec</span>:
+  <span class="pl-ent" style="color: rgb(34,134,58);">replicas</span>: <span class="pl-c1" style="color: rgb(0,92,197);">1</span>
+  <span class="pl-ent" style="color: rgb(34,134,58);">template</span>:
+    <span class="pl-ent" style="color: rgb(34,134,58);">metadata</span>:
+      <span class="pl-ent" style="color: rgb(34,134,58);">labels</span>:
+        <span class="pl-ent" style="color: rgb(34,134,58);">app</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-app</span>
+    <span class="pl-ent" style="color: rgb(34,134,58);">spec</span>:
+      <span class="pl-ent" style="color: rgb(34,134,58);">containers</span>:
+      - <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">sample-k8s-app-container</span>
+        <span class="pl-ent" style="color: rgb(34,134,58);">image</span>: <span class="pl-s" style="color: rgb(3,47,98);">&lt;username or registry URL&gt;/&lt;image_name&gt;:&lt;tag(maybe $BUILD_NUMBER)&gt;</span>
+        <span class="pl-ent" style="color: rgb(34,134,58);">ports</span>:
+        - <span class="pl-ent" style="color: rgb(34,134,58);">containerPort</span>: <span class="pl-c1" style="color: rgb(0,92,197);">8080</span>
+      <span class="pl-ent" style="color: rgb(34,134,58);">imagePullSecrets</span>:
+      - <span class="pl-ent" style="color: rgb(34,134,58);">name</span>: <span class="pl-s" style="color: rgb(3,47,98);">$KUBERNETES_SECRET_NAME</span></pre></div></li><li><p>Docker Container Registry Credentials: add one entry for each of the required private registry. If it is DockerHub, you may left the &quot;Docker registry URL&quot; as blank. Add or select the &quot;Registry credentials&quot; with type &quot;Username with password&quot;.</p></li></ul><p>You may also prepare the <a href="https://kubernetes.io/docs/concepts/configuration/secret/" class="external-link" rel="nofollow">Kubernetes Secrets</a> beforehand. and reference the secret from your resource configurations directly.</p></li></ol><h2 id="KubernetesContinuousDeployPlugin-ResourceTypes">Resource Types</h2><p>The following resource types are supported by the plugin:</p><ul><li>Deployment</li><li>Replica Set</li><li>Replication Controller - No rolling-update support. If that's required, consider using <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment" class="external-link" rel="nofollow">Deployment</a>.</li><li>Daemon Set</li><li>Pod</li><li>Job</li><li>Service</li><li>Ingress</li><li>Secret - The plugin also provides secrets configuration.</li></ul><p>In the context of continuous integration &amp; continuous deployment, only those resources that need to be updated regularly should be placed in Jenkins deployment. So most of the time the plugin should mainly deal with resources of type <span>Deployment</span>.</p><h2 id="KubernetesContinuousDeployPlugin-PipelineSupport">Pipeline Support</h2><p>The kubernetes-cd plugin provides function <code>kubernetesDeploy</code> for <a href="https://jenkins.io/doc/book/pipeline/" class="external-link" rel="nofollow">Jenkins Pipeline</a> support. You can go to the <em>Snippet Generator</em> page under <em>Pipeline Syntax</em> section in Jenkins, select &quot;kubernetesDeploy: Deploy to Kubernetes&quot; from the &quot;Sample Step&quot; dropdown, and it will provide you configuration interface for the plugin. After filling the entries and click &quot;Generate Pipeline Script&quot; button, you will get the sample scripts which can be used in your Pipeline definition.</p><div class="highlight highlight-source-groovy"><pre>kubernetesDeploy(<span class="pl-c1" style="color: rgb(0,92,197);">kubeconfigId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>kubeconfig-credentials-id<span class="pl-pds">'</span></span>,               <span class="pl-c" style="color: rgb(106,115,125);"><span class="pl-c">//</span> REQUIRED</span>
+
+                 <span class="pl-c1" style="color: rgb(0,92,197);">configs</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;ant-glob-pattern-for-resource-config-paths&gt;<span class="pl-pds">'</span></span>, <span class="pl-c" style="color: rgb(106,115,125);"><span class="pl-c">//</span> REQUIRED</span>
+                 <span class="pl-c1" style="color: rgb(0,92,197);">enableConfigSubstitution</span>: <span class="pl-c1" style="color: rgb(0,92,197);">false</span>,
+        
+                 <span class="pl-c1" style="color: rgb(0,92,197);">secretNamespace</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-namespace&gt;<span class="pl-pds">'</span></span>,
+                 <span class="pl-c1" style="color: rgb(0,92,197);">secretName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-name&gt;<span class="pl-pds">'</span></span>,
+                 <span class="pl-c1" style="color: rgb(0,92,197);">dockerCredentials</span>: [
+                        [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credentials-id-for-docker-hub&gt;<span class="pl-pds">'</span></span>],
+                        [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credentials-id-for-other-private-registry&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">url</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;registry-url&gt;<span class="pl-pds">'</span></span>],
+                 ]
+)</pre></div><p>The parameters can be divided into the following groups, which you may configure as required.</p><ul><li><p>Kubeconfig</p><p>The credentials ID for the kubeconfig stored in Jenkins credentials store.</p></li><li><p>Basic config for the deployments.</p><div class="highlight highlight-source-groovy"><pre>kubernetesDeploy(
+        <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+        <span class="pl-c1" style="color: rgb(0,92,197);">configs</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;ant-glob-pattern-for-resource-config-paths&gt;<span class="pl-pds">'</span></span>,
+        <span class="pl-c1" style="color: rgb(0,92,197);">enableConfigSubstitution</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>,
+        <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+)</pre></div><ul><li><code>enableConfigSubstitution</code> defaults to <code>true</code></li></ul></li><li><p>Docker Container Registry Credentials / Kubernetes Secrets</p><div class="highlight highlight-source-groovy"><pre>kubernetesDeploy(
+        <span class="pl-k" style="color: rgb(215,58,73);">..</span>.
+        <span class="pl-c1" style="color: rgb(0,92,197);">secretNamespace</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-namespace&gt;<span class="pl-pds">'</span></span>,
+        <span class="pl-c1" style="color: rgb(0,92,197);">secretName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;secret-name&gt;<span class="pl-pds">'</span></span>,
+        <span class="pl-c1" style="color: rgb(0,92,197);">dockerCredentials</span>: [
+            [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credentials-id-for-docker-hub&gt;<span class="pl-pds">'</span></span>],
+            [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credentials-id-for-other-private-registry&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">url</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;registry-url&gt;<span class="pl-pds">'</span></span>],
+        ],
+)</pre></div><ul><li><code>secretNamespace</code> will be <code>default</code> if omitted.</li><li>A unique <code>secretName</code> will be generated if omitted, and you need to reference it with variable<code>$KUBERNETES_SECRET_NAME</code> in your resource configurations.</li></ul></li></ul><h2 id="KubernetesContinuousDeployPlugin-KubeconfigBinding">Kubeconfig Binding</h2><p>When the kubeconfig is prepared in the Jenkins credentials store, you can utilize the <a href="https://plugins.jenkins.io/credentials-binding" rel="nofollow" class="external-link">Credentials Binding</a> plugin to bind the kubeconfig contents to a variable. You can save the contents in the variable to a local file, which can be used to invoke the <code>kubectl</code> command (with the <code>--kubeconfig</code> argument).</p><p><a href="https://github.com/jenkinsci/kubernetes-cd-plugin/blob/dev/img/binding.png" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" alt="Kubeconfig Contents Binding" src="https://github.com/jenkinsci/kubernetes-cd-plugin/raw/dev/img/binding.png" data-image-src="https://github.com/jenkinsci/kubernetes-cd-plugin/raw/dev/img/binding.png"></span></a></p><p>With pipeline:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">withCredentials([kubeconfigContent(credentialsId: &#39;acs-ssh-folder&#39;, variable: &#39;KUBECONFIG_CONTENT&#39;)]) {
+    sh &#39;&#39;&#39;echo &quot;$KUBECONFIG_CONTENT&quot; &gt; kubeconfig &amp;&amp; cat kubeconfig &amp;&amp; rm kubeconfig&#39;&#39;&#39;
+}</pre>
+</div></div><h2 id="KubernetesContinuousDeployPlugin-Data/Telemetry">Data/Telemetry</h2><p>Kubernetes Continuous Deploy Plugin collects usage data and sends it to Microsoft to help improve our products and services. Read our <a href="http://go.microsoft.com/fwlink/?LinkId=521839" class="external-link" rel="nofollow">privacy statement</a> to learn more.</p><p>You can turn off usage data collection in Manage Jenkins -&gt; Configure System -&gt; Azure -&gt; Help make Azure Jenkins plugins better by sending anonymous usage statistics to Azure Application Insights.</p><h2 id="KubernetesContinuousDeployPlugin-Changelog">Changelog</h2><h3 id="KubernetesContinuousDeployPlugin-Version2.1.2,2019-08-29">Version 2.1.2, 2019-08-29</h3><ul><li>Fix ClassNotFoundException for jackson lib</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version2.1.1,2019-08-27">Version 2.1.1, 2019-08-27</h3><ul><li>Enable cascading deletion by default to delete dependents</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version2.1.0,2019-08-19">Version 2.1.0, 2019-08-19</h3><ul><li>Support deleting resources</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version2.0.1,2019-08-14">Version 2.0.1, 2019-08-14</h3><ul><li>Init supported models when loading clientWrapper</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version2.0.0,2019-08-07">Version 2.0.0, 2019-08-07</h3><ul><li>Change kubernetes sdk to the official one</li><li>Make resources compatible with several api versions</li><li>Support more resource types: StatefulSets, Network policy, Persistent Volume, Persistent Volume Claim</li><li>Enable incremental builds for PRs</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version1.0.0,2019-05-31">Version 1.0.0, 2019-05-31</h3><p><strong>This version forces updating Kubernetes yaml files' api version</strong><span style="color: rgb(204,120,50);"><br/></span></p><ul><li>Bump Jenkins version to 2.60.3</li><li>Upgrade kubernetes-client sdk version to 4.0.4</li><li>Add support for CronJob and HPA</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.2.3,2018-06-08">Version 0.2.3, 2018-06-08</h3><ul><li>Documentation and AI fix</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.2.2,2018-05-18">Version 0.2.2, 2018-05-18</h3><ul><li>Support for namespace creation and update</li><li>Fix EnvironmentInjector serialization (JENKINS-51147)</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.2.1,2018-04-20">Version 0.2.1, 2018-04-20</h3><ul><li>Fix scoped SSH credentials lookup in kubeconfig credentials (#26)</li><li>Fix Kubernetes deploy configuration verification (#29)</li><li>Add support for ConfigMap (#30)</li><li>Fix serialization of 3rd party exceptions thrown from slave (JENKINS-50760)</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.2.0,2018-04-03">Version 0.2.0, 2018-04-03</h3><ul><li><p>Configure kubeconfig in the Jenkins credentials store instead of the job configuration (JENKINS-49781)</p><p>The original &quot;Kubernetes Cluster Credentials&quot; configuration is deprecated.</p></li><li><p>Upgrade Kubernetes Client to 3.1.10</p></li><li><p>Use scoped credentials lookup (#19)</p></li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.5,2018-02-22">Version 0.1.5, 2018-02-22</h3><ul><li>Abort build on error (JENKINS-48662 / #12)</li><li>Update Kubernetes Client to 3.1.7</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.4,2017-11-07"><span style="color: rgb(210,73,57);">Version 0.1.4, 2017-11-07</span></h3><ul><li>Fix master node SSH password login on Jenkins slave</li><li>Add Third Party Notice</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.3,2017-10-10"><span style="color: rgb(210,73,57);">Version 0.1.3, 2017-10-10</span></h3><ul><li>Remove runtime licenses</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.2,2017-09-29">Version 0.1.2, 2017-09-29</h3><ul><li><div>Fixed a stream closed issue when variable substitution is disabled</div></li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.1,2017-09-28">Version 0.1.1, 2017-09-28</h3><ul><li>Fixed an issue that plugin crashes on fastxml load</li></ul><h3 id="KubernetesContinuousDeployPlugin-Version0.1.0,2017-09-27">Version 0.1.0, 2017-09-27</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:31</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

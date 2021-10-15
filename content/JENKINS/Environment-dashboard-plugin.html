@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Environment dashboard plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Environment dashboard plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vipinsthename)</span>, last modified by <span class='editor'> Unknown User (momin)</span> on Apr 05, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Environment Dashboard <a href="https://plugins.jenkins.io/environment-dashboard" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<h1 id="Environmentdashboardplugin-Summary">Summary</h1><p><span style="color: rgb(255,0,0);"><strong>**Note - Enable Auto Refresh at the top right of the view so that the view is auto updated.</strong></span></p>This Jenkins plugin creates a custom view which can be used as a dashboard to display which code release versions have been deployed to which test and production environments (or devices).<p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border image-center" src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/config.png" data-image-src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/config.png"></span></p><p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border image-center" src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard_config.png" data-image-src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard_config.png"></span></p><p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border image-center" src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard.png" data-image-src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard.png"></span></p><p>You can also click on the environment name to get a historical view of the deployments.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource confluence-content-image-border" src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard_history.png" data-image-src="https://raw.githubusercontent.com/vipinsthename/environment-dashboard/master/img/dashboard_history.png"></span></p><h2 id="Environmentdashboardplugin-ExampleSetup">Example Set up</h2><p>You have 3 software components:</p><ul><li>UI</li><li>Web Application and API</li><li>Database</li></ul><p>Each component has a corresponding Jenkins &quot;build and package&quot; job that creates new environment agnostic build packages and puts the code into something like Nexus waiting for someone to pick it up and deploy it.</p><p>You have 4 environments</p><ul><li>CI Test</li><li>Performance Test</li><li>Pre-production</li><li>Production</li></ul><p>You have Jenkins jobs for deploying build packages to your environments.</p><p>You find it hard to track which version of each application is currently deployed to.</p><p>You configure your deployment jobs to publish a record of each deployment to this plugin.</p><p>You create a view which displays a matrix with rows for your 3 applications, columns for your environments and the intersections with the deployed code version.</p><h2 id="Environmentdashboardplugin-Otherinformation">Other information</h2><ul><li>Report any bugs on the <a href="https://github.com/vipinsthename/environment-dashboard/issues" class="external-link" rel="nofollow">github page.</a></li></ul><h2 id="Environmentdashboardplugin-Configuration">Configuration</h2><p>After installing the plugin, you'll get a new option in the Build Environment section of a job configuration page. If your job deploys to an environment, check the box and complete the form using the context sensitive help.</p><p>You can also specify how long to retain the dashboard data, the default is set to 30 days. Any data older than 30 days from the current time is automatically deleted.</p><p>Once you have run at least one job with a populated Details for Environment dashboard section, you now have enough data to generate a dashboard. On the Jenkins home page, click the + to create a new view and create a view. If you leave all settings blank, you will see the deployments of all components into all environments. You can also limit the deployment history shown when you click on the environment name on the dashboard. The default is last 10 deploys.</p><h2 id="Environmentdashboardplugin-JobDSL">Job DSL</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">environmentDashboard {
+    environmentName(String environmentName)
+    componentName(String componentName)
+    buildNumber(String buildNumber)
+    buildJob(String buildJob)
+    packageName(String packageName)
+    addColumns(boolean addColumns)
+    columns(String columnName, String contents)
+}</pre>
+</div></div><pre>The groovy DSL can be used in conjunction with Job DSL plugin to provide a definition of environment dashboard section within a job.
+
+Examples</pre><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">job(&#39;example-1&#39;) {
+    wrappers {
+        environmentDashboard {
+            environmentName(&#39;Environment-1&#39;)
+            componentName(&#39;WebApp-1&#39;)
+            buildNumber(&#39;Version-1&#39;)
+          }
+        }
+}
+
+// Add custom columns
+job(&#39;example-2&#39;) {
+    wrappers {
+        environmentDashboard {
+            environmentName(&#39;Environment-1&#39;)
+            componentName(&#39;WebApp-1&#39;)
+            buildNumber(&#39;Version-1&#39;)
+            addColumns(true)
+            column(&#39;Col1&#39;, &#39;Column 1 contents&#39;)
+            column(&#39;Col2&#39;, &#39;Column 2 contents&#39;)
+          }
+        }
+}</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:22</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

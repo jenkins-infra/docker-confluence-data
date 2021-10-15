@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Splunk Plugin for Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Splunk Plugin for Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (fengxx)</span>, last modified on Aug 20, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Splunk <a href="https://plugins.jenkins.io/splunk-devops" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-08-28/#SECURITY-1294" class="external-link" rel="nofollow">Sandbox Bypass</a></li>
+</ul>
+
+</div></div>
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="200" src="attachments/100697275/100859977.png" data-image-src="attachments/100697275/100859977.png" data-unresolved-comment-count="0" data-linked-resource-id="100859977" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-logo_0.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p>Splunk plugin for Jenkins provides deep insights into your Jenkins master and slave infrastructure, job and build details such as console logs, status, artifacts, and an incredibly efficient way to analyze test results.<p><br/>The plugin is used together with a <a href="https://splunkbase.splunk.com/app/3332" class="external-link" rel="nofollow">Splunk App for Jenkins</a> that provides out-of-the-box dashboards and search capabilities to enable organizations to run a high performing Jenkins cluster and bring operational intelligence into the software development life cycle.</p><h2 id="SplunkPluginforJenkins-SplunkPluginforJenkins">Splunk Plugin for Jenkins</h2><h3 id="SplunkPluginforJenkins-1.ConfigureSplunkServer">1. Configure Splunk Server</h3><ul><li>Go to https://&lt;jenkins-url&gt;/configure</li><li>Enter Hostname, Port, and Token<ul><li>For Splunk cloud user, the host name is something like http-inputs-xx.splunkcloud.com or http-inputs-xx.cloud.splunk.com, port is 443</li><li>For Splunk enterprise user, the host name is the indexer host name, and port is 8088 by default</li></ul></li><li>Check &quot;Raw Events Supported&quot; if you are using Splunk version 6.3.1511 or later</li><li>SSL is enabled by default in Splunk, it will protect the data transferred on network.</li><li>Click &quot;Test Connection&quot; to verify the setup</li><li>Check &quot;Enable&quot; and Save</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100697275/103677957.png" data-image-src="attachments/100697275/103677957.png" data-unresolved-comment-count="0" data-linked-resource-id="103677957" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunkins_token.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p>         </p><h3 id="SplunkPluginforJenkins-2.ConfigureMetadata">2. Configure Metadata</h3><p>Specify index, host, sourcetype for the various events. Metadata can be configured to collect as little or as much Jenkins information as you need and sent to Splunk for analysis. </p><ul><li>index is a data repository in Splunk, you can set a different data retention policy and access privileges for each index in Splunk. You need create the index in Splunk manually, the plugin will not create any index.</li><li>sourcetype is used by Splunk to determine how incoming data is formatted, see also <a href="http://docs.splunk.com/Documentation/Splunk/6.4.3/Data/Whysourcetypesmatter" class="external-link" rel="nofollow">Why sourcetype matters</a></li><li>host is used to identify which Jenkins master is the source of the data</li></ul><p>There are 7 types of events which can be customized</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td class="confluenceTd"><p><strong>Build Report</strong></p></td><td class="confluenceTd"><p>Junit or other Reports sent by calling &quot;send(message)&quot; DSL script</p></td></tr><tr><td class="confluenceTd"><p><strong>Build Event</strong></p></td><td class="confluenceTd"><p>Sent when job are started and completed</p></td></tr><tr><td class="confluenceTd"><p><strong>Queue Information</strong></p></td><td class="confluenceTd"><p>Basic queue information and Jenkins health metrics, sent when queue get updated and every 45 seconds by default. <br class="atl-forced-newline"/>You can add &quot;-Dcom.splunk.splunkjenkins.queueMonitorSeconds=N&quot; to Jenkins start parameters to adjust the timing</p></td></tr><tr><td class="confluenceTd"><p><strong>Console Log</strong></p></td><td class="confluenceTd"><p>Build console log, e.g. job/abc/123/console, slave log and Jenkins master log (jenkins.log)</p></td></tr><tr><td class="confluenceTd"><p><strong>Log File</strong></p></td><td class="confluenceTd"><p>Artifact contents, send by calling &quot;archive(includes)&quot; DSL script</p></td></tr><tr><td class="confluenceTd"><p><strong>Slave Information</strong></p></td><td class="confluenceTd"><p>The slave(agent) health metrics, sent every 8 minutes by default. You can add &quot;-Dcom.splunk.splunkjenkins.slaveMonitorMinutes=N&quot; to Jenkins start parameters to adjust the timing</p></td></tr><tr><td class="confluenceTd"><p><strong>Jenkins Config</strong></p></td><td class="confluenceTd"><p>The contents of Jenkins configuration items, e.g. config.xml, sent when the config file get updated.</p></td></tr></tbody></table></div><p>you can customize the index, sourcetype in the &quot;Custom Metadata&quot; section.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100697275/103677960.png" data-image-src="attachments/100697275/103677960.png" data-unresolved-comment-count="0" data-linked-resource-id="103677960" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunkins_metadata.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><h4 id="SplunkPluginforJenkins-2.1.MetadataconfigurationforSplunkAppforJenkins">2.1. Metadata configuration for <a href="https://splunkbase.splunk.com/app/3332" class="external-link" rel="nofollow">Splunk App for Jenkins</a></h4><ul><li>For Splunk version 6.5 or later, it is recommended to use the plugin's default config</li><li>For Splunk 6.3.x or 6.4.x, please adjust the default sourcetype to json:jenkins:old (please remove it if Splunk get upgraded to latest version otherwise data will be extracted twice)</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/100697275/105545731.png" data-image-src="attachments/100697275/105545731.png" data-unresolved-comment-count="0" data-linked-resource-id="105545731" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="json_jenkins_sourcetype_old.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><h3 id="SplunkPluginforJenkins-3.CustomizeTheJobDataSenttoSplunk">3. Customize The Job Data Sent to Splunk</h3><p>In the <span style="color: rgb(0,0,0);"><strong>Advanced</strong></span> configuration section, you can customize the post data using groovy DSL. <br/>While the default settings should suffice for most Jenkins users, the Advanced configuration section allows you to use groovy DSL to customize the data sent to Splunk.</p><p>The groovy script can use the variable <em><strong>splunkins</strong></em>, which provides access to the following objects and methods:</p><ul><li><code>send(Object message)</code> will send the information to splunk</li><li><code>getBuildEvent()</code> will return metadata about the build, such as build result, build URL, user who triggered the build</li><li><code>getJunitReport(int pageSize)</code> will return a list of test results, which contains total, passes, failures, skips, time and testcase of type List&lt;hudson.tasks.junit.CaseResult&gt;</li><li><code>getJunitReport(int pageSize, List&lt;String&gt; ignoredTestResultActions)</code> will return a list of test results except test formats specified in <span>ignoredTestResultActions</span></li><li><code>sendCoverageReport(pageSize)</code> send coverage, each event contains max pageSize metrics</li><li><code>getJunitReport()</code> is an alias of <code>getJunitReport(Integer.MAX_VALUE)</code></li><li><code>archive(String includes, String excludes, boolean uploadFromSlave, String fileSizeLimit)</code> send log file to splunk</li><li><code>archive(String includes)</code> is an alias of <code>archive(includes, null, false, &quot;&quot;)</code></li><li><code>getAction(Class type)</code> is an alias of <code>build.getAction(type)</code></li><li><code>getActionByClassName(String className)</code> same as <code>getAction(Class type)</code> but no need to import the class before use</li><li><code>hasPublisherName(String className)</code> check whether the publisher is configured for the build (applied to AbstractBuild only)</li><li>Here is the default settings for post job data processing (since v.1.5.0)</li></ul><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">//send job metadata and junit reports with page size set to 50 (each event contains max 50 test cases)
+splunkins.sendTestReport(50)
+//send coverage, each event contains max 50 class metrics
+splunkins.sendCoverageReport(50)
+//send all logs from workspace to splunk, with each file size limits to 10MB
+splunkins.archive(&quot;**/*.log&quot;, null, false, &quot;10MB&quot;)
+</pre>
+</div></div><h4 id="SplunkPluginforJenkins-4.Customizelogfilesatjoblevel(optional)">4. Customize log files at job level (optional)</h4><p>Jenkins builds can produce many artifacts which can contain useful build information. The plugin can be configured globally (step #3) to collect all artifacts using the archive command. You can also specify what artifacts to send to Splunk at the job level by adding Splunk's post-build action 'Send data to Splunk'</p><ul><li>Add a &quot;post-build action&quot; called &quot;Send data to Splunk&quot;</li><li>Enter an ant-style pattern matching string for your junit xml collection</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100697275/100859971.png" data-image-src="attachments/100697275/100859971.png" data-unresolved-comment-count="0" data-linked-resource-id="100859971" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk_for_jenkins_post_job.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><h4 id="SplunkPluginforJenkins-5.Systemproperties(optional)">5. System properties (optional)</h4><p>System properties are defined by passing -Dproperty=value to the java command line to start Jenkins. Make sure to pass all of these arguments before the -jar argument, otherwise they will be ignored. Example: <code>java -Dsplunkins.buffer=4096 -jar jenkins.war</code></p><div class="table-wrap"><table class="relative-table wrapped confluenceTable" style="width: 94.8699%;"><colgroup><col style="width: 28.7059%;"/><col style="width: 24.0%;"/><col style="width: 47.2941%;"/></colgroup><thead><tr><th class="confluenceTh">Property</th><th class="confluenceTh">Default Value</th><th class="confluenceTh">Note</th></tr></thead><tbody><tr><td class="confluenceTd">splunkins.buffer</td><td class="confluenceTd">4096</td><td class="confluenceTd">console log buffer size</td></tr><tr><td class="confluenceTd">com.splunk.splunkjenkins.JdkSplunkLogHandler.level</td><td class="confluenceTd">INFO</td><td class="confluenceTd">log message levels lower than this will not be send to splunk</td></tr><tr><td class="confluenceTd">splunkins.debugLogBatchSize</td><td class="confluenceTd">128</td><td class="confluenceTd">batch size for sending verbose level (FINE,FINER,FINEST) log record</td></tr><tr><td class="confluenceTd">splunkins.consoleLogFilterPattern</td><td class="confluenceTd">(empty)</td><td class="confluenceTd">regular expression for 'interesting' build. if it is set, only send console log to splunk for the job whose build url matches the pattern</td></tr><tr><td class="confluenceTd">splunkins.ignoreConfigChangePattern</td><td class="confluenceTd">(queue|nodeMonitors|UpdateCenter|global-build-stats|fingerprint|build)(.*?xml)</td><td class="confluenceTd">regular expression for ignoring config file changes</td></tr></tbody></table></div><p><br/></p><hr/><h4 id="SplunkPluginforJenkins-SplunkDashboardsforJenkins"><span style="color: rgb(210,73,57);"><strong>Splunk Dashboards for Jenkins</strong></span></h4><p>You can download and install the Splunk App for Jenkins from <a href="https://splunkbase.splunk.com/app/3332" class="external-link" rel="nofollow">https://splunkbase.splunk.com/app/3332</a></p><p>Once installed, the Splunk App will use the data being sent by the Splunk plugin for Jenkins and show various dashboards and search capabilities. Here are some of the key features</p><p><strong>Overview</strong> - Visualize multiple masters and associated slaves in a single page. View build status trends and be able to drill down and get details information about any build.</p><p><strong>Build Analysis</strong> - Easily find any Jenkins build using a variety of easy to use filters. View build summary or drill down to see build status trends, build time and queue time analysis, tests pass/fail trends, test runtime distribution, and console logs couple with Splunk's powerful search interface.</p><p><strong>Test Results</strong> - If you are a test engineer and spend countless hours looking at test results in Jenkins, you will love this feature. Test Results shows all the failing tests with stack traces, flags regression failures, groups test failures by errors, captures Jenkin's environment variables, and provides nifty filters to find tests with long run times, particular errors, testsuites, etc.</p><p><strong>Jenkins Health</strong> - Splunk Jenkins Apps captures Jenkins internal JVM information as well as keys metrics like queue size, executors and slaves stats, Jenkins master logs, and Jenkins slave stats. All this information is captured in real-time, allowing you to quickly discover hard to find issues and fix them before they become a bottleneck for development teams. No more ssh-ing into Jenkins systems to find issues.</p><p><strong>Jenkins Slaves</strong> - Analyze all activity on a particular slave. View builds executed on a slave, view real-time slave logs, build activity across all slaves, and check connection history to find out unstable Jenkins slaves. This feature is extremely helpful in identifying problematic components in a Jenkins cluster and optimizing your team's throughput.</p><p><strong>Audit Trail</strong> - Audit trail feature allows you to see who has logged into your Jenkins system and done any activity like starting/aborting/changing jobs. You can also see what configs have been changed by some user and can view the config xml directly in Splunk. This feature is particularly useful for organization with security and compliance use cases. </p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859983.png" data-image-src="attachments/100697275/100859983.png" data-unresolved-comment-count="0" data-linked-resource-id="100859983" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screenshot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859984.png" data-image-src="attachments/100697275/100859984.png" data-unresolved-comment-count="0" data-linked-resource-id="100859984" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-jenkins-slave-connection.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="900" src="attachments/100697275/100859985.png" data-image-src="attachments/100697275/100859985.png" data-unresolved-comment-count="0" data-linked-resource-id="100859985" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-jenkins-health.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859986.png" data-image-src="attachments/100697275/100859986.png" data-unresolved-comment-count="0" data-linked-resource-id="100859986" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-build-analysis-trends.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859987.png" data-image-src="attachments/100697275/100859987.png" data-unresolved-comment-count="0" data-linked-resource-id="100859987" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-test-trends.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859988.png" data-image-src="attachments/100697275/100859988.png" data-unresolved-comment-count="0" data-linked-resource-id="100859988" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-build-analysis-logs.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="800" src="attachments/100697275/100859989.png" data-image-src="attachments/100697275/100859989.png" data-unresolved-comment-count="0" data-linked-resource-id="100859989" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="splunk-test-results-1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100697275" data-linked-resource-container-version="81"></span></p><h2 id="SplunkPluginforJenkins-ToContribute">To Contribute</h2><ul><li>clone the repo and update code</li><li>start splunk, you can get a free trail version from <a href="https://splunk.com/" class="external-link" rel="nofollow">Splunk</a></li><li>run <code>$ mvn clean verify -Dsplunk-host=localhost -Dsplunk-username=admin -Dsplunk-passwd=changeme</code> to run tests using local splunk instance.</li><li>send pull requests</li></ul><h2 id="SplunkPluginforJenkins-DockerDemoImage">Docker Demo Image</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">curl -s -L https://raw.githubusercontent.com/fengxx/docker-splunk-app-jenkins/master/demo.sh | sh
+</pre>
+</div></div><h2 id="SplunkPluginforJenkins-FAQ">FAQ</h2><h3 id="SplunkPluginforJenkins-HowcanIsendhistoricaldatapriortothetimeplugingetinstalled">How can I send historical data prior to the time plugin get installed</h3><p>Access &lt;jenkins_url&gt;/script, and execute the groovy code (update the time range if needed).</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">def dataParser=new java.text.SimpleDateFormat(&quot;yyyy-MMM-dd HH:mm&quot;)
+def startTime=0
+def endTime=dataParser.parse(&quot;2016-OCT-26 13:24&quot;).getTime()
+def archiver=new com.splunk.splunkjenkins.utils.BuildInfoArchiver()
+archiver.run(startTime, endTime)
+</pre>
+</div></div><h3 id="SplunkPluginforJenkins-Igot&quot;Serverisbusy,maybecausedbyblockedqueue&quot;,whatcanIdo">I got &quot;Server is busy, maybe caused by blocked queue&quot;, what can I do</h3><p>Please try below options</p><p>a) Adjust splunk queue size to a larger value, such as 5MB. Edit SPLUNK_HOME/etc/system/local/server.conf and add</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">[queue]
+maxSize = 5MB</pre>
+</div></div><p>b) Adjust console text/log file buffer size, such as 10KB, Add below line to Jenkins startup script</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">-Dsplunkins.buffer=10240</pre>
+</div></div><h3 id="SplunkPluginforJenkins-Iamusingupstream/downstreamjobs,howcanIconsolidatethetestresultstoroottriggerjob?">I am using upstream/downstream jobs, how can I consolidate the test results to root trigger job?</h3><p>You can use &quot;<span style="color: rgb(128,128,128);">Customize Event Processing Script&quot; </span></p><div id="expander-1318187536" class="expand-container"><div id="expander-control-1318187536" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Click here to expand...</span></div><div id="expander-content-1318187536" class="expand-content"><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">/**
+ * Transform job metadata before sending to splunk
+ * This script is configured in Jenkins-&gt;Configure System-&gt;Splunk for Jenkins Configuration-&gt;Advanced
+ *  -&gt;Customize Event Processing Command
+ */
+
+
+import groovy.json.JsonSlurperClassic
+import hudson.model.*
+import com.splunk.splunkjenkins.model.CoverageMetricsAdapter
+import com.splunk.splunkjenkins.utils.LogEventHelper
+import org.apache.commons.codec.digest.DigestUtils
+
+/**
+ * @param run Jenkins job Run
+ * @return the upstream job url and build number
+ */
+def getUpStreamBuild(Run build) {
+    for (CauseAction action : build.getActions(CauseAction.class)) {
+        Cause.UpstreamCause upstreamCause = action.findCause(Cause.UpstreamCause.class)
+        if (upstreamCause != null) {
+            return [upstreamCause.upstreamUrl, upstreamCause.upstreamBuild, upstreamCause.upstreamProject]
+        }
+    }
+    return [build.parent.url, build.number, build.parent.fullName]
+}
+
+def isRebuild(String cause) {
+    return cause?.contains(&quot;Rebuilds build&quot;)
+}
+
+
+def sendReport() {
+    //junit report with page size set to 50, each page has maximum 50 test cases.
+    //need ignore AggregatedTestResultAction since we already send downstream results
+    def junitResults = splunkins.getJunitReport(50, [&quot;hudson.tasks.test.AggregatedTestResultAction&quot;])
+    if (!junitResults) {
+        return
+    }
+
+    def build = splunkins.build
+    def metadata = LogEventHelper.getBuildVariables(build)
+    def upStream = getUpStreamBuild(build)
+    def buildEnv = LogEventHelper.getEnvironment(build)
+
+    metadata[&quot;root_trigger&quot;] = upStream[0]
+    metadata[&quot;root_trigger_build_no&quot;] = upStream[1]
+    def causes = LogEventHelper.getBuildCauses(build)
+    def rebuildFlag = isRebuild(causes)
+    //end of metadata
+    def event = [
+            &quot;job_url&quot;      : upStream[0],
+            &quot;event_tag&quot;    : &quot;tests&quot;,
+            &quot;metadata&quot;     : metadata,
+            &quot;build_number&quot; : upStream[1],
+            &quot;user&quot;         : LogEventHelper.getTriggerUserName(build),
+            &quot;job_name&quot;     : upStream[2],
+            &quot;original_link&quot;: build.url,
+            &quot;rebuild&quot;      : rebuildFlag,
+            &quot;trigger_by&quot;   : causes
+    ]
+
+    if (junitResults &amp;&amp; junitResults[0][&quot;total&quot;] &gt; 0) {
+        junitResults.eachWithIndex { junitResult, idx -&gt;
+            Map pagedEvent = event + [&quot;testsuite&quot;: junitResult, &quot;page_num&quot;: idx + 1]
+            splunkins.send(pagedEvent)
+        }
+    } else {
+        //test result not found
+        def noResultEvent = event + [&quot;event_tag&quot;: &quot;no-tests&quot;, &quot;page_num&quot;: 1]
+        splunkins.send(noResultEvent)
+    }
+    def coverageList = CoverageMetricsAdapter.getReport(build, 200);
+    //send code coverage
+    event[&quot;event_tag&quot;] = &quot;coverage&quot;
+    coverageList.eachWithIndex { coverage, idx -&gt;
+        Map pagedEvent = event + [&quot;coverage&quot;: coverage, &quot;page_num&quot;: idx + 1]
+        splunkins.send(pagedEvent)
+    }
+}
+
+sendReport()
+
+
+</pre>
+</div></div></div></div><h2 id="SplunkPluginforJenkins-Changelog"><br/> <br/>Changelog</h2><h3 id="SplunkPluginforJenkins-1.8.1(August20,2019)">1.8.1 (August 20, 2019) </h3><ul><li>fix JENKINS-58866 Splunk plugin not sending json files</li></ul><h3 id="SplunkPluginforJenkins-1.8.0(August14,2019)">1.8.0 (August 14, 2019) </h3><ul><li>fix groovy synatx validation security issue</li><li>update minium jenkins version requirement to 2.60.3, script-security to 1.61</li></ul><h3 id="SplunkPluginforJenkins-1.7.4(June14,2019)">1.7.4 (June 14, 2019) </h3><ul><li>fix disabled check issue for jenkins pipeline step sendSplunkConsoleLog</li></ul><h3 id="SplunkPluginforJenkins-1.7.3(May28,2019)">1.7.3 (May 28, 2019) </h3><ul><li>Support RFC 6265 compliant cookie policy thanks to <a href="https://github.com/krakan" class="external-link" rel="nofollow">Jonas Linde</a></li><li>Add splunkins.verifySSL property to toggle SSL certification verification on or off</li></ul><h3 id="SplunkPluginforJenkins-1.7.2(May20,2019)">1.7.2 (May 20, 2019) </h3><ul><li>JENKINS-57410 connection leak after clicking 'Test Connection' button</li><li>respect TestNG is-config settings (beforeClass, beforeMethod) for counting test methods</li><li>add splunkins.allowConsoleLogPattern and splunkins.ignoreConfigChangePattern</li></ul><h3 id="SplunkPluginforJenkins-1.7.1(Dec7,2018)">1.7.1 (Dec 7, 2018)  </h3><ul><li><p>truncate single line text at 100000 (a sign of garbage data) to get in align with splunk source type text:jenkins, it can be adjusted via splunkins.lineTruncate system property</p></li><li>add user authenticated log information</li></ul><h3 id="SplunkPluginforJenkins-1.7.0(August20,2018)">1.7.0 (August 20, 2018)  </h3><ul><li>support multiple http event collector(HEC) hosts which are separated by comma</li><li>optimize event congestion handling</li><li>allow garbage collector to release unsent log under memory demand, to prevent OOM</li><li>allow user to adjust log queue size via -Dcom.splunk.splunkjenkins.utils.SplunkLogService.queueSize=x</li><li>add LogConsumer thread alive check</li><li>prefer tls 1.2</li></ul><p><br/></p><div id="expander-252870569" class="expand-container"><div id="expander-control-252870569" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Older versions...</span></div><div id="expander-content-252870569" class="expand-content"><h3 id="SplunkPluginforJenkins-1.6.3(Dec1,2017)">1.6.3 (Dec 1, 2017)  </h3><ul><li>fix configuration miration issue for versions prior to 1.5.0</li></ul><h3 id="SplunkPluginforJenkins-1.6.2(Nov28,2017)">1.6.2 (Nov 28, 2017)  </h3><ul><li>defer LogHandler hook registration</li><li>add covered number and total number in addition to percentage for code coverage (index=jenkins event_tag=coverage)</li></ul><h3 id="SplunkPluginforJenkins-1.6.1(Oct15,2017)">1.6.1 (Oct 15, 2017)  </h3><ul><li>remove restricted computer.getDisplayExecutors api call</li><li>add splunkins.buffer property which can be added to jenkins start up parameter (such as -Dsplunkins.buffer=4096) to adjust console log buffer</li></ul><h3 id="SplunkPluginforJenkins-1.6.0(August15,2017)">1.6.0 (August 15, 2017)  </h3><ul><li><p>add splunkins.getJunitReport(int pageSize, List&lt;String&gt; ignoredTestResultActions = null) which allow user to ignore specific test result formats</p></li><li><p>unify junit test results with xunit and cucumber test results</p></li><li><p>defer updateCache operation to JOB_LOADED phase</p></li><li><p>send JVM memory pool usage,  can be searched via</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">index=&quot;jenkins_statistics&quot; event_tag=jvm_memory</pre>
+</div></div></li></ul><h3 id="SplunkPluginforJenkins-1.5.3(July25,2017)">1.5.3 (July 25, 2017)  </h3><ul><li>fix SECURITY-479 (Arbitrary code execution vulnerability in rare circumstances)</li></ul><h3 id="SplunkPluginforJenkins-1.5.2(May22,2017)">1.5.2 (May 22, 2017)  </h3><ul><li>convert Float.NaN or Double.NaN to null</li><li>make sure workspace exists before sending files, thanks to <a href="https://github.com/ctran" class="external-link" rel="nofollow">ctran</a></li><li>fix Log type and allow verbose logging</li></ul><h3 id="SplunkPluginforJenkins-1.5.1(April24,2017)">1.5.1 (April 24, 2017)  </h3><ul><li>Fix log congestion issue when slave launcher generated verbose logs during Jenkins restart phase</li></ul><h3 id="SplunkPluginforJenkins-1.5.0(April16,2017)">1.5.0 (April 16, 2017)  </h3><ul><li>Use SecureGroovyScript to address security issues mentioned on <a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">https://jenkins.io/security/advisory/2017-04-10/</a> . If you hit errors like <br/><pre class="console-output">org.jenkinsci.plugins.scriptsecurity.scripts.UnapprovedUsageException: script not yet approved for use
+</pre><br/>you need go to &quot;Manage Jenkins -&gt; In-process Script Approval&quot;  (JENKINS_URL/scriptApproval) page to review the script and approve it.</li><li>Add support for<a href="https://wiki.jenkins-ci.org/display/JENKINS/JaCoCo+Plugin" class="external-link" rel="nofollow"> jacoco-plugin</a></li></ul><h3 id="SplunkPluginforJenkins-1.4.3(Mar3,2017)">1.4.3 (Mar 3, 2017)</h3><ul><li>Do not extract scm info for job start event, since the info maybe obtained from last build, not current build</li><li>Add null check for Node</li><li>Use job's full name instead of url to get compliance with env.JOB_NAME</li></ul><h3 id="SplunkPluginforJenkins-1.4.2(Jan4,2017)">1.4.2 (Jan 4, 2017)</h3><ul><li>Improve retry handling when Splunk is busy</li></ul><h3 id="SplunkPluginforJenkins-1.4.1(Dec19,2016)">1.4.1 (Dec 19, 2016)</h3><ul><li>Send seperate event for running jobs, used for long running job alert</li></ul><h3 id="SplunkPluginforJenkins-1.4(Dec19,2016)">1.4 (Dec 19, 2016)</h3><ul><li>Support Coverage Report generated by <a href="https://wiki.jenkins-ci.org/display/JENKINS/Clover+Plugin" class="external-link" rel="nofollow">Clover plugin</a> and <a href="https://wiki.jenkins-ci.org/display/JENKINS/Cobertura+Plugin" class="external-link" rel="nofollow">Cobertura plugin</a></li><li>Rewrite the metadata configuration page to improve the readability.</li><li>Shaded org.apache.http package to avoid conflicts with other plugin which is using an older version</li><li>Improve http posting performance by using Gzip.</li></ul><h3 id="SplunkPluginforJenkins-1.3.1(Oct27,2016)">1.3.1 (Oct 27, 2016)</h3><ul><li>Masked Password parameter, send ***</li><li>Do not send whole Environment variable list, only send build parameters.</li><li>Added BuildInfoArchiver to send historical data</li></ul><h3 id="SplunkPluginforJenkins-1.3(Oct19,2016)">1.3 (Oct 19, 2016)</h3><ul><li>Support Test Report generated by <a href="https://wiki.jenkins-ci.org/display/JENKINS/Cucumber+Test+Result+Plugin" class="external-link" rel="nofollow">cucumber-testresult-plugin</a></li><li>FIXED TestNG Summary Display issue</li></ul><h3 id="SplunkPluginforJenkins-1.2(Oct16,2016)">1.2 (Oct 16, 2016)</h3><ul><li>Support Test Report generated by <a href="https://wiki.jenkins-ci.org/display/JENKINS/testng-plugin" class="external-link" rel="nofollow">TestNG plugin</a></li></ul><h3 id="SplunkPluginforJenkins-1.1(Oct14,2016)">1.1 (Oct 14, 2016)</h3><ul><li>Simplify metadata configuration</li><li>Fixed No signature of method: static com.splunk.splunkjenkins.utils.LogEventHelper.sendFiles() is applicable for argument types: (org.jenkinsci.plugins.workflow.job.WorkflowRun ...</li></ul><h3 id="SplunkPluginforJenkins-1.0(Oct8,2016)">1.0 (Oct 8, 2016)</h3><ul><li>Initial release</li></ul></div></div><h3 id="SplunkPluginforJenkins-"><br/><br/></h3>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677955.png">splunk_for_jenkins_config_basic.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859971.png">splunk_for_jenkins_post_job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859973.png">Configure System  Jenkins .png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859975.png">Screen Shot 2016-09-26 at 11.52.10 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859974.png">Screen Shot 2016-09-26 at 11.52.10 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859982.png">jenkins-metadata.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859977.png">splunk-logo_0.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859979.png">Screen Shot 2016-09-26 at 12.04.25 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859978.png">Screen Shot 2016-09-26 at 12.04.25 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859981.png">jenkins-splunk-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859980.png">jenkins-splunk-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859976.png">jenkins-metadata.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859983.png">screenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859984.png">splunk-jenkins-slave-connection.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859985.png">splunk-jenkins-health.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859986.png">splunk-build-analysis-trends.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859987.png">jenkins-test-trends.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859988.png">splunk-build-analysis-logs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859989.png">splunk-test-results-1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/101220355.png">splunk_for_jenkins_simple.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/101220356.png">splunk_plugin_for_splunk_overview.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/101220357.png">splunk_plugin_overview_v1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/101220358.png">splunk_for_plugin_overview_v1_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/101974017.png">splunkins_simple_01.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/100859970.png">splunk_for_jenkins_config_basic.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677956.png">splunk_for_jenkins_metadata.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677958.png">splunkins_token.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677959.png">splunkins_token.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677957.png">splunkins_token.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103677960.png">splunkins_metadata.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103940112.png">Screen Shot 2017-01-16 at 10.47.17 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/103940113.png">source_type_json_6_4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/105545732.png">json_jenkins_sourcetype_old.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/105545731.png">json_jenkins_sourcetype_old.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100697275/143492961.png">Capture.PNG</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:48</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

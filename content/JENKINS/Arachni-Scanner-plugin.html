@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Arachni Scanner plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Arachni Scanner plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (irissmann)</span>, last modified on Sep 05, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>With this plugin you got a very simple integration of the <a href="http://www.arachni-scanner.com/" class="external-link" rel="nofollow">Arachni Security Scanner</a> in your Jenkins jobs. The REST API of the Arachni Security Scanner is used for communication, so a running <a href="https://github.com/Arachni/arachni/wiki/REST-server" class="external-link" rel="nofollow">Arachni REST Server</a> is a prerequisite.</p><h2 id="ArachniScannerplugin-Features:">Features:</h2><ul><li>Starts a new scan on an Arachni Server</li><li>Monitors the scan status every 5 seconds</li><li>Downloads the HTML scan report from Arachni Server</li><li>Scope of the scan is configurable</li><li>Supports Basic Authentication</li><li>Pipeline compatibility</li></ul><h2 id="ArachniScannerplugin-Configurationandusage">Configuration and usage</h2><p>At first configure the URL of your Arachni REST Server under the Jenkins system configuration page.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/138450476/138450922.jpg" data-image-src="attachments/138450476/138450922.jpg" data-unresolved-comment-count="0" data-linked-resource-id="138450922" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="arachni-jenkins-config.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="138450476" data-linked-resource-container-version="11"></span></p><p>If your Arachni Server is secured with Basic Authentication then select the credentials from credentials plugin.</p><p>In your job configuration select the <strong>Arachni Scanner</strong> build step and enter the URL of the site you want to scan. Leave the Checks field blank (or enter a *) to run all checks or specify a comma separated list with the checks to use. Sometimes a scan can takes very long, so you have the option to specify a scope.</p><p>To get the full control over the scan configuration, check the 'Use configuration file' and enter the name of your own configuration file. In the file you can use the full parameter set of Arachni. The settings from the file will be merged with the field settings. If the same parameter is specified in fields and configuration file, the setting from the file wins.</p><p>See the <a href="https://github.com/Arachni/arachni/wiki" class="external-link" rel="nofollow">Wiki page</a> of the Arachni Security Scanner for more information.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/138450476/138450924.jpg" data-image-src="attachments/138450476/138450924.jpg" data-unresolved-comment-count="0" data-linked-resource-id="138450924" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="arachni-job-config.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="138450476" data-linked-resource-container-version="11"></span></p><p>When the job is running the plugin writes the scan status every 5 seconds to the console log until the scan ends. If you abort the job then the scan on the Arachni Server will be also aborted. At last the HTML scan report will be downloaded from the server and stored in the workspace under the filename <strong>arachni-report-html.zip</strong>.</p><h2 id="ArachniScannerplugin-Pipeline">Pipeline</h2><p>Below you find a simple pipeline script to configure the Arachni Scanner Plugin.</p><pre><code>pipeline {
+   agent any
+   stages {
+      stage('Scanning') {
+         steps {
+            arachniScanner checks: '*', scope: [pageLimit: 3], url: 'http://foo:8080', userConfig: [filename: 'myConfiguration.json'], format: 'json'
+         }
+      }
+   }
+}</code></pre><p> </p><pre>Release history:</pre><ul><li><h3 id="ArachniScannerplugin-1.0.0">1.0.0</h3><ul><li>Credentials plugin is used to store username and password. Values from older configurations will be migrated.</li></ul></li><li><h3 id="ArachniScannerplugin-0.9.7">0.9.7</h3><ul><li>Supports more report formats (html, json, xml, yaml)</li></ul></li><li><h3 id="ArachniScannerplugin-0.9.6">0.9.6</h3><ul><li>Bugfix: Fix a problem for Jenkins versions newer than 2.107.1 (JEP-200)</li></ul></li><li><h3 id="ArachniScannerplugin-0.9.5">0.9.5</h3><ul><li>Support configuration files</li></ul></li><li><h3 id="ArachniScannerplugin-0.9.4">0.9.4</h3><ul><li>Support to specify checks</li><li>Support pipeline</li></ul></li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450476/148604146.jpg">arachni-jenkins-config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450476/138453795.jpg">arachni-job-config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450476/138455472.jpg">arachni-job-config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450476/138450924.jpg">arachni-job-config.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138450476/138450922.jpg">arachni-jenkins-config.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

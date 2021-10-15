@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : IOException Not enough space</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : IOException Not enough space
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (edburns@yahoo.com)</span> on Aug 23, 2010
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>On Unix systems, you may experience errors like the following. This document explains why this happens and how to solve this.</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>java.io.IOException: Not enough space
+	at java.lang.UNIXProcess.forkAndExec(Native Method)
+	at java.lang.UNIXProcess.&lt;init&gt;(UNIXProcess.java:53)
+	at java.lang.ProcessImpl.start(ProcessImpl.java:65)
+	at java.lang.ProcessBuilder.start(ProcessBuilder.java:451)
+	at java.lang.Runtime.exec(Runtime.java:591)
+	at java.lang.Runtime.exec(Runtime.java:429)
+	at java.lang.Runtime.exec(Runtime.java:326)
+</pre>
+</div></div>
+
+<h2 id="IOExceptionNotenoughspace-Why?">Why?</h2>
+<p>Not enough space in forkAndExec is normally caused by insufficient swap space. In Unix, the way Java launches a new process is first by forking the current process and then exec-ing. Therefore, for a brief period between fork and exec, there's temporarily two instances of your application server running on your system. If the application server you are running Hudson in is using 1GB virtual memory, this means you temporarily need 2GB of virtual memory, meaning more swap space.</p>
+
+<p>If your Hudson is really busy and it launches a lot of processes, in theory you could be temporarily running more than 2 instances of your application server.</p>
+
+<p>There are many ways to check the usage of swap space, but I usually use the &quot;top&quot; command, which is available on most Unix systems.</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This is a Unix-specific issue, as Windows launches child processes without forking.</p></div></div>
+
+
+<h2 id="IOExceptionNotenoughspace-Howtosolvethisissue">How to solve this issue</h2>
+<p>Since the issue is the lack of the virtual memory, you can resolve this issue by adding more swap space to your system. How you do this depends on OS.</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you know how to do this for OSes not listed here, please add it</p></div></div>
+
+<h3 id="IOExceptionNotenoughspace-Solaris">Solaris</h3>
+<p>First create a file to be used as a swap space, then add it as the swap. You can finally verify that the new file is active by listing all active swap files.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>/usr/sbin/mkfile 1g /path/to/swapfile
+/usr/bin/swap -a /path/to/swapfile
+/usr/bin/swap -l
+</pre>
+</div></div>
+<p>You will have to manually edit /etc/vfstab to make the newly added swapfile survive reboots.</p>
+
+<h3 id="IOExceptionNotenoughspace-Linux">Linux</h3>
+<p>First create a file to be used as a swap space, then format it properly, and finally add it as the swap. The total size of the new swap file is bs*count (in the example below it'll create a 1G swap)</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>dd if=/dev/zero of=/path/to/swapfile bs=1M count=1K
+mkswap /path/to/swapfile
+swapon /path/to/swapfile
+</pre>
+</div></div>
+
+<p>You will have to manually edit the appropriate file on GNU/Linux to make the newly added swapfile survive reboots.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

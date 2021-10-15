@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Amazon EC2 Container Service Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Amazon EC2 Container Service Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (elmhaidara)</span> on May 10, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Use Amazon ECS Containers to setup (docker-based) elastic build executors.</p><h1 id="AmazonEC2ContainerServicePlugin-About">About</h1><p><a href="https://aws.amazon.com/ecs/" class="external-link" rel="nofollow">Amazon EC2 Container Service (ECS)</a> is AWS' service for Docker container orchestration letting you deploy Docker based applications on a cluster.</p><p>This plugin lets you use Amazon ECS Container Service to manage Jenkins cloud agents.</p><p>Jenkins delegates to Amazon ECS the execution of the builds on Docker based agents.<br/>Each Jenkins build is executed on a dedicated Docker container that is wiped-out at the end of the build.</p><p>The ECS cluster is composed of Amazon EC2 virtual machines instantiated within the boundaries the user's account (typically in an Amazon VPC). These virtual machines can be declared statically or can be managed dynamically by AWS ECS thanks to AWS Auto Scaling and AWS CloudFormation. </p><p>Jenkins agents are connected to the Jenkins master using the JNLP protocol.</p><h1 id="AmazonEC2ContainerServicePlugin-Requirements">Requirements</h1><ul><li>Jenkins version 1.609 or later</li><li>AWS account with permissions to create an ECS cluster</li></ul><h1 id="AmazonEC2ContainerServicePlugin-Installation">Installation</h1><p>Navigate to the &quot;Plugin Manager&quot; screen, install the &quot;Amazon EC2 Container Service&quot; plugin and restart Jenkins.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837575.png" data-image-src="attachments/82020685/82837575.png" data-unresolved-comment-count="0" data-linked-resource-id="82837575" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="01-plugin-install.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h1 id="AmazonEC2ContainerServicePlugin-Configuration">Configuration</h1><h2 id="AmazonEC2ContainerServicePlugin-AmazonECScluster">Amazon ECS cluster</h2><p>As a pre-requisite, you must have created an Amazon ECS cluster with associated ECS instances. These instances can be statically associated with the ECS cluster or can be dynamically created with Amazon Auto Scaling.</p><p>The Jenkins Amazon EC2 Container Service plugin will use this ECS cluster and will create automatically the required Task Definition.</p><h2 id="AmazonEC2ContainerServicePlugin-JenkinsSystemConfiguration">Jenkins System Configuration</h2><p>Navigate to the &quot;Configure System&quot; screen.</p><p>In the &quot;Jenkins Location&quot; section, ensure that the &quot;Jenkins URL&quot; is reachable from the the container instances of the Amazon ECS cluster. See the section &quot;Network and firewalls&quot; for more details.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837576.png" data-image-src="attachments/82020685/82837576.png" data-unresolved-comment-count="0" data-linked-resource-id="82837576" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="02-0-cfg-jenkins-location.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If the global Jenkins URL configuration does not fit your needs (e.g. if your ECS agents must reach Jenkins through some kind of tunnel) you can also override the Jenkins URL in the <a href="#AmazonEC2ContainerServicePlugin-advancedconfig">Advanced Configuration</a> of the ECS cloud.</p></div></div><p>At the bottom of the screen, click on &quot;Add a new Cloud&quot; and select &quot;Amazon EC2 Container Service Cloud&quot;.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837577.png" data-image-src="attachments/82020685/82837577.png" data-unresolved-comment-count="0" data-linked-resource-id="82837577" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="02-cfg-add-cloud.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h3 id="AmazonEC2ContainerServicePlugin-AmazonEC2ContainerServiceCloud">Amazon EC2 Container Service Cloud</h3><p>Then enter the configuration details of the Amazon EC2 Container Service Cloud:</p><ul><li>Name: name for your ECS cloud (e.g. `ecs-cloud`)</li><li>Amazon ECS Credentials: Amazon IAM Access Key with privileges to create Task Definitions and Tasks on the desired ECS cluster</li><li>ECS Cluster: desired ECS cluster on which Jenkins will send builds as ECS tasks</li><li>ECS Template: click on &quot;Add&quot; to create the desired ECS template or templates</li></ul><p><span class="confluence-anchor-link" id="AmazonEC2ContainerServicePlugin-advancedconfig"></span><br/><span style="color: rgb(210,73,57);">Advanced Configuration</span></p><ul><li>Tunnel connection through: tunnelling options (when Jenkins runs behind a load balancer...).</li><li>Alternative Jenkins URL: The URL used as the Jenkins URL within the ECS containers of the configured cloud. Can be used to override the default Jenkins URL from global configuration if needed. </li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837579.png" data-image-src="attachments/82020685/82837579.png" data-unresolved-comment-count="0" data-linked-resource-id="82837579" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="04-cfg-ecs-add-template.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h3 id="AmazonEC2ContainerServicePlugin-ECSAgentTemplates">ECS Agent Templates</h3><p>One or several ECS agent templates can be defined for the Amazon EC2 Container Service Cloud. The main reason to create more than one ECS agent template is to use several Docker image to perform build (e.g. java-build-tools, php-build-tools...)</p><ul><li>Template name is used (prefixed with the cloud's name) for the task definition in ECS.</li><li>Label: agent labels used in conjunction with the job level configuration &quot;Restrict where the project can be run / Label expression&quot;. ECS agent label could identify the Docker image used for the agent (e.g. `docker` for the <a href="https://hub.docker.com/r/jenkinsci/jnlp-slave/" class="external-link" rel="nofollow">jenkinsci/jnlp-slave</a>).</li><li>Docker image: identifier of the Docker image to use to create the agents</li><li>Filesystem root: working directory used by Jenkins (e.g. `/home/jenkins/`).</li><li>Memory: number of MiB of memory reserved for the container. If your container attempts to exceed the memory allocated here, the container is killed.</li><li>The number of cpu units to reserve for the container. A container instance has 1,024 cpu units for every CPU core.</li></ul><p><strong>Advanced Configuration</strong></p><ul><li>Override entrypoint: overwritten Docker image entrypoint. Container command can't be overriden as it is used to pass jenkins agent connection parameters.</li><li>JVM arguments: additional arguments for the JVM, such as `-XX:MaxPermSize` or GC options.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/100859968.png" data-image-src="attachments/82020685/100859968.png" data-unresolved-comment-count="0" data-linked-resource-id="100859968" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2016092513_0831-ConfigureSystem .png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h2 id="AmazonEC2ContainerServicePlugin-Networkandfirewalls">Network and firewalls</h2><p>Running the Jenkins master and the ECS container instances in the same Amazon VPC and in the same subnet is the simplest setup and default settings will work out-of-the-box.</p><h3 id="AmazonEC2ContainerServicePlugin-Firewalls">Firewalls</h3><p>If you enable network restrictions between the Jenkins master and the ECS cluster container instances,</p><ul><li>Fix the TCP listen port for JNLP agents of the Jenkins master (e.g. `5000`) navigating in the &quot;Manage Jenkins / Configure Global Security&quot; screen</li><li>Allow TCP traffic from the ECS cluster container instances to the Jenkins master on the listen port for JNLP agents (see above) and the HTTP(S) port.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837583.png" data-image-src="attachments/82020685/82837583.png" data-unresolved-comment-count="0" data-linked-resource-id="82837583" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="cfg-security-jnlp-listen-port.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h3 id="AmazonEC2ContainerServicePlugin-NetworkAddressTranslationandReverseProxies">Network Address Translation and Reverse Proxies</h3><p>In case of Network Address Translation rules between the ECS cluster container instances and the Jenkins master, ensure that the JNLP agents will use the proper hostname to connect to the Jenkins master doing on of the following:</p><ul><li>Define the proper hostname of the Jenkins master defining the system property `hudson.TcpSlaveAgentListener.hostName` in the launch command</li><li>Use the advanced configuration option &quot;Tunnel connection through&quot; in the configuration of the Jenkins Amazon EC2 Container Service Cloud (see above).</li></ul><h2 id="AmazonEC2ContainerServicePlugin-IAMrole">IAM role</h2><p>We recommend you create a dedicated amazon IAM role to delegate Jenkins access to your ECS cluster.</p><p>ecs:DescribeTaskDefinition</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Effect</p></th><th class="confluenceTh"><p>Action</p></th><th class="confluenceTh"><p>Resource</p></th></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:ListClusters</p></td><td class="confluenceTd"><p>*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:DescribeContainerInstances</p></td><td class="confluenceTd"><p>*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:RegisterTaskDefinition</p></td><td class="confluenceTd"><p>*</p></td></tr><tr><td colspan="1" class="confluenceTd">Allow</td><td colspan="1" class="confluenceTd">ecs:DeregisterTaskDefinition</td><td colspan="1" class="confluenceTd">*</td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:ListTaskDefinitions</p></td><td class="confluenceTd"><p>*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:DescribeTaskDefinition</p></td><td class="confluenceTd"><p>*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:RunTask</p></td><td class="confluenceTd"><p>arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:task-definition/&lt;cloud name&gt;-&lt;template name&gt;:*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:StopTask</p></td><td class="confluenceTd"><p>arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:cluster/&lt;clusterName&gt; <br class="atl-forced-newline"/>arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:task/*</p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:ListContainerInstances</p></td><td class="confluenceTd"><p>arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:cluster/&lt;clusterName&gt; </p></td></tr><tr><td class="confluenceTd"><p>Allow</p></td><td class="confluenceTd"><p>ecs:DescribeTasks</p></td><td class="confluenceTd"><p>arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:task/*</p></td></tr></tbody></table></div><p>Here is a sample policy file if you prefer using one  :</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;Stmt1452746887373&quot;,
+            &quot;Action&quot;: [
+                &quot;ecs:RegisterTaskDefinition&quot;,
+                &quot;ecs:DeregisterTaskDefinition&quot;,
+                &quot;ecs:ListClusters&quot;,
+                &quot;ecs:DescribeContainerInstances&quot;,
+                &quot;ecs:ListTaskDefinitions&quot;,
+                &quot;ecs:DescribeTaskDefinition&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: &quot;*&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;Stmt1452746887374&quot;,
+            &quot;Action&quot;: [
+                &quot;ecs:StopTask&quot;,
+                &quot;ecs:ListContainerInstances&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:cluster/&lt;clusterName&gt;&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;Stmt1452746887375&quot;,
+            &quot;Action&quot;: [
+                &quot;ecs:RunTask&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:task-definition/jenkins-agent:*&quot;
+        },
+        {
+            &quot;Sid&quot;: &quot;Stmt1452746887376&quot;,
+            &quot;Action&quot;: [
+                &quot;ecs:StopTask&quot;,
+		&quot;ecs:DescribeTasks&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: &quot;arn:aws:ecs:&lt;region&gt;:&lt;accountId&gt;:task/*&quot;
+        }
+    ]
+}
+</pre>
+</div></div><h1 id="AmazonEC2ContainerServicePlugin-Usage">Usage</h1><p>The ECS agents can be used for any job and any type of job (Freestyle job, Maven job, Workflow job...), you just have to restrict the execution of the jobs on one of the labels used in the ECS Agent Template configuration. Sample with a label named `docker`:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837581.png" data-image-src="attachments/82020685/82837581.png" data-unresolved-comment-count="0" data-linked-resource-id="82837581" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="06-0-job-label.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><p>In the console output of the executed builds, you can verify that the build was performed on the ECS cluster checking the agent name that is composed of the ECS cloud name and of a random identifier. Sample console output of a build executed on a agent managed by an ECS cloud named `ecs-cloud`:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/82020685/82837582.png" data-image-src="attachments/82020685/82837582.png" data-unresolved-comment-count="0" data-linked-resource-id="82837582" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="06-job-build-logs.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="82020685" data-linked-resource-container-version="31"></span></p><h1 id="AmazonEC2ContainerServicePlugin-DockerImagesforECSAgents">Docker Images for ECS Agents</h1><p>The Jenkins Amazon EC2 Container Service Cloud can use for the agents all the Docker image designed to act as a Jenkins JNLP agent. Here is a list of compatible Docker images:</p><ul><li><a href="https://hub.docker.com/r/jenkinsci/jnlp-slave/" class="external-link" rel="nofollow">jenkinsci/jnlp-slave</a>: Jenkins CI official image to run Docker based JNLP agents</li><li><a href="https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/" class="external-link" rel="nofollow">cloudbees/jnlp-slave-with-java-build-tools</a>: a Docker image designed by CloudBees with convenient tools to build java applications (openjdk8, maven, selenium, firefox, aws-cli...)</li></ul><p>You can easily extend one of these images to add tools or you can create your own Docker image.</p><h1 id="AmazonEC2ContainerServicePlugin-Resources">Resources</h1><ul><li><a href="https://www.youtube.com/watch?v=v0b53cdrujs" class="external-link" rel="nofollow">Youtube: Jenkins with Amazon ECS slaves</a></li></ul><h1 id="AmazonEC2ContainerServicePlugin-Versions">Versions</h1><p>see <a href="https://github.com/jenkinsci/amazon-ecs-plugin/blob/master/Changelog.md" class="external-link" rel="nofollow">Changelog</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837564.png">jenkins-oss-plugin-manager-ecs-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837575.png">01-plugin-install.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837576.png">02-0-cfg-jenkins-location.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837577.png">02-cfg-add-cloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837578.png">03-cfg-add-credentials.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837579.png">04-cfg-ecs-add-template.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837580.png">05-cfg-ecs-slave-template.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837581.png">06-0-job-label.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837582.png">06-job-build-logs.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/82837583.png">cfg-security-jnlp-listen-port.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/100859967.png">2016-09-25 13_08_31-Configure System [Jenkins].png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/100859968.png">2016092513_0831-ConfigureSystem .png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/138454827.txt">jenkins-log.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/138454826.txt">jenkins-log.txt</a> (text/plain)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/138457947.png">Screen Shot 2018-06-12 at 12.48.55 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/165580785.png">image2018-12-11_10-14-9.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/165580813.png">image2018-12-12_9-32-13.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/82020685/175211139.jpg">ecs interruptedExeption.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

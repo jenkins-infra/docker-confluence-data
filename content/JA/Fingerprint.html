@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Fingerprint</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Fingerprint
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified on Mar 28, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Fingerprint">Fingerprint</a></p>
+
+<p>相互依存のプロジェクトがある場合、プロジェクトのどのバージョンが、他のプロジェクトのどのバージョンで使用されているのか把握するのは難しくなります。Jenkinsはこれを簡単にする&quot;ファイルの指紋&quot;を提供します。</p>
+
+<p>例えば、MIDDLEプロジェクトに依存するTOPプロジェクトがあり、MIDDLEプロジェクトはBOTTOMプロジェクトに依存するとします。あなたはBOTTOMプロジェクトで作業しています。TOPチームが彼らが使用している <code>bottom.jar</code> でNPEが発生すると報告すると、あなたは、BOTTOMプロジェクトの#32で修正したはずと思いました。Jenkinsは、どのMIDDLEプロジェクトのビルドとTOPプロジェクトが、 <code>bottom.jar</code> の#32を使用しているのか教えてくれます。</p>
+
+<h2 id="Fingerprint-どうやって設定するの?">どうやって設定するの?</h2>
+
+<p>ファイル指紋を使用するには、関連するすべてのプロジェクトが、jarファイル(この場合は、 <code>bottom.jar</code> )のファイル指紋を記録するように設定されている必要があります。</p>
+
+<p>例えば、どのBOTTOMビルドがどのTOPビルドに使用されるのか追跡したいだけであれば、TOPとBOTTOMが <code>bottom.jar</code> を記録するように設定します。どのMIDDLEビルドがどの <code>bottom.jar</code> を使用しているのかも知りたいのであれば、MIDDLEも設定します。</p>
+
+<p>ファイル指紋の記録は簡単な操作なので、以下にあげる全ファイルのファイル指紋をとにかく記録するのが一番簡単です。</p>
+<ol>
+	<li>プロジェクトが作成するjarファイル</li>
+	<li>プロジェクトが依存するjarファイル</li>
+</ol>
+
+
+<p>ファイル指紋を記録するファイルのサイズやビルドの数ではなく、ファイル指紋を記録するファイルの数がディスク容量に大きく影響を与えます。So unless you have a plenty of disk space, you don't want to fingerprint <code>&quot;*</code><code><strong>/</strong></code><code>&quot;</code>.</p>
+
+<h2 id="Fingerprint-どのように動くの?">どのように動くの?</h2>
+
+<p>ファイルの指紋は、単にMD5チェックサムです。JenkinsはMD5チェックサムのデータベースを維持し、各MD5チェックサムについて、どのプロジェクトのどのビルドが使用しているか記録します。このデータベースは、ビルドが起動し、ファイルの指紋を取得する毎に更新されます。</p>
+
+<p>必要以上にディスクを使用しないように、Jenkinsは実際のファイルそのものは保存しませんが、その代わりに、MD5チェックサムとその利用状況だけを保存します。そのファイルは、<code>$JENKINS_HOME/fingerprints</code>　にあります。</p>
+
+<h2 id="Fingerprint-どうやって使用するの?">どうやって使用するの?</h2>
+
+<p>この機能を活用する2,3の典型的なシナリオがあります。</p>
+
+<p>BOTTOMプロジェクトを開発していて、どのビルドがBOTTOM #13を使用しているか知りたいケース。</p>
+<ol>
+	<li>BOTTOM #13のビルド画面を表示します。</li>
+	<li>ビルドの成果物で、<code>bottom.jar</code> の&quot;ファイル指紋&quot;のアイコン <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/34045957/35094541.gif" data-image-src="attachments/34045957/35094541.gif" data-unresolved-comment-count="0" data-linked-resource-id="35094541" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="fingerprint.gif" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="34045957" data-linked-resource-container-version="15"></span> を選択します。</li>
+	<li><code>bottom.jar</code> を使用しているプロジェクトとビルドが表示されます。</li>
+</ol>
+
+
+<p>TOPプロジェクトを開発していて、TOP #10が使用している <code>bottom.jar</code> と <code>middle.jar</code> のビルドを知りたいケース。</p>
+<ol>
+	<li>TOP #10のビルド画面を表示します。</li>
+	<li>&quot;指紋を見る&quot;を選択します。</li>
+	<li>TOP #10でファイル指紋を記録したファイルとその由来がすべて表示されます。</li>
+</ol>
+
+
+<p>jarファイルをビルドするTOPプロジェクトがあるとします。また、TOP-TESTプロジェクトもあって、TOPプロジェクトの後に起動し、最新のTOPプロジェクトの成果物で巨大な統合テストを行うとしたとき、TOP #7のテスト結果を知りたいケース。</p>
+<ol>
+	<li>TOP #7のビルド画面を表示します。</li>
+	<li>ビルドの成果物で、<code>top.jar</code> の&quot;ファイル指紋&quot;のアイコン <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/34045957/35094541.gif" data-image-src="attachments/34045957/35094541.gif" data-unresolved-comment-count="0" data-linked-resource-id="35094541" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="fingerprint.gif" data-base-url="http://wiki.jenkins-ci.org:8085" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="34045957" data-linked-resource-container-version="15"></span> を選択します。</li>
+	<li><code>top.jar</code> を使用しているTOP-TESTのビルドがすべて表示されます。</li>
+	<li>選択すると、対応するTOP-TESTのビルド画面が表示され、テスト結果が表示されます。</li>
+	<li>TOP-TESTのビルドが表示されなければ、TOP #7を使用したTOP-TESTビルドが起動していません。おそらく、TOP #7をスキップしたか(短時間にTOPビルドがたくさんある場合には可能性があります)、TOP-TESTがビルド中なのかもしれません。</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/34045957/35094541.gif">fingerprint.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

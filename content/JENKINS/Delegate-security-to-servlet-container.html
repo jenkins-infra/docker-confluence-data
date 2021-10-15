@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Delegate security to servlet container</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Delegate security to servlet container
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jdamay)</span>, last modified on Nov 27, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Delegatesecuritytoservletcontainer-Aboutthisdocument">About this document</h1>
+
+<p>This is more specific to Tomcat than Hudson but as i did my specific configuration for Hudson i think it can help someone here <img class="emoticon emoticon-smile" src="images/icons/emoticons/smile.svg" data-emoticon-name="smile" alt="(smile)"/></p>
+
+<h1 id="Delegatesecuritytoservletcontainer-ExistingRealms">Existing Realms</h1>
+
+<p>There are 5 existing realms for Tomcat 6:</p>
+<ul>
+	<li>JDBCRealm - Accesses authentication information stored in a relational database, accessed via a JDBC driver.</li>
+	<li>DataSourceRealm - Accesses authentication information stored in a relational database, accessed via a named JNDI JDBC DataSource.</li>
+	<li>JNDIRealm - Accesses authentication information stored in an LDAP based directory server, accessed via a JNDI provider.</li>
+	<li>MemoryRealm - Accesses authentication information stored in an in-memory object collection, which is initialized from an XML document (conf/tomcat-users.xml).</li>
+	<li>JAASRealm - Accesses authentication information through the Java Authentication &amp; Authorization Service (JAAS) framework.</li>
+</ul>
+
+
+
+<p>See Tomcat documentation <a href="http://tomcat.apache.org/tomcat-6.0-doc/realm-howto.html#What%20is%20a%20Realm?" class="external-link" rel="nofollow">here</a> for more information.</p>
+
+<h1 id="Delegatesecuritytoservletcontainer-Specificneed">Specific need</h1>
+
+<p>For my company i need to have an LDAP authentication and an hudson authorization management.<br/>
+So i just had to mix JNDIRealm &amp; JDBCRealm.</p>
+
+<p>The result is LdapJDBCRealm (<a href="attachments/42467578/42631234.java" data-linked-resource-id="42631234" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="LdapJdbcRealm.java" data-nice-type="Java Source File" data-linked-resource-content-type="application/octet-stream" data-linked-resource-container-id="42467578" data-linked-resource-container-version="4">LdapJdbcRealm.java</a>,<a href="attachments/42467578/42631235.class" data-linked-resource-id="42631235" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="LdapJdbcRealm.class" data-linked-resource-content-type="application/octet-stream" data-linked-resource-container-id="42467578" data-linked-resource-container-version="4">LdapJdbcRealm.class</a>). This is only a deal with overriding some methods.<br/>
+Parameters are also mix of Realms, see server.xml template in installation steps.</p>
+
+
+<h1 id="Delegatesecuritytoservletcontainer-Installationsteps(Tomcat6.x)">Installation steps (Tomcat 6.x)</h1>
+
+<ol>
+	<li>Copy the Mysql JDBC driver to your <em>%CATALINA_HOME%/lib</em> (get it <a href="http://dev.mysql.com/downloads/connector/j/5.1.html" class="external-link" rel="nofollow">here</a>)</li>
+	<li>Copy this .class file to <em>%CATALINA_HOME%/lib/org/apache/catalina/realm</em> folder</li>
+	<li>Update server.xml configuration file (<em>%CATALINA_HOME%/conf</em>).Look at the following template:<br/>
+this is the template for LdapJDBCRealm configuration in server.xml file:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;Realm className=&quot;org.apache.catalina.realm.LdapJdbcRealm&quot; debug=&quot;99&quot;
+        connectionName=&quot;_your bind accound information_&quot;
+        connectionPassword=&quot;_your bind accound password if anonymous not supported_&quot;
+        connectionURL=&quot;_ldap url server (like http://ldapserver:389)_&quot;
+        userPattern=&quot;_pattern to search your user_&quot;
+        roleBase=&quot;dummyValue&quot;
+        roleSubtree=&quot;true&quot;
+        roleName=&quot;groupMembership&quot;
+        roleSearch=&quot;cn=DummyValue&quot;
+        driverName=&quot;com.mysql.jdbc.Driver&quot;
+        dbConnectionURL=&quot;jdbc:mysql://localhost:3306/hudson_users?user=userForDatabase&amp;amp;password=userpassword&quot;
+        dbConnectionName=&quot;userForDatabase&quot;
+        dbConnectionPassword=&quot;userpassword&quot;
+        userTable=&quot;users&quot;
+        userNameCol=&quot;user_name&quot;
+        userRoleTable=&quot;user_roles&quot;
+        roleNameCol=&quot;role_name&quot;
+      /&gt;
+</pre>
+</div></div></li>
+	<li>Create your users database. See <a href="http://tomcat.apache.org/tomcat-6.0-doc/realm-howto.html#An%20example%20SQL%20script" class="external-link" rel="nofollow">here</a> for scripts to create it.</li>
+</ol>
+
+
+<p>Once you do that, Hudson should authenticate users against LDAP server and get their authorization using your local database.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467578/42631234.java">LdapJdbcRealm.java</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467578/42631235.class">LdapJdbcRealm.class</a> (application/octet-stream)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

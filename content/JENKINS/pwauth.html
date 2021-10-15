@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : pwauth</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : pwauth
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mallox)</span>, last modified by <span class='editor'> Unknown User (lshatzer)</span> on Aug 09, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View PWauth Security Realm <a href="https://plugins.jenkins.io/pwauth" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="pwauth-About">About</h1>
+
+<p>This plug-in adds authentication via pwauth and supports both *nix system users and groups through PAM. <br/>
+If you're running Jenkins on a Linux system, chances are that your systems already include a centralized user management that is based on PAM, especially in larger organizations. PAM itself is a very versatile system for user authentication and offers many different modules to authenticate against, like for examle Samba, LDAP, MySQL, and many more (see more at <a href="http://www.kernel.org/pub/linux/libs/pam/Linux-PAM-html/Linux-PAM_SAG.html" title="Overview over common PAM modules" class="external-link" rel="nofollow">kernel.org</a>). The problem with many solutions working with PAM is that they still need access to super user rights to actually use the authentication system. This is where PWauth comes into play.</p>
+
+<p><a href="http://code.google.com/p/pwauth/" title="PWauth at google code" class="external-link" rel="nofollow">PWauth</a> is a system usually used in connection with authnz_external, an Apache2-module, but which can be used by any system wanting to authenticate against PAM, without needing super user rights. This way the user running the Jenkins instance can authenticate against any PAM system, without needing special rights, and this leaving security intact.</p>
+
+<p>This plug in uses PWauth to authenticate against whatever PAM configuration you may have set up and supports users and groups in Jenkins. Additionally the plug in allows you to define a white list of IPs that can access the system without needing to authenticate. This is useful when using a post-commit triggers for example, that tries to start a build via a URL, that would usually need authentication.</p>
+
+<h1 id="pwauth-Changelog">Changelog</h1>
+
+
+<h2 id="pwauth-Version0.5(planned)">Version 0.5 (planned)</h2>
+
+<ul>
+	<li>Allow host names in white list</li>
+	<li>Internationalization of all messages</li>
+	<li>Fix broken &quot;Remember me&quot;</li>
+	<li>Make plugin only available under *nix systems</li>
+</ul>
+
+
+<h2 id="pwauth-Version0.4(2010-12-21)">Version 0.4 (2010-12-21)</h2>
+
+
+<ul>
+	<li>Allow authentication via GET/POST parameters (<a href="http://username:password@hudson.url/" class="external-link" rel="nofollow">http://hudson.url</a>?username=&lt;username&gt;&amp;password=&lt;password&gt;)</li>
+	<li>Fixed potential security flaw in Filter</li>
+</ul>
+
+
+
+<h2 id="pwauth-Version0.3(2010-12-20)">Version 0.3 (2010-12-20)</h2>
+
+<ul>
+	<li>Botched release due to problems with migration to new java.net svn repository</li>
+</ul>
+
+
+
+
+
+
+<h2 id="pwauth-Version0.2(2010-11-05)">Version 0.2 (2010-11-05)</h2>
+
+
+<ul>
+	<li>Official release to public</li>
+</ul>
+
+
+
+<h2 id="pwauth-Version0.1"> Version 0.1</h2>
+
+<ul>
+	<li>First implementation</li>
+</ul>
+
+
+<h1 id="pwauth-HowtosetupPWauth">How to setup PWauth</h1>
+
+<p>TBD.</p>
+
+<p>Until then check the <a href="http://www.pyxzl.net/store/authnz.php" class="external-link" rel="nofollow">tutorial for authnz_external</a> or the projects <a href="http://code.google.com/p/pwauth/wiki/InstallMain" class="external-link" rel="nofollow">tutorial</a> on getting things set up.</p>
+
+<p>To use the authentication via Request, you have to send the credentials as either POST or GET parameters. Currently accepted parameters are &quot;user&quot;, &quot;username&quot;, &quot;login&quot; and &quot;pass&quot;, &quot;password&quot;, &quot;passwd&quot;, &quot;key&quot;. Any combination of these should be able to let you authenticate any request to the server.</p>
+
+<p><strong>Example:</strong><br/>
+http:<strong>/</strong>/<a href="http://my.hudson.url/job/My_Project/build?delay=0sec&amp;user=myUser&amp;pass=myPass" class="external-link" rel="nofollow">my.hudson.url/job/My_Project/build?delay=0sec&amp;user=myUser&amp;pass=myPass</a></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:40</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

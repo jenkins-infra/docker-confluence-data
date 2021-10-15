@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Auto-discovering Jenkins on the network</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Auto-discovering Jenkins on the network
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Feb 09, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>If you are developing client applications or server applications that interact with Jenkins, you can benefit from auto-discovering Jenkins in the network. Jenkins supports several modes of programmable auto-discovery.</p><div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Content only applies to old versions of Jenkins</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>The content on this page only applies to Jenkins 2.219 and earlier.</strong> These features were disabled by default in Jenkins 2.219 and LTS 2.204.2, and removed entirely from Jenkins 2.200.</p></div></div><p><br/></p><h1 id="Auto-discoveringJenkinsonthenetwork-UDPmulticast/broadcast">UDP multicast/broadcast</h1><p>Jenkins listens on UDP port 33848. You can either send an UDP broadcast packet (targeted to 255.255.255.255) to this port, or you can send an UDP multicast packet (targeted to 239.77.124.213) to this port. When a packet is received (the payload doesn't matter), Jenkins will send an XML response to the sending UDP port as a datagram. By sending a packet and listening for incoming ones, you can have an UDP client to discover nearby Jenkins instances. UDP multicast works with version 1.335 and later, UDP broadcast works with version 1.282 and later.</p><p>The structure of the XML is as follows:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;hudson&gt;
+  &lt;version&gt;1.354&lt;/version&gt;&lt;!-- version of the Jenkins --&gt;
+  &lt;url&gt;http://server/hudson/&lt;/url&gt;&lt;!-- the top page of the Jenkins --&gt;
+  &lt;slave-port&gt;12345&lt;/slave-port&gt;&lt;!-- TCP port number for slaves and CLIs to connect to --&gt;
+  ... more elements may appear here ...
+&lt;/hudson&gt;
+</pre>
+</div></div><p>Plugins can extend what to include in this XML fragment by contributing to the <a href="http://javadoc.jenkins-ci.org/byShortName/UDPBroadcastFragment">UDPBroadcastFragment</a> extension point.</p><p>This feature can be disabled via the <a href="Features-controlled-by-system-properties.html"><code>hudson.udp</code> system property</a>.</p><h3 id="Auto-discoveringJenkinsonthenetwork-FromJava">From Java</h3><p>See <a href="https://github.com/jenkinsci/swarm-plugin/blob/master/client/src/main/java/hudson/plugins/swarm/Client.java" class="external-link" rel="nofollow">the sample code</a> written in Java that does auto-discovery via UDP broadcast.</p><h1 id="Auto-discoveringJenkinsonthenetwork-DNSmulticast">DNS multicast</h1><p>Jenkins advertises itself at &quot;_jenkins._tcp.local&quot; with DNS multicast. This is another way to discover Jenkins instances on the same subnet (or by extending the &quot;_jenkins._tcp&quot; convention, you can discover Jenkins for arbitrary domain names, such as &quot;_jenkins._tcp.example.com&quot;, as a convention.) This works with version 1.359 and later.</p><p>The same version, url, and slave-port are available as the key/value pairs associated with the DNS record.</p><p>This feature can be disabled via the <a href="Features-controlled-by-system-properties.html"><code>hudson.DNSMultiCast.disabled</code> system property</a>.</p><h3 id="Auto-discoveringJenkinsonthenetwork-FromJava.1">From Java</h3><p>You can use <a href="http://jmdns.sourceforge.net/" class="external-link" rel="nofollow">jmDNS</a> if you want to perform DNS multi-cast service discovery from Java. The sample code is below:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import javax.jmdns.*;
+
+static class SampleListener implements ServiceListener {
+    public void addService(JmDNS jmdns, String type, String name) {
+        System.out.println(&quot;ADD: &quot; + jmdns.getServiceInfo(type, name));
+    }
+    public void removeService(JmDNS jmdns, String type, String name) {
+        System.out.println(&quot;REMOVE: &quot; + name);
+    }
+    public void resolveService(JmDNS jmdns, String type, String name, ServiceInfo info) {
+        System.out.println(&quot;RESOLVED: &quot; + info);
+    }
+}
+
+JmDNS jmdns = new JmDNS();
+jmdns.addServiceListener(&quot;jenkins._tcp.local.&quot;, new SampleListener());
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

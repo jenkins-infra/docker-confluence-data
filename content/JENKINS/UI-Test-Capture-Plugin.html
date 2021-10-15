@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : UI Test Capture Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : UI Test Capture Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vbathke)</span>, last modified on Oct 26, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View UI Test Capture <a href="https://plugins.jenkins.io/ui-test-capture" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<h1 id="UITestCapturePlugin-Summary">Summary</h1>
+<p>
+<p>Stream, persist and classify UI Test Results from a running Build.</p>
+
+<p>The plugin is agnostic about what test engine you use if the required informations was provided.</p></p>
+
+<h1 id="UITestCapturePlugin-Features">Features</h1>
+
+<h3 id="UITestCapturePlugin-Seetheresultswhiletheyconclude">See the results while they conclude</h3>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75893745/83558419.png" data-image-src="attachments/75893745/83558419.png" data-unresolved-comment-count="0" data-linked-resource-id="83558419" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="1.test-results.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75893745" data-linked-resource-container-version="25"></span></p>
+
+<h3 id="UITestCapturePlugin-IfsometestfailyoucanlookatitsscreenshotandBuildHistory">If some test fail you can look at its screenshot and Build History</h3>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75893745/83558420.png" data-image-src="attachments/75893745/83558420.png" data-unresolved-comment-count="0" data-linked-resource-id="83558420" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.build-history.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75893745" data-linked-resource-container-version="25"></span></p>
+
+<h3 id="UITestCapturePlugin-IfsometestsareFlakyandyouwanttoseparatefromothertestsyoucanclassifythemin&quot;Appfailure&quot;and&quot;Testfailure&quot;">If some tests are Flaky and you want to separate from other tests you can classify them in &quot;App failure&quot; and &quot;Test failure&quot; <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75893745/83558421.png" data-image-src="attachments/75893745/83558421.png" data-unresolved-comment-count="0" data-linked-resource-id="83558421" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.move-to-quarantined.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75893745" data-linked-resource-container-version="25"></span></h3>
+
+<h3 id="UITestCapturePlugin-Writecomentsaboutteststofacilitatemaintenance">Write coments about tests to facilitate maintenance</h3>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75893745/83558422.png" data-image-src="attachments/75893745/83558422.png" data-unresolved-comment-count="0" data-linked-resource-id="83558422" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.document-the-failure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75893745" data-linked-resource-container-version="25"></span></p>
+
+<h1 id="UITestCapturePlugin-Configuration">Configuration</h1>
+
+<h3 id="UITestCapturePlugin-1.Implementtheinstrunctionstowritethescreenshotofthetestmethodbeforethetestclosewiththefollowingfilenameconvention:">1. Implement the instrunctions to write the screenshot of the test method before the test close with the following filename convention:</h3>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    target/screenshots/[Test Method].png
+</pre>
+</div></div>
+<p>Exemple in Selenium with Java:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    String actualTest = this.getClass().getName()+&quot;.&quot;+testname.getMethodName();
+    File scrFile = ((TakesScreenshot)FabricaWebDriver.getDriver()).getScreenshotAs(OutputType.FILE);
+    FileUtils.copyFile(scrFile, new File(&quot;target/screenshots/&quot;+actualTest+&quot;.png&quot;));
+</pre>
+</div></div>
+
+<h3 id="UITestCapturePlugin-2.Alsobeforethetestfinish,appendthetestresultinformationsinatextfilelocatedon&quot;target/teststream.txt&quot;withthefollowingformat:">2. Also before the test finish, append the test result informations in a text file located on &quot;target/teststream.txt&quot; with the following format:</h3>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    {&quot;metodo&quot;:&quot;[Test Method], &quot;status&quot;:&quot;[Test Result]&quot;, &quot;classe&quot;:&quot;[Test Class]&quot;, &quot;descricao:&quot;:&quot;[Display Test Method]&quot;}
+</pre>
+</div></div>
+
+<p>Exemple in Selenium with Java:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    @Rule
+    public TestWatcher watcher = new TestWatcher() {     @Override
+     protected void failed(Throwable e, Description description) {
+         status= &quot;falha&quot;;
+     }
+     @Override
+     protected void skipped(AssumptionViolatedException e, Description description) {
+         status= &quot;skiped&quot;;
+     }
+     @Override
+     protected void succeeded(Description description) {
+         status= &quot;sucesso&quot;;
+     }
+     @Override
+     protected void finished(Description d) {
+         try {
+             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(&quot;target/teststream.txt&quot;, true)));
+             out.println(&quot;{\&quot;metodo\&quot;:\&quot;&quot;+actualTestMethod+&quot;\&quot;, \&quot;status\&quot;:\&quot;&quot;+status+&quot;\&quot;, &quot;
+		+ &quot;\&quot;classe\&quot;:\&quot;&quot;+actualTestClass+&quot;\&quot;, \&quot;descricao\&quot;:\&quot;&quot;+actualTestMethod+&quot;\&quot;}&quot;);
+             out.close();
+         } catch (IOException e) {
+          e.printStackTrace();
+         }
+     }    
+    };
+</pre>
+</div></div>
+
+<h3 id="UITestCapturePlugin-3.JenkinsConfiguration">3. Jenkins Configuration</h3>
+
+<p>1. On the Job configuration active this plugin with the action &quot;UI Test Capture&quot; on Post-build Action<br/>
+2. Add the action 'Arquive Artifacts' on Post-build Action with the value:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+    target/screenshots/**/*
+</pre>
+</div></div>
+
+<h1 id="UITestCapturePlugin-Changelog">Changelog</h1>
+
+
+<h3 id="UITestCapturePlugin-Release1.0.41(25October2015)">Release 1.0.41 (25 October 2015)</h3>
+
+<ul>
+	<li>First public release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893745/83558419.png">1.test-results.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893745/83558420.png">2.build-history.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893745/83558421.png">3.move-to-quarantined.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75893745/83558422.png">4.document-the-failure.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:55</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

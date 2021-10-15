@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Quality Gates Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Quality Gates Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ivanash)</span>, last modified by <span class='editor'> Unknown User (egrozdani)</span> on Apr 07, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Quality Gates <a href="https://plugins.jenkins.io/quality-gates" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-03-09/#SECURITY-1519" class="external-link" rel="nofollow">Credentials transmitted in plain text</a></li>
+</ul>
+
+</div></div>
+
+<p><br class="atl-forced-newline"/>
+This plugin will fail the build whenever the Quality Gates criteria in the Sonar analysis aren't met (the project Quality Gates status is different than &quot;Passed&quot;).</p>
+
+<h2 id="QualityGatesPlugin-Requirements">Requirements</h2>
+
+
+<h3 id="QualityGatesPlugin-Jenkins">Jenkins</h3>
+
+<p>Jenkins <a href="https://jenkins.io/changelog-stable/#v1.532" class="external-link" rel="nofollow">version 1.532</a> or newer is required.</p>
+
+<h3 id="QualityGatesPlugin-Sonar">Sonar</h3>
+
+<p>Working with all the versions of Sonar.</p>
+
+<h2 id="QualityGatesPlugin-Setup">Setup</h2>
+
+
+<h5 id="QualityGatesPlugin-1.GlobalConfiguration">1. Global Configuration</h5>
+
+<p><span style="color: rgb(210,73,57);"><strong>1.1. No Sonar Instance Configured</strong></span></p>
+
+<p>        If there isn't any instance configured the Global Configuration will look like this:</p>
+
+<p>        <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796996/96731228.png" data-image-src="attachments/96796996/96731228.png" data-unresolved-comment-count="0" data-linked-resource-id="96731228" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796996" data-linked-resource-container-version="14"></span></p>
+
+<p>        <span style="color: rgb(51,51,51);">And the plugin will be running with default Sonar Instance. Which contains the following values: URL='http//localhost:9000', Username='admin' and Password='admin'.</span></p>
+
+<p><span style="color: rgb(210,73,57);"><strong>1.2. One Sonar Instance Configured</strong></span></p>
+
+<p>        <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796996/96731231.png" data-image-src="attachments/96796996/96731231.png" data-unresolved-comment-count="0" data-linked-resource-id="96731231" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796996" data-linked-resource-container-version="14"></span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>Name</strong></span> <span style="color: rgb(51,51,51);">- </span><span style="color: rgb(51,51,51);">Specify the value of the name, so that is not empty. </span><span style="color: rgb(51,51,51);">Configurations with duplicated values for the name will not be saved.</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>SonarQube Server URL</strong></span> <span style="color: rgb(51,51,51);">- </span><span style="color: rgb(51,51,51);">Specify the URL of your Sonar instance </span><span style="color: rgb(51,51,51);">URL format for HTTP protocol is any legal http address, e.g.</span> <span style="color: rgb(51,51,51);"><a href="http://myhost.com:9000" class="external-link" rel="nofollow">http://myhost.com:9000</a></span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>SonarQube account login</strong></span> <span style="color: rgb(51,51,51);">- </span><span style="color: rgb(51,51,51);">Specify the username for your account on this instance of Sonar, otherwise Quality Gates Plugin won't be able to get the necessary data if anonymous access is disabled for your project. </span><span style="color: rgb(51,51,51);">If not specified the default Sonar username will be used.</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>SonarQube account password</strong></span> <span style="color: rgb(51,51,51);">- </span><span style="color: rgb(51,51,51);">Specify the password for your account on this instance of Sonar, otherwise Quality Gates Plugin won't be able to get the necessary data if anonymous access is disabled for your project. </span><span style="color: rgb(51,51,51);">If not specified the default Sonar password will be used.</span></li>
+</ul>
+
+
+<h6 id="QualityGatesPlugin-1.3.TwoormoreSonarInstancesConfigured"><span style="color: rgb(255,0,0);">1.3. </span><span style="color: rgb(210,73,57);"><strong>Two or more Sonar Instances Configured</strong></span></h6>
+
+<p>        If you have two or more configurations for Sonar Instances in the Global Configuration you will need to choose one of them in your job configuration.</p>
+
+<h5 id="QualityGatesPlugin-2.JobConfiguration">2. Job Configuration</h5>
+
+<p>Quality Gates Plugin needs a SonarQube code analysis so it can check its Quality Gates status. In order to get the latest quality gates status from the most recent Sonar analysis, Quality Gates Plugin should be put below SonarQube plugin in the post-build step of the job if you use the older version of SonarQube analysis or if you use the Standalone SonarQube Analysis in the build step of the job just put our plugin in the post-build step.</p>
+
+
+<h6 id="QualityGatesPlugin-2.1.NoSonarInstanceintheGlobalConfiguration">2.1. No Sonar Instance in the Global Configuration</h6>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796996/96731232.jpg" data-image-src="attachments/96796996/96731232.jpg" data-unresolved-comment-count="0" data-linked-resource-id="96731232" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_3.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="96796996" data-linked-resource-container-version="14"></span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>When using the older SonarQube way of analysis in the post-build step:</strong></span><br/>
+<span style="color: rgb(51,51,51);"><strong>Project Key -</strong></span> <span style="color: rgb(51,51,51);">T</span><span style="color: rgb(51,51,51);">o get the Project Key go to your Sonar instance (login if necessary) and click on the project whose key you need. You will be redirected to an URL like this: 'http://myhost.:9000/overview?id=123'.  </span><br/>
+<span style="color: rgb(51,51,51);">Another click on the project name will redirect you to the same view with the URL looking like this: 'http://localhost:9000/overview?id=com.company%3AMyProject'.  </span><br/>
+<span style="color: rgb(51,51,51);">ex: 'com.company%3AMyProject' is your Project Key</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>When using the Standalone SonarQube Analysis as a build step: When using the Standalone SonarQube Analysis as a build step: </strong></span><br/>
+<span style="color: rgb(51,51,51);"><strong>Y</strong></span><span style="color: rgb(51,51,51);">ou define your own Project Key in the 'sonar-project.properties' file of your project or directly in the 'Analysis properties' textbox of the Standalone SonarQube Analysis</span></li>
+</ul>
+
+
+
+<h6 id="QualityGatesPlugin-2.2.OneSonarInstanceintheGlobalConfiguration">2.2. One Sonar Instance in the Global Configuration</h6>
+
+<p>        <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796996/96731235.png" data-image-src="attachments/96796996/96731235.png" data-unresolved-comment-count="0" data-linked-resource-id="96731235" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796996" data-linked-resource-container-version="14"></span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>Project Key</strong></span><span style="color: rgb(51,51,51);"> -</span> <span style="color: rgb(51,51,51);">same as above.</span></li>
+</ul>
+
+
+<h6 id="QualityGatesPlugin-2.3.TwoormoreSonarInstancesintheGlobalConfiguration">2.3. Two or more Sonar Instances in the Global Configuration</h6>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96796996/96731234.png" data-image-src="attachments/96796996/96731234.png" data-unresolved-comment-count="0" data-linked-resource-id="96731234" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_6.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96796996" data-linked-resource-container-version="14"></span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>Sonar instance 'Name'</strong></span> <span style="color: rgb(51,51,51);">-  </span><span style="color: rgb(51,51,51);">Choose the configuration for the Sonar Instance that you want to associate with this build.</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>Project Key</strong></span><span style="color: rgb(51,51,51);"> -</span> <span style="color: rgb(51,51,51);">same as above.</span></li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731229.png">Screenshot_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731230.png">Screenshot_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731228.png">Screenshot_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731231.png">Screenshot_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731232.jpg">Screenshot_3.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731233.png">Screenshot_5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731234.png">Screenshot_6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/96731235.png">Screenshot_3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/106496079.jpg">1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/138448015.png">image2018-1-26 10:23:5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96796996/138453571.png">Sin título.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:41</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

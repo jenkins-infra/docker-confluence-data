@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SOASTA CloudTest Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SOASTA CloudTest Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tkdcoach)</span>, last modified by <span class='editor'> Unknown User (ltyler)</span> on Jun 13, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This plugin integrates <a href="http://www.soasta.com/products/cloudtest/" class="external-link" rel="nofollow">SOASTA CloudTest</a> and <a href="http://www.soasta.com/products/touchtest/" class="external-link" rel="nofollow">SOASTA TouchTest</a> features into Jenkins.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View SOASTA CloudTest <a href="https://plugins.jenkins.io/cloudtest" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-1054" class="external-link" rel="nofollow">CSRF vulnerability and missing permission check allow SSRF</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-16/#SECURITY-1439" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+</p>
+
+
+<p>The CloudTest Jenkins plugin provides the ability to</p>
+
+<ul>
+	<li>Easily run the MakeAppTouchTestable utility on an iOS or Android project</li>
+	<li>Silently install an iOS app on a connected device</li>
+	<li>Play CloudTest compositions and include the output in the build's test results</li>
+	<li>Launch and tear down grids, results databases, and test environments.</li>
+</ul>
+
+
+
+<h2 id="SOASTACloudTestPlugin-Prerequisites">Prerequisites</h2>
+
+<p>The CloudTest plug-in requires Jenkins 1.580.1 or later.</p>
+
+
+<h2 id="SOASTACloudTestPlugin-GlobalConfigurationOptions">Global Configuration Options</h2>
+
+<p>Before using the plug-in, you will need to provide the CloudTest server information, in the &quot;Manage Jenkins&quot; -&gt; &quot;Configure System&quot; page. This includes the CloudTest URL and a set of credentials. <em>We recommend creating a dedicated CloudTest account for Jenkins to use.</em></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66847694/67043428.png" data-image-src="attachments/66847694/67043428.png" data-unresolved-comment-count="0" data-linked-resource-id="67043428" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Configure_System_Screen_Shot.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="66847694" data-linked-resource-container-version="58"></span></p>
+
+
+<p>The CloudTest password is encrypted before saving it to disk. It is also masked (e.g. &quot;****&quot;) in all output generated during builds.</p>
+
+
+<h2 id="SOASTACloudTestPlugin-BuildSteps">Build Steps</h2>
+
+<p>The plug-in adds the following new build steps:</p>
+
+
+<h4 id="SOASTACloudTestPlugin-MakeAppTouchTestable">Make App TouchTestable</h4>
+
+<p>Adds the TouchTest Driver library to your app's source code. Typically this build step is inserted right before the build step that compiles the app's code (e.g. before the Xcode build step for iOS, or before the &quot;Invoke Ant&quot; build step for Android).</p>
+
+<h4 id="SOASTACloudTestPlugin-InstalliOSApponDevice">Install iOS App on Device</h4>
+
+<p>Silently installs an IPA file on one or more attached iOS devices. This ensures that your tests run against the latest version of your app.</p>
+
+<p><strong>Note</strong>: there is no Android version of this build step, because the Android SDK already provides this functionality (&quot;adb install&quot;).</p>
+
+
+<h4 id="SOASTACloudTestPlugin-PlayComposition">Play Composition</h4>
+
+<p>Executes a CloudTest composition, and saves the output in the build's test results. You can include this build step multiple times if there are multiple compositions in your test suite.</p>
+
+<h4 id="SOASTACloudTestPlugin-StartGrid">Start Grid</h4>
+
+<p>Starts the grid with the specified CloudTest server, and name, and ensures that the object reaches a ready status. In the event that the grid fails to reach a ready status, it will be torn down and the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-StopGrid">Stop Grid</h4>
+
+<p>Terminates the grid, and ensures that the grid reaches a terminated status. In the event that the grid fails to reach a terminated status, the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-StartRSDB">Start RSDB</h4>
+
+<p>Starts the RSDB with the specified CloudTest server, and name, and ensures that the RSDB reaches a ready status. In the event that the RSDB fails to reach a ready status, it will be torn down and the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-StopRSDB">Stop RSDB</h4>
+
+<p>Terminates the RSDB, and ensures that the RSDB reaches a terminated status. In the event that the grid fails to reach a terminated status, the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-TestEnvironments">Test Environments</h4>
+
+<p>Note that for test environments you will need to set up a CloudTest Server to point to CloudTest Manager <a href="https://cloudtestmanager.soasta.com/concerto/" class="external-link" rel="nofollow">https://cloudtestmanager.soasta.com/concerto/</a>.</p>
+
+<h4 id="SOASTACloudTestPlugin-StartTestEnvironment">Start Test Environment</h4>
+
+<p>Starts the test environment with the specified CloudTest server (Note this MUST be CTM), and name, and ensures that the object reaches a ready status. In the event that the test environment fails to reach a ready status, it will be torn down and the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-StopTestEnvironment">Stop Test Environment</h4>
+
+<p>Terminates the test environment, and ensures that the test environment reaches a terminated status. In the event that the test environment fails to reach a terminated status, the build step will fail.</p>
+
+<h4 id="SOASTACloudTestPlugin-WakeUpiOSDevice">Wake Up iOS Device</h4>
+
+<p>Wakes up one or more attached iOS devices, and opens Mobile Safari to the most recently-viewed page (e.g. TouchTest Agent). This can optionally be used at the beginning of a build, to &quot;prep&quot; the devices for testing.</p>
+
+<p><strong>Note:</strong> There is no Android version of this build step, because the Android SDK already provides this functionality.</p>
+
+<h4 id="SOASTACloudTestPlugin-RebootiOSDevice">Reboot iOS Device</h4>
+
+<p>Reboots one or more attached iOS devices. This can optionally be used at the end of a build, to &quot;reset&quot; for the next one.</p>
+
+<p><strong>Note</strong>: There is no Android version of this build step, because the Android SDK already provides this functionality (&quot;adb reboot&quot;).</p>
+
+<h2 id="SOASTACloudTestPlugin-Changelog">Changelog</h2>
+
+<h3 id="SOASTACloudTestPlugin-Version2.25(ReleasedJune13,2016)">Version 2.25 (Released June 13, 2016)</h3>
+
+<ul>
+	<li>Added support for CloudTest API tokens. See <a href="http://cloudlink.soasta.com/t5/CloudTest-Knowledge-Base/Single-Sign-On-SSO/ta-p/46186" class="external-link" rel="nofollow">Section on creating api tokens</a>.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.24(ReleasedJune2,2016)">Version 2.24 (Released June 2, 2016)</h3>
+
+<ul>
+	<li>Fixed null pointer exception during HTTP client creation.</li>
+</ul>
+
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.23(ReleasedMay25,2016)">Version 2.23 (Released May 25, 2016)</h3>
+
+<ul>
+	<li>Added support for client side certificates to communicate with a cloud server.</li>
+	<li>Manage Jenkins -&gt; Configure System -&gt; CloudTest Servers -&gt; Advanced</li>
+	<li>Enter the full path of the keystore file (.jks)</li>
+	<li>If no password is required leave blank.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.22(ReleasedFebruary26,2016)">Version 2.22 (Released February 26, 2016)</h3>
+
+<ul>
+	<li>Grid management build, and post-build steps (Start, Stop)</li>
+	<li>Test environment management build, and post-build steps (Start, Stop)</li>
+	<li>Results database (RSDB) management build, and post-build steps (Start, Stop)</li>
+	<li>Fixed test connection not working with recent versions of Cloud Test</li>
+	<li>The CloudTest plugin will now respect the 'No Proxy Host' list (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30907" class="external-link" rel="nofollow">https://issues.jenkins-ci.org/browse/JENKINS-30907</a>)</li>
+	<li>Fixed long timeout issue when checking for build number of a un-reachable CloudTest server</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.21(ReleasedSeptember21,2015)">Version 2.21 (Released September 21, 2015)</h3>
+
+<ul>
+	<li>Update Jenkins version to 1.580.1</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.20(releasedJuly20,2014)">Version 2.20 (released July 20, 2014)</h3>
+
+<ul>
+	<li>&quot;Play Composition(s)&quot; build step now supports three new thresholds - &quot;Min Duration”, &quot;Max Duration” and &quot;Average Duration&quot;.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.19(releasedJuly18,2014)">Version 2.19 (released July 18, 2014)</h3>
+
+<ul>
+	<li>&quot;Play Composition(s)&quot; build step now includes the ability to generate CSV output.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.18(releasedJuly9,2014)">Version 2.18 (released July 9, 2014)</h3>
+
+<ul>
+	<li>Results with no content no longer throw a NullPointerException. Instead, an appropriate error message will be displayed in Console and in Test Result.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.17(releasedJuly7,2014)">Version 2.17 (released July 7, 2014)</h3>
+
+<ul>
+	<li>&quot;Play Composition(s)&quot; build step now has support for transaction thresholds.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.16(releasedJune11,2014)">Version 2.16 (released June 11, 2014)</h3>
+
+<ul>
+	<li>Display full clip path for validation messages (eg. A nested clip will have all clips on its path output, not just its clip name).</li>
+	<li>Blocks cross-site scripting in output of test results.</li>
+</ul>
+
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.15(releasedMay13,2014)"><span style="color: rgb(210,73,57);"><strong>Version 2.15 (released May 13, 2014)</strong></span></h3>
+
+<ul>
+	<li>&quot;Play Composition(s)&quot; build step no longer outputs duplicate validation clip names. Clip name formatting has changed to be on individual lines and validation messages belonging to the clip are now indented.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.14(releasedMay5,2014)">Version 2.14 (released May 5, 2014)</h3>
+
+<ul>
+	<li>Added clip name to &quot;Play Composition(s)&quot; build step's validation output.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.13(releasedApril7,2014)">Version 2.13 (released April 7, 2014)</h3>
+
+<ul>
+	<li>Dynamic Instrumentation support for &quot;MakeAppTouchTestable&quot; build step.</li>
+	<li>Additional JVM options support for &quot;MakeAppTouchTestable&quot; build step.</li>
+</ul>
+
+
+<p><em>NOTE: The &quot;jump&quot; in version numbers from 2.8 to 2.13 is due to technical issues encountered while attempting to release the new version of the plug-in.  There were no releases between 2.8 and 2.13.</em></p>
+
+<h3 id="SOASTACloudTestPlugin-Version2.8(releasedFebruary26,2014)">Version 2.8 (released February 26, 2014)</h3>
+
+<ul>
+	<li>Null Junit Results are now prevented from triggering bad HTML output in Jenkins.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.7(releasedDecember19,2013)">Version 2.7 (released December 19, 2013)</h3>
+
+<ul>
+	<li>Fixed &quot;403 Forbidden&quot; errors when downloading files using CloudTest plugin.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.6(releasedNovember22,2013)">Version 2.6 (released November 22, 2013)</h3>
+
+<ul>
+	<li>Fixed NullPointerException seen when additional options are not provided for the &quot;Play Composition(s)&quot; build step.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.5(releasedNovember08,2013)">Version 2.5 (released November 08, 2013)</h3>
+
+<ul>
+	<li>Issue where CloudTest servers were not being detected correctly has been resolved.</li>
+	<li>New &quot;Additional Options&quot; input for the &quot;Play Composition(s)&quot; build step.  Any values entered here will be passed directly to SCommand.</li>
+	<li>Server configurations are now managed using a unique ID and friendly name, instead of being bound to the URL.  This means that you can use multiple CloudTest accounts with a single server (e.g. for concurrent builds), and can change the URL for a server configuration without affecting existing jobs.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.4(releasedJune25,2013)">Version 2.4 (released June 25, 2013)</h3>
+
+<ul>
+	<li>The &quot;Run App in iOS Simulator&quot; build step now works correctly when only a single CloudTest server has been configured.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.3(releasedJune4,2013)">Version 2.3 (released June 4, 2013)</h3>
+
+<ul>
+	<li>The &quot;Play Composition&quot; build step now works correctly on Windows (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17986" class="external-link" rel="nofollow">JENKINS-17986</a>).</li>
+	<li>Improved error message when the plug-in fails to determine the CloudTest server's build number.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.2(releasedMay14,2013)">Version 2.2 (released May 14, 2013)</h3>
+
+<ul>
+	<li>The &quot;Run App in iOS Simulator&quot; build step now automatically launches TouchTest Agent on the simulator.</li>
+	<li>Internal changes in preparation for next major CloudTest release.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.1(releasedApril8,2013)">Version 2.1 (released April 8, 2013)</h3>
+
+<ul>
+	<li>SCommand invocations now &quot;inherit&quot; the Jenkins proxy settings.</li>
+	<li>File and directory validations no longer show an error when the path includes a variable.</li>
+</ul>
+
+
+<h3 id="SOASTACloudTestPlugin-Version2.0(releasedMarch15,2013)">Version 2.0 (released March 15, 2013)</h3>
+
+<ul>
+	<li>Initial release.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847694/67043427.png">Screen Shot 2013-03-19 at 8.46.35 AM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847694/67043429.png">Configure_System_Screen_Shot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66847694/67043428.png">Configure_System_Screen_Shot.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:47</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

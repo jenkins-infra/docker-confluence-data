@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : One-Shot Executor</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : One-Shot Executor
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified on Sep 19, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View One-Shot Executor <a href="https://plugins.jenkins.io/one-shot-executor" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+One-Shot Executor is an alternate paradigm for Jenkins Slave.</p>
+
+<h2 id="One-ShotExecutor-TLDR;">TLDR;</h2>
+
+<p>A One-Shot Executor is a Slave created for a specific Build in Jenkins Queue. It is launched as the Build start, and destroyed as the Build Complete. Think as a 1:1 lifecycle between your Build and the Slave to run it.</p>
+
+<p>This plugin doesn't provide anything by itself, it is designed for being used by other plugin that require this new paradigm, typically relying on container technology.</p>
+
+<h2 id="One-ShotExecutor-Why?">Why ?</h2>
+
+<p>A classic (or Cloud) Jenkins slave has it standalone lifecycle and do accept task from the build queue. Especially, even when using a Cloud slave, which can create a fresh new slave for a Build, Slave will still precede the Build, and survive it. Cloud API can be tweaked to ensure slave will be created asap and destroyed after use for a Build, but</p>
+
+<p>1. Cloud API do introduce some delays. Can be tweaked to limit them to a strict minimum, but still exists</p>
+
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96075993/96305161.png" data-image-src="attachments/96075993/96305161.png" data-unresolved-comment-count="0" data-linked-resource-id="96305161" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2016-03-04 à 09.10.37.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96075993" data-linked-resource-container-version="13"></span></p>
+
+<p>2. The relation between a Build and a Slave is &quot;Slave host a Build&quot; as a special case for &quot;Salve do host Builds&quot; .</p>
+
+
+
+<p><strong>So the Slave precede the Build, what's wrong ?</strong></p>
+
+<p>When relying on Docker containers, and the actual container image to host the build is defined by the Job or Build parameters, the slave launch can fail. A Cloud Slave would try to provision a slave repeatedly as an infinite loop to match the Queue Task executor request, until someone wonder why the build never started, investigate, and find a typo in job configuration.</p>
+
+<h2 id="One-ShotExecutor-So,whataboutOne-Shot?">So, what about One-Shot ?</h2>
+
+<p>A OneShot executor is an executor dedicated to a Builld.</p>
+
+<p>We don't need the Cloud API and it's provisioning logic to estimate the load and determine when a new slave has to be created, we <strong><em>KNOW</em></strong> a new slave is required. So One-Shot just bypass the Cloud logic and immediately create a Slave. The fresh new slave claim to be ready so the task is assigned, and a Build is started. As the Build start to execute, the Slave actually starts as well.</p>
+
+<p>This lazy-bootstrap let us create a tight coupling between a Build and it's Slave, and actually reverse the relation to &quot;a Build has a Slave&quot;.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96075993/96305162.png" data-image-src="attachments/96075993/96305162.png" data-unresolved-comment-count="0" data-linked-resource-id="96305162" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Capture d’écran 2016-03-04 à 09.23.19.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96075993" data-linked-resource-container-version="13"></span></p>
+
+
+<p>Reversing the Slave/Build relation and forwarding Slave's log into build log, we can report the container bootstrap process. User will see in log the image is pulled from registry, container is started, may fail and report errors. In such circumstances, this is not Jenkins fault, but an actual failure caused by the Build's configuration. So getting this in the Build log, and reporting to the user by build failure notification will let him know something is wrong without delay.</p>
+
+
+
+<h2 id="One-ShotExecutor-How?">How ?</h2>
+
+<p>One-Shot Executor is an infrastructure plugin, it does not provide new Slaves by itself, but just the API for a Slave provider to implement this new approach and only focus on running a Slave according to the Job configuration / Build parameters.</p>
+
+<p>Implementation require Jenkins 2.9 or later as we had to introduce some dedicated hooks to allow the Build:Executor inverse relation.</p>
+
+<h2 id="One-ShotExecutor-History">History</h2>
+
+<p>This plugin has been extracted from <a href="Docker-Slaves-Plugin.html">docker-slaves</a>, we created for Docker Hack Day 2015 (we won the 3rd prize!), and which is an experiment sandbox for us. So this specific piece of code was created by extracting stable components to let them become mature and usable by others.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96075993/96305161.png">Capture d’écran 2016-03-04 à 09.10.37.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96075993/96305162.png">Capture d’écran 2016-03-04 à 09.23.19.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

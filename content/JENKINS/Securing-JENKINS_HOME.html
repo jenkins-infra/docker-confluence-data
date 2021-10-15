@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Securing JENKINS_HOME</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Securing JENKINS_HOME
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (wilfredh)</span>, last modified on Feb 26, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Jenkins stores all its state on disk, in the JENKINS_HOME directory. For example, $JENKINS_HOME is /var/jenkins_home if you're using the <a href="https://github.com/jenkinsci/docker" class="external-link" rel="nofollow">official Jenkins Docker image</a>.</p><h2 id="SecuringJENKINS_HOME-JENKINS_HOME/secrets">JENKINS_HOME/secrets</h2><p>This directory contains encryption keys that protect secrets, such as credentials. For example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$JENKINS_HOME/secrets $ ls -1
+filepath-filters.d/
+hudson.console.ConsoleNote.MAC
+hudson.util.Secret
+jenkins.model.Jenkins.crumbSalt
+master.key
+org.jenkinsci.main.modules.instance_identity.InstanceIdentity.KEY
+whitelisted-callables.d</pre>
+</div></div><p>Sensitive data in other files are encrypted using the keys in secrets/. For example, API tokens in user configuration files are protected:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$ head $JENKINS_HOME/users/jsmith/config.xml
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;user&gt;
+  &lt;fullName&gt;John Smith&lt;/fullName&gt;
+  &lt;properties&gt;
+    &lt;jenkins.security.ApiTokenProperty&gt;
+      &lt;apiToken&gt;{AQAAABAAAAAw3HLwlE6JAj4Iq81oCccPe6F12p+garuVgD/2fdSD6LmchI77uBjQq+8sFOhSTd9LOwTBGWN5ZcHTpGNvxg1MDA==}&lt;/apiToken&gt;
+    &lt;/jenkins.security.ApiTokenProperty&gt;</pre>
+</div></div><p>$JENKINS_HOME/secrets should be only readable by the user account used by the Jenkins process. <strong>Read access to this directory is equivalent to being a Jenkins admin user.</strong></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$JENKINS_HOME $ ls -ld secrets
+drwx------+ 10 jenkinsuser 340 Feb 26 13:52 secrets/</pre>
+</div></div><h2 id="SecuringJENKINS_HOME-OtherJENKINS_HOMEdirectories">Other JENKINS_HOME directories</h2><p>Depending on your Jenkins use case, you may also want to protect other directories in JENKINS_HOME.</p><p>For example, users can discover what jobs exist, and what they do, by looking at the <code>jobs</code> directory.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$JENKINS_HOME $ ls jobs/
+build_hello_world/ deploy_hello_world/ another_exciting_job/
+$JENKINS_HOME $ less jobs/another_exciting_job/config.xml
+...
+  &lt;builders&gt;
+    &lt;hudson.tasks.Shell&gt;
+      &lt;command&gt;ls /&lt;/command&gt;
+    &lt;/hudson.tasks.Shell&gt;
+  &lt;/builders&gt;</pre>
+</div></div><p>Users can also view build output when jobs run:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$JENKINS_HOME $ more jobs/another_exciting_job/builds/1/log
+Started by user John Smith
+Building in workspace /var/jenkins_home/jobs/another_exciting_job/workspace
+[workspace] $ /bin/sh -xe /tmp/jenkins1336326875197177937.sh
++ ls /
+bin
+dev
+etc
+home
+keys
+lib
+media
+mnt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+Finished: SUCCESS</pre>
+</div></div><p>Jenkins may also have source code checkouts in JENKINS_HOME:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">$JENKINS_HOME $ ls caches
+git-595a783332800bac6d7b275cab2eb84d/
+$JENKINS_HOME $ cd caches/git-595a783332800bac6d7b275cab2eb84d/
+$JENKINS_HOME/caches/git-595a783332800bac6d7b275cab2eb84d/ $ git remote -v
+origin    http://example.com/hello_world.git (fetch)
+origin    http://example.com/hello_world.git (push)</pre>
+</div></div><h2 id="SecuringJENKINS_HOME-Hardening">Hardening</h2><p>If job configuration or output is sensitive, you may want to make all of JENKINS_HOME only readable by the user used by the Jenkins process. This will also protect your instance if/when there are <a href="https://jenkins.io/security/advisory/2018-02-26/" class="external-link" rel="nofollow">plugin bugs that write unencrypted data to JENKINS_HOME</a>.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

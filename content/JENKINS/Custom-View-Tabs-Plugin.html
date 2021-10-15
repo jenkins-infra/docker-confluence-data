@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Custom View Tabs Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Custom View Tabs Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (todderz)</span>, last modified on Feb 19, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Custom View Tabs <a href="https://plugins.jenkins.io/custom-view-tabs" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>Custom View Tabs plugin allows customised labels and colours for view tabs, showing job status details.</p>
+
+
+
+<h1 id="CustomViewTabsPlugin-About">About</h1>
+
+<p>This plugin allows you to customise the view tab labels so that you can tell at a glance when a view contains failed, unstable or disabled jobs. You have full control over the details that are shown, can customise the tab colour to indicate different statuses, can specify one label format for the active tab and a different format for the inactive tab, etc.</p>
+
+<h1 id="CustomViewTabsPlugin-QuickStart">Quick Start</h1>
+
+<ol>
+	<li>Install without restart from Manage Plugins.</li>
+	<li>On Configure System select &quot;Custom Views TabBar&quot; from the &quot;Views TabBar&quot; selection near the top of the page.</li>
+	<li>Scroll to the &quot;Custom View Tabs&quot; config section. Click the &quot;tab colour options&quot; button and select Red for &quot;Tab colour when failed jobs&quot;. Apply changes.</li>
+	<li>View your Jenkins home page and views containing failed jobs should have red tabs.</li>
+	<li>Back in the config try changing the label patterns to &quot;$N1 - $F failed&quot; and view the home page again. Tabs should now show the number of failures.</li>
+	<li>No failures? Try &quot;$N1 - $T jobs&quot; to display the total number of jobs. </li>
+	<li>See the examples below and customise as desired.</li>
+</ol>
+
+
+<h1 id="CustomViewTabsPlugin-Usage">Usage</h1>
+
+<p>Perhaps you'd like the active view tab label to give you an overview of the job statuses in the view:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959772.png" data-image-src="attachments/69764334/69959772.png" data-unresolved-comment-count="0" data-linked-resource-id="69959772" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="detailed-label.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Maybe you only want the label to show details of failures. You can include any of the status counts and any text that you choose, eg:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959786.png" data-image-src="attachments/69764334/69959786.png" data-unresolved-comment-count="0" data-linked-resource-id="69959786" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="other-detailed.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Perhaps you'd prefer a short message that shows &quot;number of failures / total count&quot;, eg &quot;1/5&quot; for one failure out of five jobs:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959773.png" data-image-src="attachments/69764334/69959773.png" data-unresolved-comment-count="0" data-linked-resource-id="69959773" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="brief-label.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Perhaps you'd like the long version for the active tab and the short version on all the inactive tabs:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959774.png" data-image-src="attachments/69764334/69959774.png" data-unresolved-comment-count="0" data-linked-resource-id="69959774" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="detailed-and-brief.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Perhaps that means the tab bar gets too long with all the views you have, so maybe you don't want the inactive tab labels when everything on that tab is OK:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959775.png" data-image-src="attachments/69764334/69959775.png" data-unresolved-comment-count="0" data-linked-resource-id="69959775" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="detailed-and-brief-conditional.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Still too long? Perhaps you'd like to use a shorter version of the name on those inactive tabs. You can choose to use a certain number of characters:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959776.png" data-image-src="attachments/69764334/69959776.png" data-unresolved-comment-count="0" data-linked-resource-id="69959776" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="short-name.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Or you can use a regular expression to do things like reducing to just the initial letters, eg a view called &quot;Lots Of Jobs&quot; would become LOJ:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959777.png" data-image-src="attachments/69764334/69959777.png" data-unresolved-comment-count="0" data-linked-resource-id="69959777" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="initials-name.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Maybe you prefer a simple indication of the number of failed jobs:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959790.png" data-image-src="attachments/69764334/69959790.png" data-unresolved-comment-count="0" data-linked-resource-id="69959790" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="failure-count.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Perhaps you would just like a very subtle indication to show when a view contains a job that is not succeeding:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959791.png" data-image-src="attachments/69764334/69959791.png" data-unresolved-comment-count="0" data-linked-resource-id="69959791" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="subtle.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Or maybe like the next one. Remember that because broken jobs are an incredibly rare event on your project, thanks to the efforts of your awesome team-mates, there won't normally be quite so many tabs with error indications. The point really is that you have a lot of control to decide what to show and how:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959792.png" data-image-src="attachments/69764334/69959792.png" data-unresolved-comment-count="0" data-linked-resource-id="69959792" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="subtle-alternate.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+
+<p>Perhaps you'd just like the tabs for any view with a failing job to be coloured red:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959779.png" data-image-src="attachments/69764334/69959779.png" data-unresolved-comment-count="0" data-linked-resource-id="69959779" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="failed-red.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Maybe you also want tabs to be yellow when there is an unstable job. Note that the worst status takes precedence, so in this example the &quot;All&quot; tab is red because it has one failing job which is worse than the unstable job, but the view with nothing worse than unstable is coloured yellow:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959780.png" data-image-src="attachments/69764334/69959780.png" data-unresolved-comment-count="0" data-linked-resource-id="69959780" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="unstable-yellow.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>Maybe that red was too harsh so you want to specify your own colour code for something a little more subtle:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959781.png" data-image-src="attachments/69764334/69959781.png" data-unresolved-comment-count="0" data-linked-resource-id="69959781" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="custom-red.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>If you want, you can go mad and choose a colour for &quot;disabled&quot; and even a colour to use when everything is OK, (but really you probably want to stick to just using colours for failures, so that it gets noticed):</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959784.png" data-image-src="attachments/69764334/69959784.png" data-unresolved-comment-count="0" data-linked-resource-id="69959784" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="all-colours.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+
+<p>If you use nested views then the parent tab will summarise its children:</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959787.png" data-image-src="attachments/69764334/69959787.png" data-unresolved-comment-count="0" data-linked-resource-id="69959787" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nested.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>and the nested child views work just like any other:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959788.png" data-image-src="attachments/69764334/69959788.png" data-unresolved-comment-count="0" data-linked-resource-id="69959788" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="nested-child.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<p>I like to have a brief message on the active tab, a subtle marker on tabs with &quot;problematic&quot; jobs, and a more prominent, but still inoffensive red indication where there are failures. This lets me get a quick overview of what's happening, so that I can start chasing people to fix problems or delete their outdated projects, and not let broken builds become the norm. I want failures to be something that gets noticed quickly, and fixed, and on a busy project with many teams sharing one Jenkins, it takes a bit of care to ensure that old, broken junk doesn't build up. This view is just another tool that helps me with that:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764334/69959793.png" data-image-src="attachments/69764334/69959793.png" data-unresolved-comment-count="0" data-linked-resource-id="69959793" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="prefered.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+
+
+
+<h1 id="CustomViewTabsPlugin-Configuration">Configuration</h1>
+
+<p>All configuration is in the global Jenkins config page. After installation, you will need to choose the custom view tabs option in the &quot;Views Tab Bar&quot; drop down:</p>
+
+<p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="200" src="attachments/69764334/69959782.png" data-image-src="attachments/69764334/69959782.png" data-unresolved-comment-count="0" data-linked-resource-id="69959782" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="tabsbar-selection.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+
+<p>Label patterns are specified using any text you want and some special placeholders for the different counts, choosing from the following:</p>
+
+<ul>
+	<li>$T - The Total number of jobs</li>
+	<li>$S - The number of jobs currently Succeeding</li>
+	<li>$F - The number of jobs currently Failing</li>
+	<li>$U - The number of jobs currently Unstable</li>
+	<li>$D - The number of jobs currently Disabled</li>
+</ul>
+
+
+<p>and some tokens for the view name:</p>
+<ul>
+	<li>$N1 - The original view name</li>
+	<li>$N2 - The original view name truncated according to the short name length setting</li>
+	<li>$N3 - The original view name processed using replaceAll(regexMatch, regexReplacement)  - see advanced config section</li>
+</ul>
+
+
+<p>eg, for the patterns you've seen in the examples above, we have:</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="200" src="attachments/69764334/69959783.png" data-image-src="attachments/69764334/69959783.png" data-unresolved-comment-count="0" data-linked-resource-id="69959783" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="config-simple.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+
+<p>In the above screen you can also see the settings to control whether the labelling should be always on or only when there is something other than &quot;successful&quot; to report.</p>
+
+<p>Click on the tab colour options button to select the colours to use for different conditions, and enter your own colour codes if you don't like the built ins:</p>
+
+<p> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="200" src="attachments/69764334/69959785.png" data-image-src="attachments/69764334/69959785.png" data-unresolved-comment-count="0" data-linked-resource-id="69959785" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="tab-colour-options.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764334" data-linked-resource-container-version="30"></span></p>
+
+<h1 id="CustomViewTabsPlugin-Versions">Versions</h1>
+
+<h4 id="CustomViewTabsPlugin-1.0(18Oct2013)">1.0 (18 Oct 2013)</h4>
+
+<p>Call it a beta version (my first attempt at a Jenkins plugin).<br/>
+Please confirm operation in a test instance of Jenkins before installing in your production server.<br/>
+Compatible with the nested views plugin, but if you're using any other customisations of the tab bar it probably isn't compatible.<br/>
+You can only have one views tab bar implementation active in a given Jenkins instance.<br/>
+If you experience tabs with missing names, check that there is a naming pattern specified for active and inactive, eg just $N1 if you want to keep the original name.<br/>
+Please report any bugs.<br/>
+Feedback on functionality and implementation most welcome: I hope to gain a much better understanding of how to write effective Jenkins plugins.</p>
+
+<h4 id="CustomViewTabsPlugin-1.3(19Feb2016)">1.3 (19 Feb 2016)</h4>
+
+<p>thanks to maosmurf - updates for UI compatibility with newer Jenkins version</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959772.png">detailed-label.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959773.png">brief-label.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959774.png">detailed-and-brief.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959775.png">detailed-and-brief-conditional.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959776.png">short-name.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959778.png">initials-name.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959777.png">initials-name.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959779.png">failed-red.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959780.png">unstable-yellow.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959781.png">custom-red.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959782.png">tabsbar-selection.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959783.png">config-simple.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959784.png">all-colours.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959785.png">tab-colour-options.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959786.png">other-detailed.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959787.png">nested.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959788.png">nested-child.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959790.png">failure-count.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959791.png">subtle.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959792.png">subtle-alternate.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764334/69959793.png">prefered.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:19</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

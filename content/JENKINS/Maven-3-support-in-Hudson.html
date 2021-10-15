@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Maven 3 support in Hudson</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Maven-Project-Plugin.html">Maven Project Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Maven 3 support in Hudson
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ndeloof)</span>, last modified by <span class='editor'> Unknown User (eller86)</span> on Sep 13, 2013
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Maven 3 support in the native maven plugin has been integrated in 1.392</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Documentation in progress</p></div></div>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021616322 {padding: 0px;}
+div.rbtoc1631021616322 ul {list-style: disc;margin-left: 0px;padding-left: 6px;}
+div.rbtoc1631021616322 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021616322'>
+<ul class='toc-indentation'>
+<li><a href='#Maven3supportinHudson-Introduction'>Introduction</a>
+<ul class='toc-indentation'>
+<li><a href='#Maven3supportinHudson-MavensupportinHudson'>Maven support in Hudson</a></li>
+</ul>
+</li>
+<li><a href='#Maven3supportinHudson-WhydowehavetointegrateMavenintoHudson?'>Why do we have to integrate Maven into Hudson?</a>
+<ul class='toc-indentation'>
+<li><a href='#Maven3supportinHudson-Betterfeedback'>Better feedback</a></li>
+</ul>
+</li>
+<li><a href='#Maven3supportinHudson-PossibleimprovementstoMaven3support'>Possible improvements to Maven 3 support</a>
+<ul class='toc-indentation'>
+<li><a href='#Maven3supportinHudson-Projectanalyzis'>Project analyzis</a></li>
+<li><a href='#Maven3supportinHudson-Runningmaven3build'>Running maven 3 build</a></li>
+</ul>
+</li>
+<li><a href='#Maven3supportinHudson-ChangeinHudsonPluginsformaven3'>Change in Hudson Plugins for maven 3</a></li>
+</ul>
+</div>
+
+<h3 id="Maven3supportinHudson-Introduction">Introduction</h3>
+
+<p>Maven 2 support in Hudson is still experimental, but many users rely on it. Maven 3 comes now with first beta available, we have to consider support in Hudson as many things changed and it cannot be integrated to Hudson the way Maven 2 was.</p>
+
+<h4 id="Maven3supportinHudson-MavensupportinHudson">Maven support in Hudson</h4>
+
+<p>Maven 2 support in Hudson is a two-phase process :</p>
+
+<ol>
+	<li>Read project POM(s), build the module tree assuming dependencies ordering, and setup jobs for thoses modules</li>
+	<li>Run maven build on modules</li>
+</ol>
+
+
+<p>In early stages, First step was built on Maven Embedder, but this strategy failed due to lack of support for settings and other issues. The project POMs are now parsed by Hudson using maven model API.</p>
+
+<p>Second step uses a hack to create the classloader hierarchy expected by Maven, but include Hudson tweaks (custom plexus components, plugin filters, phase listeners) so that Hudson can monitor the build. As a result, some maven builds in hudson can behave strangely compared to command line maven (<em>JIRA issues #?</em>).</p>
+
+<h3 id="Maven3supportinHudson-WhydowehavetointegrateMavenintoHudson?">Why do we have to integrate Maven into Hudson?</h3>
+
+<p>What is the main benefit for integrating Mavens internal structures into Hudson? What do Hudson gain from that compared to viewing Maven as a black box and just make sure that Hudson can install and find Maven 3 and call it's target as any user would do?</p>
+
+<h4 id="Maven3supportinHudson-Betterfeedback">Better feedback</h4>
+
+<p>Many maven projects are built as multi-module projects. Running the build as a black-box process with a single success/failure status gives few feedback on build status. By analyzing the POM and modules, Hudson can display status per module, with related links to test failures and other reporting stuff. Hudson can also setup the maven options to only build modules that are related to last commit and the dependent ones (incremental build option) OR build modules in parallel fo a quicker build.</p>
+
+
+<h3 id="Maven3supportinHudson-PossibleimprovementstoMaven3support">Possible improvements to Maven 3 support</h3>
+
+<h4 id="Maven3supportinHudson-Projectanalyzis">Project analyzis</h4>
+
+<p>This step can take advantage of new Maven 3 API and &quot;build plan&quot; (<a href="http://communitymapbuilder.osgeo.org/display/MAVEN/Deterministic+Lifecycle+Planning" class="external-link" rel="nofollow">doc</a>) to get a clean view of the project structure, without dependency on maven internals. Using such API the Maven version and configuration used to analyze the project and to run the build will be the same</p>
+
+<h4 id="Maven3supportinHudson-Runningmaven3build">Running maven 3 build</h4>
+
+<p>This step requires a better isolation from Hudson JVM with less changes to Maven runtime.</p>
+
+<p>Maven 3 has cleaner APIs and support for listeners (<em>used in maven parallel build, to be confirmed|link to doc?</em>). Running the Maven3 build as a standalone JVM - like freestyle projects in hudson - will make it more compliant to standard Maven build. The forked JVM just has to include a Hudson dedicated listener to send back build notifications to Hudson JVM, but the JVM running Maven will require no other hack.</p>
+
+<h3 id="Maven3supportinHudson-ChangeinHudsonPluginsformaven3">Change in Hudson Plugins for maven 3</h3>
+
+<p>@since 1.392 MavenBuildProxy has a new method getMavenVersion() which returns a bean MavenBuildInformation.<br/>
+This bean returns the maven version used for this build with the method String getMavenVersion().<br/>
+Here you are able to know if you are using maven 2 or later with this piece of code :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+public boolean maven3orLater(String mavenVersion) {
+    // null or empty so false !
+    if (StringUtils.isBlank( mavenVersion )) {
+      return false;
+     }
+     return new ComparableVersion (mavenVersion).compareTo( new ComparableVersion (&quot;3.0&quot;) ) &gt;= 0;
+}
+</pre>
+</div></div>
+<p>So now all MavenReporter knows the maven version used.<br/>
+If you are modifying the mojo execution in your maven reporter you have to take care of the following change to (see related issues : <a href="http://issues.jenkins-ci.org/browse/JENKINS-8415" class="external-link" rel="nofollow">JENKINS-8415</a>, <a href="http://issues.jenkins-ci.org/browse/JENKINS-8362" class="external-link" rel="nofollow">JENKINS-8362</a> )</p>
+
+<p>See relative commit <a href="https://github.com/jenkinsci/jenkins/commit/3f2ab68b248a8104053227b074221937f7ab3176" class="external-link" rel="nofollow">https://github.com/jenkinsci/jenkins/commit/3f2ab68b248a8104053227b074221937f7ab3176</a><br/>
+Now in order to change (when your build is maven 3), you must play with the mojo configuration available with :</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+mojo.mojoExecution.getConfiguration()
+This is a Xpp3Dom now (previously it was a XmlPlexusConfiguration )
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

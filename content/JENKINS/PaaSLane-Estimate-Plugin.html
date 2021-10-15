@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : PaaSLane Estimate Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : PaaSLane Estimate Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (ctp_alan_zall)</span>, last modified by <span class='editor'> Unknown User (ushatil_ctp)</span> on Sep 04, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Provides a post build action for submitting artifacts to PaaSLane for scanning.</p>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View PaaSLane Estimate <a href="https://plugins.jenkins.io/paaslane-estimate" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<h1 id="PaaSLaneEstimatePlugin-Goal">Goal</h1>
+
+<p>The PaaSLane Estimate plugin for Jenkins provides a secure submission capability for users of PaaSLane. a static code analysis platform, and Jenkins. PaaSLane is a static code analyzer for modernizing and optimizing applications. When modernizing existing code, PaaSLane can help to make your application be more performant, more secure, and easier to maintain. When developing new cloud applications, <a href="http://www.paaslane.com" class="external-link" rel="nofollow">PaaSLane </a> helps ensure optimal performance and scalability in the most popular public and private cloud platforms. PaaSLane automatically spots hundreds of potential issues and optimizations in your source code, giving you detailed examples and suggesting remediations to enhance developer productivity. For a free trial <a href="http://www.paaslane.com/products/paaslane-optimize/" class="external-link" rel="nofollow">click here </a>.</p>
+
+<p>The PaaSLane Estimate plugin is implemented as a <em>Post Build Action</em> and is intended to sweep a directory structure looking for files that match the specified patterns and securely upload them to PaaSLane for verification. Once the files are uploaded, they are profiled and then an estimation report is generated. This report will include overall conformance with the rules defined, a list of instances of the violations with their recommended remediation, as well as an estimate for the remediation.</p>
+
+<h1 id="PaaSLaneEstimatePlugin-Gettingstarted">Getting started</h1>
+
+<p>Install the plugin using the Plugin Manager via the Available tab, and restart Jenkins</p>
+
+<h1 id="PaaSLaneEstimatePlugin-JobSetup">Job Setup</h1>
+
+<p>The PaaSLane Estimate plugin is implemented as a Post Build Action Plugin as shown below</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/74416560/74711082.png" data-image-src="attachments/74416560/74711082.png" data-unresolved-comment-count="0" data-linked-resource-id="74711082" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="PLE_Plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="74416560" data-linked-resource-container-version="33"></span></p>
+
+
+<h1 id="PaaSLaneEstimatePlugin-Options:">Options:</h1>
+
+<ol>
+	<li>Name - The name field is used to specify the PaaSLane application that the artifacts mapped later will be associated with. For example, if the name of this field is &quot;My Application&quot; and you match 3 artifacts, there will be an application &quot;My Application&quot; with 3 modules that get profiled.</li>
+	<li>Authentication Token - The &quot;Authentication Token&quot; field contains the PaaSLane token associated with a specific user in a specific tenant. This token can be gotten by logging into PaaSLane, clicking the username dropdown and selecting to &quot;Get Token&quot;. Once you have this option you should be presented with the time sensitive token.</li>
+	<li>PaaSLane SaaS URL - The &quot;PaaSLane Agent URL&quot; field specifies the root url, including the host, port and context that define the location of the PaaSLane profiling environment to use. For most SaaS customers, this will be <span class="nolink">https://app.paaslane.com/paaslane</span>.</li>
+	<li>PaaSLane Agent URL - The &quot;PaaSLane Agent URL&quot; field specifies the root url, including the host, port and context that define the location of the PaaSLane profiling environment to use. For most SaaS customers, this will be <span class="nolink">https://agent.paaslane.com/paaslaneagentserver</span>. However, customers utilizing distributed profiling, will want to get their URL from their administrator.</li>
+	<li>Path to Artifact(s) - This optional value specifies the additional path from the workspace directory that should be scanned for artifacts to be included in the application. This, paired with &quot;Regular Expression for Selecting Modules&quot; and &quot;Exclude Regular Expressions&quot; help to specify included artifacts.</li>
+	<li>Regular Expression for Selecting Modules - This value specifies the Ant style regular expression used to search for artifacts residing under &quot;Path to Artifact(s)&quot;. For examples of Ant Style regular expressions, please see <a href="http://ant.apache.org/manual/dirtasks.html#patterns" class="external-link" rel="nofollow">examples</a>.</li>
+	<li>Excluded Regular Expressions - The &quot;Exclude Regular Expressions&quot; field contains a comma separated list of regular expression patterns that will be applied to every matched ar<span style="color: rgb(0,0,0);">tifact. If any of the patterns match the path of the artifact being reviewed, then  artifact will not be sent to PaaSLane. Examples of these regular expressions can be found</span> <span style="color: rgb(0,0,0);"><a href="http://ocpsoft.org/opensource/guide-to-regular-expressions-in-java-part-1/" class="external-link" rel="nofollow">here.</a></span></li>
+	<li><span style="color: rgb(0,0,0);">Report Config - Name of the Report Config to use when generating the Report. If you leave this field blank, PaaSLane will use the Default Report Config. </span>To see your existing Report Configs, go to the PaaSLane UI, click &quot;Applications&quot;, and click &quot;New Report&quot; next to an existing application. Under the &quot;Create Report&quot; button, you will see a dropdown that contains a list of existing Report Configs. You can click &quot;Advanced&quot; to see details and further configure your report.</li>
+	<li><span style="color: rgb(0,0,0);">Language - The &quot;Language&quot; selection specifies which language rules should be applied to the artifacts that are uploaded and profiled.</span></li>
+	<li>Test, but don't send files - The &quot;Test, but don't send files&quot; field, when checked, will only display the files that would have been sent, based on the parameters. Use this field to get the parameters correct.</li>
+	<li>Fail when Total Alert Count greater than - Forces the plugin to query the total number of alerts found and if that number exceeds the threshold provided below, the build will fail.</li>
+	<li>Fail when Blocker Alert Count greater than - Forces the plugin to query the total number of blocker alerts found and if that number exceeds the threshold provided below, the build will fail.</li>
+	<li>                                                               - The threshold for acceptable number of blocker alerts allowed.</li>
+	<li>Fail when Important Alert Count greater than - Forces the plugin to query the total number of important alerts found and if that number exceeds the threshold provided below, the build will fail.</li>
+	<li>                                                               - The threshold for acceptable number of important alerts allowed.</li>
+	<li>Fail when Warning Alert Count greater than - Forces the plugin to query the total number of warning alerts found and if that number exceeds the threshold provided below, the build will fail.</li>
+	<li>Fail when Optimization Alert Count greater than - Forces the plugin to query the total number of optimization alerts found and if that number exceeds the threshold provided below, the build will fail.</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74416560/74711083.png">PLE_Plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74416560/76054534.png">PLE_Plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/74416560/74711082.png">PLE_Plugin.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:37</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

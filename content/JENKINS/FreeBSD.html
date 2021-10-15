@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : FreeBSD</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : FreeBSD
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified by <span class='editor'> Unknown User (kinow)</span> on Oct 18, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="FreeBSD-InstallingJenkinsCIonFreeBSD">Installing Jenkins CI on FreeBSD </h2>
+
+<p>Installing Jenkins on FreeBSD is now as simple as running the following commands as root (or prefix the 'sudo' command):
+<br class="atl-forced-newline"/></p>
+
+<p>You can install Jenkins LTS with pkg:</p>
+
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# pkg install jenkins-lts
+</pre>
+</div></div>
+
+<p>Or if you want to install the latest version of Jenkins:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"># pkg install jenkins</pre>
+</div></div>
+<p>Compiling from ports:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# cd /usr/ports/devel/jenkins
+# make install clean
+</pre>
+</div></div>
+
+<p>This will automatically install Java (by default, OpenJDK)</p>
+
+<h2 id="FreeBSD-ManuallystartingandstoppingtheJenkinsCIservice">Manually starting and stopping the Jenkins CI service</h2>
+
+<p>You can start, stop, restart, and get the status of Jenkins with the 'service' command run as root, like this:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# service jenkins start
+# service jenkins status
+# service jenkins restart
+# service jenkins stop
+</pre>
+</div></div>
+
+<h2 id="FreeBSD-StartingJenkinsCIautomatically">Starting Jenkins CI automatically</h2>
+
+<p>To have Jenkins start automatically whenever your FreeBSD system starts, add the following line to /etc/rc.conf:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+jenkins_enable=&quot;YES&quot;
+</pre>
+</div></div>
+
+<h2 id="FreeBSD-AccessingJenkinsonFreeBSD">Accessing Jenkins on FreeBSD</h2>
+
+<p>It is the default configuration to listen on every address of the host and port 8180:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>/usr/local/etc/rc.d/jenkins</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+: ${jenkins_args=&quot;--webroot=${jenkins_home}/war --httpPort=8180 --prefix=/jenkins&quot;}
+</pre>
+</div></div>
+
+<p>Once you've installed and launched Jenkins, it will be available at the following URI. Note: you may find that the trailing slash is mandatory when using curl to test:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>http://localhost:8180/jenkins/
+</pre>
+</div></div>
+
+<h2 id="FreeBSD-ChangingtheJenkinsCIlistenaddress,portandprefix">Changing the Jenkins CI listen address, port and prefix</h2>
+
+<p>This fine if you only want to access Jenkins directly from external. If you want the Jenkins can be accessed only from system on which it is installed, for example, put Jenkins behind of a reverse proxy which can provide https connection (or you want Jenkins can only be accessed through an SSH tunnel with port forwarding), or you just want to drop &quot;/jenkins&quot; prefix.  Set the jenkins_args in the configuration file &quot;/etc/rc.conf&quot; or &quot;/etc/rc.conf.d/jenkins&quot;, add the httpListenAddress argument and set its value to 127.0.0.1, and remove the prefix argument to the . For example:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>/etc/rc.conf</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+jenkins_args=&quot;--webroot=${jenkins_home}/war --httpListenAddress=127.0.0.1 --httpPort=8180&quot;
+</pre>
+</div></div>
+
+<p>After making these changes, restart Jenkins to apply the change:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# service jenkins restart
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

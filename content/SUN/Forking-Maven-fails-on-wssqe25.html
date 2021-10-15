@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sun&#39;s Hudson deployment : Forking Maven fails on wssqe25</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Sun&#39;s Hudson deployment</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Investigation-Notes.html">Investigation Notes</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Sun&#39;s Hudson deployment : Forking Maven fails on wssqe25
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Jul 23, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>A m2 build on wssqe25 hangs at boot. It appears from Process Explorer that the forked Maven process has already exited, leaving the slave blocked on accepting a TCP connection that never arrives.</p>
+
+<p>On master:</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&quot;Executor #1 for jennings&quot; Id=117 WAITING on hudson.remoting.UserRequest@2d810e
+	at java.lang.Object.wait(Native Method)
+	-  waiting on hudson.remoting.UserRequest@2d810e
+	at java.lang.Object.wait(Object.java:485)
+	at hudson.remoting.Request.call(Request.java:88)
+	at hudson.remoting.Channel.call(Channel.java:392)
+	at hudson.maven.MavenModuleSetBuild$RunnerImpl.doRun(MavenModuleSetBuild.java:342)
+	at hudson.model.AbstractBuild$AbstractRunner.run(AbstractBuild.java:231)
+	at hudson.model.Run.run(Run.java:786)
+	at hudson.maven.MavenModuleSetBuild.run(MavenModuleSetBuild.java:204)
+	at hudson.model.ResourceController.execute(ResourceController.java:70)
+	at hudson.model.Executor.run(Executor.java:88)
+</pre>
+</div></div>
+
+<p>On slave:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>&quot;pool-1-thread-9&quot; Id=230 RUNNABLE (in native)
+	at java.net.PlainSocketImpl.socketAccept(Native Method)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:384)
+	-  locked java.net.SocksSocketImpl@1765966
+	at java.net.ServerSocket.implAccept(ServerSocket.java:453)
+	at java.net.ServerSocket.accept(ServerSocket.java:421)
+	at hudson.maven.MavenProcessFactory$AcceptorImpl.accept(MavenProcessFactory.java:126)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.perform(RemoteInvocationHandler.java:240)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:223)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:183)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:69)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:23)
+	at hudson.remoting.Request$2.run(Request.java:200)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:441)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:885)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:907)
+	at java.lang.Thread.run(Thread.java:619)
+</pre>
+</div></div>
+
+<p>After manually connecting to the TCP port to avoid dead lock, the wholw build output was:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>started
+Building remotely on wssqe25.sfbay
+Checking out a fresh workspace because C:\hudson\workspace\v3-docs\v3-docs doesn&#39;t exist
+Checking out https://www.dev.java.net/svn/glassfish-svn/trunk/v3-docs
+   ...
+At revision 21376
+no change for https://www.dev.java.net/svn/glassfish-svn/trunk/v3-docs since the previous build
+Parsing POMs
+[INFO ] snapshot org.glassfish:glassfish-parent:10.0-SNAPSHOT: checking for updates from glassfish-repository
+[INFO ] snapshot org.glassfish:glassfish-parent:10.0-SNAPSHOT: checking for updates from glassfish-repository-wsinterop
+[v3-docs] $ /files/hudson/tools/java1.6/bin/java -cp c:\hudson\maven-agent.jar;c:\files\hudson\tools\maven-2.0.7\boot\classworlds-1.1.jar hudson.maven.agent.Main /files/hudson/tools/maven-2.0.7 C:\hudson\bin\slave.jar c:\hudson\maven-interceptor.jar 2237
+ERROR: Failed to parse POMs
+java.io.EOFException: unexpected stream termination
+	at hudson.remoting.Channel.&lt;init&gt;(Channel.java:260)
+	at hudson.remoting.Channel.&lt;init&gt;(Channel.java:204)
+	at hudson.maven.MavenProcessFactory$1.&lt;init&gt;(MavenProcessFactory.java:178)
+	at hudson.maven.MavenProcessFactory.newProcess(MavenProcessFactory.java:177)
+	at hudson.maven.ProcessCache.get(ProcessCache.java:170)
+	at hudson.maven.MavenModuleSetBuild$RunnerImpl.doRun(MavenModuleSetBuild.java:328)
+	at hudson.model.AbstractBuild$AbstractRunner.run(AbstractBuild.java:231)
+	at hudson.model.Run.run(Run.java:786)
+	at hudson.maven.MavenModuleSetBuild.run(MavenModuleSetBuild.java:204)
+	at hudson.model.ResourceController.execute(ResourceController.java:70)
+	at hudson.model.Executor.run(Executor.java:88)
+finished: FAILURE
+
+</pre>
+</div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

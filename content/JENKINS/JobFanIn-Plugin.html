@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JobFanIn Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JobFanIn Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (lonkaryogeshr)</span>, last modified on Jul 02, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="JobFanInPlugin-Summary">Summary</h1><p>This plugin provides a watch on upstream projects to trigger downstream projects once all the upstream projects are build &amp; have stable status. Easier to join multiple project to trigger single downstream project. This plugin can be used with Build Pipeline, Delivery Pipeline etc. It solves complexity of merging pipeline flows from multiple branches to single.</p><h1 id="JobFanInPlugin-Description">Description</h1><ul><li>Trigger downstream projects based on build stability of multiple upstream projects.<br/> Example: 'Job Z' will be triggered if and only if 'Job A', 'Job B' and 'Job C' are build and stable</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96076332/96305240.png" data-image-src="attachments/96076332/96305240.png" data-unresolved-comment-count="0" data-linked-resource-id="96305240" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="fanin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96076332" data-linked-resource-container-version="24"></span></p><ul><li>Trigger can check stability of upstream jobs <strong>recursively</strong>. <br/> Example: 'Job Z' will be triggered if and only if Job A, B, C, P1, P2, P3 and P4 are build and stable</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96076332/96305241.png" data-image-src="attachments/96076332/96305241.png" data-unresolved-comment-count="0" data-linked-resource-id="96305241" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="fanin-hierarchy.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96076332" data-linked-resource-container-version="24"></span></p><ul><li>Configuration is done on downstream job very simple. For downstream projects which depends on multiple upstream project to be build and stable.<br/> Example: Following is the configuration for downstream project for it to trigger once both upstream projects F2, B2 are build stable</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/96076332/96305196.png" data-image-src="attachments/96076332/96305196.png" data-unresolved-comment-count="0" data-linked-resource-id="96305196" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="job-fan-in-plugin.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="96076332" data-linked-resource-container-version="24"></span></p><p>Since the plugin keeps DependencyGraph intact, it is compatible with delivery pipeline &amp; Build pipeline.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View JobFanIn <a href="https://plugins.jenkins.io/job-fan-in" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><h1 id="JobFanInPlugin-Important">Important</h1><p>This plugin can't detect if other Upstream projects were never build after first trigger from any of the upstream project.</p><p>e.g. Consider Project A , B, C all have last build's A1, B1, C1 and all are successful. Now if Project A was trigger and <span style="color: rgb(255,0,0);"><strong><span style="text-decoration: underline;">Job A2</span></strong></span> of Project A was Successful So this will trigger Project Z <span style="color: rgb(255,0,0);"><strong>considering Project B and Project C has last builds </strong></span><span style="color: rgb(255,0,0);"><strong>successful</strong></span>. However if any of Project B or C is currently running this will not trigger Project Z until this run is completed and finishes successfully (Depending on your trigger configuration)</p><p>This is a shortfall of this plugin.</p><h1 id="JobFanInPlugin-ReleaseNotes">Release Notes</h1><p>1.1.4    Fixed issue: <a href="https://issues.jenkins-ci.org/browse/JENKINS-52296" class="external-link" rel="nofollow">JENKINS-52296</a> - <span style="color: rgb(5,38,76);">Do not persist Upstream Job list and DependencyGraph</span></p><p>1.1.3    Fixed issue: <a href="https://issues.jenkins-ci.org/browse/JENKINS-40151" class="external-link" rel="nofollow">JENKINS-40151</a> - JobFanIn plugin &quot;FATAL: null java.lang.NullPointerException&quot;. when new job is added as upstream dependency which never had build, Causing trigger from other jobs to through null pointer</p><p>1.1.2    Fixed issue: <a href="https://issues.jenkins-ci.org/browse/JENKINS-38267" class="external-link" rel="nofollow">JENKINS-38267 - UI always shows default configuration</a></p><p>1.1.1    Fixed issue: Downstream jobs get triggered even when parent jobs are in queue</p><p>1.0       Initial release</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96076332/96305195.png">2016-03-10 12_06_45-R Config [Jenkins].png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96076332/96305196.png">job-fan-in-plugin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96076332/96305240.png">fanin.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/96076332/96305241.png">fanin-hierarchy.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:30</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

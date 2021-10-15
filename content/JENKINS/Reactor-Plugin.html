@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Reactor Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Reactor Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (magnayn)</span>, last modified by <span class='editor'> Unknown User (dncarley)</span> on Oct 10, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-04-10/" class="external-link" rel="nofollow">Arbitrary code execution vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<p>
+<p>This plugin allows jobs to programmatically trigger downstream jobs through the execution of groovy scripts.</p></p>
+
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022119299 {padding: 0px;}
+div.rbtoc1631022119299 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022119299 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022119299'>
+<ul class='toc-indentation'>
+<li><a href='#ReactorPlugin-Programaticallytriggeryourdownstreambuilds'>Programatically trigger your downstream builds</a>
+<ul class='toc-indentation'>
+<li><a href='#ReactorPlugin-Exampleusage'>Example usage</a></li>
+</ul>
+</li>
+<li><a href='#ReactorPlugin-Examplesingithub'>Examples in github</a></li>
+</ul>
+</div>
+
+<h1 id="ReactorPlugin-Programaticallytriggeryourdownstreambuilds">Programatically trigger your downstream builds</h1>
+
+
+<p><strong>Experimental!</strong></p>
+
+<h2 id="ReactorPlugin-Exampleusage">Example usage</h2>
+
+<p>This is the use-case this plugin was designed for.</p>
+
+<p>You have one project, your 'product' build. This exists in an SCM repository, and has multiple branches (perhaps following build-flow, you may have a development and multiple release branches).</p>
+
+<p>You may have multiple jenkins projects for each - or be using the new workflow-multibranch tooling to automatically create a Jenkins for each branch as it is cut.</p>
+
+<p>You also have multiple customer projects using those builds. Those projects are in their own repositories, and may also have multiple branches, and rely on <em>different versions</em> of the product.</p>
+
+<p>When a customer project SCM changes, you want the customer project to build.</p>
+
+<p>When the product SCM changes, you want that project (+branch) to build <strong><em>and then</em></strong><em> all the customer projects that rely on it to also build.</em></p>
+
+<h3 id="ReactorPlugin-Entermaintenanceheadache"><em>Enter maintenance headache</em></h3>
+
+<p>This is normally handled by 'trigger downstream build', and perhaps parameterising that build. However - when (say) your development branch changes to a new version number - some customer projects won't build any more, as they are tied to a different project. You must enter each one and manually change the 'build on upstream' settings. Multiple projects and branches makes this painful.</p>
+
+<h3 id="ReactorPlugin-Reactorplugin">Reactor plugin</h3>
+
+<p>This plugin aims to help.</p>
+
+<p>In your <em>upstream</em> project (e.g: &quot;product&quot;), add a build step &quot;Fire Reactor Event&quot;. You may give this event a name (e.g: &quot;Build&quot;), and some properties (name=value).</p>
+
+<p>In workflow, this can be defined thus:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+step([$class: &#39;FireEventStep&#39;, eventName: &#39;build&#39;, properties: &quot;&quot;&quot;upstreamCommit=${env.GIT_COMMIT}&quot;&quot;&quot;]);
+</pre>
+</div></div>
+<p>In your <em>downstream</em> project, you add a build step of &quot;Register Reactor Script&quot;.</p>
+
+<p>What happens is that when your project is built, the reactor script is lodged against this project (and will be visible in the project configuration). When the event above is fired, the plugin evaluates each script against the incoming event to determine if it should rebuild or not.</p>
+
+<p>The simplest possible script is therefore</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+return true;
+</pre>
+</div></div>
+<p><span style="color: rgb(210,73,57);"><strong>More logic</strong></span></p>
+
+<p>To do more interesting evaluations, the script should obviously examine the incoming event (called 'event'). For example:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+ return( event.jobName.startsWith(&quot;MyProduct&quot;) )
+</pre>
+</div></div>
+<p>The event object comes with a number of properties you can evaluate:</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<td class="confluenceTd"><p> eventName </p></td>
+<td class="confluenceTd"><p> The name of the event (e.g: &quot;Build&quot;) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> jobName </p></td>
+<td class="confluenceTd"><p> The job name the event came from <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> jobFullName </p></td>
+<td class="confluenceTd"><p> The FULL job name (e.g: multibranchproj/branchname) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> buildNumber </p></td>
+<td class="confluenceTd"><p> The build number of the job the event came from </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> eventProperties </p></td>
+<td class="confluenceTd"><p> The passed job properties (access e.g: event.eventProperties['upstreamCommit'] </p></td>
+</tr>
+</tbody></table></div>
+
+
+
+
+<h3 id="ReactorPlugin-Exampleinworkflow:">Example in workflow:</h3>
+
+<p>step([$class: 'RegisterReactorStep', scriptData: '''<br/>
+  <br/>
+  println &quot;REACTOR: Consider: &quot;<br/>
+  if( event.jobName.startsWith(&quot;RealTime&quot;) )<br/>
+    return true;<br/>
+  return false;<br/>
+   ''' ]);</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+step([$class: &#39;RegisterReactorStep&#39;, scriptData: &quot;&quot;&quot;
+
+  if( event.jobName.startsWith(&quot;MyProduct&quot;) &amp;&amp; event.eventProperties[&#39;upstreamVersion&#39;] == &#39;${myVersion}&#39; )
+    return true;
+
+  return false;
+
+   &quot;&quot;&quot; ]);
+</pre>
+</div></div>
+<p>Note that the propertry replacement above is executed (intentionally) when the step is registered in the build, not when the script is evaluated.</p>
+
+<h3 id="ReactorPlugin-Utilisingthecauseobject(Workflow)">Utilising the cause object (Workflow)</h3>
+
+<p>If the build was triggered in this way, the causes will contain this information. You can access this in the build script to make some additional decisions - for example, where to get upstream artifacts:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+node(&#39;docker&#39;) {
+
+  registerDownstream();
+
+  env[&#39;upstream&#39;] = calculateUpstream(currentBuild.rawBuild.causes);
+}
+
+
+def calculateUpstream(causes) {
+  def root = &quot;http://jenkins.mycorp.org/plugin/repository/project/&quot;;
+  def cause = causes.find() { it instanceof com.nirima.reactor.ReactorCause };
+
+  if( cause != null &amp;&amp; cause != false ) {
+    return &quot;${root}${cause.event.jobName}/Build/${cause.event.buildNumber}/repository/&quot;
+  } else {
+    return &quot;${root}MyProduct/dev-main/LastSuccessful/repository/&quot;
+  }
+}
+
+</pre>
+</div></div>
+
+
+<h1 id="ReactorPlugin-Examplesingithub">Examples in github</h1>
+
+<p>See the two projects</p>
+
+<p><a href="https://github.com/magnayn/reactor-plugin-test-upstream" class="external-link" rel="nofollow">https://github.com/magnayn/reactor-plugin-test-upstream</a></p>
+
+
+
+<p>and</p>
+
+<p><a href="https://github.com/magnayn/reactor-plugin-test-downstream" class="external-link" rel="nofollow">https://github.com/magnayn/reactor-plugin-test-downstream</a></p>
+
+<p>(workflow-multibranch projects).</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:41</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

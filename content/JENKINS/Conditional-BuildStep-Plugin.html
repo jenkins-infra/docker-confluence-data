@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Conditional BuildStep Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Conditional BuildStep Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (domi)</span>, last modified by <span class='editor'> Unknown User (imod)</span> on Jun 09, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Conditional BuildStep <a href="https://plugins.jenkins.io/conditional-buildstep" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+A buildstep wrapping any number of other buildsteps, controlling their execution based on a defined condition.<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020694835 {padding: 0px;}
+div.rbtoc1631020694835 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020694835 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020694835'>
+<ul class='toc-indentation'>
+<li><a href='#ConditionalBuildStepPlugin-Info'>Info</a></li>
+<li><a href='#ConditionalBuildStepPlugin-Conditions'>Conditions</a></li>
+<li><a href='#ConditionalBuildStepPlugin-Conditionalstep(single)'>Conditional step (single)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-Conditionalsteps(multiple)'>Conditional steps (multiple)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-Examples'>Examples</a>
+<ul class='toc-indentation'>
+<li><a href='#ConditionalBuildStepPlugin-Knownissues'>Known issues</a></li>
+</ul>
+</li>
+<li><a href='#ConditionalBuildStepPlugin-VersionHistory'>Version History</a>
+<ul class='toc-indentation'>
+<li><a href='#ConditionalBuildStepPlugin-1.3.6(9.June2017)'>1.3.6 (9. June 2017)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.3.5(16.June2016)'>1.3.5 (16. June 2016)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.3.3(13.Nov.2013)'>1.3.3 (13. Nov. 2013)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.3.2(10.Nov.2013)'>1.3.2 (10. Nov.2013)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.3(16.July2013)'>1.3 (16. July 2013)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.2.2(2.June2013)'>1.2.2 (2. June 2013)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.2.1(1.Nov2012)'>1.2.1 (1. Nov 2012)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.2(11.Okt2012)'>1.2 (11. Okt 2012)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.1(6.May2012)'>1.1 (6. May 2012)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-1.0(31.March2012)'>1.0 (31. March 2012)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-0.0.3(31.Dec.2011)'>0.0.3 (31. Dec. 2011)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-0.0.2(14.Nov.2011)'>0.0.2 (14. Nov. 2011)</a></li>
+<li><a href='#ConditionalBuildStepPlugin-0.0.1'>0.0.1</a></li>
+</ul>
+</li>
+<li><a href='#ConditionalBuildStepPlugin-HelpandSupport'>Help and Support</a></li>
+</ul>
+</div></p><h1 id="ConditionalBuildStepPlugin-Info">Info</h1><p><span style="color: rgb(255,0,0);">This plugin requires the</span> <span style="color: rgb(255,0,0);"><a href="Token-Macro-Plugin.html">TokenMacro Plugin</a></span> <span style="color: rgb(255,0,0);">and the </span><span style="color: rgb(255,0,0);"><a href="Run-Condition-Plugin.html">Run Condition Plugin</a></span> <span style="color: rgb(255,0,0);">to be installed!</span></p><ul><li>Ever wanted to have more control whether a step should be executed or not?</li><li>Want to reduce the number of jobs doing nearly the same thing?</li></ul><p>Add a conditional buildstep which acts as a container. It will allow you to define a condition controling the execution of the step(s).</p><h1 id="ConditionalBuildStepPlugin-Conditions">Conditions</h1><p>There are multiple conditions one can choose of, these are all defined by the <a href="Run-Condition-Plugin.html">Run Condition Plugin</a></p><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Missing builder</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you're not able to add the builder of your choice within a conditional build step (because it's not available within the dropdown), then this is likely because the builder does not provide a <em>@DataBoundConstructor</em> constructor and/or the Descriptor does not extend <em>hudson.tasks.BuildStepDescriptor</em>. For non programmers: the plugin you would like to use does not yet follow the newest Jenkins coding guidelines. Without this, the conditional buildstep plugin is not able to work with it.</p></div></div><h1 id="ConditionalBuildStepPlugin-Conditionalstep(single)">Conditional step (single)</h1><p>This build step allows you to select any build step and define a condition to control whether the step should be executed.<br/> For reasons why you might want to use this step, see <a href="59507542.html">Why use Conditional step (single)?</a></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/58002645/59899948.jpg" data-image-src="attachments/58002645/59899948.jpg" data-unresolved-comment-count="0" data-linked-resource-id="59899948" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-capture-1.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="58002645" data-linked-resource-container-version="55"></span></p><h1 id="ConditionalBuildStepPlugin-Conditionalsteps(multiple)">Conditional steps (multiple)</h1><p><span style="color: rgb(0,0,0);">A 'Conditional steps (multiple)' container is able to contain any number of any other buildsteps (e.g. Shell, Ant, Maven,...) and you can have any number of 'Conditional Steps' containers, each configured with a different condition.</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/58002645/59899947.jpg" data-image-src="attachments/58002645/59899947.jpg" data-unresolved-comment-count="0" data-linked-resource-id="59899947" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="screen-capture-2.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="58002645" data-linked-resource-container-version="55"></span></p><h1 id="ConditionalBuildStepPlugin-Examples">Examples</h1><p>please check out the examples at the <a href="Run-Condition-Plugin.html">Run Condition Plugin</a></p><h2 id="ConditionalBuildStepPlugin-Knownissues">Known issues</h2><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                    </tr>
+
+        <tr>
+            <td colspan="3">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20&#39;conditional-buildstep-plugin&#39;&amp;tempMax=1000&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h1 id="ConditionalBuildStepPlugin-VersionHistory">Version History</h1><h3 id="ConditionalBuildStepPlugin-1.3.6(9.June2017)">1.3.6 (9. June 2017)</h3><ul><li>integrate <a href="https://issues.jenkins-ci.org/browse/JENKINS-43887" class="external-link" rel="nofollow">JENKINS-43887</a> upgrade parent pom to 2.x (thanks varyvol <a href="https://github.com/jenkinsci/conditional-buildstep-plugin/pull/14" class="external-link" rel="nofollow">#14</a>)</li><li>ConditionalBuilder now implements DependencyDeclarer (thanks TWestling <a href="https://github.com/jenkinsci/conditional-buildstep-plugin/pull/12" class="external-link" rel="nofollow">#12</a>)</li></ul><h3 id="ConditionalBuildStepPlugin-1.3.5(16.June2016)">1.3.5 (16. June 2016)</h3><ul><li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-35526" class="external-link" rel="nofollow">JENKINS-35526</a>, update to DependencyDeclarer (<a href="https://github.com/jenkinsci/conditional-buildstep-plugin/pull/10" class="external-link" rel="nofollow">PR#10</a> thanks fbelzunc)</li><li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-34971" class="external-link" rel="nofollow">JENKINS-34971</a> describe advanced options about failing the evaluation of a condition</li></ul><h3 id="ConditionalBuildStepPlugin-1.3.3(13.Nov.2013)">1.3.3 (13. Nov. 2013)</h3><ul><li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-20543" class="external-link" rel="nofollow">JENKINS-20543</a> fix &quot;NoSuchMethodError: org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuildStepHelper.getContainedBuilders()&quot;</li></ul><h3 id="ConditionalBuildStepPlugin-1.3.2(10.Nov.2013)">1.3.2 (10. Nov.2013)</h3><ul><li>add helper (ConditionalBuildStepHelper) to support working with wrapped build steps to support <a href="https://issues.jenkins-ci.org/browse/JENKINS-18967" class="external-link" rel="nofollow">JENKINS-18967</a></li><li>enhance ConditionalBuildStepHelper to also return pre- and post builders from a maven project</li></ul><h3 id="ConditionalBuildStepPlugin-1.3(16.July2013)">1.3 (16. July 2013)</h3><ul><li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18135" class="external-link" rel="nofollow">JENKINS-18135</a> fix compatibility issues with <a href="Any-Build-Step-Plugin.html">Any Build Step Plugin</a></li><li>lift dependency to core LTS 1.480.3</li></ul><h3 id="ConditionalBuildStepPlugin-1.2.2(2.June2013)">1.2.2 (2. June 2013)</h3><ul><li>fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-17836" class="external-link" rel="nofollow">JENKINS-17836</a> exception if there is no builder defined within the conditional build step</li></ul><h3 id="ConditionalBuildStepPlugin-1.2.1(1.Nov2012)">1.2.1 (1. Nov 2012)</h3><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13871" class="external-link" rel="nofollow">JENKINS-13871</a> Using &quot;Conditional build step&quot; and &quot;Parameterized build step&quot; in same step is preventing parallel executions of same job</li></ul><h3 id="ConditionalBuildStepPlugin-1.2(11.Okt2012)">1.2 (11. Okt 2012)</h3><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-14118" class="external-link" rel="nofollow">JENKINS-14118</a> show builds triggered through &quot;Conditional buildstep&quot; plugin reported as downstream builds for the current build.</li></ul><h3 id="ConditionalBuildStepPlugin-1.1(6.May2012)">1.1 (6. May 2012)</h3><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13618" class="external-link" rel="nofollow">JENKINS-13618</a> Unable to use multiple Conditional Steps in the Prebuild section of Multi configuration job</li></ul><h3 id="ConditionalBuildStepPlugin-1.0(31.March2012)">1.0 (31. March 2012)</h3><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13112" class="external-link" rel="nofollow">JENKINS-13112</a> - Adding any post-build step as a build step causes exception (caused in combination with the <a href="Any-Build-Step-Plugin.html">Any Build Step Plugin</a>)</li></ul><h3 id="ConditionalBuildStepPlugin-0.0.3(31.Dec.2011)">0.0.3 (31. Dec. 2011)</h3><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-12036" class="external-link" rel="nofollow">JENKINS-12036</a> - conditional buildsteps does not support matrix build</li></ul><h3 id="ConditionalBuildStepPlugin-0.0.2(14.Nov.2011)">0.0.2 (14. Nov. 2011)</h3><ul><li>integrate <a href="Run-Condition-Plugin.html">Run Condition Plugin</a>  to ease condition extensions, which also fixes <a href="https://issues.jenkins-ci.org/browse/JENKINS-11671" class="external-link" rel="nofollow">JENKINS-11671</a></li></ul><h3 id="ConditionalBuildStepPlugin-0.0.1">0.0.1</h3><ul><li>initial</li></ul><h1 id="ConditionalBuildStepPlugin-HelpandSupport">Help and Support</h1><p>For Help and support please use the <a href="http://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">Jenkins Users</a> mailing list or the Issue tracker (JIRA).</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002645/58196183.jpg">add_conditional_step.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002645/58196184.jpg">config_buildsteps.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002645/59899947.jpg">screen-capture-2.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002645/59899948.jpg">screen-capture-1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58002645/59899949.jpg">screen-capture-3.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

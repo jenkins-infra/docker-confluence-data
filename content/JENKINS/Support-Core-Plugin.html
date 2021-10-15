@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Support Core Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Support Core Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stephenconnolly)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Nov 21, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Support Core <a href="https://plugins.jenkins.io/support-core" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-02-24/#SECURITY-2150" class="external-link" rel="nofollow">Support bundles can include user session IDs</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-11-21/#SECURITY-1634" class="external-link" rel="nofollow">Users with Overall/Read permission are able to delete arbitrary files</a></li>
+</ul>
+
+</div></div>
+<h1 id="SupportCorePlugin-SupportCorePlugin">Support Core Plugin</h1><p>The plugin provides the basic infrastructure for generating &quot;bundles&quot; of support information within Jenkins.</p><p>There are three ways of generating bundles:</p><ul><li>Automatic bundles, these get saved in $JENKINS_HOME/support once per hour starting 3 minutes after Jenkins starts the plugin (i.e. this may still be generated even if Jenkins will not fully start). The automatic bundles are retained using an exponential aging strategy, so you should have a bunch of them over the entire lifetime once the plugin has been installed.</li><li>On demand bundles:<ul><li>You can generate them from the root &quot;Support&quot; action, using the User Interface ; or</li><li>By using the CLI Command. For the association documentation, please refer to <code>&lt;yourJenkinsInstanceUrl&gt;/cli/command/support</code> embedded documentation.</li></ul></li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/69764720/69959819.png" data-image-src="attachments/69764720/69959819.png" data-unresolved-comment-count="0" data-linked-resource-id="69959819" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2013-10-24 at 13.20.13.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="69764720" data-linked-resource-container-version="92"></span></p><h2 id="SupportCorePlugin-DockerFile">Docker File</h2><p>As part of the support bundle if the About Jenkins option is checked then you will receive a docker file in the bundle also. The docker file contains the current version of Jenkins, along with a wget operation to download all of the plugins on the Jenkins master. This creates a similar environment for testing or reproducing bugs.</p><p>First build the image:</p><pre>docker build -f Dockerfile</pre><p>then run the docker image</p><pre>docker run -d -p 8080:80</pre><p>This should create a new Jenkins master with the same version, and the same plugins and versions all bundled.</p><h2 id="SupportCorePlugin-Thirdpartysupportproviders">Third party support providers</h2><p>Various companies and organizations provide commercial support for Jenkins. They can provide additional content and branding to the support action. The following lists the known third party support providers (in date order) and the links to their support provider plugin.</p><ul><li><a href="https://release-notes.cloudbees.com/product/CloudBees+Support+Plugin" class="external-link" rel="nofollow">CloudBees Support Plugin</a> by <a href="https://www.cloudbees.com" class="external-link" rel="nofollow">CloudBees, Inc.</a></li></ul><h2 id="SupportCorePlugin-Frequentissues">Frequent issues</h2><h3 id="SupportCorePlugin-SupportbundlescorruptthroughtheUI">Support bundles corrupt through the UI</h3><p>The most common situation for this to happen is when the <strong>About Jenkins</strong> option is enabled.</p><p>Meanwhile, the support bundle is getting generated it looks like the generation process is stuck as the downloaded size stays at the same point for a long time. To diagnosis this issue the best is to take a threadDump when in the moment where it is stuck and check the Jenkins logs.</p><p>If a stacktrace like the one below appears</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&quot;Handling POST /support/download from XX.XX.XX.XX : RequestHandlerThread[#126]&quot; Id=123772 Group=main RUNNABLE
+	at java.io.UnixFileSystem.getBooleanAttributes0(Native Method)
+	at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:242)
+	at java.io.File.isDirectory(File.java:849)
+	at com.cloudbees.jenkins.support.impl.AboutJenkins$ItemsContent.printTo(AboutJenkins.java:641)
+	at com.cloudbees.jenkins.support.api.PrintedContent.writeTo(PrintedContent.java:47)
+	at com.cloudbees.jenkins.support.SupportPlugin.writeBundle(SupportPlugin.java:359)
+	at com.cloudbees.jenkins.support.SupportAction.doDownload(SupportAction.java:154)</pre>
+</div></div><p>and the Jenkins logs are populated with </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">2018-01-04 04:52:17.633+0000 [id=123769]	WARNING	c.c.j.support.SupportPlugin#writeBundle: Could not attach &#39;nodes/slave/Slave1/checksums.md5&#39; to support bundle
+org.eclipse.jetty.io.EofException: Closed
+	at org.eclipse.jetty.server.HttpOutput.write(HttpOutput.java:476)
+	at net.bull.javamelody.FilterServletOutputStream.write(FilterServletOutputStream.java:88)
+	at net.bull.javamelody.CounterResponseStream.write(CounterResponseStream.java:82)
+	at org.apache.tools.zip.ZipOutputStream.writeOut(ZipOutputStream.java:1029)
+	at org.apache.tools.zip.ZipOutputStream.deflate(ZipOutputStream.java:680)
+	at org.apache.tools.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:432)
+	at org.apache.tools.zip.ZipOutputStream.putNextEntry(ZipOutputStream.java:489)
+	at com.cloudbees.jenkins.support.SupportPlugin.writeBundle(SupportPlugin.java:358)
+	at com.cloudbees.jenkins.support.SupportAction.doDownload(SupportAction.java:154)
+
+</pre>
+</div></div><p>Then, surely the problem is that you are hitting the <strong>Idle timeout</strong> in the load balancer and this makes the connection betweek the ELB and your broweser to drop. To workaround this problem you can:</p><ul><li>Increase the Idle timeout in the load balancer</li><li>Not include About Jenkins section</li><li>Reduce the number of builds in the system</li></ul><h2 id="SupportCorePlugin-SupportBundleAnonymization">Support Bundle Anonymization</h2><p><a href="https://issues.jenkins-ci.org/browse/JENKINS-21670" class="external-link" rel="nofollow">Beginning in version 2.48</a>, this plugin now allows for automated <code>ContentFilter</code> extensions to enable anonymizing of various data. By enabling this feature, the default set of filters will anonymize agent names, agent computer names, agent labels, view names (aka folders), job names, usernames, and IP addresses (both IPv4 and IPv6). These data are mapped to randomly generated fake names which are saved to Jenkins master. A Jenkins administrator can view these mappings by going to <strong>Manage Jenkins </strong><span class="caret" style="color: rgb(55,58,60);"><strong>› Support Bundle Anonymization</strong>. All files written to the support bundle by this and all extensions of this plugin will replace all instances of the original values with their anonymized counterpart. Note that the Stop Words list on that page shows which terms are ignored when filtering names (case-insensitive full match).</span></p><h3 id="SupportCorePlugin-Limitations"><span class="caret" style="color: rgb(55,58,60);">Limitations</span></h3><p><span class="caret" style="color: rgb(55,58,60);"> </span></p><div class="sect2"><div class="sect3"><div class="paragraph"><p>Anonymization filters only apply to text files. It cannot handle non-Jenkins URLs, custom proprietary Jenkins plugin names, and exceptions quoting invalid Groovy code in a Jenkins pipeline. The active plugins, disabled plugins, failed plugins, and <code>Dockerfile</code> reports are not anonymized due to several Jenkins plugins and other Java libraries using version numbers that are indistinguishable from IP addresses. These reports are in the files <code>plugins/active.txt</code>, <code>plugins/disabled.txt</code>, <code>plugins/failed.txt</code>, and <code>docker/Dockerfile</code>. These files should all be manually reviewed if you do not wish to disclose the names of custom proprietary plugins.</p></div><p><br/></p></div></div><h2 id="SupportCorePlugin-VersionHistory">Version History</h2><h3 id="SupportCorePlugin-Version2.64(2019Nov21)">Version 2.64 (2019 Nov 21)</h3><ul><li><a href="https://jenkins.io/security/advisory/2019-11-21/#SECURITY-1634" class="external-link" rel="nofollow">Fix security issues</a></li></ul><h3 id="SupportCorePlugin-Version2.62(2019Oct4)">Version 2.62 (2019 Oct 4)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-58165" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58165?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58165</a>
+                            -
+            <span class="summary">support-core doesn&#39;t take into account %t on GC logs</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Handle parameterized GC logs filenames</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-56245" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-56245?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-56245</a>
+                            -
+            <span class="summary">Add the instanceId in the bundle</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Add instance ID to AboutJenkins</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-58980" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58980?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-58980</a>
+                            -
+            <span class="summary">support-core should only collect the latest GC logs</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Only include latest GC logs</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-59453" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-59453?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14688&amp;avatarType=issuetype"/>JENKINS-59453</a>
+                            -
+            <span class="summary">Cleanup plugin dependencies / Move to BOM</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Clean up plugin dependencies</li><li><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-59554" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-59554?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14688&amp;avatarType=issuetype"/>JENKINS-59554</a>
+                            -
+            <span class="summary">Avoid capturing an automatic bundle immediately after startup</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Wait 3 minutes before generating a first support bundle</p></li><li><span style="color: rgb(5,38,76);">LogFlusher should run before shutting down Jenkins. (PR <a href="https://github.com/jenkinsci/support-core-plugin/pull/193" class="external-link" rel="nofollow">#193</a>)</span></li><li><p class="gh-header-title"><span class="js-issue-title">More gracefully handle a configuration file deleted while the bundle is being written (PR <a href="https://github.com/jenkinsci/support-core-plugin/pull/190" class="external-link" rel="nofollow">#190</a>)</span></p></li></ul><h3 id="SupportCorePlugin-Version2.61(2019Sept9)">Version 2.61 (2019 Sept 9)</h3><ul><li><span style="color: rgb(23,43,77);">
+<span class="jira-issue resolved" data-jira-key="JENKINS-58528" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58528?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58528</a>
+                            -
+            <span class="summary">Channel listeners (SlaveCommandStatistics.Statistics) retained after node removal</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Report available processes for master</span></li></ul><h3 id="SupportCorePlugin-Version2.60(2019Aug6)">Version 2.60 (2019 Aug 6)</h3><ul><li><span style="color: rgb(23,43,77);">
+<span class="jira-issue resolved" data-jira-key="JENKINS-58528" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58528?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58528</a>
+                            -
+            <span class="summary">Channel listeners (SlaveCommandStatistics.Statistics) retained after node removal</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Fix memory leak caused by nodes statistics always growing.</span></li></ul><h3 id="SupportCorePlugin-Version2.59(2019Aug1)">Version 2.59 (2019 Aug 1)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-58606" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58606?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-58606</a>
+                            -
+            <span class="summary">Add info about backup plugins to support bundle</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+<span style="color: rgb(23,43,77);">Add info about backup plugins to support bundle.</span></li></ul><h3 id="SupportCorePlugin-Version2.58(2019Jul16)">Version 2.58 (2019 Jul 16)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-58393" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-58393?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-58393</a>
+                            -
+            <span class="summary">Support Bundle incomplete due to failure to getTime() on a Node</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Avoid the bundle not being generated properly when getTime() failed.</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-57602" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-57602?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-57602</a>
+                            -
+            <span class="summary">NPE in Support Core Plugin when reporting agents</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ Fix the agents reporting.</li></ul><h3 id="SupportCorePlugin-Version2.57(2019Jul5)">Version 2.57 (2019 Jul 5)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-57990" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-57990?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-57990</a>
+                            -
+            <span class="summary">Avoid filtering contents without sensible data and do per-content anonymization</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Improve the filtering, avoid filtering the garbage collectors logs.</li></ul><h3 id="SupportCorePlugin-Version2.56(2019Feb18)">Version 2.56 (2019 Feb 18)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55866" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55866?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55866</a>
+                            -
+            <span class="summary">Anonymize by words</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Fix for first implementation.</li></ul><h3 id="SupportCorePlugin-Version2.55(2019Feb18)">Version 2.55 (2019 Feb 18)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55014" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55014?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55014</a>
+                            -
+            <span class="summary">Deadlocking around support-core-plugin log publishing</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Prevent deadlock when bundle generated at startup.</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55843" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55843?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55843</a>
+                            -
+            <span class="summary">Folders missed due to anonymization in the bundle</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Avoid bundle getting corrupted when folder have certain names.</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55866" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55866?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55866</a>
+                            -
+            <span class="summary">Anonymize by words</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Replace only full words.</li></ul><h3 id="SupportCorePlugin-Version2.54(2019Jan15)">Version 2.54 (2019 Jan 15)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55493" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55493?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-55493</a>
+                            -
+            <span class="summary">[support-core] Upgrade parent pom and fix HTMLForm API usage</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Update parent POM to test plugin with JDK 11.</li></ul><h3 id="SupportCorePlugin-Version2.53(2018Dec11)">Version 2.53 (2018 Dec 11)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-55493" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55493?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-55493</a>
+                            -
+            <span class="summary">[support-core] Upgrade parent pom and fix HTMLForm API usage</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Update parent POM to test plugin with JDK 11.</li></ul><h3 id="SupportCorePlugin-Version2.53(2018Dec11).1">Version 2.53 (2018 Dec 11)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-54922" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54922?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-54922</a>
+                            -
+            <span class="summary">Generated markdown should work in MacDown.app</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Improve generated Markdown.</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-54999" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54999?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-54999</a>
+                            -
+            <span class="summary">Performance issue due to the bundle anonymization feature of the support-core plugin</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Improve anonymization performance.</li></ul><h3 id="SupportCorePlugin-Version2.52(2018Nov28)">Version 2.52 (2018 Nov 28)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-54688" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54688?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-54688</a>
+                            -
+            <span class="summary">Operating System informations are anonymized</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ Information about operating system does not get anonymized.</li></ul><h3 id="SupportCorePlugin-Version2.51(2018Nov19)">Version 2.51 (2018 Nov 19)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-54687" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-54687?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-54687</a>
+                            -
+            <span class="summary">GCLogs should be excluded by default</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ GC Logs should be excluded by default.</li></ul><h3 id="SupportCorePlugin-Version2.50(2018Sept13)">Version 2.50 (2018 Sept 13)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-53184" class="external-link" rel="nofollow">JENKINS-53184</a>: Use Jenkins version as stop word.</li></ul><h3 id="SupportCorePlugin-Version2.49(2018Jul19)">Version 2.49 (2018 Jul 19)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-52639" class="external-link" rel="nofollow">JENKINS-52639</a>: Remove transitive dependency on snakeyaml to fix API compatibility issues.</li></ul><h3 id="SupportCorePlugin-Version2.48(2018Jul02)">Version 2.48 (2018 Jul 02)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21670" class="external-link" rel="nofollow">JENKINS-21670</a>: Add support for anonymizing private data in support bundles.</li><li><span style="color: rgb(5,38,76);"><a href="https://issues.jenkins-ci.org/browse/JENKINS-49578" class="external-link" rel="nofollow">JENKINS-49578</a>: Make the button for deleting old support bundles red to help prevent users from deleting bundles inadvertently.</span></li></ul><h3 id="SupportCorePlugin-Version2.47(2018Apr19)">Version 2.47 (2018 Apr 19)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-50765" class="external-link" rel="nofollow">JENKINS-50765</a><a href="https://issues.jenkins-ci.org/browse/JENKINS-50765" class="external-link" rel="nofollow">: Harden against XXE vulnerabilities (Just a precaution as this does not appear to be exploitable in practice)</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-50428" class="external-link" rel="nofollow">JENKINS-50428</a><a href="https://issues.jenkins-ci.org/browse/JENKINS-50428" class="external-link" rel="nofollow">: Support the property in Jenkins 2.114 in newer that allows the location of AsyncPeriodicWork task logs to be configured</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-49668" class="external-link" rel="nofollow">JENKINS-49668</a>: Fix the support bundle component that lists installed root certificate authorities</li></ul><h3 id="SupportCorePlugin-Version2.46(2018Mar14)">Version 2.46 (2018 Mar 14)</h3><ul><li><p>
+<span class="jira-issue resolved" data-jira-key="JENKINS-27035" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-27035?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-27035</a>
+                            -
+            <span class="summary">Request/response statistics</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ Request/response statistics. Tallying command read/write events.</p></li><li><strong>Jenkins baseline updated to 2.107.x.</strong></li></ul><h3 id="SupportCorePlugin-Version2.45.1(2018Mar09)">Version 2.45.1 (2018 Mar 09)</h3><ul><li>As has been found abnormal usage of private API, it has been reintroduced temporary because of backward compatibility.</li></ul><h3 id="SupportCorePlugin-Version2.45(2018Mar07)">Version 2.45 (2018 Mar 07)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-49931" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-49931?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-49931</a>
+                            -
+            <span class="summary">Heap Histogram Collection Destabilizes Masters</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+Pass <code>-Dcom.cloudbees.jenkins.support.impl.HeapUsageHistogram.DISABLED=false</code> to restore heap histogram generation, pending a better fix.</li><li><p>Sort thread dumps by name rather than ID.</p></li><li><p>Reduce pressure on master file descriptors.</p></li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-46132" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-46132?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-46132</a>
+                            -
+            <span class="summary">All Agents have the same Proc Info which is Master&#39;s Proc Info</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+</li><li><strong>Jenkins baseline updated to 2.46.x.</strong><strong><br/></strong></li></ul><h3 id="SupportCorePlugin-Version2.44(2017Dec12)">Version 2.44 (2017 Dec 12)</h3><ul><li><p><code>ClassCastException</code> possible on 2.50+.</p></li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-48436" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48436?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48436</a>
+                            -
+            <span class="summary">/support/download doesn&#39;t exist anymore</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+Restoring compatibility for an API endpoint.</li></ul><h3 id="SupportCorePlugin-Version2.43">Version 2.43</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-41653" class="external-link" rel="nofollow">JENKINS-41653</a> <span style="color: rgb(41,41,41);">Support core warning when collecting data</span></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-47779" class="external-link" rel="nofollow">JENKINS-47779</a> <span style="color: rgb(41,41,41);">Could <span>not create fully detailed support bundles after 2.86</span></span></li></ul><h3 id="SupportCorePlugin-Version2.42">Version 2.42</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22791" class="external-link" rel="nofollow">JENKINS-22791</a> <span style="color: rgb(41,41,41);">Record heap histograms new component</span></li></ul><h3 id="SupportCorePlugin-Version2.41">Version 2.41</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-44236" class="external-link" rel="nofollow">JENKINS-44236</a> Also gather NFS related stats</li><li>(<a href="https://github.com/jenkinsci/support-core-plugin/pull/109" class="external-link" rel="nofollow">PR-109</a> non functional/user facing change)</li></ul><h3 id="SupportCorePlugin-Version2.40">Version 2.40</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/104" class="external-link" rel="nofollow">PR-104</a> Delete temp files even if failures happen, and better error message if failed to delete the file.</li><li> <a href="https://issues.jenkins-ci.org/browse/JENKINS-41745" class="external-link" rel="nofollow">JENKINS-41745</a> Allow SupportCommand to work without a Remoting channel</li></ul><h3 id="SupportCorePlugin-Version2.39">Version 2.39</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-42393" class="external-link" rel="nofollow">JENKINS-42393</a> Temporary files should not be created in the bundles root directory under JENKINS_HOME</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-40613" class="external-link" rel="nofollow">JENKINS-40613</a> Report a blocked Timer</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/101" class="external-link" rel="nofollow">PR-101</a> Use UTC for all timestamps</li></ul><h3 id="SupportCorePlugin-Version2.38">Version 2.38</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-40062" class="external-link" rel="nofollow">JENKINS-40062</a> Optionally include config.xml files for nodes</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/96" class="external-link" rel="nofollow">PR-96</a> Print stack trace in logical order</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/97" class="external-link" rel="nofollow">PR-97</a> Max file size for agent logs</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/99" class="external-link" rel="nofollow">PR-99</a> Add initialization milestone</li></ul><h3 id="SupportCorePlugin-Version2.37">Version 2.37</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-40098" class="external-link" rel="nofollow">JENKINS-40098</a> Bundle naming strategy should be able to specify an instance type</li></ul><h3 id="SupportCorePlugin-Version2.36">Version 2.36</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39150" class="external-link" rel="nofollow">JENKINS-39150</a> Improve remoting channel diagnostics in Support Core</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-40094" class="external-link" rel="nofollow">JENKINS-40094</a> Global config.xml only contains a exception</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/94" class="external-link" rel="nofollow">PR 94</a> Fix weird display of the GC Logging gathering</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/85" class="external-link" rel="nofollow">PR 85</a> Add node monitoring data for all nodes (i.e. the columns you typically see for each node on the /computer page)</li></ul><h3 id="SupportCorePlugin-Version2.35">Version 2.35</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/89" class="external-link" rel="nofollow">PR 89</a> NPE in GCLogs.addContents after 2.34.</li></ul><h3 id="SupportCorePlugin-Version2.34">Version 2.34</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-38572">JENKINS-38572</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/76" class="external-link" rel="nofollow">PR 76</a> Only obtain proxy information if async-http-client plugin is installed.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/81" class="external-link" rel="nofollow">PR 81</a> Fixed some buglets in SupportLogFormatter.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39381">JENKINS-39381</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/83" class="external-link" rel="nofollow">PR 83</a> Add a support component for XML files.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/86" class="external-link" rel="nofollow">PR 86</a> Check if Jenkins is quieting down.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/87" class="external-link" rel="nofollow">PR 87</a> Add MIT license.md file.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-39607">JENKINS-39607</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/88" class="external-link" rel="nofollow">PR 88</a> GC logs should be collected.</li><li><strong><span style="color: rgb(36,41,46);"><strong>Jenkins baseline updated to </strong>1.625.x</span></strong></li></ul><h3 id="SupportCorePlugin-Version2.33">Version 2.33</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/74" class="external-link" rel="nofollow">PR 74</a> Add proxy information to update center section.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-37772">JENKINS-37772</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/73" class="external-link" rel="nofollow">PR 73</a> Get rid of Initializer(after = InitMilestone.COMPLETED)</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/70" class="external-link" rel="nofollow">PR 70</a> Use require post annotation</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/68" class="external-link" rel="nofollow">PR 68</a> Diagnose startup performance.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/66" class="external-link" rel="nofollow">PR 66</a> Upgrade parent 2.3 -&gt; 2.11</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34719">JENKINS-34719</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/63" class="external-link" rel="nofollow">PR 63</a> Pick up and logs that have been refactored into JENKINS_HOME/logs.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/62" class="external-link" rel="nofollow">PR 62</a> Separate slave logs, and master logs.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-26409">JENKINS-26409</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/60" class="external-link" rel="nofollow">PR 60</a> If the stream is terminated early log this information in FINE level.</li></ul><h3 id="SupportCorePlugin-Version2.32">Version 2.32</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/58" class="external-link" rel="nofollow">PR 58</a> Enable and enforce findbugs on the verify stage.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/53" class="external-link" rel="nofollow">PR 53</a> Adapt to new parent POM.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34462">JENKINS-34462</a> <a href="https://github.com/jenkinsci/support-core-plugin/pull/59" class="external-link" rel="nofollow">PR 59</a> Add CSRF protection status.</li><li><strong><span style="color: rgb(36,41,46);"><strong>Jenkins baseline updated to </strong>1.580.x</span></strong></li></ul><h3 id="SupportCorePlugin-Version2.31">Version 2.31</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/56" class="external-link" rel="nofollow">PR 65</a> Prevent null pointer exception reporting log level.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/57" class="external-link" rel="nofollow">PR 57</a> Add the locale of the browser to a slow request.</li></ul><h3 id="SupportCorePlugin-Version2.30">Version 2.30</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/50" class="external-link" rel="nofollow">PR 50</a> Add argument to increase max log rotate size.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/51" class="external-link" rel="nofollow">PR 51</a> Add deadlock test.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/52" class="external-link" rel="nofollow">PR 52</a> Record log rotate levels.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/48" class="external-link" rel="nofollow">PR 48</a> Add update center information.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/54" class="external-link" rel="nofollow">PR 54</a> Add slave version information for master node.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/55" class="external-link" rel="nofollow">PR 55</a> Switch to a ThreadLocal DateFormatter</li></ul><h3 id="SupportCorePlugin-Version2.29">Version 2.29</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/44" class="external-link" rel="nofollow">PR 44</a> Add Jenkins url configuration to validate reverse proxy configuration</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/43" class="external-link" rel="nofollow">PR 43</a> Check build queue elements to see if the QueueTaskDispatcher is able to run the builds.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30117">JENKINS-30117</a> Support bundle blocks with lots of data</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28216">JENKINS-28216</a> Obtain slave logs using async callable.</li></ul><h3 id="SupportCorePlugin-Version2.28">Version 2.28</h3><ul><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/41" class="external-link" rel="nofollow">PR 41</a> Deadlock detector now records the full stack traces</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/18" class="external-link" rel="nofollow">PR 18</a> Option to capture the export table of slaves added</li></ul><h3 id="SupportCorePlugin-Version2.27">Version 2.27</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21668">JENKINS-21668</a> Obtain root CA information.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/24" class="external-link" rel="nofollow">PR 24</a> Add networking interface information</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28876">JENKINS-28876</a> Add user-agent information to slow-request</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/37" class="external-link" rel="nofollow">PR 37</a><ul><li>add system uptime to see if an outage comes from a system reboot</li><li>add DMI information to see if Jenkins is running on a virtualized server</li></ul></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29034">JENKINS-29034</a> Modify filename to include date and time.</li></ul><h3 id="SupportCorePlugin-Version2.26Badrelease.">Version 2.26 Bad release.</h3><h3 id="SupportCorePlugin-Version2.25(June092015)">Version 2.25 (June 09 2015)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-26409">JENKINS-26409</a> ClientAbortException logged when cancelling a support bundle download.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28703">JENKINS-28703</a> Add pinned status to plugin information.</li></ul><h3 id="SupportCorePlugin-Version2.24(June032015)">Version 2.24 (June 03 2015)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24671">JENKINS-24671</a> Added username to slow-requests.</li><li><a href="https://github.com/jenkinsci/support-core-plugin/pull/22" class="external-link" rel="nofollow">PR 22</a> Add system metrics.</li></ul><h3 id="SupportCorePlugin-Version2.23(June032015)(Badrelease)">Version 2.23 (June 03 2015) (Bad release)</h3><h3 id="SupportCorePlugin-Version2.22(May062015)">Version 2.22 (May 06 2015)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-27669">JENKINS-27669</a> <code>ClassCircularityError</code> after creating a log recorder with a blank logger name.</li><li>Limit winsw log file.</li></ul><h3 id="SupportCorePlugin-Version2.21(Apr282014)">Version 2.21 (Apr 28 2014)</h3><ul><li>Fix Dockerfile generation to prevent overflowing the number of steps</li><li>Fix download url for plugins in Dockerfile generation</li><li>Quote thread names in thread dumps</li><li>Fix HTML title tag to properly display action title (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23278" class="external-link" rel="nofollow">issue #23278</a>)</li><li>Add summary of current build queue (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20542" class="external-link" rel="nofollow">issue #20542</a>)</li><li>Set file last modified timestamp in ZIP archive</li><li>Fix generated date format</li><li>Add load statistics graphs and data to support bundle</li></ul><h3 id="SupportCorePlugin-Version2.20(Dec292014)">Version 2.20 (Dec 29 2014)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24380">JENKINS-24380</a> Support for new build directory layout in Jenkins 1.597+.</li></ul><h3 id="SupportCorePlugin-Version2.19">Version 2.19</h3><p>No changelog recorded, blame <a class="confluence-userlink user-mention" data-username="kohsuke" href="https://wiki.jenkins.io/display/~kohsuke" data-linked-resource-id="327681" data-linked-resource-version="3" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (kohsuke)</a>!</p><h3 id="SupportCorePlugin-Version2.18(Oct302014)">Version 2.18 (Oct 30 2014)</h3><ul><li><code>slow-requests</code> was missing stack traces.</li></ul><h3 id="SupportCorePlugin-Version2.17(Oct102014)">Version 2.17 (Oct 10 2014)</h3><ul><li>Capture past slave launch logs, not just the current session (<a href="https://issues.jenkins-ci.org/browse/JENKINS-25108">JENKINS-25108</a>)</li></ul><h3 id="SupportCorePlugin-Version2.16(Oct82014)">Version 2.16 (Oct 8 2014)</h3><ul><li>Prevent slow-request files from going over 2MB in size.</li></ul><h3 id="SupportCorePlugin-Version2.15(Sept252014)">Version 2.15 (Sept 25 2014)</h3><ul><li>Added some NPE safety against cloud implementations that return malformed slave descriptions</li><li>Slow request content was not properly displaying stack trace elements</li><li>Resolve file descriptor symlinks</li></ul><h3 id="SupportCorePlugin-Version2.14(Sept52014)">Version 2.14 (Sept 5 2014)</h3><ul><li>Better summarize Item’s of all kinds. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22609">JENKINS-22609</a>)</li><li>Checking for slow requests threw an exception on an non-locked thread. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-24567">JENKINS-24567</a>)</li></ul><h3 id="SupportCorePlugin-Version2.13(Aug262014)">Version 2.13 (Aug 26 2014)</h3><ul><li>Workaround for <a href="https://issues.jenkins-ci.org/browse/JENKINS-24358">JENKINS-24358</a> deadlock.</li><li>Record the query string in slow request logs.</li><li>Add lock owner thread info to slow request logs.</li><li>Note the current thread name at each slow request sample.</li><li>Omit empty <code>other-logs/*.log</code>.</li></ul><h3 id="SupportCorePlugin-Version2.12(Jul222014)">Version 2.12 (Jul 22 2014)</h3><ul><li>Make the SlowRequestChecker timings configurable and only collect thread dumps if there are slow requests (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23904" class="external-link" rel="nofollow">JENKINS-23904</a>)</li></ul><h3 id="SupportCorePlugin-Version2.11(Jul82014)">Version 2.11 (Jul 8 2014)</h3><ul><li>When sending log files remotely, GZip the content to reduce bandwidth requirements</li></ul><h3 id="SupportCorePlugin-Version2.10(Jul82014)">Version 2.10 (Jul 8 2014)</h3><ul><li>The remote node logs were not being transferred once the log file grew above a certain undetermined critical size due to GC pressure removing an exported remoting reference from the slave's JVM.</li></ul><h3 id="SupportCorePlugin-Version2.9(Jul82014)">Version 2.9 (Jul 8 2014)</h3><ul><li>When there are many remote nodes, the serial fetching of logs in 2.8 can cause bundle generation to take an excessive amount of time. Now the log fetching is performed in parallel.</li></ul><h3 id="SupportCorePlugin-Version2.8(Jul82014)">Version 2.8 (Jul 8 2014)</h3><ul><li>Add caching of slave log files with append-based fetch for when the cache contains partial content. Should significantly reduce the support bundle generation load unless slave logs are generating a <em>lot</em> of content rapidly.</li></ul><h3 id="SupportCorePlugin-Version2.7(Jul42014)">Version 2.7 (Jul 4 2014)</h3><ul><li>Make some of the remote operations asynchronous and time bounded in order to reduce the impact of periodic support bundle generation and speed up bundle generation in general.</li><li>The only default content that retains synchronous remoting I/O is the Log Recorders component.</li></ul><h3 id="SupportCorePlugin-Version2.6(May192014)">Version 2.6 (May 19 2014)</h3><ul><li>Fix file list cap to actually do something, and not throw exceptions when hitting the cap.</li><li>Ignore offline slaves when checking file descriptors (workaround for <a href="https://issues.jenkins-ci.org/browse/JENKINS-21999">JENKINS-21999</a>).</li></ul><h3 id="SupportCorePlugin-Version2.5(May122014)">Version 2.5 (May 12 2014)</h3><ul><li>Reduce memory usage from features added in 2.3.</li></ul><h3 id="SupportCorePlugin-Version2.4(May062014)">Version 2.4 (May 06 2014)</h3><ul><li>New component added in 2.3 usually failed to load.</li></ul><h3 id="SupportCorePlugin-Version2.3(April232014)">Version 2.3 (April 23 2014)</h3><ul><li>Report a thread dump when the jvm starts to become unresponsive. Checks every 3 seconds to see if the instance is unresponsive.</li><li>Report when a deadlock has occurred. Checks every 15 seconds for instance of deadlocks occurring.</li></ul><h3 id="SupportCorePlugin-Version2.1(Mar242014)">Version 2.1 (Mar 24 2014)</h3><ul><li>Robustness for plugins missing descriptors, such as on special slave launchers.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22326">JENKINS-22326</a> Deadlock in logging.</li></ul><h3 id="SupportCorePlugin-Version2.0(Mar202014)">Version 2.0 (Mar 20 2014)</h3><ul><li>Upgraded from Yammer metrics to Codahale/Dropwizard metrics using the <a href="Metrics-Plugin.html">Metrics Plugin</a> (as a result, minimum required version of Jenkins has been increased to 1.520).</li><li>Fixed bug where large slave launch logs could cause an OOM in Jenkins.</li><li>Reports on LSB modules when defined / available </li></ul><h3 id="SupportCorePlugin-Version1.8(Feb052014)">Version 1.8 (Feb 05 2014)</h3><ul><li>Fixes and improvements to thread dump reports.</li></ul><h3 id="SupportCorePlugin-Version1.7(Feb042014)">Version 1.7 (Feb 04 2014)</h3><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20863">JENKINS-20863</a> Fixed integer overflow.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-19876">JENKINS-19876</a> Storing custom logs on disk.</li><li>Added CPU usage information to thread dumps.</li></ul><h3 id="SupportCorePlugin-Version1.6(Dec022013)">Version 1.6 (Dec 02 2013)</h3><ul><li>Security fixes; please update.</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20362">JENKINS-20362</a> Added CLI command.</li><li>Better plugins/disables.txt.</li><li>Summarize security configuration.</li><li>Separate nodes.md.</li><li>Remember deselected components.</li><li>Fixed display of impermissible components.</li></ul><h3 id="SupportCorePlugin-Version1.4(Oct24th,2013)">Version 1.4 (Oct 24th, 2013)</h3><ul><li>Update the User Agent detection resources</li></ul><h3 id="SupportCorePlugin-Version1.3(Oct24th,2013)">Version 1.3 (Oct 24th, 2013)</h3><ul><li>Ensure AboutUser reports the details of the requesting user and not the details of the impersonated user.</li></ul><h3 id="SupportCorePlugin-Version1.2(Oct24th,2013)">Version 1.2 (Oct 24th, 2013)</h3><ul><li>Simplified threading model when generating bundles</li></ul><h3 id="SupportCorePlugin-Version1.1(Oct24th,2013)">Version 1.1 (Oct 24th, 2013)</h3><ul><li>Refactoring some of the behaviour of AboutBrowser and AboutUser components</li></ul><h3 id="SupportCorePlugin-Version1.0(Oct24th,2013)">Version 1.0 (Oct 24th, 2013)</h3><ul><li>Initial release</li></ul><div><span style="color: rgb(41,41,41);font-size: 24.0px;"><br/></span></div><div><span style="color: rgb(41,41,41);font-size: 24.0px;"><br/></span></div><div><span style="color: rgb(41,41,41);font-size: 24.0px;"><br/></span></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764720/69959818.png">Screen Shot 2013-10-24 at 13.19.18.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/69764720/69959819.png">Screen Shot 2013-10-24 at 13.20.13.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

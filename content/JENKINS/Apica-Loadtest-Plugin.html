@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Apica Loadtest Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Apica Loadtest Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (andrasnemes)</span>, last modified on May 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Apica Loadtest <a href="https://plugins.jenkins.io/ApicaLoadtest" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+The plugin enables <a href="https://www.apicasystem.com/" class="external-link" rel="nofollow">Apica</a> Loadtest customers to run automatic load tests as part of a Jenkins build process.<br/><span style="color: rgb(51,51,51);"><strong>Build runner setup</strong></span></p><p><span style="color: rgb(51,51,51);">The plugin is a build runner and can be added to a project on the project's configuration page:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704686.png" data-image-src="attachments/78676226/173704686.png" data-unresolved-comment-count="0" data-linked-resource-id="173704686" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="2.ConfigureProject.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><span style="color: rgb(9,30,66);">The Apica load test plugin is a build step and can be selected from the Build plugins list:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704687.png" data-image-src="attachments/78676226/173704687.png" data-unresolved-comment-count="0" data-linked-resource-id="173704687" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="3.SelectApicaLoadtestFromBuildTools.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/></p><p><span style="color: rgb(51,51,51);">You'll then see the build runner options:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704688.png" data-image-src="attachments/78676226/173704688.png" data-unresolved-comment-count="0" data-linked-resource-id="173704688" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="4.EmptyJenkinsPluginOptionsAfterFirstLoad.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><br/></p><p style="">Set your ALT environment endpoints, the ALT API authentication token, the preset name and the load test scenario file name. You can use the Test settings button to test your inputs.</p><p style="">You can use the buttons next to the API and Web base URL text fields to fill in the default product SaaS endpoints. Otherwise you can provide your on-premise environment endpoints.</p><p style="">If all properties are correct then you'll see a confirmation:</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704689.png" data-image-src="attachments/78676226/173704689.png" data-unresolved-comment-count="0" data-linked-resource-id="173704689" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="5.ValidatePluginEntries.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/><span style="color: rgb(51,51,51);">Here are some example error messages in case some property is not correct:</span></p><ul><li><span style="color: rgb(51,51,51);">Exception while checking preset: The authentication ticket is not well formatted.</span></li><li><span style="color: rgb(51,51,51);">No such preset found: short test2</span></li><li><span style="color: rgb(51,51,51);">Load test file name must be either a .class or .zip file.</span></li><li><span style="color: rgb(51,51,51);">No such load test file found: cldemo_start2.class</span></li><li><span style="color: rgb(0,0,0);">Invalid ALT API base URL: unknown protocol: dgdfg</span></li><li><span style="color: rgb(0,0,0);">Invalid ALT Web base URL: no protocol: /loadtesapicasystemcom</span></li></ul><p><span style="color: rgb(255,0,0);">Note that Jenkins won't block the user from saving a build runner despite validation errors. The settings are additionally rechecked before a test starts.</span></p><p><span style="color: rgb(51,51,51);"><strong>Thresholds</strong></span></p><p><span style="color: rgb(51,51,51);">It's possible to add thresholds to the test. If the threshold is broken then the test can be marked as &quot;failed&quot;:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704690.png" data-image-src="attachments/78676226/173704690.png" data-unresolved-comment-count="0" data-linked-resource-id="173704690" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="6.AddThresholds.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><br/><br/><span style="color: rgb(51,51,51);">Save your setup:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676226/78938131.png" data-image-src="attachments/78676226/78938131.png" data-unresolved-comment-count="0" data-linked-resource-id="78938131" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Save plugin setup.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><span style="color: rgb(51,51,51);"><strong>Running the Apica build runner</strong></span></p><p><span style="color: rgb(51,51,51);">You can start the build runner like you would start any other runner in Jenkins. The simplest way is to start a build on the UI:</span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/78676226/173704691.png" data-image-src="attachments/78676226/173704691.png" data-unresolved-comment-count="0" data-linked-resource-id="173704691" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="7.StartJenkinsBuildNow.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/><span style="color: rgb(51,51,51);">You can monitor the build progress by clicking on the build number and opening the Console output link:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676226/78938133.png" data-image-src="attachments/78676226/78938133.png" data-unresolved-comment-count="0" data-linked-resource-id="78938133" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Console output link.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/><span style="color: rgb(51,51,51);">You can check the detailed build log for messages. They are similar to what people see in the live stats window of ALT:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704692.png" data-image-src="attachments/78676226/173704692.png" data-unresolved-comment-count="0" data-linked-resource-id="173704692" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="8.ViewConsoleOutputOfLoadtestAtStart.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/><span style="color: rgb(51,51,51);">The runner checks the job status every 10 seconds at present.</span></p><p><span style="color: rgb(51,51,51);">At the end of the job the log shows some basic statistics and the thresholds are evaluated:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704693.png" data-image-src="attachments/78676226/173704693.png" data-unresolved-comment-count="0" data-linked-resource-id="173704693" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="9.ConsoleOutputFromEndOfJob.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><span style="color: rgb(51,51,51);"><strong>Result presentation</strong></span></p><p><span style="color: rgb(9,30,66);">Refresh the build page after a successful job if it doesn't refresh itself automatically. You'll see two links on the left hand panel:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/78676226/78938136.png" data-image-src="attachments/78676226/78938136.png" data-unresolved-comment-count="0" data-linked-resource-id="78938136" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Load test result presentation links.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span><br/><span style="color: rgb(51,51,51);">Apica load test summary presents the key statistics in tabular format:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704695.png" data-image-src="attachments/78676226/173704695.png" data-unresolved-comment-count="0" data-linked-resource-id="173704695" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="10.ApicaLoadtestSummaryReport.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p><p><span style="color: rgb(51,51,51);">The Apica load test trends tab shows a custom CI page in an iframe:</span></p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/78676226/173704698.png" data-image-src="attachments/78676226/173704698.png" data-unresolved-comment-count="0" data-linked-resource-id="173704698" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="11.ApicaLoadtestTrendsReportTokenRemoved.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676226" data-linked-resource-container-version="14"></span></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938125.png">Open configuration page of project.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938126.png">Apica load test plugin visible in build runners list.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938127.png">Loadtest plugin build runner options.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938128.png">All properties set in Jenkins plugin.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938129.png">Add thresholds button in jenkins plugin.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938130.png">Add threshold examples.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938131.png">Save plugin setup.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938132.png">Start a build in Jenkins.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938133.png">Console output link.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938134.png">Console output of ongoing job.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938135.png">Console output job finished.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938136.png">Load test result presentation links.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/95125505.png">Apica load test summary.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938138.png">Apica load test trends.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/78938137.png">Apica load test summary.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704686.png">2.ConfigureProject.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704687.png">3.SelectApicaLoadtestFromBuildTools.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704688.png">4.EmptyJenkinsPluginOptionsAfterFirstLoad.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704689.png">5.ValidatePluginEntries.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704690.png">6.AddThresholds.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704691.png">7.StartJenkinsBuildNow.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704692.png">8.ViewConsoleOutputOfLoadtestAtStart.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704693.png">9.ConsoleOutputFromEndOfJob.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704695.png">10.ApicaLoadtestSummaryReport.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704696.png">11.ApicaLoadtestTrendsReport.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676226/173704698.png">11.ApicaLoadtestTrendsReportTokenRemoved.PNG</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

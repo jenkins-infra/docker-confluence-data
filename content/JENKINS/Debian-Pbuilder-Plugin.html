@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Debian Pbuilder Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Debian Pbuilder Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (rm5248)</span>, last modified on Oct 12, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Debian Pbuilder <a href="https://plugins.jenkins.io/debian-pbuilder" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin lets you build Debian packages in a pbuilder environment, keeping a clean filesystem for builds.<br/></p><p>Build Debian packages in Jenkins!</p><p>This plugin is based largely off of <a href="https://jenkins-debian-glue.org" class="external-link" rel="nofollow">jenkins-debian-glue</a>, however with support for builder packages in a proper Jenkins way.</p><p><a href="https://ci.jenkins.io/job/Plugins/job/debian-pbuilder-plugin/" class="external-link" rel="nofollow">ci.jenkins.io</a>: <a href="https://ci.jenkins.io/job/Plugins/job/debian-pbuilder-plugin/job/master/" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="https://ci.jenkins.io/buildStatus/icon?job=Plugins/debian-pbuilder-plugin/master" data-image-src="https://ci.jenkins.io/buildStatus/icon?job=Plugins/debian-pbuilder-plugin/master"></span></a></p><p><a href="https://jenkins.rm5248.com/job/debian-pbuilder/" class="external-link" rel="nofollow">jenkins.rm5248.com</a>: <a href="http://jenkins.rm5248.com/job/debian-pbuilder/" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="http://jenkins.rm5248.com/buildStatus/icon?job=debian-pbuilder" data-image-src="http://jenkins.rm5248.com/buildStatus/icon?job=debian-pbuilder"></span></a></p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020825740 {padding: 0px;}
+div.rbtoc1631020825740 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020825740 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020825740'>
+<ul class='toc-indentation'>
+<li><a href='#DebianPbuilderPlugin-SystemSetup'>System Setup</a></li>
+<li><a href='#DebianPbuilderPlugin-UsingthePlugin'>Using the Plugin</a>
+<ul class='toc-indentation'>
+<li><a href='#DebianPbuilderPlugin-ConfigurationOptions'>Configuration Options</a></li>
+<li><a href='#DebianPbuilderPlugin-ProjectSetup(Traditional)'>Project Setup(Traditional)</a></li>
+<li><a href='#DebianPbuilderPlugin-ProjectSetup(Pipeline)'>Project Setup(Pipeline)</a></li>
+<li><a href='#DebianPbuilderPlugin-PackageVersioning'>Package Versioning</a></li>
+<li><a href='#DebianPbuilderPlugin-Artifacts'>Artifacts</a></li>
+<li><a href='#DebianPbuilderPlugin-Output'>Output</a></li>
+<li><a href='#DebianPbuilderPlugin-Buildingpackageswith&#39;quilt&#39;format'>Building packages with &#39;quilt&#39; format</a></li>
+</ul>
+</li>
+<li><a href='#DebianPbuilderPlugin-IssueTracking'>Issue Tracking</a></li>
+<li><a href='#DebianPbuilderPlugin-Releases'>Releases</a>
+<ul class='toc-indentation'>
+<li><a href='#DebianPbuilderPlugin-Version1.7(2019-10-12)'>Version 1.7(2019-10-12)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.6(2019-04-21)'>Version 1.6(2019-04-21)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.5(2019-01-27)'>Version 1.5(2019-01-27)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.4(2018-05-12)'>Version 1.4(2018-05-12)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.3(2018-01-13)'>Version 1.3(2018-01-13)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.2(2017-12-23)'>Version 1.2(2017-12-23)</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.1'>Version 1.1</a></li>
+<li><a href='#DebianPbuilderPlugin-Version1.0'>Version 1.0</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="DebianPbuilderPlugin-SystemSetup">System Setup</h1><p>Before you can successfully run the plugin, there are certain requirements that must be met on the node(s) that you wish to run on.  </p><ol><li><p>Install needed dependencies:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">apt-get install qemu-user-static devscripts cowbuilder dpkg-dev</pre>
+</div></div></li><li><p>If building Debian packages on Ubuntu, make sure that the package debian-archive-keyring is installed </p></li><li><p>Like jenkins-debian-glue, make sure that sudo is configured properly. As taken from the jenkins-debian-glue webpage, add the following to either /etc/sudoers, or create a new file(e.g. /etc/sudoers.d/jenkins): </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">jenkins ALL=NOPASSWD: /usr/sbin/cowbuilder, /usr/sbin/chroot 
+Defaults env_keep+=&quot;DEB_* DIST ARCH&quot;</pre>
+</div></div><p><br/>(this assumes that Jenkins is running under the Jenkins user)</p></li></ol><h1 id="DebianPbuilderPlugin-UsingthePlugin">Using the Plugin</h1><h2 id="DebianPbuilderPlugin-ConfigurationOptions">Configuration Options</h2><p>There are several global configuration options.  These options may be found by going to &quot;Manage Jenkins&quot; → &quot;Configure System&quot;.  </p><ul><li>Email address - this is the email that is set in the changelog entry for the build.  It need not be an actual email address</li><li>Version format - Determines how the package will be versioned if not a tag build</li><li>Debian directory - determines where the debian/ folder is, by default the project should be checked out to a directory called 'source'</li></ul><h2 id="DebianPbuilderPlugin-ProjectSetup(Traditional)">Project Setup(Traditional)</h2><p>This plugin may be configured as both a traditional Jenkins build, or as a Pipeline project.</p><ol><li>Create a new project.  If you want to build for multiple architectures, select &quot;Multi-configuration project&quot;</li><li>Checkout source code.  When you checkout the source code for the project, it <strong>should</strong> be in a subdirectory called 'source'(this value can be changed on either a per-build configuration or globally).  This can be done as either an SVN repository, or a git repository.  To checkout to the proper directory using git, go to &quot;Additional Behaviors&quot; and select &quot;Check out to a sub-directory&quot;, and put &quot;source&quot; as the value.  To checkout to the proper directory using SVN, under &quot;Local module directory&quot; put &quot;source&quot; as the value.<br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138445515/138445520.png" data-image-src="attachments/138445515/138445520.png" data-unresolved-comment-count="0" data-linked-resource-id="138445520" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="git-settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138445515" data-linked-resource-container-version="13"></span><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138445515/138445521.png" data-image-src="attachments/138445515/138445521.png" data-unresolved-comment-count="0" data-linked-resource-id="138445521" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="svn-settings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138445515" data-linked-resource-container-version="13"></span></li><li><p>Under 'Build Environment', select 'Delete workspace before build starts'</p></li><li><p>If you have a matrix configuration project, add a new variable called &quot;architecture&quot;.  Put in the proper architectures to build for in this section; this must map to a valid architecture that exists in the distribution repos.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138445515/138445519.png" data-image-src="attachments/138445515/138445519.png" data-unresolved-comment-count="0" data-linked-resource-id="138445519" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configuration-matrix.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138445515" data-linked-resource-container-version="13"></span></p></li><li><p>Under the 'Build' section, add 'Debian Pbuilder'. Most of these settings may be left at their default values, however it is highly recommended to fill in the &quot;Distribution&quot; and &quot;Mirror Site&quot; variables in order to ensure that you get a consistent build.  Otherwise, pbuilder will use the defaults for whatever distribution you are currently running.<br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="250" src="attachments/138445515/138445518.png" data-image-src="attachments/138445515/138445518.png" data-unresolved-comment-count="0" data-linked-resource-id="138445518" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="build-configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138445515" data-linked-resource-container-version="13"></span></p></li><li><p>If you have custom pbuilder hook files that you want to install, install the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Config+File+Provider+Plugin" class="external-link" rel="nofollow">Config File Provider</a> to add in config files. Set the 'target' option to be `hookdir/&lt;file-name&gt;`.</p></li></ol><h2 id="DebianPbuilderPlugin-ProjectSetup(Pipeline)">Project Setup(Pipeline)</h2><p>If using pipeline, you may setup a job similar to the following:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline Setup - single arch</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">node(){
+        ws{
+            stage( &quot;clean&quot; ){
+                cleanWs()
+            }
+            stage( &quot;checkout&quot; ){
+                checkout([$class: &#39;GitSCM&#39;, branches: 
+                         [[name: &#39;*/jenkinsfile-updates&#39;]], 
+                         doGenerateSubmoduleConfigurations: false, 
+                         extensions: [[$class: &#39;RelativeTargetDirectory&#39;, relativeTargetDir: &#39;source&#39;]], 
+                         submoduleCfg: [], 
+                         userRemoteConfigs: [[credentialsId: &#39;78de5c66-5dfb-4c95-8ad9-ec34e8dee4ec&#39;, url: &#39;git@github.com:rm5248/CSerial.git&#39;]]])
+            }
+
+            stage(&quot;build&quot;){
+                //Actually build the package.
+                //Note that you can go to the &#39;Pipeline Syntax&#39; page on your Jenkins instance to generate this automatically
+                debianPbuilder additionalBuildResults: &#39;&#39;, architecture: &#39;&#39;, distribution: &#39;jessie&#39;, keyring: &#39;&#39;, mirrorSite: &#39;http://ftp.us.debian.org&#39;
+            }
+        }
+
+}</pre>
+</div></div><p>The following example shows how to build for multiple architectures:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline Setup - Multiple arch</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">def axisArchitecture = [&quot;amd64&quot;, &quot;armhf&quot;]
+def axisNode = [&quot;master&quot;]
+def tasks = [:]
+
+for( int i = 0; i &lt; axisArchitecture.size(); i++ ){
+    def arch = axisArchitecture[i];
+    tasks[&quot;${axisNode[0]}/${axisArchitecture[i]}&quot;] = {
+        node(axisNode[0]){
+            ws{
+                stage( &quot;clean&quot; ){
+                    cleanWs()
+                }
+	            stage( &quot;checkout&quot; ){
+                    checkout([$class: &#39;GitSCM&#39;, branches: 
+                             [[name: &#39;*/jenkinsfile-updates&#39;]], 
+                             doGenerateSubmoduleConfigurations: false, 
+                             extensions: [[$class: &#39;RelativeTargetDirectory&#39;, relativeTargetDir: &#39;source&#39;]], 
+                             submoduleCfg: [], 
+                             userRemoteConfigs: [[credentialsId: &#39;78de5c66-5dfb-4c95-8ad9-ec34e8dee4ec&#39;, url: &#39;git@github.com:rm5248/CSerial.git&#39;]]])
+   	            } 
+                stage(&quot;build-${arch}&quot;){
+                    debianPbuilder architecture:&quot;${arch}&quot;
+                }
+            }
+        }
+    }
+}
+
+stage(&#39;build&#39;){
+    parallel tasks
+}</pre>
+</div></div><p><br/></p><h2 id="DebianPbuilderPlugin-PackageVersioning">Package Versioning</h2><p>By default the plugin will increment the current version number by reading 'debian/changelog'.  The algorithm follows the standard Debian practice of packages having a ~ being a pre-release version, and packages with a + denoting a version greater than what is default.  Note that this only happens if the the distribution set in 'debian/changelog' is UNRELEASED, or a tag is being built.  Tags are automatically scanned; if using SVN or git, the environment variables <span style="color: rgb(3,47,98);">SVN_URL_1 and GIT_BRANCH are scanned for the substring &quot;tags/&quot;; if the substring is found, the package will be built as a tag.  Otherwise, you can also select the &quot;Build as tag&quot; to force the package to not increment the version number, or alternatively set the environment variable <span style="color: rgb(36,41,46);">DEB_PBUILDER_BUILDING_TAG if you are building a tag.</span></span></p><h2 id="DebianPbuilderPlugin-Artifacts">Artifacts</h2><p><span style="color: rgb(36,41,46);">All generated files are automatically added to the build artifacts for easy retrieval.  This includes the deb files, as well as the dsc and tar files used to build the package in the pbuilder environment.</span></p><h2 id="DebianPbuilderPlugin-Output">Output</h2><p>All output can be found in the build output of the project when it is built.  If for some reason the build fails, this is a good first place to look.  If there is a configuration problem, a (hopefully) useful error message will be printed out when the build fails.  </p><h2 id="DebianPbuilderPlugin-Buildingpackageswith&#39;quilt&#39;format">Building packages with 'quilt' format</h2><p>When building a package with format &quot;3.0 (quilt)&quot;, you must provide the orig.tar.gz file for the builder to work properly.  This can be done one of two ways: either you can provide the orig.tar.gz through a pre-build step of some kind, or under the 'advanced' section there is a field for you to fill in the name of the package to checkout using the 'pristine-tar' command.</p><h1 id="DebianPbuilderPlugin-IssueTracking">Issue Tracking</h1><p>Please file any bugs that you may find on the Jenkins JIRA, using the debian-pbuilder-plugin component.  <a href="https://issues.jenkins-ci.org/issues/?filter=18140" class="external-link" rel="nofollow">Click here</a> for all open issues.</p><h1 id="DebianPbuilderPlugin-Releases"><span style="color: rgb(210,73,57);">Releases</span></h1><h5 id="DebianPbuilderPlugin-Version1.7(2019-10-12)">Version 1.7(2019-10-12)</h5><ul><li>Fixed a few minor issues with building from pipeline[<a href="https://github.com/jenkinsci/debian-pbuilder-plugin/pull/3" class="external-link" rel="nofollow">PR #3</a>]</li></ul><h5 id="DebianPbuilderPlugin-Version1.6(2019-04-21)">Version 1.6(2019-04-21)</h5><ul><li>Removed file lock when building packages; pbuilder should take care of this automatically and it probably doesn't work with multiple slaves anyway</li><li>Catch correct exception if trying to create multiple chroots at the same time</li><li>Added an option to change the pbuilder dependency resolver.  Changing the dependency resolver fixes problems with apt segfaulting on an armhf chroot.</li><li>Made the global configuration actually save and load correctly.</li><li>Print out a more useful error message when the debian/source/format file doesn't exist or is bad.</li></ul><h5 id="DebianPbuilderPlugin-Version1.5(2019-01-27)">Version 1.5(2019-01-27)</h5><ul><li>Added ability to use pristine-tar to get orig.tar.gz file(JENKINS-52645)</li><li>Added ability to set components when creating pbuilder base.  This is mostly useful for building Ubuntu packages.</li></ul><h5 id="DebianPbuilderPlugin-Version1.4(2018-05-12)">Version 1.4(2018-05-12)</h5><ul><li><p><span style="color: rgb(0,0,0);">Added a setting for the keyring.  </span></p><ul><li><p><span style="color: rgb(0,0,0);">Auto-detection for building Debian packages on Ubuntu should still work, but this is useful for overriding it</span></p></li><li><p><span style="color: rgb(0,0,0);">Thanks to jayjlawrence with <a href="https://github.com/jenkinsci/debian-pbuilder-plugin/pull/1" class="external-link" rel="nofollow">PR #1</a> for prompting this change</span></p></li></ul></li></ul><h5 id="DebianPbuilderPlugin-Version1.3(2018-01-13)">Version 1.3(2018-01-13)</h5><ul><li>Plugin does not depend on pipeline</li><li>Fixed JENKINS-48921</li></ul><h5 id="DebianPbuilderPlugin-Version1.2(2017-12-23)">Version 1.2(2017-12-23)</h5><ul><li>First official release on Jenkins.io</li><li>No changes to code since version 1.1, only documentation/POM updates</li></ul><h5 id="DebianPbuilderPlugin-Version1.1">Version 1.1</h5><ul><li>Support for Pipeline jobs. </li><li>Added configuration options for versioning</li></ul><h5 id="DebianPbuilderPlugin-Version1.0">Version 1.0</h5><ul><li>Initial Release of software.  Can build projects of multiple types.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138445515/138445518.png">build-configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138445515/138445519.png">configuration-matrix.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138445515/138445521.png">svn-settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138445515/138445522.png">git-settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138445515/138445520.png">git-settings.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

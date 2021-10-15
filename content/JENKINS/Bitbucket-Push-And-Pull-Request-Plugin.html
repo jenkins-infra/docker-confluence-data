@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Bitbucket Push And Pull Request Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Bitbucket Push And Pull Request Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (cdelmonte)</span>, last modified on Oct 15, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <pre><br/><br/></pre><p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Bitbucket Push and Pull Request <a href="https://plugins.jenkins.io/bitbucket-push-and-pull-request" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Requirements</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>1) This plugin requires a Jenkins v2.138.2 or later and supports</p><ul><li>Bitbucket Cloud rest api v2.x+ and later</li><li>Bitbucket Server 5.14+ and later</li></ul><p>2) This plugin will not work if the previous Bitbucket plugin  (<a href="https://plugins.jenkins.io/bitbucket" rel="nofollow" class="external-link">https://plugins.jenkins.io/bitbucket</a>) is installed.</p><p>3) <span style="color: rgb(255,0,0);"><strong>warning:</strong> After updating the plugin from a version prior to the 2.x.x, the jobs with a pull request need to be reconfigured, reselecting once again, from the plugin conf. pane, the pull request event, that will trigger the build.</span></p></div></div><div><br/></div><div><p>Plugin for Jenkins <strong>v2.138.2 or later</strong>, that triggers builds on Bitbucket's push and pull requests. It's based on the Sazo's fork (<a href="https://github.com/sazo/bitbucket-plugin" class="external-link" rel="nofollow">https://github.com/sazo/bitbucket-plugin</a>) of the official Bitbucket Plugin (<a rel="nofollow" href="https://plugins.jenkins.io/bitbucket" class="external-link">https://plugins.jenkins.io/bitbucket</a>).</p><p>The new features introduced by Bitbucket Push and Pull Request are:</p><ul><li>improved support of pushs for Bitbucket Cloud (rest api v2.x+ with git and mercurial) and Bitbucket Server (5.14+ with git)</li><li>support of pull requests for Bitbucket Cloud (rest api v2.x+ with git and mercurial) and Bitbucket Server (5.14+ with git)</li><li>usage of Gson instead of net.sf.json.JSONObject (blacklisted starting from Jenkins 2.102+)</li><li>Introduction of Models and security improvements</li></ul></div><div><br/>This plugin supports:</div><div><ul><li><strong><strong>push and pull requests</strong> for Bitbucket cloud rest api v2.x+ and later and for </strong><strong>for Bitbucket server 5.14+ and later</strong><strong><br/></strong></li></ul></div><h1 id="BitbucketPushAndPullRequestPlugin-Configuration">Configuration</h1><h5 id="BitbucketPushAndPullRequestPlugin-Beforeyoustart..."><strong>Before you start...</strong></h5><p><u><strong>Bitbucket Push And Pull Request Plugin</strong></u><strong> </strong><u>will not work</u> if the Bitbucket plugin  (<a rel="nofollow" href="https://plugins.jenkins.io/bitbucket" class="external-link">https://plugins.jenkins.io/bitbucket</a>) is still installed. So, please de-install the previous Bitbucket plugin if you want to use this new one.<u><br/></u></p><h5 id="BitbucketPushAndPullRequestPlugin-Configurethewebhook"><strong>Configure the webhook</strong></h5><p>In case you are using <strong>Bitbucket Cloud</strong>, configure your Bitbucket repository adding a <strong>webhook in the settings page.</strong> In the URL field (see image, point A) add your JENKINS_URL followed by &quot;/bitbucket-hook/&quot; (for example &quot;<a href="https://my-jenkins.on-my-planet-far-away.com/bitbucket-hook/" class="external-link" rel="nofollow">https://my-jenkins.on-my-planet-far-away.com/bitbucket-hook/</a>&quot;) Credentials for the webhook endpoint are not required, the trailing slash is mandatory. For more infos please consult the resource <a href="https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html" class="external-link" rel="nofollow">https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html</a>.</p><p>If you are using <strong>Bitbucket Server</strong>, follow these instructions: <a href="https://confluence.atlassian.com/bitbucketserver/managing-webhooks-in-bitbucket-server-938025878.html" class="external-link" rel="nofollow">https://confluence.atlassian.com/bitbucketserver/managing-webhooks-in-bitbucket-server-938025878.html</a></p><h5 id="BitbucketPushAndPullRequestPlugin-ConfigureyourJenkinsjob"><strong>Configure your Jenkins job</strong></h5><p>1.a. Configure the Bitbucket Repository under the Source Code Management with your credentials. For <strong>git</strong>:</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="600" src="attachments/165581264/165581974.png" data-image-src="attachments/165581264/165581974.png" data-unresolved-comment-count="0" data-linked-resource-id="165581974" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_push-and-pull-request-2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165581264" data-linked-resource-container-version="38"></span></p><p><br/></p><p>1.b. In case you are using <strong>Mercurial</strong> instead of git, configure it as follows:</p><p><br/></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="600" src="attachments/165581264/175212861.png" data-image-src="attachments/165581264/175212861.png" data-unresolved-comment-count="0" data-linked-resource-id="175212861" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_2019-06-19 pipeline nofilter push mercurial cloud bitbucket Config [Jenkins].png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165581264" data-linked-resource-container-version="38"></span></p><p><em>Please note: the branch, related to the events which trigger the builds, must be specified in the field Revision.<br/></em></p><p><br/></p><p>2. Now activate the plugin in your job selecting the &quot;Build with Bitbucket Push and Pull Request Plugin&quot; option in the Build Triggers pane.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="600" src="attachments/165581264/175212906.png" data-image-src="attachments/165581264/175212906.png" data-unresolved-comment-count="0" data-linked-resource-id="175212906" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot_2019-06-19 pipeline filter push cloud bitbucket Config [Jenkins](1).png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="165581264" data-linked-resource-container-version="38"></span></p><p><br/></p><h1 id="BitbucketPushAndPullRequestPlugin-Environmentvariables">Environment variables</h1><h3 id="BitbucketPushAndPullRequestPlugin-EnvironmentvariablesforBitbucketCloudandServerpullrequests">Environment variables for Bitbucket Cloud and Server pull requests</h3><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">NAME</th><th class="confluenceTh">VALUE</th></tr><tr><td class="confluenceTd">BITBUCKET_SOURCE_BRANCH</td><td class="confluenceTd">source branch</td></tr><tr><td class="confluenceTd">BITBUCKET_TARGET_BRANCH</td><td class="confluenceTd">target branch</td></tr><tr><td class="confluenceTd">BITBUCKET_PULL_REQUEST_LINK</td><td class="confluenceTd">link</td></tr><tr><td class="confluenceTd">BITBUCKET_PULL_REQUEST_ID</td><td class="confluenceTd">id</td></tr><tr><td class="confluenceTd">BITBUCKET_PAYLOAD</td><td class="confluenceTd">payload as json string</td></tr></tbody></table></div><h3 id="BitbucketPushAndPullRequestPlugin-EnvironmentvariablesforBitbucketCloudpushs">Environment variables for Bitbucket Cloud pushs</h3><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><th class="confluenceTh">NAME</th><th class="confluenceTh">VALUE</th></tr><tr><td class="confluenceTd">REPOSITORY_LINK</td><td class="confluenceTd"><em> branch (Deprecated. It will be removed)</em></td></tr><tr><td class="confluenceTd">BITBUCKET_SOURCE_BRANCH</td><td class="confluenceTd">branch</td></tr><tr><td class="confluenceTd">BITBUCKET_REPOSITORY_URL</td><td class="confluenceTd">repository url</td></tr><tr><td class="confluenceTd">BITBUCKET_PAYLOAD</td><td class="confluenceTd">payload as json string</td></tr></tbody></table></div><h1 id="BitbucketPushAndPullRequestPlugin-Codesnippets">Code snippets</h1><p><br/></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Dsl jobs</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Eclipse" data-theme="Eclipse">job(&#39;example-pull-request-created&#39;) {
+  	triggers{
+  		bitbucketPullRequestCreatedAction()
+  	}
+  	scm {
+		git {
+		    remote {
+		        url(&quot;https://git.company.domain/scm/~username/telegram.git&quot;)
+		    }
+		}
+	}
+    steps {
+        shell(&#39;echo START pull request created&#39;)
+    }
+}
+
+job(&#39;example-pull-request-updated&#39;) {
+  	triggers{
+  		bitbucketPullRequestUpdatedAction()
+  	}
+  	scm {
+		git {
+		    remote {
+		        url(&quot;https://git.company.domain/scm/~username/telegram.git&quot;)
+		    }
+		}
+	}
+    steps {
+        shell(&#39;echo START pull request updated&#39;)
+    }
+}
+
+// bitbucketPullRequestApprovedAction(boolean onlyIfReviewersApproved)
+job(&#39;example-pull-request-approved&#39;) {
+  	triggers{
+  		bitbucketPullRequestApprovedAction(false)
+  	}
+  	scm {
+		git {
+		    remote {
+		        url(&quot;https://git.company.domain/scm/~username/telegram.git&quot;)
+		    }
+		}
+	}
+    steps {
+        shell(&#39;echo START pull request approved&#39;)
+    }
+}
+
+// bitbucketRepositoryPushAction(boolean triggerAlsoIfTagPush, String allowedBranches)
+job(&#39;example-push&#39;) {
+  	triggers{
+  		bitbucketRepositoryPushAction(false, &quot;&quot;)
+  	}
+  	scm {
+		git {
+		    remote {
+		        url(&quot;https://git.company.domain/scm/~username/telegram.git&quot;)
+		    }
+		}
+	}
+    steps {
+        shell(&#39;echo START push&#39;)
+    }
+}</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline script</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Eclipse" data-theme="Eclipse">properties([
+    pipelineTriggers([
+        [
+            $class: &#39;BitBucketPPRTrigger&#39;,
+            triggers : [
+                [
+                    $class: &#39;BitBucketPPRPullRequestTriggerFilter&#39;,
+                    actionFilter: [
+                        $class: &#39;BitBucketPPRPullRequestCreatedActionFilter&#39;
+                    ]
+                ]
+            ]
+        ]
+    ])
+])
+node {
+	def sourceBranch = &quot;&quot;
+        def targetBranch = &quot;&quot;
+        try{
+            sourceBranch = &quot;${BITBUCKET_SOURCE_BRANCH}&quot;;
+            targetBranch = &quot;${BITBUCKET_TARGET_BRANCH}&quot;;
+        }catch(e){}
+
+        if(sourceBranch == &quot;&quot;){
+            sourceBranch = &#39;development&#39;
+        }
+
+        if(targetBranch == &quot;&quot;){
+            targetBranch = &#39;master&#39;
+        }
+
+        checkout changelog: true, poll: true, scm: [
+            $class: &#39;GitSCM&#39;,
+            branches: [
+                [name: &#39;*/&#39;+sourceBranch]
+            ],
+            doGenerateSubmoduleConfigurations: false,
+            extensions: [
+                 [
+                    $class: &#39;PreBuildMerge&#39;,
+                    options: [
+                        fastForwardMode: &#39;FF&#39;,
+                        mergeRemote: &#39;origin&#39;,
+                        mergeStrategy: &#39;recursive&#39;,
+                        mergeTarget: &#39;&#39;+targetBranch
+                    ]
+                ]
+            ],
+            submoduleCfg: [],
+            userRemoteConfigs: [
+                [
+                    url: &#39;https://[user]@bitbucket.org/[org]/[repo].git&#39;]
+                ]
+            ]
+
+
+        echo &#39;Some build steps&#39;
+
+}</pre>
+</div></div><p><br/></p><h1 id="BitbucketPushAndPullRequestPlugin-ChangeLog">Change Log</h1><h2 id="BitbucketPushAndPullRequestPlugin-2.2.0(2019-10-14)">2.2.0 (2019-10-14)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-2.0.0...bitbucket-push-and-pull-request-2.2.0" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Implemented enhancements:</strong></p><ul><li>Added checkbox to define if changes on the repos have to be confirmed through the git plugin before starting a job triggered by a push</li><li>Added pull request support for Mercurial on Bitbucket Cloud</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>#60 change pull request #59 and reformatting by cdelmonte-zg</li><li>#59 adding logic to trigger target branch on merge by raghav-a</li><li>#58 an option for repository hasChange() conditional behaviour by cdelmonte-z</li><li>#55 workflows: implement isPipelineMultibranch check by macghriogair</li><li>#51 Job DSL multiple triggers by rhotau</li><li>#50 Support for multiple triggers from dsl by rhotau</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-2.0.0(2019-06-25)">2.0.0 (2019-06-25)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.6.4...bitbucket-push-and-pull-request-2.0.0" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Implemented enhancements:</strong></p><ul><li>Added pull request support for Bitbucket Server - Added pull request support for Mercurial on Bitbucket Cloud</li></ul><p><strong>Closed issues:</strong></p><ul><li>Issue #44 Branch expression matching before triggering the build: expecting fix for Bitbucket Server bug</li><li>Issue #37 Jenkins build triggered from push event with Mercurial instead of git enhancement</li></ul><p><strong>Merged pull requests:</strong> </p><ul><li>#49 Add warnings</li><li>#48 [Enhancement] Add pull request support for Bitbucket Server and Mercurial on Bitbucket Cloud</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.6.4(2019-06-19)">1.6.4 (2019-06-19)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.6.3...bitbucket-push-and-pull-request-1.6.4" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Closed issues:</strong></p><ul><li>Issue #38 BITBUCKET<em>SOURCE</em>BRANCH has wrong value for repo:push events </li><li>Issue #36 Branch expression matching before triggering the build</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[fix] #47 Develop</li><li>[fix] #46 Improving tests for allowed branches </li><li>[fix] #45 Develop</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.6.3(2019-06-14)">1.6.3 (2019-06-14)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.6.2...bitbucket-push-and-pull-request-1.6.3" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Closed issues:</strong></p><ul><li>Issue #36 Branch expression matching before triggering the build</li><li>Issue #30 Version 1.6.2 throws exception after receiving PR payload bug</li><li>Issue #27 Builds not triggering with 1.6.1 and Bitbucket Server 7.0.1 bug</li><li>Issue #26 Add environment variable for git repository url</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[fix] #41 BranchSpec pattern matching directions (by macghriogair)</li><li>[enhancement] #34 Create CODE<em>OF</em>CONDUCT.md (by eiriarte-mendez)</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.6.2(2019-05-10)">1.6.2 (2019-05-10)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.6.1...bitbucket-push-and-pull-request-1.6.2" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Closed issues:</strong></p><ul><li>Issue #27 Builds not triggering with 1.6.1 and Bitbucket Server 7.0.1 bug</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[Bug] #27 Builds not triggering with 1.6.1 and Bitbucket Server 7.0.1 #28</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.6.1(2019-05-08)">1.6.1 (2019-05-08)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.6.0...bitbucket-push-and-pull-request-1.6.1" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Implemented enhancements:</strong></p><ul><li>added more enviroment variables and improved the documentation abotu them</li></ul><p><strong>Closed issues:</strong></p><ul><li>Improvements#24 Add environment variable for pull request id</li><li>Issue#19 Webhook not triggering</li><li>Improvements#11 BITBUCKET_SOURCE_BRANCH is not injected for SCM poll</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[develop] Enhance environment variables #25</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.6.0(2019-04-29)">1.6.0 (2019-04-29)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/bitbucket-push-and-pull-request-1.5.0...bitbucket-push-and-pull-request-1.6.0" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Implemented enhancements:</strong></p><ul><li>split methods of io.jenkins.plugins.bitbucketpushandpullrequest.BitBucketPPRJobProbe to allow unit tests</li></ul><p><strong>Closed issues:</strong></p><ul><li>Improvements#20 Add trigger for pull request merged</li><li>Improvements#14 Pattern for allowed branches</li><li>Improvements#5 Improve support for BitBucket Server push</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[develop] Remove deprecated username field from payload #17 by macghriogair</li><li>[develop] add support for pattern matching on branches #18 by macghriogair</li><li>[develop] Add support for merged pull requests #21 by cdelmonte-zg</li></ul><h2 id="BitbucketPushAndPullRequestPlugin-1.5.0(2019-04-11)">1.5.0 (2019-04-11)</h2><p><a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/compare/master@%7B20days%7D...master" class="external-link" rel="nofollow">Full Changelog</a></p><p><strong>Implemented enhancements:</strong></p><ul><li>split methods of io.jenkins.plugins.bitbucketpushandpullrequest.BitBucketPPRJobProbe to allow unit tests</li></ul><p><strong>Closed issues:</strong></p><ul><li>Improvements#10 add ssh uri matching for git clone</li><li>Improvements#12 No change-logs or description of features</li><li>Improvements#5 Improve support for BitBucket Server push</li></ul><p><strong>Merged pull requests:</strong></p><ul><li>[dev] gitignore more project specific entries <a href="https://github.com/jenkinsci/bitbucket-push-and-pull-request-plugin/pull/13" class="external-link" rel="nofollow">#13</a> by macghriogair</li></ul><p><br/></p><h1 id="BitbucketPushAndPullRequestPlugin-Issues">Issues</h1><p>
+
+
+
+
+
+<div id="refresh-module-1068305415" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues-1068305415" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Created</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Updated</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Due</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Assignee</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Reporter</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Status</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Resolution</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60602?src=confmacro">JENKINS-60602</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60602?src=confmacro">
+                                            Bitbucket integration with Jenkins
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60602?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14688&amp;avatarType=issuetype"
+                                                alt="Task"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 29, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 15, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Christian Del Monte
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Alex Martynenko
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+    ">
+                                                Reopened
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Unresolved
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60418?src=confmacro">JENKINS-60418</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60418?src=confmacro">
+                                            issue of Integration webhook with bitbucket when using bitbucket pull and push plugin
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60418?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 10, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 13, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Christian Del Monte
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            vikas goyal
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Cannot Reproduce
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60032?src=confmacro">JENKINS-60032</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60032?src=confmacro">
+                                            issue with bitbucket pull and push request plugin 
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-60032?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Nov 04, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 03, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Christian Del Monte
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            vikas goyal
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Resolved
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Fixed
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58607?src=confmacro">JENKINS-58607</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58607?src=confmacro">
+                                            Problem configuring BitBucket Push and Pull Request Plugin
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-58607?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 22, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 13, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Christian Del Monte
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Renat Kabirov
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Not A Defect
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55896?src=confmacro">JENKINS-55896</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55896?src=confmacro">
+                                            Jenkins is not triggering build on any pullrequest created in bitbucket repo
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55896?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 31, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jun 20, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Christian Del Monte
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Hassaan Sohail
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/blocker.svg"
+                                             alt="Blocker"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+    ">
+                                                Closed
+                                            </span>
+                                                                                                            </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            Fixed
+                                                                    </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="11">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=component+%3D+bitbucket-push-and-pull-request-plugin+&amp;src=confmacro">
+                                                            5 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><p><br/></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/165581952.png">add_webhook.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/165581973.png">Screenshot_push-and-pull-request.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/165581974.png">Screenshot_push-and-pull-request-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/173704012.png">Screenshot_2019-05-02.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/175212861.png">Screenshot_2019-06-19 pipeline nofilter push mercurial cloud bitbucket Config [Jenkins].png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/165581264/175212906.png">Screenshot_2019-06-19 pipeline filter push cloud bitbucket Config [Jenkins](1).png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

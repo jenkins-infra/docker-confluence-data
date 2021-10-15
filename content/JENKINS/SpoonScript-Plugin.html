@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SpoonScript Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SpoonScript Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mateusz)</span>, last modified on May 17, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View TurboScript <a href="https://plugins.jenkins.io/spoonscript" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>The SpoonScript plugin for Jenkins allows to automatically build Spoon images and push them to the Spoon.net Hub or local repository.</p>
+
+<p>The SpoonScript Jenkins plugin includes the following capabilities:</p>
+<ul>
+	<li>Build an image with SpoonScript</li>
+	<li>Push the resulting image to the Spoon.net Hub</li>
+	<li>Export an image to the local repository</li>
+	<li>Trigger a build job using webhooks</li>
+</ul>
+
+
+<h3 id="SpoonScriptPlugin-QuickTour">Quick Tour</h3>
+
+<h4 id="SpoonScriptPlugin-BuildanimagewithSpoonScript">Build an image with SpoonScript</h4>
+
+<ol>
+	<li>Create a new Jenkins item and select a <strong>Spoon Project</strong> as its type.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938143.png" data-image-src="attachments/78676253/78938143.png" data-unresolved-comment-count="0" data-linked-resource-id="78938143" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_project_configure_1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>Add <strong>Execute SpoonScript</strong> build step.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938144.png" data-image-src="attachments/78676253/78938144.png" data-unresolved-comment-count="0" data-linked-resource-id="78938144" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_project_configure_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>By convention, the default name for a SpoonScript file is <strong>spoon.me</strong>. It should be located in the Jenkins project workspace which corresponds to the root directory of a GitHub project.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938145.png" data-image-src="attachments/78676253/78938145.png" data-unresolved-comment-count="0" data-linked-resource-id="78938145" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_project_configure_3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>Write a SpoonScript to define how a new image should be created. For more information about SpoonScript refer to the <a href="https://spoon.net/docs/reference/spoonscript" class="external-link" rel="nofollow">language reference</a> or take a look at sample scripts in <a href="https://github.com/spoonapps/spoonme" class="external-link" rel="nofollow">GitHub</a>.</li>
+	<li>Provide credentials to a Spoon.net account. If no credentials are provided, the SpoonScript will be run as the currently logged on user.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938146.png" data-image-src="attachments/78676253/78938146.png" data-unresolved-comment-count="0" data-linked-resource-id="78938146" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_project_configure_4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>For enterprise deployments you may be interested in building images that target a specific version of the Spoon VM. To gain access to this and other optional settings, click <strong>Advanced</strong> button.  For more information about specific options, click buttons with help content or refer to the <a href="https://spoon.net/docs/reference#build" class="external-link" rel="nofollow">online documentation</a>.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938147.png" data-image-src="attachments/78676253/78938147.png" data-unresolved-comment-count="0" data-linked-resource-id="78938147" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_configure_5.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>Save your changes and test the script by triggering the job manually. In the next sections you will learn how to push new images to the Spoon.net Hub.</li>
+</ol>
+
+
+<h4 id="SpoonScriptPlugin-PushanimagetotheSpoon.netHub">Push an image to the Spoon.net Hub</h4>
+
+<p>Pushing images to the Spoon.net Hub is available as post-build action:</p>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938150.png" data-image-src="attachments/78676253/78938150.png" data-unresolved-comment-count="0" data-linked-resource-id="78938150" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_push.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></p>
+
+<p>There are three options for naming the new remote image:</p>
+<ol>
+	<li>Use the same name as the local image.</li>
+	<li>Generate the remote image name from the Git information for your project (organization, project, branch, and current head version). Note that you cannot publish images from an organization to which you do not belong. For example, if your Spoon.net account name is <strong>JimmyKimmel</strong> then you won’t be allowed to push images as <strong>OprahWinfrey</strong>. If this is required, then overwrite the name of the GitHub organization with your account name.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938152.png" data-image-src="attachments/78676253/78938152.png" data-unresolved-comment-count="0" data-linked-resource-id="78938152" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_push_overwrite_organization.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+	<li>Use a fixed remote image name hardcoded in the job definition. Optionally, you may append a suffix from the date and time in order to keep old images available in the Spoon.net Hub.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938151.png" data-image-src="attachments/78676253/78938151.png" data-unresolved-comment-count="0" data-linked-resource-id="78938151" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_push_fixed_image_name.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></li>
+</ol>
+
+
+<h4 id="SpoonScriptPlugin-Exportanimagetothelocalrepository">Export an image to the local repository</h4>
+
+<p>Exporting images to the local repository is available as post-build action:</p>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938148.png" data-image-src="attachments/78676253/78938148.png" data-unresolved-comment-count="0" data-linked-resource-id="78938148" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_export_image.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span><br/>
+         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938149.png" data-image-src="attachments/78676253/78938149.png" data-unresolved-comment-count="0" data-linked-resource-id="78938149" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_export_image_outputfile.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></p>
+
+<h4 id="SpoonScriptPlugin-Removeanimagefromthelocalrepository">Remove an image from the local repository</h4>
+
+<p>New images will remain in the local repository unless they are deleted using the <code>spoon rmi &lt;image_name&gt;</code> command. This step can be included in the job definition using the post-build action <strong>Remove local Spoon image</strong>.</p>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938153.png" data-image-src="attachments/78676253/78938153.png" data-unresolved-comment-count="0" data-linked-resource-id="78938153" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_remove_local_image.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></p>
+
+<h4 id="SpoonScriptPlugin-Triggerabuildjobusingwebhooks">Trigger a build job using webhooks</h4>
+
+<p>You may decide to build a Spoon container image whenever the source code changes for your project.  To facilitate this, a Spoon Jenkins job can be triggered using an HTTP POST request.  The request content is required to be compatible with the structure of <a href="https://developer.github.com/webhooks/" class="external-link" rel="nofollow">GitHub webhook events</a>.</p>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938154.png" data-image-src="attachments/78676253/78938154.png" data-unresolved-comment-count="0" data-linked-resource-id="78938154" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_webhook_setup.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></p>
+
+<p>Webhook messages are sent to Jenkins_URL/spoon-webhook endpoint as POST with <code>Content-Type</code> set to <code>application/x-www-form-urlencoded</code>.</p>
+
+<p>         <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/78676253/78938156.png" data-image-src="attachments/78676253/78938156.png" data-unresolved-comment-count="0" data-linked-resource-id="78938156" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_webhook_endpoint.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="78676253" data-linked-resource-container-version="9"></span></p>
+
+<p>Enjoy and please send any feedback or questions to <a href="https://twitter.com/spoonapps" class="external-link" rel="nofollow">@spoonapps</a>!</p>
+
+<h3 id="SpoonScriptPlugin-ChangeLog">Change Log</h3>
+
+<h5 id="SpoonScriptPlugin-Version1.0(Apr21,2014)">Version 1.0 (Apr 21, 2014)</h5>
+
+<ul>
+	<li>Build an image with SpoonScript</li>
+	<li>Push the resulting image to the Spoon.net Hub</li>
+	<li>Export an image to the local repository</li>
+	<li>Trigger a build job using webhooks</li>
+	<li>Integration with Credentials plugin</li>
+	<li>Integration with Git plugin</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938143.png">jenkins_project_configure_1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938144.png">jenkins_project_configure_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938145.png">jenkins_project_configure_3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938146.png">jenkins_project_configure_4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938147.png">jenkins_configure_5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938148.png">jenkins_export_image.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938149.png">jenkins_export_image_outputfile.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938150.png">jenkins_push.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938151.png">jenkins_push_fixed_image_name.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938152.png">jenkins_push_overwrite_organization.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938153.png">jenkins_remove_local_image.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938155.png">jenkins_webhook_setup.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938154.png">jenkins_webhook_setup.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/78676253/78938156.png">jenkins_webhook_endpoint.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:49</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

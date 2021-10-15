@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Perforce Plugin - Future</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Perforce-Plugin.html">Perforce Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Perforce Plugin - Future
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stimms)</span>, last modified on Jul 15, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page outlines a spec for the future perforce plugin.  Much of the content comes from the hudson-dev mailing list and discussion on this topic is probably best done there. 
+<br class="atl-forced-newline"/></p>
+
+<p>It was decided that a new plugin was probably needed.  The reasons for this were two fold.  First the old plugin makes use of the tek42 libraries for perforce integration.  These libraries natively invoke p4 which means that the output must be parsed.  Often unexpected output causes the appliation to crash and testing the plugin is quite tricky.  The second reason is that the current plugin is suffering from feature creep as a number of developers without a coherent vision of the plugin have been contributing over the past few years.  Some of the features are not complimentary and must be configured using checkboxes. </p>
+
+<h1 id="PerforcePlugin-Future-Whatshouldtheperforceplugindo?">What should the perforce plugin do? </h1>
+
+<p><br class="atl-forced-newline"/></p>
+
+<p>A minimalist approach is probably best and the options the current plugin provides should be trimmed.  In terms of configuration</p>
+
+<p>1.  P4PORT - provide the port on which to connect to the perforce server</p>
+
+<p>2.  P4USER - the user to use during the build</p>
+
+<p>3.  P4PASSWD - the password to use to log in.  This could, as has been suggested, be handled by running p4 login on the build box.  However it forces people to add a script to run on their build box or manually run p4 login whenever the login ticket expires.  This parameter could be optional such that if it isn't set the plugin doesn't attempt to login and assumes that the build box and account have a valid ticket. </p>
+
+<p>4.  Workspace template - a client workspace mapping with the name of the workspace templated out.  So a workspace like</p>
+
+<p>View:<br/>
+        //ReleaseEngineering/trunk/... //st_mirage_installers/ReleaseEngineering/...<br/>
+        //Install/trunk/... //st_mirage_installers/Install/...</p>
+
+<p>would be entered as</p>
+
+<p>View:<br/>
+        //ReleaseEngineering/trunk/... //${clientName}/ReleaseEngineering/...<br/>
+        //Install/trunk/... //${clientName}/Install/...
+<br class="atl-forced-newline"/></p>
+
+<p>This would allow the plugin to create a workspace for each box which is very useful for build farms.  If the workspace already exists on the build box a new one will not be created but if one doesn't exist then it will be created from the template.  I think this approach deals with both the case of build farm and single build box.  I would probably use<br/>
+something like</p>
+
+<p>${projectName}<br/>
+.replace(&quot;\s&quot;, &quot;<em>&quot;) + &quot;</em>&quot; + ${buildBoxName}
+<br class="atl-forced-newline"/></p>
+
+<p>as the name for the client.  </p>
+
+<p>The workspace spec field will also allow the running of groovy code to generate a spec.  This should provide for installations which make use of external scripts to set up their workspaces.  </p>
+
+<p>The workspace name specification, one time force sync, first changelist to track, repository browser, p4 label and windows specific details fields would be dropped. </p>
+
+<p>The repository browser and label functions could be moved into their own plugins.  The workspace name would now be automatically generated, the force one time sync should be done manually since it would be a very rare occurrence and the first changelist to track should be limited to something like p4change - 1000.  </p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:37</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

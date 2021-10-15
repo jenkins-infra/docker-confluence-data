@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Dashboard View</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Dashboard View
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (petehayes)</span>, last modified by <span class='editor'> Unknown User (tgr)</span> on Aug 05, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Dashboard View <a href="https://plugins.jenkins.io/dashboard-view" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-05-11/#SECURITY-2233" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-09-12/#SECURITY-1489" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+This plugin contributes a new view implementation that provides a dashboard / portal-like view for your Jenkins instance.<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020809808 {padding: 0px;}
+div.rbtoc1631020809808 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020809808 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020809808'>
+<ul class='toc-indentation'>
+<li><a href='#DashboardView-Addnewview'>Add new view</a></li>
+<li><a href='#DashboardView-Configuredashboardview'>Configure dashboard view</a></li>
+<li><a href='#DashboardView-Viewlayout'>View layout</a></li>
+<li><a href='#DashboardView-Coreportlets'>Core portlets</a></li>
+<li><a href='#DashboardView-ExtendingtheDashboardViewplugin'>Extending the Dashboard View plugin</a></li>
+<li><a href='#DashboardView-OtherpluginsthatsupporttheDashboardView'>Other plugins that support the Dashboard View</a></li>
+<li><a href='#DashboardView-TODO'>TODO</a></li>
+<li><a href='#DashboardView-VersionHistory'>Version History</a></li>
+</ul>
+</div></p><h2 id="DashboardView-Addnewview">Add new view</h2><p>On the Jenkins main page, click the + tab to start the new view wizard (If you do not see a +, it is likely you do not have permission to create a new view).  On the create new view page, give your view a name and select the Dashboard type and click ok.   <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975814.png" data-image-src="attachments/41877565/41975814.png" data-unresolved-comment-count="0" data-linked-resource-id="41975814" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="create-view.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h2 id="DashboardView-Configuredashboardview">Configure dashboard view</h2><p>The configuration is done in 2 parts, selecting the Jenkins jobs to include in the view, and selecting which dashboard portlets to have included in the view.  The jobs that you select are used for all the portlets to draw their information from. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/42631390.jpg" data-image-src="attachments/41877565/42631390.jpg" data-unresolved-comment-count="0" data-linked-resource-id="42631390" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="dashboard-view-configure-1.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-Selectjobs">Select jobs</h3><p>Select the list of jobs to include in the dashboard. This is exactly the same process as the standard list view that comes with Jenkins.</p><p>Also a regular expression can be used to specify the jobs to include in the view.</p><h3 id="DashboardView-Options">Options</h3><ul><li>Show standard Jenkins list at the top of the page: shows uses standard Jenkins jobs list as it would be when using Jenkins' built-in  'List View' type.</li></ul><h3 id="DashboardView-Selectportlets">Select portlets</h3><p>Configure which portlets you want to see on the top and on the left and the right column.  Each portlet may have its own configuration but at a minimum it requires a name to be given to it.<br/>Click ok and the dashboard configuration will be saved and you will be brought to the dashboard view itself.</p><h2 id="DashboardView-Viewlayout">View layout</h2><p>The dashboard view supports a layout with rows spanning the entire view with 2 columns.</p><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/></colgroup><tbody><tr><td colspan="2" class="confluenceTd"><p style="text-align: center;">Top portlet 1</p></td></tr><tr><td class="confluenceTd"><p>Left portlet 1</p></td><td class="confluenceTd"><p>Right portlet 1</p></td></tr><tr><td class="confluenceTd"><p>Left portlet 2</p></td><td class="confluenceTd"><p>Right portlet 2</p></td></tr><tr><td colspan="2" class="confluenceTd"><p style="text-align: center;">Bottom portlet 1</p></td></tr></tbody></table></div><h2 id="DashboardView-Coreportlets">Core portlets</h2><p>The dashboard view comes with a number of portlets that you can configure your view with (New portlets can be contributed to Jenkins via other plugins, even your own).</p><h3 id="DashboardView-StandardJenkinsjobslist">Standard Jenkins jobs list</h3><p>This portlet shows a row for each job showing the standard columns configured in Jenkins. All the configured portlets are displayed below this list.<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/42631391.jpg" data-image-src="attachments/41877565/42631391.jpg" data-unresolved-comment-count="0" data-linked-resource-id="42631391" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="dashboard-view-ShowStdJobListAtTop.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-JobsGrid">Jobs Grid</h3><p>The jobs grid portlet displays a 3 column table with the current status and a clickable link to the job.  This offers a more compressed presentation of your jobs than the standard 1 row per job view, albeit at the cost of some job information. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975817.png" data-image-src="attachments/41877565/41975817.png" data-unresolved-comment-count="0" data-linked-resource-id="41975817" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="all-jobs.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-UnstableJobs">Unstable Jobs</h3><p>This portlet lists the unstable jobs within the view.  Note, this does not necessarily list all of Jenkins' unstable jobs, but only looks at jobs configured for this view. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975821.png" data-image-src="attachments/41877565/41975821.png" data-unresolved-comment-count="0" data-linked-resource-id="41975821" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="unstable-jobs.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-TestStatisticsGrid">Test Statistics Grid</h3><p>The test statistics grid shows detailed test data for the configured jobs.  This is useful to get an aggregated count of tests across the jobs in your view.   If desired, jobs with zero tests can be hidden. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975820.png" data-image-src="attachments/41877565/41975820.png" data-unresolved-comment-count="0" data-linked-resource-id="41975820" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test-stats-grid.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-TestStatisticsChart">Test Statistics Chart</h3><p>This is a pie chart of the tests in the configured jobs.  It shows the passing, failing, and skipped jobs with the total # and percentages.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975819.png" data-image-src="attachments/41877565/41975819.png" data-unresolved-comment-count="0" data-linked-resource-id="41975819" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test-stats-chart.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-TestTrendChart">Test Trend Chart</h3><p>This is a chart that shows your tests over time in aggregate.  The logic is that for every day since the first job in the view was built, it shows the total number of passing, skipped and failing tests in aggregate across the build.  It assumes that if a build did not occur on a given day, that the previous day's build results (or the previous-previous day, etc.) will be used. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/41975822.png" data-image-src="attachments/41877565/41975822.png" data-unresolved-comment-count="0" data-linked-resource-id="41975822" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test-trends.PNG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-Jobsstatistics">Jobs statistics</h3><p>Shows statistics based on jobs health.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/42631392.jpg" data-image-src="attachments/41877565/42631392.jpg" data-unresolved-comment-count="0" data-linked-resource-id="42631392" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="dashboard-view-JobsStatistics.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h3 id="DashboardView-Buildstatistics">Build statistics</h3><p>Shows statistics based on build status.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/41877565/42631393.jpg" data-image-src="attachments/41877565/42631393.jpg" data-unresolved-comment-count="0" data-linked-resource-id="42631393" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="dashboard-view-BuildStatistics.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="41877565" data-linked-resource-container-version="87"></span></p><h2 id="DashboardView-ExtendingtheDashboardViewplugin">Extending the Dashboard View plugin</h2><p>Much of the benefit of this plugin will be realized when other plugins that enhance Jenkins offer support for it.</p><p>Add support in your plugin:</p><ul><li>Extend the DashboardPortlet class and provide a descriptor that extends the Descriptor&lt;DashboardPortlet&gt;</li><li>Create a jelly view called portlet.jelly</li><li>Optionally create a jelly view called main.jelly to be used when the portlet is in maximized mode (otherwise the same portlet.jelly view will be used)</li></ul><p>It is possible to define custom parameters for the DashboardPortlet. The displayName is always required. To add new parameters:</p><ul><li>create a jelly file called config.jelly to be used when the portlet is configured (added to the view in 'Edit View' config page);</li><li>modify constructor (with @DataBoundConstructor) to receive the new parameters.</li></ul><p>Looking at the source code of this plugin will show a number of examples of doing this. The core portlets do the same thing that your plugin would do.</p><p>On your plugin Wiki page, add the label supports-dashboard-view so that it will show up in the list below.</p><p>Sample files:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>MyPortlet.java</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">import hudson.plugins.view.dashboard.DashboardPortlet;
+
+class MyPortlet extends DashboardPortlet {
+
+    @DataBoundConstructor
+    public MyPortlet(String name) {
+        super(name);
+    }
+
+// do whatever you want
+
+    @Extension
+    public static class DescriptorImpl extends Descriptor&lt;DashboardPortlet&gt; {
+        @Override
+        public String getDisplayName() {
+            return &quot;MyPortlet&quot;;
+        }
+    }
+};
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>portlet.jelly</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">&lt;j:jelly xmlns:j=&quot;jelly:core&quot; xmlns:st=&quot;jelly:stapler&quot; xmlns:d=&quot;jelly:define&quot; xmlns:dp=&quot;/hudson/plugins/view/dashboard&quot; xmlns:l=&quot;/lib/layout&quot; xmlns:t=&quot;/lib/hudson&quot; xmlns:f=&quot;/lib/form&quot;&gt;
+
+  &lt;dp:decorate portlet=&quot;${it}&quot;&gt; &lt;!-- This is to say that this is a dashboard view portlet --&gt;
+    &lt;tr&gt;&lt;td&gt; &lt;!-- This is needed because everything is formatted as a table - ugly, I know --&gt;
+
+      &lt;!-- you can include a separate file with the logic to display your data or you can write here directly --&gt;
+      &lt;div align=&quot;center&quot;&gt;
+        &lt;st:include page=&quot;myportlet.jelly&quot;/&gt;
+       &lt;/div&gt;
+
+     &lt;/td&gt;&lt;/tr&gt;
+  &lt;/dp:decorate&gt;
+&lt;/j:jelly&gt;
+</pre>
+</div></div><h2 id="DashboardView-OtherpluginsthatsupporttheDashboardView">Other plugins that support the Dashboard View</h2><p>
+
+
+
+
+
+
+
+
+
+
+
+<ul class="content-by-label">
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Android+Lint+Plugin">Android Lint Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Parses output from the Android lint tool and displays the results for analysis.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Rich+Text+Publisher+Plugin">Rich Text Publisher Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin puts custom rich text message to the Build pages and Job main page (for last build). Atlassian Confluence, WikiText and HTML notations are supported.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/DRY+Plugin">DRY Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for duplicate code checkers like <a href="http://pmd.sourceforge.net/cpd.html" class="external-link" rel="nofollow">CPD</a> or <a href="http://www.harukizaemon.com/simian/" class="external-link" rel="nofollow">Simian</a>.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Cppcheck+Plugin">Cppcheck Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for <a href="http://cppcheck.wiki.sourceforge.net/" class="external-link" rel="nofollow">CppCheck</a>, a tool for static C/C++ code analysis.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Project+Statistics+Plugin">Project Statistics Plugin</a>
+                
+                                        <span class="smalltext">&mdash; 
+<p>This plugin provides new dashboard-view portlets and new columns for displaying project statistics for your Jenkins instance.</p></span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Custom+Job+Icon+Plugin">Custom Job Icon Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin allows to configure a custom icon for each job in order to improve the job visibility on the dashboard.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Questa+VRM+Plugin">Questa VRM Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Adds the ability for Jenkins to publish results from Mentor Graphics Questa Verification Run Manager (VRM).</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Parasoft+Findings+Plugin">Parasoft Findings Plugin</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Warnings+Next+Generation+Plugin">Warnings Next Generation Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin collects compiler warnings or issues reported by static analysis tools and visualizes the results.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Analysis+Collector+Plugin">Analysis Collector Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plug-in is an add-on for the plug-ins <a href="/display/JENKINS/Checkstyle+Plugin">Checkstyle</a>, <a href="/display/JENKINS/DRY+Plugin">Dry</a>, <a href="/display/JENKINS/FindBugs+Plugin">FindBugs</a>, <a href="/display/JENKINS/PMD+Plugin">PMD</a>, <a href="/display/JENKINS/Android+Lint+Plugin">Android Lint</a>, <a href="/display/JENKINS/Task+Scanner+Plugin">Task Scanner</a>, and <a href="/display/JENKINS/Warnings+Plugin">Warnings</a>: the plug-in collects the different analysis results and shows the results in a combined trend graph. Additionally, the plug-in provides health reporting and build stability based on these combined results.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Static+Code+Analysis+Plug-ins">Static Code Analysis Plug-ins</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/SLOCCount+Plugin">SLOCCount Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plug-in generates trend report for <a href="http://www.dwheeler.com/sloccount/" class="external-link" rel="nofollow">SLOCCount</a> and <a href="http://cloc.sourceforge.net/" class="external-link" rel="nofollow">cloc</a> open source tools, that count number of code lines written in many programming languages.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/M2+Release+Plugin">M2 Release Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin allows you to perform a release build using the <a href="http://maven.apache.org/plugins/maven-release-plugin/" class="external-link" rel="nofollow">maven-release-plugin</a> from within Jenkins.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Cadence+vManager+Plugin">Cadence vManager Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin adds an ability to perform REST over HTTP calls to Cadence vManager as a step in your build.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/PMD+Plugin">PMD Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for <a href="http://pmd.sourceforge.net/" class="external-link" rel="nofollow">PMD</a>, an open source static code analysis program. </span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Task+Scanner+Plugin">Task Scanner Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin scans the workspace files for open tasks and generates a trend report.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/CCM+Plugin">CCM Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plug-in generates reports on cyclomatic complexity for .NET code.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/FindBugs+Plugin">FindBugs Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for <a href="http://findbugs.sourceforge.net/" class="external-link" rel="nofollow">FindBugs</a>, an open source program which uses static analysis to look for bugs in Java code. </span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Checkstyle+Plugin">Checkstyle Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for <a href="http://checkstyle.sourceforge.net/" class="external-link" rel="nofollow">Checkstyle</a>, an open source static code analysis program. </span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Release+Plugin">Release Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin adds the ability to wrap your job with pre- and post- build steps which are only executed when a manual release build is triggered.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/OWASP+Dependency-Check+Plugin">OWASP Dependency-Check Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin can analyze dependencies and generate trend reports for <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" class="external-link" rel="nofollow">Dependency-Check</a>, an open source utility that detects known vulnerabilities in project dependencies.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Warnings+Plugin">Warnings Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin generates the trend report for compiler warnings in the console log or in log files.</span>
+            
+                    </div>
+    </li>
+    </ul>
+</p><h2 id="DashboardView-TODO">TODO</h2><ul><li>Use 'div' instead of 'table' to place portlets in the page.</li><li>update this wiki page with more updated screenshots.</li></ul><h2 id="DashboardView-VersionHistory">Version History</h2><h3 id="DashboardView-Version2.11andnewer">Version 2.11 and newer</h3><p>See <a rel="nofollow">GitHub releases</a></p><h3 id="DashboardView-Version2.10(2018/11/11)">Version 2.10 (2018/11/11)</h3><p>(Needs Jenkins 1.625.3 and Java 7)</p><ul><li>Modernizes dependencies, update joda-time to latest version</li><li>Don't depend on maven-plugin anymore</li><li>Fix fullscreen view on newer Jenkins versions (Thanks to <span class="link-gray no-underline ml-1">eva-mueller-coremedia</span>, <span class="author text-inherit css-truncate-target">NeverOddOrEven and <span class="author text-inherit css-truncate-target">szhem for providing pull-requests fixing this issue, fixes <a href="https://issues.jenkins-ci.org/browse/JENKINS-39941" class="external-link" rel="nofollow">JENKINS-39941</a>, )</span></span></li><li><span class="author text-inherit css-truncate-target"><span class="author text-inherit css-truncate-target">Fix health percentage cutoff (Thanks to zizizach for noticing this)</span></span></li><li><span class="author text-inherit css-truncate-target"><span class="author text-inherit css-truncate-target">Alternate percentages when near 0/100% (Provided by Arnaud TAMAILLON)</span></span></li><li><span class="author text-inherit css-truncate-target"><span class="author text-inherit css-truncate-target">Apply full screen style to maximized portlets</span></span></li><li><span class="author text-inherit css-truncate-target"><span class="author text-inherit css-truncate-target">Based on <a href="https://issues.jenkins-ci.org/browse/JENKINS-13687" class="external-link" rel="nofollow">JENKINS-13687</a>: Add config button to full screen (fixes <a href="http://JENKINS-52170" class="external-link" rel="nofollow">JENKINS-52170</a>, thanks to <span class="view-issue-field"><span class="user-hover"> jjasper for the inspiration)</span></span></span></span></li><li><span class="author text-inherit css-truncate-target"><span class="author text-inherit css-truncate-target"><a class="external-link" href="https://issues.jenkins-ci.org/browse/JENKINS-49745" rel="nofollow">JENKINS-49745</a>: Better JavaScript error handling in &quot;Agent statistics&quot; portlet<br/></span></span></li></ul><h3 id="DashboardView-Version2.9.11(2017/06/07)">Version 2.9.11 (2017/06/07)</h3><p>(Needs Jenkins 1.580.1)</p><ul><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-43863" class="external-link" rel="nofollow">JENKINS-43863</a>: Bump Jenkins version and include needed dependencies.</li></ul><h3 id="DashboardView-Version2.9.10(2016/06/01)">Version 2.9.10 (2016/06/01)</h3><ul><li>Bugfix: Ensure that ${jobs} is really a Collection&lt;Job&gt;</li><li>Minor cleanups</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-35266" class="external-link" rel="nofollow">JENKINS-35266</a>: Fix reset of Hide projects with no tests in the test portlet</li></ul><h3 id="DashboardView-Version2.9.9(2015/05/17)">Version 2.9.9 (2015/05/17)</h3><ul><li>Hide inactive matrix configurations from the Test Statistics Grid (JENKINS-34804)</li><li>Add option to Test Statistics Portlet to allow jobs with 0 tests to be hidden. (JENKINS-33952)</li></ul><h3 id="DashboardView-Version2.9.7(2015/12/19)">Version 2.9.7 (2015/12/19)</h3><ul><li>Fixed icons missing in build statistics portlet (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29690">JENKINS-29690</a>)</li><li>Fixed test result trend not displayed in matrix project configuration top page (<a href="https://issues.jenkins-ci.org/browse/JENKINS-12205">JENKINS-12205</a>)</li><li>Optimized job statistics portlet (<a href="https://issues.jenkins-ci.org/browse/JENKINS-26879">JENKINS-26879</a>)</li><li>Add an option to show in full screen</li></ul><h3 id="DashboardView-Version2.9.6(2015/07/13)">Version 2.9.6 (2015/07/13)</h3><ul><li>Do not rely on relative links (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28860">JENKINS-28860</a>)</li></ul><h3 id="DashboardView-Version2.9.5(2015/06/18)">Version 2.9.5 (2015/06/18)</h3><ul><li>Use request based URLs</li><li>Fixed &quot;Starting jobs returns error 'Form post required'&quot; (<a href="https://issues.jenkins-ci.org/browse/JENKINS-20025">JENKINS-20025</a>)</li></ul><h3 id="DashboardView-Version2.9.4(2014/07/29)">Version 2.9.4 (2014/07/29)</h3><ul><li>Fix CCE which causes the Unstable jobs portlet to blank out if you have any Maven Job type projects.</li><li>Fix duplicate entries when using the Unstable jobs portlet with recursion enabled for the view</li><li>Fix the build link on the Jobs Grid</li></ul><h3 id="DashboardView-Version2.9.3(2014/07/14)">Version 2.9.3 (2014/07/14)</h3><ul><li>Release fails with recent git client</li><li>Fixed issue where dashboard view would not work inside a folder. If a view was created inside a folder, the jobLink would fail to properly provide the correct url (<a href="https://github.com/jenkinsci/dashboard-view-plugin/pull/24" class="external-link" rel="nofollow">pull/24</a>).</li><li>Ensure that ${jobs} is really a Collection&lt;Job&gt;, with no Folder for example (<a href="https://issues.jenkins-ci.org/browse/JENKINS-21578">JENKINS-21578</a>, <a href="https://github.com/jenkinsci/dashboard-view-plugin/pull/23" class="external-link" rel="nofollow">pull/23</a>).</li><li>Fixed unstable job portlet to properly display failing or unstable jobs inside folders (<a href="https://github.com/jenkinsci/dashboard-view-plugin/pull/22" class="external-link" rel="nofollow">pull/22</a>).</li><li>TestStatisticsPortlet config.jelly: the reference to the instance of the portlet was using the wrong syntax (<a href="https://github.com/jenkinsci/dashboard-view-plugin/pull/21" class="external-link" rel="nofollow">pull/21</a>).</li></ul><h3 id="DashboardView-Version2.9.2(2013/10/27)">Version 2.9.2 (2013/10/27)</h3><ul><li>No changes (!?)</li></ul><h3 id="DashboardView-Version2.9.1(2013/8/16)">Version 2.9.1 (2013/8/16)</h3><ul><li>Upgrading to dashboard-view 2.9 causes Jobs Grid information to not be displayed (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19219">JENKINS-19219</a>).</li></ul><h3 id="DashboardView-Version2.9(2013/8/13)">Version 2.9 (2013/8/13)</h3><ul><li>Added configuration to JobsPortlet: Number of column and job filling direction.</li><li>Added Timeshift-Option for Test-Trend-Chart (<a href="https://issues.jenkins-ci.org/browse/JENKINS-15814">JENKINS-15814</a>).</li><li>Build statistics does not display result with regex .* filter (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18880">JENKINS-18880</a>).</li><li>Added Number of columns and Fill column first parameters (<a href="https://github.com/jenkinsci/dashboard-view-plugin/pull/10" class="external-link" rel="nofollow">pull/10</a>).</li><li>Awful performance from Latest Builds portlet (<a href="https://issues.jenkins-ci.org/browse/JENKINS-18861">JENKINS-18861</a>).</li></ul><h3 id="DashboardView-Version2.8(2013/7/9)">Version 2.8 (2013/7/9)</h3><ul><li>Avoid loading too many build records for display jobs (<a href="https://issues.jenkins-ci.org/browse/JENKINS-15858">JENKINS-15858</a>).</li><li>Fix test trend chart for TestNG test results.</li><li>Sort list of available dashboards alphabetically (<a href="https://issues.jenkins-ci.org/browse/JENKINS-6289">JENKINS-6289</a>).</li></ul><h3 id="DashboardView-Version2.7(2013/6/27)">Version 2.7 (2013/6/27)</h3><ul><li>Dashboard View plugin v2.6 broke URL path to build stability images(<a href="https://issues.jenkins-ci.org/browse/JENKINS-18049">JENKINS-18049</a>).</li></ul><h3 id="DashboardView-Version2.6(2012/05/19)">Version 2.6 (2012/05/19)</h3><p>TBC</p><h3 id="DashboardView-Version2.5(2012/03/23)">Version 2.5 (2012/03/23)</h3><ul><li>Added possibility to sort the test statistics grid portlet results <a href="https://issues.jenkins-ci.org/browse/JENKINS-16943">JENKINS-16943</a></li><li>Added iframe portlet</li><li>Removed configure link from dashboard</li></ul><h3 id="DashboardView-Version2.4(2012/11/12)">Version 2.4 (2012/11/12)</h3><ul><li>Fixed null pointer exception in TestTrendChart portlet <a href="https://issues.jenkins-ci.org/browse/JENKINS-14522">JENKINS-14522</a></li><li>Showing Jenkins pop-up menu when hovering on the job link <a href="https://issues.jenkins-ci.org/browse/JENKINS-15294">JENKINS-15294</a></li><li>Added optional colours to TestStatisticChart (improvement provided by user <a href="https://github.com/jake-stacktrace" class="external-link" rel="nofollow">jake-stacktrace</a>)</li><li>Added support for folders in view (provided by user <a href="https://github.com/ndeloof" class="external-link" rel="nofollow">ndeloof</a>)</li></ul><h3 id="DashboardView-Version2.3(2012/07/17)">Version 2.3 (2012/07/17)</h3><ul><li>Added image portlet: allows to display an image given the URL</li><li>Modified &quot;Test Trend Chart&quot; portlet: allow to select what type of tests to display (All tests, Only successful, Only failed, Only skipped) <a href="https://issues.jenkins-ci.org/browse/JENKINS-12126">JENKINS-12126</a></li><li>Modified &quot;Test Trend Chart&quot; portlet: modified x-axis label of test trend to use only day-month</li></ul><h3 id="DashboardView-Version2.2(2012/01/11)">Version 2.2 (2012/01/11)</h3><ul><li>Compatibility with <a href="Extension-Point-for-Project-Views-Navigation.html">Extension Point for Project Navigation</a></li></ul><h3 id="DashboardView-Version2.1(2011/10/08)">Version 2.1 (2011/10/08)</h3><ul><li>Added patch provided by Matt <a href="https://issues.jenkins-ci.org/browse/JENKINS-9559">JENKINS-9559</a></li><li>Added timestamp sorting in LatestBuilds view <a href="https://issues.jenkins-ci.org/browse/JENKINS-9606">JENKINS-9606</a></li><li>TestTrendChart was reporting tests contribution in the past; modified to contribute to the future <a href="https://issues.jenkins-ci.org/browse/JENKINS-10529">JENKINS-10529</a></li><li>Fixed visualization when a date range is provided <a href="https://issues.jenkins-ci.org/browse/JENKINS-10529">JENKINS-10529</a></li><li>Fixed issue with test trend chart is empty with maven2 projects <a href="https://issues.jenkins-ci.org/browse/JENKINS-7099">JENKINS-7099</a> (fix provided by user <a href="https://github.com/larrys" class="external-link" rel="nofollow">larrys</a>)</li><li>Add new statistics portlet &quot;Slaves statistics&quot; which displays count of slaves, offline slaves, online slaves, disconected slaves, tasks in a queue and running jobs (provided by user <a href="https://github.com/lvotypko" class="external-link" rel="nofollow">lvotypko</a>)</li></ul><h3 id="DashboardView-Version2.0.2">Version 2.0.2</h3><ul><li>Renamed hudson to jenkins.</li></ul><h3 id="DashboardView-Version2.0.1(2011/03/07)">Version 2.0.1 (2011/03/07)</h3><ul><li>Supported near 100 and near 0 percents in test statistics grid <a href="https://issues.jenkins-ci.org/browse/JENKINS-7913">JENKINS-7913</a></li><li>Modified relative to absolute URL image for portlet collapse/expand icons <a href="https://issues.jenkins-ci.org/browse/JENKINS-8956">JENKINS-8956</a></li><li>Improved the usability of show/hide portlet; using new icons from jenkins theme <a href="https://issues.jenkins-ci.org/browse/JENKINS-8624">JENKINS-8624</a>]</li><li>Added build button to Unstable and Grid Jobs portlets <a href="https://issues.jenkins-ci.org/browse/JENKINS-7569">JENKINS-7569</a></li></ul><h3 id="DashboardView-Version2.0(2011/02/11)">Version 2.0 (2011/02/11)</h3><ul><li>Modified for github and Jenkins.</li><li>Allow to hide/show portlets directly from the dashboard (without having to go to the configuration page); see <a href="https://issues.jenkins-ci.org/browse/JENKINS-7465">JENKINS-7465</a> and <a href="https://issues.jenkins-ci.org/browse/JENKINS-8623">JENKINS-8623</a> (fix provided by <a href="https://github.com/Godin" class="external-link" rel="nofollow">Godin</a>)</li><li>Allow to specify a range of dates for TestTrendGraph portlet (use 0 to auto-adjust the range) <a href="https://issues.jenkins-ci.org/browse/JENKINS-7596">JENKINS-7596</a></li><li><span style="text-decoration: line-through;">Supported near 100 and near 0 percent in test statistics grid</span> <span style="text-decoration: line-through;"><a href="http://issues.jenkins-ci.org/browse/JENKINS-7913" class="external-link" rel="nofollow">issue #7913 </a></span>(missing in this version)</li><li>Fixed bug <a href="https://issues.jenkins-ci.org/browse/JENKINS-7595">JENKINS-7595</a></li></ul><h3 id="DashboardView-Version1.8.2(01/20/2011)">Version 1.8.2 (01/20/2011)</h3><ul><li>Added Japanese translation.</li></ul><h3 id="DashboardView-Version1.8.1(09/16/2010)">Version 1.8.1 (09/16/2010)</h3><ul><li>Allow to configure standard view parameters for Dashboard View <a href="https://issues.jenkins-ci.org/browse/JENKINS-6618">JENKINS-6618</a></li></ul><h3 id="DashboardView-Version1.8(09/15/2010)">Version 1.8 (09/15/2010)</h3><ul><li>Added some italian translations</li><li>The configuration page has been re-organized</li><li>Allow to specify width of left and right columns in dashboard view (percentage or fixed width) <a href="https://issues.jenkins-ci.org/browse/JENKINS-7429">JENKINS-7429</a></li></ul><h3 id="DashboardView-Version1.7(08/12/2010)">Version 1.7 (08/12/2010)</h3><ul><li>Show job description tooltip and build description tooltip <a href="https://issues.jenkins-ci.org/browse/JENKINS-7107">JENKINS-7107</a></li><li>Allow parametrization of graph width and height for 'Test Trend Graph' Portlet <a href="https://issues.jenkins-ci.org/browse/JENKINS-6811">JENKINS-6811</a></li><li>Allow parametrization of number of builds used for 'Latest Builds' portlet <a href="https://issues.jenkins-ci.org/browse/JENKINS-7090">JENKINS-7090</a></li><li>Keep 'standard' order for jobLink: build status - health status - job name <a href="https://issues.jenkins-ci.org/browse/JENKINS-6611">JENKINS-6611</a></li><li>Added i18n to some parts of the plugin</li></ul><h3 id="DashboardView-Version1.6(05/20/2010)">Version 1.6 (05/20/2010)</h3><ul><li>Added health icon in custom jobLink</li><li>Added 'title' attribute to img tags</li><li>Added default name on portlet add <a href="https://issues.jenkins-ci.org/browse/JENKINS-5952">JENKINS-5952</a></li><li>Added unique id to each portlet (within the same dashboard/view) <a href="https://issues.jenkins-ci.org/browse/JENKINS-6118">JENKINS-6118</a></li></ul><h3 id="DashboardView-Version1.5(04/02/2010)">Version 1.5 (04/02/2010)</h3><ul><li>Fixed 'Last 10 builds' showing always bullet from last build <a href="https://issues.jenkins-ci.org/browse/JENKINS-6091">JENKINS-6091</a></li><li>Fixed 'Last 10 builds' doesn't filter jobs <a href="https://issues.jenkins-ci.org/browse/JENKINS-6106">JENKINS-6106</a></li><li>Allowing to hide disabled jobs when not using regexp</li></ul><h3 id="DashboardView-Version1.4(03/25/2010)">Version 1.4 (03/25/2010)</h3><ul><li>Fixed standard Jenkins list view visualization problem</li></ul><h3 id="DashboardView-Version1.3(03/05/2010)">Version 1.3 (03/05/2010)</h3><p>WARNING: if upgrading from a previous release, all the dashboard views must be edited and saved (also without modifying anything) to correctly work with this version.</p><ul><li>Layout: added top portlets (portlets that spawn the entire page width) and are shown above the left and right portlets <a href="https://issues.jenkins-ci.org/browse/JENKINS-5759">JENKINS-5759</a></li><li>New portlets:<ul><li>standard Jenkins jobs list <a href="https://issues.jenkins-ci.org/browse/JENKINS-5691">JENKINS-5691</a></li><li>Jobs statistics</li><li>Build statistics</li></ul></li><li>Added option to show standard Jenkins jobs list before displaying all the portlets <a href="https://issues.jenkins-ci.org/browse/JENKINS-5814">JENKINS-5814</a></li></ul><h3 id="DashboardView-Version1.1(11/15/2009)">Version 1.1 (11/15/2009)</h3><ul><li>Fixed issue with Unstable Jobs portlet where content was empty if builds were being actively run</li><li>New option on regular expression job inclusion to prevent disabled jobs from appearing</li><li>Supports single column view if only portlets are only specified for left or right column</li></ul><h3 id="DashboardView-Version1.0(10/11/2009)">Version 1.0 (10/11/2009)</h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975814.png">create-view.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975816.png">configure-view.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975815.png">configure-view.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975817.png">all-jobs.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975818.png">sample.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975819.png">test-stats-chart.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975820.png">test-stats-grid.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975821.png">unstable-jobs.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/41975822.png">test-trends.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/42631390.jpg">dashboard-view-configure-1.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/42631391.jpg">dashboard-view-ShowStdJobListAtTop.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/42631392.jpg">dashboard-view-JobsStatistics.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/42631393.jpg">dashboard-view-BuildStatistics.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/59900032.jpg">Dashboard [Jenkins] - Mozilla Firefox.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/41877565/68550674.png">Selection_010.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:20</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

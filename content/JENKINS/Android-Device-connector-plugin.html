@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Android Device connector plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Android Device connector plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (xfreebird)</span>, last modified on Mar 10, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'android-device-connector' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>This plugin lists up all the Android devices connected to the master and all the Jenkins slaves, and provide operations to them.</p></p>
+
+
+<p>Specifically, the current version provides the following functionalities:</p>
+<ul>
+	<li>UI that lists all the connected devices and their properties.</li>
+	<li>Build step that lets you deploy *.apk to a device (a build running on one slave can deploy app to Android connected to another slave.)</li>
+	<li>Web UI and CLI commands to deploy *.apk</li>
+</ul>
+
+
+<p>The Slave or the host where the devices are connected require to have the adb command in PATH.</p>
+
+
+<p>It is based on the iOS Device connector plugin <a href="https://wiki.jenkins-ci.org/display/JENKINS/iOS+Device+connector+plugin" class="external-link" rel="nofollow">iOS Device connector plugin</a>.</p>
+
+<p>Many thanks to Kohsuke Kawaguchi for making the iOS Device plugin, without it I wouldn't been able to make it.</p>
+
+
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" height="200" src="attachments/75892412/76054682.png" data-image-src="attachments/75892412/76054682.png" data-unresolved-comment-count="0" data-linked-resource-id="76054682" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-02-28 at 10.14.30 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75892412" data-linked-resource-container-version="11"></span> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/75892412/76054683.png" data-image-src="attachments/75892412/76054683.png" data-unresolved-comment-count="0" data-linked-resource-id="76054683" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-02-28 at 10.14.47 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75892412" data-linked-resource-container-version="11"></span></p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/75892412/76054684.png" data-image-src="attachments/75892412/76054684.png" data-unresolved-comment-count="0" data-linked-resource-id="76054684" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-02-28 at 10.15.10 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75892412" data-linked-resource-container-version="11"></span> <span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/75892412/76054685.png" data-image-src="attachments/75892412/76054685.png" data-unresolved-comment-count="0" data-linked-resource-id="76054685" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-02-28 at 10.15.30 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75892412" data-linked-resource-container-version="11"></span></p>
+
+<h1 id="AndroidDeviceconnectorplugin-CommonPitfalls">Common Pitfalls</h1>
+
+
+<h2 id="AndroidDeviceconnectorplugin-Environmentvariables">Environment variables</h2>
+
+<p>If you don't see your connected devices then make sure:</p>
+<ul>
+	<li>the ANDROID_HOME environment variable set and visible to Jenkins</li>
+	<li>adb is in $ANDROID_HOME/platform-tools/</li>
+	<li>adb is in PATH</li>
+</ul>
+
+
+<h2 id="AndroidDeviceconnectorplugin-SSHslaves">SSH slaves</h2>
+
+<p>If you are using <a href="https://wiki.jenkins-ci.org/display/JENKINS/SSH+Slaves+plugin" class="external-link" rel="nofollow">SSH slaves</a>, then the easies solution is to make an adb symbolic link to /usr/bin/adb on the Slave.</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+sudo ln -s /path/to/android_home/platform-tools/adb /usr/bin/adb
+</pre>
+</div></div>
+
+
+
+<p>GitHub repo <a href="https://github.com/xfreebird/android-device-connector-plugin" class="external-link" rel="nofollow">https://github.com/xfreebird/android-device-connector-plugin</a></p>
+
+<h1 id="AndroidDeviceconnectorplugin-Changelog"><span style="color: rgb(210,73,57);"><strong>Changelog</strong></span></h1>
+
+
+<h3 id="AndroidDeviceconnectorplugin-Version1.3(Feb28,2014)">Version 1.3 (Feb 28, 2014)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054687.png">Screen Shot 2015-02-28 at 10.14.30 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054688.png">Screen Shot 2015-02-28 at 10.14.47 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054689.png">Screen Shot 2015-02-28 at 10.15.10 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054686.png">Screen Shot 2015-02-28 at 10.15.30 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054690.png">Screen Shot 2015-02-28 at 10.15.30 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054682.png">Screen Shot 2015-02-28 at 10.14.30 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054683.png">Screen Shot 2015-02-28 at 10.14.47 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054684.png">Screen Shot 2015-02-28 at 10.15.10 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892412/76054685.png">Screen Shot 2015-02-28 at 10.15.30 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

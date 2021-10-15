@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Build Configurator plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Build Configurator plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (amcbridgedevteam)</span>, last modified on Apr 13, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'build-configurator' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+Build Configurator plugin extends the functionality of Jenkins CI and provides a simplified way of creating and managing various project's configurations and settings as well as generates necessary builds, artifacts etc.<h2 id="BuildConfiguratorplugin-Features">Features</h2><ul><li>Create and manage various build configurations</li><li>Produce individual pre-configured job for every build</li><li>Use several projects in one build as well as several build settings for each project</li><li>Set pre/post build scripts (like comments for Jenkins administrator), e-mail notifications and produced artifacts</li><li>View build’s configuration’s additional information (such as state, update date and other)</li></ul><p>The plugin supports most of popular builder templates (such as .NET, Maven &amp; Ant, XCode)</p><h2 id="BuildConfiguratorplugin-Requirements">Requirements</h2><h3 id="BuildConfiguratorplugin-Jenkins">Jenkins</h3><p>Jenkins <a href="https://jenkins.io/changelog-stable#v1.625.3" class="external-link" rel="nofollow">version 1.625.3</a> or newer is required.</p><h3 id="BuildConfiguratorplugin-Otherplugins">Other plugins</h3><ul><li>Mailer plugin</li><li>Description setter plugin</li><li>Conditional buildstep plugin</li><li>Copy to slave plugin</li><li>Multiple SCMs plugin</li><li>Workspace cleanup plugin (if necessary)</li><li>Subversion plugin</li><li>Git plugin</li></ul><h2 id="BuildConfiguratorplugin-Setup">Setup</h2><h4 id="BuildConfiguratorplugin-Installplugin">Install plugin</h4><ul><li>Find &quot;build-configurator&quot; in the list of Jenkins plugins and install it. Otherwise it can be uploaded manually.</li><li>Download “buildserver.jar” and “builders.xml” by URL &quot;&lt;URL&gt;&quot;.</li><li>Set up <span style="color: rgb(255,0,0);">BUILDER_PATH</span> environment variable to folder with “buildserver.jar” and “builders.xml” files.</li></ul><h3 id="BuildConfiguratorplugin-Per-jobconfiguration">Per-job configuration</h3><h4 id="BuildConfiguratorplugin-“Builders.xml”filespecification"><strong>“Builders.xml” file specification</strong></h4><p>File “<em>Builders.xml” </em>is<em> </em>located in “JENKINS_HOME\plugins\build-configurator\config” on Jenkins master. It contains a list of available <em>builders</em> that will be displayed in BAMT view when creating new configuration. The root tag &lt;builders&gt; contains &lt;builder&gt; tags with two required attributes: key (unique builder name) and value (text to display). </p><p class="Standard">After adding/changing a builder, check if the builder with the name which corresponds to the ‘key’ attribute exists on one of the buildservers. Otherwise add such a builder.</p><p class="Standard">Example of “Builders.xml” file structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: html/xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;builders&gt;
+   &lt;builder key=&quot;VS_2013&quot; value=&quot;VS 2013&quot;/&gt;
+   ...
+&lt;builders&gt;</pre>
+</div></div><p class="Standard"><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/108266553/108331497.png" data-image-src="attachments/108266553/108331497.png" data-unresolved-comment-count="0" data-linked-resource-id="108331497" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-4-3 14:29:37.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="108266553" data-linked-resource-container-version="24"></span></p><p class="Standard"> </p><h4 id="BuildConfiguratorplugin-“Platforms.xml”filespecification"><strong><strong>“Platforms.xml” file specification</strong></strong></h4><p class="Standard"><span>File “<em>Platforms.xml”</em><span class="apple-converted-space"><em> </em></span>is located in “JENKINS_HOME\plugins\build-configurator\config” on Jenkins master. It contains a list of platforms for builders. While changing this list, check if there is corresponding builder with this platform in all builderserves which support it.</span></p><p class="Standard">Example of “Platforms.xml” file structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: html/xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;platforms&gt;
+  &lt;platform&gt;
+    &lt;platformName&gt;x86&lt;/platformName&gt;
+  &lt;/platform&gt;
+...</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/108266553/108331494.png" data-image-src="attachments/108266553/108331494.png" data-unresolved-comment-count="0" data-linked-resource-id="108331494" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-4-3 14:9:18.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="108266553" data-linked-resource-container-version="24"></span></p><p class="Standard"> </p><h4 id="BuildConfiguratorplugin-“ScriptType.xml”filespecification"><strong>“ScriptType.xml” file specification</strong></h4><p>Script won’t be generated automatically. Administrator should create a script of the corresponding type. File “<em>ScriptType.xml” </em>is located in “JENKINS_HOME\plugins\build-configurator\config”.</p><p class="Standard">There are already “windows batch”, “unix shell” and “python” script types. Any script type can be added.</p><p class="Standard">Example of “ScriptType.xml” file structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: html/xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;scriptTypes&gt;
+    &lt;scriptType&gt;
+        &lt;scriptTypeName&gt;Windows batch&lt;/scriptTypeName&gt;
+    &lt;/scriptType&gt;
+    ...
+&lt;/scriptTypes&gt;</pre>
+</div></div><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/108266553/108332036.png" data-image-src="attachments/108266553/108332036.png" data-unresolved-comment-count="0" data-linked-resource-id="108332036" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-4-4 13:21:49.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="108266553" data-linked-resource-container-version="24"></span></p><p><strong><br/></strong></p><h4 id="BuildConfiguratorplugin-Buildserver“builders.xml”filespecification"><strong><strong>Buildserver “builders.xml” file specification</strong></strong></h4><p class="standard"><span>File “<em>builders.xml”</em><span class="apple-converted-space"> </span>consists of the list of <em>builders</em><span class="apple-converted-space">. Builder </span>will execute particular project’s build (in most cases they’re abstraction on top of compilators). The root tag<span class="apple-converted-space"> </span><em>&lt;builders&gt;</em><span class="apple-converted-space"> </span>has list of its child tags<span class="apple-converted-space"> </span><em>&lt;builder&gt;</em>, each of which describes builder's configuration. Attributes of each<span class="apple-converted-space"> </span><em>&lt;builder&gt;</em><span class="apple-converted-space"> </span>tag are described below:</span></p><ol><li><em>name</em> - represents name of the builder; it should be the same name which is available as an option on plugin's configuration creation page;</li><li><em>architecture</em> - it's an obsolete value (because 64-bit builders can still build 32-bit applications when command option is specified);</li><li><em>executeBuild</em> - represents absolute path to compiler/interpreter location;</li><li><em>commandLine</em> - describes command pattern and parameters to launch compiler/interpreter. Consists of following parameters that will be automatically replaced as described below:</li></ol><ul><li style="list-style-type: none;background-image: none;"><ul><li><em>executeBuild</em> - replaced with builder's &quot;<em>executeBuild&quot;</em> attribute value;</li><li><em>solution</em> - retrieved from config.xml value; determines solution file name (e.g. *.sln, *.csproj etc.);</li><li><em>config</em> - retrieved from config.xml value; determines target configuration (e.g. 'Debug', 'Release');</li><li><em>architecture</em> - retrieved from config.xml value; determines target project architecture (e.g. 'Win32', 'x86_64', 'Any CPU' etc.)</li></ul></li></ul><p class="Standard">Remarks:</p><ol><li class="Standard">square brackets determine 'Other' configuration where custom attributes for builder command can be specified; thus, inner content is replaced by value retrieved from config.xml; only one pair of brackets is allowed;</li><li class="Standard">denotes XML-friendly double quotes (single quote sign will break parsing XML file).<br/><br/></li></ol><p class="Standard">Example of “<em>builders.xml</em>” file structure:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: html/xml; gutter: false; theme: Confluence" data-theme="Confluence">&lt;builders&gt;
+ &lt;builder 
+  name=&quot;MSBuild 2.0&quot;
+  architecture=&quot;x86&quot;
+  executeBuild=&quot;C:\\WINDOWS\\Microsoft.NET\\Framework\\v2.0.50727\\msbuild.exe&quot;
+  commandLine=&quot;executeBuild solution /t:rebuild [/p:Configuration=config /p:Platform=&amp;quot;architecture&amp;quot;]&quot;/&gt;
+  ...
+&lt;/builders&gt;</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331491.png">image2017-4-3 14:6:55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331492.png">image2017-4-3 14:7:50.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331493.png">image2017-4-3 14:8:55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331494.png">image2017-4-3 14:9:18.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331495.png">image2017-4-3 14:10:16.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331496.png">image2017-4-3 14:10:51.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108331497.png">image2017-4-3 14:29:37.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/108266553/108332036.png">image2017-4-4 13:21:49.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:14</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

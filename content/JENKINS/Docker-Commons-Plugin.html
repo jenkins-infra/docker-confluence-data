@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Docker Commons Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Docker Commons Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jglick)</span>, last modified by <span class='editor'> Unknown User (oleg_nenashev)</span> on May 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>APIs for using Docker from other plugins.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Docker Commons <a href="https://plugins.jenkins.io/docker-commons" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2017-07-10/" class="external-link" rel="nofollow">Users with Overall/Read access can enumerate credential IDs</a></li>
+</ul>
+
+</div></div>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020876493 {padding: 0px;}
+div.rbtoc1631020876493 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020876493 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020876493'>
+<ul class='toc-indentation'>
+<li><a href='#DockerCommonsPlugin-Summary'>Summary</a></li>
+<li><a href='#DockerCommonsPlugin-Use-cases'>Use-cases</a>
+<ul class='toc-indentation'>
+<li><a href='#DockerCommonsPlugin-Credentialsandlocations'>Credentials and locations</a></li>
+</ul>
+</li>
+<li><a href='#DockerCommonsPlugin-Versionhistory'>Version history</a>
+<ul class='toc-indentation'>
+<li><a href='#DockerCommonsPlugin-Version1.15(May13,2019)'>Version 1.15 (May 13, 2019)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.14(April2,2019)'>Version 1.14 (April 2, 2019)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.13(May18,2018)'>Version 1.13 (May 18, 2018)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.12(May11,2018)'>Version 1.12 (May 11, 2018)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.11(Jan04,2018)'>Version 1.11 (Jan 04, 2018)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.10(Dec11,2017)'>Version 1.10 (Dec 11, 2017)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.9(Oct10,2017)'>Version 1.9 (Oct 10, 2017)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.8(Jul10,2017)'>Version 1.8 (Jul 10, 2017)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.7(Jun16,2017)'>Version 1.7 (Jun 16, 2017)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.6(Jan11,2017)'>Version 1.6 (Jan 11, 2017)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.5(Oct05,2016)'>Version 1.5 (Oct 05, 2016)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.4.1(Sep08,2016)'>Version 1.4.1 (Sep 08, 2016)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.4.0(Jun17,2016)'>Version 1.4.0 (Jun 17, 2016)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.3.1(Feb19,2016)'>Version 1.3.1 (Feb 19, 2016)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.3(Feb08,2016)'>Version 1.3 (Feb 08, 2016)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.2(Jul292015)'>Version 1.2 (Jul 29 2015)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.1(Jul072015)'>Version 1.1 (Jul 07 2015)</a></li>
+<li><a href='#DockerCommonsPlugin-Version1.0(May222015)'>Version 1.0 (May 22 2015)</a></li>
+</ul>
+</li>
+</ul>
+</div></p><h2 id="DockerCommonsPlugin-Summary">Summary</h2><p>Plugin provides the following features:</p><ul><li>API for managing Docker image and container fingerprints</li><li>Credentials and location of Docker Registry</li><li>Credentials and location of Docker Daemon (aka Docker Remote API)</li><li><em><a href="http://javadoc.jenkins-ci.org/hudson/tools/ToolInstallation.html" class="external-link" rel="nofollow">ToolInstallation</a></em> for Docker CLI clients</li><li><em>DockerImageExtractor</em> extension point to get Docker image relations from jobs</li><li>Simple UI referring related image fingerprints in Docker builds</li></ul><h2 id="DockerCommonsPlugin-Use-cases">Use-cases</h2><h3 id="DockerCommonsPlugin-Credentialsandlocations">Credentials and locations</h3><p>This allows users to configure one set of endpoint/credentials and use it across all the Docker<br/>related plugins, thereby keeping configuration more <a href="http://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external-link" rel="nofollow">DRY</a>.</p><p>See <a href="Docker-Pipeline-Plugin.html">Docker Pipeline Plugin</a> for the typical usage.</p><h2 id="DockerCommonsPlugin-Versionhistory">Version history</h2><h3 id="DockerCommonsPlugin-Version1.15(May13,2019)">Version 1.15 (May 13, 2019)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-57439" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-57439?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"/>JENKINS-57439</a>
+                            -
+            <span class="summary">Add Declarative Credentials handler for Docker</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ - Add support of Docker credentials specification in Declarative Pipeline<ul><li>Documentation: <a href="https://github.com/jenkinsci/docker-commons-plugin#declarative-pipeline-example" class="external-link" rel="nofollow">https://github.com/jenkinsci/docker-commons-plugin#declarative-pipeline-example</a></li></ul></li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-52724" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-52724?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-52724</a>
+                            -
+            <span class="summary">Building an image with a custom registry overwrites environment variables</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+, 
+<span class="jira-issue resolved" data-jira-key="JENKINS-52737" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-52737?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-52737</a>
+                            -
+            <span class="summary">Using a docker agent from a private registry does pass the proxy configuration to the docker container</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ - Inherit properties from the local Docker config.json if it exists</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-57420" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-57420?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"/>JENKINS-57420</a>
+                            -
+            <span class="summary">Use the new multiline secret field in docker-commons</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ - Use a new way to specify multi-line secrets in the plugin</li></ul><h3 id="DockerCommonsPlugin-Version1.14(April2,2019)">Version 1.14 (April 2, 2019)</h3><ul><li>Improve help text formatting (<a href="https://github.com/jenkinsci/docker-commons-plugin/pull/73" class="external-link" rel="nofollow">PR 73</a>)</li><li>Developer: Add new API for getting Docker-related credentials for 
+<span class="jira-issue resolved" data-jira-key="JENKINS-48437" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48437?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48437</a>
+                            -
+            <span class="summary">Docker Pipeline Plugin withRegistry and Authorize Plugin fails to get credentialsId</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ul><h3 id="DockerCommonsPlugin-Version1.13(May18,2018)">Version 1.13 (May 18, 2018)</h3><ul><li>API for 
+<span class="jira-issue resolved" data-jira-key="JENKINS-51397" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-51397?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-51397</a>
+                            -
+            <span class="summary">docker login being called without server-related environment variables</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ul><h3 id="DockerCommonsPlugin-Version1.12(May11,2018)">Version 1.12 (May 11, 2018)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-38018" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-38018?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-38018</a>
+                            -
+            <span class="summary">withDockerRegistry fails to authenticate with DockerHub</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ (and allied issues)</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-41880" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-41880?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-41880</a>
+                            -
+            <span class="summary">ConcurrentModificationException while creating docker image fingerprints</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-49075" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-49075?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-49075</a>
+                            -
+            <span class="summary">docker-commons-plugin not working with PCT</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ implies a newer Jenkins core dependency</li></ul><h3 id="DockerCommonsPlugin-Version1.11(Jan04,2018)">Version 1.11 (Jan 04, 2018)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-48674" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48674?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48674</a>
+                            -
+            <span class="summary">Automated installation of docker fail for recent version of docker (&gt; 17.05.0-ce)</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ Failure to download newer Docker releases from the automatic tool installer.</li></ul><h3 id="DockerCommonsPlugin-Version1.10(Dec11,2017)">Version 1.10 (Dec 11, 2017)</h3><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-48453" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48453?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48453</a>
+                            -
+            <span class="summary">java.nio.file.NoSuchFileException when materializing ServerKey</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+ Regression in Jenkins 2.93+ when using server credentials.</li></ul><h3 id="DockerCommonsPlugin-Version1.9(Oct10,2017)">Version 1.9 (Oct 10, 2017)</h3><ul><li>Removing <code>icon-shim</code> plugin dependency.</li></ul><h3 id="DockerCommonsPlugin-Version1.8(Jul10,2017)">Version 1.8 (Jul 10, 2017)</h3><ul><li><a href="https://jenkins.io/security/advisory/2017-07-10/" class="external-link" rel="nofollow">Fix security issue</a></li></ul><h3 id="DockerCommonsPlugin-Version1.7(Jun16,2017)">Version 1.7 (Jun 16, 2017)</h3><ul><li>Always include port in image name.</li><li>Add credentials binding implementation for Docker server credentials.</li></ul><h3 id="DockerCommonsPlugin-Version1.6(Jan11,2017)">Version 1.6 (Jan 11, 2017)</h3><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-39181">JENKINS-39181</a> Fix Invalid fully qualified image name when registry URL is specified</li></ul><h3 id="DockerCommonsPlugin-Version1.5(Oct05,2016)">Version 1.5 (Oct 05, 2016)</h3><ul><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-38018">JENKINS-38018</a> API for more informative logging about use of registry credentials.</li></ul><h3 id="DockerCommonsPlugin-Version1.4.1(Sep08,2016)">Version 1.4.1 (Sep 08, 2016)</h3><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> <a href="https://issues.jenkins-ci.org/browse/JENKINS-36082">JENKINS-36082</a> <a href="https://issues.jenkins-ci.org/browse/JENKINS-32790">JENKINS-32790</a> The Docker tool installer (used for example by <code>withTool</code> in the <a href="Docker-Pipeline-Plugin.html">Docker Pipeline Plugin</a>) was broken.</li></ul><h3 id="DockerCommonsPlugin-Version1.4.0(Jun17,2016)">Version 1.4.0 (Jun 17, 2016)</h3><ul><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Migration to the new parent POM (<a href="https://issues.jenkins-ci.org/browse/JENKINS-35018">JENKINS-35018</a>)</li><li><img class="emoticon emoticon-information" src="images/icons/emoticons/information.svg" data-emoticon-name="information" alt="(info)"/> Jenkins core dependency has been updated to 1.580.x</li></ul><h3 id="DockerCommonsPlugin-Version1.3.1(Feb19,2016)">Version 1.3.1 (Feb 19, 2016)</h3><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Polishing the fix of <a href="https://issues.jenkins-ci.org/browse/JENKINS-28776">JENKINS-28776</a></li></ul><h3 id="DockerCommonsPlugin-Version1.3(Feb08,2016)">Version 1.3 (Feb 08, 2016)</h3><ul><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Support the &quot;sha256:&quot; prefix in image ID, required for Docker 1.10 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-32792">JENKINS-32792</a>)</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Replace build action icon stubs by Docker icons (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28776">JENKINS-28776</a>)</li></ul><h3 id="DockerCommonsPlugin-Version1.2(Jul292015)">Version 1.2 (Jul 29 2015)</h3><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> NPE when using credentials together with docker 1.7 (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29627">JENKINS-29627</a>)</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Support creation of named fingerprints in the API (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29098">JENKINS-29098</a>)</li></ul><h3 id="DockerCommonsPlugin-Version1.1(Jul072015)">Version 1.1 (Jul 07 2015)</h3><ul><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Cleanup of FindBugs issues, update of the CI system</li><li><img class="emoticon emoticon-cross" src="images/icons/emoticons/error.svg" data-emoticon-name="cross" alt="(error)"/> Fix the issue with the Docker Tool selector (<a href="https://github.com/jenkinsci/docker-commons-plugin/pull/40" class="external-link" rel="nofollow">PR #40</a>)</li><li><img class="emoticon emoticon-plus" src="images/icons/emoticons/add.svg" data-emoticon-name="plus" alt="(plus)"/> Support Docker 1.7+ .docker/config.json (<a href="https://github.com/jenkinsci/docker-commons-plugin/pull/38" class="external-link" rel="nofollow">PR #38</a>)</li></ul><h3 id="DockerCommonsPlugin-Version1.0(May222015)">Version 1.0 (May 22 2015)</h3><ul><li>First stable release</li><li>There were may alpha releases before this release, see commit histories in GitHub</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:21</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

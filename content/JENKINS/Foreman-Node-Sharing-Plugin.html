@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Foreman Node Sharing Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Foreman Node Sharing Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (scoheb)</span>, last modified by <span class='editor'> Unknown User (olivergondza)</span> on Mar 06, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plugin is deprecated and will no longer be maintained. It was replaced by purely Jenkins solution: <a href="Node-Sharing-Plugin.html">Node Sharing Plugin</a></p></div></div>Allow multiple masters to share a node that is defined as a resource on a <a href="http://theforeman.org/" class="external-link" rel="nofollow">Foreman</a> instance.<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'foreman-node-sharing' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+<h2 id="ForemanNodeSharingPlugin-Essentials">Essentials</h2><ul><li>This plugin provides a means to automatically coordinate the sharing of bare metal resources as nodes among multiple masters.</li><li>It connects to single <strong>Foreman</strong> instance and multiple <strong>Jenkins masters</strong> reserve it communicating via the Foreman Reserve Plugin API.<ul><li>Ensure the Foreman Reserve Plugin is installed. See <a href="https://github.com/david-caro/foreman_reserve" class="external-link" rel="nofollow">https://github.com/david-caro/foreman_reserve</a></li></ul></li><li>Once configured, Jenkins is able to reserve hosts based on labels attached to them and the labels builds require.<ul><li>It will behave just any other Jenkins Cloud.</li></ul></li><li>Nodes are connected over SSH using the same credential.</li><li>To ensure fairness, hosts will be utilized for a single build only and returned back to pool for other masters to reserve.</li></ul><h2 id="ForemanNodeSharingPlugin-SetUp">Set Up</h2><h3 id="ForemanNodeSharingPlugin-CloudinJenkins(es)">Cloud in Jenkins(es)</h3><ul><li>Once the plugin is installed, a cloud type called <strong>Foreman Shared Node</strong> is made available.</li><li>Navigate to <strong>Manage Jenkins</strong> / <strong>Configure Jenkins</strong> / <strong>Cloud</strong></li><li>Click on <strong>Add a new cloud</strong></li><li>Select <strong>Foreman Shared Node</strong></li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98403034/101580820.png" data-image-src="attachments/98403034/101580820.png" data-unresolved-comment-count="0" data-linked-resource-id="101580820" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="AddNewCloud.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98403034" data-linked-resource-container-version="23"></span></p><ul><li>Enter the Foreman connection details</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98403034/101580822.png" data-image-src="attachments/98403034/101580822.png" data-unresolved-comment-count="0" data-linked-resource-id="101580822" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ForemanConfig.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98403034" data-linked-resource-container-version="23"></span></p><ul><li>Click <strong>Test Connection</strong> to verify the Foreman connection details.<ul><li>The plugin will report the version of Foreman.</li></ul></li></ul><ul><li>Click Save.</li></ul><h3 id="ForemanNodeSharingPlugin-HostsinForeman">Hosts in Foreman</h3><h4 id="ForemanNodeSharingPlugin-Automatically">Automatically</h4><p>TODO: Document new inventory population tool.</p><p>There is a script that can be used to populate many resources in Foreman. See <a href="https://raw.githubusercontent.com/scoheb/acceptance-test-harness/f1f426b171538373d92e69afa278a0288bf9b017/src/test/resources/foreman_node_sharing_plugin/setup.sh" class="external-link" rel="nofollow">https://raw.githubusercontent.com/scoheb/acceptance-test-harness/f1f426b171538373d92e69afa278a0288bf9b017/src/test/resources/foreman_node_sharing_plugin/setup.sh</a></p><p>Usage: setup.sh URL HOSTNAME IP LABEL</p><h4 id="ForemanNodeSharingPlugin-Manually">Manually</h4><ul><li>Login to the Foreman instance</li><li>Navigate to <strong>Hosts</strong> / <strong>New Host</strong></li><li>Populate the following properties<ul><li>Name</li><li>Domain</li><li>IP Address</li></ul></li><li>Add the following properties:<ul><li>JENKINS_LABEL</li><li>JENKINS_SLAVE_REMOTEFS_ROOT</li><li>RESERVED</li></ul></li><li>Set the <strong>JENKINS_LABEL</strong> property to be the set of labels that this resources provides. Separate mulitple labels by a space.</li><li>Set the <strong>JENKINS_SLAVE_REMOTEFS_ROOT</strong> property to be the value of the REMOTEFS_ROOT for this shared node.</li></ul><h2 id="ForemanNodeSharingPlugin-Internalworkings">Internal workings</h2><ul><li>Plugin uses<ul><li><a href="SSH-Slaves-plugin.html">SSH Slaves plugin</a> to connect to machines.</li><li><a href="Cloud-Statistics-Plugin.html">Cloud Statistics Plugin</a> to report foreman reservation progress.</li><li><a href="Resource-Disposer-Plugin.html">Resource Disposer Plugin</a> to tear down resources reliably.</li></ul></li></ul><h3 id="ForemanNodeSharingPlugin-Buildsequence">Build sequence</h3><ul><li>A job with label <strong>myLabel</strong> is triggered and placed in Jenkins queue.</li><li>Jenkins Cloud API checks to see if a slave exists with label <strong>myLabel</strong></li><li>If not, all defined Clouds are checked to see which one can provision label <strong>myLabel</strong></li><li>The plugin is requested to provision and performs:<ul><li>Foreman query to search for an <strong>UN-RESERVED host</strong> where JENKINS_LABEL matches <strong>myLabel</strong></li><li>Foreman API call to reserve host<ul><li>The Jenkins URL will be added as the <strong>RESERVED</strong> property value.</li></ul></li><li>Foreman query to obtain Jenkins <strong>RemoteFS Root</strong> for the host</li></ul></li><li>Node is created and SSH Connection established using defined Cloud credentials.</li><li>Build is performed on newly provisioned slave.</li><li>The plugin immediately attempts to terminate the node and calls Foreman API to release the resource.</li></ul><h3 id="ForemanNodeSharingPlugin-ImportantNotes">Important Notes</h3><ul><li>Freestyle, Maven and Matrix jobs are supported.</li><li>In the event that the Foreman connection is lost while a build is running, the plugin will attempt to release the resource in the background</li><li>Should you need to forcefully release a resource, simply set the <strong>RESERVED</strong> property in Foreman to be <strong>false</strong><ul><li>Only string value '<strong>false</strong>' put into <strong>RESERVED</strong> property makes a node free and available for further reservation, nothing else</li></ul></li><li>You may also use the <strong>Audit</strong> feature in Foreman for debugging purposes.</li></ul><h2 id="ForemanNodeSharingPlugin-ChangeLog">Change Log</h2><h4 id="ForemanNodeSharingPlugin-Version1.2.9">Version 1.2.9</h4><ul><li>Removed PendingDelete behavior</li><li>Bug fixed release</li></ul><h4 id="ForemanNodeSharingPlugin-Version1.2.2">Version 1.2.2</h4><ul><li><a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=JENKINS-41693&amp;linkCreation=true&amp;fromPageId=98403034">JENKINS-41693</a> Added timeouts to web client connection</li><li>Javadoc fixes.</li><li>Handle initialization properly when no hosts are reserved.</li></ul><h4 id="ForemanNodeSharingPlugin-Version1.2.1">Version 1.2.1</h4><ul><li><a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=JENKINS-39148&amp;linkCreation=true&amp;fromPageId=98403034">JENKINS-39148</a> Implemented basic cleanup on startup</li><li>Show compatible hosts on dedicated page instead of configure page</li><li><a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=JENKINS-40030&amp;linkCreation=true&amp;fromPageId=98403034">JENKINS-40030</a> Re-defined delays defined in hudson.slaves.NodeProvisioner.NodeProvisionerInvoker</li><li><a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=JENKINS-38899&amp;linkCreation=true&amp;fromPageId=98403034">JENKINS-38899</a> ForemanSharedNodeCloud.provision(Label) iterates over the whole collection</li><li><a class="createlink" href="/pages/createpage.action?spaceKey=JENKINS&amp;title=JENKINS-39140&amp;linkCreation=true&amp;fromPageId=98403034">JENKINS-39140</a> Node termination is performed by periodic task</li><li>Override AbstractCloudComputer.doDoDelete()</li></ul><h4 id="ForemanNodeSharingPlugin-Version1.2.0">Version 1.2.0</h4><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98403034/101580820.png">AddNewCloud.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98403034/101580821.png">Foreman.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98403034/101580822.png">ForemanConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98403034/101580823.png">compatible.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Building Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Building Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (foxtrot9)</span> on Jan 26, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="BuildingJenkins-BuildJenkinsfollowingthecontributiondirections.">Build Jenkins following the <a href="https://github.com/jenkinsci/jenkins/blob/master/CONTRIBUTING.md" class="external-link" rel="nofollow">contribution directions</a>.</h1><h1 id="BuildingJenkins-Configureworkenvironment">Configure work environment</h1><p>To check out Jenkins, follow the steps below. Then run Maven build at least once to have it generate additional source files:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>// check out the workspace
+$ git clone https://github.com/jenkinsci/jenkins.git
+// Download dependencies and build with Maven
+// Note: mvn install may be a prerequisite for other mvn targets
+$ cd jenkins
+$ mvn -Plight-test install
+</pre>
+</div></div><p>The git repository mentioned above is where the core of Jenkins is located, i.e. not the plugins. In the root of the repository is a file called <strong>changelog.html</strong>, which you should update if/when you become a <a href="Instructions-for-Committers.html">committer</a>.</p><p>The first build will take a while, because it has to download all needed dependencies and plugins from Maven central.<br/> If it succeeds with <code>BUILD SUCCESSFUL</code> at the end, you are good to go.<br/> At the end you should have war/target/jenkins.war, which is the Jenkins you just built.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Building and running tests can cause permgem errors. If that is the case, try to increase the JVM limit for Maven targets, by setting the following environment variable:<br/> $ export MAVEN_OPTS=&quot;-XX:MaxPermSize=128m&quot;</p></div></div><h2 id="BuildingJenkins-Eclipse">Eclipse</h2><p>You can <em>either</em> use M2Eclipse/m2e to import the Maven projects directly <em>or</em> create Eclipse project files from the command line and then import the projects into Eclipse. There's no consensus in the community as to which approach is better. Experienced Maven users seem to prefer m2eclipse, but people new to Maven seem to find the latter easier and more predictable. For the latter do:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>// generate .project and .classpath for Eclipse
+$ mvn -DdownloadSources=true eclipse:eclipse
+</pre>
+</div></div><p>There is a step-by-step guide to <a href="Setting-up-Eclipse-to-build-Jenkins.html">working with Eclipse once you've run the above commands</a>.</p><h2 id="BuildingJenkins-NetBeans/IntellijIDEA">NetBeans/Intellij IDEA</h2><p>NetBeans (6.7+) users can just open the POM directly, with File -&gt; Open Project and navigate to the <code>jenkins</code> folder. IntelliJ IDEA users can directly open a Maven POM.</p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If your IDE complains that 'Messages' class is not found, they are missing because they are supposed to be generated. Run a Maven build once and you should see them all. If that doesn't fix the problem, make sure your IDE added <code>target/generated-sources</code> to the compile source roots.</p></div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If IntelliJ IDEA fails to compile with error messages &quot;XXX clashes with package of same name&quot;, this is caused by issue <a href="http://youtrack.jetbrains.com/issue/IDEA-80331" class="external-link" rel="nofollow">IDEA-80331</a>. JetBrains suggest to add <code>resources:*.groovy</code> to Settings | Compiler | Resource Patterns as a workaround.</p></div></div><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If your are using IntelliJ IDEA and Microsoft Windows then you should run Intellij IDEA as administrator. Otherwise some tests which are creating Symlink will fail.;</p></div></div><h1 id="BuildingJenkins-DebuggingJenkins">Debugging Jenkins</h1><p><a href="http://jetty.mortbay.org/maven-plugin/" class="external-link" rel="nofollow">Maven Jetty plugin</a> offers a convenient debugging environment, but for <a href="https://issues.jenkins-ci.org/browse/JENKINS-932">a few reasons</a> we maintain a modified version of the plugin under a different name, so the plugin name is different but the configuration parameters are the same.</p><p>First you need to add org.jenkins-ci.tools as a plugin group to your maven settings.xml file, as described in <a href="https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial#Plugintutorial-SettingUpEnvironment" class="external-link" rel="nofollow">Plugin tutorial#SettingUpEnvironment</a>.</p><p>Then do the following to run Jenkins under the debugger:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># To change the port run mvnDebug jenkins-dev:run -Dport=9090
+$ cd war
+$ mvnDebug jenkins-dev:run
+</pre>
+</div></div><p>This will launch maven with the debugger port for 8000. You can connect to this port from your IDE by using the remote debug feature. After you connect the debugger, open <a href="http://localhost:8080/" class="external-link" rel="nofollow">http://localhost:8080/</a> in your browser. Once this starts running, keep it running. Jetty will pick up all the changes automatically.</p><ol><li>When you make changes to view files in core/src/main/resources, just hit F5 in your browser to see the changes.</li><li>When you make changes to static resources in war/resources, just hit F5 in your browser to see the changes.</li><li>When you change Java source files. Compile them in your IDE and Jetty should pick that up. You don't need to run mvn at all for this.</li><li>NetBeans users can just hit Debug with main/war open.</li></ol><p>If you are developing plugins and want to test them see <a href="Plugin-Structure.html#PluginStructure-TestingWithJenkins">Plugin Structure#Testing With Jenkins</a></p><h1 id="BuildingJenkins-OtherTips">Other Tips</h1><ol><li>Consider running Maven like mvn -o ... to avoid hitting repositories every time. This will make various operations considerably faster.</li><li>When Maven complains about something, try &quot;cd $JENKINS; mvn clean install&quot;.</li><li>The above mentioned profile (-Plight-test) does only run the fairly quick unit tests and leaves out the integration test in the test-harness module. If you want to skip all tests (not recommended!), run Maven with &quot;-Dskip-test-harness&quot;.</li><li>If you have trouble that isn't addressed here, please send email to the Jenkins <a href="Mailing-Lists.html">dev list</a>. The developers all read that list frequently. <strong>You might not get an answer for a long time - or not at all - if you post your questions as comments to this page.</strong></li><li>Setting up a local Maven repository manager can considerably speed up your Jenkins builds, and make life with Maven more pleasant in general. Please click <a href="Using-Artifactory-for-Configuring-a-Jenkins-Build-Environment.html">here</a> for <a href="http://www.jfrog.com/products.php" class="external-link" rel="nofollow">Artifactory</a> or <a href="Jenkins-Development-Environment-with-Nexus.html">here</a> for <a href="http://www.sonatype.org/nexus" class="external-link" rel="nofollow">Nexus</a> instructions.</li><li>Users can also use <a href="http://www.jfrog.com/products.php" class="external-link" rel="nofollow">Artifactory</a> for easy and rapid <a href="Using-Artifactory-for-Configuring-a-Jenkins-Build-Environment.html">setup for hackatons and meetups</a>.</li><li>In development &amp; test modes, the setup wizard is skipped. To force the setup wizard to run, use this system property: <code>jenkins.install.runSetupWizard=true</code></li></ol><h1 id="BuildingJenkins-Credits">Credits</h1><p>The sponsor statement from YourKit Java Profiler, which gave us a free license for the Hudson project.</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Open-source license for YourKit Java Profiler</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>YourKit is kindly supporting open source projects with its full-featured Java Profiler. YourKit, LLC is creator of innovative and intelligent tools for profiling Java and .NET applications. Take a look at YourKit's leading software products: <a href="http://www.yourkit.com/java/profiler/index.jsp" class="external-link" rel="nofollow">YourKit Java Profiler</a> and <a href="http://www.yourkit.com/.net/profiler/index.jsp" class="external-link" rel="nofollow">YourKit ASP.NET Profiler</a></p></div></div><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Open-source license for StackProbe Profiler</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><a href="http://www.stackprobe.com/" class="external-link" rel="nofollow">StackProbe</a> is kindly supporting open source projects with its profiler, StackProbe Profiler</p></div></div><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Open-source license for IntelliJ IDEA</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><a href="http://www.jetbrains.com" class="external-link" rel="nofollow">JetBrains</a> is kindly supporting open-source projects with their OSS license for IntelliJ IDEA.</p><div style="float:right">
+<a href="http://www.jetbrains.com/idea/features/javascript.html" style="display:block; background:#0d3a9e url(http://www.jetbrains.com/idea/opensource/img/all/banners/idea234x60_blue.gif) no-repeat 0 0; border:solid 1px #0d3a9e; margin:0;padding:0;text-decoration:none;text-indent:0;letter-spacing:-0.001em; width:252px; height:58px" alt="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers" title="Java IDE with advanced HTML/CSS/JS editor for hardcore web-developers" class="external-link" rel="nofollow"><span style="margin: -3px 0 0 42px;padding: 0;float: left;font-size: 10px;cursor:pointer;  background-image:none;border:0;color: #acc4f9; font-family: trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Can’t code without</span><span style="margin:33px 0 0 7px;padding:0 0 2px 0; line-height:12px;font-size:9px;cursor:pointer;  background-image:none;border:0;display:block;width:240px; color:#acc4f9; font-family:trebuchet ms,arial,sans-serif;font-weight: normal;text-align:left;">Java IDE with advanced HTML/CSS/JS<br/>editor for hardcore web-developers</span></a>
+</div></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753754/61112448.png">Error1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/753754/61112447.png">Error1.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

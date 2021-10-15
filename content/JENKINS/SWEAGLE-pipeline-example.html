@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SWEAGLE pipeline example</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SWEAGLE-Plugin.html">SWEAGLE Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SWEAGLE pipeline example
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (joe99000)</span>, last modified on Aug 02, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <pre class="code highlight" lang="plaintext"><span class="line" lang="plaintext">pipeline {</span>
+<span class="line" lang="plaintext">    agent any</span>
+<span class="line" lang="plaintext">    stages {</span>
+<span class="line" lang="plaintext">        stage('UploadConfig'){</span>
+<span class="line" lang="plaintext">        </span>
+<span class="line" lang="plaintext">            steps {</span>
+<span class="line" lang="plaintext">                </span>
+<span class="line" lang="plaintext">                SWEAGLEUpload(</span>
+<span class="line" lang="plaintext">                actionName: 'Upload Config Files', </span>
+<span class="line" lang="plaintext">                fileLocation: '/var/lib/jenkins/workspace/plugin_pipeline_test/temp.json', </span>
+<span class="line" lang="plaintext">                format: 'json', </span>
+<span class="line" lang="plaintext">                markFailed: false, </span>
+<span class="line" lang="plaintext">                nodePath: 'Applications,TradeMax,settingsp.json', </span>
+<span class="line" lang="plaintext">                onlyParent: false, </span>
+<span class="line" lang="plaintext">                showResults: false,</span>
+<span class="line" lang="plaintext">                withSnapshot: false,</span>
+<span class="line" lang="plaintext">                description: '', </span>
+<span class="line" lang="plaintext">                tag: '', </span>
+<span class="line" lang="plaintext">                allowDelete: false)</span>
+
+<span class="line" lang="plaintext">            }</span>
+<span class="line" lang="plaintext">        }</span>
+
+<span class="line" lang="plaintext">        stage('Validate Config') {</span>
+<span class="line" lang="plaintext">            steps {</span>
+<span class="line" lang="plaintext">              SWEAGLEValidate(</span>
+<span class="line" lang="plaintext">              actionName: 'Validate Config Files',</span>
+<span class="line" lang="plaintext">              mdsName: 'TradeMax-PRD',</span>
+<span class="line" lang="plaintext">              warnMax: -1,</span>
+<span class="line" lang="plaintext">              errMax: 0,</span>
+<span class="line" lang="plaintext">              markFailed: false,</span>
+<span class="line" lang="plaintext">              showResults: false, </span>
+<span class="line" lang="plaintext">              retryCount: 5,</span>
+<span class="line" lang="plaintext">              retryInterval: 30)</span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">            }</span>
+<span class="line" lang="plaintext">        }</span>
+
+<span class="line" lang="plaintext">        stage('Snapshot Config') {</span>
+<span class="line" lang="plaintext">            steps {</span>
+<span class="line" lang="plaintext">              SWEAGLESnapshot(</span>
+<span class="line" lang="plaintext">              actionName: 'Snapshot TradeMax-PRD',</span>
+<span class="line" lang="plaintext">              mdsName: 'TradeMax-PRD',</span>
+<span class="line" lang="plaintext">              description: &quot;Snapshot for Jenkins Build ${BUILD_ID}&quot;,</span>
+<span class="line" lang="plaintext">              tag: &quot;Version:2.1.${BUILD_ID}&quot;,</span>
+<span class="line" lang="plaintext">              markFailed: false,</span>
+<span class="line" lang="plaintext">              showResults: false)</span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">            }</span>
+<span class="line" lang="plaintext">        }</span>
+<span class="line" lang="plaintext">        </span>
+<span class="line" lang="plaintext">        stage('Export Config') {</span>
+<span class="line" lang="plaintext">            steps {</span>
+<span class="line" lang="plaintext">              SWEAGLEExport(</span>
+<span class="line" lang="plaintext">              actionName: 'Export TradeMax-PRD settings.json',</span>
+<span class="line" lang="plaintext">              mdsName: 'TradeMax-PRD',</span>
+<span class="line" lang="plaintext">              exporter: 'retrieveAllDataFromNode',</span>
+<span class="line" lang="plaintext">              args: &quot;settings.json&quot;,</span>
+<span class="line" lang="plaintext">              format: 'json',</span>
+<span class="line" lang="plaintext">              fileLocation: '/var/lib/jenkins/workspace/plugin_pipeline_test/settings.json',</span>
+<span class="line" lang="plaintext">              markFailed: false,</span>
+<span class="line" lang="plaintext">              showResults: false)</span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">              </span>
+<span class="line" lang="plaintext">            }</span>
+<span class="line" lang="plaintext">        }</span>
+
+<span class="line" lang="plaintext">       </span>
+<span class="line" lang="plaintext">    }</span>
+<span class="line" lang="plaintext">}</span>
+</pre>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

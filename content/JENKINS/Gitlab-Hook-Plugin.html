@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Gitlab Hook Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Gitlab Hook Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (elvanja)</span>, last modified by <span class='editor'> Unknown User (javiplx)</span> on Apr 17, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Gitlab Hook <a href="https://plugins.jenkins.io/gitlab-hook" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-01-15/#SECURITY-1683" class="external-link" rel="nofollow">Reflected XSS vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2018-05-09/#SECURITY-263" class="external-link" rel="nofollow">Gitlab API token stored and displayed in plain text</a></li>
+</ul>
+
+</div></div>
+
+<p>Enables Gitlab web hooks to be used to trigger SMC polling on Gitlab projects</p>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021124859 {padding: 0px;}
+div.rbtoc1631021124859 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021124859 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021124859'>
+<ul class='toc-indentation'>
+<li><a href='#GitlabHookPlugin-Why?'>Why?</a></li>
+<li><a href='#GitlabHookPlugin-Versionhistory'>Version history</a>
+<ul class='toc-indentation'>
+<li><a href='#GitlabHookPlugin-Openissues'>Open issues</a></li>
+<li><a href='#GitlabHookPlugin-Version1.4.2(Apr2016)'>Version 1.4.2 (Apr 2016)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.4.1.1(Jan2016)'>Version 1.4.1.1 (Jan 2016)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.4.0(May2015)'>Version 1.4.0 (May 2015)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.3.1(Feb272015)'>Version 1.3.1 (Feb 27 2015)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.3.0(Feb192015)'>Version 1.3.0 (Feb 19 2015)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.2.1(Feb32015)'>Version 1.2.1 (Feb 3 2015)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.2.0(Jan192015)'>Version 1.2.0 (Jan 19 2015)</a></li>
+<li><a href='#GitlabHookPlugin-Version1.1.0(Jul132014)'>Version 1.1.0 (Jul 13 2014)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1 id="GitlabHookPlugin-Why?">Why?</h1>
+
+<p>For <a href="http://gitlabhq.com" class="external-link" rel="nofollow">Gitlab</a> there is an existing solution that might work for you.<br/>
+You can just use the notifyCommit hook on <a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin" class="external-link" rel="nofollow">Git plugin</a> like this:</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http://your-jenkins-server/git/notifyCommit?url=&lt;URL of the Git repository for the Gitlab project&gt;</pre>
+</div></div>
+<p>But, with a large number of projects that are mostly polling (no hooks), the project might actually be built with a great delay (5 to 20 minutes).<br/>
+You can find more details about notifyCommit and this issue <a href="http://kohsuke.org/2011/12/01/polling-must-die-triggering-jenkins-builds-from-a-git-hook" class="external-link" rel="nofollow">here</a>.</p>
+
+<p>That is where this plugin comes in.<br/>
+It gives you the option to use <a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin#build-now-hook" class="external-link" rel="nofollow">build_now</a> or <a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin#notify-commit-hook" class="external-link" rel="nofollow">notify_commit</a> hook, whichever suits your needs better.</p>
+
+<h1 id="GitlabHookPlugin-Versionhistory">Version history</h1>
+
+<h3 id="GitlabHookPlugin-Openissues">Open issues</h3>
+
+ <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=status%20in%20%28Open,%22In%20Progress%22,Reopened%29%20AND%20component=gitlab-hook-plugin&amp;tempMax=50&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<h3 id="GitlabHookPlugin-Version1.4.2(Apr2016)">Version 1.4.2 (Apr 2016)</h3>
+
+<ul>
+	<li>Full support recent GitLab 8.x releases</li>
+	<li>Support for GitLab 8.1 commit statuses</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-33836" class="external-link" rel="nofollow">JENKINS-33836</a>, remove merge request projects even when merged branches triggering is disabled</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-33252" class="external-link" rel="nofollow">JENKINS-33252</a>, skip reporting if gitlab url/token not configured</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29317" class="external-link" rel="nofollow">JENKINS-29317</a>, implemented endpoint for triggering a specific jenkins project</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30322" class="external-link" rel="nofollow">JENKINS-30322</a>, report on job log about communications through gitlab API</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28808" class="external-link" rel="nofollow">JENKINS-28808</a>, fixed <em>Multiple SCMs</em> projects</li>
+	<li>Avoid tag building projects to be elected as candidates to automatically create projects</li>
+	<li>Improved acceptance tests &amp; documentation</li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.4.1.1(Jan2016)">Version 1.4.1.1 (Jan 2016)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28327" class="external-link" rel="nofollow">JENKINS-28327</a>, uncaptured exception on malformed congiguration file</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28452" class="external-link" rel="nofollow">JENKINS-28452</a>, configurable triggering for projects with pre-build merges</li>
+	<li>Fixed parameter serialization for tag builds</li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.4.0(May2015)">Version 1.4.0 (May 2015)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-23992" class="external-link" rel="nofollow">JENKINS-23992</a>, HTML on build reason</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-25267" class="external-link" rel="nofollow">JENKINS-25267</a>, building merge request objects</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-27101" class="external-link" rel="nofollow">JENKINS-27101</a>, undefined method isOlderThan on automatic project creation</li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.3.1(Feb272015)">Version 1.3.1 (Feb 27 2015)</h3>
+
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-27101" class="external-link" rel="nofollow">JENKINS-27101</a>, exception happens when creating a project from a template</li>
+	<li><a href="https://github.com/javiplx/jenkins-gitlab-hook-plugin/issues/56" class="external-link" rel="nofollow">Issue #56</a>, elevated privileges required for automatic project creation</li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.3.0(Feb192015)">Version 1.3.0 (Feb 19 2015)</h3>
+
+<ul>
+	<li>Template based automatic project creation</li>
+	<li>Improved branch matching. Mainly allow exact matches for <em>*/master</em> and allow branch specifications starting with <em>refs/</em></li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.2.1(Feb32015)">Version 1.2.1 (Feb 3 2015)</h3>
+
+<ul>
+	<li><a href="https://github.com/jenkinsci/gitlab-hook-plugin/pull/3" class="external-link" rel="nofollow">Issue #3</a> allowing also choice parameter type for branch name parameter</li>
+</ul>
+
+
+<h3 id="GitlabHookPlugin-Version1.2.0(Jan192015)">Version 1.2.0 (Jan 19 2015)</h3>
+
+<ul>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/44" class="external-link" rel="nofollow">Issue #44</a> global configuration for automatic project per branch creation</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/issues/50" class="external-link" rel="nofollow">Issue #50</a> trigger the build only for multi configuration project, not it's axis</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/31" class="external-link" rel="nofollow">Issue #31</a> payload data is auto-filled to job parameters</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/41" class="external-link" rel="nofollow">Issue #41</a> supporting refspec matching (if refspec present in job configuration)</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/39" class="external-link" rel="nofollow">Issue #39</a> multiple smc's support</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/42" class="external-link" rel="nofollow">Issue #42</a> git 2 support</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/43" class="external-link" rel="nofollow">Issue #43</a> better error handling, exceptions converted to java RuntimeException</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24232" class="external-link" rel="nofollow">#JENKINS-24232</a> fix for branch specifier that is not of String type, now just skipping such projects instead of raising exception</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/pull/45" class="external-link" rel="nofollow">Issue #45</a> fix for getting branch name from payload, did not work correctly for tags</li>
+	<li>fix for invalid or empty payload, returns the actual payload sent and a more meaningful description</li>
+	<li>catching invalid route, displaying known routes and link to wiki</li>
+	<li>improved logging for request details, payload, matching projects</li>
+	<li>displaying stack trace on exception, nicely formatted for api response or in log</li>
+</ul>
+
+
+
+
+<h3 id="GitlabHookPlugin-Version1.1.0(Jul132014)">Version 1.1.0 (Jul 13 2014)</h3>
+
+<ul>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/issues/30" class="external-link" rel="nofollow">Issue #30</a> supporting crumb exclusion</li>
+	<li><a href="https://github.com/elvanja/jenkins-gitlab-hook-plugin/issues/26" class="external-link" rel="nofollow">Issue #26</a> automatic detection and filling of parameters from payload</li>
+	<li>RSpec 3.0 compliance</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65142854/76513282.jpg">Capture.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65142854/76513283.jpg">Capture.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65142854/76513281.jpg">Capture.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:25</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

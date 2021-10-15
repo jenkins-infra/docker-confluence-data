@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Serena Deploy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Serena Deploy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (tpayne)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Jul 07, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="SerenaDeployPlugin-Overview">Overview</h1>
+
+<p>
+<p>This plugin integrates Jenkins with Serena Release Automation (SRA) the Serena DevOps solution.</p><br/>
+The plugin allows a Jenkins job to be associated with SRA, automatically deploying any build artifacts through a configured DevOps process.</p>
+
+<p>The plugin currently supports</p>
+<ul>
+	<li>Artifact upload to specified SRA repository</li>
+	<li>Artifact deployment using specified SRA deployment process</li>
+</ul>
+
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Serena SRA Deploy <a href="https://plugins.jenkins.io/sra-deploy" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-1066" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+
+<h1 id="SerenaDeployPlugin-Pre-requisites">Pre-requisites</h1>
+
+<p>This plugin currently supports the latest GA version of SRA. The plugin uses both the Dimensions Java client and the SRA Java client to interface against a specified SRA installation so requires that the Jenkins installation be updated with a number of JAR files from the SRA installation as document below.</p>
+
+<h1 id="SerenaDeployPlugin-Installation">Installation</h1>
+
+<p>To run this plugin against a Jenkins installation, the following steps need to be taken:-</p>
+<ul>
+	<li>The plugin needs to be installed and enabled using the Jenkins plugin manager using the <em>Available</em> tab in the usual manner. The name of the SRA plugin to select and install is <em>Serena SRA Deploy plugin</em>.</li>
+</ul>
+
+
+<ul>
+	<li>The following JAR files need to be placed into the Jenkins class path or dropped into the <em>&lt;Jenkins_Home&gt;/WEB-INF/lib</em> directory. These JAR files can be copied from the <em>&lt;DM_ROOT&gt;/java_api/lib/</em> and <em>&lt;DM_ROOT&gt;/AdminConsole/lib/</em> directory of your Dimensions server installation or from your SRA installation.
+	<ul>
+		<li><em>darius.jar</em></li>
+		<li><em>dmclient.jar</em></li>
+		<li><em>dmfile.jar</em></li>
+		<li><em>dmnet.jar</em></li>
+		<li><em>urbancode-vfs-client-all.jar</em></li>
+		<li><em>urbancode-vfs-common.jar</em></li>
+		<li><em>urbancode-vfs-server.jar</em></li>
+		<li><em>urbancode-vfs.jar</em></li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>For SRA 4.5.1 and above, please use the following JARs.
+	<ul>
+		<li><em>jersey-bundle-1.2.jar</em></li>
+		<li><em>jersey-client-1.2.jar</em></li>
+		<li><em>jsr311-api-1.1.1.jar</em></li>
+		<li><em>serenara-client-CURRENT.jar</em></li>
+		<li><em>serenara-vfs-CURRENT.jar</em></li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>For SRA 5.0 and above, please use the following JARs.
+	<ul>
+		<li><em>commons-fileutils-CURRENT.jar</em></li>
+		<li><em>commons-util-CURRENT.jar</em></li>
+		<li><em>serenara-client-CURRENT.jar</em></li>
+		<li><em>serenara-vfs-CURRENT.jar</em></li>
+		<li><em>jersey-bundle-1.2.jar</em></li>
+		<li><em>jersey-client-1.2.jar</em></li>
+		<li><em>jsr311-api-1.1.1.jar</em></li>
+		<li><em>jettison-1.2.jar</em></li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>The plugin uses a version of log4j which conflicts with the version that comes deployed by default in Jenkins. As such, it is necessary to update the Jenkins version to use version 1.2.17 at a minimum. Failure to do so will cause the plugin to fail with &quot;method not found&quot; exceptions.</li>
+	<li>If you wish to use this plugin with SSO, then the SRA server needs to be version 5.0.1 or higher.</li>
+</ul>
+
+
+<p>Failure to follow the above steps will mean the plugin will not operate correctly.</p>
+
+<h1 id="SerenaDeployPlugin-ConfiguringthePlugin">Configuring the Plugin</h1>
+
+<p>The plugin can be configured to work with Serena Release Automation at both the System level and at the individual job definition level.</p>
+
+<h3 id="SerenaDeployPlugin-SystemConfiguration">System Configuration</h3>
+
+<p>Configuring the plugin at the system level allows you to define what SRA installations you can use with your build jobs. The configuration allows you to add installation details for each SRA server that you want to use and test their connection works.</p>
+
+<p>An example screen shot is shown below.  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66849044/67043512.jpg" data-image-src="attachments/66849044/67043512.jpg" data-unresolved-comment-count="0" data-linked-resource-id="67043512" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="SystemConfigSRA.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="66849044" data-linked-resource-container-version="34"></span></p>
+
+
+<h3 id="SerenaDeployPlugin-JobConfiguration">Job Configuration</h3>
+
+<p>When you create a new build job, you need to configure the SRA server that you are pushing your build artifacts to. You also need to add the component you are loading artifacts into, the types of artifacts you are including (or excluding) from the load, whether or not you are running a deployment as part of the loading process and if so, what deployment process(es) to follow.</p>
+
+<p>An example screen shot of the available options is shown below.  <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/66849044/67043514.jpg" data-image-src="attachments/66849044/67043514.jpg" data-unresolved-comment-count="0" data-linked-resource-id="67043514" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="JobConfigSRA.jpg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="66849044" data-linked-resource-container-version="34"></span></p>
+
+
+<h1 id="SerenaDeployPlugin-KnownIssuesandLimitations">Known Issues and Limitations</h1>
+
+<p>The following are a list of the current known issues and limitations with this plugin</p>
+<ul>
+	<li>This plugin will support SSO, but only with SRA version 5.0.1+</li>
+</ul>
+
+
+<h1 id="SerenaDeployPlugin-UpandComingChanges">Up and Coming Changes</h1>
+
+<p>The following are a list of possible fixes and enhancement(s) to be added to the next version of the plugin</p>
+<ul>
+	<li>TBD</li>
+</ul>
+
+
+<h1 id="SerenaDeployPlugin-VersionHistory">Version History</h1>
+
+<p>1.4.2.5 – Mar, 2014</p>
+<ul>
+	<li>Enhancement: Add options to validate various objects in SRA when creating/editing a configuration </li>
+</ul>
+
+
+<p>1.4.2.4 – Jan, 2014</p>
+<ul>
+	<li>Bugfix: Fix issue with Serena RA install URI mangling when /serena_ra/ ends in a /</li>
+	<li>Enhancement: Revise doc dependencies for SRA 5.0.1</li>
+</ul>
+
+
+<p>1.4.2.3 – Nov, 2013</p>
+<ul>
+	<li>Bugfix: Resolve more help text issues</li>
+	<li>Enhancement: Add SSO support for SRA 5.0.1+ only, will not work prior to SRA 5.0.1</li>
+	<li>Enhancement: Revise dependencies</li>
+</ul>
+
+
+<p>1.4.2.2 – May, 2013</p>
+<ul>
+	<li>Resolve help text issue</li>
+	<li>Remove unnecessary package dependencies</li>
+</ul>
+
+
+<p><span style="color: rgb(0,0,0);">1.4.2.1 – May, 2013</span></p>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66849044/67043513.jpg">SystemConfigSRA.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66849044/67043512.jpg">SystemConfigSRA.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66849044/67043515.jpg">JobConfigSRA.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/66849044/67043514.jpg">JobConfigSRA.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:46</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

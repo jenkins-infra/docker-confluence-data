@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OverOps Query Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OverOps Query Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (joe99000)</span>, last modified by <span class='editor'> Unknown User (emizell)</span> on Feb 12, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><a href="https://www.overops.com/" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="238" src="attachments/138458008/138458011.png" data-image-src="attachments/138458008/138458011.png" data-unresolved-comment-count="0" data-linked-resource-id="138458011" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="OverOpslogo.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138458008" data-linked-resource-container-version="12"></span></a>      </p><p>This plugin provides a mechanism for applying OverOps severity assignment and regression analysis to new builds to allow application owners, DevOps engineers, and SREs to determine the quality of their code before promoting it into production.</p><p>Run this plugin as a post build step after all other testing is complete to generate a Reliability Report that will determine the stability of the build. From the Reliability Report you can drill down into each specific error using the OverOps <a href="https://doc.overops.com/docs/automated-root-cause-arc" rel="nofollow" class="external-link">Automated Root Cause</a> analysis screen to solve the issue.</p><p>For more information about the plugin, <a href="https://doc.overops.com/docs/jenkins#section-quality-gates" rel="nofollow" class="external-link">quality gates</a>, and for <a href="https://doc.overops.com/docs/jenkins#section-examples-for-regression-testing" rel="nofollow" class="external-link">regression testing examples</a>, see the <a rel="nofollow" href="https://doc.overops.com/docs/jenkins" class="external-link">Jenkins Plugin Guide</a>.</p><p>Find this project on GitHub: <a href="https://github.com/jenkinsci/overops-query-plugin" class="external-link" rel="nofollow">https://github.com/jenkinsci/overops-query-plugin</a></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" alt="OverOps Reliability Report" height="400" src="https://files.readme.io/865d290-Pasted_image_at_2019-02-11__6_21_PM.png" data-image-src="https://files.readme.io/865d290-Pasted_image_at_2019-02-11__6_21_PM.png"></span></p><h2 id="OverOpsQueryPlugin-Installation"><a href="https://github.com/jenkinsci/overops-query-plugin#installation" class="external-link" rel="nofollow">Installation</a></h2><p>Prerequisites</p><ul><li>Jenkins 2.43 running on Java 1.8 or later</li><li>OverOps installed on the designated environment</li></ul><p>Install the OverOps Query Plugin through the Plugin Manager. From the Jenkins Dashboard, select Manage Jenkins → Manage Plugins → Available → scroll down to <strong>OverOps Query Plugin</strong>.</p><h2 id="OverOpsQueryPlugin-GlobalConfiguration"><a href="https://github.com/jenkinsci/overops-query-plugin#global-configuration" class="external-link" rel="nofollow">Global Configuration</a></h2><p>After installing the plugin, configure it to connect to OverOps.</p><p>From the Jenkins Dashboard, select Manage Jenkins → Configure System → scroll down to <span>OverOps Query Plugin</span>.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="400" src="attachments/138458008/165582995.png" data-image-src="attachments/138458008/165582995.png" data-unresolved-comment-count="0" data-linked-resource-id="165582995" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="configure.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138458008" data-linked-resource-container-version="12"></span></p><h3 id="OverOpsQueryPlugin-OverOpsURL">OverOps URL</h3><p>The complete URL of the OverOps API, including port. <a rel="nofollow" href="https://api.overops.com/" class="external-link">https://api.overops.com</a> for SaaS or <a rel="nofollow" href="http://host.domain.com:8080/" class="external-link">http://host.domain.com:8080</a> for on prem.</p><h3 id="OverOpsQueryPlugin-OverOpsEnvironmentID">OverOps Environment ID</h3><p>The default OverOps environment identifier (e.g. S12345) if none is specified in the build settings. Make sure the &quot;S&quot; is capitalized.</p><h3 id="OverOpsQueryPlugin-OverOpsAPIToken">OverOps API Token</h3><p>The OverOps REST API token to use for authentication. This can be obtained from the OverOps dashboard under Settings → Account.</p><h4 id="OverOpsQueryPlugin-Testing">Testing</h4><p>Click <em>Test Connection</em> to show a count of available metrics. If the count shows 0 measurements, credentials are correct but database may be wrong. If credentials are incorrect you will receive an authentication error.</p><p><br/></p><h2 id="OverOpsQueryPlugin-JobPostBuildConfiguration"><a href="https://github.com/jenkinsci/overops-query-plugin#job-post-build-configuration" class="external-link" rel="nofollow">Job Post Build Configuration</a></h2><p>Choose a project, then select Configure → Post-build Actions → scroll down to <strong>Query OverOps</strong></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-external-resource" height="400" src="https://files.readme.io/be5ad3f-image-7.png" data-image-src="https://files.readme.io/be5ad3f-image-7.png"></span></p><h3 id="OverOpsQueryPlugin-ApplicationName">Application Name</h3><p><em>(Optional)</em> <a rel="nofollow" href="https://doc.overops.com/docs/naming-your-application-server-deployment" class="external-link">Application Name</a> as specified in OverOps</p><ul><li>If populated, the plugin will filter the data for the specific application in OverOps.</li><li>If blank, no application filter will be applied in query.</li></ul><p>Example:<br/>${JOB_NAME }</p><h3 id="OverOpsQueryPlugin-DeploymentName">Deployment Name</h3><p><em>(Optional)</em> <a href="https://doc.overops.com/docs/naming-your-application-server-deployment" rel="nofollow" class="external-link">Deployment Name</a> as specified in OverOps or use Jenkins environment variables.</p><p><span>Example:</span><br/>${BUILD_NUMBER} or ${JOB_NAME }-${BUILD_NUMBER}</p><ul><li>If populated, the plugin will filter the data for the specific deployment name in OverOps</li><li>If blank, no deployment filter will be applied in the query.</li></ul><h3 id="OverOpsQueryPlugin-EnvironmentID">Environment ID</h3><p>The OverOps environment identifier (e.g S4567) to inspect data for this build. If no value is provided here, the value provided in the global Jenkins plug settings will be used.</p><h3 id="OverOpsQueryPlugin-RegexFilter">Regex Filter</h3><p>A way to filter out specific event types from affecting the outcome of the OverOps Reliability report.</p><ul><li>Sample list of event types, Uncaught Exception, Caught Exception,|Swallowed Exception, Logged Error, Logged Warning, Timer</li><li>This filter enables the removal of one or more of these event types from the final results.</li><li>Example filter expression with pipe separated list- <code>&quot;type&quot;:\&quot;s*(Logged Error|Logged Warning|Timer)</code></li></ul><h3 id="OverOpsQueryPlugin-MarkBuildUnstable">Mark Build Unstable</h3><p>If checked the build will be marked unstable if any of the above gates are met.</p><h3 id="OverOpsQueryPlugin-ShowTopIssues">Show Top Issues</h3><p>Prints the top X events (as provided by this parameter) with the highest volume of errors detected within the active time window, This is useful when used in conjunction with Max Error Volume to identify the errors which caused a build to fail.</p><h2 id="OverOpsQueryPlugin-QualityGates">Quality Gates</h2><h3 id="OverOpsQueryPlugin-NewErrorGate">New Error Gate</h3><p>If any new errors is detected, the build will be marked as unstable.</p><h3 id="OverOpsQueryPlugin-ResurfacedErrorGate">Resurfaced Error Gate</h3><p>If any resurfaced errors is detected, the build will be marked as unstable.</p><h3 id="OverOpsQueryPlugin-TotalErrorVolumeGate">Total Error Volume Gate</h3><p>Set the max total error volume allowed. If exceeded the build will be marked as unstable.</p><h3 id="OverOpsQueryPlugin-UniqueErrorVolumeGate">Unique Error Volume Gate</h3><p>Set the max total error volume allowed. If exceeded the build will be marked as unstable.</p><h3 id="OverOpsQueryPlugin-CriticalExceptionTypesGate">Critical Exception Types Gate</h3><p>A comma delimited list of exception types that are deemed as severe regardless of their volume. If any events of any exceptions listed have a count greater than zero, the build will be marked as unstable. Blank to skip this test.</p><p><span>Example:</span><br/>NullPointerException,IndexOutOfBoundsException</p><h3 id="OverOpsQueryPlugin-IncreasingErrorsGate">Increasing Errors Gate</h3><p><span>Combines the following parameters:</span></p><ul><li>Event Volume Threshold</li><li>Event Rate Threshold</li><li>Regression Delta</li><li>Critical Regression Threshold</li><li>Apply Seasonality</li></ul><h4 id="OverOpsQueryPlugin-ActiveTimeWindow(d-day,h-hour,m-minute)">Active Time Window (d - day, h - hour, m - minute)</h4><p>The time window inspected to search for new issues and regressions. Set to zero to use the Deployment Name (which would be the current build).</p><ul><li><span>Example:</span> 1d would be one day active time window.</li></ul><h4 id="OverOpsQueryPlugin-BaselineTimeWindow(d-day,h-hour,m-minute)">Baseline Time Window (d - day, h - hour, m - minute)</h4><p>The time window against which events in the active window are compared to test for regressions. If this gate is used, baseline time window is required.</p><ul><li><span>Example:</span> 14d would be a two week baseline time window.</li></ul><h4 id="OverOpsQueryPlugin-EventVolumeThreshold">Event Volume Threshold</h4><p>The minimal number of times an event of a non-critical type (e.g. uncaught) must take place to be considered severe.</p><ul><li>If a New event has a count greater than the set value, it will be evaluated as severe and could break the build if its event rate is above the Event Rate Threshold.</li><li>If an Existing event has a count greater than the set value, it will be evaluated as severe and could break the build if its event rate is above the Event Rate Threshold and the Critical Regression Threshold.</li><li>If any event has a count less than the set value, it will not be evaluated as severe and will not break the build.</li></ul><h4 id="OverOpsQueryPlugin-EventRateThreshold(0-1)">Event Rate Threshold (0-1)</h4><p>The minimum rate at which event of a non-critical type (e.g. uncaught) must take place to be considered severe. A rate of 0.1 means the events is allowed to take place &lt;= 10% of the time.</p><ul><li>If a New event has a rate greater than the set value, it will be evaluated as severe and could break the build if its event volume is above the Event Volume Threshold.</li><li>If an Existing event has a rate greater than the set value, it will be evaluated as severe and could break the build if its event volume is above the Event Volume Threshold and the Critical Regression Threshold.</li><li>If an event has a rate less than the set value, it will not be evaluated as severe and will not break the build.</li></ul><h4 id="OverOpsQueryPlugin-RegressionDelta(0-1)">Regression Delta (0-1)</h4><p>The change in percentage between an event's rate in the active time span compared to the baseline to be considered a regression. The active time span is the Active Time Window or the Deployment Name (whichever is populated). A rate of 0.1 means the events is allowed to take place &lt;= 10% of the time.</p><ul><li>If an Existing event has an error rate delta (active window compared to baseline) greater than the set value, it will be marked as a regression, but will not break the build.</li></ul><h4 id="OverOpsQueryPlugin-CriticalRegressionThreshold(0-1)">Critical Regression Threshold (0-1)</h4><p>The change in percentage between an event's rate in the active time span compared to the baseline to be considered a critical regression. The active time span is the Active Time Window or the Deployment Name (whichever is populated). A rate of 0.1 means the events is allowed to take place &lt;= 10% of the time.</p><ul><li>If an Existing event has an error rate delta (active window compared to baseline) greater than the set value, it will be marked as a severe regression and will break the build.</li></ul><h4 id="OverOpsQueryPlugin-ApplySeasonality">Apply Seasonality</h4><p>If peaks have been seen in baseline window, then this would be considered normal and not a regression. Should the plugin identify an equal or matching peak in the baseline time window, or two peaks of greater than 50% of the volume seen in the active window, the event will not be marked as a regression.</p><h3 id="OverOpsQueryPlugin-DebugMode">Debug Mode</h3><p>If checked, all queries and results will be displayed in the OverOps reliability report. For advanced debugging purposes only.</p><p><br/></p><hr/><p>Visit <a style="letter-spacing: 0.0px;" href="https://overops.com" class="external-link" rel="nofollow">overops.com</a> to learn more about OverOps.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/138458010.svg">logo_regular.svg</a> (image/svg+xml)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/138458011.png">OverOpslogo.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/138458012.jpeg">OverOpsscreen.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165577668.png">Screen Shot 2018-10-25 at 2.51.19 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165577670.png">Screen Shot 2018-10-25 at 2.51.19 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165577677.png">Screen Shot 2018-10-25 at 2.51.19 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165577667.png">Screen Shot 2018-10-25 at 2.51.19 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165582993.png">reliability-report.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165582997.png">configure.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165582996.png">code-quality-gate-options.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138458008/165582995.png">configure.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

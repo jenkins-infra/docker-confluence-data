@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Audit Trail Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Audit Trail Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mindless)</span>, last modified by <span class='editor'> Unknown User (pierrebtz)</span> on Jun 09, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Audit Trail <a href="https://plugins.jenkins.io/audit-trail" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-03-09/#SECURITY-1722" class="external-link" rel="nofollow">XSS vulnerability</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-10-08/#SECURITY-1846" class="external-link" rel="nofollow">Incorrect default pattern</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-10-08/#SECURITY-1815" class="external-link" rel="nofollow">Request logging could be bypassed</a></li>
+</ul>
+
+</div></div>
+Keep a log of who performed particular Jenkins operations, such as configuring jobs.<br/>This plugin adds an <code>Audit Trail</code> section in the main Jenkins configuration page. Here you can configure log location and settings (file size and number of rotating log files), and a URI pattern for requests to be logged. The default options select most actions with significant effect such as creating/configuring/deleting jobs and views or delete/save-forever/start a build. The log is written to disk as configured and recent entries can also be viewed in the Manage / System Log section.<br/>Also see the <a href="JobConfigHistory-Plugin.html">JobConfigHistory Plugin</a> for recording actual changes made to job configurations.</p><p><br/></p><hr/><h2 id="AuditTrailPlugin-Configuration">Configuration</h2><h3 id="AuditTrailPlugin-Filelogger">File logger</h3><p>Output audit logs in rolling files.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/36602604/72613986.png" data-image-src="attachments/36602604/72613986.png" data-unresolved-comment-count="0" data-linked-resource-id="72613986" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-audit-trail-file-logger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36602604" data-linked-resource-container-version="27"></span></p><p>The file logger relies on <code>java.util.logging.FileHandler</code> and can use patterns to describe the log file location as documented <a href="http://docs.oracle.com/javase/7/docs/api/java/util/logging/FileHandler.html" class="external-link" rel="nofollow">here</a> (<code>%h</code>, <code>%g</code>...).</p><h3 id="AuditTrailPlugin-Sysloglogger">Syslog logger</h3><p>Send audit logs to a Syslog server.</p><p><strong>Configuration screen</strong><br/><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/36602604/72613987.png" data-image-src="attachments/36602604/72613987.png" data-unresolved-comment-count="0" data-linked-resource-id="72613987" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-audit-trail-syslog-logger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36602604" data-linked-resource-container-version="27"></span></p><p><strong>Advanced configuration screen</strong></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/36602604/72613988.png" data-image-src="attachments/36602604/72613988.png" data-unresolved-comment-count="0" data-linked-resource-id="72613988" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-audit-trail-syslog-logger-advanced.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36602604" data-linked-resource-container-version="27"></span></p><h3 id="AuditTrailPlugin-Consolelogger">Console logger</h3><p>Output audit logs in <code>stdout</code> or <code>stderr</code>. Primarily intended for debugging purpose.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/36602604/72613989.png" data-image-src="attachments/36602604/72613989.png" data-unresolved-comment-count="0" data-linked-resource-id="72613989" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-audit-trail-console-logger.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="36602604" data-linked-resource-container-version="27"></span></p><h2 id="AuditTrailPlugin-Changelog">Changelog</h2><p>From version 2.5 on, changelog is automatically generated using <a href="https://github.com/toolmantim/release-drafter" class="external-link" rel="nofollow">release-drafter</a>. See directly the <a href="https://github.com/jenkinsci/audit-trail-plugin/releases" class="external-link" rel="nofollow">GitHub release page for the plugin.</a></p><h4 id="AuditTrailPlugin-Olderreleases">Older releases</h4><h5 id="AuditTrailPlugin-Version2.4(11Jan2019)">Version 2.4 (11 Jan 2019)</h5><ul><li>Log file logger for Audit trail plugin leaks open file descriptors (<a href="https://issues.jenkins-ci.org/browse/JENKINS-44129" class="external-link" rel="nofollow">JENKINS-44129</a>)</li><li>Fixes default date format to show time (<a href="https://issues.jenkins-ci.org/browse/JENKINS-55376" class="external-link" rel="nofollow">JENKINS-55376</a>)</li></ul><h5 id="AuditTrailPlugin-Version2.3(28May2018)">Version 2.3 (28 May 2018)</h5><ul><li>Jenkins minimal version bumped to 2.60.3</li><li>Add a log prefix feature</li><li>Fix JEP-200 issue in ConsoleAuditLogger (<a href="https://issues.jenkins-ci.org/browse/JENKINS-51331" class="external-link" rel="nofollow">JENKINS-51331</a>)</li></ul><h5 id="AuditTrailPlugin-Version2.2(26Aug2015)">Version 2.2 (26 Aug 2015)</h5><ul><li>Add stop, restart, prepare for shutdown as default filter (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19669" class="external-link" rel="nofollow">JENKINS-19669</a>)</li><li>Added project enable/disable to default pattern</li><li>Added millis to the File audit logger message (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29159" class="external-link" rel="nofollow">JENKINS-29159</a>)</li></ul><h5 id="AuditTrailPlugin-Version2.1(16-Sept-2014)">Version 2.1 (16-Sept-2014)</h5><ul><li>Add audit message with build start time, duration, node and cause </li></ul><h5 id="AuditTrailPlugin-Version2.0(23-April-2014)">Version 2.0 (23-April-2014)</h5><ul><li>Major refactoring to support multiple outputs</li><li>Add Syslog output</li><li>Add Console output</li></ul><h5 id="AuditTrailPlugin-Version1.8(31-May-2013)">Version 1.8 (31-May-2013)</h5><ul><li>Fixed security vulnerability.</li></ul><h5 id="AuditTrailPlugin-Version1.7(3-Aug-2011)">Version 1.7 (3-Aug-2011)</h5><ul><li>Log IP address for anonymous users. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-10559">JENKINS-10559</a>)</li></ul><h5 id="AuditTrailPlugin-Version1.6(24-Feb-2011)">Version 1.6 (24-Feb-2011)</h5><ul><li>Rerelease 1.5 to properly set required Jenkins version.</li></ul><h5 id="AuditTrailPlugin-Version1.5(15-Feb-2011)">Version 1.5 (15-Feb-2011)</h5><ul><li>Set a default value for log location.</li><li>Translation update (German)</li></ul><h5 id="AuditTrailPlugin-Version1.4(21-Nov-2009)">Version 1.4 (21-Nov-2009)</h5><ul><li>For queue item URLs, add URL for that item's job in the log entry.</li><li>Update uses of deprecated APIs</li></ul><h5 id="AuditTrailPlugin-Version1.3(3-Mar-2009)">Version 1.3 (3-Mar-2009)</h5><ul><li>Updated to work with Hudson 1.288 and higher. Use version 1.2 for older Hudson versions.</li><li>Fix so build triggers also appear in Manage / System Log section.</li></ul><h5 id="AuditTrailPlugin-Version1.2(13-Feb-2009)">Version 1.2 (13-Feb-2009)</h5><ul><li>Add option to log how each build is triggered (on Hudson 1.283 or higher; older versions just say &quot;Started&quot;).</li><li>Add some more URI patterns to log by default.</li></ul><h5 id="AuditTrailPlugin-Version1.1(16-Jan-2009)">Version 1.1 (16-Jan-2009)</h5><ul><li>Minor log setup fixes.</li></ul><h5 id="AuditTrailPlugin-Version1.0(15-Jan-2009)">Version 1.0 (15-Jan-2009)</h5><ul><li>Initial release.</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602604/72613986.png">jenkins-audit-trail-file-logger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602604/72613987.png">jenkins-audit-trail-syslog-logger.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602604/72613988.png">jenkins-audit-trail-syslog-logger-advanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/36602604/72613989.png">jenkins-audit-trail-console-logger.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

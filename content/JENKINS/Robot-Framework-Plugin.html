@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Robot Framework Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Robot Framework Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (janne.piironen@gmail.com)</span>, last modified by <span class='editor'> Unknown User (tattoo)</span> on Sep 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Robot Framework <a href="https://plugins.jenkins.io/robot" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-01-15/#SECURITY-1698" class="external-link" rel="nofollow">XXE vulnerability</a></li>
+</ul>
+
+</div></div>
+<br/></p><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022200771 {padding: 0px;}
+div.rbtoc1631022200771 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022200771 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022200771'>
+<ul class='toc-indentation'>
+<li><a href='#RobotFrameworkPlugin-Description'>Description</a>
+<ul class='toc-indentation'>
+<li><a href='#RobotFrameworkPlugin-Currentfeatures'>Current features</a></li>
+<li><a href='#RobotFrameworkPlugin-Configuration'>Configuration</a></li>
+<li><a href='#RobotFrameworkPlugin-OverallScreenshots'>Overall Screenshots</a></li>
+</ul>
+</li>
+<li><a href='#RobotFrameworkPlugin-Bugs'>Bugs</a></li>
+<li><a href='#RobotFrameworkPlugin-Changelog'>Changelog</a></li>
+</ul>
+</div></p><h2 id="RobotFrameworkPlugin-Description"><span style="color: rgb(210,73,57);">Description</span></h2><p>This plugin collects and publishes <a href="http://robotframework.org/" title="Robot Framework Home" class="external-link" rel="nofollow">Robot Framework</a> test results in Jenkins.<br/>Preconditions: all &quot;suggested plugins&quot; are &quot;installed&quot; in Jenkins.</p><p><a href="https://issues.jenkins-ci.org/issues/?jql=project+%3D+JENKINS+AND+component+%3D+robot-plugin" class="external-link" rel="nofollow">Issue Tracker</a></p><h3 id="RobotFrameworkPlugin-Currentfeatures">Current features</h3><ul><li>Test suite and case details with trend graphs</li><li>Environment variable expansion for build paths in configuration</li><li>Wildcard support for output files for parsing and archiving of multiple Robot result files</li><li>Collection and archiving of original Robot report HTML files</li><li>Summary of Robot run on build page</li><li>Summary of latest Robot run on project page</li><li>Trend graph of passed tests over builds on project page</li><li>Marking build failed/unstable/successful according to pass thresholds given by user</li><li>Option of evaluating only critical tests against the pass thresholds</li><li>Listview column to show overall passed/failed tests in project listing and duration trend</li><li>Configurable archiving of arbitrary Robot related artifacts per build </li><li>Token macros for usage with e.g. email-ext plugin</li><li>Test visibility in radiator views</li></ul><h3 id="RobotFrameworkPlugin-Configuration">Configuration</h3><h4 id="RobotFrameworkPlugin-Basicconfigurationoftestingtask">Basic configuration of testing task</h4><ol><li>Configure your project</li><li>Select: Build -&gt; Add build step -&gt; execute shell/Execute Windows batch command</li><li>Add the command to run the tests. You might have direct pybot/jybot command here like &quot;pybot --variable name:value --outputdir my_robot_results my_test_suite&quot; or in case you need to do something more, you can call any script that you use for running the tests. Relevant part from Robot Jenkins Plugin point of view is that this script generates the Robot outputs.</li><li>Force your Robot script to return successfully from shell with &quot;exit 0&quot; to empower the plugin in deciding if the build is success/failure (by default Robot exits with error code when there's any failed tests)</li><li>Select: Post-build Actions -&gt; Publish Robot Framework test results</li><li>Set path where your results are located (in above example command &quot;my_robot_results&quot;)</li><li>If your output files are named differently than default (i.e. output.xml, report.html and log.html) specify the filenames by pressing the &quot;Advanced...&quot; button and writing the names in relevant fields. The fields support wildcards * and ?.</li><li>If you have other artifacts such as screenshots that you want to persist for viewing later in the logs you must configure them under &quot;Advanced... -&gt; Other files to copy&quot;. The field accepts comma separated list of files and supports wildcards * and ?.</li><li>Set thresholds and optionally disable thresholds for critical tests only to count every test in the pass percentage.</li></ol><h4 id="RobotFrameworkPlugin-Configuringdirectlinkstologfiles">Configuring direct links to log files</h4><h5 id="RobotFrameworkPlugin-Version1.3.0">Version 1.3.0</h5><p>Links are automatically generated to whatever files are configured to &quot;Report html&quot; and &quot;Log html&quot; in the plugin configuration. Links to log and report htmls are now only in the summary sections in the middle of the page and the sidebar link from previous versions have been removed.</p><h5 id="RobotFrameworkPlugin-Version1.2.3andearlier">Version 1.2.3 and earlier</h5><p>From version 1.2 it's possible to configure a direct link from both sidepanel and project/build page summaries to chosen file persisted with the build. If no file is configured the link won't show up. Steps to do this are as follows:</p><ol><li>Go to project configuration</li><li>Configure the name of the file to be linked to Log/Report link field</li><li>Make sure that you are saving the actual file you want to link with the build by checking the filenames/masks configured in the fields behind &quot;Advanced...&quot; button. By default these are output.xml, report.html and log.html which are the Robot Framework default names</li><li>Save the configuration and run a build. The links are persisted per build in order to withstand changes in file naming. Thus the links won't appear in builds that exist already.</li><li>Links should appear in the project/build summaries and in build sidepanel.</li></ol><p>NOTE: After configuration change etc. the link will appear also in project sidepanel, but for now it doesn't appear there right after the build. Conversely, the project view sidepanel link won't go away until after configuration change/resave in project. We're working on a solution to this.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" height="150" src="attachments/47087692/57409673.png" data-image-src="attachments/47087692/57409673.png" data-unresolved-comment-count="0" data-linked-resource-id="57409673" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="loghtml_sidepanel.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span><br/><em>Sidepanel link</em></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="150" src="attachments/47087692/57409672.png" data-image-src="attachments/47087692/57409672.png" data-unresolved-comment-count="0" data-linked-resource-id="57409672" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="robo_loglink_projectpage.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span><br/><em>Summary link</em></p><h4 id="RobotFrameworkPlugin-ConfiguringRobotoverallpass/failtoshowintheprojectlist">Configuring Robot overall pass/fail to show in the project list</h4><ol><li>Go to Jenkins front page</li><li>Select the + sign in the top tabs of the project listing to create a new view or go to <a href="http://YOURJENKINSHOST/newView" class="external-link" rel="nofollow">http://YOURJENKINSHOST/newView</a></li><li>Name your view and proceed creating a list view</li><li>Choose project you want to include to the view. By default the &quot;Robot pass/fail&quot; column will appear to the column listing.</li><li>Save view and select it from the top tabs in Jenkins project listing</li><li>(Optional) If you want to have the view on by default go to &quot;Manage Jenkins&quot;-&gt;&quot;Configure System&quot; (or <a href="http://YOURJENKINSHOST/configure" class="external-link" rel="nofollow">http://YOURJENKINSHOST/configure</a> )and select your newly created view to be the default one.</li></ol><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/47087692/57409675.png" data-image-src="attachments/47087692/57409675.png" data-unresolved-comment-count="0" data-linked-resource-id="57409675" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="robot_view_column.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span><br/><em>List view column in action</em></p><h4 id="RobotFrameworkPlugin-Usingtokenmacrosine-mailreport">Using token macros in e-mail report</h4><p>Prerequisites: token-macro plugin and email-ext plugin installed.</p><ol><li>Go to project configuration</li><li>Enable &quot;Editable Email Notification&quot; in post-build actions (<a href="https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin" class="external-link" rel="nofollow">configuration reference</a>)</li><li>Now you can use the following Robot variables in your custom result email:</li></ol><ul><li>${ROBOT_FAILEDCASES} - Expands to list of failed Robot cases. Each case on its own line.</li><li>${ROBOT_PASSPERCENTAGE, onlyCritical} - Expands to pass percentage of tests. (passed / total * 100 %),<br/>onlyCritical - True if only critical tests should be calculated in percentage. Defaults to false.</li><li>${ROBOT_PASSRATIO, onlyCritical} Expands to build result in 'passed / total' format.<br/>onlyCritical - True if only critical tests should be calculated in percentage. Defaults to false.</li><li>${ROBOT_REPORTLINK} - If logfile link is configured in the Robot plugin this link will point to that file for the build. Else show link to Robot reports directory for the build.</li></ul><h4 id="RobotFrameworkPlugin-Displayingtestnumbersinbuildradiatorviewsetc.">Displaying test numbers in build radiator views etc.</h4><div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If the Robot plugin marks the build as failure the tests will not show up. This is because only unstable and successful builds are considered to have test results per Jenkins.</p><p>This means that in order to see the test results in other views you must set your unstable threshold so that the build never goes to failure.</p></div></div><h3 id="RobotFrameworkPlugin-OverallScreenshots">Overall Screenshots</h3><h5 id="RobotFrameworkPlugin-Config">Config</h5><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/47087692/47382534.png" data-image-src="attachments/47087692/47382534.png" data-unresolved-comment-count="0" data-linked-resource-id="47382534" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="config1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span></p><h5 id="RobotFrameworkPlugin-Projectview">Project view</h5><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/47087692/47382535.png" data-image-src="attachments/47087692/47382535.png" data-unresolved-comment-count="0" data-linked-resource-id="47382535" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="project_page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span></p><h5 id="RobotFrameworkPlugin-Buildview">Build view</h5><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/47087692/47382536.png" data-image-src="attachments/47087692/47382536.png" data-unresolved-comment-count="0" data-linked-resource-id="47382536" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="build_page.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span></p><h5 id="RobotFrameworkPlugin-Detailedbuildview">Detailed build view</h5><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" src="attachments/47087692/57409592.png" data-image-src="attachments/47087692/57409592.png" data-unresolved-comment-count="0" data-linked-resource-id="57409592" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="detailed.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="47087692" data-linked-resource-container-version="49"></span></p><h2 id="RobotFrameworkPlugin-Bugs">Bugs</h2><p><a href="https://issues.jenkins-ci.org/issues/?jql=component%20%3D%20robot-plugin%20AND%20resolution%20is%20EMPTY%20ORDER%20BY%20updated%20DESC" class="external-link" rel="nofollow">List of open bugs on robot-plugin</a></p><p>
+
+
+
+
+
+<div id="refresh-module--83977429" class="refresh-module-id jira-table" >
+<p>
+    
+        
+    
+        
+    <div id="jira-issues--83977429" style="width: 100%;  overflow: auto;"
+         class="jira-issues">
+        <table class="aui" >
+            <tbody>
+            <tr></tr>             <tr>
+                                                            
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Key</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Summary</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">T</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Created</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Updated</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">P</span></th>
+                                                                                                        
+                                                    <th style="text-align: left; text-transform: capitalize;"
+                                class="jira-macro-table-underline-pdfexport jira-tablesorter-header"><span
+                                    class="jim-table-header-content">Status</span></th>
+                                                                        </tr>
+                                                                                                                    <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-37739?src=confmacro">JENKINS-37739</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-37739?src=confmacro">
+                                            Support multiple output.xml&#39;s to support parallel test executions in pipeline
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-37739?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 28, 2016
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Sep 03, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/trivial.svg"
+                                             alt="Trivial"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66150?src=confmacro">JENKINS-66150</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66150?src=confmacro">
+                                            Issue on output.xml parser 
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66150?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 15, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 03, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66032?src=confmacro">JENKINS-66032</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66032?src=confmacro">
+                                            ${ROBOT_PASSPERCENTAGE} for test suite
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-66032?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Aug 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/critical.svg"
+                                             alt="Critical"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63900?src=confmacro">JENKINS-63900</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63900?src=confmacro">
+                                            Robot Framework results trend graph is not showing the correct build number of the job
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-63900?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Oct 09, 2020
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jun 21, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+    ">
+                                                Reopened
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23077?src=confmacro">JENKINS-23077</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23077?src=confmacro">
+                                            New configuration option: do not throw exception about missing output.xml when the build fails
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-23077?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 16, 2014
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 04, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26245?src=confmacro">JENKINS-26245</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26245?src=confmacro">
+                                            Add option to show &quot;all tests&quot; or &quot;critical tests&quot; in the Listviewcolumn that shows overall passed/failed tests in project listing
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-26245?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 30, 2014
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            May 04, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+    ">
+                                                Reopened
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41560?src=confmacro">JENKINS-41560</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41560?src=confmacro">
+                                            Robot Framework plugin on Windows not honoring passed/unstable percentages
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-41560?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 30, 2017
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Apr 27, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15190?src=confmacro">JENKINS-15190</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15190?src=confmacro">
+                                            Creation of trend graphs is slow on large number of builds
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15190?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Sep 17, 2012
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Apr 21, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11441?src=confmacro">JENKINS-11441</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11441?src=confmacro">
+                                            Aggregate Downstream Robot Reports
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-11441?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Oct 22, 2011
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8378?src=confmacro">JENKINS-8378</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8378?src=confmacro">
+                                            Filter test chart
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8378?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 29, 2010
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8380?src=confmacro">JENKINS-8380</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8380?src=confmacro">
+                                            Allow clean shutdown of testing from UI
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-8380?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 30, 2010
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15189?src=confmacro">JENKINS-15189</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15189?src=confmacro">
+                                            Make Robot plugin influence the weather icon
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15189?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Sep 17, 2012
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15195?src=confmacro">JENKINS-15195</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15195?src=confmacro">
+                                            Send old &#39;Summary Report&#39; style report to e-mail
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15195?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Sep 17, 2012
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15200?src=confmacro">JENKINS-15200</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15200?src=confmacro">
+                                            Test case history in matrix format
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-15200?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Sep 17, 2012
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18840?src=confmacro">JENKINS-18840</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18840?src=confmacro">
+                                            Remove support for Robot Framework split outputs.
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-18840?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jul 19, 2013
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-22603?src=confmacro">JENKINS-22603</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-22603?src=confmacro">
+                                            Add support Dashboard View
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-22603?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Apr 14, 2014
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 02, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33329?src=confmacro">JENKINS-33329</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33329?src=confmacro">
+                                            Robot-plugin incorrectly recognized CloudBees Folder project to display Robot results column
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-33329?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"
+                                                alt="Bug"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Mar 05, 2016
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Feb 24, 2021
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56862?src=confmacro">JENKINS-56862</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56862?src=confmacro">
+                                            Provide support to claim failing test(s).
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-56862?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14681&amp;avatarType=issuetype"
+                                                alt="New Feature"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Apr 03, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Apr 03, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowNormal">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55675?src=confmacro">JENKINS-55675</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55675?src=confmacro">
+                                            Add RF RPA support
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-55675?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 18, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Jan 18, 2019
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/major.svg"
+                                             alt="Major"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                                                        <tr class="rowAlternate">
+                                                                                                                        <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-24968?src=confmacro">JENKINS-24968</a>
+                                                                    </td>
+                                                            <td                                     class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-24968?src=confmacro">
+                                            Show documentation on suite and test view
+                                        </a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <a href="https://issues.jenkins.io/browse/JENKINS-24968?src=confmacro"><img
+                                                src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14680&amp;avatarType=issuetype"
+                                                alt="Improvement"
+                                                class="icon"/></a>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Oct 02, 2014
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            Dec 01, 2017
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <img src="https://issues.jenkins.io/images/icons/priorities/minor.svg"
+                                             alt="Minor"
+                                             class="icon"/>
+                                                                    </td>
+                                                            <td nowrap="true"                                    class="jira-macro-table-underline-pdfexport" >
+                                                                            <!-- The new status lozengens support for Jira 6.2 or later. Otherwise we use the icon.-->
+                                                                                    <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-default
+    ">
+                                                Open
+                                            </span>
+                                                                                                            </td>
+                                                    </tr>
+                                                                                                                        <tr>
+                    <td colspan="7">
+                        <div class="jira-oauth-message-marker">
+                            <div class="aui-message-container">
+                                <div class="aui-message info">
+                                    <span><a class="static-oauth-init" href="https://wiki.jenkins.io/plugins/servlet/applinks/oauth/login-dance/authorize?applicationLinkID=dd058dce-0c66-3b77-8b09-71b1d7728747">Authenticate</a> to retrieve your issues</span>
+                                    <span class="aui-icon icon-info"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                            </tbody>
+        </table>
+    </div>
+            <div class="refresh-issues-bottom">
+                            <span id="total-issues-count" class="total-issues-count">
+                                                                    <a rel="nofollow" title="View all matching issues in Jira."
+                           href="https://issues.jenkins.io/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=component+%3D+robot-plugin+AND+resolution+is+EMPTY+ORDER+BY+updated+DESC+&amp;src=confmacro">
+                                                            20 issues
+                                                    </a>
+                                        </span>
+                                </div>
+        </p>
+
+    
+</div>
+</p><h2 id="RobotFrameworkPlugin-Changelog">Changelog</h2><h4 id="RobotFrameworkPlugin-Release2.0.0">Release 2.0.0</h4><ul><li>Pull request 18 <a href="https://github.com/jenkinsci/robot-plugin/pull/18" class="external-link" rel="nofollow">New design for list view results column</a></li><li>Pull request 22 <a href="https://github.com/jenkinsci/robot-plugin/pull/22" class="external-link" rel="nofollow">Support for `rebot` merged output.xml file</a></li><li>Pull request 23 <a href="https://github.com/jenkinsci/robot-plugin/pull/23" class="external-link" rel="nofollow">Add pipeline step support</a></li><li>Pull request 24 <a href="https://github.com/jenkinsci/robot-plugin/pull/24" class="external-link" rel="nofollow">Fix empty result in REST API</a></li><li>Pull request 25 <a href="https://github.com/jenkinsci/robot-plugin/pull/25" class="external-link" rel="nofollow">Add suite and test descriptions to results view</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.6.5">Release 1.6.5</h4><ul><li>Pull request 15 <a href="https://github.com/jenkinsci/robot-plugin/pull/15" class="external-link" rel="nofollow">Fix for evaluating case as critically failed</a></li><li>Pull request 16 <a href="https://github.com/jenkinsci/robot-plugin/pull/16" class="external-link" rel="nofollow">Removes second reading of entire history in createDurationGraphForTestObject</a></li><li>Pull request 19 <a href="https://github.com/jenkinsci/robot-plugin/pull/19" class="external-link" rel="nofollow">Changed new Robot Icons</a></li><li>Pull request 20 <a href="https://github.com/jenkinsci/robot-plugin/pull/20" class="external-link" rel="nofollow">[FIXED JENKINS-47227] Add public getEnableCache</a></li><li>Pull request 21 <a href="https://github.com/jenkinsci/robot-plugin/pull/21" class="external-link" rel="nofollow">Add Jenkinsfile</a></li><li>JENKINS-52447 <a href="https://issues.jenkins-ci.org/browse/JENKINS-52447" class="external-link" rel="nofollow">Incorrect reporting of total test cases</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.6.4">Release 1.6.4</h4><ul><li>Pull request 12 <a href="https://github.com/jenkinsci/robot-plugin/pull/12" class="external-link" rel="nofollow">Support Jenkins Workflow</a></li></ul><ul><li>Pull request 13 <a href="https://github.com/jenkinsci/robot-plugin/pull/13" class="external-link" rel="nofollow">Make cache based on WeakReferences optional</a></li></ul><ul><li>Pull request 14 <a href="https://github.com/jenkinsci/robot-plugin/pull/14" class="external-link" rel="nofollow">handle empty or invalid maxBuildToShow parameter</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.6.2">Release 1.6.2</h4><ul><li>JENKINS-29353 <a href="https://issues.jenkins-ci.org/browse/JENKINS-29353" class="external-link" rel="nofollow">Configurable number of builds for trends generation</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.6.1">Release 1.6.1</h4><ul><li>Reverted earlier caching changes, because sometimes it increased memory usage too much</li><li>JENKINS-29178 <a href="https://issues.jenkins-ci.org/browse/JENKINS-29178" class="external-link" rel="nofollow">Robot Framework 2.9 output parsing is broken</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.6.0">Release 1.6.0</h4><ul><li>Performance enhancements by improved result caching</li><li>JENKINS-27141 <a href="https://issues.jenkins-ci.org/browse/JENKINS-27141" class="external-link" rel="nofollow">Option to show only critical tests in graphs</a></li><li>JENKINS-26980 <a href="https://issues.jenkins-ci.org/browse/JENKINS-26980" class="external-link" rel="nofollow">Enable configuration of &quot;Robot Results&quot; column in the default job list view</a></li><li>JENKINS-24868 <a href="https://issues.jenkins-ci.org/browse/JENKINS-24868" class="external-link" rel="nofollow">Add the ability for robot plugin graph to show only failed tests</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.5.0">Release 1.5.0</h4><ul><li>JENKINS-24916 <a href="https://issues.jenkins-ci.org/browse/JENKINS-24916" class="external-link" rel="nofollow">Link to robot log from individual tests and suites</a></li><li>JENKINS-24792 <a href="https://issues.jenkins-ci.org/browse/JENKINS-24792" class="external-link" rel="nofollow">Cleanup graph zooming</a></li><li>JENKINS-24688 <a href="https://issues.jenkins-ci.org/browse/JENKINS-24688" class="external-link" rel="nofollow">Robot framework summary split in multiple rows in job list</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.4.3">Release 1.4.3</h4><ul><li>JENKINS-24531 <a href="https://issues.jenkins-ci.org/browse/JENKINS-24531" class="external-link" rel="nofollow">There should be high resolution versions of graphs available</a></li><li>JENKINS-22406 <a href="https://issues.jenkins-ci.org/browse/JENKINS-22406" class="external-link" rel="nofollow">Show tags for test cases</a></li><li>JENKINS-21739 <a href="https://issues.jenkins-ci.org/browse/JENKINS-21739" class="external-link" rel="nofollow">Links to robot framework report files are invalid when inside a folder</a></li><li>JENKINS-21644 <a href="https://issues.jenkins-ci.org/browse/JENKINS-21644" class="external-link" rel="nofollow">Aggregated results in a multimodule maven project displays only values of the last submodule</a></li></ul><h4 id="RobotFrameworkPlugin-Release1.4.2">Release 1.4.2</h4><ul><li>JENKINS-22060 Plugin does not count suite setup times into duration</li><li>JENKINS-21736 Make the archiving of output.xml optional</li></ul><h4 id="RobotFrameworkPlugin-Release1.4.1">Release 1.4.1</h4><ul><li>JENKINS-21489 URL decoding for test objects fails with special characters</li><li>JENKINS-21490 Split token-macro tokens further to enable more custom reporting</li></ul><h4 id="RobotFrameworkPlugin-Release1.4.0">Release 1.4.0</h4><ul><li>JENKINS-8381 Robot summary and trend graph for multi-configuration projects</li></ul><p><span style="color: rgb(210,73,57);"><strong>Release 1.3.2</strong></span></p><ul><li>JENKINS-19479 Robot Framework Plugin Threshold uses rounded percentage for evaluating pass/unstable build status</li><li>JENKINS-19484 Robot Framework plugin shows result as &quot;Failed!&quot; on individual test case result page</li></ul><h4 id="RobotFrameworkPlugin-Release1.3.1">Release 1.3.1</h4><ul><li>JENKINS-19328 Whole directory is copied when &quot;Other files to copy&quot; -field is empty</li></ul><h4 id="RobotFrameworkPlugin-Release1.3.0">Release 1.3.0</h4><ul><li>JENKINS-15809 Failed to scout hudson.plugins.robot.tokens.RobotPassPercentageTokenMacro</li><li>JENKINS-15188 Human readable duration values for test summaries and trend graphs</li><li>JENKINS-15191 Robot icon is scaled ugly in many places</li><li>JENKINS-15193 Graph scaling to see the significant changes in test count / duration</li><li>JENKINS-12795 Log/Report link in Job page is broken when Jenkins is started with a specific prefix</li><li>JENKINS-19064 Project/build page summary improvements</li><li>JENKINS-15768 Plug-in doesn't retain directories when copy files using &quot;Other files to copy&quot; setting</li><li>JENKINS-16615 Link to log.html is broken on project page in matrix project</li><li>JENKINS-18675 Failure in suite teardown does not fail test cases</li><li>JENKINS-17328 output.xml kept open after build if parsing error occurs causing subsequent runs to fail</li><li>JENKINS-15327 Publish Robot Framework test results not support chinese character</li></ul><h4 id="RobotFrameworkPlugin-Release1.2.3">Release 1.2.3</h4><ul><li>JENKINS-15194 - Basic token macros created for use in e.g. email-ext plugin</li><li>JENKINS-15187 - Made the plugin report tests as unit tests in order to see test count in different views e.g. radiator plugins (see config notice above)</li></ul><h4 id="RobotFrameworkPlugin-Release1.2.2">Release 1.2.2</h4><ul><li>Changed XML parsing to much more memory efficient StAX. Should solve many outOfMemoryErrors.</li><li>Changed the way suites with same names are handled</li><li>Fixed a bug where empty &quot;Other files to copy&quot; field leads to copying the whole directory into saved builds.</li></ul><h4 id="RobotFrameworkPlugin-Release1.2.1">Release 1.2.1</h4><ul><li>Compliance with RF 2.6 log file changes (html and javascript files separated)</li><li>Option to save arbitrary test artifacts with test results</li></ul><h4 id="RobotFrameworkPlugin-Release1.2">Release 1.2</h4><ul><li>configurable file link (to log / report file) on project and build pages</li><li>Listviewcolumn to show overall passed/failed tests in project listing</li><li>pass/fail graph to testcase view</li><li>support for changed robot output xml (issue: <a href="http://www.google.com/url?sa=D&amp;q=http://code.google.com/p/robotframework/issues/detail%3Fid%3D820" class="external-link" rel="nofollow">http://www.google.com/url?sa=D&amp;q=http://code.google.com/p/robotframework/issues/detail%3Fid%3D820</a>)</li></ul><h4 id="RobotFrameworkPlugin-Release1.1">Release 1.1</h4><ul><li>JENKINS-9078 - Jenkins environment variables available for configurations</li><li>JENKINS-9079 - Support for GLOB style wildcards in file configurations</li><li>Detailed views of test cases and suites with trend graphs</li><li>Fix to JDK 1.5 incompliant exception throw</li></ul><h4 id="RobotFrameworkPlugin-Release1.0">Release 1.0</h4><ul><li>Initial release of the plugin</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382532.png">config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382533.png">config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382531.png">config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382534.png">config1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/69402737.png">project_page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/69402738.png">build_page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/69402739.png">detailed.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/57409672.png">robo_loglink_projectpage.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/57409673.png">loghtml_sidepanel.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/57409674.png">logfile_configuration_screen.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/57409675.png">robot_view_column.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/59179019.jpg">ride.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/59179020.jpg">jenkins.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/61112332.jpg">how_to_find_robot_error_log.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382535.png">project_page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/47382536.png">build_page.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/47087692/57409592.png">detailed.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:43</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

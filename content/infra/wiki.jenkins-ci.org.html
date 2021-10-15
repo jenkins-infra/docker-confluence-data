@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins Infrastructure : wiki.jenkins-ci.org</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins Infrastructure</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins Infrastructure : wiki.jenkins-ci.org
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (aheritier)</span> on Mar 07, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="wiki.jenkins-ci.org-Wherearethings?">Where are things?</h1>
+<p>Stock Confluence is installed at /srv/wiki under its own user account 'wiki'.</p>
+
+<h1 id="wiki.jenkins-ci.org-Tobouncetheserver">To bounce the server</h1>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">ssh lettuce.jenkins-ci.org</pre>
+</div></div>
+<p>then </p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+# Restart Confluence
+sudo docker restart confluence
+# Restart Confluence cache
+sudo docker restart confluence-cache
+</pre>
+</div></div>
+
+<h1 id="wiki.jenkins-ci.org-TODOs">TODOs</h1>
+<ul>
+	<li>Apache runs <a href="https://studio.plugins.atlassian.com/wiki/display/AUTOEXP/Confluence+AutoExport+Plugin" class="external-link" rel="nofollow">auto export plugin</a> to divert much of the load to statically generated HTML without bothering Confluence. Something we can look into. <a href="https://cwiki.apache.org/CWIKI/" class="external-link" rel="nofollow">Example of static page</a> and <a href="https://cwiki.apache.org/confluence/display/CWIKI/Index" class="external-link" rel="nofollow">its corresponding Confluence page</a>.</li>
+	<li><a href="http://confluence.atlassian.com/display/DOC/Performance+Tuning" class="external-link" rel="nofollow">Performance tuning guide from Atlassian</a></li>
+</ul>
+
+
+<h1 id="wiki.jenkins-ci.org-IncidentRecords">Incident Records</h1>
+<p>There's <a href="https://support.atlassian.com/browse/CSP-58700" class="external-link" rel="nofollow">a ticket filed in Atlassian support</a> for the recent outages. So let's keep records of when/how Confluence failed. (newer ones first)</p>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>See <a href="How-to-do-a-post-mortem-analysis.html">How to do a post-mortem analysis</a> for what data to collect before relaunching a new instance</p></div></div>
+
+<h3 id="wiki.jenkins-ci.org-March16th18:49PT">March 16th 18:49 PT</h3>
+<p>Upgraded JDK to 6u24 since investigation in CSP-58700 seems to indicate that there have been 7 JDK crashes while JIT-ing the exact same method. <a href="http://confluence.atlassian.com/pages/viewpage.action?pageId=219023686" class="external-link" rel="nofollow">This KB article</a> appears spot on.</p>
+
+<h3 id="wiki.jenkins-ci.org-March16thafternoonPT">March 16th afternoon PT</h3>
+<p>With the help of OSUSL, the VM now has 2.5GB heap. I've modified the VM parameters to &quot;-Xmx768m -XX:MaxPermSize=256m&quot;. Previously it was 512m and 192m respectively.</p>
+
+<h3 id="wiki.jenkins-ci.org-March16th(1sttime)">March 16th (1st time)</h3>
+<p>JVM crash on out of memory error (<a href="attachments/53608678/56819713.log" data-linked-resource-id="56819713" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="hs_err_pid19777.log" data-linked-resource-content-type="text/x-log" data-linked-resource-container-id="53608678" data-linked-resource-container-version="12">full report</a>):</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># A fatal error has been detected by the Java Runtime Environment:
+#
+# java.lang.OutOfMemoryError: requested 536870928 bytes for Chunk::new. Out of swap space?
+#
+#  Internal Error (allocation.cpp:215), pid=19777, tid=140363900471040
+#  Error: Chunk::new
+#
+# JRE version: 6.0_22-b04
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (17.1-b03 mixed mode linux-amd64 )
+# An error report file with more information is saved as:
+# /srv/wiki/confluence-3.4.7-std/logs/hs_err_pid19777.log
+</pre>
+</div></div>
+<p>It appears that the JVM crashed when it was trying to reallocate the oldgen from 300MB-ish to 500MB-ish because the kernel didn't have enough swap space to underwrite the new allocation.</p>
+
+<h3 id="wiki.jenkins-ci.org-March16th(2ndtime)">March 16th (2nd time)</h3>
+<p>Unresponsive JVM. &quot;jmap -heap&quot; reported that all the heap spaces have fully filled up. Presumably the JVM went into the excessive GC mode although I couldn't confirm it.</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Attaching to process ID 1423, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 17.1-b03
+
+using thread-local object allocation.
+Parallel GC with 2 thread(s)
+
+Heap Configuration:
+   MinHeapFreeRatio = 40
+   MaxHeapFreeRatio = 70
+   MaxHeapSize      = 469762048 (448.0MB)
+   NewSize          = 1310720 (1.25MB)
+   MaxNewSize       = 17592186044415 MB
+   OldSize          = 5439488 (5.1875MB)
+   NewRatio         = 2
+   SurvivorRatio    = 8
+   PermSize         = 21757952 (20.75MB)
+   MaxPermSize      = 205520896 (196.0MB)
+
+Heap Usage:
+PS Young Generation
+Eden Space:
+   capacity = 118554624 (113.0625MB)
+   used     = 118554624 (113.0625MB)
+   free     = 0 (0.0MB)
+   100.0% used
+From Space:
+   capacity = 13762560 (13.125MB)
+   used     = 0 (0.0MB)
+   free     = 13762560 (13.125MB)
+   0.0% used
+To Space:
+   capacity = 19005440 (18.125MB)
+   used     = 0 (0.0MB)
+   free     = 19005440 (18.125MB)
+   0.0% used
+PS Old Generation
+   capacity = 313196544 (298.6875MB)
+   used     = 313196480 (298.68743896484375MB)
+   free     = 64 (6.103515625E-5MB)
+   99.99997956554718% used
+PS Perm Generation
+   capacity = 132775936 (126.625MB)
+   used     = 132711288 (126.56334686279297MB)
+   free     = 64648 (0.06165313720703125MB)
+   99.95131045432811% used
+</pre>
+</div></div>
+
+
+<h3 id="wiki.jenkins-ci.org-March16th(3rdtime)">March 16th (3rd time)</h3>
+<p>Andrew restarted it. No details.</p>
+
+<h3 id="wiki.jenkins-ci.org-Sep232015">Sep 23 2015</h3>
+<p><a href="20150903-Wiki-Outage.html">20150903 Wiki Outage</a></p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/53608678/56819713.log">hs_err_pid19777.log</a> (text/x-log)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

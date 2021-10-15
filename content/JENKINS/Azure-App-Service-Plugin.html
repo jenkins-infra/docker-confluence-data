@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Azure App Service Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Azure App Service Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (chenkennt)</span>, last modified by <span class='editor'> Unknown User (jieshe)</span> on Jun 17, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Azure App Service <a href="https://plugins.jenkins.io/azure-app-service" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p>A Jenkins plugin to deploy an Azure App Service (currently supports only Web App).</p><h2 id="AzureAppServicePlugin-HowtoInstall">How to Install</h2><p>You can install/update this plugin in Jenkins update center (Manage Jenkins -&gt; Manage Plugins, search Azure App Service Plugin).</p><p>You can also manually install the plugin if you want to try the latest feature before it's officially released. To manually install the plugin:</p><ol><li>Clone the repo and build:<pre><code>mvn package
+</code></pre></li><li>Open your Jenkins dashboard, go to Manage Jenkins -&gt; Manage Plugins.</li><li>Go to Advanced tab, under Upload Plugin section, click Choose File.</li><li>Select <code>azure-app-service.hpi</code> in <code>target</code> folder of your repo, click Upload.</li><li>Restart your Jenkins instance after install is completed.</li></ol><h2 id="AzureAppServicePlugin-DeploytoAzureWebApp">Deploy to Azure Web App</h2><h3 id="AzureAppServicePlugin-Prerequisites">Prerequisites</h3><p>To use this plugin to deploy to Azure Web App, first you need to have an Azure Service Principal in your Jenkins instance.</p><ol><li>Create an Azure Service Principal through <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json" class="external-link" rel="nofollow">Azure CLI</a> or <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal" class="external-link" rel="nofollow">Azure portal</a>.</li><li>Open Jenkins dashboard, go to Credentials, add a new Microsoft Azure Service Principal with the credential information you just created.</li></ol><p>Then create a Web App in Azure portal or through Azure CLI, we support both <a href="https://azuremarketplace.microsoft.com/en-us/marketplace/apps/Microsoft.WebSite?tab=Overview" class="external-link" rel="nofollow">Web App</a> (which is hosted on Windows) and <a href="https://azuremarketplace.microsoft.com/en-us/marketplace/apps/Microsoft.AppSvcLinux?tab=Overview" class="external-link" rel="nofollow">Web App On Linux</a>.</p><h3 id="AzureAppServicePlugin-DeploytoWebAppthroughFileUpload">Deploy to Web App through File Upload</h3><p>You can deploy your project to Azure Web App by uploading your build artifacts (for example, <code>.war or .zip</code> file in Java).</p><ul><li>For Java EE apps, <a href="https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-zip#deploy-war-file" class="external-link" rel="nofollow">WAR deploy</a> will be used.</li><li>For Java SE apps, <a href="https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-zip#deploy-zip-file" class="external-link" rel="nofollow">ZIP deploy</a> will be used.</li><li>For other languages, Git will be used.</li></ul><ol><li>Create a new freestyle project in Jenkins, add necessary build steps to build your code.</li><li>Add a post-build action 'Publish an Azure Web App'.</li><li>Select your Azure credential in Azure Profile Configuration section.</li><li>In App Configuration section, choose the resource group and web app in your subscription, and also fill in the files you want to deploy (for example, a war package if you're using Java).</li><li>There are two optional parameters Source Directory and Target Directory that allows you to specify source and target folders when uploading files. For example, Java web app on Azure is actually running in a Tomcat server. So you should upload you war package to <code>webapps</code> folder. So in this case, set Target Directory to <code>webapps</code>.</li><li>You can also set Slot Name if you want to deploy to a slot other than production.</li><li>Save the project and build it, your web app will be deployed to Azure when build is completed.</li></ol><blockquote><p><span style="color: rgb(106,115,125);">For Java SE apps, you need to archive a web.config file with your jar file in zip format. The basic web.config file example is as below, and you need to replace the variable $JAR_FILE with your own jar file name.</span></p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration&gt;
+ &lt;system.webServer&gt;
+   &lt;handlers&gt;
+     &lt;add name=&quot;httpPlatformHandler&quot; path=&quot;*&quot; verb=&quot;*&quot; modules=&quot;httpPlatformHandler&quot; resourceType=&quot;Unspecified&quot; /&gt;
+   &lt;/handlers&gt;
+   &lt;httpPlatform processPath=&quot;%JAVA_HOME%\bin\java.exe&quot;
+       arguments=&quot;-Djava.net.preferIPv4Stack=true -Dserver.port=%HTTP_PLATFORM_PORT% -jar &amp;quot;%HOME%\site\wwwroot\${JAR_FILE}&amp;quot;&quot;&gt;
+   &lt;/httpPlatform&gt;
+ &lt;/system.webServer&gt;
+&lt;/configuration&gt;</code></pre></blockquote><h3 id="AzureAppServicePlugin-DeploytoWebApponLinuxusingDocker">Deploy to Web App on Linux using Docker</h3><p>Web App on Linux supports a different way to do the deployment using Docker. To deploy using Docker, you need to provide a <code>Dockerfile</code> that packages your web app with service runtime into a docker image. Then the plugin will build the image, push it to a docker registry and deploy the image to your web app.</p><blockquote style="margin-left: 0.0px;"><p>Web App on Linux also supports traditional ways like Git and WAR deploy, but only for built-in languages (.NET Core, Java, Node.js, PHP and Ruby). For other languages, you need to package your application code and service runtime together into a docker image and use docker to deploy.</p></blockquote><p>To deploy using docker:</p><ol><li>Same as #1 - #3 of file upload approach.</li><li>Select a Linux web app, choose Publish via Docker.</li><li>Fill in Dockerfile path (by default it's <code>**/Dockerfile</code>), Docker registry URL (leave it empty if you use DockerHub), Registry credentials.</li><li>Optionally you can specify the docker image name and tag in Advanced tab, by default image name is get from the image name you configured in Azure portal (in Docker Container setting) and tag is generated from <code>$BUILD_NUMBER</code>. So please specify the image name in at least one place (in Docker Container settings in portal or Docker Image in advanced options).</li><li>Please also be noted deployment will fail if you're used built-in docker image setting. So please first go to Docker Container setting in Azure portal to change docker config to use custom image. For built-in image, please use file upload approach to deploy.</li><li>Similar to file upload approach, you can choose a different slot other than production.</li><li>Save and build the project, you'll see your container image is pushed to your registry and web app is deployed.</li></ol><h2 id="AzureAppServicePlugin-DeployusingPipeline">Deploy using Pipeline</h2><p>You can also use this plugin in pipeline (Jenkinsfile). Here are some samples to use the plugin in pipeline script:</p><p>To deploy a Java web app using file upload:</p><div class="highlight highlight-source-groovy"><pre>azureWebAppPublish <span class="pl-c1" style="color: rgb(0,92,197);">azureCredentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credential_id&gt;<span class="pl-pds">'</span></span>,
+                   <span class="pl-c1" style="color: rgb(0,92,197);">resourceGroup</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;resource_group_name&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">appName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;app_name&gt;<span class="pl-pds">'</span></span>,
+                   <span class="pl-c1" style="color: rgb(0,92,197);">filePath</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>*.war<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">sourceDirectory</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>target<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">targetDirectory</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>webapps<span class="pl-pds">'</span></span></pre></div><p>To deploy using docker:</p><div class="highlight highlight-source-groovy"><pre>azureWebAppPublish <span class="pl-c1" style="color: rgb(0,92,197);">azureCredentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;credential_id&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">publishType</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>docker<span class="pl-pds">'</span></span>,
+                   <span class="pl-c1" style="color: rgb(0,92,197);">resourceGroup</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;resource_group_name&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">appName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;app_name&gt;<span class="pl-pds">'</span></span>,
+                   <span class="pl-c1" style="color: rgb(0,92,197);">dockerImageName</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;image_name&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">dockerImageTag</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;image_tag&gt;<span class="pl-pds">'</span></span>,
+                   <span class="pl-c1" style="color: rgb(0,92,197);">dockerRegistryEndpoint</span>: [<span class="pl-c1" style="color: rgb(0,92,197);">credentialsId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>&lt;registry_credential_id&gt;<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">url</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">&quot;</span>&lt;registry_url&gt;<span class="pl-pds">&quot;</span></span>]</pre></div><p>For advanced options, you can use Jenkins Pipeline Syntax tool to generate a sample script.</p><h2 id="AzureAppServicePlugin-Swapslots">Swap slots</h2><p>You can use `Swap slots for an Azure Web App` step in `Post-build Actions` to swap slots for your web app.</p><ol><li>In your freestyle project, add a post-build action `Swap slots for an Azure Web App`.</li><li>Select your Azure credential in Azure Profile Configuration section.</li><li>In App Configuration section, choose the resource group and web app in your subscription.</li><li>Choose the two slots you want to swap.</li><li>Save the project and build it, your slots will be swapped when build is completed.</li></ol><p>Here is the sample to swap slots in pipeline script:</p><p><br/>azureWebAppSwapSlots appName: '&lt;web_app_name&gt;', azureCredentialsId: '&lt;credential_id&gt;',</p><p>                                        resourceGroup: '&lt;resource_group&gt;', sourceSlotName: '&lt;source_slot_name&gt;',</p><p>                                        targetSlotName: '&lt;target_slot_name&gt;'<br/><br/></p><h2 id="AzureAppServicePlugin-Data/Telemetry">Data/Telemetry</h2><p>Azure App Service Plugin collects usage data and sends it to Microsoft to help improve our products and services. Read our <a href="http://go.microsoft.com/fwlink/?LinkId=521839" class="external-link" rel="nofollow">privacy statement</a> to learn more.</p><p>You can turn off usage data collection in Manage Jenkins -&gt; Configure System -&gt; Azure -&gt; Help make Azure Jenkins plugins better by sending anonymous usage statistics to Azure Application Insights.</p><h2 id="AzureAppServicePlugin-Changelog">Changelog</h2><h3 id="AzureAppServicePlugin-Version1.0.0,2019-06-17">Version 1.0.0, 2019-06-17</h3><ul><li>Bump Jenkins version to 2.60.3</li><li>Add support for swapping slots</li></ul><h3 id="AzureAppServicePlugin-Version0.4.2,2019-01-07">Version 0.4.2, 2019-01-07</h3><ul><li><p>Add all files instead of one by one for git add</p></li></ul><h3 id="AzureAppServicePlugin-Version0.4.1,2018-10-19">Version 0.4.1, 2018-10-19</h3><ul><li>Fix security vulnerability of jackson-databind</li></ul><h3 id="AzureAppServicePlugin-Version0.4.0,2018-09-10">Version 0.4.0, 2018-09-10</h3><ul><li>Support zip deploy for Java SE applications</li><li>Add retry logic for war deploy</li><li>Fix exception for failing to find Azure resources</li></ul><h3 id="AzureAppServicePlugin-Version0.3.1,2018-05-30">Version 0.3.1, 2018-05-30</h3><ul><li>Switch to war deploy for Java apps</li><li>Add null check for path names when deploy</li></ul><h3 id="AzureAppServicePlugin-Version0.3.0,2018-04-03">Version 0.3.0, 2018-04-03</h3><ul><li>Add an option to skip docker build step (#25)</li><li>Restart slot after successful deployment (JENKINS-48191, #21)</li><li>Support Java container app on Linux (#23)</li><li>Support for credentials lookup in <a rel="nofollow" href="https://plugins.jenkins.io/cloudbees-folder" class="external-link">Folders</a></li><li>Expands variables in source/target directory and slot name (#24)</li></ul><h3 id="AzureAppServicePlugin-Version0.2.0,2018-01-05">Version 0.2.0, 2018-01-05</h3><ul><li>Support MSI</li></ul><h3 id="AzureAppServicePlugin-Version0.1.3,2017-11-07">Version 0.1.3, 2017-11-07</h3><ul><li>Specify refspec explicitly when doing git push</li><li>Add Third Party Notice</li></ul><h3 id="AzureAppServicePlugin-Version0.1.2,2017-10-18">Version 0.1.2, 2017-10-18</h3><ul><li>Remove runtime licenses</li></ul><h3 id="AzureAppServicePlugin-Version0.1.1,2017-09-30"><span>Version 0.1.1, 2017-09-30</span></h3><ul><li><div>Improve stability of FTP and Docker deploy</div></li></ul><h3 id="AzureAppServicePlugin-Version0.1,2017-07-18"><span style="color: rgb(210,73,57);">Version 0.1, 2017-07-18</span></h3><ul><li>Initial release</li><li>Support deploy to Azure Web App through Git and FTP</li><li>Support deploy to Azure Web App on Linux through Docker</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956542/133956820.jpg">publish-azure-web-app-plugin.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956542/133957113.jpg">service-principal.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956542/135465398.png">image2017-9-28 0:51:47.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/133956542/135465596.png">image2017-10-1 0:55:9.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:12</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

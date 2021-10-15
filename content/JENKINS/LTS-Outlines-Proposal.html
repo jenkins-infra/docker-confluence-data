@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : LTS Outlines Proposal</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Release-Process.html">Release Process</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="LTS-Release-Line.html">LTS Release Line</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : LTS Outlines Proposal
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vjuranek)</span>, last modified by <span class='editor'> Unknown User (dty)</span> on Sep 28, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>The main aim of this doc is to gather outlines and rules, that should followed when back-porting to the LTS. The main idea is that based on following rules the process (or some part of the process) could be scripted and automated.</p>
+
+
+<h3 id="LTSOutlinesProposal-Generalrules">General rules</h3>
+
+<ul>
+	<li>All important bug-fixes should have JIRA</li>
+	<li>Git commit should contain a reference to appropriate JIRA so that link to the commit is present in the comment in JIRA or it can be easily found in git log</li>
+	<li>Whoever commits a fix for a given JIRA will close the JIRA (<em>question: how to verify, that it really fix the issue?</em>) and eventually fix the JIRA priority</li>
+</ul>
+
+
+<h3 id="LTSOutlinesProposal-Back-porting">Back-porting</h3>
+
+<ul>
+	<li>Back-port all blockers and critical issues which were fixed and are already in Jenkins release for 14 days (appropriate JIRA is not re-opened)
+	<ul>
+		<li><em>Question: How to deal with/automate fixes containing several commit during loner time period?</em></li>
+	</ul>
+	</li>
+	<li>No new features from upstream are back-ported</li>
+</ul>
+
+
+<h3 id="LTSOutlinesProposal-Releases">Releases</h3>
+
+<ul>
+	<li>Major release every 3 months</li>
+	<li>Minor release &quot;when needed&quot;, i.e. when some blocker or critical bug is fixed and is in Mainline release is verified that it's really fixed.</li>
+</ul>
+
+
+<h3 id="LTSOutlinesProposal-ExampleLTSreleaseschedule">Example LTS release schedule</h3>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Date </p></th>
+<th class="confluenceTh"><p> Mainline Release </p></th>
+<th class="confluenceTh"><p> LTS Release </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-07-11 </p></td>
+<td class="confluenceTd"><p> 1.420 </p></td>
+<td class="confluenceTd"><p> 1.409.1 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-07-18 </p></td>
+<td class="confluenceTd"><p> 1.421 </p></td>
+<td class="confluenceTd"><p> 1.409.1 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-07-25 </p></td>
+<td class="confluenceTd"><p> 1.422 - fixed major bug JENKINS-10000 </p></td>
+<td class="confluenceTd"><p> 1.409.1 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-08-01 </p></td>
+<td class="confluenceTd"><p> 1.423 </p></td>
+<td class="confluenceTd"><p> 1.409.1 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-08-08 </p></td>
+<td class="confluenceTd"><p> 1.424 </p></td>
+<td class="confluenceTd"><p> 1.409.1 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-08-15 </p></td>
+<td class="confluenceTd"><p> 1.425 </p></td>
+<td class="confluenceTd"><p> 1.409.2 - fixed major bug JENKINS-10000<br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-08-22 </p></td>
+<td class="confluenceTd"><p> 1.426 </p></td>
+<td class="confluenceTd"><p> 1.409.2 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-08-29 </p></td>
+<td class="confluenceTd"><p> 1.427 - fixed major bug JENKINS-10345 </p></td>
+<td class="confluenceTd"><p> 1.409.2 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-09-05 </p></td>
+<td class="confluenceTd"><p> 1.428 - refix major bug JENKINS-10345 </p></td>
+<td class="confluenceTd"><p> 1.409.2 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-09-12 </p></td>
+<td class="confluenceTd"><p> 1.429 </p></td>
+<td class="confluenceTd"><p> 1.409.2 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-09-19 </p></td>
+<td class="confluenceTd"><p> 1.430 </p></td>
+<td class="confluenceTd"><p> 1.409.2 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-09-26 </p></td>
+<td class="confluenceTd"><p> 1.431 </p></td>
+<td class="confluenceTd"><p> 1.409.3 - fixed major bug JENKINS-10345<br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-10-03 </p></td>
+<td class="confluenceTd"><p> 1.432 </p></td>
+<td class="confluenceTd"><p> 1.409.3 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> 2011-10-10 </p></td>
+<td class="confluenceTd"><p> 1.433 </p></td>
+<td class="confluenceTd"><p> 1.424.1 - includes fix for major bug JENKINS-10345 </p></td>
+</tr>
+</tbody></table></div>
+
+
+<h3 id="LTSOutlinesProposal-Testing">Testing</h3>
+
+<ul>
+	<li>CI</li>
+	<li>Manual tests (how will do the test, how to coordinate and share the results?)</li>
+	<li>Plug-in and their compatibility with RC (how to coordinate and share the results?)</li>
+	<li>How to share experiences from your instances (e.g. I staged latest LTS RC in our environment and run into the following troubles)?</li>
+</ul>
+
+
+<h3 id="LTSOutlinesProposal-Nicetohave">Nice to have</h3>
+
+<p>Following points don't seems to be easily implemented in near future, but it would be nice to have them one day :-)</p>
+<ul>
+	<li>Every blocker and critical JIRA issue should have target release (hard to decide, which version it should be, if the patch is not available yet)</li>
+	<li>Every commit which fixes blocker or critical issue should have a test which verifies it</li>
+	<li>Fixed all JIRAs targeted to this release</li>
+	<li>No release until all blockers are fixed (this would suppose that we will review the existing blockers first and eventually change the priority)</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

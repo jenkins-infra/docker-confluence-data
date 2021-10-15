@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Ant Job Clone script</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Ant Job Clone script
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Anonymous</span>, last modified on Jul 24, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="AntJobClonescript-AnttargettocloneaTemplateHudsonJobremotely">Ant target to clone a Template Hudson Job remotely</h1>
+
+<p>If you have a subversion repository that conforms to the suggestions laid down by the pragmatic programmers, then this ant target should allow you to trivially create Jobs on Hudson based on a template job and the current branch that your working copy is in.</p>
+
+<p>I hope someone out there finds this useful.  There are no dependencies on anything other than Ant and Subversion, but unfortunately due to the lack of a decent POST task there is a dependancy on a Java+Ant combination that supports script tasks of type javascript (sorry).</p>
+
+<p> This script could probably be improved especially around the regular expression replacements, a filter chain would probably be better.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;!--
+Copyright (c) 2009, Ciaran Jessup
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the &lt;organization&gt; nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY CIARAN JESSUP &#39;&#39;AS IS&#39;&#39; AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL CIARAN JESSUP BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--&gt;
+&lt;project name=&quot;OurProject&quot; default=&quot;build&quot; basedir=&quot;.&quot;&gt;
+    &lt;property name=&quot;hudsonServer&quot; value=&quot;http://hudsonServer/hudson&quot;/&gt;
+    &lt;property name=&quot;ciTemplate&quot; value=&quot;CITemplateJobName&quot;/&gt;
+    &lt;property name=&quot;hudson_config_file&quot; value=&quot;temp_hudson_ci_config_file.xml&quot; /&gt;
+    &lt;target name=&quot;build&quot;&gt;
+        &lt;exec executable=&quot;svn&quot; outputproperty=&quot;svnlog_out&quot;&gt;
+            &lt;arg line=&quot;info&quot;/&gt;
+        &lt;/exec&gt;
+		&lt;script language=&quot;javascript&quot;&gt;&lt;![CDATA[
+			branchURLPattern= /^\sURL:\s+(.+\/branches\/([^\s\/]+))\/?.*/m
+                        matches= svnlog_out.match(branchURLPattern);
+			project.setNewProperty(&quot;branchURL&quot;, matches[1] );
+			project.setNewProperty(&quot;branchName&quot;, matches[2] );
+		]]&gt;&lt;/script&gt;
+
+        &lt;!-- test to see if the CI build for this branch has been created yet --&gt;
+        &lt;delete file=&quot;${hudson_config_file}&quot; failonerror=&quot;false&quot;/&gt;
+        &lt;get src=&quot;${hudsonServer}/job/${branchName}/config.xml&quot; dest=&quot;${hudson_config_file}&quot; ignoreerrors=&quot;true&quot;/&gt;
+        &lt;available file=&quot;${hudson_config_file}&quot; type=&quot;file&quot; property=&quot;branch.already.present&quot;/&gt;
+        &lt;fail if=&quot;branch.already.present&quot; message=&quot;${branchName} already has a CI Build on Hudson&quot;/&gt;
+        &lt;echo message=&quot;&quot;/&gt;
+        &lt;echo message=&quot;&quot;/&gt;
+        &lt;echo message =&quot;Found URL TO SVN: ${branchURL}&quot;/&gt;
+        &lt;echo message =&quot;Determined Branch name to be: ${branchName}&quot;/&gt;
+        &lt;echo message=&quot;&quot;/&gt;
+        &lt;!-- Ask the user to see if they really do want to carry on --&gt;
+        &lt;input message=&quot;Are you sure you want to create a CI build on hudson for ${branchName} (y/n)?&quot;
+                 validargs=&quot;y,n&quot;
+                 addproperty=&quot;do.delete&quot;/&gt;
+        &lt;condition property=&quot;do.abort&quot;&gt;
+                &lt;equals arg1=&quot;n&quot; arg2=&quot;${do.delete}&quot;/&gt;
+        &lt;/condition&gt;
+        &lt;fail if=&quot;do.abort&quot;&gt;CI Build creation aborted by user.&lt;/fail&gt;
+
+        &lt;!-- Create the new job based on the templated job --&gt;
+        &lt;antcall target=&quot;_doPost&quot;&gt;
+            &lt;param name=&quot;url&quot; value=&quot;${hudsonServer}/createItem?name=${branchName}&amp;amp;mode=copy&amp;amp;from=${ciTemplate}&quot;/&gt;
+        &lt;/antcall&gt;
+
+        &lt;!-- Update the job configuration --&gt;
+        &lt;get src=&quot;${hudsonServer}/job/${branchName}/config.xml&quot; dest=&quot;${hudson_config_file}&quot;/&gt;
+        &lt;replaceregexp file=&quot;${hudson_config_file}&quot; match=&quot;&amp;lt;description&amp;gt;.+&amp;lt;/description&amp;gt;&quot; replace=&quot;&amp;lt;description&amp;gt;The ${branchName} branch&amp;lt;/description&amp;gt;&quot;/&gt;
+        &lt;replaceregexp file=&quot;${hudson_config_file}&quot; match=&quot;&amp;lt;remote&amp;gt;.+&amp;lt;/remote&amp;gt;&quot; replace=&quot;&amp;lt;remote&amp;gt;${branchURL}&amp;lt;/remote&amp;gt;&quot;/&gt;
+        &lt;replaceregexp file=&quot;${hudson_config_file}&quot; match=&quot;&amp;lt;local&amp;gt;.+&amp;lt;/local&amp;gt;&quot; replace=&quot;&amp;lt;local&amp;gt;${branchName}&amp;lt;/local&amp;gt;&quot;/&gt;
+
+        &lt;!-- post our modified configuration back to hudson --&gt;
+        &lt;loadfile property=&quot;hudson_ci_config&quot; srcFile=&quot;${hudson_config_file}&quot;/&gt;
+        &lt;antcall target=&quot;_doPost&quot;&gt;
+            &lt;param name=&quot;url&quot; value=&quot;${hudsonServer}/job/${branchName}/config.xml&quot;/&gt;
+            &lt;param name=&quot;data&quot; value=&quot;${hudson_ci_config}&quot;/&gt;
+        &lt;/antcall&gt;
+
+        &lt;!-- Finally enable the job --&gt;
+        &lt;antcall target=&quot;_doPost&quot;&gt;
+            &lt;param name=&quot;url&quot; value=&quot;${hudsonServer}/job/${branchName}/enable&quot;/&gt;
+        &lt;/antcall&gt;
+
+        &lt;!-- Be a good citizen and delete our temp file --&gt;
+        &lt;delete file=&quot;${hudson_config_file}&quot; failonerror=&quot;false&quot;/&gt;
+    &lt;/target&gt;
+
+    &lt;target name=&quot;_doPost&quot;&gt;
+        &lt;script language=&quot;javascript&quot;&gt;&lt;![CDATA[
+            importPackage(java.net);
+            importPackage(java.io);
+            importClass(java.lang.StringBuffer);
+
+            url= new URL(project.getProperty(&quot;url&quot;));
+            conn = url.openConnection();
+            conn.setRequestMethod( &quot;POST&quot; );
+            conn.setDoOutput(true);
+
+            data= project.getProperty(&quot;data&quot;);
+            if( data ) {
+                conn.setRequestProperty(&quot;Content-Length&quot;, &quot;&quot; +data.getBytes().length);
+            }
+            wr = new OutputStreamWriter(conn.getOutputStream());
+            if( data ) {
+                wr.write(data);
+            }
+            wr.flush();
+            wr.close();
+
+            // Get the response
+            try {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                stringBuffer= new StringBuffer();
+                var line;
+                while ((line = rd.readLine()) != null) {
+                    stringBuffer.append(line+&quot;\n&quot;); // Gonna mess with linebreaks here..shame.
+                }
+                // None of the targets above care about the response so just forget about it :)
+            }catch( e ) {} //swallowed, hudson really doesn&#39;t like these empty posts..
+
+        ]]&gt;&lt;/script&gt;
+    &lt;/target&gt;
+&lt;/project&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

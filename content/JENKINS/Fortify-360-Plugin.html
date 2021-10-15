@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Fortify 360 Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Fortify 360 Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (samngms)</span>, last modified by <span class='editor'> Unknown User (akaryakina)</span> on Feb 13, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Fortify360Plugin-Attention!ThispluginisNOTMAINTAINEDandNOTSUPPORTED.FortifyimplementedtheOFFICIALpluginanditisnowavailabledirectlyfromtheJenkinsmarketplace.Please,visitinstead.">Attention! This plugin is NOT MAINTAINED and NOT SUPPORTED. Fortify implemented the OFFICIAL plugin and it is now available directly from the Jenkins marketplace. Please, visit <a href="Fortify-Plugin.html">Fortify Plugin</a> instead.</h1><p><br/>Fortify 360 FPR post-processing and uploading to Fortify 360 Server<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'fortify360' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+</p><h3 id="Fortify360Plugin-Note:"><span style="color: rgb(255,0,0);"><em><span style="text-decoration: underline;">Note:</span></em></span></h3><ol><li>This plugin is not maintained by Fortify</li><li>Plugin version 2.0+ only supports Fortify 360 Server v2.5 or later. If you are using Fortify 360 Server 2.1 or older, please stay with plugin version 1.4</li></ol><h2 id="Fortify360Plugin-Features">Features</h2><ul><li>Upload the FPR to Fortify 360 Server</li><li>Run Javascript to perform job assignment (assign a vulnerability to a particular user)</li><li>Plot Normalized Vulnerabilities Score (NVS) against each build (on Windows/Linux/Mac only)</li><li>Consider a build as UNSTABLE if major vulnerabilities were found (on Windows/Linux/Mac only)</li></ul><h2 id="Fortify360Plugin-Installation&amp;Setup">Installation &amp; Setup</h2><p>The easiest way to setup is to include Fortify into your PATH environment.If you don't want to add Fortify into your PATH, then setup as follows:</p><p><span style="text-decoration: underline;">For master node:</span></p><p>You don't need to install Fortify on the master node, you just need to copy the following 4 jars from a Fortify installation and setup the path in global config</p><ul><li>wsclient.jar</li><li>wsobjects.jar</li><li>common.jar</li><li>common13.jar</li></ul><p><span style="text-decoration: underline;">For slave node:</span></p><p>Since we need to run &quot;reportGenerator&quot;, you need to install Fortify on the slave node. If we can't find &quot;reportGenerator&quot; we will skip plotting the NVS chart, other features are not affected.</p><p>We will try to locate &quot;reportGenerator&quot; in the following order:</p><ol><li>FORTIFY_HOME environment variable (if exists)</li><li>PATH environment variable</li><li>the Fortify path of the master node</li></ol><h2 id="Fortify360Plugin-GlobalConfig">Global Config</h2><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="181" width="834" src="attachments/42467912/42631247.png" data-image-src="attachments/42467912/42631247.png" data-unresolved-comment-count="0" data-linked-resource-id="42631247" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="global_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467912" data-linked-resource-container-version="23"></span></p><h2 id="Fortify360Plugin-ProjectConfig">Project Config</h2><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="268" width="837" src="attachments/42467912/42631248.png" data-image-src="attachments/42467912/42631248.png" data-unresolved-comment-count="0" data-linked-resource-id="42631248" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="project_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467912" data-linked-resource-container-version="23"></span></p><h2 id="Fortify360Plugin-Charts">Charts</h2><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/42467912/42631249.png" data-image-src="attachments/42467912/42631249.png" data-unresolved-comment-count="0" data-linked-resource-id="42631249" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="chart.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="42467912" data-linked-resource-container-version="23"></span></p><h2 id="Fortify360Plugin-Howitworks">How it works</h2><p>- The plugin uses &quot;reportGenerator&quot;, which is installed with Fortify 360, to generate XML report to retrieve FPR summary data.</p><p>- Starting from v2.0, it will use WS call to upload FPR to Fortify 360 Server directly. Before v2.0, it uses &quot;fortifyclient&quot; to upload FPR to Fortify 360 Server.</p><h2 id="Fortify360Plugin-Assumption">Assumption</h2><p>We assume the FPRs are stored inside the workspace (which can be a remote slave machine), not the Build RootDir (which is in the master machine).</p><h2 id="Fortify360Plugin-Contact">Contact</h2><p>samngms [at] gmail [dot] com</p><h2 id="Fortify360Plugin-Changelog">Changelog</h2><p>Version 3.90 (Jun 28, 2013)</p><ul><li>Supports Fortify SSC version 3.90</li></ul><p>Version 3.81 (April 8, 2013)</p><ul><li>Supports Fortify SSC version 3.70 and 3.80</li></ul><p>Version 3.6 (Nov 28, 2012)</p><ul><li>Supports Fortify SSC version 3.60</li></ul><p>Version 2.4 (May 26, 2012)</p><ul><li>Supports Fortify SSC version 3.40 and 3.50 </li></ul><p>Version 2.3 (Dec 24, 2011)</p><ul><li>Supports Fortify 360 version up to 3.30</li><li>Sort ProjectList pull down list in config page (thanks to Gonzalez)</li></ul><p>Version 2.2 (June 13, 2011)</p><ul><li>Supports Fortify360 version 3.0.0 and 3.1.0</li></ul><p>Version 2.1 (Oct 11, 2010)</p><ul><li>Bug fixed: the project selection pulldown menu doesn't work if the URL contains context path</li></ul><p>Version 2.0 (Sep 3, 2010)</p><ul><li>New Feature: Job Assignment Script (perform vulnerability assignment by Javascript)</li><li>Most fields are validated</li><li>Will populate Project IDs to a pull-down menu</li></ul><p>Version 1.4 (May 24, 2010)</p><ul><li>Support Master/Slave</li><li>Bug fixed: help pages URLs are now correct in Hudson with URL context prefix</li></ul><p>Version 1.3 (April 6, 2010)</p><ul><li>The NVS equation for SCA 5.8 was wrong. Fixed in v1.3</li></ul><p>Version 1.2 (April 5, 2010)</p><ul><li>Support SCA 5.8 FPO when calculating NVS. The plugin will assume Critical/High/Medium/Low if your &quot;sourceanalyzer -version&quot; is 5.8.x or higher and assume Hot/Warning/Info if it is 5.7.x or earlier</li><li>Since ReportGenerator is only available on Windows/Linux/Mac, if you are not using one of those platforms, the plugin can't calculate NVS but at least now it will be able to upload FPR to F360 Server</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467912/46563397.png">global_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467912/46563398.png">project_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467912/42631249.png">chart.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467912/42631247.png">global_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/42467912/42631248.png">project_config.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

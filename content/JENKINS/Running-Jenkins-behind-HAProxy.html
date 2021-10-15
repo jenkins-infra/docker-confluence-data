@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Running Jenkins behind HAProxy</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Running Jenkins behind HAProxy
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (dnusbaum)</span>, last modified on Oct 03, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>In situations where you want a user friendly URL, different public ports, or to terminate SSL connections before they reach Jenkins, you may find it useful to run Jenkins (or the servlet container that Jenkins runs in) behind HAProxy. This document discusses some of the approaches for doing this.</p><h2 id="RunningJenkinsbehindHAProxy-PlainHTTP">Plain HTTP</h2><p>Using HAProxy 1.7.9, here is an example HAProxy.cfg to proxy over plain HTTP:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># If you already have an haproxy.cfg file, you can probably leave the
+# global and defaults section as-is, but you might need to increase the 
+# timeouts so that long-running CLI commands will work.
+global 
+    maxconn 4096 
+    log 127.0.0.1 local0 debug
+
+defaults
+   log global
+   option httplog
+   option dontlognull
+   option forwardfor
+   maxconn 20
+   timeout connect 5s
+   timeout client 60s
+   timeout server 60s
+
+frontend http-in
+   bind *:80
+   mode http
+   acl prefixed-with-jenkins  path_beg /jenkins/
+   acl host-is-jenkins-example   hdr(host) eq jenkins.example.com
+   use_backend jenkins if host-is-jenkins-example prefixed-with-jenkins
+
+backend jenkins
+   server jenkins1 127.0.0.1:8080
+   mode http
+   reqrep ^([^\ :]*)\ /(.*) \1\ /\2
+   acl response-is-redirect res.hdr(Location) -m found
+   rspirep ^Location:\ (http|https)://127.0.0.1:8080/jenkins/(.*) Location:\ \1://jenkins.example.com/jenkins/\2 if response-is-redirect</pre>
+</div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This assumes Jenkins is running locally on port 8080.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This assumes that you are using the /jenkins/ context path for both the site exposed from HAProxy, and Jenkins itself. If this is not the case, you will need to adjust the configuration.</p></div></div><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>If you are experiencing the following error when attempting to run long CLI commands in Jenkins &gt; 2.80, and Jenkins is running behind HAProxy, it is probably due to HAProxy timing out the CLI connection. You can increase the <code>timeout client</code> and <code>timeout server</code> settings as necessary so the command will complete successfully. Versions of Jenkins before 2.80 might not respect the <code>proxy_read_timeout  </code>setting.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>WARNING: null
+hudson.cli.DiagnosedStreamCorruptionException
+Read back: 0x00 0x00 0x00 0x1e 0x07 &#39;Started reverse-proxy-test #68&#39; 0x00 0x00 0x00 0x01 0x07 0x0a
+Read ahead: 
+Diagnosis problem:
+    java.io.IOException: Premature EOF
+    	at sun.net.www.http.ChunkedInputStream.readAheadBlocking(ChunkedInputStream.java:565)
+    	...
+	at hudson.cli.FlightRecorderInputStream.analyzeCrash(FlightRecorderInputStream.java:82)
+	at hudson.cli.PlainCLIProtocol$EitherSide$Reader.run(PlainCLIProtocol.java:153)
+Caused by: java.io.IOException: Premature EOF
+	at sun.net.www.http.ChunkedInputStream.readAheadBlocking(ChunkedInputStream.java:565)
+	...
+	at java.io.DataInputStream.readInt(DataInputStream.java:387)
+	at hudson.cli.PlainCLIProtocol$EitherSide$Reader.run(PlainCLIProtocol.java:111)</pre>
+</div></div></div></div><h2 id="RunningJenkinsbehindHAProxy-WithSSL"><br/>With SSL</h2><p>Using HAProxy 1.7.9, here is an example HAProxy.cfg to connect to the proxy using SSL, terminate the SSL connection, and then talk to Jenkins using plain HTTP:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># If you already have an haproxy.cfg file, you can probably leave the
+# global and defaults section as-is, but you might need to increase the 
+# timeouts so that long-running CLI commands will work.
+global 
+    maxconn 4096 
+    log 127.0.0.1 local0 debug
+
+defaults
+   log global
+   option httplog
+   option dontlognull
+   option forwardfor
+   maxconn 20
+   timeout connect 5s
+   timeout client 5min
+   timeout server 5min
+ 
+frontend http-in
+    bind *:80
+    bind *:443 ssl crt /usr/local/etc/haproxy/ssl/server.pem
+    mode http
+    redirect scheme https if !{ ssl_fc } # Redirect http requests to https
+    use_backend jenkins if { path_beg /jenkins/ }
+
+backend jenkins
+    server jenkins1 127.0.0.1:8080
+    mode http
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    reqrep ^([^\ :]*)\ /(.*)     \1\ /\2
+    acl response-is-redirect res.hdr(Location) -m found
+    rspirep ^Location:\ (http)://127.0.0.1:8080/(.*)   Location:\ https://jenkins.example.com:443/\2  if response-is-redirect</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

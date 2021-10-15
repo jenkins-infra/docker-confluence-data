@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Ui Testing White Mountains Release</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Static-Code-Analysis-Plug-ins.html">Static Code Analysis Plug-ins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Ui Testing White Mountains Release
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (drulli)</span>, last modified by <span class='editor'> Unknown User (jsoref)</span> on Dec 06, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="UiTestingWhiteMountainsRelease-Configuration(Arrange,Given)">Configuration (Arrange, Given)</h1><p>The static code analysis plug-in are configured using the following ways (depends on Jenkins job type).</p><h2 id="UiTestingWhiteMountainsRelease-FreestyleJob,MavenJob,MatrixJob"><span style="color: rgb(210,73,57);font-size: 20.0px;">Freestyle Job, Maven Job, Matrix Job</span></h2><p>Use the <em>Add Postbuild Action</em> command &quot;<strong>Record static analysis results</strong>&quot; (See integration tests for parameter variations). </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/138456505/138456577.png" data-image-src="attachments/138456505/138456577.png" data-unresolved-comment-count="0" data-linked-resource-id="138456577" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Bildschirmfoto 2018-05-23 um 11.05.51.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="138456505" data-linked-resource-container-version="16"></span></p><h2 id="UiTestingWhiteMountainsRelease-Pipeline(Scripted),Pipeline(ScriptedParallel),Multi-Branch-Pipeline(Scripted)"><span style="color: rgb(210,73,57);font-size: 20.0px;">Pipeline (Scripted), Pipeline (Scripted Parallel), Multi-Branch-Pipeline (Scripted)</span></h2><p>The whole configuration is done using a pipeline script. Use the steps &quot;<strong>scanForIssues</strong>&quot; (see <a href="https://github.com/jenkinsci/analysis-core-plugin/blob/3.0/src/main/java/io/jenkins/plugins/analysis/core/steps/ScanForIssuesStep.java" class="external-link" rel="nofollow">ScanForIssuesStep</a>) to scan for Issues and the step &quot;<strong>publishIssues</strong>&quot; (see <a href="https://github.com/jenkinsci/analysis-core-plugin/blob/3.0/src/main/java/io/jenkins/plugins/analysis/core/steps/PublishIssuesStep.java" class="external-link" rel="nofollow">PublishIssuesStep</a>) to aggregate and publish the results.</p><p>Example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">node {
+    stage (&#39;Checkout&#39;) {
+        git branch:&#39;master&#39;, url: &#39;git@github.com:jenkinsci/analysis-model.git&#39;
+    }
+
+    stage (&#39;Build&#39;) {
+        def mvnHome = tool &#39;mvn-default&#39;
+
+        sh &quot;${mvnHome}/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore&quot;
+
+        junit testResults: &#39;**/target/surefire-reports/TEST-*.xml&#39;
+
+        def java = scanForIssues tool: [$class: &#39;Java&#39;]
+        def javadoc = scanForIssues tool: [$class: &#39;JavaDoc&#39;]
+
+        publishIssues issues:[java,javadoc], unstableTotalAll:1
+    }
+
+    stage (&#39;Analysis&#39;) {
+        def mvnHome = tool &#39;mvn-default&#39;
+
+        sh &quot;${mvnHome}/bin/mvn -batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs spotbugs:spotbugs&quot;
+
+        def checkstyle = scanForIssues tool: [$class: &#39;CheckStyle&#39;], pattern: &#39;**/target/checkstyle-result.xml&#39;
+        publishIssues issues:[checkstyle], unstableTotalAll:1
+
+        def pmd = scanForIssues tool: [$class: &#39;Pmd&#39;], pattern: &#39;**/target/pmd.xml&#39;
+        publishIssues issues:[pmd], unstableTotalAll:1
+
+        def cpd = scanForIssues tool: [$class: &#39;Cpd&#39;], pattern: &#39;**/target/cpd.xml&#39;
+        publishIssues issues:[cpd]
+
+        def findbugs = scanForIssues tool: [$class: &#39;FindBugs&#39;], pattern: &#39;**/target/findbugsXml.xml&#39;
+        publishIssues issues:[findbugs], unstableTotalAll:1
+
+        def spotbugs = scanForIssues tool: [$class: &#39;SpotBugs&#39;], pattern: &#39;**/target/spotbugsXml.xml&#39;
+        publishIssues issues:[spotbugs], unstableTotalAll:1
+
+        def maven = scanForIssues tool: [$class: &#39;MavenConsole&#39;]
+        publishIssues issues:[maven]
+    }
+}
+
+</pre>
+</div></div><h2 id="UiTestingWhiteMountainsRelease-Pipeline(Declarative),Multi-Branch-Pipeline(Declarative)">Pipeline (Declarative), Multi-Branch-Pipeline (Declarative)</h2><p>The whole configuration is done using a <strong>declarative</strong> pipeline script. Use the step &quot;<strong>recordIssues</strong>&quot; (see <a href="https://github.com/jenkinsci/analysis-core-plugin/blob/3.0/src/main/java/io/jenkins/plugins/analysis/core/steps/IssuesRecorder.java" class="external-link" rel="nofollow">IssuesRecorderStep</a>) to report Issues.</p><p>Example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">pipeline {
+    agent &#39;any&#39;
+    tools {
+        maven &#39;mvn-3.5.0&#39;
+        jdk &#39;jdk-default&#39;
+    }
+    stages {
+        stage (&#39;Build&#39;) {
+            steps {
+                sh &#39;${M2_HOME}/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore&#39;
+            }
+        }
+
+        stage (&#39;Analysis&#39;) {
+            steps {
+                sh &#39;${M2_HOME}/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs spotbugs:spotbugs&#39;
+            }
+        }
+    }
+    post {
+        always {
+            junit testResults: &#39;**/target/surefire-reports/TEST-*.xml&#39;
+
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;&#39;, tool: [$class: &#39;MavenConsole&#39;]], [pattern: &#39;&#39;, tool: [$class: &#39;Java&#39;]], [pattern: &#39;&#39;, tool: [$class: &#39;JavaDoc&#39;]]]
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;&#39;, tool: [$class: &#39;CheckStyle&#39;]]]
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;&#39;, tool: [$class: &#39;FindBugs&#39;]]]
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;&#39;, tool: [$class: &#39;SpotBugs&#39;]]]
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;**/target/cpd.xml&#39;, tool: [$class: &#39;Cpd&#39;]]]
+            recordIssues enabledForFailure: true, tools: [[pattern: &#39;**/target/pmd.xml&#39;, tool: [$class: &#39;Pmd&#39;]]]
+        }
+    }
+}
+</pre>
+</div></div><h1 id="UiTestingWhiteMountainsRelease-Validation(Assert,Then)">Validation (Assert, Then)</h1><p>Validation of the results does not depend on the job type chosen above. There following views are available and should be tested using a different <a href="https://github.com/jenkinsci/acceptance-test-harness/blob/master/docs/PAGE-OBJECTS.md" class="external-link" rel="nofollow">page object</a>:</p><ul><li>Job Page: Sidebar links and Trend Graph</li><li>Build Page: Sidebar links and Summary Box</li><li>Result Page: <ul><li>Doughnut graph showing the trend of new, fixed and outstanding issues</li><li>Doughnut graph showing the distribution of errors, low, normal or high priority issues</li><li>Details box showing<ul><li>Distribution by property (Tools, Modules, Packages, Files, Categories, Types)</li><li>Details Table of all issues</li><li>Details List of all issues</li></ul></li><li>Source Code view of affected file</li><li>Console Log Code view of affected part in console log</li><li>Information and Error view</li><li>Fixed issues details</li></ul></li></ul><p>In order to provide clean code for all assertions a <a href="http://joel-costigliola.github.io/assertj/assertj-core-custom-assertions.html" class="external-link" rel="nofollow">custom assertion class</a> should be created.</p><h1 id="UiTestingWhiteMountainsRelease-Variations">Variations</h1><p>The following set of variations should be tested.</p><h2 id="UiTestingWhiteMountainsRelease-JobType">Job Type</h2><ul class="inline-task-list" data-inline-tasks-content-id="138456505"><li class="checked" data-inline-task-id="1"><span>Freestyle Job </span></li><li class="checked" data-inline-task-id="2"><span>Maven Job</span></li><li data-inline-task-id="3"><span>Matrix Job</span></li><li class="checked" data-inline-task-id="4"><span>Pipeline Job (Scripted)</span></li><li data-inline-task-id="5">Pipeline Job (Scripted - Parallel Execution)</li><li data-inline-task-id="6">Pipeline Job (Declarative)</li><li data-inline-task-id="7">Pipeline Job (Declarative - Parallel Execution)</li><li data-inline-task-id="8">Multibranch-Pipeline</li><li data-inline-task-id="9">Job in a Folder</li></ul><h2 id="UiTestingWhiteMountainsRelease-Miscellaneous">Miscellaneous</h2><ul class="inline-task-list" data-inline-tasks-content-id="138456505"><li class="checked" data-inline-task-id="10"><span>Navigation to Source Files possible (XL)</span></li><li class="checked" data-inline-task-id="11"><span>Not Logged in User can navigate to Workspace Source Files (S, extension of previous test case)</span></li><li data-inline-task-id="12"><span>Name of Packages Tab is variable (Package vs. Namespace) (XL)</span></li><li class="checked" data-inline-task-id="13"><span>Reference Build navigable in Build Overview (S)</span></li><li data-inline-task-id="14">Reference Build navigable from Age Column in Details View (S)</li><li data-inline-task-id="15"><span>Navigation into a sub-set of issues (properties: File, Package, Module, Type, Category, Priority, Origin) (M)</span></li><li class="checked" data-inline-task-id="16"><span>Default pattern of tools like Checkstyle is used (S)</span></li><li data-inline-task-id="39"><span>Composite Parsers (more than one different parser) aggregate warnings (M)</span></li><li data-inline-task-id="17"><span>Report encodings: check the encoding of a report with different locales (M)</span></li><li data-inline-task-id="18">Source Code encodings: check the encoding of a source file with different locales (M)</li><li data-inline-task-id="19">Jenkins restart: all information is loaded from disk (S)</li><li data-inline-task-id="21">XML Parser reports an user friendly error if no pattern is provided (i.e. console log scanning active): <code>canScanConsoleLog (S)</code></li><li class="checked" data-inline-task-id="23">Zero Warnings should be handled correctly (S)</li><li data-inline-task-id="24">Console Log parsing vs. File parsing (same input should provide same output) (M)</li><li class="checked" data-inline-task-id="25">Multiple files in the workspace are correctly parsed (M)</li><li class="checked" data-inline-task-id="26">Module names are correctly resolved (M)</li><li class="checked" data-inline-task-id="27">Package names are correctly resolved (M)</li><li class="checked" data-inline-task-id="28">Tests with newest LTS and 2.107.3</li><li class="checked" data-inline-task-id="29">Master build (default)</li><li data-inline-task-id="30">Agent build on same machine (S)</li><li data-inline-task-id="31">Agent build in docker container (XL)</li><li data-inline-task-id="32">Groovy parser (M)</li><li data-inline-task-id="33">Input variations (see Integration Tests) (M)</li><li data-inline-task-id="40">Verify behavior if builds are deleted (M)</li><li data-inline-task-id="34">Sorting of Tables (M)</li><li data-inline-task-id="37">Filtering of Tables (M)</li><li data-inline-task-id="38">Pagination of Tables (M)</li><li data-inline-task-id="41">Trendgraphs are visible (M)</li><li data-inline-task-id="42">(Not implemented yet: Git Blames are visible)</li><li data-inline-task-id="43">(Not implemented yet: Tokens and EMail)</li><li data-inline-task-id="44"><span> </span></li></ul><p> </p><p> </p><p> </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/138456505/138456577.png">Bildschirmfoto 2018-05-23 um 11.05.51.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

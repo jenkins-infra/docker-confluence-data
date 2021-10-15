@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Android Lint Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Android Lint Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (orrc)</span>, last modified on Jan 16, 2021
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plugin was deprecated in 2020.</p><p>All functionality has been integrated into the <a href="https://plugins.jenkins.io/warnings-ng/" class="external-link" rel="nofollow">Warnings Next Generation Plugin</a>.</p></div></div><p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://www.jenkins.io/security/advisory/2020-09-16/#SECURITY-1908" class="external-link" rel="nofollow">Stored XSS vulnerability</a></li>
+</ul>
+
+</div></div>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2018-02-05/" class="external-link" rel="nofollow">XML External Entity (XXE) processing vulnerability</a></li>
+</ul>
+
+</div></div>
+Parses output from the Android lint tool and displays the results for analysis.<br/>See also: <a href="Android-Emulator-Plugin.html">Android Emulator Plugin</a>.</p><h2 id="AndroidLintPlugin-Features">Features</h2><p><a href="http://tools.android.com/tips/lint" class="external-link" rel="nofollow">Android Lint</a> is a tool which scans your Android projects and reports on potential bugs, performance, security and translation issues, plus more.</p><p>This Jenkins plugin parses XML reports produced by running <code>lint</code>, analyses them and displays the results for each build. <br/>Information shown includes a build summary, trend graphs, display of warnings in context, and dashboard portlets.</p><p>This plugin builds on the work of the static analysis core plugin; see the <a href="Static-Code-Analysis-Plug-ins.html">Static Code Analysis Plug-ins</a> page for a fuller list of features.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/60915759/61112352.png" data-image-src="attachments/60915759/61112352.png" data-unresolved-comment-count="0" data-linked-resource-id="61112352" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="lint-trend.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60915759" data-linked-resource-container-version="33" title="A Lint trend graph is shown indicating issues by priority."></span>   <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/60915759/61112323.png" data-image-src="attachments/60915759/61112323.png" data-unresolved-comment-count="0" data-linked-resource-id="61112323" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="lint-warnings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60915759" data-linked-resource-container-version="33" title="Lint warnings are shown grouped by their type or category and by filename."></span>   <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-thumbnail" src="attachments/60915759/61112322.png" data-image-src="attachments/60915759/61112322.png" data-unresolved-comment-count="0" data-linked-resource-id="61112322" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="lint-code-popup.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60915759" data-linked-resource-container-version="33" title="Lint problems can be viewed directly inline from within Jenkins."></span></p><h2 id="AndroidLintPlugin-Requirements">Requirements</h2><ul><li>Jenkins 2.7 or newer</li><li>The Static Analysis Utilities plugin — this will be automatically installed when you install this plugin</li><li>Android SDK Tools r17 or newer, but at least r21 is recommended</li></ul><p>If the <a href="Dashboard-View.html">Dashboard View</a> plugin is also installed, you will be able to add Lint-specific portlets to your dashboard views.</p><h2 id="AndroidLintPlugin-Configuration">Configuration</h2><h3 id="AndroidLintPlugin-Jobconfiguration">Job configuration</h3><h4 id="AndroidLintPlugin-Freestylejobconfiguration">Freestyle job configuration</h4><p>Enable &quot;Publish Android Lint results&quot; in the &quot;Post-build Actions&quot; of your Jenkins job.</p><p>By default, the plugin will parse any files matching the pattern &quot;<code>lint-results*.xml</code>&quot;, anywhere in your build's workspace. <br/>This behaviour can be overridden by entering a filename or <a href="https://ant.apache.org/manual/Types/fileset.html" class="external-link" rel="nofollow">pattern</a>, relative to the root of your build's workspace.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/60915759/61112321.png" data-image-src="attachments/60915759/61112321.png" data-unresolved-comment-count="0" data-linked-resource-id="61112321" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="lint-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="60915759" data-linked-resource-container-version="33"></span></p><h4 id="AndroidLintPlugin-Pipelinejobconfiguration">Pipeline job configuration</h4><p>You can generate the required <a href="Pipeline-Plugin.html">Pipeline</a> syntax via the <a href="https://jenkins.io/blog/2016/05/31/pipeline-snippetizer/" class="external-link" rel="nofollow">Snippet Generator</a> by choosing the &quot;androidLint: Publish Android Lint results&quot; step, but some quick examples follow.</p><p>The most basic configuration is this, which will analyse any files in the workspace matching the default pattern <code>**/lint-results*.xml</code>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">androidLint()
+</pre>
+</div></div><p>To specify the filenames or pattern to search for, use the <code>pattern</code> parameter:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">androidLint pattern: &#39;foo/bar/my-app_lint-results.xml&#39;
+</pre>
+</div></div><p>To mark the build as unstable if there are more than 10 Lint warnings, and to mark the build as failed if there are more than 30 Lint warnings:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">androidLint unstableTotalAll: &#39;10&#39;, failedTotalAll: &#39;30&#39;
+</pre>
+</div></div><p>To mark the build as failed if any high-priority warnings were introduced since the last build:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">androidLint failedNewHigh: &#39;0&#39;
+</pre>
+</div></div><div id="expander-1068988207" class="expand-container"><div id="expander-control-1068988207" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Deprecated Pipeline syntax…</span></div><div id="expander-content-1068988207" class="expand-content"><p><em>The syntax in this section is only required if you're using version 2.9 or older of the <a href="Pipeline-Groovy-Plugin.html">Pipeline Groovy Plugin</a>, which was superseded in July 2016.</em></p><p>The most basic configuration is this, which will analyse any files in the workspace matching the default pattern <code>**/lint-results*.xml</code>:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">step([$class: &#39;LintPublisher&#39;])
+</pre>
+</div></div><p>To specify the filenames or pattern to search for, use the <code>pattern</code> parameter:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">step([$class: &#39;LintPublisher&#39;, pattern: &#39;foo/bar/my-app_lint-results.xml&#39;])
+</pre>
+</div></div><p>To mark the build as unstable if there are more than 10 Lint warnings, and to mark the build as failed if there are more than 30 Lint warnings:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">step([$class: &#39;LintPublisher&#39;, unstableTotalAll: &#39;10&#39;, failedTotalAll: &#39;30&#39;])
+</pre>
+</div></div><p>To mark the build as failed if any high-priority warnings were introduced since the last build:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">step([$class: &#39;LintPublisher&#39;, failedNewHigh: &#39;0&#39;])
+</pre>
+</div></div></div></div><h4 id="AndroidLintPlugin-ProducingLintoutput">Producing Lint output</h4><p>Note that this plugin does not run Lint for you — you must provide Lint results in XML format, either by running <code>lint</code> during a build, or by copying the file(s) from somewhere else.</p><h5 id="AndroidLintPlugin-ViaGradle">Via Gradle</h5><p>If you're using the Gradle build system for Android, as of version 0.7 of the Android Gradle plugin, Lint integration is built-in.</p><p>By default, running the <code>lint</code> Gradle task will generate the Lint XML file required by this plugin. <br/>However, you should disable the <code>abortOnError</code> option, to ensure that the Gradle script reports success, even if Lint finds issues with your project that it regards fatal.</p><p>You can do this by adding a <code>lintOptions</code> block at the end of your <code>android</code> block in your <code>build.gradle</code> file:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>android {
+    // ...
+
+    lintOptions {
+        // Don&#39;t abort if Lint finds an error, otherwise the Jenkins build
+        // will be marked as failed, and Jenkins won&#39;t analyse the Lint output
+        abortOnError false
+    }
+}
+</pre>
+</div></div><p>Running <code>./gradlew lint</code> will compile your Android project, run Lint, and write the results to <code>build/lint-results.xml</code>. <br/>As mentioned in the section above, this plugin will automatically find and parse any files with this name.</p><p>If you run <code>./gradlew lintDebug</code>, the file will be called <code>lint-results-debug.xml</code> — and the same pattern applies for other build variants (i.e. the <code>lintRelease</code> task creates <code>lint-results-release.xml</code>).</p><h5 id="AndroidLintPlugin-Viathecommandline">Via the command line</h5><p>If you're not using Gradle or some other build tool which automates the execution of Lint, you will need to add an &quot;Execute shell&quot; build step to your Jenkins job where you run <code>lint</code>.</p><p>For best results, run Lint in your Android application's directory, e.g.: <br/><code>cd app; lint --xml --fullpath lint-results.xml .</code></p><p><strong>Note:</strong> When running Jenkins on a headless system, or under a user ID which doesn't have access to a graphical environment, you may see some errors while running Lint. <br/>To combat this, you can run Java in headless mode, as follows: <br/><code>os_opts=&quot;-Djava.awt.headless=true&quot; lint --xml --fullpath lint-results.xml .</code></p><h4 id="AndroidLintPlugin-ChangingbuildoutcomebasedonLintresults">Changing build outcome based on Lint results</h4><p>You can mark builds as unstable or failed, if the number of Lint issues found — or introduced in the latest build — exceeds a certain threshold.</p><p>e.g. A build can be automatically flagged as unstable or failed if any Lint issues with &quot;Fatal&quot; or &quot;Error&quot; severity are introduced.</p><p>To do this, in the job configuration, click &quot;Advanced&quot; in the &quot;Publish Android Lint results&quot; section. Under &quot;Status thresholds&quot; you can change the build to unstable (yellow ball) or failed (red ball). To mark a build as unstable if there are more than 10 Lint issues in total, but fail the build outright if even a single &quot;Fatal&quot;/&quot;Error&quot; issue exists, then enter &quot;10&quot; under &quot;All priorities&quot; in the yellow row, and &quot;0&quot; under &quot;Priority high&quot; in the red row.</p><p>i.e. If there are 12 normal-priority Lint issues found, this exceeds the threshold of 10, causing the build to be marked as unstable. Or, if there is a high-priority issue found, that would exceed the threshold of 0, thereby failing the build.</p><p>You should use this to be ruthless about fixing Lint issues as they occur, and remember that you can exclude false positives by <a href="http://tools.android.com/tips/lint/suppressing-lint-warnings" class="external-link" rel="nofollow">setting up a <code>lint.xml</code> file</a> in the root of your app project.</p><h2 id="AndroidLintPlugin-Versionhistory">Version history</h2><h3 id="AndroidLintPlugin-Version2.6(Feb5,2018)">Version 2.6 (Feb 5, 2018)</h3><ul><li><a href="https://jenkins.io/security/advisory/2018-02-05/" class="external-link" rel="nofollow">Fix security issue</a></li></ul><h3 id="AndroidLintPlugin-Version2.5(September9,2017)">Version 2.5 (September 9, 2017)</h3><ul><li>Fixed missing Lint graphs on Pipeline project pages (<a href="https://issues.jenkins-ci.org/browse/JENKINS-34621" class="external-link" rel="nofollow">JENKINS-34621</a>)<ul><li>Thanks to <a href="https://github.com/warnyul" class="external-link" rel="nofollow">Balázs Varga</a></li></ul></li><li>Fixed 404 error when trying to configure the graph from the job configuration page (<a href="https://issues.jenkins-ci.org/browse/JENKINS-41629" class="external-link" rel="nofollow">JENKINS-41629</a>)</li><li>Updated <a href="Static-Code-Analysis-Plug-ins.html">analysis-core</a> dependencies to the latest</li><li>Raised the minimum Jenkins version to 2.7</li></ul><h3 id="AndroidLintPlugin-Version2.4(August27,2016)">Version 2.4 (August 27, 2016)</h3><ul><li>Integrated the <a href="Structs-plugin.html">Structs library plugin</a> to give this plugin a short name (&quot;<code>androidLint</code>&quot;) which allows for simplified syntax in plugins such as <a href="Pipeline-Plugin.html">Pipeline</a><ul><li>See the &quot;Pipeline job configuration&quot; section above for more details</li></ul></li></ul><h3 id="AndroidLintPlugin-Version2.3(April27,2016)">Version 2.3 (April 27, 2016)</h3><ul><li>Added support for the <a href="Pipeline-Plugin.html">Pipeline Plugin</a><ul><li>Thanks to Manuel Recena</li></ul></li><li>Updated the default file pattern to <code>**/lint-results*.xml</code> (i.e. will match <code>lint-results-&lt;buildType&gt;.xml</code> by default, as produced by Gradle)<ul><li>Thanks to Karol Wrótniak</li></ul></li><li>Fixed bug that prevented the &quot;hide projects with no warnings&quot; option from being enabled on the &quot;Android Lint issues per project&quot; dashboard view (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19713">JENKINS-19713</a>)</li><li>Updated <a href="Static-Code-Analysis-Plug-ins.html">analysis-core</a> dependencies to the latest</li></ul><h3 id="AndroidLintPlugin-Version2.2(October9,2014)">Version 2.2 (October 9, 2014)</h3><ul><li>Added a new view column, showing the total Lint warnings count (<a href="https://issues.jenkins-ci.org/browse/JENKINS-22176">JENKINS-22176</a>)</li><li>Upgraded analysis-core to the latest version, 1.61<ul><li>This fixes incorrect issue counts where Lint files contain duplicate issues</li></ul></li><li>Fixed wrongly-escaped XML tags<ul><li>Thanks to Sebastian Schuberth for these fixes and features</li></ul></li></ul><h3 id="AndroidLintPlugin-Version2.1(April11,2013)">Version 2.1 (April 11, 2013)</h3><ul><li>Maven jobs are now supported, via the 'lint' goal used by the <a href="https://code.google.com/p/maven-android-plugin/" class="external-link" rel="nofollow">Android Maven Plugin 3.5.1+</a> (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-14857">JENKINS-14857</a>)</li><li>Fixed issue where the Android icon wasn't displayed in Jenkins 1.501+ (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-16075">JENKINS-16075</a>)</li><li>HTML-like tags (e.g. &lt;TextView&gt;) are no longer missing from issue explanations</li><li>Upgraded to the latest static analysis plugins, raising the minimum Jenkins version to 1.424</li></ul><h3 id="AndroidLintPlugin-Version2.0.3(February12,2013)">Version 2.0.3 (February 12, 2013)</h3><ul><li>Fixed issue where issues with &quot;Informational&quot; severity were being shown as &quot;Warning&quot; (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-16645">JENKINS-16645</a>)</li><li>Fixed issue where some configuration settings weren't being honoured correctly</li></ul><h3 id="AndroidLintPlugin-Version2.0.2(December30,2012)">Version 2.0.2 (December 30, 2012)</h3><ul><li>Fixed issue where the Android icon wasn't always displayed (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-16075">JENKINS-16075</a>)</li></ul><h3 id="AndroidLintPlugin-Version2.0.1(November13,2012)">Version 2.0.1 (November 13, 2012)</h3><ul><li>Issues are now classified correctly, according to Lint 'severity' rather than 'priority'<ul><li>Lint issues with severity &quot;Fatal&quot; or &quot;Error&quot; are now shown as high priority, &quot;Warning&quot; has normal priority, &quot;Informational&quot; has low priority</li></ul></li><li>Full explanations and context information for all issues are now included, when using SDK Tools r21 or above</li><li>Explanations for new Lint checks introduced in the future will appear without having to upgrade this plugin</li><li>Removed support for Maven job types, as this doesn't work</li><li>Many thanks to <a href="https://plus.google.com/+TorNorbye" class="external-link" rel="nofollow">Tor Norbye</a> (from the Android Tools team) for updating Lint to make this possible!</li></ul><h3 id="AndroidLintPlugin-Version1.0.1(March22,2012)">Version 1.0.1 (March 22, 2012)</h3><ul><li>Fixed bug where gathering results would fail for builds running on a slave, with Lint XML generated using SDK Tools r17</li></ul><h3 id="AndroidLintPlugin-Version1.0(March21,2012)">Version 1.0 (March 21, 2012)</h3><ul><li>Initial release</li><li>Thanks to <a class="confluence-userlink user-mention" data-username="drulli" href="https://wiki.jenkins.io/display/~drulli" data-linked-resource-id="2916376" data-linked-resource-version="2" data-linked-resource-type="userinfo" data-base-url="https://wiki.jenkins.io">Unknown User (drulli)</a> for writing analysis-core and providing code samples from his many other static analysis plugins</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60915759/61112321.png">lint-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60915759/61112322.png">lint-code-popup.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60915759/61112323.png">lint-warnings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60915759/61112353.png">lint-trend.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/60915759/61112352.png">lint-trend.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

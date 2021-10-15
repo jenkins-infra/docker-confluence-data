@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Nomad Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Nomad Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (iverberk)</span>, last modified on Sep 25, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Nomad <a href="https://plugins.jenkins.io/nomad" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-1058" class="external-link" rel="nofollow">CSRF vulnerability and missing permission check allow SSRF</a></li>
+	<li><a href="https://www.jenkins.io/security/advisory/2021-08-31/#SECURITY-2396" class="external-link" rel="nofollow">Password stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+<p><br class="atl-forced-newline"/>
+The Nomad Jenkins plugin allows Jenkins to dynamically launch build slaves on a Nomad cluster depending on the workload.</p>
+
+<h2 id="NomadPlugin-PREREQUISITES">PREREQUISITES</h2>
+
+<p>Nomad version &gt;= 0.3.2 is required for the plugin to function properly.</p>
+
+<h2 id="NomadPlugin-USAGE">USAGE</h2>
+
+
+<h4 id="NomadPlugin-Createacloud">Create a cloud</h4>
+
+<p>Go to &quot;Manage Jenkins&quot; -&gt; &quot;Configure System&quot; and add a new Nomad cloud at the bottom of the page:</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail confluence-content-image-border" width="200" src="attachments/98009461/98598919.png" data-image-src="attachments/98009461/98598919.png" data-unresolved-comment-count="0" data-linked-resource-id="98598919" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-04-30 at 10.13.53.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009461" data-linked-resource-container-version="12"></span></p>
+
+
+<h4 id="NomadPlugin-ConfigureGeneralsettings">Configure General settings</h4>
+
+<p>Configure the global plugin settings. The Jenkins Slave URL is usually the 'Jenkins Base Url' with '/jnlpJars/slave.jar' added.</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="400" src="attachments/98009461/98598920.png" data-image-src="attachments/98009461/98598920.png" data-unresolved-comment-count="0" data-linked-resource-id="98598920" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-04-30 at 10.35.40.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009461" data-linked-resource-container-version="12"></span></p>
+
+<p>Test the connection to Nomad with the test button to make sure that the plugin can reach the Nomad agent.</p>
+
+<h4 id="NomadPlugin-ConfigureSlaveTemplates">Configure Slave Templates</h4>
+
+<p>You can define multiple slave templates that Jenkins will use to start new build slaves on the Nomad cluster. Labels can be used to restrict jobs to only run on a certain kind of slave.</p>
+
+<p>Nomad uses the slave template settings to configure the slave job.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98009461/100859925.png" data-image-src="attachments/98009461/100859925.png" data-unresolved-comment-count="0" data-linked-resource-id="100859925" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-08-25 at 3.58.44 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009461" data-linked-resource-container-version="12"></span></p>
+
+<p>The Nomad plugin will use the Java driver by default to start a new slave in an isolated context (chroot). You can choose to use the Docker driver instead and specify a build image to use.</p>
+
+<p>To pull images from a private docker registry - you can specify authentication details in username and pasword fields.</p>
+
+<p>If you need to run additional command before the container runs slave.jar to connect to Jenkins master - use the <strong>Prefix Command</strong> option.</p>
+
+<p>The actual command will be &quot;/bin/bash -c &lt;your_command&gt;; java -jar slave.jar ..&quot;</p>
+
+<p>If more than one command is needed - separate with semicolons.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/98009461/100859927.png" data-image-src="attachments/98009461/100859927.png" data-unresolved-comment-count="0" data-linked-resource-id="100859927" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-08-25 at 4.12.00 PM.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009461" data-linked-resource-container-version="12"></span></p>
+
+
+
+
+
+<h4 id="NomadPlugin-ConfigureJobs">Configure Jobs</h4>
+
+<p>In order to use a Nomad slave you will have to restrict the job to only use a specific label.</p>
+
+<p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-content-image-border" width="300" src="attachments/98009461/98598924.png" data-image-src="attachments/98009461/98598924.png" data-unresolved-comment-count="0" data-linked-resource-id="98598924" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2016-04-30 at 10.52.25.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="98009461" data-linked-resource-container-version="12"></span></p>
+
+<h2 id="NomadPlugin-CHANGELOG">CHANGELOG</h2>
+
+
+<h3 id="NomadPlugin-0.3.1(September25th2016)">0.3.1 (September 25th 2016)</h3>
+
+<ul>
+	<li>Fixed slave path for Java driver</li>
+	<li>Make sure that Jenkins base url ends with a forward slash when creating the secret url</li>
+</ul>
+
+
+
+<h3 id="NomadPlugin-0.3(August25th2016)">0.3 (August 25th 2016)</h3>
+
+
+
+<ul>
+	<li>Add an ASAP provisioning strategy for faster slave bringup</li>
+	<li>Allow restricting node usage to jobs with label restriction</li>
+	<li>Allow specification of number of executors per slave.</li>
+	<li>Allow adding a prefix command to execute before running the slave.jar</li>
+</ul>
+
+
+
+
+<h3 id="NomadPlugin-0.2(July28th2016)">0.2 (July 28th 2016)</h3>
+
+<ul>
+	<li>Bug fixes</li>
+	<li>Add privileged and network mode options to Docker driver</li>
+	<li>Add docker private registry authentication support</li>
+	<li>Add datacenter parameters and pass region as GET parameter</li>
+	<li>Added support for Jenkins security/auth</li>
+</ul>
+
+
+
+<h3 id="NomadPlugin-0.1(April28th2016)">0.1 (April 28th 2016)</h3>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598919.png">Screen Shot 2016-04-30 at 10.13.53.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598920.png">Screen Shot 2016-04-30 at 10.35.40.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598921.png">Screen Shot 2016-04-30 at 10.41.27.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598922.png">Screen Shot 2016-04-30 at 10.44.55.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598923.png">Screen Shot 2016-04-30 at 10.48.21.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/98598924.png">Screen Shot 2016-04-30 at 10.52.25.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/100859928.png">Screen Shot 2016-08-25 at 3.58.44 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/100859926.png">Screen Shot 2016-08-25 at 4.00.33 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/100859929.png">Screen Shot 2016-08-25 at 4.12.00 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/100859925.png">Screen Shot 2016-08-25 at 3.58.44 PM.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/98009461/100859927.png">Screen Shot 2016-08-25 at 4.12.00 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:35</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

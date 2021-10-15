@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Plugins affected by fix for SECURITY-170</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Plugins affected by fix for SECURITY-170
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (orrc)</span>, last modified by <span class='editor'> Unknown User (yafim_kazak)</span> on Jan 23, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="PluginsaffectedbyfixforSECURITY-170-Background">Background</h2>
+
+<p>In a <a href="https://wiki.jenkins.io/display/SECURITY/Jenkins+Security+Advisory+2016-05-11">May 2016 security advisory</a>, a vulnerability was announced (SECURITY-170 / CVE-2016-3721) whereby attackers could potentially exploit the fact that certain Jenkins plugins allow the definition of arbitrary build parameters — which are in turn injected into the build envirionment.</p>
+
+<p>The fix for this issue — which was first included in Jenkins versions 1.651.2 and Jenkins 2.3 — means that only build parameters that have been explicitly defined in a job's configuration will be available by default at build time.  Any other arbitrary parameters added to a build by plugins will not be available by default.</p>
+
+<p>As there are a number of plugins that rely on the behaviour in older Jenkins versions, upgrading to 1.651.2 or 2.3 means that certain build behaviours may be broken.</p>
+
+<p>This page attempts to list the affected plugins, how the plugin behaves in current versions of Jenkins, and whether those plugins have been fixed to work with the new parameter filtering behaviour of Jenkins.</p>
+
+<h2 id="PluginsaffectedbyfixforSECURITY-170-Workarounds">Workarounds</h2>
+
+<p>Note that there are a couple of global workarounds to either turn off the new parameter-filtering behaviour, or to whitelist certain parameter names, preventing them from being filtered out.</p>
+
+<p>These are described in the <a href="https://wiki.jenkins.io/display/SECURITY/Jenkins+Security+Advisory+2016-05-11">security advisory</a> and in the <a href="https://jenkins.io/blog/2016/05/11/security-update/" class="external-link" rel="nofollow">accompanying blog post</a>.</p>
+
+<h2 id="PluginsaffectedbyfixforSECURITY-170-Affectedplugins">Affected plugins</h2>
+
+<p>Note that this list is not exhaustive. If you encounter a plugin that no longer works as expected due to the fix for SECURITY-170, please add it to the list.<br/>
+<strong>More importantly, please</strong> <strong><a href="https://wiki.jenkins-ci.org/display/JENKINS/How+to+report+an+issue" class="external-link" rel="nofollow"><em>file a bug report</em></a></strong><strong>, if one doesn't exist, to help ensure that the appropriate plugin maintainer is informed.</strong></p>
+
+<p>Some items here include a list of the parameter names that they use, which could be added to the whitelist mentioned in the &quot;Workarounds&quot; section above.</p>
+
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin name </p></th>
+<th class="confluenceTh"><p> Behaviour </p></th>
+<th class="confluenceTh"><p> Issue </p></th>
+<th class="confluenceTh"><p> Status </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="https://wiki.jenkins-ci.org/display/JENKINS/Assembla+Merge+Request+Builder+Plugin" class="external-link" rel="nofollow">Assembla Merge Request Builder Plugin</a> </p></td>
+<td class="confluenceTd"><p> Parameters are stripped unless defined. <br class="atl-forced-newline"/>  </p>
+<div id="expander-830823770" class="expand-container"><div id="expander-control-830823770" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Parameter names used</span></div><div id="expander-content-830823770" class="expand-content"><p><br class="atl-forced-newline"/>
+assemblaSourceSpaceId,assemblaAuthorName,assemblaDescription,assemblaSourceRepositoryUrl,assemblaTargetBranch,assemblaSourceRepositoryName,assemblaTargetRepositoryUrl,assemblaMergeRequestId,assemblaRefName,assemblaSourceBranch <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+</div></div>
+<p /></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-38254" class="external-link" rel="nofollow">JENKINS-38254</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/assembla-merge-request-builder-plugin/pull/4" class="external-link" rel="nofollow">PR</a> - fixed in 1.1.4 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="CloudBees-Docker-Hub-Notification.html">CloudBees Docker Hub Notification</a> </p></td>
+<td class="confluenceTd"><p> ? </p></td>
+<td class="confluenceTd"><p> ? </p></td>
+<td class="confluenceTd"><p> Fixed in 2.1.0 (<a href="https://github.com/jenkinsci/dockerhub-notification-plugin/pull/13" class="external-link" rel="nofollow">fix</a>) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Delivery-Pipeline-Plugin.html">Delivery Pipeline Plugin</a> </p></td>
+<td class="confluenceTd"><p> PIPELINE_VERSION doesn't get created </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34805">JENKINS-34805</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/Diabol/delivery-pipeline-plugin/pull/182" class="external-link" rel="nofollow">PR</a> - fixed in 0.9.12 <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Gearman-Plugin.html">Gearman Plugin</a> </p></td>
+<td class="confluenceTd"><p> Parameters are stripped unless defined. Should be made to autowhitelist. </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34885">JENKINS-34885</a> </p></td>
+<td class="confluenceTd"><p> Not fixed </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Gerrit-Trigger.html">Gerrit Trigger</a> </p></td>
+<td class="confluenceTd"><p> Builds fail with message &quot;stderr: fatal: Couldn't find remote ref $GERRIT_REFSPEC&quot;</p>
+<div id="expander-542388645" class="expand-container"><div id="expander-control-542388645" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Parameter names used</span></div><div id="expander-content-542388645" class="expand-content"><p><br class="atl-forced-newline"/>
+GERRIT_EVENT_TYPE,GERRIT_EVENT_HASH,GERRIT_BRANCH,GERRIT_TOPIC, <br class="atl-forced-newline"/>
+GERRIT_CHANGE_NUMBER,GERRIT_CHANGE_ID,GERRIT_PATCHSET_NUMBER, <br class="atl-forced-newline"/>
+GERRIT_PATCHSET_REVISION,GERRIT_REFSPEC,GERRIT_PROJECT,GERRIT_CHANGE_SUBJECT, <br class="atl-forced-newline"/>
+GERRIT_CHANGE_COMMIT_MESSAGE,GERRIT_CHANGE_URL,GERRIT_CHANGE_OWNER, <br class="atl-forced-newline"/>
+GERRIT_CHANGE_OWNER_NAME,GERRIT_CHANGE_OWNER_EMAIL, <br class="atl-forced-newline"/>
+GERRIT_PATCHSET_UPLOADER,GERRIT_PATCHSET_UPLOADER_NAME <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+</div></div> </td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34753">JENKINS-34753</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/gerrit-trigger-plugin/pull/285" class="external-link" rel="nofollow">PR</a> - fixed in 2.21.0 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="GitHub-pull-request-builder-plugin.html">GitHub Pull Request Builder Plugin</a> </p></td>
+<td class="confluenceTd"><p> If using the standard <code>${sha1</code>} branch spec, builds will fail with &quot;Couldn't find any revision to build&quot;. <br class="atl-forced-newline"/>
+Pull requests remain in the &quot;pending&quot; state as the plugin fails to update the PR with the build outcome </p>
+<div id="expander-2035063192" class="expand-container"><div id="expander-control-2035063192" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Parameter names used</span></div><div id="expander-content-2035063192" class="expand-content"><p> ghprbActualCommit,ghprbActualCommitAuthor,ghprbActualCommitAuthorEmail,ghprbAuthorRepoGitUrl, <br class="atl-forced-newline"/>
+ghprbCommentBody,ghprbCredentialsId,ghprbGhRepository,ghprbPullAuthorEmail,ghprbPullAuthorLogin, <br class="atl-forced-newline"/>
+ghprbPullAuthorLoginMention,ghprbPullDescription,ghprbPullId,ghprbPullLink, <br class="atl-forced-newline"/>
+ghprbPullLongDescription,ghprbPullTitle,ghprbSourceBranch,ghprbTargetBranch,ghprbTriggerAuthor, <br class="atl-forced-newline"/>
+ghprbTriggerAuthorEmail,ghprbTriggerAuthorLogin,ghprbTriggerAuthorLoginMention,GIT_BRANCH,sha1 <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+</div></div>
+<p /></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34762">JENKINS-34762</a> </p></td>
+<td class="confluenceTd"><p> <strong>Fixed in 1.32.3 (</strong><a href="https://github.com/jenkinsci/ghprb-plugin/commit/eff442fa26500e6ebfe6008af3d929e5fe61d0cc" class="external-link" rel="nofollow">fix</a><strong>)</strong> <br class="atl-forced-newline"/>
+Fix removed from 1.32.2 <br class="atl-forced-newline"/>
+Tentative fix in 1.32.1 (<a href="https://github.com/jenkinsci/ghprb-plugin/pull/344" class="external-link" rel="nofollow">fix</a>) <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="HP-Application-Automation-Tools.html">HP Application Automation Tools</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> HP_RUN_ID not available to subsequent build steps. <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-39654" class="external-link" rel="nofollow">JENKINS-39654</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Not fixed <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="inheritance-plugin.html">Inheritance Plugin</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Parameters defined on a `super` project are not expanded in a derived project <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34831">JENKINS-34831</a> </p></td>
+<td class="confluenceTd"><p> Not fixed </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Job-Generator-Plugin.html">Job Generator Plugin</a> </p></td>
+<td class="confluenceTd"><p> Parameters aren't passed to child jobs </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34814">JENKINS-34814</a> </p></td>
+<td class="confluenceTd"><p> Not fixed </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="https://wiki.jenkins-ci.org/display/JENKINS/Lockable+Resources+Plugin" class="external-link" rel="nofollow">Lockable Resources Plugin</a> </p></td>
+<td class="confluenceTd"><p> Reserved resources variable name will not pass to the build </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34853">JENKINS-34853</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/lockable-resources-plugin/pull/31" class="external-link" rel="nofollow">PR</a> - fixed in 1.9 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Matrix-Project-Plugin.html">Matrix Project Plugin</a> </p></td>
+<td class="confluenceTd"><p> Parameters defined on a project are not passed to child jobs </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34758">JENKINS-34758</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/matrix-project-plugin/pull/36" class="external-link" rel="nofollow">PR</a> - fixed in 1.7 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Parameterized-Trigger-Plugin.html">Parameterized Trigger Plugin</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Parameters (e.g. when using properties files as source) are only passed if they are defined on the downstream job. This is the behavior intended by the SECURITY-170, see <a href="https://wiki.jenkins.io/display/SECURITY/Jenkins+Security+Advisory+2016-05-11">Jenkins Security Advisory 2016-05-11</a> <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> n/a <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Won't fix (hopefully) <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="https://wiki.jenkins-ci.org/display/JENKINS/Poll%20Mailbox%20Trigger%20Plugin" class="external-link" rel="nofollow">Poll Mailbox Trigger Plugin</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/poll-mailbox-trigger-plugin#job-parameters" class="external-link" rel="nofollow">pmt_* job parameters</a> are no longer injected into the job. e.g. <a href="https://github.com/jenkinsci/poll-mailbox-trigger-plugin#job-parameters" class="external-link" rel="nofollow">pmt_from, pmt_replyTo, pmt_content, etc</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/poll-mailbox-trigger-plugin/issues/19" class="external-link" rel="nofollow">#19</a> </p></td>
+<td class="confluenceTd"><p> Fixed in 1.024 (<a href="https://github.com/jenkinsci/poll-mailbox-trigger-plugin/commit/d0154dab63dc3a5978ebcbcd6aaa6d98212009cf" class="external-link" rel="nofollow">fix</a>) <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Promoted-Builds-Plugin.html">Promoted Builds Plugin</a> </p></td>
+<td class="confluenceTd"><p> Promoted builds do not receive parameter values defined at the job level </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34826">JENKINS-34826</a> </p></td>
+<td class="confluenceTd"><p> <strong>Fixed in 2.27</strong> (<a href="https://github.com/jenkinsci/promoted-builds-plugin/pull/93" class="external-link" rel="nofollow">fix</a>) <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Release-Plugin.html">Release Plugin</a> </p></td>
+<td class="confluenceTd"><p> Release parameters are not passed to the build </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-34996">JENKINS-34996</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/release-plugin/pull/17" class="external-link" rel="nofollow">PR</a> - fixed in 2.6 </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="Stash-PullRequest-Builder-Plugin.html">Stash PullRequest Builder Plugin</a> </p></td>
+<td class="confluenceTd"><p> Builds will fail with &quot;Couldn't find any revision to build&quot;. <br class="atl-forced-newline"/>
+As this plugin accepts arbitrary parameters, it's one of the plugins that caused SECURITY-170.</p>
+<div id="expander-245904219" class="expand-container"><div id="expander-control-245904219" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Parameter names used</span></div><div id="expander-content-245904219" class="expand-content"><p><br class="atl-forced-newline"/>
+pullRequestId,pullRequestTitle,sourceBranch,targetBranch,sourceRepositoryOwner, <br class="atl-forced-newline"/>
+sourceRepositoryName,destinationRepositoryOwner,destinationRepositoryName, <br class="atl-forced-newline"/>
+sourceCommitHash,destinationCommitHash <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+</div></div> </td>
+<td class="confluenceTd"><p> <a href="https://github.com/nemccarthy/stash-pullrequest-builder-plugin/issues/84" class="external-link" rel="nofollow">#84</a> </p></td>
+<td class="confluenceTd"><p> Fixed in 1.7.0 - <a href="https://github.com/nemccarthy/stash-pullrequest-builder-plugin/pull/89" class="external-link" rel="nofollow">PR</a> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="P4-Plugin.html">P4 Plugin</a> </p></td>
+<td class="confluenceTd"><p> Parameters generated for review builds are not passed. <br class="atl-forced-newline"/>  </p>
+<div id="expander-1361647222" class="expand-container"><div id="expander-control-1361647222" class="expand-control"><span class="expand-icon aui-icon aui-icon-small aui-iconfont-chevron-down"></span><span class="expand-control-text">Parameter names used</span></div><div id="expander-content-1361647222" class="expand-content"><p>json, review, change, status, pass, <br class="atl-forced-newline"/>
+fail, label, Submit <br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>  <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/></p>
+</div></div>
+<p>Note that there may be more missing parameters for other special build types. <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-35210" class="external-link" rel="nofollow">JENKINS-35210</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://github.com/jenkinsci/p4-plugin/pull/25" class="external-link" rel="nofollow">PR</a><br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="M2-Release-Plugin.html">M2 Release Plugin</a> </p></td>
+<td class="confluenceTd"><p> SCM username and password environment variables, if configured, are not set </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-35261" class="external-link" rel="nofollow">JENKINS-35261</a> </p></td>
+<td class="confluenceTd"><p> Not fixed </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="59510168.html">Multijob Plugin (tikal-multijob-plugin)</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> see description in <a href="https://issues.jenkins-ci.org/browse/JENKINS-36124" class="external-link" rel="nofollow">JENKINS-36124</a> </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-36124" class="external-link" rel="nofollow">JENKINS-36124</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Fixed in 1.22 (<a href="https://github.com/jenkinsci/tikal-multijob-plugin/pull/100" class="external-link" rel="nofollow">fix</a>) <br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="https://wiki.jenkins-ci.org/display/JENKINS/Repository+Connector+Plugin" class="external-link" rel="nofollow">Repository Connector Plugin</a><br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> Artifact version chosen does not get set. <br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> </p></td>
+<td class="confluenceTd"><p> Not fixed. <a href="https://github.com/jenkinsci/repository-connector-plugin/pull/19" class="external-link" rel="nofollow">PR pending</a><br class="atl-forced-newline"/> </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> <a href="https://wiki.jenkins-ci.org/display/JENKINS/Maven+Metadata+Plugin" class="external-link" rel="nofollow">Maven Metadata Plugin</a> </p></td>
+<td class="confluenceTd"><p> The following parameters do not get passed on from parent to child jobs in <a href="https://github.com/jenkinsci/matrix-project-plugin" class="external-link" rel="nofollow">Matrix Project Plugin</a>. Version 1.7 (May 24, 2016) <br class="atl-forced-newline"/>
+ Version 1.7 broke the ability to pass these parameters to child jobs.JENKINS-34758 Parameters visibility in child builds (related to SECURITY-170) <br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_VERSION</span><br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_ARTIFACT_URL</span><br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_GROUP_ID</span><br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_ARTIFACT_ID</span><br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_CLASSIFIER</span><br class="atl-forced-newline"/>
+<span style="color: rgb(51,51,51);">MY_JAR_PACKAGING</span><br class="atl-forced-newline"/>
+<br class="atl-forced-newline"/> </p></td>
+<td class="confluenceTd"><p> <a href="https://issues.jenkins-ci.org/browse/JENKINS-38978" class="external-link" rel="nofollow">JENKINS-38978</a> </p></td>
+<td class="confluenceTd"><p> Not fixed </p></td>
+</tr>
+</tbody></table></div>
+
+<p><br class="atl-forced-newline"/></p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

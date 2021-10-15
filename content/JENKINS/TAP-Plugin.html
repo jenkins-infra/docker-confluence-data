@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : TAP Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : TAP Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kinow)</span>, last modified on Jun 05, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View TAP <a href="https://plugins.jenkins.io/tap" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2016-06-20/" class="external-link" rel="nofollow">Path traversal vulnerability</a></li>
+</ul>
+
+</div></div>
+This plug-in adds support to <a href="http://www.testanything.org" class="external-link" rel="nofollow">TAP</a> test result files to Jenkins. It lets you specify an <a href="http://ant.apache.org/manual/dirtasks.html#patterns" class="external-link" rel="nofollow">ant-like pattern</a> for a directory that contains your TAP files.<br/>TAP Plug-in depends on <a href="http://www.tap4j.org" class="external-link" rel="nofollow">tap4j</a> - a TAP implementation for Java, and on the <a href="https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin" class="external-link" rel="nofollow">JUnit Plug-in</a>. You may get errors if the JUnit Plug-in is not active in your Jenkins instance (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-27227" class="external-link" rel="nofollow">JENKINS-27227</a> for more).</p><h2 id="TAPPlugin-Overview">Overview</h2><p>The plug-in looks for TAP files like the following one.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">1..2
+ok 1 - Yahoo!
+not ok 2 - org.tap4j.Error...</pre>
+</div></div><p>When a TAP stream like the above is found, the plug-in delegates the parsing the tap4j. The results of tap4j parsing are then analysed, organized and displayed to the user as graphs and custom pages.</p><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>You can test your TAP streams with tap4j, using <a href="http://instanttap.appspot.com/" class="external-link" rel="nofollow">InstantTAP</a>.</p></div></div><h3 id="TAPPlugin-UnderstandingTAPstreamsin2minutes">Understanding TAP streams in 2 minutes</h3><p>One of the easiest ways to learn something new is by examples. So here we will show some examples of TAP streams. For being human-friendly, it shouldn't confuse you. We will use comments to explain each line.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">1..2 # a plan stating that we have two tests cases, from 1 to 2.
+ok 1 - Yahoo! # the first test result was executed successfully and has a description of &#39; - Yahoo!&#39;.
+not ok 2 - org.tap4j.Error... # unfortunately, the second test result failed. The description here was used to display some nasty Exception.</pre>
+</div></div><h3 id="TAPPlugin-RunningPerltestswithprove">Running Perl tests with prove</h3><p>The plug-in cannot handle prove's default output (since it includes more information than simply TAP, and causes tap4j parser to fail). The best way to handle the prove output is by using Perl module <a href="http://search.cpan.org/~wonko/TAP-Harness-Archive-0.14/lib/TAP/Harness/Archive.pm" class="external-link" rel="nofollow">TAP::Harness::Archive</a>. Supposing you have your tests under t/ directory, you can create another directory (say, output) and archive your TAP tests with prove by using a command line similar to the below:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">prove t/ --archive output
+</pre>
+</div></div><p>The result files will be stored under <em>output/t/</em>. You can use a pattern in the plug-in configuration like <em>t/*</em><strong><em>/</em></strong><em>.t</em>.</p><h3 id="TAPPlugin-Usingattachments">Using attachments</h3><p>The following is a TAP with attachments, using YAMLish. If you are familiar with YAML, this example should be very easy to read.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">1..2
+ok 1
+not ok 2 - br.eti.kinoshita.selenium.TestListVeterinarians#testGoogle
+  ---
+  extensions:
+      Files:
+          my_message.txt:
+            File-Title: my_message.txt
+            File-Description: Sample message
+            File-Size: 31
+            File-Name: message.txt
+            File-Content: TuNvIGNvbnRhdmFtIGNvbSBtaW5oYSBhc3T6Y2lhIQ==
+            File-Type: image/png
+  ...</pre>
+</div></div><p>The Files entry has an array of files. You have to Base64 encode your content data.</p><h3 id="TAPPlugin-Subtests(groupingortestsuites).">Subtests (grouping or test suites).</h3><p>Subtests let you group several TAP streams unto a single one. This way, you can organize your tests in similar fashion to JUnit or TestNG test suites. Indentation is important for TAP subtests.</p><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Subtests and YAMLish are not officially in TAP 13 specification</p></div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: javascript; gutter: false; theme: Confluence" data-theme="Confluence">  1..3
+  ok 1 - First test
+      1..2
+      ok 1 - This is a subtest
+      ok 2 - So is this
+        1..2
+        ok 1 - This is a subtest
+        ok 2 - So is this
+  ok 2 - An example subtest
+  ok 3 - Third test</pre>
+</div></div><h2 id="TAPPlugin-Configuration">Configuration</h2><ol><li>Install the Jenkins TAP Plug-in using the Plug-in Manager or manually by copying the .hpi (or .jpi) file</li><li>Check the option to publish TAP, configure a pattern (and other settings)</li><li>Execute your build and analyze the results</li></ol><h2 id="TAPPlugin-Screenshots">Screenshots</h2><h4 id="TAPPlugin-JenkinsJUnitcompatiblereportsandgraphs">Jenkins JUnit compatible reports and graphs</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57183895/58195992.png" data-image-src="attachments/57183895/58195992.png" data-unresolved-comment-count="0" data-linked-resource-id="58195992" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="001.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183895" data-linked-resource-container-version="97"></span></p><h4 id="TAPPlugin-CustomactionsforTAPtoo">Custom actions for TAP too</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57183895/58195993.png" data-image-src="attachments/57183895/58195993.png" data-unresolved-comment-count="0" data-linked-resource-id="58195993" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="002.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183895" data-linked-resource-container-version="97"></span></p><h4 id="TAPPlugin-YAMLishsupport">YAMLish support</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57183895/58195994.png" data-image-src="attachments/57183895/58195994.png" data-unresolved-comment-count="0" data-linked-resource-id="58195994" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="003.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183895" data-linked-resource-container-version="97"></span></p><h2 id="TAPPlugin-LanguagesSupported">Languages Supported</h2><ol><li>English (American)</li><li><span style="text-decoration: line-through;">Portuguese (Brazil)</span>) Work in Progress</li><li><span style="text-decoration: line-through;">Spanish (Thanks to</span> <span style="text-decoration: line-through;"><a href="http://www.cesinha.com" class="external-link" rel="nofollow">César Fernandes de Almeida</a></span><span style="text-decoration: line-through;">)</span> Work in Progress</li></ol><h2 id="TAPPlugin-KnownLimitations">Known Limitations</h2><ol><li>If the file type of a TAP report is considered as binary by the Jenkins webserver then the TAP plugin doesn't consider this file for inclusion in TAP reports (see <a href="https://issues.jenkins-ci.org/browse/JENKINS-15813" class="external-link" rel="nofollow">#15813</a> for further details). To make sure your TAP report is considered for inclusion use e.g. the file name suffix .tap (so instead of a file named &quot;<em>report</em>&quot; use &quot;<em>report.tap</em>&quot;).</li></ol><h2 id="TAPPlugin-CompatibilityMatrix">Compatibility Matrix</h2><div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plug-in is not developed for Hudson, and we don't fix bugs happening in any version of Hudson.</p></div></div><div class="table-wrap"><table class="wrapped confluenceTable"><colgroup><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/></colgroup><tbody><tr><th class="confluenceTh"><p>Plugin</p></th><td class="confluenceTd"><p>1.0</p></td><td class="confluenceTd"><p>1.1</p></td><td class="confluenceTd"><p>1.2.x</p></td><td class="confluenceTd"><p>1.3~1.9</p></td><td class="confluenceTd"><p>1.10</p></td><td class="confluenceTd"><p>1.11</p></td><td class="confluenceTd"><p>1.12</p></td><td class="confluenceTd"><p>1.13</p></td><td class="confluenceTd"><p>1.14</p></td><td class="confluenceTd"><p>1.15</p></td><td class="confluenceTd"><p>1.16</p></td><td class="confluenceTd"><p>1.17</p></td><td class="confluenceTd"><p>1.18+</p></td></tr><tr><th class="confluenceTh"><p>TAP</p></th><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td><td class="confluenceTd"><p>13</p></td></tr><tr><th class="confluenceTh"><p>Jenkins</p></th><td class="confluenceTd"><p>1.399+</p></td><td class="confluenceTd"><p>1.399+</p></td><td class="confluenceTd"><p>1.399+</p></td><td class="confluenceTd"><p>1.399+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td><td class="confluenceTd"><p>1.488+</p></td></tr><tr><th class="confluenceTh"><p>Hudson</p></th><td class="confluenceTd"><p>?</p></td><td class="confluenceTd"><p>?</p></td><td class="confluenceTd"><p>?</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td><td class="confluenceTd"><p>Not supported</p></td></tr></tbody></table></div><h2 id="TAPPlugin-OpenIssues">Open Issues</h2><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20tap-plugin&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h2 id="TAPPlugin-Sponsors">Sponsors</h2><p><a href="http://www.tupilabs.com" class="external-link" rel="nofollow"><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="300" src="attachments/57183895/63275015.png" data-image-src="attachments/57183895/63275015.png" data-unresolved-comment-count="0" data-linked-resource-id="63275015" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="logo1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183895" data-linked-resource-container-version="97"></span></a></p><p>For commercial support, please get contact us via <a href="https://twitter.com/tupilabs" class="external-link" rel="nofollow">@tupilabs</a></p><h2 id="TAPPlugin-Resources">Resources</h2><ol><li>This plug-in is going to be part of &quot;Make your tests speak TAP&quot; presentation in <a href="http://www.jcertif.com" class="external-link" rel="nofollow">JCertif</a> by <a href="http://www.kinoshita.eti.br" class="external-link" rel="nofollow">Bruno P. Kinoshita</a>, in September 2011. In this presentation will be presented too the tap4j project, how to enable TAP in JUnit and TestNG, integrate <a href="http://www.perl.org" class="external-link" rel="nofollow">Perl</a> and <a href="http://www.oracle.com/java" class="external-link" rel="nofollow">Java</a> tests and an <a href="https://github.com/kinow/tap-editor" class="external-link" rel="nofollow">Eclipse TAP editor</a>.</li><li>Gábor Szabó (2009), Test Reporting system: Smolder wish-list &lt;<a href="http://szabgab.com/blog/2009/07/test-reporting-system-smolder-wish-list.html" class="external-link" rel="nofollow">http://szabgab.com/blog/2009/07/test-reporting-system-smolder-wish-list.html</a>&gt;.</li><li>Gábor Szabó (2009), Reporting Test Results &lt;<a href="http://szabgab.com/blog/2009/04/reporting-test-results.html" class="external-link" rel="nofollow">http://szabgab.com/blog/2009/04/reporting-test-results.html</a>&gt;</li><li><a href="http://www.tap4j.org" class="external-link" rel="nofollow">tap4j</a> - The TAP implementation for Java.</li><li><a href="http://www.testanything.org" class="external-link" rel="nofollow">Test Anything Protocol</a> (official webpage).</li><li><a href="http://www.slideshare.net/guest94ab56d/2013-0717continuous-performancemonitoringwithjenkins" class="external-link" rel="nofollow">Performance tests with phantomjs and yslow</a> (uses the plug-in for plotting the TAP results)</li><li><a href="http://www.mathworks.com/help/matlab/ref/matlab.unittest.plugins.tapplugin-class.html" class="external-link" rel="nofollow">TAP Plugin for Matlab</a></li></ol><div class="confluence-information-macro confluence-information-macro-information"><p class="title">JCertif 2011</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><a href="http://www.jcertif.com" class="external-link" rel="nofollow">JCertif</a> - Make your tests speak TAP - Speaker: <a href="http://www.kinoshita.eti.br" class="external-link" rel="nofollow">Bruno P. Kinoshita</a><br/>September, 2011 - Brazzaville, Congo<br/><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/57183895/58195991.png" data-image-src="attachments/57183895/58195991.png" data-unresolved-comment-count="0" data-linked-resource-id="58195991" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="JCertif_Conf2011_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183895" data-linked-resource-container-version="97"></span></p></div></div><h2 id="TAPPlugin-ReleaseNotes">Release Notes</h2><h5 id="TAPPlugin-2.3(2019-06-05)">2.3 (2019-06-05)</h5><ol><li><a href="https://github.com/jenkinsci/tap-plugin/pull/24" class="external-link" rel="nofollow">tap4j dependency upgraded to 4.4.2 version</a></li><li><a href="https://github.com/jenkinsci/tap-plugin/pull/25" class="external-link" rel="nofollow">enabled parsing of TAP documents with corrupted YAML content</a><ol><li>New option in advanced, to remove corrupted YAML elements (should work after upgrading the plug-in, but remember to back up first anyway!)</li></ol></li></ol><h5 id="TAPPlugin-2.2.2(2019-02-14)">2.2.2 (2019-02-14)</h5><ol><li>
+<span class="jira-issue" data-jira-key="JENKINS-55787" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55787?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/images/icons/issuetypes/epic.png"/>JENKINS-55787</a>
+                            -
+            <span class="summary">Switch labels from entry to checkbox</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-current
+     jira-macro-single-issue-export-pdf">In Progress</span>
+                </span>
+</li></ol><h5 id="TAPPlugin-2.2.1(2018-02-07)">2.2.1 (2018-02-07)</h5><ol><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-48925" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48925?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48925</a>
+                            -
+            <span class="summary">TAP plugin is not compatible with JEP-200 in Jenkins 2.102</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ol><h5 id="TAPPlugin-2.2(2018-01-26)">2.2 (2018-01-26)</h5><ol><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-48925" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-48925?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-48925</a>
+                            -
+            <span class="summary">TAP plugin is not compatible with JEP-200 in Jenkins 2.102</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ol><h5 id="TAPPlugin-2.1(2017-02-28)">2.1 (2017-02-28)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22250" class="external-link" rel="nofollow">JENKINS-22250</a>: &quot;fail the build if no test results are present&quot; option doesn't fail the job</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21456" class="external-link" rel="nofollow">JENKINS-21456</a>: Plugin runs despite earlier errors</li><li>Upgraded tap4j dependency from 4.2.0 to 4.2.1 (latest)</li></ol><h5 id="TAPPlugin-2.0(2016-08-20)">2.0 (2016-08-20)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29649" class="external-link" rel="nofollow">JENKINS-29649: don't overwrite existing junit-results</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-34000" class="external-link" rel="nofollow">JENKINS-34000: Workflow/Pipeline Support for TAP Plugin</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-33779" class="external-link" rel="nofollow">JENKINS-33779: TAP plugin: enable detailed output for TAP with subtests</a></li></ol><h5 id="TAPPlugin-1.25(2016-06-21)">1.25 (2016-06-21)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-23851" class="external-link" rel="nofollow">JENKINS-23851: Expand env vars in the ant pattern field</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17804" class="external-link" rel="nofollow">JENKINS-17804: Add option to show only failures</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29650" class="external-link" rel="nofollow">JENKINS-29650: Don't use a build step synchronization, defaulting to NONE.</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-30751" class="external-link" rel="nofollow">JENKINS-30751: Use same logic everywhere to say whether a test is a failure or not</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24843" class="external-link" rel="nofollow">JENKINS-24843: Copy duration from Tabulated Tests</a></li><li><a href="https://github.com/jenkinsci/tap-plugin/pull/6" class="external-link" rel="nofollow">pull request #6: fix duration_ms (thanks to @forrest79)</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22016" class="external-link" rel="nofollow">JENKINS-22016 via pull request #10: Expand env vars in the ant pattern field (thanks to @evandy0)</a></li><li><a href="https://issues.jenkins-ci.org/browse/SECURITY-85" class="external-link" rel="nofollow">SECURITY-85: [tap] Can read all files on file system</a></li></ol><h5 id="TAPPlugin-1.24(2015-10-01)">1.24 (2015-10-01)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-19471" class="external-link" rel="nofollow">JENKINS-19471: TAP parser does not conform to InstantTAP website</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-24505" class="external-link" rel="nofollow">JENKINS-24505: Tests are not marked as skipped with TAP plugin</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-19676" class="external-link" rel="nofollow">JENKINS-19676: TAP test description does not get escaped</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-27227" class="external-link" rel="nofollow">JENKINS-27227: TAP plugin fails to load with java.lang.NoClassDefFoundError: hudson/tasks/test/AbstractTestResultAction</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-29153" class="external-link" rel="nofollow">JENKINS-29153: tap plugin fails job when not have to</a></li></ol><h5 id="TAPPlugin-1.23(2015-05-23)">1.23 (2015-05-23)</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-28508" class="external-link" rel="nofollow">JENKINS-28508: Broken link on Tap Results</a></li></ol><h5 id="TAPPlugin-1.22(2015-03-07)">1.22 (2015-03-07)</h5><ol><li><a href="https://github.com/jenkinsci/tap-plugin/pull/8" class="external-link" rel="nofollow">Pull request #8 to add LICENSE.txt</a></li></ol><h5 id="TAPPlugin-1.21">1.21</h5><ol><li><span style="text-decoration: line-through;">Dropped</span></li></ol><h5 id="TAPPlugin-Version1.20">Version 1.20</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22047" class="external-link" rel="nofollow">JENKINS-22047: Add option to reduce noise in logs</a></li></ol><h5 id="TAPPlugin-Version1.18">Version 1.18</h5><ol><li>Updated to tap4j-4.0.8</li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22047" class="external-link" rel="nofollow">JENKINS-22047: Add option to reduce noise in logs</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22036" class="external-link" rel="nofollow">JENKINS-22036: NullPointer when there is no Test Plan</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17960" class="external-link" rel="nofollow">JENKINS-17960: Indicate if tests don't go to plan</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21917" class="external-link" rel="nofollow">JENKINS-21917: TAP results graph causes null pointer exception</a></li><li><a href="https://github.com/jenkinsci/tap-plugin/pull/4" class="external-link" rel="nofollow">https://github.com/jenkinsci/tap-plugin/pull/4</a></li></ol><h5 id="TAPPlugin-Version1.17">Version 1.17</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22047" class="external-link" rel="nofollow">JENKINS-22047: Add option to reduce noise in logs</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-22036" class="external-link" rel="nofollow">JENKINS-22036: NullPointer when there is no Test Plan</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17960" class="external-link" rel="nofollow">JENKINS-17960: Indicate if tests don't go to plan</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-21917" class="external-link" rel="nofollow">JENKINS-21917: TAP results graph causes null pointer exception</a></li><li><a href="https://github.com/jenkinsci/tap-plugin/pull/4" class="external-link" rel="nofollow">Pull request #4</a></li></ol><h5 id="TAPPlugin-Version1.17.1">Version 1.17</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-20924" class="external-link" rel="nofollow">JENKINS-20924: Make plans optional in TAP via a configuration</a></li></ol><h5 id="TAPPlugin-Version1.16">Version 1.16</h5><ol><li>Updated to tap4j-4.0.5 (better subtests handling)</li></ol><h5 id="TAPPlugin-Version1.15">Version 1.15</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-16325" class="external-link" rel="nofollow">JENKINS-16325: TAP Parser can't handle the output from prove</a></li></ol><h5 id="TAPPlugin-Version1.14">Version 1.14</h5><ol><li>Security bug reported by Kees J. via e-mail. This issue is related to exposing files that the user running Jenkins has access via the plug-in.</li></ol><h5 id="TAPPlugin-Version1.13">Version 1.13</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17960" class="external-link" rel="nofollow">JENKINS-17960: Indicate if tests don't go to plan</a></li></ol><h5 id="TAPPlugin-Version1.12">Version 1.12</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-18885" class="external-link" rel="nofollow">JENKINS-18885: Parse errors with Git's TAP test suite, part 2</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17878" class="external-link" rel="nofollow">JENKINS-17878: HTML test output in tapResults not escaped</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17855" class="external-link" rel="nofollow">JENKINS-17855: TAP Stream results summary page contains links that fail</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17504" class="external-link" rel="nofollow">JENKINS-17504: TAP Plugin generates bad detail links on &quot;tapTestReport&quot; page</a></li></ol><h5 id="TAPPlugin-Version1.11">Version 1.11</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17859" class="external-link" rel="nofollow">JENKINS-17859: TAP report table show failed test message on ALL tests after the failed one.</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17855" class="external-link" rel="nofollow">JENKINS-17855: TAP Stream results summary page contains links that fail</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17941" class="external-link" rel="nofollow">JENKINS-17941: Parse errors with Git's TAP test suite</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17947" class="external-link" rel="nofollow">JENKINS-17947: Nested TAP not parsed correctly</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17504" class="external-link" rel="nofollow">JENKINS-17504: TAP Plugin generates bad detail links on &quot;tapTestReport&quot; page</a></li></ol><h5 id="TAPPlugin-Version1.10">Version 1.10</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-17245" class="external-link" rel="nofollow">JENKINS-17245: Tap plug-in can't find TAP attachments</a></li></ol><h5 id="TAPPlugin-Version1.9">Version 1.9</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-16262" class="external-link" rel="nofollow">JENKINS-16262: Tap plug-in can't find TAP attachments</a></li></ol><h5 id="TAPPlugin-Version1.8">Version 1.8</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15914" class="external-link" rel="nofollow">JENKINS-15914: TAP results table misses first comment line</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15322" class="external-link" rel="nofollow">JENKINS-15322: NOTESTS in TAP response gives parse error and stack trace from plugin</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15401" class="external-link" rel="nofollow">JENKINS-15401: support TODO directive to not fail such tests</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15907" class="external-link" rel="nofollow">JENKINS-15907: When multiple TAP files with same basename match pattern, only one is processed</a></li></ol><h5 id="TAPPlugin-Version1.7">Version 1.7</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15586" class="external-link" rel="nofollow">JENKINS-15586: TAP plug-in is ignoring given file extension and looking for .tap files</a></li></ol><h5 id="TAPPlugin-Version1.6">Version 1.6</h5><ol><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15419" class="external-link" rel="nofollow">JENKINS-15419: TAP published results hide JUnit published results</a></li><li><a href="https://issues.jenkins-ci.org/browse/JENKINS-15497" class="external-link" rel="nofollow">JENKINS-15497: Display link to download TAP attachment</a></li></ol><h5 id="TAPPlugin-Version1.2.7">Version 1.2.7</h5><ol><li>Removed requirement to have the TAP Plan at start or at the end of the TAP Stream. This way, TAP Streams generated using Perl done_testing() now works well with the plug-in</li></ol><h5 id="TAPPlugin-Version1.2.6">Version 1.2.6</h5><ol><li>Support JSON within YAMLish data</li></ol><h5 id="TAPPlugin-Version1.1">Version 1.1</h5><ol><li>Support to Bail out!'s</li><li>JENKINS-10562 TAP Plugin fails on slave</li></ol><h5 id="TAPPlugin-Version1.0">Version 1.0</h5><ol><li>Initial design of the plug-in</li><li>Custom UI for TAP test results</li><li>JUnit-like graph that displays the test results per build (actually the graph was modeled using TestNG Plug-in as basis)</li></ol><h2 id="TAPPlugin-Roadmap(wishlist)">Roadmap (wish list)</h2><h5 id="TAPPlugin-Version1.x">Version 1.x</h5><ol><li>Add configurations like validate number of tests with test plan, <span style="text-decoration: line-through;">a TODO causes a test to fail</span></li><li><span style="text-decoration: line-through;">Diagnostics image gallery</span> Done! Fixed as a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Image+Gallery+Plugin" class="external-link" rel="nofollow">new plug-in</a></li><li>Diagnostics exception code formatting</li><li><span style="text-decoration: line-through;">Add a link to open the file in the Build workspace (think about remote and local issues)</span> Done!</li></ol><h2 id="TAPPlugin-History">History</h2><p>The idea of the plug-in surged after tap4j was created. After learning about Smolder, it became evident that Jenkins could be used as a replacement for it. All that was needed was just adding TAP support to Jenkins and implementing a nice UI to display the test results. After some messages in jenkins-dev-list, Max and Nick commented about their need to show test results in a different manner than how Jenkins was doing at that moment. Soon after that Max, Nick, Bruno (tap4j) and Cesar (tap4j) started to work together, exchanging mail messages and discussing about a initial design for this plug-in.</p><p>In July 2011 the first version of the plug-in was ready to be released. The graph code used here was adapted from TestNG Plugin (big thanks to the development team, great work). The diagnostic (YAMLish) was implemented in Jelly + Java + CSS. And the road map was incremented based on what Gábor Szabó posted about Smolder and testing reports in his blog (see resources for links).</p><h2 id="TAPPlugin-SimulatingTAPstreamswithshellbuildsteps">Simulating TAP streams with shell build steps</h2><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#!/bin/bash
+
+
+for x in {1..100}; do
+
+
+cat &gt; $x.tap &lt;&lt;EOF
+ok 1
+not ok 2
+ok 3 # SKIP
+not ok 4
+ok 5
+ok 6
+ok 7
+EOF
+
+
+done ;
+</pre>
+</div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195991.png">JCertif_Conf2011_2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195995.png">001.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195996.png">002.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195997.png">003.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195992.png">001.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195993.png">002.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/58195994.png">003.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183895/63275015.png">logo1.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:51</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

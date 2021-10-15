@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ShiningPanda Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ShiningPanda Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mansion)</span>, last modified on Jul 15, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ShiningPanda <a href="https://plugins.jenkins.io/shiningpanda" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+This plugin adds Python support to Jenkins with some useful builders (Python builder, <a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">virtualenv</a> builder, <a href="https://bitbucket.org/hpk42/tox" class="external-link" rel="nofollow">tox</a> builder...) and the ability to use a Python axis in multi-configuration projects (for testing on multiple versions of Python).<div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>This plugin is developed by <a href="http://shiningpanda.com/" class="external-link" rel="nofollow">ShiningPanda.</a>, the editor of <a href="https://requires.io/" class="external-link" rel="nofollow">requires.io</a>, a web service to monitor the dependencies of your Python projects. <a href="https://requires.io/contact/" class="external-link" rel="nofollow">Contact us</a> for more informations!</p></div></div><h1 id="ShiningPandaPlugin-ConfigurePythoninstallations">Configure Python installations</h1><p>To configure Python installations, step in <code>Manage Jenkins &gt; Global Tool Configuration</code>. Then look for the <code>Python</code> section.</p><p><span class="confluence-embedded-file-wrapper image-center-wrapper"><img class="confluence-embedded-image image-center" src="attachments/58001240/58196092.png" data-image-src="attachments/58001240/58196092.png" data-unresolved-comment-count="0" data-linked-resource-id="58196092" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="installations.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="58001240" data-linked-resource-container-version="96"></span></p><p>To configure a new Python installation click on <code>Add Python</code>, then fill the following fields:</p><ul><li><code>Name</code>: the name of this Python installation, make it meaningful by including the Python's version for example.</li><li><code>Home or executable</code>: the path to the root folder of the Python installation (CPython, PyPy, Stackless Python, Jython or IronPython) or the path to the Python executable, such as:<ul><li><code>/opt/local/Library/Frameworks/Python.framework/Versions/2.7</code> on MacOS X (<a href="http://www.macports.org/" class="external-link" rel="nofollow">MacPorts</a>).</li><li><code>C:\Python27</code> on Windows.</li><li><code>/usr/bin/python2.6</code> on Unix.</li><li>...</li></ul></li></ul><p>A good practice is to install raw Pythons and then use the <code>Virtualenv Builder</code> to setup your execution environment.</p><h1 id="ShiningPandaPlugin-Builders">Builders</h1><p>Five builders dedicated to Python:</p><ul><li><code>Virtualenv Builder</code> (recommended): creates an isolated environment with <a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">virtualenv</a>,</li><li><code>Buildout Builder</code>: use <a href="http://www.buildout.org/" class="external-link" rel="nofollow">Buildout</a> to build your project,</li><li><code>Tox Builder</code>: use <a href="http://tox.readthedocs.org/en/latest/" class="external-link" rel="nofollow">tox</a> to build your project, only available for Jenkins multi-configuration projects,</li><li><code>Python Builder</code>: use a Python installation configured on Jenkins via <code><span>Manage Jenkins &gt; Global Tool Configuration</span> &gt; Python</code>,</li><li><code>Custom Python Builder</code>: use an arbitrary Python installation, typically a manually created <a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">virtualenv</a> environment.</li></ul><h1 id="ShiningPandaPlugin-Publishers">Publishers</h1><p>One publisher dedicated to Python:</p><ul><li><code>Publish coverage.py HTML reports</code>: this publisher aims at displaying HTML reports generated by the <a href="http://nedbatchelder.com/code/coverage/" class="external-link" rel="nofollow">coverage</a> package.</li></ul><h1 id="ShiningPandaPlugin-FAQ">FAQ</h1><h2 id="ShiningPandaPlugin-Whycan&#39;tIseeallthebuilders?">Why can't I see all the builders?</h2><p>Have you configured some Python installations in the <code>Python</code> section of the <code>Manage Jenkins &gt; <span>Global Tool Configuration</span></code> page?</p><h2 id="ShiningPandaPlugin-HowtoconfigureIronPythononUNIX?">How to configure IronPython on UNIX?</h2><p>See this <a href="http://shiningpanda.com/shiningpanda-plugin-ironpython-here-we.html" class="external-link" rel="nofollow">blog post</a>.</p><p><span class="confluence-anchor-link" id="ShiningPandaPlugin-roadmap"></span></p><h1 id="ShiningPandaPlugin-Roadmap">Roadmap</h1><ol><li>Support <a href="http://pypi.python.org/pypi/pip" class="external-link" rel="nofollow">pip</a>'s requirements.txt in <a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">virtualenv</a> builders (thanks @myusuf3 for the idea).</li><li>Ease <a href="http://www.logilab.org/857" class="external-link" rel="nofollow">PyLint</a> code analysis (and associated reporting).</li><li>Improve <a href="http://pypi.python.org/pypi/coverage" class="external-link" rel="nofollow">coverage</a> reporing.</li><li>Automate installation of Pythons.</li><li>Your idea here... <a href="https://requires.io/contact/" class="external-link" rel="nofollow">contact us</a>!</li></ol><h1 id="ShiningPandaPlugin-VersionHistory">Version History</h1><h2 id="ShiningPandaPlugin-Version0.24(15/07/2018)">Version 0.24 (15/07/2018)</h2><ul><li>Bundle virtualenv <a href="https://pypi.org/project/virtualenv/16.0.0" class="external-link" rel="nofollow">16.0.0</a></li><li>Do not use <code>pip.main</code></li></ul><h2 id="ShiningPandaPlugin-Version0.23(25/06/2016)">Version 0.23 (25/06/2016)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/15.0.2" class="external-link" rel="nofollow">15.0.2</a></li><li>Update <code>Tox</code> axis default environments</li></ul><h2 id="ShiningPandaPlugin-Version0.22(29/08/2015)">Version 0.22 (29/08/2015)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/13.1.2" class="external-link" rel="nofollow">13.1.2</a> (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30068" class="external-link" rel="nofollow">JENKINS-30068</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-27551" class="external-link" rel="nofollow">JENKINS-27551</a>),</li><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-28428" class="external-link" rel="nofollow">JENKINS-28428</a>: coverage 4 renames status.dat to status.json.</li></ul><h2 id="ShiningPandaPlugin-Version0.21(14/06/2014)">Version 0.21 (14/06/2014)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.11.6" class="external-link" rel="nofollow">1.11.6</a>,</li><li>Remove package manager selector on <code>Virtualenv Builder</code>,</li><li>Remove hosted mode.</li></ul><h2 id="ShiningPandaPlugin-Version0.20(30/06/2013)">Version 0.20 (30/06/2013)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-18415" class="external-link" rel="nofollow">JENKINS-18415</a>: can't run shining panda jobs on Jenkins 1.519.</li></ul><h2 id="ShiningPandaPlugin-Version0.19(19/03/2013)">Version 0.19 (19/03/2013)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.9.1" class="external-link" rel="nofollow">1.9.1</a>.</li></ul><h2 id="ShiningPandaPlugin-Version0.18(24/02/2013)">Version 0.18 (24/02/2013)</h2><ul><li>Add <code>py33</code> to <code>Tox</code> axis,</li><li>Copyright 2013.</li></ul><h2 id="ShiningPandaPlugin-Version0.17(29/11/2012)">Version 0.17 (29/11/2012)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.8.4" class="external-link" rel="nofollow">1.8.4</a>.</li></ul><h2 id="ShiningPandaPlugin-Version0.16(21/11/2012)">Version 0.16 (21/11/2012)</h2><ul><li>Fallback on virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.7.2" class="external-link" rel="nofollow">1.7.2</a> for Python 2.4 (default is <a href="http://pypi.python.org/pypi/virtualenv/1.8.2" class="external-link" rel="nofollow">1.8.2</a>).</li></ul><h2 id="ShiningPandaPlugin-Version0.15(06/11/2012)">Version 0.15 (06/11/2012)</h2><ul><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-14188" class="external-link" rel="nofollow">JENKINS-14188</a>: path to executable is now allowed in the <code>Home</code> field of a Python installation,</li><li>Configurable ShiningPanda working directory,</li><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.8.2" class="external-link" rel="nofollow">1.8.2</a>.</li></ul><h2 id="ShiningPandaPlugin-Version0.14(25/07/2012)">Version 0.14 (25/07/2012)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.7.2" class="external-link" rel="nofollow">1.7.2</a>,</li><li>Fix <code>Buildout Builder</code>: bootstrap.py of zc.buildout 2 always uses distribute.</li></ul><h2 id="ShiningPandaPlugin-Version0.13(17/05/2012)">Version 0.13 (17/05/2012)</h2><ul><li>Fix help.</li></ul><h2 id="ShiningPandaPlugin-Version0.12(30/04/2012)">Version 0.12 (30/04/2012)</h2><ul><li>Add IronPython support,</li><li>Switch from Affero GPL to something we could call a Lesser Affero GPL (see <a href="https://raw.github.com/jenkinsci/shiningpanda-plugin/master/LICENSE.txt" class="external-link" rel="nofollow">here</a>),</li><li>Fix path to Jython 2.2.1 executable.</li></ul><h2 id="ShiningPandaPlugin-Version0.11(05/04/2012)">Version 0.11 (05/04/2012)</h2><ul><li>Bundle the development branch of virtualenv (1.7.1.2.post1@e299c87a1b9a63fcc2c3279cef3bf42e14ba0d32) to include PyPy and Jython fixes for Windows,</li><li>Fix the path to the binary of a PyPy based virtualenv on Windows in <code>Virtualenv Builder</code>,</li><li>Fix <a href="https://issues.jenkins-ci.org/browse/JENKINS-13339" class="external-link" rel="nofollow">JENKINS-13339</a>: configuration file not set when calling <code>buildout</code> in <code>Buildout Builder</code>.</li></ul><h2 id="ShiningPandaPlugin-Version0.10(20/02/2012)">Version 0.10 (20/02/2012)</h2><ul><li>Bundle virtualenv <a href="http://pypi.python.org/pypi/virtualenv/1.7.1.2" class="external-link" rel="nofollow">1.7.1.2</a>,</li><li>New builder for <a href="http://www.buildout.org/" class="external-link" rel="nofollow">Buildout</a>.</li></ul><h2 id="ShiningPandaPlugin-Version0.9(26/01/2012)">Version 0.9 (26/01/2012)</h2><ul><li>Improve the <code>Virtualenv Builder</code> cleanup algorithm to avoid useless virtual environment creations,</li><li>Move virtual environments generated by the <code>Virtualenv Builder</code> under <code>$JENKINS_HOME/shiningpanda</code> to avoid deletions caused by full checkouts, as a consequence the <code>Virtualenv home</code> field becomes a <code>Name</code> field: two <code>Virtualenv Builder</code> with the same <code>Name</code> will use the same virtual environment installation,</li><li>Fix the workspace addition in the <code>PATH</code> for the <code>XShell</code> nature.</li></ul><h2 id="ShiningPandaPlugin-Version0.7(19/01/2012)">Version 0.7 (19/01/2012)</h2><ul><li>Add a <code>Nature</code> field on <code>Python Builder</code>, <code>Virtualenv Builder</code> and <code>Custom Python Builder</code> to specify the type of the <code>Command</code> field. In addition to shell (<code>Shell</code> nature), you can now type some Python with the <code>Python</code> nature, and some shell commands translated at runtime to match the targeted platform (variables, separator, ...) with the <code>XShell</code> nature,</li><li>Add a coverage.py HTML report publisher,</li><li>Add a <code>TOXENV pattern</code> field to the <code>Tox Builder</code> to compute the test environment (an alternative to <code>Tox</code> axis),</li><li>Detect Python installations in standard locations at first launch,</li><li>Unable to submit job configuration if only <code>Custom environments</code> field is used in <code>Tox</code> axis (<a href="https://www.shiningpanda-ci.com/bugs/view.php?id=12" class="external-link" rel="nofollow">Mantis 12</a>),</li><li>In specific cases the Python version was still asked in <em>Virtualenv Builder</em> and <em>Python Builder</em> on multi-configuration projects (<a href="https://www.shiningpanda-ci.com/bugs/view.php?id=14" class="external-link" rel="nofollow">Mantis 14</a>),</li><li>Create symbolic links to Python shared libraries in <code>$VIRTUAL_ENV/lib</code> on Unix (see <a href="https://github.com/pypa/virtualenv/issues/216" class="external-link" rel="nofollow">virtualenv 216</a>),</li><li>Copyright 2012.</li></ul><h2 id="ShiningPandaPlugin-Version0.6(05/12/2011)">Version 0.6 (05/12/2011)</h2><ul><li>Embed <a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">virtualenv</a> 1.7 including pull request <a href="https://github.com/pypa/virtualenv/pull/193" class="external-link" rel="nofollow">#193</a>.</li><li>As a consequence, <code>No site packages</code> becomes <code>System site packages</code> (with the opposite value) for <code>Virtualenv Builder</code>.</li><li>Fix a 0.4 to 0.5 backward compatibility bug on Python installations.</li></ul><h2 id="ShiningPandaPlugin-Version0.5(24/11/2011)">Version 0.5 (24/11/2011)</h2><ul><li><code><a href="http://codespeak.net/~hpk/tox/" class="external-link" rel="nofollow">Tox</a></code> <code>Builder</code>.</li><li><a href="http://pypi.python.org/pypi/virtualenv" class="external-link" rel="nofollow">Virtualenv</a> is no more required in Python installations.</li><li>Windows support.</li><li><a href="http://www.jython.org/" class="external-link" rel="nofollow">Jython</a> support.</li><li><code>Custom Virtualenv Builder</code> becomes <code>Custom Python Builder</code> and handles now any kind of Python installation.</li><li><code>Standard Python Builder</code> becomes <code>Python Builder</code>.</li><li>Full path to Python executable available via <code>PYTHON_EXE</code> environment variable in <code>Command</code> fields.</li><li><code>Python</code> axis displayed as a tree on <a href="https://www.shiningpanda-ci.com" class="external-link" rel="nofollow">shiningpanda-ci.com</a>.</li></ul><h2 id="ShiningPandaPlugin-Version0.4(28/09/2011)">Version 0.4 (28/09/2011)</h2><ul><li>Adding ability to pass <code>--no-site-packages</code> to virtualenv (thanks @amcfague).</li><li>Remove <code>(Default)</code> Python version.</li><li>Add an explicit option on builders with <code>Command</code> to ignore non-zero exit code (previously done by specifying an header, which are now ignored).</li></ul><h2 id="ShiningPandaPlugin-Version0.3(20/09/2011)">Version 0.3 (20/09/2011)</h2><ul><li>Whitespace characters are not allowed in Python names (as they are used to create the workspace path in multi-configuration projects).</li><li>Make the build fail if there a some whitespace characters in <code>PYTHONHOME</code> (see. <a href="https://bugs.launchpad.net/virtualenv/+bug/241581" class="external-link" rel="nofollow">https://bugs.launchpad.net/virtualenv/+bug/241581</a>).</li><li>Propagate <code>User-defined Axis</code> variables in all builders (multi-configuration projects).</li></ul><h2 id="ShiningPandaPlugin-Version0.2(13/09/2011)">Version 0.2 (13/09/2011)</h2><ul><li>PyPy support.</li></ul><h2 id="ShiningPandaPlugin-Version0.1(31/08/2011)">Version 0.1 (31/08/2011)</h2><ul><li><p>Initial release.</p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022391655 {padding: 0px;}
+div.rbtoc1631022391655 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022391655 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022391655'>
+<ul class='toc-indentation'>
+
+</ul>
+</div> <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022391655 {padding: 0px;}
+div.rbtoc1631022391655 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022391655 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022391655'>
+<ul class='toc-indentation'>
+
+</ul>
+</div></li></ul><p><span class="confluence-anchor-link" id="ShiningPandaPlugin-running-tests"></span></p><h1 id="ShiningPandaPlugin-Runningtests">Running tests</h1><p>If you want to run ShiningPanda plugin tests, ensure that you're on UNIX and that following environment variables are not set: <code>PYTHONHOME</code>, <code>VIRTUAL_ENV</code> and <code>JYTHON_HOME</code>.</p><p>You'll also need some Python installations:</p><ul><li>a CPython 2 installation,</li><li>a CPython 3 installation,</li><li>a PyPy installation,</li><li>a Jython installation.</li></ul><p>To declare them, create a new property file by copying the template (only if template's configuration does not match your environment):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">cp src/test/resources/test.properties.model src/test/resources/test.properties
+</pre>
+</div></div><p>Then edit <code>test.properties</code> and modify the following entries:</p><ul><li><code>CPython.2.Home</code>: CPython 2's home folder (<code>PYTHONHOME</code>),</li><li><code>CPython.3.Home</code>: CPython 3's home folder (<code>PYTHONHOME</code>),</li><li><code>PyPy.Home</code>: PyPy's home folder,</li><li><code>Jython.Home</code>: Jython's home folder (<code>JYTHON_HOME</code>),</li></ul><p>You can also provide these values via command line:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">mvn -DCPython.3.Home=/path/to/cpython/3/home
+</pre>
+</div></div><p>To run all the tests:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">mvn clean install
+</pre>
+</div></div><p>To run a test:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">mvn -Dtest=jenkins.plugins.shiningpanda.builders.TestVirtualenvBuilder
+</pre>
+</div></div><p>And to debug one (with Eclipse for instance):</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">mvn -Dmaven.surefire.debug -Dtest=jenkins.plugins.shiningpanda.TestVirtualenvBuilder
+</pre>
+</div></div><p>For those developing on Eclipse, its test runner is not compatible with Jenkins's base test case. You'll need to run tests via command line.</p><p>And if you just want to check that everything is working for the <code>HEAD</code>, just have a look on <a href="https://jenkins.shiningpanda-ci.com/shiningpanda.org/job/shiningpanda-plugin/" class="external-link" rel="nofollow">our continuous integration server</a>.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899999.png">installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59179047.png">add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59179048.png">custom_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59179049.png">standard_python_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59179050.png">virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899994.png">custom_python_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899993.png">custom_python_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899995.png">freestyle_add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899996.png">freestyle_python_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899998.png">freestyle_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900019.png">freestyle_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/65863686.png">installations.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900000.png">matrix_add_axis.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900001.png">matrix_add_build_step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900002.png">matrix_python_axis_hosted.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900003.png">matrix_python_axis.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900004.png">matrix_python_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900005.png">matrix_tox_axis.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900006.png">matrix_tox_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900020.png">matrix_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900008.png">new_job.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59899997.png">freestyle_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/59900007.png">matrix_virtualenv_builder.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/58001240/58196092.png">installations.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:46</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

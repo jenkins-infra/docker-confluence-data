@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Apache frontend for security</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Securing-Jenkins.html">Securing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Apache frontend for security
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified on Jun 30, 2008
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル: <a href="http://hudson.gotdns.com/wiki/display/HUDSON/Apache+frontend+for+security" class="external-link" rel="nofollow">Apache frontend for security</a></p>
+
+
+<p>It is possible to use an apache in front of your tomcat instance that runs Hudson. You will need to compile apache-2.2 with mod_proxy enabled. The example below shows an invocation of apache-2.2 configure script with parameters that enable mod_proxy, mod_proxy_ajp, LDAP and SSL.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+[ root@buildhost# ]sudo ./configure --enable-proxy \
+--enable-ldap \
+--enable-vhost \
+--enable-ssl \
+--enable-suexec \
+--enable-rewrite \
+--enable-proxy-ajp \
+--enable-authnz-ldap \
+--enable-mods-shared=all \
+--with-ssl \
+--with-ldap \
+--with-ldap-include=/usr/include/ \
+--prefix=/opt/apache/httpd-2.2.6
+</pre>
+</div></div>
+<p>Edit the httpd-vhosts.conf file that resides in \${APACHE_HOME}/conf/extras to make apache aware of your tomcat server. The example below shows a vhost configuration for an apache that runs on the same machine as the tomcat instance. The tomcat instance here is configured to run an AJP connector on port 8102. It has no HTTP* connectors configured. This vhost is also configured to rely on basic authentication (htpasswd) to protect certain resources, such as project(s) configuration, hudon management, and project(s) deletion. See the apache manual for examples of basic, and other, authentication scheme configuration.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;VirtualHost *:80&gt;
+    ServerAdmin your@email.address.com
+    DocumentRoot &quot;/opt/apache/httpd/htdocs&quot;
+    ServerName hudson.yourdomain.com
+    ErrorLog &quot;logs/hudson-error_log&quot;
+
+           ProxyPass /hudson/ ajp://127.0.0.1:8102/hudson/
+           ProxyPassReverse /hudson/ ajp://127.0.0.1:8102/hudson/
+           ProxyPass / ajp://127.0.0.1:8102/hudson/
+           ProxyPassReverse / ajp://127.0.0.1:8102/hudson/
+        &lt;Location /&gt;
+                Order allow,deny
+                Allow from all
+        &lt;/Location&gt;
+        &lt;Location /hudson/manage&gt;
+                AuthType basic
+                AuthName &quot;Hudson Config&quot;
+                AuthUserFile &quot;/opt/apache/httpd/conf/.htpasswd&quot;
+                Require valid-user
+        &lt;/Location&gt;
+        &lt;LocationMatch &quot;/hudson/job/.*/configure&quot;&gt;
+                AuthType basic
+                AuthName &quot;Hudson Project Config&quot;
+                AuthUserFile &quot;/opt/apache/httpd/conf/.htpasswd&quot;
+                Require valid-user
+        &lt;/LocationMatch&gt;
+        &lt;LocationMatch &quot;/hudson/job/.*/delete&quot;&gt;
+                AuthType basic
+                AuthName &quot;Hudson Project Config&quot;
+                AuthUserFile &quot;/opt/apache/httpd/conf/.htpasswd&quot;
+                Require valid-user
+        &lt;/LocationMatch&gt;
+[_Top of page_|#top]
+
+&lt;/VirtualHost&gt;
+</pre>
+</div></div>
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>The tomcat instance does not have an HTTP connector to prevent direct access. I am currently trying to find out how to get the AJP connector only listen/accept communications on a certain interface. Until that is done, a rogue apache server can be configured to access your tomcat instance and bypass all authentication.</p></div></div>
+
+<div class="confluence-information-macro confluence-information-macro-note"><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>This is done by setting the <strong>address</strong> attribute in the tomcat connector definition. See <a href="http://tomcat.apache.org/tomcat-5.5-doc/config/ajp.html#Standard%20Implementation" class="external-link" rel="nofollow">http://tomcat.apache.org/tomcat-5.5-doc/config/ajp.html#Standard%20Implementation</a>. For above localhost setting, use <strong>address=&quot;127.0.0.1&quot;</strong>. Without this, Tomcat will listen on all interfaces, including all external-facing interfaces. With the setting, Tomcat will make the connector listen just on 127.0.0.1 to which no packets from external sources will be routed.</p></div></div>
+                    </div>
+
+                    
+                                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="comments" class="pageSectionTitle">Comments:</h2>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-46336738"></a>
+                                    <font class="smallfont"><p>Fioricet2u.com Buy Fioricet Online<br/>
+[http://www.fioricet2u.com||Fioricet]<br/>
+[http://www.fioricet2u.com||Buy Fioricet]</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Oct 19, 2010 08:33
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087651"></a>
+                                    <font class="smallfont"><p>I always cut out interesting article,<a href="http://www.air-randy.us/" class="external-link" rel="nofollow">cheap jordans</a><span style="color: rgb(0,0,255);"> .</span></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Nov 23, 2010 23:47
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087652"></a>
+                                    <font class="smallfont"><p>I really want to say your article is very good! Support you,<a href="http://www.christianlouboutinforcheap.cc/" class="external-link" rel="nofollow">fake tian louboutin</a>.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Nov 23, 2010 23:50
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087653"></a>
+                                    <font class="smallfont"><p><span style="color: rgb(43,43,43);">Bless your friend forever! Also bless myself!</span> <a href="http://www.coachoutlets4sale.com/" class="external-link" rel="nofollow">coach bags</a></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Nov 23, 2010 23:50
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087657"></a>
+                                    <font class="smallfont"><p>There was a song in the first season,<a href="http://www.coach-outlets.cc/" class="external-link" rel="nofollow">coach outlet</a> joke and then we decided to go to Hawaii with my kids.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Nov 24, 2010 00:21
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087843"></a>
+                                    <font class="smallfont"><p><a href="http://www.supra-skytop.org/" class="external-link" rel="nofollow">supra skytop</a> I like your  your beauty! Perhaps you don; t think too much of it, bu it is really fascinating.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 03, 2010 18:14
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087848"></a>
+                                    <font class="smallfont"><p>When you can feel the things you，<a href="http://www.coach-outlets.cc/coach-shoes-c-92.html" title="coach shoes" class="external-link" rel="nofollow">coach shoes</a> want to feel able to say what you feel when this is a very happy time.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 03, 2010 19:37
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47087855"></a>
+                                    <font class="smallfont"><p>Truth is God and God is truth. <a href="http://www.christianlouboutinforcheap.cc/" title="christian louboutin" class="external-link" rel="nofollow">christian louboutin</a></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 04, 2010 00:51
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47480892"></a>
+                                    <font class="smallfont"><p>Not tolerance of others, is unworthy of tolerance by others,<a href="http://www.louisvuittonforsale.com/" class="external-link" rel="nofollow">louis vuitton outlet</a> but who can say oneself is not to need tolerant?</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 07, 2010 17:04
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47480985"></a>
+                                    <font class="smallfont"><p>Thank you for your explanation. Very helpful.<br/>
+<a href="http://www.cheapairjordan.cc/" class="external-link" rel="nofollow">Air Jordan</a></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 09, 2010 18:31
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-47480987"></a>
+                                    <font class="smallfont"><p><a href="http://www.coachoutlets4sale.com" class="external-link" rel="nofollow">coach factory stores</a>. I like all of your article.Well done..*</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by  at Dec 09, 2010 22:18
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    </div>
+                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

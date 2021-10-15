@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : ClearCase Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : ClearCase Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (vlatombe)</span> on Jul 02, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Integrates Jenkins with <a href="http://www.ibm.com/software/awdtools/clearcase/" class="external-link" rel="nofollow">ClearCase</a>.</p>
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View ClearCase <a href="https://plugins.jenkins.io/clearcase" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin allows you to use either base ClearCase and UCM ClearCase as the SCM for your Jenkins projects.</p>
+
+<p>The plugin uses the <strong>cleartool</strong> executable to work with a ClearCase server. This requires that the cleartool command (and therefore the <strong>full ClearCase client</strong>) be installed on master and all slaves on which you wish to run ClearCase jobs.</p>
+
+<p>This plugin doesn't support CCRC (Clearcase Remote Client), and probably never will, given the large differences of implementation between this client and the full client.</p>
+
+
+<p>The SCM also supports polling, so it can start a build when changes are detected on the branch, label or stream specified in the job configuration.</p>
+
+<h2 id="ClearCasePlugin-Usage">Usage</h2>
+
+<h3 id="ClearCasePlugin-Globalconfiguration">Global configuration</h3>
+
+<ul>
+	<li>Set up the cleartool executable in the Jenkins configuration. To verify that the executable can be used by Jenkins press the &quot;Check cleartool version&quot;</li>
+	<li>Choose the default view storage location strategy. This will be applied to all jobs using the plugin. The configuration can be overriden at job level within the advanced section.
+	<ul>
+		<li>Default : when issuing the mkview command no additional option to specify the view storage is issued. The behaviour will depend on the server configuration.</li>
+		<li>Use explicit path : generates -vws argument to the mkview command. The setting specifies a prefix per OS, then the &lt;viewtag&gt;.vws is appended.</li>
+		<li>Use server storage location : generates -stgloc argument. You can either use auto or a specific view storage. You'll need to input a label to determine where the command to list storage locations should be issued (since it can vary depending on the host).</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h3 id="ClearCasePlugin-BaseClearCase">Base ClearCase</h3>
+
+<h4 id="ClearCasePlugin-Basicconfiguration">Basic configuration</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/2916537/71696511.png" data-image-src="attachments/2916537/71696511.png" data-unresolved-comment-count="0" data-linked-resource-id="71696511" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="base_configuration.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="2916537" data-linked-resource-container-version="193"></span></p>
+<ul>
+	<li>View tag : It has to be unique in the ClearCase region the master/slaves are using. The default value should ensure that, but you can customize it if you know what you are doing. During the build, this value can be referenced using CLEARCASE_VIEWTAG</li>
+	<li>View path : the folder where the clearcase view will be created within the workspace. You can use CLEARCASE_VIEWPATH during the build in order to get the absolute path to the view directory.</li>
+	<li>You can provide the config spec either inline or by reading it from a file. The file must be reachable from the master node.</li>
+	<li>You can provide a command to execute prior to read the config spec in order to refresh it.</li>
+	<li>You can then provide either load rules, or choose to read them from the config spec. Load rules are required even for dynamic views, as they are used for polling and also to generate changelogs.
+	<ul>
+		<li>Load rules should be separated by newlines.</li>
+		<li>Load rules should be a path to a file or directory within the  view, i.e., &quot;vob/some_vob&quot; or &quot;\some_other_vob\directory&quot;. The path can  have a leading file separator, or not. You can also have load rules  starting with &quot;load&quot;, as you would in a snapshot config spec outside of  Jenkins - the &quot;load &quot; will be removed and the path will be processed as  normal.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>It is possible to poll on different load rules. This allows you to only monitor part of the view.</li>
+	<li>Check &quot;Use update&quot; if you wish to use the same view for every build - this will greatly speed up your builds, since the view won't be recreated and repopulated every build, but build output will be left in the view.
+	<ul>
+		<li>This option is only applicable to snapshot views. Dynamic views are not removed and recreated.</li>
+	</ul>
+	</li>
+	<li>Specify one or more branches - these branches will be used for polling for changes and assembling changelogs.</li>
+	<li>Specify one or more labels - allows to detect changes by addition or removal of given labels. The plugin will no longer look at checkins, only label addition/removal.</li>
+</ul>
+
+
+<h4 id="ClearCasePlugin-Advancedconfiguration">Advanced configuration</h4>
+
+<ul>
+	<li>Click the &quot;Advanced&quot; button to reveal the advanced options, including the dynamic view options.</li>
+	<li>Excluded regions
+	<ul>
+		<li>Optionally, specify one or more regular expressions representing files or directories which you wish to ignore when polling and generating changelogs. In this example, any changes to a file named &quot;version.properties&quot; or &quot;Version.properties&quot; anywhere in the source tree will be ignored.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li>Override view storage : this allows you to override the global strategy (see global configuration above for details)</li>
+	<li>Additional mkview arguments
+	<ul>
+		<li>If you need to pass additional arguments to &quot;cleartool mkview&quot;, such as -gpath, -hpath, -server, etc, do that here. You can refer to the workspace the view will be under as $WORKSPACE, and the view name as $CLEARCASE_VIEWNAME. These will be replaced before being passed to <em>cleartool mkview</em>.</li>
+	</ul>
+	</li>
+	<li>Filter destroy sub-branch events
+	<ul>
+		<li>If selected, <em>destroy sub-branch</em> events, which are generally the result of removing a version 0 of a file, will be ignored in polling.</li>
+	</ul>
+	</li>
+	<li>Remove ClearCase view on rename
+	<ul>
+		<li>If selected, the view will be removed, via <em>cleartool rmview</em>, if the job is renamed, since the workspace directory will change and the existing view will no longer be valid.</li>
+	</ul>
+	</li>
+	<li>Multi-site poll buffer
+	<ul>
+		<li>Optionally, if you wish to have polling check for changes since the last build plus an additional period of time, in case of changes made at another site before the build which had not yet been synced to the build site by build time, enter that buffer period here, in minutes.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h4 id="ClearCasePlugin-Dynamicviewconfiguration">Dynamic view configuration</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/2916537/39256092.png" data-image-src="attachments/2916537/39256092.png" data-unresolved-comment-count="0" data-linked-resource-id="39256092" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="base_dynamic_config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="2916537" data-linked-resource-container-version="193"></span></p>
+<ul>
+	<li>Optionally, you can use an existing dynamic view, rather than a new snapshot view. To do so, check &quot;Use dynamic view&quot; under the advanced options.</li>
+	<li>View root
+	<ul>
+		<li>Required for dynamic view use - this is the directory or drive under which dynamic views live. On Unix, this is generally &quot;/view&quot;, while on Windows, it's generally &quot;M:\&quot;.</li>
+	</ul>
+	</li>
+	<li>Do Not Reset Config Spec
+	<ul>
+		<li>If selected, the dynamic view's config spec won't be changed, regardless of whether it matches the config spec specified in the job configuration.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h3 id="ClearCasePlugin-UCMClearCase">UCM ClearCase</h3>
+
+<h4 id="ClearCasePlugin-Basicconfiguration.1">Basic configuration </h4>
+
+
+
+
+
+<ul>
+	<li>View tag : It has to be unique in the ClearCase region the  master/slaves are using. The default value should ensure that, but you  can customize it if you know what you are doing. During the build, this  value can be referenced using CLEARCASE_VIEWTAG</li>
+	<li>View path : the folder where the clearcase view will be created  within the workspace. You can use CLEARCASE_VIEWPATH during the build in  order to get the absolute path to the view directory.</li>
+	<li>Stream selector : the specification for the stream you want to create the view on.</li>
+	<li>Define load rules manually : usually load rules can be determined automatically based on the foundation baselines of the given stream selector, but if you wish to use only a part of the load rules defined for the given stream, you will need to specify the load rules to use.</li>
+	<li>Check &quot;Use update&quot; if you wish to use the same view for every build -  this will greatly speed up your builds, since the view won't be  recreated and repopulated every build, but build output will be left in  the view.
+	<ul>
+		<li>This option is only applicable to snapshot views. Dynamic views are not removed and recreated.</li>
+	</ul>
+	</li>
+	<li>Changeset : this defines what level of details you wish to appear in the resulting changeset. Generating the changeset has a time cost, so depending on what kind of job you run, you may not want everything to appear.</li>
+	<li>Build foundation baseline : this option will change the behaviour of the plugin by creating a view not on the stream itself, but rather based on its foundation baseline. When polling, only change of foundation baselines (resulting from rebase operation) will trigger a build.</li>
+</ul>
+
+
+<h4 id="ClearCasePlugin-Advancedconfiguration.1">Advanced configuration</h4>
+
+<p>Most of advanced configuation are common with the Base Clearcase section. With UCM, the following additional options applies :</p>
+<ul>
+	<li>Filter <em>Destroy sub branch</em> event : as its name suggests, this will filter out events deleting branches, as this is an operation that is often done through Clearcase hooks.</li>
+	<li>Branch name : if specified, the branch name will be used for polling and to build changelogs, rather than extrapolating from the UCM stream name.</li>
+</ul>
+
+
+<h4 id="ClearCasePlugin-Dynamicviewconfiguration.1">Dynamic view configuration</h4>
+
+<p>Freeze code : This options will create a child stream under the configured stream and will use it for the build. On each build, Jenkins will rebase the build stream with the latest baselines found the configured stream.</p>
+
+<h2 id="ClearCasePlugin-Gettingsupport">Getting support</h2>
+
+<ul>
+	<li>Start by reading the FAQ section below.</li>
+	<li>If you don't find what you are looking for, have a look on the <a href="http://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">jenkinsci-users</a> group.</li>
+	<li>Comments on this page aren't monitored regularly, so prefer the user group if you have any question.</li>
+</ul>
+
+
+<h2 id="ClearCasePlugin-Frequentlyaskedquestions">Frequently asked questions</h2>
+
+<h4 id="ClearCasePlugin-Aretheviewattributesavailableinthebuildscripts?">Are the view attributes available in the build scripts?</h4>
+
+<p>There are three environment variables set after checkout :</p>
+<ul>
+	<li>CLEARCASE_VIEWNAME : The path of the view relative to the workspace</li>
+	<li>CLEARCASE_VIEWPATH : The absolute path of the view</li>
+	<li>CLEARCASE_VIEWTAG : The view tag</li>
+</ul>
+
+
+<h4 id="ClearCasePlugin-Cantheviewnamebeupdatedwiththenameofthejob?">Can the view name be updated with the name of the job ?</h4>
+
+<p>Yes, it is possible to add ${USER_NAME}, ${NODE_NAME}, ${JOB_NAME} and ${DASH_WORKSPACE_NUMBER} in a view name which are replaced with the name of the user, node and job.</p>
+
+<p>We recommend you to use the default view tag, which is jenkins_${USER_NAME}<em>${NODE_NAME}</em>${JOB_NAME}${DASH_WORKSPACE_NUMBER}. This will allow you to generate unique view tag whatever your configuration is.</p>
+
+<h4 id="ClearCasePlugin-Errorwhencreatingview(storagedirectorymustbeinUNCstyle)">Error when creating view <em>(storage directory must be in UNC style)</em></h4>
+
+<p>This can happen if no server storage location has been defined for your ClearCase region (this has to be done by ClearCase administrators).</p>
+
+<p>In that case, you can use Override view storage &gt; Use explicit path. The plugin will generate a -vws argument for the <em>cleartool mkview</em> command based on the view tag that you provided and view storage directory that you provided.
+<br class="atl-forced-newline"/></p>
+
+<h4 id="ClearCasePlugin-Errorwhenretrievinghistory(Error:Notanobjectinavob:&quot;vobs&quot;)">Error when retrieving history <em>(Error: Not an object in a vob: &quot;vobs&quot;)</em></h4>
+
+<p>On Linux and Solaris there are sometimes problems retrieving the ClearCase history using lshistory. In the Advanced section in the configuration it is possible to specify one or several paths in the <strong>VOB path(s)</strong> field that will be used when retrieving the history. If the config spec contains &quot;vobs/gtx2&quot; then the <strong>VOB path(s)</strong> field should be set to gtx2. (<a href="http://www.nabble.com/Clearcase-plugin-and-the-lshistory-command-td13384131.html" class="external-link" rel="nofollow">Mail thread</a>, <a href="https://issues.jenkins-ci.org/browse/JENKINS-1053">JENKINS-1053</a>)</p>
+
+
+<h2 id="ClearCasePlugin-Changelog"><a href="ClearCase-Plugin-Changelog.html">Changelog</a></h2>
+
+<h2 id="ClearCasePlugin-Upgradenotes"><a href="ClearCase-plugin-Upgrade-notes.html">Upgrade notes</a></h2>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/3080246.png">ClearCaseJobConfig-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/3080240.jpg">cc_configuration.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/37879860.hpi">clearcase.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/37879859.hpi">clearcase.hpi</a> (application/octet-stream)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/39256090.png">base_standard_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/39256091.png">base_advanced_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/39256092.png">base_dynamic_config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112406.tif">jenkins1.TIF</a> (image/tiff)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112409.jpg">jenkins1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112408.jpg">jenkins2.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112407.jpg">jenkins1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112410.jpg">jenkins1b.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/61112411.jpg">jenkins2b.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/71696511.png">base_configuration.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/71696512.png">base_advanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/2916537/71696513.png">ucm_basic.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

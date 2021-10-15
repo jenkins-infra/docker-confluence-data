@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Clang Scan-Build Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Clang Scan-Build Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jkennedy1980)</span>, last modified by <span class='editor'> Unknown User (escoem)</span> on Dec 21, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'clang-scanbuild-plugin' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>
+<p>This plugin allows you to execute Clang scan-build against Mac or iPhone XCode projects or other scan-build compatible build tools.</p></p>
+
+<h1 id="ClangScan-BuildPlugin-Description">Description</h1>
+
+<p>This plugin allows you configure a build step that will execute the <a href="http://clang-analyzer.llvm.org/scan-build.html" class="external-link" rel="nofollow">Clang scan-build</a> static analysis tool against an XCode project. This plugin also provides a Post-build Action that will archive the HTML reports and generate a trend graph.</p>
+
+
+<p>The following features are provided by this plug-in:</p>
+<ul>
+	<li>Clang tool installations so you can configure locations differently on slaves</li>
+	<li>Clang scan-build build step which allows you to provide XCode settings such as: target, SDK, &amp; configuration</li>
+	<li>Dashboard trend chart which details the bug count over time visible on your job's dashboard page</li>
+	<li>New bugs since the last build are highlighted so they are easy to identify</li>
+	<li>A publisher which will archive the scan-build HTML reports and will optionally fail the build if the bug count exceeds the configured threshold</li>
+</ul>
+
+
+<p>Please use the <a href="Mailing-Lists.html">mailing lists</a> or <a href="http://issues.jenkins-ci.org/" class="external-link" rel="nofollow">issue tracker</a> to ask questions, create feature request, or create bug reports.</p>
+
+<h1 id="ClangScan-BuildPlugin-Installation">Installation</h1>
+
+<ul>
+	<li>First install Clang scan-build onto the Jenkins master or slave which will be executing your XCode builds. You can download clang at the following url: <a href="http://clang-analyzer.llvm.org/installation.html" class="external-link" rel="nofollow">http://clang-analyzer.llvm.org/installation.html</a></li>
+	<li>Setup a Clang scan-build installation in the Jenkins main configuration. (Manage Jenkins). You should give your installation a unique name and provide a path to the scan-build folder unless your master will never execute Clang scan-build jobs.</li>
+	<li>Edit your Job configuration by adding a 'Clang scan-build' Build Step.</li>
+	<li>Choose the installation you wish to use (likely the one you just added).</li>
+	<li>Provide the appropriate XCode build settings (target, SDK, &amp; configuration).</li>
+</ul>
+
+
+<h1 id="ClangScan-BuildPlugin-Samplejobusingmake">Sample job using make</h1>
+
+<ul>
+	<li>To invoke scan-build from the command-line using make, create a job with <strong>Build Step - Execute Shell</strong> such as:
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+make clean
+rm -rf ${WORKSPACE}/clangScanBuildReports
+scan-build -o ${WORKSPACE}/clangScanBuildReports -v -v --use-cc clang --use-analyzer=/usr/bin/clang make
+</pre>
+</div></div></li>
+</ul>
+
+
+<ul>
+	<li>If you wish to have results published, add the <strong>Post-build Action - Publish Clang scan-build reports</strong>.</li>
+</ul>
+
+
+<h1 id="ClangScan-BuildPlugin-Changelog">Changelog</h1>
+
+<p><strong>Release 1.7</strong></p>
+<ul>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-18941">JENKINS-18941</a> allow specifying output directory for scan-build reports</li>
+	<li><a href="https://issues.jenkins-ci.org/browse/JENKINS-31679">JENKINS-31679</a> fix logging</li>
+</ul>
+
+
+<p><strong>Release 1.6</strong></p>
+<ul>
+	<li>Remove obsolete &quot;-activetarget&quot; flag (<a href="https://issues.jenkins-ci.org/browse/JENKINS-23008">JENKINS-23008</a>)</li>
+	<li>Fix null pointer exception in getClangexcludedpaths (<a href="https://issues.jenkins-ci.org/browse/JENKINS-28130">JENKINS-28130</a>)</li>
+</ul>
+
+
+<p><strong>Release 1.5</strong></p>
+<ul>
+	<li>Update to Jenkins core parent dependency to 1.580.1</li>
+	<li>Change minimum isApplicable() level to AbstractProject, for compatibility with <a href="https://wiki.jenkins-ci.org/display/JENKINS/inheritance-plugin" class="external-link" rel="nofollow">inheritance plugin</a>.</li>
+	<li>Add support for clang static analyzer &gt;= 270</li>
+	<li>Add the ability to exclude files from scan-build analysis.</li>
+	<li>Update the publisher to copy all available reports.</li>
+	<li>Remove hardcoded &quot;Xcode 4&quot;.</li>
+	<li>Add default arguments for xcodebuild and scan-build.</li>
+	<li>Update e-mail address for Josh Kennedy.</li>
+</ul>
+
+
+<p><strong>Release 1.4</strong></p>
+<ul>
+	<li>Added code to implement <a href="https://issues.jenkins-ci.org/browse/JENKINS-15902">JENKINS-15902</a> - xcode build arguments can now be specified. They will be added to the end of the command.</li>
+</ul>
+
+
+<p><strong>Release 1.3.1</strong></p>
+
+<ul>
+	<li>Fixed <a href="https://issues.jenkins-ci.org/browse/JENKINS-9251">JENKINS-9251</a> - If you are using a master/slave configuration the clang scan-build tool home can now be left blank on the master and configured on each slave.</li>
+	<li>Fixed another bug which was causing a 500 error when saving the scan-build tool configuration.</li>
+</ul>
+
+
+<p><strong>Release 1.3</strong></p>
+<ul>
+	<li>Merged patch provided by github user 'tru' which passes Jenkins environment variables through the plugin and makes them available to scan-build.  This enables passing down variables such as BUILD_NUMBER and other Jenkins environment variables.</li>
+	<li>Added the ability to provide arbitrary arguments in the build action configuration which are passed to scan-build.  </li>
+</ul>
+
+
+<p><strong>Release 1.2</strong></p>
+
+<ul>
+	<li>Patch provided by Kenji21 to fix a bug when building on a slave.</li>
+	<li>Bug reports are now created on the slave and copied to the master so that they are accessible in your browser</li>
+</ul>
+
+
+<p><strong>Release 1.1</strong></p>
+<ul>
+	<li>Support for X-Code 4</li>
+</ul>
+
+
+<p><strong>Release 1.0</strong></p>
+<ul>
+	<li>Initial Release</li>
+	<li>Clang scan-build build step</li>
+	<li>Clang scan-build report publisher</li>
+	<li>Supports XCode projects within workspace subfolders</li>
+</ul>
+
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/54723336/72613981.png">Screen Shot 2014-04-20 at 2.11.02 PM.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:16</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

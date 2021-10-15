@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Koji Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Koji Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (vtunka)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Jun 01, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Koji <a href="https://plugins.jenkins.io/koji" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-30/#SECURITY-936" class="external-link" rel="nofollow">SSL/TLS certificate validation globally and unconditionally disabled</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-1092" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+<p>This plugin enables integration with <a href="https://fedorahosted.org/koji/" class="external-link" rel="nofollow">Koji</a> build system providing clean-room environment for production builds. Main focus of Koji is on reproducibility, auditability and isolation of build executors which are freshly provisioned each time.</p>
+
+<p>This plugin focuses on Koji/Maven builds, however if there will be requirements to work with RPM builds, Windows native builds or images in the future, I can add the support as well and of course I will accept your contributions.</p>
+
+<p>You can use <a href="https://github.com/sbadakhc/kojak" class="external-link" rel="nofollow">Kojak</a> scripts to easily provision &amp; automatically configure your own Koji instance including configuration of the Java/maven ecosystem.</p></p>
+
+
+<p>A potential usage of Jenkins-Koji plugin can be described as such:</p>
+<ul>
+	<li>Run your builds using Jenkins CI, as you do now</li>
+	<li>Once build &amp; tests are passing and you are ready to produce a production build call Jenkins-Koji build step</li>
+	<li>Jenkins-Koji plugin orchestrates the jobs in Koji, you can choose a &quot;scratch build&quot; which is a temporary build which is garbage collected after a time </li>
+	<li>Once Koji is finished, use Jenkins-Koji plugin to automatically fetch the artifacts from Koji and for example run a set of smoke tests</li>
+	<li>Once these advanced tests pass, you are ready for a full build, once again execute Koji build, this time a regular build, which will be stored permanently in Koji</li>
+</ul>
+
+
+
+
+<div class="sectionColumnWrapper"><div class="sectionMacro">
+<div class="sectionMacroRow"><div class="columnMacro" style="width:50%;min-width:50%;max-width:50%;"><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Installation Requirements</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Currently this plugin requires koji CLI installed on the filesystem, limiting usage to Linux. In time the functionality of koji CLI will be transfered to core plugin, allowing execution from various OSes.</p></div></div></div></div></div></div>
+
+
+<h1 id="KojiPlugin-Description">Description</h1>
+
+<p>Koji plugin is meant for orchestration of Koji instance from Jenkins CI. The idea is to use Jenkins as a developer tool and build the production releases via Koji.</p>
+
+<p>The following features are provided by this plug-in:</p>
+<ul>
+	<li>Orchestrate a Koji maven build</li>
+	<li>Collect the results from Koji</li>
+	<li>Find metadata about builds, packages or build targets from Koji</li>
+	<li>Simple authentication</li>
+</ul>
+
+
+
+
+<h1 id="KojiPlugin-HowToUse">How To Use</h1>
+
+<ol>
+	<li>Download <a href="https://github.com/sbadakhc/kojak.git" class="external-link" rel="nofollow">Kojak</a> to set up your own Koji environment or use <a href="https://fedoraproject.org/wiki/Koji/RunsHere" class="external-link" rel="nofollow">existing Koji instance</a>.</li>
+	<li>Install Koji CLI on your system (yum install koji)</li>
+	<li>Configure the Koji CLI to use your SSH key for Koji instance </li>
+	<li>Install the Koji plugin in Jenkins</li>
+	<li>Restart Jenkins</li>
+	<li>Execute Koji-plugin in Jenkins as you desire</li>
+	<li>Monitor build using Koji-web, Koji CLI, etc.</li>
+</ol>
+
+
+<p>Step no. 3 - configuring global plugin settings: </p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/72418973/72614030.png" data-image-src="attachments/72418973/72614030.png" data-unresolved-comment-count="0" data-linked-resource-id="72614030" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-koji-global-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72418973" data-linked-resource-container-version="16"></span></p>
+
+
+<p>Step no. 6 - invoking Jenkins-Koji plugin in your project:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/72418973/72614031.png" data-image-src="attachments/72418973/72614031.png" data-unresolved-comment-count="0" data-linked-resource-id="72614031" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-koji-project-config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72418973" data-linked-resource-container-version="16"></span><br/>
+Build log;</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/72418973/72614032.png" data-image-src="attachments/72418973/72614032.png" data-unresolved-comment-count="0" data-linked-resource-id="72614032" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins-koji-build-log.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72418973" data-linked-resource-container-version="16"></span><br/>
+Step no. 7 - monitoring Koji build: <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/72418973/72614033.png" data-image-src="attachments/72418973/72614033.png" data-unresolved-comment-count="0" data-linked-resource-id="72614033" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="koji-results.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="72418973" data-linked-resource-container-version="16"></span></p>
+
+
+<h1 id="KojiPlugin-Roadmap">Roadmap</h1>
+
+<ul>
+	<li>Eliminate usage of Koji CLI to enable support for multiplatform Jenkins executors</li>
+	<li>Revamp of Jelly UI</li>
+	<li>Provide more operations</li>
+	<li>Include rule based decisions for Koji builds based on test results / successful executions </li>
+	<li>Try to provide authentication via SSL or Kerberos if desired by community</li>
+	<li>Enable basic operations for RPMs</li>
+</ul>
+
+
+<h1 id="KojiPlugin-Changelog">Changelog</h1>
+
+<h3 id="KojiPlugin-Release0.3(Jun1,2015)">Release 0.3 (Jun 1, 2015)</h3>
+<ul>
+	<li>Fixed plugin artifact ID, allowing users pre-0.2 to upgrade</li>
+	<li>Added plugin wiki URL</li>
+	<li>No functional changes since 0.2</li>
+</ul>
+
+
+<h3 id="KojiPlugin-Release0.2(May19,2014)">Release 0.2 (May 19, 2014)</h3>
+<ul>
+	<li>Correctly handle Koji XML-RPC login</li>
+	<li>Correctly handle MalformedURL of Koji HUB</li>
+	<li>Fix number of arguments issue for non-scratch builds</li>
+	<li>Add documentation</li>
+</ul>
+
+
+<h3 id="KojiPlugin-Release0.1.3">Release 0.1.3</h3>
+
+<ul>
+	<li>Standardize naming conventions of plugin to Jenkins standards</li>
+</ul>
+
+
+<h3 id="KojiPlugin-Release0.1.1-&gt;0.1.2">Release 0.1.1 -&gt; 0.1.2</h3>
+
+<ul>
+	<li>Solving issues with maven release plugin releasing SNAPSHOTs</li>
+</ul>
+
+
+<h3 id="KojiPlugin-Release0.1">Release 0.1</h3>
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614023.png">tattletale-settings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614024.png">tattletale-build-step.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614025.png">tattletale-post-build.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614026.png">tattletale-project.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614027.png">tattletale-report.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614029.png">jenkins-koji-global-config-cut.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614030.png">jenkins-koji-global-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614031.png">jenkins-koji-project-config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614032.png">jenkins-koji-build-log.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/72418973/72614033.png">koji-results.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:31</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

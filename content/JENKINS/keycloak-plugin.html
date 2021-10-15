@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : keycloak-plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : keycloak-plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mnadeem)</span>, last modified by <span class='editor'> Unknown User (devlauer)</span> on Mar 25, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Keycloak Authentication <a href="https://plugins.jenkins.io/keycloak" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p><a href="https://github.com/keycloak/jenkins-keycloak-plugin" class="external-link" rel="nofollow">Home page</a> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75432221/75628572.png" data-image-src="attachments/75432221/75628572.png" data-unresolved-comment-count="0" data-linked-resource-id="75628572" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jk.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p>(a fork with a newer keycloak version and a separate update-site can be found at this <a href="https://github.com/devlauer/jenkins-keycloak-plugin" class="external-link" rel="nofollow">Home page</a>)</p>
+
+
+<h1 id="keycloak-plugin-Usage">Usage</h1>
+
+<p>You can watch the screencast in <span style="color: rgb(255,0,0);"><strong><a href="https://vimeo.com/116429910" class="external-link" rel="nofollow">Vimeo</a></strong></span><span style="color: rgb(255,0,0);"><strong>/</strong></span><span style="color: rgb(255,0,0);"><strong><a href="https://www.youtube.com/watch?v=_WAFuOa53R0" class="external-link" rel="nofollow">YouTube</a></strong></span><strong> </strong><span style="color: rgb(255,0,0);"><strong>(You may have to put the speaker in high volume)</strong></span></p>
+
+<p><span style="color: rgb(255,0,0);"><strong>(applies only to the older plugin version)</strong></span></p>
+
+<p><span style="color: rgb(255,0,0);"><strong>Usage of the newer version:</strong></span></p>
+
+
+
+<h4 id="keycloak-plugin-Step1:Createakeycloakclientinarealm">Step 1 : Create a keycloak client in a realm</h4>
+
+<p>Lets call the realm <strong>'ci'</strong> and the client <strong>'jenkins'</strong><br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496069.jpg" data-image-src="attachments/75432221/106496069.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496069" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_1.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p>Jenkins is running on port <strong>8080</strong></p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496072.jpg" data-image-src="attachments/75432221/106496072.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496072" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_2.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p>Create the client accordingly</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496070.jpg" data-image-src="attachments/75432221/106496070.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496070" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_1.2.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496071.jpg" data-image-src="attachments/75432221/106496071.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496071" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_1.3.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p>Also make sure sample users are also created, in this case I have created 'devlauer'.</p>
+
+
+
+<h4 id="keycloak-plugin-Step2:Copythekeycloak.json">Step 2 : Copy the keycloak.json</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496073.jpg" data-image-src="attachments/75432221/106496073.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496073" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_3.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<h4 id="keycloak-plugin-Step3:IntheJenkinsglobalsettingspagepastethecontent">Step 3 : In the Jenkins global settings page paste the content</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496074.jpg" data-image-src="attachments/75432221/106496074.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496074" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_4.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+
+<h4 id="keycloak-plugin-Step4:IntheSecurityRealmactivatethesecurityrealmoftheplugin">Step 4 : In the Security Realm activate the security realm of the plugin</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496075.jpg" data-image-src="attachments/75432221/106496075.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496075" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_5.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<h4 id="keycloak-plugin-Step5:Loginintojenkins">Step 5 : Login into jenkins</h4>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/75432221/75628688.png" data-image-src="attachments/75432221/75628688.png" data-unresolved-comment-count="0" data-linked-resource-id="75628688" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="kj6.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+<p>User would be redirected to keycloak for authentication</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496077.jpg" data-image-src="attachments/75432221/106496077.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496077" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_6.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span></p>
+
+
+<h4 id="keycloak-plugin-Step7:Keycloakwouldredirectbacktojenkins">Step 7 : Keycloak would redirect back to jenkins</h4>
+
+<p>User would be redirected back to callback URL</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75432221/106496078.jpg" data-image-src="attachments/75432221/106496078.jpg" data-unresolved-comment-count="0" data-linked-resource-id="106496078" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Usage_7.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="75432221" data-linked-resource-container-version="36"></span><br/>
+===========================================================================================================================</p>
+
+
+<h5 id="keycloak-plugin-Youwouldalsoliketointegratekeyclcoakwithsonar">You would also like to <a href="https://reachmnadeem.wordpress.com/2015/01/22/integrating-keycloak-with-sonarqube/" class="external-link" rel="nofollow">integrate keyclcoak with sonar</a></h5>
+
+<h1 id="keycloak-plugin-TODO">TODO</h1>
+
+
+
+<h4 id="keycloak-plugin-Authorization">Authorization</h4>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628558.png">5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628559.png">4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628560.png">1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628561.png">2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628562.png">3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628563.png">6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628564.png">7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628572.png">jk.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628682.png">kj5.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628683.png">kj4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628684.png">kj1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628685.png">kj2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628686.png">kj3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628688.png">kj6.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628689.png">kj7.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/75628690.png">kj8.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496069.jpg">Usage_1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496070.jpg">Usage_1.2.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496071.jpg">Usage_1.3.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496072.jpg">Usage_2.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496073.jpg">Usage_3.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496076.jpg">Usage_4.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496075.jpg">Usage_5.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496074.jpg">Usage_4.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496077.jpg">Usage_6.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75432221/106496078.jpg">Usage_7.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:31</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

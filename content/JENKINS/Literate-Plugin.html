@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Literate Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Literate Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (stephenconnolly)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Dec 10, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2020-03-09/#SECURITY-1750" class="external-link" rel="nofollow">RCE vulnerability</a></li>
+</ul>
+
+</div></div>
+
+
+<h1 id="LiteratePlugin-LiteratePlugin">Literate Plugin</h1>
+
+<p>
+<p>The plugin provides support for the literate-style multi-branch project type.</p></p>
+
+<h2 id="LiteratePlugin-Whatisaliterate-styleproject">What is a literate-style project</h2>
+
+<p>A Literate-style project is a project where the instructions on how to build the project are part of the actual project themselves. At its simplest, if the project has a README.md file that contains a build section with a literate code block containing the build instructions, that is a literate style project.</p>
+
+<h3 id="LiteratePlugin-Examples">Examples</h3>
+
+
+<h4 id="LiteratePlugin-Simplebuild">Simple build</h4>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Hello world literate project
+============================
+
+
+Build
+-----
+
+
+Let&#39;s say hello
+
+
+    echo &quot;Hello world&quot;
+</pre>
+</div></div>
+<p>Your typical GNU native code project might use something like</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre># Standard GNU project
+
+
+# Build with autoconf/automake
+
+
+    ./configure
+    make
+</pre>
+</div></div>
+
+<h4 id="LiteratePlugin-Simplebuildwithenvironment">Simple build with environment</h4>
+
+<p>ANT projects may do something like</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Environments
+===========
+
+
+Notice how we specify the environment to build with by providing Jenkins node
+labels or tool installer names in code snippet sections attached to bullet points
+in an &quot;environment&quot; section?
+
+
+* `ant-1.8`, `java-1.7`
+
+
+Build
+=====
+
+
+    ant clean dist
+</pre>
+</div></div>
+
+<h4 id="LiteratePlugin-Severalenvironments,buildcommandsdependingontheenvironment">Several environments, build commands depending on the environment</h4>
+
+<p>We could have a more complex project, e.g.</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>Complex project
+===============
+
+
+Environments
+===========
+
+
+We have two different environments that the build must be run on:
+
+
+* `linux`, `gcc-4.2`, `ant-1.8`, `maven-3.0.5`, `java-1.7`
+* `windows`, `vs-pro-2012`, `ant-1.8`, `maven-3.0.5`, `java-1.7`
+
+
+Build
+=====
+
+
+We have two different sets of build instructions, one for building with visual studio and
+the other for building with GCC
+
+
+* On `gcc-4.2`, we start by building the native code
+
+
+        ./configure
+        make
+
+
+    Now we do the Maven based build
+
+
+        mvn clean verify
+
+
+    Finally we use ANT to do the final steps
+
+
+        ant dist-publish
+
+
+* On `vs-pro-2012`, we have a batch file to do the native steps
+
+
+        call build-native.bat
+
+
+    It&#39;s always fun the way Windows invokes batch files, so we need to call them every time
+
+
+        call mvn.bat clean verify
+
+
+    And again for ANT
+
+
+        call ant.bat dist-publish
+</pre>
+</div></div>
+<p>The literate style lets us intersperse comments around the actual build steps to assist in documenting the build instructions.</p>
+
+<h2 id="LiteratePlugin-Promotion">Promotion</h2>
+
+<p>The plugin includes some facilities to support lightweight promotions using manual approval.</p>
+
+<p>You can define the command associated with a promotion just like a build command, in a specific question. But you are free to choose the name of the section. This name will need to be provided to the job configuration.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">Release
+=======
+
+To release the project:
+
+    mvn release:prepare release:perform -B</pre>
+</div></div>
+<p>Of course, the release process doesn't make sense for all branches. It will usually be valid only for master branch. The literate plugin allows you to specify such a restriction.</p>
+
+
+<h2 id="LiteratePlugin-Whatisamulti-branchproject">What is a multi-branch project</h2>
+
+<p>A multi-branch project is a project that automagically creates a sub-project for every branch in your source control. When the branch is deleted (assuming you configure the project to auto prune dead branches) then the sub-project will be removed. Branches are cheap and easy to create in Source Control. They should be just as easy to create in Jenkins... with a literate-style multi-branch project they are trivial to create.</p>
+
+<p>The advantage that literate-style projects bring to multi-branch projects is that you can even change the build system in your branch without breaking the job for your branch.</p>
+
+<h2 id="LiteratePlugin-Howtoinstall">How to install</h2>
+
+<p><span style="text-decoration: line-through;">This plugin is currently in beta version. It means it is available from the jenkins <a href="http://jenkins-ci.org/content/experimental-plugins-update-center" class="external-link" rel="nofollow">experimental update center</a>. Once you have configured your Jenkins instance to target the experimental update center, you can install the literate plugin as any other plugin.</span></p>
+
+<p>This plugin is no longer in beta version. You can install the literate plugin as any other plugin, without having to use the experimental update center.</p>
+
+<h2 id="LiteratePlugin-VersionHistory">Version History</h2>
+
+<h3 id="LiteratePlugin-1.0(2015-12-03)">1.0 (2015-12-03)</h3>
+
+<ul>
+	<li>Screw it, let's cut an official release... while there are some things I think should be done first, given that workflow enables the same problems and doesn't provide a solution we may as well just ship it!</li>
+	<li>The plugin is now available in the official update center.</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:32</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

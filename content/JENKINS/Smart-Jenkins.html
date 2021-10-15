@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Smart Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Smart Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (future_azure)</span>, last modified on Aug 01, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Smart Jenkins <a href="https://plugins.jenkins.io/smart-jenkins" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+
+<p>
+<p>This plugin reduces the electricity consumption by shutting down idle slaves and re-schedules jobs to avoid the rush hours of electricity.</p></p>
+
+<p>Abstract</p>
+
+<p>This plugin schedules jobs to avoid rush hours, shuts down idle computers, and boots them remotely when necessary. In this plugin, OK time (when jobs will be built by Jenkins) and NG time (when jobs will be blocked by this plugin) are being defined. If it is in NG time, idle slaves which are controlled by this plugin will shut down. At the same time, jobs which are controlled by this plugin will be blocked and re-scheduled. However, jobs which are configured to be built with another slave (which is always online) will be built at once. If it is in OK time, all slaves controlled by this plugin will boot. Meanwhile, jobs which are blocked will be built in this time.</p>
+
+<p>About this plugin</p>
+
+<p>This plugin allows:</p>
+<ol>
+	<li>Setting 	“OK” time1 and “NG” time2.</li>
+	<li>Selecting 	slaves which will be controlled by this plugin</li>
+	<li>Selecting 	jobs which will be controlled by this plugin</li>
+	<li>Shutting 	down slaves when necessary even it is in OK time</li>
+	<li>Waking 	up slaves when necessary even it is in NG time</li>
+</ol>
+
+
+<p>User guide</p>
+
+<p>To use this plugin, users need to do some setting in their slave machines.</p>
+<ul>
+	<li>If 	the OS of a slave machine is Linux, users need to set the permission 	of “shutdown” command to make it can be used by every user of 	this machine.</li>
+	<li>Users 	need to make slave machines launch when system starts up.</li>
+	<li>Users 	need to make master machine’s number of built greater than 1.</li>
+	<li>Users 	need to install “wake-on-lan” on master.</li>
+</ul>
+
+
+<p>Note: there are four jobs (shutdown-linux, shutdown-win, wol-linux, wol-win) will be created by this plugin.</p>
+
+<p>When you install this plugin, your side menu will have table like picture1. You can boot your slave machines by clicking the button “On” or shut down your slave machines by clicking the button “Off”. And when the slave machine is online, it will show the IP and MAC address in this table.</p>
+
+<p> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57999885/58196001.png" data-image-src="attachments/57999885/58196001.png" data-unresolved-comment-count="0" data-linked-resource-id="58196001" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SmartJenkins-1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57999885" data-linked-resource-container-version="6"></span></p>
+
+<p>To activate this plugin, just check the smart Jenkins link and check enable Smart-Jenkins Scheduler. You then get the following fields:</p>
+
+<p>OK Time Slot is where you define your own OK time. You just need to input the time you want to do your jobs. For example, from 23o’clock to 7o’clock next day, it is not rush time of electricity, so you want to do your jobs in the time. Also, if you only need do your tests on weekdays, you can input the day you want to do your jobs.</p>
+
+<p>In this case, you can set your OK time like “1-5@23-7“(the number before @ means the day you want to do your jobs and the number after @ means the time you want to do your jobs in a day).</p>
+
+<p>The green part in picture2 means OK time and the gray part means NG time. The read line in picture2 means current time. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57999885/58196002.png" data-image-src="attachments/57999885/58196002.png" data-unresolved-comment-count="0" data-linked-resource-id="58196002" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SmartJenkins-2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57999885" data-linked-resource-container-version="6"></span></p>
+
+<p>If you check the enable selection in job config page (picture3), jobs which are checked will be controlled by this plugin. It means the checked jobs will be blocked in NG time unless its config<sup>1</sup> says it can be built with the slave which is always online. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57999885/58196003.png" data-image-src="attachments/57999885/58196003.png" data-unresolved-comment-count="0" data-linked-resource-id="58196003" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SmartJenkins-3.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57999885" data-linked-resource-container-version="6"></span></p>
+
+<p>If you check the enable selection in slave config page (picture4), slaves which are checked will be controlled by this plugin. It means that the checked slave will shut down when it is NG time and will boot when it is OK time. And the un-checked slave will always online. <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/57999885/58196004.png" data-image-src="attachments/57999885/58196004.png" data-unresolved-comment-count="0" data-linked-resource-id="58196004" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="SmartJenkins-4.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57999885" data-linked-resource-container-version="6"></span></p>
+
+<p>For example, you make job config in picture3 and slave config in picture4. And you set “ruby-test” job’s matrix label_exp as “slave1 || master_VM”.  When it is NG time, slave1 is power off and master_VM is online. So the ruby-test job will be built with master_VM machine. </p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57999885/58196001.png">SmartJenkins-1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57999885/58196002.png">SmartJenkins-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57999885/58196003.png">SmartJenkins-3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57999885/58196004.png">SmartJenkins-4.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:47</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

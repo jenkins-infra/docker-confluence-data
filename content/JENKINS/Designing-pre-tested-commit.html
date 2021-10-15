@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Designing pre-tested commit</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Designing pre-tested commit
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (lifeless)</span> on Dec 10, 2009
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Designingpre-testedcommit-TableofContents">Table of Contents</h1>
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020183147 {padding: 0px;}
+div.rbtoc1631020183147 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020183147 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020183147'>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-TableofContents'>Table of Contents</a></li>
+<li><a href='#Designingpre-testedcommit-TeamCityimplementation'>TeamCity implementation</a>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-Issues'>Issues</a>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-WhowritesIDEsupport?'>Who writes IDE support?</a></li>
+<li><a href='#Designingpre-testedcommit-Don&#39;treinventthepatchmanagement'>Don&#39;t reinvent the patch management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#Designingpre-testedcommit-&quot;BranchySCM&quot;approach'>&quot;Branchy SCM&quot; approach</a>
+<ul class='toc-indentation'>
+
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-Userexperience/Usagescenario'>User experience / Usage scenario</a>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-Workingonmultiplebugfixesinthefire-and-forgetstyle'>Working on multiple bug fixes in the fire-and-forget style</a></li>
+<li><a href='#Designingpre-testedcommit-Personalbranchunderateambranch'>Personal branch under a team branch</a></li>
+</ul>
+</li>
+<li><a href='#Designingpre-testedcommit-Issues.1'>Issues</a></li>
+</ul>
+<li><a href='#Designingpre-testedcommit-Possibledesigndecisions'>Possible design decisions</a>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-Howaretestablebranchesidentified?'>How are testable branches identified?</a></li>
+<li><a href='#Designingpre-testedcommit-Whatconstitutesasuccessfulmergetotrunk?'>What constitutes a successful merge to trunk?</a></li>
+<li><a href='#Designingpre-testedcommit-Whentomergebackfromtrunk?'>When to merge back from trunk?</a></li>
+<li><a href='#Designingpre-testedcommit-Shouldthesamesetoftestsbeusedforallbranches?'>Should the same set of tests be used for all branches?</a></li>
+<li><a href='#Designingpre-testedcommit-Testbeforemerge,aftermerge,orboth?'>Test before merge, after merge, or both?</a></li>
+<li><a href='#Designingpre-testedcommit-Howtodealwithdiachronicbuilds?'>How to deal with diachronic builds?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#Designingpre-testedcommit-Minimimalapproach'>Minimimal approach</a>
+<ul class='toc-indentation'>
+<li><a href='#Designingpre-testedcommit-NewSCMmethods'>New SCM methods</a></li>
+<li><a href='#Designingpre-testedcommit-Newmerge-branchplugin'>New merge-branch plugin</a></li>
+<li><a href='#Designingpre-testedcommit-Benefits'>Benefits</a></li>
+<li><a href='#Designingpre-testedcommit-Caveats'>Caveats</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Trying to hash out different ideas of how to attack the pre-tested commit feature (<a href="https://issues.jenkins-ci.org/browse/JENKINS-1682">JENKINS-1682</a>.)</p>
+
+<h1 id="Designingpre-testedcommit-TeamCityimplementation">TeamCity implementation</h1>
+
+<ol>
+	<li>Every personal build (PB) and team build gets a build number from the same counter. But PBs are invisible to people other than the submitter, so this causes some gap in the build number. It's presumably done this way to handle both kinds of builds uniformly internally.</li>
+	<li>When I submit a PB, those changes also remain in the workspace. This is both good and bad — good because you can continue to make the follow up changes (say you are 50% done in a big refactoring, so you can submit a build, then continue to work on the remaining 50%), bad because you can't move on to work on something totally different.</li>
+	<li>My PB is tested against the tip of SCM, not against the revision I had locally.</li>
+	<li>When I submit a PB, <strong>entire files are sent to TeamCity, instead of just diff</strong>. So if the tip of SCM contains a change from Bob in the same file, Bob's change is overwritten by mine. This situation is detected later when IDE tries to commit them, as it then notices that the file being committed is not the latest. This just appears to be a limitation in the implementation, as I don't see anything preventing them from just sending a diff.</li>
+	<li>The delayed commit correctly excludes all the additional changes that I made after submitting a PB. This appears to be done by (1) pushing my current files aside, (2) bringing back the files as they were when a PB was started, (3) run SCM commit, then (4) bring back the files set aside in step 1. I can see this process in the IDE editor panes, as they change the contents.</li>
+</ol>
+
+
+
+<h3 id="Designingpre-testedcommit-Issues">Issues</h3>
+
+
+<h5 id="Designingpre-testedcommit-WhowritesIDEsupport?">Who writes IDE support?</h5>
+
+<p>TC implements this basically as a build with a patch as a build parameter, so it's straight-forward. OTOH, the delayed commit part is very tedious — if we are to do this outside IDE, we need to write the SCM commit handling, and if we are to do this inside IDE, we have to add this functionality into all the IDEs.</p>
+
+<h5 id="Designingpre-testedcommit-Don&#39;treinventthepatchmanagement">Don't reinvent the patch management</h5>
+
+<p>For a developer to make a progress while a PB is running, he has to come up with his own patch management mechanism, such as <a href="http://savannah.nongnu.org/projects/quilt" class="external-link" rel="nofollow">quilt</a>. Whatever you do there, it isn't integrated with the delayed commit workflow, and so you can't use delayed commits in the fire-and-forget style.</p>
+
+<p>For example, say you want to (1) work on bug A, (2) do a delayed commit, (3) work on another bug B, (4) do a delayed commit, ..., then between (2) and (3) you have to push your diff off to somewhere, so that you can come back to it if PB fails and you can work on bug B without mixing bug A. This is exactly the kind of things SCMs are good at, so why not let SCM do it? (For example, by using branches)</p>
+
+<p>OTOH, this implementation hides those untested changes from showing up in SCM, and for SCMs like CVS and Subversion that has a rather poor merge capability, this simplifies the change tracking and forensic analysis of the SCM history later.</p>
+
+
+<h1 id="Designingpre-testedcommit-&quot;BranchySCM&quot;approach">&quot;Branchy SCM&quot; approach</h1>
+
+<p>This implementation approach is based on the idea that untested commits are OK, as long as they aren't in the main branch of the development. So the model here is to let people commit untested commits as new branches, then let Hudson build them and integrate them automatically.</p>
+
+<p>We can also let Hudson prune branches that are &quot;done&quot; — for example by deleting branches if they are successfully merged and no additional change was made to it for N days, or for example by using a naming convention or metadata or something like that.</p>
+
+<h3 id="Designingpre-testedcommit-Userexperience/Usagescenario">User experience / Usage scenario</h3>
+
+<p>The following two scenarios show how the same feature can be used in different ways.</p>
+
+<h5 id="Designingpre-testedcommit-Workingonmultiplebugfixesinthefire-and-forgetstyle">Working on multiple bug fixes in the fire-and-forget style</h5>
+
+<p>Joe wants to fix bug A and B in his project, which are independent.</p>
+
+<ol>
+	<li>Joe checks out the workspace, and come up with a fix for A
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>svn co trunk; vi abc</pre>
+</div></div></li>
+	<li>Joe commits this to a &quot;bug-A&quot; branch
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>svn cp trunk branches/bug-A; svn switch branches/bug-A; svn commit</pre>
+</div></div></li>
+	<li>Joe goes back to the trunk and come up with a fix for B
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>svn switch trunk; vi abc</pre>
+</div></div></li>
+	<li>Joe commits this to a &quot;bug-B&quot; branch
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>svn cp trunk branches/bug-B; svn switch branches/bug-B; svn commit</pre>
+</div></div></li>
+</ol>
+
+
+<p>Hudson detects that those two branches are feature branches for automatic integration, so it'll merge them with the tip of the upstream branch, do a build/test, and if they run fine, it'll be committed to the upstream branch.</p>
+
+<p>If the build or merge fails, Joe will be notified and he can work on those branches. Maybe he'll make a follow-up change, or maybe he'll sync it with the upstream branch to resolve merge conflicts, or maybe he just deletes the branch to abandon the change entirely.</p>
+
+<p>Another benefit of this approach is that this can be used to organize workspaces into a multi-level hierarchy, instead of just forcing it to be 2 levels, as in team build/personal build distinction.</p>
+
+<h5 id="Designingpre-testedcommit-Personalbranchunderateambranch">Personal branch under a team branch</h5>
+
+<p>Alice, Bob, Charlie, and 23 other engineers are in a team that works on the same code base. Each person gets a branch off from the team branch.</p>
+
+<ol>
+	<li>Alice checks out the workspace and makes some changes
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>svn co branches/alice; vi abc; svn commit</pre>
+</div></div></li>
+	<li>Hudson detects this change, it'll merge them with the tip of the team branch, do a build/test, and if they run fine, it'll be committed to the upstream branch.</li>
+	<li>Alice keeps on changing her branch, while Hudson is doing all that asynchronously on the server
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>vi abc; svn commit; vi abc; svn commit</pre>
+</div></div></li>
+</ol>
+
+
+<h3 id="Designingpre-testedcommit-Issues.1">Issues</h3>
+
+<p>This requires SCMs that have a reasonably modern branching and merging support, such as Subversion 1.5, Git, and Mercurial. OTOH, this won't work at all with SCMs that lack a decent merge support, such as CVS and earlier versions of Subversion.</p>
+
+<h2 id="Designingpre-testedcommit-Possibledesigndecisions">Possible design decisions</h2>
+
+<h3 id="Designingpre-testedcommit-Howaretestablebranchesidentified?">How are testable branches identified?</h3>
+
+<p>There could be an explicit list of branches to test, or you could just have a name pattern.</p>
+
+<p>Or you might wish to only test branches when explicitly requested, rather than having Hudson poll branches for changes. Or you might wish to have changes in branches trigger informational builds, but not merge unless requested.</p>
+
+<h3 id="Designingpre-testedcommit-Whatconstitutesasuccessfulmergetotrunk?">What constitutes a successful merge to trunk?</h3>
+
+<p>No file-level conflicts? No line-level conflicts?</p>
+
+<p>(Mercurial supports both modes, FWIW.)</p>
+
+<h3 id="Designingpre-testedcommit-Whentomergebackfromtrunk?">When to merge back from trunk?</h3>
+
+<p>It is possible for Hudson to attempt to merge trunk back into available branches immediately after accepting changesets for trunk. (If there is a merge conflict, just skip it - let the branch owner resolve the conflict when they are ready.)</p>
+
+<p>Some sites may prefer for developers to synchronize their branches with trunk manually. Of course in this case the developers need to remember to do so reasonably frequently; otherwise the chance of their changes being unusable when merged with trunk, or failing to merge with trunk at all, increases steadily over time.</p>
+
+<h3 id="Designingpre-testedcommit-Shouldthesamesetoftestsbeusedforallbranches?">Should the same set of tests be used for all branches?</h3>
+
+<p>This is certainly simpler. But particular users or subteams might be interested in a specific set of tests which is too slow to be run for every commit to the repository. At least there needs to be a lowest common denominator test set which is required for merge to trunk.</p>
+
+<p>One possibility is to create a separate plugin which supplies the list of modified files to the build in an environment variable, so you can use various tools and heuristics to decide which tests it might be prudent to run. Or just require project admins to handle it as part of the build script, e.g. by running some additional tests based on the name of the branch.</p>
+
+<h3 id="Designingpre-testedcommit-Testbeforemerge,aftermerge,orboth?">Test before merge, after merge, or both?</h3>
+
+<p>There are several possible topologies:</p>
+
+<ol>
+	<li>Test in parallel, only before merge. Quick but unsafe since the merge could introduce a regression not present in the merge parents.</li>
+	<li>Test only after merge. Safe but slow since testing of all branches must be serialized, say using a round-robin policy.</li>
+	<li>Test branches in parallel, then test again after merge. Faster since the post-merge test will rarely fail.</li>
+	<li>Test and merge in a more complex tree with some fan-in factor. Potentially fastest, though the heuristics for picking the tree layout can be complex.</li>
+</ol>
+
+
+<h3 id="Designingpre-testedcommit-Howtodealwithdiachronicbuilds?">How to deal with diachronic builds?</h3>
+
+<p>Some projects - notably Maven modulesets using non-snapshot dependencies - succeed or fail based on factors other than the currently checked-out SCM snapshot.</p>
+
+<p>Probably punt on this and require such modulesets to be built as separate projects. Assume that all the necessary tests covering changes in a module are in fact present in that module (or at least in a snapshot-related sister module included in the same project).</p>
+
+<h1 id="Designingpre-testedcommit-Minimimalapproach">Minimimal approach</h1>
+
+<p>Make it possible for folk to configure this up on their own, and then we can incrementally improve IDE integration, automatic detection etc. This is a variation of the Branch SCM approach, but deliberately punting on all the hard questions.</p>
+
+<h2 id="Designingpre-testedcommit-NewSCMmethods">New SCM methods</h2>
+
+
+<p>Add new optional methods to the interface SCM's implement (probably via a new subinterface to keep binary compatibility) with two calls:</p>
+<ul>
+	<li>merge(URL)</li>
+	<li>commit(message)</li>
+</ul>
+
+
+<h2 id="Designingpre-testedcommit-Newmerge-branchplugin">New merge-branch plugin</h2>
+
+<p>This plugin would require 2 parameters to builds it is enabled on : a url to merge, and a commit message to give. The plugin would simply call the new SCM methods, for the SCM in use on a build, before and after the build (and only on stable builds).</p>
+
+<h2 id="Designingpre-testedcommit-Benefits">Benefits</h2>
+
+<ul>
+	<li>Gets something up and running.</li>
+	<li>Can work with any SCM that implements the interface. Note that you can do decent merges in old svn and even in CVS if you record appropriate metadata - and the SCM implementation can choose to do that.</li>
+	<li>Few changes needed.</li>
+</ul>
+
+
+<h2 id="Designingpre-testedcommit-Caveats">Caveats</h2>
+
+<ul>
+	<li>May waste some builds on bzr/git/hg because it depends on the SCM to reject/permit commits done to the same branch without updating the work area first.</li>
+	<li>May commit some broken builds on cvs/svn for the same reason - because these SCM's permit out of date commits to work.</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

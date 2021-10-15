@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : zap-plugin Env Inject</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="zap-plugin.html">zap plugin</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Configure-the-Job.html">Configure the Job</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : zap-plugin Env Inject
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jordangs)</span>, last modified on Nov 15, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="zap-pluginEnvInject-EnvInject">Env Inject</h1>
+
+<h3 id="zap-pluginEnvInject-JenkinsJOB_NAMEConfigureBuildEnvironment">Jenkins <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662333/102793324.png" data-image-src="attachments/102662333/102793324.png" data-unresolved-comment-count="0" data-linked-resource-id="102793324" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow16.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662333" data-linked-resource-container-version="7"></span> <code>JOB_NAME</code> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662333/102793324.png" data-image-src="attachments/102662333/102793324.png" data-unresolved-comment-count="0" data-linked-resource-id="102793324" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow16.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662333" data-linked-resource-container-version="7"></span> Configure <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662333/102793324.png" data-image-src="attachments/102662333/102793324.png" data-unresolved-comment-count="0" data-linked-resource-id="102793324" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="arrow16.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662333" data-linked-resource-container-version="7"></span> Build Environment</h3>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http://127.0.0.1:8080/job/JOB_NAME</pre>
+</div></div>
+<p> <br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662333/102793323.png" data-image-src="attachments/102662333/102793323.png" data-unresolved-comment-count="0" data-linked-resource-id="102793323" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ENV_INJECTOR.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662333" data-linked-resource-container-version="7"></span></p>
+
+<ol>
+	<li><strong>Check <em>inject environment variables to the build process</em> to enable job specific environment variables.</strong>
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Warning:</strong> Notice: These <strong>CANNOT</strong> be used when the ZAP Jenkins plugin is run as a pre-build step.</p></div></div></li>
+	<li><strong>Specify Properties Content</strong><br/>
+ 
+	<ul>
+		<li>Format: <span style="color: gray;"><code>VARIABLE_NAME=VARIABLE_VALUE</code></span><br/>
+ </li>
+		<li>New entries are represented by line breaks.<br/>
+ </li>
+	</ul>
+	</li>
+	<li><strong>Usage</strong><br/>
+ 
+	<ul>
+		<li>Certain fields in the Jenkins ZAP plugin accept <strong>System Environment Variables</strong>, <strong>Build Variables</strong> as well as <strong>Environment Inject Plugin Variables</strong>. See the <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/102662333/102793325.png" data-image-src="attachments/102662333/102793325.png" data-unresolved-comment-count="0" data-linked-resource-id="102793325" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="help.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="102662333" data-linked-resource-container-version="7"></span> for each field to see more details.
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p><strong>Info:</strong> All variable can be called with <span style="color: gray;"><p>{{$</p>
+<div class="error"><span class="error">Unknown macro: {VARIABLE_NAME}</span> </div>
+<p>}}</p></span></p></div></div></li>
+	</ul>
+	</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662333/102793323.png">ENV_INJECTOR.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662333/102793324.png">arrow16.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/102662333/102793325.png">help.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:01</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

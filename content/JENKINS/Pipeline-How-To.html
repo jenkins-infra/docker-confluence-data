@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Pipeline How To</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Xcode-Plugin.html">Xcode Plugin</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Pipeline How To
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kazuhidet)</span> on Sep 20, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>Write the know-how of compiling Xcode projects and exporting IPA packages using Jenkins's Pipeline function.</p><h2 id="PipelineHowTo-ステップガイド">ステップ ガイド</h2><p></p><ol><li><p>Import developer profile.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">        importDeveloperProfile(importIntoExistingKeychain: false,
+            profileId: &#39;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&#39;)</pre>
+</div></div></li><li><p>Build the project and output the archive.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">        xcodeBuild(
+          xcodeSchema: &quot;${PROJECT_SCHEMA}&quot;,
+          ipaOutputDirectory: &#39;Release&#39;,
+          ipaExportMethod: &#39;app-store&#39;,
+          generateArchive: true,
+          buildIpa: true,
+          ipaName: &quot;${BUILD_TARGET}&quot;,
+          bundleID: &#39;com.example.TargetApp&#39;,
+          developmentTeamName: &quot;${DEVELOPMENT_TEAM_NAME}&quot;,
+          cleanBeforeBuild: true,
+          configuration: &#39;Release&#39;,
+          cfBundleShortVersionStringValue: &#39;1.0.0&#39;,
+          cfBundleVersionValue: &#39;1&#39;
+        )</pre>
+</div></div></li><li><p>Export the IPA file from the archive.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">    exportIpa(
+        archiveDir: &quot;${WORKSPACE}/${repositoryName}/build/Release-iphoneos&quot;,
+        xcodeSchema: &quot;${PROJECT_SCHEMA}&quot;,
+        developmentTeamName: &quot;${DEVELOPMENT_TEAM}&quot;,
+        configuration: &quot;AdHoc&quot;,
+        infoPlistPath: &quot;${INFO_PLIST}&quot;,
+        manualSigning: true,
+        provisioningProfiles: [
+            [provisioningProfileAppId: &quot;${BUNDLE_ID}&quot;, provisioningProfileUUID: &#39;TestApp_AdHoc_Profile.mobileprovision&#39;]
+            [provisioningProfileAppId: &quot;${BUNDLE_ID}.watchkitapp&quot;, provisioningProfileUUID: &#39;TestApp_AdHoc_Profile.mobileprovision&#39;],
+            [provisioningProfileAppId: &quot;${BUNDLE_ID}.watchkitapp.watchkitextension&quot;, provisioningProfileUUID: &#39;TestApp_AdHoc_Profile.mobileprovision&#39;]
+        ],
+        ipaExportMethod: &quot;ad-hoc&quot;,
+        ipaName: &quot;${BUILD_TARGET}&quot;,
+        ipaOutputDirectory: &quot;AdHoc&quot;
+    )</pre>
+</div></div></li><li><p>Upload the exported IPA file.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"></pre>
+</div></div></li></ol><p><br/></p><div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">When using &quot;XCode's&quot; Automatically manage signing &quot;, various ways are required, so please note the points to be noted separately.</div></div><h2 id="PipelineHowTo-関連記事">関連記事</h2><p></p><p>
+
+
+
+
+
+
+
+
+
+
+
+<ul class="content-by-label">
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Build+History+Manager+Plugin">Build History Manager Plugin</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Matrix+Configuration+Parameter+Plugin">Matrix Configuration Parameter Plugin</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Windows+Azure+Storage+Plugin">Windows Azure Storage Plugin</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Benchmark+Plugin">Benchmark Plugin</a>
+                
+                        
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/CloudShell+Sandbox+Plugin">CloudShell Sandbox Plugin</a>
+                
+                        
+                    </div>
+    </li>
+    </ul>
+</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:59</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

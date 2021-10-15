@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Summary Display Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Summary Display Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (deruyter)</span>, last modified on Jul 08, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><br/>
+This plugin allows an easy and fully customized build report display.</p>
+
+<h1 id="SummaryDisplayPlugin-TableofContent">Table of Content</h1>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631022641291 {padding: 0px;}
+div.rbtoc1631022641291 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631022641291 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631022641291'>
+<ul class='toc-indentation'>
+<li><a href='#SummaryDisplayPlugin-TableofContent'>Table of Content</a></li>
+<li><a href='#SummaryDisplayPlugin-PluginInformation'>Plugin Information</a></li>
+<li><a href='#SummaryDisplayPlugin-Features'>Features</a></li>
+<li><a href='#SummaryDisplayPlugin-Usage'>Usage</a></li>
+<li><a href='#SummaryDisplayPlugin-Examples'>Examples</a></li>
+<li><a href='#SummaryDisplayPlugin-SyntaxDescription'>Syntax Description</a></li>
+<li><a href='#SummaryDisplayPlugin-Changelog'>Changelog</a></li>
+</ul>
+</div>
+
+<h1 id="SummaryDisplayPlugin-PluginInformation">Plugin Information</h1>
+
+<table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Summary Display <a href="https://plugins.jenkins.io/summary_report" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>Display an extended summary report in project and build pages.</p>
+
+<h1 id="SummaryDisplayPlugin-Features">Features</h1>
+
+<ul>
+	<li>Allow a rich summary report visible from both project and build page</li>
+	<li>Reports must be written in an XML format according to the syntax described in section Syntax Description</li>
+	<li>This plugin allow the parsing of several XML files</li>
+	<li>Reports displayed are ordered according to the XML file names</li>
+	<li>Element displayed are based on </li>
+</ul>
+
+
+<h1 id="SummaryDisplayPlugin-Usage">Usage</h1>
+
+<ul>
+	<li>In order to activate the plugin you must:
+	<ul>
+		<li>Activate result archiving of xml reports</li>
+		<li>Activate ACI report publication of the xml summary reports</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/62062647/62816257.jpg" data-image-src="attachments/62062647/62816257.jpg" data-unresolved-comment-count="0" data-linked-resource-id="62816257" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="configure.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="62062647" data-linked-resource-container-version="34"></span></p>
+
+<h1 id="SummaryDisplayPlugin-Examples">Examples</h1>
+
+<ul>
+	<li>Result at project level:</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/62062647/62816258.jpg" data-image-src="attachments/62062647/62816258.jpg" data-unresolved-comment-count="0" data-linked-resource-id="62816258" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="result_prj.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="62062647" data-linked-resource-container-version="34"></span></p>
+
+
+<ul>
+	<li>Same result at build page</li>
+</ul>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/62062647/62816259.jpg" data-image-src="attachments/62062647/62816259.jpg" data-unresolved-comment-count="0" data-linked-resource-id="62816259" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="result_build.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="62062647" data-linked-resource-container-version="34"></span><br/>
+  </p>
+
+<h1 id="SummaryDisplayPlugin-SyntaxDescription">Syntax Description</h1>
+
+<p>The Summary_report Hudson plugin can parse XML report with this structure: <br/>
+Only one section can be use in each XML file.</p>
+
+<h3 id="SummaryDisplayPlugin-Section">Section</h3>
+
+<p>Sections are created using <em>&lt;section&gt; ... &lt;/section&gt;</em> tags.<br/>
+Section attributes are:</p>
+<ul>
+	<li><strong>name</strong>: section name</li>
+	<li><strong>fontcolor</strong>: section font color</li>
+</ul>
+
+
+<p>Example:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;section name=&quot;Performance Summary&quot; fontcolor=&quot;#ffffff&quot;&gt;
+&lt;/section&gt;
+</pre>
+</div></div>
+
+<h3 id="SummaryDisplayPlugin-Field">Field</h3>
+
+<p>Fields are created using <em>&lt;field&gt; ... &lt;/field&gt;</em> tags.<br/>
+Fields attributes are:</p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>name</strong></span><span style="color: rgb(51,51,51);">: field name</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>value</strong></span><span style="color: rgb(51,51,51);">: field value</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>href</strong></span><span style="color: rgb(51,51,51);">: HTTP link, relative to the project build. For instance, to access artifact dir, you can specify </span>href=&quot;artifact/artifacts&quot;</li>
+	<li><span style="color: rgb(51,51,51);"><strong>titlecolor</strong></span><span style="color: rgb(51,51,51);">: font color for the field title</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>detailcolor</strong></span><span style="color: rgb(51,51,51);">: font color for the field details</span></li>
+	<li><span style="color: rgb(51,51,51);"><strong>&lt;![CDATA[ ]]&gt;</strong></span><span style="color: rgb(51,51,51);">: the CDATA term is used about text data that should not be parsed by the XML parser.</span><br/>
+<span style="color: rgb(51,51,51);">Everything inside a CDATA section is ignored by the parser. It can be used to insert HTTP link given an absolute reference, as specified in the example below. </span>
+<blockquote>
+<p>Only one CDATA is parsed between start and end field tag</p></blockquote></li>
+</ul>
+
+
+<p>Example:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;field name=&quot;Field Name To Display&quot; titlecolor=&quot;black&quot; value=&quot;My Field Value&quot; detailcolor=&quot;#000000&quot; href=&quot;artifacts/field.txt&quot;&gt;
+	&lt;![CDATA[
+		....TEXT....
+		&lt;a href=&quot;http://....&quot;&gt;Link to something&lt;/a&gt;
+		...Some more text...
+	 ]]&gt;
+&lt;/field&gt;
+</pre>
+</div></div>
+
+<h3 id="SummaryDisplayPlugin-Table">Table</h3>
+
+<p>Tables are created using <em>&lt;table&gt; ... &lt;/table&gt;</em> tags.<br/>
+Fields attributes are:</p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong><em>sorttable=&quot;yes&quot;</em></strong></span><span style="color: rgb(51,51,51);"><em>:</em></span> <span style="color: rgb(51,51,51);">Each column become sortable</span><span style="color: rgb(51,51,51);">Table structure:</span></li>
+	<li><span style="color: rgb(51,51,51);">Lines are created using</span> <span style="color: rgb(51,51,51);"><em>&lt;tr&gt;...&lt;/tr&gt;</em></span> <span style="color: rgb(51,51,51);">tags.</span></li>
+	<li><span style="color: rgb(51,51,51);">Column </span><span style="color: rgb(51,51,51);">are created using</span> <span style="color: rgb(51,51,51);"><em>&lt;td&gt;...&lt;/td&gt;</em></span> <span style="color: rgb(51,51,51);">tags.</span></li>
+</ul>
+
+
+<p><span style="color: rgb(51,51,51);">The number of column must be identical  in each line.</span></p>
+
+<p>Attributes of a cell are:</p>
+<ul>
+	<li><strong>title</strong>:* *The text to show when the cursor is <span style="color: rgb(34,34,34);">over the table cell.</span></li>
+	<li><strong>bgcolor</strong>: Cell background color.<br/>
+Authorized values are: 
+	<ul>
+		<li>red, </li>
+		<li>green, </li>
+		<li>black, </li>
+		<li>#fffff....</li>
+	</ul>
+	</li>
+	<li><strong>fontcolor</strong>: Cell font color.<br/>
+Authorized values are: 
+	<ul>
+		<li>red,</li>
+		<li>green, </li>
+		<li>black, </li>
+		<li>#fffff....</li>
+	</ul>
+	</li>
+	<li><strong>fontattribute</strong>: Cell font attribute<br/>
+Authorized values are:
+	<ul>
+		<li>normal, </li>
+		<li>bold, </li>
+		<li>number between 100 and 900</li>
+	</ul>
+	</li>
+	<li><strong>href</strong>: Link, this link is relative from the artifact storage location.</li>
+	<li><strong>align</strong>: The text alinment<br/>
+Authorized values are:
+	<ul>
+		<li>center, </li>
+		<li>left, </li>
+		<li>right, </li>
+		<li>justify</li>
+	</ul>
+	</li>
+	<li><strong>width</strong>: The width of the cell</li>
+</ul>
+
+
+<p>Example:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;table sorttable=&quot;yes&quot;&gt;
+        &lt;tr&gt;
+                &lt;td value=&quot;Table title&quot; bgcolor=&quot;red&quot; fontcolor=&quot;black&quot; fontattribute=&quot;bold&quot; href=&quot;report.xls&quot; align=&quot;center&quot; width=&quot;200&quot;/&gt;
+                &lt;td value=&quot;Column 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;center&quot; width=&quot;200&quot;/&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+                &lt;td value=&quot;Line 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;left&quot; width=&quot;200&quot;/&gt;
+                &lt;td value=&quot;Value 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;none&quot; width=&quot;200&quot;/&gt;
+        &lt;/tr&gt;
+&lt;/table&gt;
+</pre>
+</div></div>
+
+<h3 id="SummaryDisplayPlugin-Tabs">Tabs</h3>
+
+<p>A tab set can contain a lot of tab. Tab sets are created using <em>&lt;tabs&gt; ... &lt;/tabs&gt;</em> tags.</p>
+
+<p>In a tab set, a tab is created using <em>&lt;tab&gt; ... &lt;/tab&gt;</em> tags.</p>
+
+<p>Tab attributes are:</p>
+<ul>
+	<li><span style="color: rgb(51,51,51);"><strong>name</strong></span><span style="color: rgb(51,51,51);">: Tab name</span></li>
+</ul>
+
+
+<p>Content allowed for a tab:</p>
+
+<ul>
+	<li>field</li>
+	<li>table</li>
+</ul>
+
+
+<blockquote>
+<p>It's not possible to insert tabs or accordion.</p></blockquote>
+
+<p>Example:</p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;tabs&gt;
+	&lt;tab name=&quot;First tab&quot;&gt;
+		&lt;field name=&quot;Build status&quot; value=&quot;All target succeeded&quot; /&gt;
+		&lt;field name=&quot;Functionnal status&quot; value=&quot;Validation is Ok&quot; /&gt;
+	&lt;/tab&gt;
+	&lt;tab name=&quot;Second tab&quot;&gt;
+		&lt;table&gt;
+			&lt;tr&gt;
+				&lt;td value=&quot;Table title&quot; bgcolor=&quot;red&quot; fontcolor=&quot;black&quot; fontattribute=&quot;bold&quot; href=&quot;report.xls&quot; align=&quot;center&quot; width=&quot;200&quot;/&gt;
+				&lt;td value=&quot;Column 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;center&quot; width=&quot;200&quot;/&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td value=&quot;Line 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;left&quot; width=&quot;200&quot;/&gt;
+				&lt;td value=&quot;Value 1&quot; bgcolor=&quot;white&quot; fontcolor=&quot;black&quot; fontattribute=&quot;normal&quot; href=&quot;&quot; align=&quot;none&quot; width=&quot;200&quot;/&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/tab&gt;
+&lt;/tabs&gt;
+</pre>
+</div></div>
+
+<h3 id="SummaryDisplayPlugin-Accordion.">Accordion.</h3>
+
+<p><span style="color: rgb(51,51,51);">Accordions are created using </span><span style="color: rgb(51,51,51);"><em>&lt;accordion&gt; ... &lt;/accordion&gt;</em></span><span style="color: rgb(51,51,51);"> tags.</span><br/>
+<span style="color: rgb(51,51,51);">Accordion</span><span style="color: rgb(51,51,51);"><em> </em></span><span style="color: rgb(51,51,51);">attributes are:</span></p>
+<ul>
+	<li><strong>name</strong>: Accordion name</li>
+</ul>
+
+
+<p><span style="color: rgb(51,51,51);">Content allowed for nn accordion:</span></p>
+<ul>
+	<li><span style="color: rgb(51,51,51);">fields </span></li>
+	<li><span style="color: rgb(51,51,51);">table.</span></li>
+</ul>
+
+
+<blockquote>
+<p>It's not possible to insert tabs or accordion.</p></blockquote>
+
+<h3 id="SummaryDisplayPlugin-AFullSectionExample">A Full Section Example</h3>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;section name=&quot;&quot; fontcolor=&quot;&quot;&gt;
+	// To display a field
+	&lt;field name=&quot;&quot; titlecolor=&quot;&quot; value=&quot;&quot; detailcolor=&quot;&quot; href=&quot;&quot;&gt; &lt;![CDATA[  ]]&gt; &lt;/field&gt;
+
+	// To display a table
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;td value=&quot;&quot; bgcolor=&quot;&quot; fontcolor=&quot;&quot; title=&quot;&quot; fontattribute=&quot;&quot; href=&quot;&quot; align=&quot;&quot; width=&quot;&quot;/&gt;
+			&lt;td value=&quot;&quot; bgcolor=&quot;&quot; fontcolor=&quot;&quot; title=&quot;&quot; fontattribute=&quot;&quot; href=&quot;&quot; align=&quot;&quot; width=&quot;&quot;/&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td value=&quot;&quot; bgcolor=&quot;&quot; fontcolor=&quot;&quot; title=&quot;&quot; fontattribute=&quot;&quot; href=&quot;&quot; align=&quot;&quot; width=&quot;&quot;/&gt;
+			&lt;td value=&quot;&quot; bgcolor=&quot;&quot; fontcolor=&quot;&quot; title=&quot;&quot; fontattribute=&quot;&quot; href=&quot;&quot; align=&quot;&quot; width=&quot;&quot;/&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+
+	// To display tabs
+	&lt;tabs&gt;
+		&lt;tab name=&quot;&quot;&gt;
+		// Only insert table or field in tab
+		&lt;/tab&gt;
+		&lt;tab name=&quot;&quot;&gt;
+		// Only insert table or field in tab
+		&lt;/tab&gt;
+	&lt;/tabs&gt;
+
+	// To display an accordion
+	&lt;accordion name=&quot;&quot;&gt;
+	// Only insert table or field in tab
+	&lt;/accordion&gt;
+&lt;/section&gt;
+</pre>
+</div></div>
+
+<h1 id="SummaryDisplayPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.15(Jan29,2016)">Version 1.15 (Jan 29, 2016)</h3>
+
+<ul>
+	<li>Fix issue <a href="https://issues.jenkins-ci.org/browse/JENKINS-33044" class="external-link" rel="nofollow">JENKINS-33044</a>: implement SimpleBuildStep thanks to Egor Shchegolkov</li>
+	<li>Made project testable on windows thanks to Egor Shchegolkov</li>
+</ul>
+
+
+
+<h3 id="SummaryDisplayPlugin-Version1.14(Jan29,2016)">Version 1.14 (Jan 29, 2016)</h3>
+
+<ul>
+	<li>Fix issue <a href="https://issues.jenkins-ci.org/browse/JENKINS-30146" class="external-link" rel="nofollow">JENKINS-30146</a> Plugin is hanging builds when running concurrently thanks to <span style="color: rgb(51,51,51);">Shuaibing Li </span><a href="mailto:Shuaibing.Li@lombardrisk.com" class="external-link" rel="nofollow">Shuaibing.Li@lombardrisk.com</a></li>
+	<li>Cleanup unused source files</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.13(Apr21,2015)">Version 1.13 (Apr 21, 2015)</h3>
+
+<ul>
+	<li>Display on project page is now optional thanks to martinda</li>
+	<li>Project without builds no longer create errors thanks to martinda</li>
+</ul>
+
+
+
+<h3 id="SummaryDisplayPlugin-Version1.12(Nov7,2014)">Version 1.12 (Nov 7, 2014)</h3>
+
+<ul>
+	<li>Fix issue <a href="https://issues.jenkins-ci.org/browse/JENKINS-25466" class="external-link" rel="nofollow">JENKINS-25466</a> thanks to Magnus Jacobsson </li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.10(Sep26,2013)">Version 1.10 (Sep 26, 2013)</h3>
+
+<ul>
+	<li>Fixes for compatibility with jenkins version 1.532</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.9(Feb6,2013)">Version 1.9 (Feb 6, 2013)</h3>
+
+<ul>
+	<li>Added some checks to avoid warning messages (Contribution from David-caro <a href="mailto:david.caro.estevez@gmail.com" class="external-link" rel="nofollow">david.caro.estevez@gmail.com</a>)</li>
+</ul>
+
+
+
+<h3 id="SummaryDisplayPlugin-Version1.8(Jan8,2013)">Version 1.8 (Jan 8, 2013)</h3>
+
+<ul>
+	<li>Avoid javascript conflicts and allow absolute links (Contribution from Mattias Holmund)
+	<ul>
+		<li>Absolute links did not work, they were prefixed with a buildnumber</li>
+		<li>There were javascript conflicts between the jquery included in summary_report and the prototype.js used by jenkins</li>
+		<li>There were javascript conflicts between sorttable and javascript  code included in jenkins. It manifested itself for me with the  claim-plugin, but I believe it can cause all sorts of mysterious  problems.</li>
+	</ul>
+	</li>
+	<li>Table output slightly restyled and can now be restyles more with css.</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.7(Dec10,2012)">Version 1.7 (Dec 10, 2012)</h3>
+
+<ul>
+	<li>Use CSS classes for styling (Contribution from Mattias Holmund)</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.5(Sept12,2012)">Version 1.5 (Sept 12, 2012)</h3>
+
+<ul>
+	<li>Align panel on right without any size limit</li>
+	<li>Add support for attribute title in cells (&lt;td title=&quot;my title&quot;&gt;)</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.4(Jul5,2012)">Version 1.4 (Jul 5, 2012)</h3>
+
+<ul>
+	<li>Fix for URL loading issue when using plugin from windows</li>
+	<li>Improve error reporting</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.3(Jun22,2012)">Version 1.3 (Jun 22, 2012)</h3>
+
+<ul>
+	<li>Rename Git repository in summary_report-plugin to follow rules.</li>
+	<li>Corrections in the documentation.</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.2(Jun22,2012)">Version 1.2 (Jun 22, 2012)</h3>
+
+<ul>
+	<li>Rename plugin from Hudson Summary Display to Summary Display</li>
+	<li>Change keyword in the Jenkins prject configuration panel</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.1(Jun20,2012)">Version 1.1 (Jun 20, 2012)</h3>
+
+<ul>
+	<li>Cleanup in the descriptors.</li>
+</ul>
+
+
+<h3 id="SummaryDisplayPlugin-Version1.0(Jun13,2012)">Version 1.0 (Jun 13, 2012)</h3>
+
+<ul>
+	<li>Initial Release.</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62291984.png">Screenshot-2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62291985.png">Screenshot-3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62291986.png">Screenshot-4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62816257.jpg">configure.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62816258.jpg">result_prj.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/62816259.jpg">result_build.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/73597004.jpg">Untitled_Clipping_072314_023717_PM.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/62062647/74285078.png">version1_10.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:50</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

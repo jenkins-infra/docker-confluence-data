@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Bitbucket OAuth Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Bitbucket OAuth Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mallowlabs)</span>, last modified on Oct 14, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Bitbucket OAuth <a href="https://plugins.jenkins.io/bitbucket-oauth" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-10-23/#SECURITY-1546" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+This Jenkins plugin enables OAuth authentication for <a href="https://bitbucket.org" class="external-link" rel="nofollow">Bitbucket</a> users.</p><h2 id="BitbucketOAuthPlugin-Upgrading0.7to0.8"><span><strong>Upgrading 0.7 to 0.8</strong></span></h2><p>bitbucket-oauth-plugin changed using OAuth version 1.0 to 2.0.</p><p>If you got<strong> invalid redirect_uri</strong> error in login, you hove to specify Callback URL in Bitbucket OAuth setting page.</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="227" src="attachments/67568690/165582025.png" data-image-src="attachments/67568690/165582025.png" data-unresolved-comment-count="0" data-linked-resource-id="165582025" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="invalid_redirect_uri.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67568690" data-linked-resource-container-version="23"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" width="621" src="attachments/67568690/165582027.png" data-image-src="attachments/67568690/165582027.png" data-unresolved-comment-count="0" data-linked-resource-id="165582027" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="callback_url.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67568690" data-linked-resource-container-version="23"></span></p><p><br/></p><p>bitbucket-oauth-plugin changed using Bitbucket API endpoint v1 to v2.</p><p>You have to change permissions: <strong>Account &gt; Read</strong> and <strong>Team membership &gt; Read</strong></p><p><strong><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="181" src="attachments/67568690/165582028.png" data-image-src="attachments/67568690/165582028.png" data-unresolved-comment-count="0" data-linked-resource-id="165582028" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="permissions.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67568690" data-linked-resource-container-version="23"></span><br/></strong></p><h2 id="BitbucketOAuthPlugin-Setup"><span style="color: rgb(210,73,57);"><strong>Setup</strong></span></h2><p>First you need to get consumer key/secret from Bitbucket.</p><ol><li>Log into your Bitbucket account.</li><li>Click on your account avatar in the top right corner and select <strong>Bitbucket Settings</strong>.</li><li>If your are a member of an organization, ensure you are on Team settings, not Account settings, from the drop down.</li><li>Under ACCESS MANAGEMENT select <strong>OAuth</strong>.</li><li>Under OAuth consumers, click <strong>Add consumer</strong>.</li><li>The system requests the following information: <strong>Name</strong> is required. Others are optional.<br/><ul><li><strong>Name</strong> is required.</li><li><strong>Callback URL</strong> is required. input <span class="nolink">https://your.jenkins.root/securityRealm/finishLogi</span>n .</li><li>Others are optional.</li></ul></li><li>Under Permissions, select <strong>Account &gt; Read</strong> and <strong>Team membership &gt; Read</strong>(optional).</li><li>Click <strong>Save</strong>. The system generates a key and a secret for you. Toggle the consumer name to see the generated Key and Secret value for your consumer.</li></ol><p>Second, you need to configure your Jenkins.</p><ol><li>Open Jenkins <strong>Configure System</strong> page.</li><li>Set correct URL to <strong>Jenkins URL.</strong></li><li>Click <strong>Save</strong> button.</li><li>Open Jenkins <strong>Configure Global Security</strong> page.</li><li>Check <strong>Enable security</strong>.</li><li>Select <strong>Bitbucket OAuth Plugin</strong> in <strong>Security Realm</strong>.</li><li>Input your Consumer Key to <strong>Client ID</strong>.</li><li>Input your Consumer Secret to <strong>Client Secret</strong>.</li><li>Click <strong>Save</strong> button.</li></ol><h1 id="BitbucketOAuthPlugin-BitbucketTeamaccessSupport">Bitbucket Team access Support</h1><div><p>Based on the teams that user has access to, this plugin automatically creates groups of the form</p><p><strong>team::role</strong></p><p>Supported roles are <strong>admin</strong>, <strong>contributor</strong> and <strong>member</strong></p><p>Examples</p><ul><li>team1::admin</li><li>team2::contributor</li><li>team3::member</li></ul><p>These group names can be used in <em>Jenkins Matrix-based</em> security to give fine grained access control based on the users team access in Bitbucket.</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/67568690/138450469.png" data-image-src="attachments/67568690/138450469.png" data-unresolved-comment-count="0" data-linked-resource-id="138450469" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="matrix_based_security.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="67568690" data-linked-resource-container-version="23"></span></p></div><h1 id="BitbucketOAuthPlugin-ConfigurepluginviaGroovyscript">Configure plugin via Groovy script</h1><p>Either automatically upon <a href="https://wiki.jenkins.io/display/JENKINS/Post-initialization+script" rel="nofollow">Jenkins post-initialization</a> or through <a href="https://wiki.jenkins.io/display/JENKINS/Jenkins+Script+Console" rel="nofollow">Jenkins script console</a>, example:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import hudson.security.AuthorizationStrategy
+import hudson.security.SecurityRealm
+import jenkins.model.Jenkins
+import org.jenkinsci.plugins.BitbucketSecurityRealm
+
+// parameters
+def bitbucketSecurityRealmParameters = [
+  clientID:     &#39;012345678901234567&#39;,
+  clientSecret: &#39;012345678901234567012345678901&#39;
+]
+
+// security realm configuration
+SecurityRealm bitbucketSecurityRealm = new BitbucketSecurityRealm(
+  bitbucketSecurityRealmParameters.clientID,
+  bitbucketSecurityRealmParameters.clientSecret
+)
+
+// authorization strategy - full control when logged in
+AuthorizationStrategy authorizationStrategy = new hudson.security.FullControlOnceLoggedInAuthorizationStrategy()
+
+// authorization strategy - set anonymous read to false
+authorizationStrategy.setAllowAnonymousRead(false)
+
+// get Jenkins instance
+Jenkins jenkins = Jenkins.getInstance()
+
+// add configurations to Jenkins
+jenkins.setSecurityRealm(bitbucketSecurityRealm)
+jenkins.setAuthorizationStrategy(authorizationStrategy)
+
+// save current Jenkins state to disk
+jenkins.save()</pre>
+</div></div><h2 id="BitbucketOAuthPlugin-VersionHistory"><strong><span style="color: rgb(210,73,57);">Version History</span></strong></h2><h3 id="BitbucketOAuthPlugin-Version0.10(14Oct,2019)">Version 0.10 (14 Oct, 2019)</h3><ul><li>[SECURITY-1546] Fixed client secret is saved in plain text (Notice: I recommend that you re-save Jenkins security configuration.)</li></ul><h3 id="BitbucketOAuthPlugin-Version0.9(19Jan,2019)">Version 0.9 (19 Jan, 2019)</h3><ul><li>Fixed infinite redirect loop on Jenkins 2.150.2 (related:  <a href="https://issues.jenkins-ci.org/browse/JENKINS-55668" class="external-link" rel="nofollow">JENKINS-55668</a> )</li></ul><h3 id="BitbucketOAuthPlugin-Version0.8(3Jan,2019)">Version 0.8 (3 Jan, 2019)</h3><ul><li>Changed Bitbucket OAuth 1.0 to OAuth 2.0 (Notice: <strong>You have to specify the Callback URL in Bitbucket OAuth setting page</strong>)</li><li>Changed Bitbucket API v1 to v2 (Notice: <strong>You have to add Account Read permission in Bitbucket OAuth setting page</strong>)</li><li>Changed secret key input field to password </li></ul><h3 id="BitbucketOAuthPlugin-Version0.7(1May,2018)">Version 0.7 (1 May, 2018)</h3><ul><li>Fixed Groovy example did not work</li></ul><h3 id="BitbucketOAuthPlugin-Version0.6(25Feb,2018)">Version 0.6 (25 Feb, 2018)</h3><ul><li>Added Bitbucket API 2.0 support (Pluign requires <strong>Account Read</strong> Permission only)</li><li>Added spport for adding user authorities based on bitbucket team/role (related: <a href="https://github.com/mallowlabs/bitbucket-oauth-plugin/pull/11" class="external-link" rel="nofollow">Pull Request #11</a>)</li></ul><h3 id="BitbucketOAuthPlugin-Version0.5(5Jun,2016)">Version 0.5 (5 Jun, 2016)</h3><ul><li>Fixed ClassCastException (related: <a href="https://issues.jenkins-ci.org/browse/JENKINS-34792" class="external-link" rel="nofollow">JENKINS-34792</a> )</li></ul><h3 id="BitbucketOAuthPlugin-Version0.4(14May,2014)">Version 0.4 (14 May, 2014)</h3><ul><li>Fixed broken api token access (related: <a href="https://issues.jenkins-ci.org/browse/JENKINS-21882" class="external-link" rel="nofollow">JENKINS-21882</a> )</li></ul><h3 id="BitbucketOAuthPlugin-Version0.3(31Jul,2013)">Version 0.3 (31 Jul, 2013)</h3><ul><li>Works on reverse proxy environments ( Use Jenkins URL configuration instead of request URL )</li></ul><h3 id="BitbucketOAuthPlugin-Version0.1(29May,2013)"><span style="color: rgb(210,73,57);"><strong>Version 0.1 (29 May, 2013)</strong></span></h3><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/67895357.png">20110607235219.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/67895371.png">BitBucket_Not_In_JenkinsIssue.PNG</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/138450469.png">matrix_based_security.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/165582026.png">invalid_redirect_uri.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/165582025.png">invalid_redirect_uri.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/165582027.png">callback_url.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/67568690/165582028.png">permissions.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:13</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

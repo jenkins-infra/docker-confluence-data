@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Matrix Groovy Execution Strategy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Matrix Groovy Execution Strategy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jeremym)</span>, last modified on Aug 28, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Matrix Groovy Execution Strategy <a href="https://plugins.jenkins.io/matrix-groovy-execution-strategy" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+A plugin to decide the execution order and valid combinations of matrix projects.This uses a user defined groovy script to arrange the order which will then be executed</p><h2 id="MatrixGroovyExecutionStrategyPlugin-Usage">Usage</h2><p>This plugin makes use of an extension point in the matrix-project plugin to allow for other execution strategies for matrix projects. When installed, matrix projects will show a new drop-down to select an execution strategy. Without the plugin, the default (or classic) strategy is selected and not even displayed.<br/> <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/75892812/78938139.png" data-image-src="attachments/75892812/78938139.png" data-unresolved-comment-count="0" data-linked-resource-id="78938139" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screen Shot 2015-04-20 at 9.31.22 pm.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="75892812" data-linked-resource-container-version="17"></span></p><p>This plugin can also be used as a combination filter/touchstone to feed builds into the queue with more flexibility than the two stages supplied as standard. </p><h2 id="MatrixGroovyExecutionStrategyPlugin-ReturnValue">Return Value</h2><p>New for release 1.0.6. You can now specify if you want to continue after a failure. If you return a List with two items in it, the second item can be a true|false value where true will continue execution even after a failure. The idea is that you can control whether to continue after a failure from within the script</p><pre>return [result, true]  </pre><p>The original functionality also works and will work as before</p><pre>return result</pre><p>will fail at the end of the current run as before.</p><h2 id="MatrixGroovyExecutionStrategyPlugin-Bindings">Bindings</h2><p>There are several variables available in the script</p><ul><li>combinations</li><li>workspace</li><li>jenkins</li><li>execution</li><li>result</li><li>parameters</li><li>env</li><li>out</li></ul><h3 id="MatrixGroovyExecutionStrategyPlugin-combinations">combinations</h3><p>This is a List of a String map of all the matrix combinations<br/> For example</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">[
+    { axis1: &quot;a&quot;, axis2: &quot;x&quot; },
+    { axis1: &quot;a&quot;, axis2: &quot;y&quot; },
+    { axis1: &quot;a&quot;, axis2: &quot;z&quot; },
+    { axis1: &quot;b&quot;, axis2: &quot;x&quot; },
+    { axis1: &quot;b&quot;, axis2: &quot;y&quot; },
+    { axis1: &quot;b&quot;, axis2: &quot;z&quot; }
+]
+</pre>
+</div></div><h3 id="MatrixGroovyExecutionStrategyPlugin-workspace">workspace</h3><p>A string of the workspace directory</p><h3 id="MatrixGroovyExecutionStrategyPlugin-jenkins">jenkins</h3><p>The Jenkins instance</p><h3 id="MatrixGroovyExecutionStrategyPlugin-execution">execution </h3><p>The is the [OneOffExecutor]( <a href="http://javadoc.jenkins-ci.org/hudson/model/OneOffExecutor.html" class="external-link" rel="nofollow">http://javadoc.jenkins-ci.org/hudson/model/OneOffExecutor.html</a>) running the setup for the matrix job</p><h3 id="MatrixGroovyExecutionStrategyPlugin-result">result</h3><p>The script is expected to return a [TreeMap](<a href="http://groovy.codehaus.org/JN1035-Maps" class="external-link" rel="nofollow">http://groovy.codehaus.org/JN1035-Maps</a>). This is passed in for use but does not have to be the one returned</p><p> </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">{
+  x: [
+    { axis1: &quot;a&quot;, axis2: &quot;x&quot; },
+    { axis1: &quot;b&quot;, axis2: &quot;x&quot; }
+  ],
+  y: [
+    { axis1: &quot;a&quot;, axis2: &quot;y&quot; },
+    { axis1: &quot;b&quot;, axis2: &quot;y&quot; }
+  ]
+}
+</pre>
+</div></div><p>Notice that axis2: 'z' has not been returned, so these combinations will not be executed.</p><p>The results will be placed onto the build queue in the order they are placed in the array, so in the above it will be ['a','x'] then ['b','x']. When they are completed then ['a','y'] and ['b','y']. The combinations can run in a different order if there are dependencies on nodes, for example. This is a good way to feed your combinations in a definite order.</p><h3 id="MatrixGroovyExecutionStrategyPlugin-parameters">parameters</h3><p>This is a hash of any build parameters used, with the parameter name as the key</p><h3 id="MatrixGroovyExecutionStrategyPlugin-env">env</h3><p>This is the environment variables used in the build. It is also aware of the <a href="EnvInject-Plugin.html">envinject</a> plugin and will use these if installed and defined for the project</p><h3 id="MatrixGroovyExecutionStrategyPlugin-out">out</h3><p>This is bound to the output logger for the build and its main use is to allow println statements to appear in the build log. This will happen transparently for </p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence"> println &#39;something for the log&#39;
+</pre>
+</div></div><h3 id="MatrixGroovyExecutionStrategyPlugin-Execution">Execution</h3><p>The entries in the TreeMap returned will be executed in sequence.<br/> That is to say, the first list will be executed in parallel, then the second, and so on<br/> A failure will stop the build on the next entry but the runs in flight will not be stopped.<br/> If no script is specified, all combinations will be run in parallel in one go.</p><p>These will be run in alphabetical order of the keys.</p><h3 id="MatrixGroovyExecutionStrategyPlugin-Scripts">Scripts</h3><h4 id="MatrixGroovyExecutionStrategyPlugin-Location">Location</h4><p>The script can be in three locations</p><ul><li>Added in directly</li><li>An absolute path available to the node running the job setting up the matrix (can be disabled in global config). This file is to exist on the master, even if running on a slave node.</li><li>A relative path in the workspace (can be disabled in global config)</li></ul><h4 id="MatrixGroovyExecutionStrategyPlugin-Example">Example</h4><p>How to transform the example above</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">combinations.each{
+
+             if(it.axis2 == &#39;z&#39;)
+                   return
+
+             result[it.axis2] = result[it.axis2] ?: []
+             result[it.axis2] &lt;&lt; it
+}
+
+[result, true]
+</pre>
+</div></div><h4 id="MatrixGroovyExecutionStrategyPlugin-GlobalConfiguration">Global Configuration</h4><p>There is an option to disable scripts off the filesystem. This is useful if you want to secure scripts for non admin users. This option will change the job display section to only show a script option.</p><h2 id="MatrixGroovyExecutionStrategyPlugin-ReleaseHistory">Release History</h2><h5 id="MatrixGroovyExecutionStrategyPlugin-1.07">1.07</h5><p>Fixed usage of script when using a fully qualified path. This script will reside on the master <a href="https://github.com/jenkinsci/matrix-groovy-execution-strategy-plugin/issues/15" class="external-link" rel="nofollow">issue 15</a></p><h5 id="MatrixGroovyExecutionStrategyPlugin-1.06(1.05notreleased)">1.06 (1.05 not released)</h5><p>Added return list option to specify if a failure should continue the main build</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">return [ result, true]</pre>
+</div></div><p>Upgraded to use groovy 3.2.1</p><h5 id="MatrixGroovyExecutionStrategyPlugin-1.04">1.04</h5><p>Added parameters binding</p><p>Added env binding</p><p>Added out binding</p><p>Try out all the above with this in your script</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">println &#39;---------parameters--------&#39;
+parameters.each{ k,v -&gt;
+    println &quot;${k}--&gt;${v}&quot;
+}
+println &#39;-------------env--------------&#39;
+env.each{ k,v -&gt;
+    println &quot;${k}--&gt;${v}&quot;
+}
+println &#39;--------------------------------&#39;
+</pre>
+</div></div><h5 id="MatrixGroovyExecutionStrategyPlugin-1.0.3">1.0.3</h5><p>Bugfix to use a safer randomize method</p><h5 id="MatrixGroovyExecutionStrategyPlugin-1.0.2">1.0.2</h5><p>Fixed to work with Matrix Build Listeners like Matrix Combination parameter</p><p>Added Script Security capability</p><p>Added global config option to disable using scripts off the filesystem - to complete script security</p><div class="confluence-information-macro confluence-information-macro-tip"><span class="aui-icon aui-icon-small aui-iconfont-approve confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Please ask questions on <a href="https://github.com/jenkinsci/matrix-groovy-execution-strategy-plugin/issues" class="external-link" rel="nofollow">github</a> as I don't get notifications for this page </p></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892812/78938141.png">Screen Shot 2015-04-20 at 9.31.22 pm.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892812/78938140.png">Screen Shot 2015-03-03 at 9.40.43 pm.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/75892812/78938139.png">Screen Shot 2015-04-20 at 9.31.22 pm.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

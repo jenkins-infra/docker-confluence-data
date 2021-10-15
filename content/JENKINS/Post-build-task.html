@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Post build task</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Post build task
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (shinodkm)</span>, last modified by <span class='editor'> Unknown User (danielbeck)</span> on Oct 19, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Post build task <a href="https://plugins.jenkins.io/postbuild-task" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>This plugin allows the user to execute a shell/batch task depending on the build log output. Java regular expression are allowed.</p>
+
+<p>This feature allows user to associate shell or a batch scripts that perform some tasks on Hudson depending on the build log output. If the log text has a match some where in the build log file, the script will execute and the post build log will append to the project build log. Java regular expression are allowed.</p>
+
+<h1 id="Postbuildtask-Usage">Usage</h1>
+
+<p>When you install this plugin, your project configuration page gets additional &quot;Post build task&quot; option as illustrated below:</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/38928638/39256096.jpg" data-image-src="attachments/38928638/39256096.jpg" data-unresolved-comment-count="0" data-linked-resource-id="39256096" data-linked-resource-version="3" data-linked-resource-type="attachment" data-linked-resource-default-alias="postbuild_1.5.JPG" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="38928638" data-linked-resource-container-version="18"></span></p>
+
+<p>The Post build task consists of log texts and a script.For the multiple searches, log texts could be joined by an 'And' or an 'Or'. For example, if text &quot;BUILD FAILED&quot; OR &quot;IOException&quot; is found, then it runs the command. For multiple search click on the add button will create one option box (And &amp; Or) and a new log text box.</p>
+
+<p>If the log text has a match it is considered as true otherwise false. Do a bitwise operation for the total match results and if the bitwise result is true, the script will execute otherwise skip</p>
+
+<h4 id="Postbuildtask-Example:1">Example:1</h4>
+
+<p>'BUILD FAILED'  OR 'IOException' AND 'Building remotely'<br/>
+'BUILD FAILED'  matches so         --&gt; 'true'<br/>
+'IOException'   does not match so  --&gt; 'false'<br/>
+'Building remotely'   matches so   --&gt; 'true'<br/>
+((true OR false) AND true)         --&gt; 'true' (does execute)</p>
+
+<h4 id="Postbuildtask-Example:2">Example:2</h4>
+
+<p>'BUILD FAILED'  AND 'IOException' AND 'Building remotely'<br/>
+'BUILD FAILED'  matches so         --&gt; 'true'<br/>
+'IOException'   does not match so  --&gt; 'false'<br/>
+'Building remotely'   matches so   --&gt; 'true'<br/>
+((true AND false) AND true)        --&gt; 'false' (does not execute)</p>
+
+<p>Java Regex are allowed for matching log text. If the text is &quot;Total time: (\d+)&quot; and the script is &quot;script.sh&quot;, then if the log contains a line &quot;Total time: 10&quot;, the &quot;script.sh 10&quot; will be called.</p>
+
+<p>Specify the shell script to be executed when the execution of the task is selected. This is where the actual work happens. When the script executes, the current directory will be the workspace directory, just like the shell script builder. So depending on your SCM, you might have to cd into a directory. Try &quot;pwd&quot; and &quot;ls&quot; to find out whether you need that or not.</p>
+
+<p>Post build task plugin</p>
+
+<h1 id="Postbuildtask-Changelog">Changelog</h1>
+
+<h4 id="Postbuildtask-Version1.8(2011/01/03)">Version 1.8 (2011/01/03)</h4>
+
+<ul>
+	<li>New option to run script only if all previous steps were successful.</li>
+	<li>New option to fail the whole build if the script execution fails.</li>
+</ul>
+
+
+<h4 id="Postbuildtask-Version1.7(2010/06/03)">Version 1.7 (2010/06/03)</h4>
+
+<ul>
+	<li>Added Spanish translation</li>
+</ul>
+
+
+<h4 id="Postbuildtask-Version1.5(2009/09/15)">Version 1.5 (2009/09/15)</h4>
+
+<ul>
+	<li>Added multiple searches for log text.they could be joined by an 'And' or an 'Or'.</li>
+	<li>Removed grouping for the time being.</li>
+</ul>
+
+
+<h4 id="Postbuildtask-Version1.3(2009/09/07)">Version 1.3 (2009/09/07)</h4>
+
+<ul>
+	<li>Added regex option for log text</li>
+</ul>
+
+
+<h4 id="Postbuildtask-Version1.1(2009/08/26)">Version 1.1 (2009/08/26)</h4>
+
+<ul>
+	<li>Initial version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928638/39256074.jpg">shinod.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928638/39256076.jpg">pbtask1.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928638/39256097.jpg">postbuild_1.5.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928638/39256098.jpg">postbuild_1.5.JPG</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/38928638/39256096.jpg">postbuild_1.5.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:39</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

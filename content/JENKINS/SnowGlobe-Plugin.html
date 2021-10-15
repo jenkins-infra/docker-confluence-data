@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SnowGlobe Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SnowGlobe Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (magnayn)</span>, last modified on Apr 18, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'snowglobe-plugin' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+This plugin provides the ability to define Infrastructure as Code. Create, update and tear down clusters of related docker containers for builds, testing or continuous delivery.</p><p> </p><p>Snowglobe plugin for Jenkins</p><p>This allows Jenkins jobs to control a SnowGlobe instance (see <a href="https://nirima.github.io/SnowGlobe/" rel="nofollow" class="external-link">https://nirima.github.io/SnowGlobe/</a>).</p><h2 id="SnowGlobePlugin-Operations"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#operations" rel="nofollow"></a>Operations</h2><p>The operations are relatively simple:</p><h3 id="SnowGlobePlugin-Clone"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#clone" rel="nofollow"></a>Clone</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_clone <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">sourceId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>ci-template<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">targetId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>new-globe-name<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-SetVariables"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#set-variables" rel="nofollow"></a>Set Variables</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_set_variables <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">variables</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>key=&quot;value&quot;<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-GetVariables"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#get-variables" rel="nofollow"></a>Get Variables</h3><div class="highlight highlight-source-groovy"><pre>data <span class="pl-k" style="color: rgb(215,58,73);">=</span> snowglobe_get_variables  <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-Apply"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#apply" rel="nofollow"></a>Apply</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_apply <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-State"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#state" rel="nofollow"></a>State</h3><div class="highlight highlight-source-groovy"><pre>data <span class="pl-k" style="color: rgb(215,58,73);">=</span> snowglobe_state <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">false</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-Destroy"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#destroy" rel="nofollow"></a>Destroy</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_clone <span class="pl-c1" style="color: rgb(0,92,197);">remove</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><p>Remove: set to true to also remove the SnowGlobe after destruction.</p><p>In all cases - createAction controls whether to add an action to the build, which will also remove the globe when the CI build is complete.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:47</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

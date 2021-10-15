@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : SimpleClearCase-Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : SimpleClearCase-Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sata_)</span>, last modified on Mar 12, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Simple Dynamic ClearCase <a href="https://plugins.jenkins.io/simpleclearcase" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+
+<p>Integrates Jenkins with <a href="http://www.ibm.com/software/awdtools/clearcase/" class="external-link" rel="nofollow">ClearCase</a>.<br/>
+This plugin interfaces Jenkins against a dynamic base view, Clearcase SCM. Its 'Simple' in the sense of feature availability. In contrast with <a href="ClearCase-Plugin.html">ClearCase Plugin</a> you don't define a static config specification in the SCM plugin. Rather what you specify is a view name and the load rules which are to be tracked inside of ClearCase repository.</p>
+
+<p>As the view is dynamic, the plugin doesn't take any snapshots of the  source code, the checkout mechanism will only review the clear tool  lshistory over the specified 'load rules'. The load rules are in simple terms only paths inside of the view to specific code bases.</p>
+
+<p>Since you usually specifiy a branch in ClearCase, the option has been added. Which means that SCM-plugin only tracks changes in that branch. If you don't set an value for Branch, it will notify changes as soon as there is a change in any branch - which isn't what most people are looking for.</p>
+
+<p>There is also a optional setting which is filter, it disregards mkbranch and rmbranch events occuring in ClearCase, since branch creation doesn't affect a specific branch it reduces the &quot;false positive&quot; in build.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/57183988/59900245.png" data-image-src="attachments/57183988/59900245.png" data-unresolved-comment-count="0" data-linked-resource-id="59900245" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="simple_clearcase_version_2.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="57183988" data-linked-resource-container-version="9"></span><br/>
+Here you can see that the schedule is Poll SCM each other minute (setting can be any value of course, this is just an example), which means that the plugin will check over the defined load rules if there has been any changes. If so, and the quiet time of plugin (there is internal quiet time, check repository code for constant) is passed then an scm changes is reported to Jenkins.</p>
+
+<p>The view itself can be configured by ClearTool or a more advanced setup if you require it. For instance if there are a couple of daily releases from other departments within your corporation which you want to track inside of the view.</p>
+
+<p>If that is required, you can create a Jenkins job which has the task of updating the config spec, in for instance a shell script. That job should be marked as <a href="Exclusive-Execution-Plugin.html">Exclusive Execution</a> by installing the referred plugin. This will ensure no inconsistencies will happen as the updating of config spec is being performed in solitude, no other jobs are being executed.</p>
+
+
+
+
+<h2 id="SimpleClearCase-Plugin-ChangeLog">Change Log</h2>
+
+
+<h4 id="SimpleClearCase-Plugin-Version1.2">Version 1.2</h4>
+
+<ul>
+	<li>Added optional filter function for rmbranch, mkbranch</li>
+	<li>Added capability to watch specific ClearCase Branch, instead of all</li>
+	<li>Removed limitation of white space in file paths</li>
+	<li>Added abort exception when checkout failes due to:
+	<ul>
+		<li>incorrect branch</li>
+		<li>ClearCase error</li>
+	</ul>
+	</li>
+	<li>Improved error handling in compareRevision and Checkout</li>
+</ul>
+
+
+<h4 id="SimpleClearCase-Plugin-Version1.0">Version 1.0</h4>
+
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183988/57409827.png">simpleclearcasescreenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183988/57409826.png">simpleclearcasescreenshot.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/57183988/59900245.png">simple_clearcase_version_2.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:46</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

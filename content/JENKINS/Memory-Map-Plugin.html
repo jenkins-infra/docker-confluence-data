@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Memory Map Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Memory Map Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Bue Petersen</span>, last modified by <span class='editor'> Unknown User (oehc)</span> on Apr 06, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="sectionColumnWrapper"><div class="sectionMacro"><div class="sectionMacroRow"><div class="columnMacro"><p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Memory Map <a href="https://plugins.jenkins.io/memory-map" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+</p></div><div class="columnMacro"><h4 id="MemoryMapPlugin-Developedby">Developed by</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65670635/65863895.png" data-image-src="attachments/65670635/65863895.png" data-unresolved-comment-count="0" data-linked-resource-id="65863895" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="praqmalogo.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p><h4 id="MemoryMapPlugin-Sponsoredby">Sponsored by</h4><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/65670635/65863896.gif" data-image-src="attachments/65670635/65863896.gif" data-unresolved-comment-count="0" data-linked-resource-id="65863896" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="logo-yxlon.gif" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/gif" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image" height="79" width="139" src="attachments/65670635/71008289.png" data-image-src="attachments/65670635/71008289.png" data-unresolved-comment-count="0" data-linked-resource-id="71008289" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="MAN_diesel_lille.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p></div></div></div></div><div class="confluence-information-macro confluence-information-macro-note"><p class="title">We use Github issues as issue tracker</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Please use our Praqma Memory Map Github repository and issues there to file issue related to this plugin: <a class="external-link" href="https://github.com/Praqma/memory-map-plugin" rel="nofollow">https://github.com/Praqma/memory-map-plugin</a></p></div></div><h1 id="MemoryMapPlugin-TheJenkinsMemoryMapPlugin">The Jenkins Memory Map Plugin</h1><div class="confluence-information-macro confluence-information-macro-note"><p class="title">Upgrade from 1.X.X to 2.X.X</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Upgrading from 1.X.X to 2.X.X is a one way street, so make sure to take a backup of your jobs config.xml if you want to revert to the older version.</p></div></div><p> <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631021632283 {padding: 0px;}
+div.rbtoc1631021632283 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631021632283 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631021632283'>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-TheJenkinsMemoryMapPlugin'>The Jenkins Memory Map Plugin</a></li>
+<li><a href='#MemoryMapPlugin-Usage'>Usage</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-Ashortmemorymapintroduction'>A short memory map introduction</a></li>
+<li><a href='#MemoryMapPlugin-Configurationofmemorymapplugin'>Configuration of memory map plugin</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-Addingaparser'>Adding a parser</a></li>
+<li><a href='#MemoryMapPlugin-Addingagraph'>Adding a graph</a></li>
+<li><a href='#MemoryMapPlugin-Runningthememorymapplugin'>Running the memory map plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-Roadmap'>Road map</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-Ongoingdevelopment'>Ongoing development</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-Smallerfeatures-upfordiscussion'>Smaller features - up for discussion</a></li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-Thirdandfourthdevelopmentiteration'>Third and fourth development iteration</a></li>
+<li><a href='#MemoryMapPlugin-Contributions'>Contributions</a></li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-Architectureanddesign'>Architecture and design</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-JenkinsJobDSL'>Jenkins Job DSL</a></li>
+<li><a href='#MemoryMapPlugin-Pipelineconfiguration'>Pipeline configuration</a></li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-Changelog'>Changelog</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-2.2.1'>2.2.1</a></li>
+<li><a href='#MemoryMapPlugin-2.2.0'>2.2.0</a></li>
+<li><a href='#MemoryMapPlugin-2.1.2'>2.1.2</a></li>
+<li><a href='#MemoryMapPlugin-2.1.1'>2.1.1</a></li>
+<li><a href='#MemoryMapPlugin-2.1.0'>2.1.0</a></li>
+<li><a href='#MemoryMapPlugin-1.0.2'>1.0.2</a></li>
+<li><a href='#MemoryMapPlugin-1.0.1'>1.0.1</a></li>
+<li><a href='#MemoryMapPlugin-1.0.0'>1.0.0</a></li>
+<li><a href='#MemoryMapPlugin-0.1.2'>0.1.2</a></li>
+<li><a href='#MemoryMapPlugin-0.1.1'>0.1.1</a></li>
+<li><a href='#MemoryMapPlugin-0.1.0'>0.1.0</a></li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-Bugs'>Bugs</a>
+<ul class='toc-indentation'>
+<li><a href='#MemoryMapPlugin-KnownIssues'>Known Issues</a></li>
+</ul>
+</li>
+<li><a href='#MemoryMapPlugin-TestandQA'>Test and QA</a></li>
+</ul>
+</div></p><p>The Memory Map Plugin provides assistance for monitoring the memory map created by a linker. It is especially useful when development is being conducted in conditions where memory is limited, e.g. embedded systems.</p><p>Currently the plugin supports the following linkers:</p><ul><li>Texas Instruments TMS320C200 Linker</li><li>GCC linker (LD)</li></ul><p>The plugin is developed to allow for easy extensibility, adding additional support for different linkers is relatively easy. We encourage you to implement support for linkers yourself or to contribute by proxy (<a href="http://www.praqma.com/stories/contribbyproxy" class="external-link" rel="nofollow">http://www.praqma.com/stories/contribbyproxy</a>).</p><p>Read more about the ongoing development below: <a href="#MemoryMapPlugin-Ongoingdevelopment">#Ongoing development</a>.</p><p>Some of the next obvious linkers choices to implement are:</p><ul><li>Keil</li><li>IAR</li></ul><h1 id="MemoryMapPlugin-Usage">Usage</h1><p>The plugin provides assistance with:</p><ul><li>Constant monitoring of your applications current memory usage and layout.</li><li>Provides continuous feedback on the memory consumption and the amount that is still available.</li><li>Later the plugin will be extended so that memory usage can be browsed, through different layers of the graph, in details down to each symbol in the code. See <a href="#MemoryMapPlugin-Roadmap">#Road map</a></li></ul><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670635/65863897.png" data-image-src="attachments/65670635/65863897.png" data-unresolved-comment-count="0" data-linked-resource-id="65863897" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Screenshot-761.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p></div></td></tr><tr><td class="confluenceTd"><p>An example of two memory map graph showing memory consumption over builds. <br class="atl-forced-newline"/> We have configured two graph corresponding to our two types of memory, and assigned logical memory section to each graph in the plugin configuration. <br class="atl-forced-newline"/> See below under <a href="#MemoryMapPlugin-Configuration">#Configuration</a> for how to configure graphs.</p></td></tr></tbody></table></div><h2 id="MemoryMapPlugin-Ashortmemorymapintroduction">A short memory map introduction</h2><p>For operating systems with dynamic loaders a relocatable binary is the end product of the compiler and linker process. However for embedded systems, where memory is the limiting constraint, there is a need for an absolutely located binary. A relocator is a component of the linker that creates such a absolutely located binary. The layout is typically described by a configuration file in which the developer can configure the memory for the system. The linker proceeds from there by creating the executable binary that will be deployed on the target. It also has the capability to create a memory map file. A memory map file describes how objects, symbols, program code, startup code etc. will be allocated in the physical memory.</p><p>This plugin analyses the memory map file and displays how much memory will be used, unused and allocated in various parts of physical memory.</p><h2 id="MemoryMapPlugin-Configurationofmemorymapplugin">Configuration of memory map plugin</h2><p>After installing the plugin, there will be a <strong>Publish Memory Map</strong> post-build action available to you.</p><p>After adding the post-build step you must configure the basic settings:</p><p><strong>Word size:</strong> The plugin assumes values in the linker command and map file are in words, this field requires the size of a word on your platform in bits.</p><p><strong>Show bytes on graphs:</strong> If checked graph will show bytes instead of words.<strong>Choose Scale Type:</strong> Choose to show values on a kilo, mega or giga scale.</p><h3 id="MemoryMapPlugin-Addingaparser">Adding a parser</h3><p>You can add a parser to the publisher by clicking the <strong>Add</strong> button.</p><p><strong>Unique parser name:</strong> A name unique among other parsers for this job. Renaming causes previous results to be lost.</p><p><strong>Parser title:</strong> A title used for grouping this parser's graphs in the UI.</p><p><strong>Linker command</strong> *<span class="nolink">file:</span>* The linker configuration file where the memory layout is described.</p><p>*Path to map <span class="nolink">file:</span>* Path where your memory map file resides.</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">File patterns</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The  command and map file fields support ant file patterns and are relative to the workspace.<br/> Only 1 file is selected, the first one which matches the pattern.</p></div></div><h3 id="MemoryMapPlugin-Addingagraph">Adding a graph</h3><p>To add graphs to a parser, again, click the <strong>Add</strong> button.</p><p><strong>Graph caption:</strong> A title used for this graph in the UI.</p><p><strong>Graph data:</strong> The memory sections that should be monitored in the graph.</p><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Graph data options</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>To display multiple sections, separate them with commas.</p><p>To display the sum of sections, separate with +.</p></div></div><div class="table-wrap"><table class="wrapped confluenceTable"><tbody><tr><td class="confluenceTd"><div class="content-wrapper"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670635/82280571.png" data-image-src="attachments/65670635/82280571.png" data-unresolved-comment-count="0" data-linked-resource-id="82280571" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="memory map config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p></div></td></tr><tr><td class="confluenceTd"><div class="content-wrapper"><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670635/67043423.png" data-image-src="attachments/65670635/67043423.png" data-unresolved-comment-count="0" data-linked-resource-id="67043423" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="memorySectionsAddTogether-graph.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p></div></td></tr><tr><td class="confluenceTd"><p>An example of a fully configured Memory Map Publisher and its result</p></td></tr></tbody></table></div><h3 id="MemoryMapPlugin-Runningthememorymapplugin">Running the memory map plugin</h3><ul><li>For each build the linker command file and memory map file will be parsed and the graph updated for the build</li><li>If build fails, data from the graph is omitted</li><li>Adding new memory section to the graphs will first have an effect after next build</li><li>Existing memory section can be &quot;moved&quot; between graph without running new build, eg. configuring L03SARAM to be shown in the FLASH graph instead of RAM graph.</li></ul><h1 id="MemoryMapPlugin-Roadmap">Road map</h1><h2 id="MemoryMapPlugin-Ongoingdevelopment">Ongoing development</h2><p>Besides regular bugfixes and maintenance, two major changes are in the pipeline. We call them the third and fourth development iteration respectively.</p><h3 id="MemoryMapPlugin-Smallerfeatures-upfordiscussion">Smaller features - up for discussion</h3><ul><li>Memory usage thresholds: Enable configuration of a threshold that will make the job to fail or unstable if new memory consumption exceed the</li><li>Warn value: The build could fail or be unstable and users notified if memory usage goes beyond the maximum available. You can set that value, say 5% under the maximum, so your developer team would have time for refactoring if you expect to need more than that 5%.</li></ul><p>You can contribute with one or more of these features - see <a href="#MemoryMapPlugin-Contributions">#Contributions</a>.</p><p>If you want a feature, without doing the dirty work yourself sponsor our development and contribute by proxy. See <a href="http://www.praqma.com/stories/contribbyproxy" class="external-link" rel="nofollow">http://www.praqma.com/stories/contribbyproxy</a></p><h2 id="MemoryMapPlugin-Thirdandfourthdevelopmentiteration">Third and fourth development iteration</h2><p>The overall plan is to implement memory analysis in deeper details.<br/> We'd like to add the ability to click on graphs and browse the memory usage in greater detail. Clicking through to the second layer will show you, for example, a summary of initialized, uinitialized, data etc.<br/> Clicking through to the third level will show you the memory usage in even greater detail, all the way down to showing which objects are in a section.</p><h2 id="MemoryMapPlugin-Contributions">Contributions</h2><p>Fork our project on github: <a href="https://github.com/Praqma/memory-map-plugin" class="external-link" rel="nofollow">https://github.com/Praqma/memory-map-plugin</a><br/> Please also notify us by email at support@praqma.com about your plans for changes, so we do not end up developing the same functionality or fixing the same bugs at the same time.</p><p>You can also create a feature or bug from the Jira component.</p><h1 id="MemoryMapPlugin-Architectureanddesign">Architecture and design</h1><p>We were heavily inspired by the Warnings plugin, where one can easily contribute with a new parser by supplying a Java class to add functionality of parsing output from a new compiler.<br/> This aspect of the design needs more work, but we already supply the basic setup. You need to write little code and throw regular expressions at the content of your linkers map-file.</p><h2 id="MemoryMapPlugin-JenkinsJobDSL">Jenkins Job DSL</h2><h6 id="MemoryMapPlugin-Availableoptions"><em>Available options</em></h6><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">job {
+    publishers {
+        memoryMap {
+            wordSize (Integer wordSize) // Defaults to 8
+            showBytesOnGraphs (boolean showBytesOnGraph = true) // Defaults to false
+            scale (String scale)
+            parser(String parserType, String parserUniqueName, String commandFile, String mapFile) {
+                parserTitle (String parserTitle)
+              	graph{
+                  	graphCaption (String graphCaption)
+                  	graphData    (String graphData)
+              	}
+            }
+        }
+    }
+}
+</pre>
+</div></div><h6 id="MemoryMapPlugin-Example"><em>Example</em></h6><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">job (&quot;mmap_GEN&quot;){
+    publishers {
+        memoryMap {
+            wordSize 16
+            showBytesOnGraphs true
+            scale &quot;KILO&quot;
+            parser(&quot;GCC&quot;, &quot;gcc-5391&quot;, &quot;cmd.ld&quot;, &quot;mem.map&quot;) {
+                parserTitle &quot;gcc graphs&quot;
+              	graph{
+                  	graphCaption &quot;RAM&quot;
+                  	graphData    &quot;ram08+ram09&quot;
+              	}
+              	graph{
+                  	graphCaption &quot;ETC&quot;
+                  	graphData    &quot;etc.&quot;
+              	}
+            }
+        }
+    }
+}
+</pre>
+</div></div><h2 id="MemoryMapPlugin-Pipelineconfiguration">Pipeline configuration</h2><p>Memory map plugin supports pipeline job type as a general build step. You can use the snippet generator to create the step for your pipeline job dsl. See picture below <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65670635/102596612.png" data-image-src="attachments/65670635/102596612.png" data-unresolved-comment-count="0" data-linked-resource-id="102596612" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="snippet-gen.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span></p><h1 id="MemoryMapPlugin-Changelog">Changelog</h1><h2 id="MemoryMapPlugin-2.2.1">2.2.1</h2><ul><li>Fixed: X-axis was cluttered with increasing number of builds</li><li>Fixed: Memory Map only worked for WordSize = 16</li></ul><h2 id="MemoryMapPlugin-2.2.0">2.2.0</h2><ul><li>Added pipeline support (Big thanks to @wbagdon)</li></ul><h2 id="MemoryMapPlugin-2.1.2">2.1.2</h2><ul><li>Updated maintainers</li></ul><h2 id="MemoryMapPlugin-2.1.1">2.1.1</h2><ul><li>HexUtils supports values over Integer.MAX_VALUE (<a href="https://issues.jenkins-ci.org/browse/JENKINS-31200" class="external-link" rel="nofollow">JENKINS-31200</a>)</li></ul><h2 id="MemoryMapPlugin-2.1.0">2.1.0</h2><ul><li>The core dependy requirements have been increased to 1.580</li><li>Added Jenkins Job DSL support (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30194" class="external-link" rel="nofollow">JENKINS-30194</a>)</li><li>Added support for the GCC linker (LD) (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19841" class="external-link" rel="nofollow">JENKINS-19841</a>)</li><li>Added the ability to configure multiple parsers for one job. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-19839" class="external-link" rel="nofollow">JENKINS-19839</a>)</li><li>Fixed: Comments in memory config files caused the job to fail. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29804" class="external-link" rel="nofollow">JENKINS-29804</a>)</li><li>Fixed: Parsers without graphs configured caused the job to fail. (<a href="https://issues.jenkins-ci.org/browse/JENKINS-29052" class="external-link" rel="nofollow">JENKINS-29052</a>)</li><li>Added a new Texas Instruments parser. (This is due to refactoring, technically they're same. The old one is considered deprecated and will be removed soon.)  (<a href="https://issues.jenkins-ci.org/browse/JENKINS-30000" class="external-link" rel="nofollow">JENKINS-30000</a>)</li></ul><h2 id="MemoryMapPlugin-1.0.2">1.0.2</h2><ul><li>The core dependency requirements have been lowered to 1.480.3 </li></ul><h2 id="MemoryMapPlugin-1.0.1">1.0.1</h2><ul><li>Fixed: Graph Configuration not effective until after another build (<a href="https://issues.jenkins-ci.org/browse/JENKINS-17466" class="external-link" rel="nofollow">JENKINS-17466</a>)</li><li>Fixed: Missing data from bar chart <a href="https://issues.jenkins-ci.org/browse/JENKINS-17465" class="external-link" rel="nofollow">JENKINS-17465</a></li></ul><h2 id="MemoryMapPlugin-1.0.0">1.0.0</h2><p>Bugfix</p><ul><li>Added support for space in 'Program memory selection' (<a href="https://issues.jenkins-ci.org/browse/JENKINS-16891" class="external-link" rel="nofollow">JENKINS-16891</a>)</li></ul><p>Features</p><ul><li>Support for merging memory sections together (<a href="https://issues.jenkins-ci.org/browse/JENKINS-16890" class="external-link" rel="nofollow">JENKINS-16890</a>)</li><li>Merging max label if they have same size (<a href="https://issues.jenkins-ci.org/browse/JENKINS-16825" class="external-link" rel="nofollow">JENKINS-16825</a>)</li><li>Support for multiple scale value (<a href="https://issues.jenkins-ci.org/browse/JENKINS-16822" class="external-link" rel="nofollow">JENKINS-16822</a>)</li></ul><h2 id="MemoryMapPlugin-0.1.2">0.1.2</h2><ul><li>bugfix for calculations of word to bytes.</li></ul><h2 id="MemoryMapPlugin-0.1.1">0.1.1</h2><p>First initial release:</p><ul><li>design and architecture toward easy implementation of new compiler-linker choices.</li><li>user defined graphs.</li></ul><h2 id="MemoryMapPlugin-0.1.0">0.1.0</h2><p>Draft for a first version</p><h1 id="MemoryMapPlugin-Bugs">Bugs</h1><ul><li>Check the <a href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?mode=hide&amp;reset=true&amp;jqlQuery=project+%3D+JENKINS+AND+status+in+(Open%2C+%22In+Progress%22%2C+Reopened)+AND+component+%3D+%27memory-map%27" class="external-link" rel="nofollow">open issues</a> carefully to see if the issue has already been reported.</li><li>Create an issue, if needed, and make sure to choose the <strong>memory-map</strong> sub-component. Make sure to mention the plugin version number in the issue description.</li></ul><p><strong>Note</strong>: Source code can be found at <a href="https://github.com/Praqma/memory-map-plugin/" class="external-link" rel="nofollow">https://github.com/Praqma/memory-map-plugin/</a>.</p><h2 id="MemoryMapPlugin-KnownIssues">Known Issues</h2><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" height="100" src="attachments/65670635/67043378.jpeg" data-image-src="attachments/65670635/67043378.jpeg" data-unresolved-comment-count="0" data-linked-resource-id="67043378" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="url-1.jpeg" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/jpeg" data-linked-resource-container-id="65670635" data-linked-resource-container-version="60"></span><a href="http://www.praqma.com/services/jcisupport" class="external-link" rel="nofollow">If it's broken ...We Can Fix It!</a></p><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                    </tr>
+
+        <tr>
+            <td colspan="3">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="http://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=project%20=%20JENKINS%20AND%20status%20in%20%28Open,%20%22In%20Progress%22,%20Reopened%29%20AND%20component%20=%20&#39;memory-map-plugin&#39;&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h1 id="MemoryMapPlugin-TestandQA">Test and QA</h1><p>The plugin is tested against the Jenkins version &quot;required core&quot; which is 1.484.</p><p>Combinations of master/slaves and operating systems that are tested is:</p><ul><li>Ubuntu Linux 12.04.1 LTS as Master, Ubuntu Linux 12.04.1 Slave</li><li>Windows 2007 Pro Master/Master setup</li><li>Ubuntu Linux 12.04.1 LTS as Master/Master setup</li></ul><p>To our best knowledge the plugin shouldn't be affected of master/slave and operating systems parameters.</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/65863895.png">praqmalogo.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/65863896.gif">logo-yxlon.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/65863897.png">Screenshot-761.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/65863898.png">Screenshot-762.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/65863936.jpg">memorymap.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/67043378.jpeg">url-1.jpeg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/67043421.png">memorymapconfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/67043422.png">memorySectionsAddTogether.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/67043423.png">memorySectionsAddTogether-graph.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/71008289.png">MAN_diesel_lille.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/82280571.png">memory map config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65670635/102596612.png">snippet-gen.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:33</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

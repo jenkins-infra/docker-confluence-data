@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : OctopusDeploy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : OctopusDeploy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (badriance)</span>, last modified on Nov 05, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Octopus Deploy <a href="https://plugins.jenkins.io/octopusdeploy" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Older versions of this plugin may not be safe to use. Please review the following warnings before using an older version:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-02-19/#SECURITY-817" class="external-link" rel="nofollow">SSRF vulnerability</a></li>
+	<li><a href="https://jenkins.io/security/advisory/2019-04-03/#SECURITY-957" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+Allows users to create and deploy releases with OctopusDeploy</p><h2 id="OctopusDeployPlugin-Releases">Releases</h2><h3 id="OctopusDeployPlugin-1.9.0">1.9.0</h3><p>Feature for supporting Octopus 2018.8 which introduced a change to Steps allowing multiple packages. Now uses 'package reference name' instead of just step name.</p><p>Contributed by <a href="https://github.com/slewis74" class="external-link" rel="nofollow">Shannon Lewis</a></p><h3 id="OctopusDeployPlugin-1.8.1">1.8.1</h3><p>Bugfix - When a specified Octopus URL ended with a / the Build Summary links would be incorrectly truncated by one character.</p><h3 id="OctopusDeployPlugin-1.8.0">1.8.0</h3><p>Feature Enhancement - Packages can now be specified by Package Name <em>or</em> by Step Name.</p><p>Contributed by <a href="https://github.com/cjuroz" class="external-link" rel="nofollow">Cristian Uroz</a></p><h3 id="OctopusDeployPlugin-1.7.0">1.7.0</h3><p>New Feature - Supports configuring and using multiple Octopus servers. Configure in the Jenkins global configuration, and use per-project in the Deployment or Release post build step. Found under Advanced Options.</p><p>Contributed by <a href="https://github.com/phoewass" class="external-link" rel="nofollow">Wassim Ben Ayed</a></p><h3 id="OctopusDeployPlugin-1.6.0">1.6.0</h3><p>New Feature - Support the ability to specify a <a href="https://octopus.com/docs/key-concepts/projects/channels" class="external-link" rel="nofollow">channel </a>while creating a release.</p><h3 id="OctopusDeployPlugin-1.5.0">1.5.0</h3><p>New Feature - The ability to specify a tenant when deploying in <a href="http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments" class="external-link" rel="nofollow">multi-tenant mode</a>.<br/> Contributed by <a href="https://github.com/mcginkel" class="external-link" rel="nofollow">Kees van Ginkel</a></p><h3 id="OctopusDeployPlugin-1.4.0">1.4.0</h3><p>New Feature - set variables when executing a deployment. <br/> Contributed by <a href="https://github.com/srufle" class="external-link" rel="nofollow">Stephen Rufle</a></p><h3 id="OctopusDeployPlugin-1.3.1">1.3.1</h3><p>Bugfix - Release notes from SCM now properly include changeset from current build.</p><h3 id="OctopusDeployPlugin-1.3.0">1.3.0</h3><p>Initial release on Jenkins-CI</p><h1 id="OctopusDeployPlugin-OctopusDeployPlugin">OctopusDeploy Plugin</h1><p>Connecting <a href="https://octopusdeploy.com/" class="external-link" rel="nofollow">OctopusDeploy</a> to the <a href="https://jenkins-ci.org/" class="external-link" rel="nofollow">Jenkins</a> workflow. Integration with OctopusDeploy is achieved via the REST API, not the Octo.exe tool.</p><h3 id="OctopusDeployPlugin-Compatibility">Compatibility</h3><p>Built initially with, and compatible with OctopusDeploy 2.6.<br/> Tested and compatible with OctopusDeploy 3.0, 3.1, 3.2, and 3.4.</p><h2 id="OctopusDeployPlugin-MainComponents">Main Components</h2><h3 id="OctopusDeployPlugin-Post-buildstep-CreateRelease">Post-build step - Create Release</h3><p>Creates a new release entry for a given project. Optionally also deploys the newly created release to a given environment. This component will only run if the build has been successful up until the point the post-build step is invoked.</p><h3 id="OctopusDeployPlugin-Post-buildstep-ExecuteDeployment">Post-build step - Execute Deployment</h3><p>Sends a release to a given environment. This component will only run if the build has been successful up until the point the post-build step is invoked.</p><h2 id="OctopusDeployPlugin-Features">Features</h2><h3 id="OctopusDeployPlugin-RESTAPIIntegration">REST API Integration</h3><p>This plugin implements part of the REST API for OctopusDeploy in order to retrieve data and execute commands on the server. It makes use of an API Key which is configured in the Global Settings Jenkins configuration page. This API Key is used for all interactions with OctopusDeploy.</p><h3 id="OctopusDeployPlugin-EnvironmentVariableSupport">Environment Variable Support</h3><p>Environment variables can be used in many fields in the Release and Deployment components of this plugin. Any variable, written as</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>${VARIABLE_NAME}</pre>
+</div></div><p>will get replaced by that variable's value. If there is no value set for that variable, the token is not replaced.</p><h3 id="OctopusDeployPlugin-CustomReleaseNotes">Custom Release Notes</h3><p>The Release component allows Release Notes to be gathered from SCM, collecting commit messages from the current build all the way back to the last successful build, or it can load in Release Notes from a file. There is also an option to provide a link back to the job run that created the release in the Release Notes, allowing easy navigation between Jenkins jobs and OctopusDeploy Releases.</p><h3 id="OctopusDeployPlugin-BuildSummaryLinks">Build Summary Links</h3><p>Each component provides a link to the Release or Deployment that it created. These links are provided in the console output of the job as well as showing up as a build badge, and in the Build Summary.</p><h3 id="OctopusDeployPlugin-Wait-for-Deployment">Wait-for-Deployment</h3><p>The Deployment component can optionally wait for the completion of the Deployment, and record the status. If the status returns as failed, the Jenkins job will be marked as a failure.</p><h3 id="OctopusDeployPlugin-Autocomplete">Autocomplete</h3><p>Some entry fields, like Project and Environment support auto-completion, pulling a list of names to choose from from the OctopusDeploy server.</p><h3 id="OctopusDeployPlugin-Octopusvariables">Octopus variables</h3><p>As of 1.4.0, this plugin can set Octopus variables for use in deployment.</p><h3 id="OctopusDeployPlugin-Multitenantsupport">Multi tenant support</h3><p>As of 1.5.0, this plugin can submit a Tenant to the deployment step for use in Octopus' multi-tenant mode.</p><h3 id="OctopusDeployPlugin-CreatingreleaseonspecificChannels">Creating release on specific Channels</h3><p>As of 1.6.0, this plugin can create releases on specific Channels as defined by users.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:36</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

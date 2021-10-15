@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Administering Jenkins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Administering Jenkins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified by <span class='editor'> Unknown User (deepchip)</span> on Aug 27, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>
+  <div style="float:right">
+  <div class="panel" style="border-color: #aaaaaa;border-style: solid;border-width: 1px;"><div class="panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;border-bottom-color: #aaaaaa;"><b>See also</b></div><div class="panelContent">
+<ul><li><a href="Starting-and-Accessing-Jenkins.html" rel="nofollow">Starting and Accessing Jenkins</a></li><li><a href="Features-controlled-by-system-properties.html" rel="nofollow">Features controlled by system properties</a></li></ul>
+</div></div>
+  </div></p><h1 id="AdministeringJenkins-JENKINS_HOMEdirectory">JENKINS_HOME directory</h1><p>Jenkins needs some disk space to perform builds and keep archives. You can check this location from the configuration screen of Jenkins.</p><p>By default, this is set to <code>~/.jenkins</code>, but you can change this in one of the following ways:</p><ul><li>Set &quot;JENKINS_HOME&quot; environment variable to the new home directory before launching the servlet container.</li><li>Set &quot;JENKINS_HOME&quot; system property to the servlet container.</li><li>Set JNDI environment entry &quot;JENKINS_HOME&quot; to the new directory.</li></ul><p><a href="Containers.html">See the container specific documentation collection</a> for more about how to do this for your container.</p><p>You can change this location after you've used Jenkins for a while, too. To do this, stop Jenkins completely, move the contents from old JENKINS_HOME to the new home, set the new JENKINS_HOME, and restart Jenkins.</p><p><code>JENKINS_HOME</code> has a fairly obvious directory structure that looks like the following:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>JENKINS_HOME
+ +- config.xml     (jenkins root configuration)
+ +- *.xml          (other site-wide configuration files)
+ +- userContent    (files in this directory will be served under your http://server/userContent/)
+ +- fingerprints   (stores fingerprint records)
+ +- nodes          (slave configurations)
+ +- plugins        (stores plugins)
+ +- secrets        (secretes needed when migrating credentials to other servers)
+ +- workspace (working directory for the version control system)
+     +- [JOBNAME] (sub directory for each job)
+ +- jobs
+     +- [JOBNAME]      (sub directory for each job)
+         +- config.xml     (job configuration file)
+         +- latest         (symbolic link to the last successful build)
+         +- builds
+             +- [BUILD_ID]     (for each build)
+                 +- build.xml      (build result summary)
+                 +- log            (log file)
+                 +- changelog.xml  (change log)
+</pre>
+</div></div><h1 id="AdministeringJenkins-Backupandrestore">Back up and restore</h1><p>All the settings, build logs, artifact archives are stored under the JENKINS_HOME directory. Simply archive this directory to make a back up. Similarly, restoring the data is just replacing the contents of the JENKINS_HOME directory from a back up.</p><p>Back ups can be taken without stopping the server, but when you restore, please do stop the server.</p><h1 id="AdministeringJenkins-Moving/copying/renamingjobs">Moving/copying/renaming jobs</h1><p>You can:</p><ol><li>Move a job from one installation of Jenkins to another by simply copying the corresponding job directory.</li><li>Make a copy of an existing job by making a clone of a job directory by a different name.</li><li>Rename an existing job by renaming a directory. Note that the if you change a job name you will need to change any other job that tries to call the renamed job.</li></ol><p>Those operations can be done even when Jenkins is running. For changes like these to take effect, you have to click &quot;reload config&quot; to force Jenkins to reload configuration from the disk.</p><h2 id="AdministeringJenkins-Batchrenamingjobs">Batch renaming jobs</h2><p>Replacing spaces in job names with underscores</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ rename &#39;s/\s/_/g&#39; *</pre>
+</div></div><h1 id="AdministeringJenkins-Archiveunusedjobs">Archive unused jobs</h1><p>Sometimes you want to remove a job from Jenkins but do so in such a way that you can resurrect it later, if the need arises. You can do this by going to $JENKINS_HOME and create an archive of the job directory. The following command illustrates how to archive a job 'xyz' and remove it.</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ cd $JENKINS_HOME/jobs
+$ tar czf xyz.tgz xyz
+// go to Jenkins GUI &quot;Manage Jenkins&quot; page and &quot;Reload Configuration from Disk&quot;
+</pre>
+</div></div><p>As long as you are not building the xyz project while you create an archive, you can do this operation without taking Jenkins offline.</p><ul><li>See also the <a href="Shelve-Project-Plugin.html">&quot;Shelve Project&quot; plugin</a>.</li></ul><h1 id="AdministeringJenkins-ScriptConsole">Script Console</h1><p>Useful for trouble-shooting, diagnostics or batch updates of jobs Jenkins provides a script console which gives you access to all Jenkins internals.<br/>These scripts are written in <a href="http://groovy.codehaus.org/" class="external-link" rel="nofollow">Groovy</a> and you'll find some samples of them in this <a href="Jenkins-Script-Console.html">page</a>.</p><h1 id="AdministeringJenkins-URLOptions">URL Options</h1><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">http://[jenkins-server]/[command]
+</pre>
+</div></div><p>where [command] can be</p><ul><li><code>exit</code> shutdown jenkins</li><li><code>restart</code> restart jenkins</li><li><code>reload</code> to reload the configuration</li></ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

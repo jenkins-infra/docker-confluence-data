@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : GCM Notification Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : GCM Notification Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (orrc)</span>, last modified on Aug 04, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> Distribution of this plugin has been suspended due to unresolved security vulnerabilities, see below. </p></td>
+</tr>
+</tbody></table>
+
+<div class="confluence-information-macro confluence-information-macro-warning"><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The current version of this plugin may not be safe to use. Please review the following warnings before use:</p>
+
+<ul>
+	<li><a href="https://jenkins.io/security/advisory/2019-08-07/#SECURITY-591" class="external-link" rel="nofollow">Credentials stored in plain text</a></li>
+</ul>
+
+</div></div>
+
+<p>Sends build notifications to Android devices using the Google Cloud Messaging (GCM) service.</p>
+
+<h2 id="GCMNotificationPlugin-Setup">Setup</h2>
+<p>Once fully set up, Jenkins will be able to send notifications to the Google Cloud Messaging (GCM) service — formerly known as Cloud to Device Messaging (C2DM) — which will forward those notifications to the relevant devices which have been paired with your Jenkins server.</p>
+
+<h3 id="GCMNotificationPlugin-Prerequisites">Prerequisites</h3>
+<h4 id="GCMNotificationPlugin-Admin">Admin</h4>
+<ul>
+	<li>Jenkins 1.466+</li>
+	<li>A Google Account</li>
+</ul>
+
+
+<h4 id="GCMNotificationPlugin-Users">Users </h4>
+<ul>
+	<li>A device running Android 2.2 or newer
+	<ul>
+		<li>Must be signed into a Google Account, unless the phone is running Android 4.0.4+</li>
+		<li>Must have an app installed which is compatible with this plugin (e.g. <a href="http://buildwatch.org/?utm_source=jenkins&amp;utm_medium=wiki&amp;utm_content=app-prerequisites" class="external-link" rel="nofollow">BuildWatch</a>).</li>
+	</ul>
+	</li>
+	<li>Preferably your Jenkins server should be accessible from your Android device (e.g. both on the same wifi network, or your Jenkins instance is publicly available)</li>
+</ul>
+
+
+<h3 id="GCMNotificationPlugin-Admin:One-timeJenkinssetup">Admin: One-time Jenkins setup</h3>
+<p>Once you have the plugin installed, you must use your Google Account to create a new API Project, which gives you access to use the GCM service.</p>
+
+<ol>
+	<li>Sign in to the <a href="https://code.google.com/apis/console/" class="external-link" rel="nofollow">Google APIs Console</a></li>
+	<li>Create a new project</li>
+	<li>Enable the &quot;Google Cloud Messaging for Android&quot; service</li>
+	<li>Under &quot;API Access&quot;, create a new Server Key and note the &quot;API key&quot; value</li>
+	<li>From the project &quot;Overview&quot; page, note the &quot;Project Number&quot; value</li>
+	<li>Paste these two values into the respective fields under the Jenkins system config (Manage Jenkins → Configure System)</li>
+</ol>
+
+
+<p>This process is demonstrated in this video: <a class="external-link" href="https://www.youtube.com/watch?v=3QFVUg0nfRM" rel="nofollow">https://www.youtube.com/watch?v=3QFVUg0nfRM</a></p>
+
+<h3 id="GCMNotificationPlugin-Users:One-timedevicesetup">Users: One-time device setup</h3>
+<p>Each user who wishes to be able to receive notifications must pair their device with the particular Jenkins instance.</p>
+
+<p>The simplest way to set up an Android device and receive notifications is to use the <a href="http://buildwatch.org/?utm_source=jenkins&amp;utm_medium=wiki&amp;utm_content=app-setup" class="external-link" rel="nofollow">BuildWatch app</a>.  <br/>
+Ways in which other apps can integrate with the GCM plugin are described below, but for now we'll assume the use of BuildWatch.</p>
+
+<ol>
+	<li>You must be logged in to an account on your Jenkins instance, as each device must be associated with a user account.</li>
+	<li>From your user's configuration page (i.e. click your user ID in the top right corner of any page, then click &quot;Configure&quot; on the left), you'll see a &quot;Google Cloud Messaging Token&quot; section.
+	<ul>
+		<li>Here you should see a &quot;Show QR code&quot; button.  If not, you're either not logged in, or looking at the configuration page for a different user.</li>
+	</ul>
+	</li>
+	<li>Clicking the button will display a QR code which you can scan with the BuildWatch app by clicking &quot;Auto setup&quot; in the app.</li>
+	<li>Scanning the code will request a GCM token from Google and then register this with your Jenkins server.</li>
+</ol>
+
+
+<p>Now your device is ready to receive notifications.</p>
+
+<p>This process is demonstrated in this video: <a class="external-link" href="https://www.youtube.com/watch?v=mt0ctjBTiZw" rel="nofollow">https://www.youtube.com/watch?v=mt0ctjBTiZw</a></p>
+
+<h3 id="GCMNotificationPlugin-Configurejobs">Configure jobs</h3>
+<p>Once you have one or more users with devices paired to your Jenkins server, you can enable build notifications.</p>
+
+<p>In any job, enable the &quot;Notify Android devices&quot; post-build action.</p>
+
+<p>Here you can enter the Jenkins user IDs you wish to be notified, separated by spaces.</p>
+
+<p>The advanced options available are specified by the <a href="Instant-Messaging-Plugin.html">Instant Messaging Plugin</a>.</p>
+
+<h2 id="GCMNotificationPlugin-Troubleshooting">Troubleshooting</h2>
+<h3 id="GCMNotificationPlugin-Idon&#39;tseea&quot;ShowQRcode&quot;buttononmyuserpage">I don't see a &quot;Show QR code&quot; button on my user page</h3>
+<p>Make sure you're logged into Jenkins, and that you're looking at the correct user configuration page.  <br/>
+e.g. If you're logged in as an admin user, you may have access to other users pages.  Here the QR code won't be available.</p>
+
+<h3 id="GCMNotificationPlugin-IscannedtheQRcode,butIcan&#39;tseeanytokenonmyuserconfigurationpage">I scanned the QR code, but I can't see any token on my user configuration page</h3>
+<p>If you scanned the QR code and directly afterwards pressed &quot;Enter token manually&quot;, you won't see the token — you must reload the page first.  </p>
+
+<p>Alternatively, your Android device failed to upload the GCM token to Jenkins.  <br/>
+This can be for several reasons:</p>
+
+<ul>
+	<li>Your Android device doesn't currently have network connectivity</li>
+	<li>Your Jenkins server doesn't currently have network connectivity</li>
+	<li>Your Jenkins server is not accessible from your Android device (e.g. Android device is not on the same wifi network)</li>
+	<li>The hostname of the Jenkins server is something that the Android device cannot resolve (e.g. Jenkins hostname &quot;our-ci-server.local&quot; may not be a resolvable by the DNS server the Android device is using)</li>
+</ul>
+
+
+<p>Check that you have the correct connectivity and try again.  You can also confirm from your Android browser that you can reach the Jenkins URL listed under Manage Jenkins → Configure System → Jenkins URL.</p>
+
+<h2 id="GCMNotificationPlugin-ImplementingcompatibleAndroidapps">Implementing compatible Android apps</h2>
+<p>If you want to integrate Jenkins GCM notifications into your own app, you can use the following info.</p>
+
+<h3 id="GCMNotificationPlugin-Registering">Registering</h3>
+<h4 id="GCMNotificationPlugin-RecognisingQRcode">Recognising QR code</h4>
+<p>The QR code shown by this plugin simply contains a JSON object with the following key/value string pairs:</p>
+<div class="table-wrap"><table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Key </p></th>
+<th class="confluenceTh"><p> Value </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> username </p></td>
+<td class="confluenceTd"><p> Jenkins user ID </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> token </p></td>
+<td class="confluenceTd"><p> Jenkins API token for the user </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> senderId </p></td>
+<td class="confluenceTd"><p> Google API project number (from Configure System → Google Cloud Messaging Notifications) </p></td>
+</tr>
+<tr>
+<td class="confluenceTd"><p> url </p></td>
+<td class="confluenceTd"><p> Jenkins base URL (from Configure System → Jenkins URL) </p></td>
+</tr>
+</tbody></table></div>
+
+
+<p>For example:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>{&quot;username&quot;: &quot;bob&quot;, &quot;token&quot;: &quot;8feb49ac4902ccd17e5a0&quot;, &quot;senderId&quot;: &quot;987654321&quot;, &quot;url&quot;: &quot;http:\/\/ci.example.com\/&quot;}
+</pre>
+</div></div>
+
+<p>The <code>senderId</code> is used to request a GCM device token via the Android APIs.  <br/>
+Once received, the <code>username</code> and <code>token</code> are used to send the value to the Jenkins instance at <code>url</code>.</p>
+
+<h4 id="GCMNotificationPlugin-Uploadingtoken">Uploading token</h4>
+<p>Once you have a GCM device token, it should be sent as an HTTP POST request to <code>JENKINS_URL/gcm/register</code> with the parameter <code>token</code> containing the GCM device token.</p>
+
+<p>The HTTP request should be made as the Jenkins user in question — i.e. you should use the user ID and API token from the QR code to do <a href="https://wiki.jenkins-ci.org/display/JENKINS/Authenticating+scripted+clients" class="external-link" rel="nofollow">HTTP Basic authentication</a>.</p>
+
+<p>Jenkins will reply with HTTP 200 OK if the token was registered, and with the relevant error code otherwise, depending on whether the token was missing or the user was not authenticated.</p>
+
+<p>Once you've uploaded the user's GCM device token, you can safely throw away the info gained from the QR code. If you do want to hold onto the user ID and their API token, you should give the user a method of deleting these from your app, as these values are sensitive — i.e. they can be used to perform any action as that Jenkins user.</p>
+
+<h3 id="GCMNotificationPlugin-Receivingnotifications">Receiving notifications</h3>
+<p>When this plugin sends a notification to a device, it currently simply sends a single string value &quot;<code>m</code>&quot;, containing the plain text of the notification, as you would normally see from the Instant Messaging plugin.</p>
+
+<p>e.g. &quot;Project foobar build #123: SUCCESS in 2 min: <a class="external-link" href="http://ci.example.com/job/foobar/123/" rel="nofollow">http://ci.example.com/job/foobar/123/</a>&quot;</p>
+
+<p>Your app will receive this directly as an Android <code>Intent</code>, with the <code>String</code> value of &quot;<code>m</code>&quot; in the intent extras.</p>
+
+<p>Currently the Instant Messaging plugin doesn't deliver more structured data to its users, but this is something we'd like to improve on in future...</p>
+
+<h2 id="GCMNotificationPlugin-Moreinfo">More info</h2>
+<p>You can find various demonstrations, setup instructions and further info at <a href="http://buildwatch.org/?utm_source=jenkins&amp;utm_medium=wiki" class="external-link" rel="nofollow">buildwatch.org</a>.</p>
+
+<p>If you have any questions, get in touch via the links here or on the BuildWatch site.</p>
+
+<h2 id="GCMNotificationPlugin-Versionhistory">Version history</h2>
+<h3 id="GCMNotificationPlugin-Version1.0(November20,2012)">Version 1.0 (November 20, 2012)</h3>
+<ul>
+	<li>Initial release</li>
+</ul>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:24</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

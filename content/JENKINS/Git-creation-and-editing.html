@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Git creation and editing</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Blue-Ocean-development.html">Blue Ocean development</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Git creation and editing
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (jamesdumay)</span>, last modified on Jul 14, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020236258 {padding: 0px;}
+div.rbtoc1631020236258 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020236258 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020236258'>
+<ul class='toc-indentation'>
+<li><a href='#Gitcreationandediting-Issues'>Issues</a></li>
+<li><a href='#Gitcreationandediting-Problems'>Problems</a></li>
+<li><a href='#Gitcreationandediting-Assumptionsandlimitations'>Assumptions and limitations</a></li>
+<li><a href='#Gitcreationandediting-Securityscenario'>Security scenario</a>
+<ul class='toc-indentation'>
+<li><a href='#Gitcreationandediting-InGithubread/write'>In Github read/write</a></li>
+<li><a href='#Gitcreationandediting-InGitread/write'>In Git read/write</a>
+<ul class='toc-indentation'>
+<li><a href='#Gitcreationandediting-SSHcredentials'>SSH credentials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#Gitcreationandediting-Userflows'>User flows</a>
+<ul class='toc-indentation'>
+<li><a href='#Gitcreationandediting-1.Firststep'>1. First step</a></li>
+<li><a href='#Gitcreationandediting-CreatingthePipelineusingSSH'>Creating the Pipeline using SSH</a></li>
+<li><a href='#Gitcreationandediting-Loadingtheeditor:'>Loading the editor:</a></li>
+<li><a href='#Gitcreationandediting-Savingfromtheeditor'>Saving from the editor</a></li>
+<li><a href='#Gitcreationandediting-Whenevercredentialsarerequired'>Whenever credentials are required</a>
+<ul class='toc-indentation'>
+<li><a href='#Gitcreationandediting-Githubwithaccesstoken'>Github with access token</a></li>
+<li><a href='#Gitcreationandediting-GitwithJenkinsuserpublickey'>Git with Jenkins user public key</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href='#Gitcreationandediting-Technicalquestionsandproblems'>Technical questions and problems</a></li>
+<li><a href='#Gitcreationandediting-Keith&#39;stechnicalbraindump'>Keith&#39;s technical brain dump</a></li>
+</ul>
+</div></p><h2 id="Gitcreationandediting-Issues">Issues</h2><ul><li>
+<span class="jira-issue resolved" data-jira-key="JENKINS-43148" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-43148?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14685&amp;avatarType=issuetype"/>JENKINS-43148</a>
+                            -
+            <span class="summary">Support native Git for pipeline creation and editing</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+</li></ul><h2 id="Gitcreationandediting-Problems">Problems</h2><ul><li>The largest notable difference is that creating and editing with plain Git has noticeably more network traffic than Github. This means the user may have to wait for Blue Ocean to retrieve the content of the repository before showing them the Editor or before their save action is completed.</li><li>The administrator is delegating the control of their credentials to read/write to the repository. They may want finer grained controls for who can edit the Jenkinsfile.</li></ul><h2 id="Gitcreationandediting-Assumptionsandlimitations">Assumptions and limitations</h2><ul><li>We will use whatever credential was provided in the first instance to setup the Pipeline to write back to the Git repository.</li><li>If writing fails, we let them know the key they provided isn't allowed to push and the user is given instructions on how to copy the Jenkinsfile to their repository.</li><li>All other situations do not matter.</li><li>User will still be able to setup a system SSH key on the server and allow users to write with it desired but only if they picked system credential when they initially setup the Pipeline.</li><li>We are also assuming that the URL to the repository is the same URL that will be used for the write. This means there is no option to enter a different remote URL on write or any credential negotiation that goes with that flow.</li></ul><h2 id="Gitcreationandediting-Securityscenario">Security scenario</h2><h3 id="Gitcreationandediting-InGithubread/write">In Github read/write</h3><p>If Bob sets up the Pipeline he delegates his Github token for reading from the repository, for the purpose of running the Pipeline. When Alice comes along and wants to edit the Pipeline, she cannot use Bobs access token and is prompted to provide her own access token used for editing the pipeline.</p><p>Note that today, in order for Alice to edit, she needs to go and enter her token in creation then click the edit button and then she can author. This needs to be fixed properly as part of 
+<span class="jira-issue resolved" data-jira-key="JENKINS-42791" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-42791?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14685&amp;avatarType=issuetype"/>JENKINS-42791</a>
+                            -
+            <span class="summary">Developer should be asked for their Github token when loading the editor</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Resolved</span>
+                </span>
+.</p><h3 id="Gitcreationandediting-InGitread/write">In Git read/write</h3><h4 id="Gitcreationandediting-SSHcredentials">SSH credentials</h4><p>If Bob sets up the Pipeline he uses his Jenkins public key to delegate his Git ssh key for reading from the repository, for the purpose of running the Pipeline. When Alice comes along and wants to edit the Pipeline, she cannot use Bobs ssh key. Jenkins generates a public/private key pair and stores it as a credential against her user. She is then prompted to download a public key and register it with the Git server.</p><h2 id="Gitcreationandediting-Userflows">User flows</h2><h3 id="Gitcreationandediting-1.Firststep">1. First step</h3><p>Developer enters in their URL and based off of the protocol we decide if they will use SSH key (SSH) or Username/password (http/https)</p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="300" src="attachments/116097109/116064588.png" data-image-src="attachments/116097109/116064588.png" data-unresolved-comment-count="0" data-linked-resource-id="116064588" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Git Step 1.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097109" data-linked-resource-container-version="5"></span></p><h3 id="Gitcreationandediting-CreatingthePipelineusingSSH">Creating the Pipeline using SSH</h3><p> </p><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="300" src="attachments/116097109/116064614.png" data-image-src="attachments/116097109/116064614.png" data-unresolved-comment-count="0" data-linked-resource-id="116064614" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Git with Jenkins Key.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097109" data-linked-resource-container-version="5"></span></p><p> </p><h3 id="Gitcreationandediting-Loadingtheeditor:">Loading the editor:</h3><ol><li>Developer clicks the edit action</li><li>Developer sees a progress dialog with a message &quot;Loading your Jenkinsfile&quot;<ul><li>This could take a while as we have to do a shallow clone of the repository</li><li>How much progress information do we get from the clone? If we can easily get this info we can use a determinate progress indicator rather than a indeterminate one.</li><li>Developer should be able to cancel the load if it takes too long</li></ul></li><li>Developer sees the Editor</li></ol><h3 id="Gitcreationandediting-Savingfromtheeditor">Saving from the editor</h3><ol><li>Developer clicks save</li><li>Developer sees the save dialog and then confirms<br/><ol><li>May commit back to new branch or current branch</li></ol></li><li>Developer sees progress dialog with message &quot;Saving your pipeline&quot;</li><li>Developer lands back on the Activity screen</li></ol><h3 id="Gitcreationandediting-Whenevercredentialsarerequired">Whenever credentials are required</h3><ol><li>Blue Ocean detects the type of credential needed based on the repository URL<ul><li>If Bob sets up the Pipeline using a Git URL with the SSH protocol then he can only create a SSH credential for it.</li><li>If Alice edits the Pipeline that Bob setup using SSH then she needs a SSH key</li></ul></li><li>User is presented with a way of creating their own credential (as scoped in the Security scenarios) and credential is validated before allowing the user to continue</li><li>User can perform creation or editing actions</li></ol><h4 id="Gitcreationandediting-Githubwithaccesstoken">Github with access token</h4><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="300" src="attachments/116097109/116064613.png" data-image-src="attachments/116097109/116064613.png" data-unresolved-comment-count="0" data-linked-resource-id="116064613" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="Commit new file Connect to Github.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097109" data-linked-resource-container-version="5"></span></p><h4 id="Gitcreationandediting-GitwithJenkinsuserpublickey">Git with Jenkins user public key</h4><p><span class="confluence-embedded-file-wrapper confluence-embedded-manual-size"><img class="confluence-embedded-image confluence-thumbnail" width="300" src="attachments/116097109/116064592.png" data-image-src="attachments/116097109/116064592.png" data-unresolved-comment-count="0" data-linked-resource-id="116064592" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="connect-git-ssh.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="116097109" data-linked-resource-container-version="5"></span></p><h2 id="Gitcreationandediting-Technicalquestionsandproblems">Technical questions and problems</h2><ul><li>Is there a smart repo cache that we can use on the master to perform the editing operations on?</li><li>Is there any way to get progress information from the Git operations we use? We would like to display them to the user.</li><li>To inform design – when asking for credentials and their remote URL, what other information could they need to successfully push the Jenkinsfike?</li></ul><h2 id="Gitcreationandediting-Keith&#39;stechnicalbraindump">Keith's technical brain dump</h2><p>I have this working by:</p><ol><li>cloning the repo (shallow)</li><li>checkout the branch</li><li>reading the content</li></ol><p>and for writes:</p><ol><li>cloning the repo (shallow)</li><li>Depending if the branch has changed:<br/><ol><li>creating a branch based on the source</li></ol></li><li>saving content</li><li>adding a remote for the writable URL &amp; credential</li><li>committing and pushing content</li></ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064588.png">Git Step 1.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064589.png">Git Step 2.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064590.png">Git Step 3.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064591.png">connect-git-http.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064592.png">connect-git-ssh.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064613.png">Commit new file Connect to Github.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064614.png">Git with Jenkins Key.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116064615.png">Git with Username and Password.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116065075.png">image2017-4-26 22:35:34.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116065076.png">image2017-4-26 22:41:59.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116065077.png">image2017-4-26 22:50:14.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/116097109/116065081.png">User: James William Dumay » User [Jenkins] 2017-04-27 09-04-32.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:10</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

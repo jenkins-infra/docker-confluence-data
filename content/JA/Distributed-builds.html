@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>日本語 : Distributed builds</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">日本語</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Jenkins.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            日本語 : Distributed builds
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (sogabe)</span>, last modified by <span class='editor'> Unknown User (akiko)</span> on Mar 09, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>オリジナル:<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Distributed+builds">Distributed builds</a></p>
+
+<p>Jenkinsは&quot;マスター/スレーブ&quot; モードをサポートしています。このため、プロジェクトビルドのための作業負荷を、複数の&quot;スレーブ&quot;ノードに分割して割り当てることが出来ます。さらに、1つのJenkins上で、非常に多くのプロジェクトを管理することも、テスト / ビルドのために必要な異なる環境を提供することも可能です。</p>
+
+<p>このドキュメントは、&quot;マスター/スレーブ&quot; モードと、その利用方法について解説します。</p>
+
+<h1 id="Distributedbuilds-Contents">Contents</h1>
+
+<style type='text/css'>/*<![CDATA[*/
+div.rbtoc1632930776875 {padding: 0px;}
+div.rbtoc1632930776875 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1632930776875 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1632930776875'>
+<ul class='toc-indentation'>
+<li><a href='#Distributedbuilds-Contents'>Contents</a></li>
+<li><a href='#Distributedbuilds-どういう仕組みで動くの?'>どういう仕組みで動くの?</a></li>
+<li><a href='#Distributedbuilds-スレーブエージェント起動の様々な方法'>スレーブエージェント起動の様々な方法</a>
+<ul class='toc-indentation'>
+<li><a href='#Distributedbuilds-ssh経由でマスターからスレーブエージェントを起動する'>ssh経由でマスターからスレーブエージェントを起動する</a></li>
+<li><a href='#Distributedbuilds-マスターからWindows上のスレーブエージェントを起動する'>マスターからWindows上のスレーブエージェントを起動する</a></li>
+<li><a href='#Distributedbuilds-自分でスクリプトを作成し、Jenkinsのスレーブを開始する'>自分でスクリプトを作成し、Jenkinsのスレーブを開始する</a></li>
+<li><a href='#Distributedbuilds-JavaWebStartを利用してスレーブエージェントを起動する'>Java Web Startを利用してスレーブエージェントを起動する</a></li>
+<li><a href='#Distributedbuilds-ヘッドレスな環境でのスレーブエージェントの起動'>ヘッドレスな環境でのスレーブエージェントの起動</a></li>
+<li><a href='#Distributedbuilds-OtherRequirements/その他必要事項'>Other Requirements / その他必要事項</a></li>
+</ul>
+</li>
+<li><a href='#Distributedbuilds-例:Unix上の設定'>例: Unix上の設定</a></li>
+<li><a href='#Distributedbuilds-スケジューリング戦略'>スケジューリング戦略</a></li>
+<li><a href='#Distributedbuilds-マスターオンリーから、マスター/スレーブへの変換'>マスターオンリーから、マスター/スレーブへの変換</a></li>
+<li><a href='#Distributedbuilds-パブリックネットワーク上のマスターとファイアウォール内のスレーブ'>パブリックネットワーク上のマスターとファイアウォール内のスレーブ</a></li>
+<li><a href='#Distributedbuilds-同じマシンで複数のスレーブを稼動させる'>同じマシンで複数のスレーブを稼動させる</a></li>
+<li><a href='#Distributedbuilds-トラブルシューティング'>トラブルシューティング</a></li>
+<li><a href='#Distributedbuilds-その他の参考情報'>その他の参考情報</a></li>
+</ul>
+</div>
+
+<h1 id="Distributedbuilds-どういう仕組みで動くの?">どういう仕組みで動くの?</h1>
+
+<p>インストールされたJenkins自身は、&quot;マスター&quot; となります。<br/>
+利用しているJenkinsが、&quot;マスター/スレーブ&quot; モードをサポートしていなければ、そのJenkinsがマスターそのものになります。また、&quot;マスター/スレーブ&quot; モードであっても、マスターとして担う役割には変わりありません。<br/>
+マスターは、すべてのHTTPリクエストを受け付け、マスター自身に割り当てられたプロジェクトのビルドを担当します。</p>
+
+<p>マスターのために、プロジェクトをビルドできるようにセットアップされたコンピュータが、スレーブとなります。Jenkinsは　&quot;slave agent&quot; という独立したプログラムを、スレーブの上で走らせます。スレーブエージェントを起動するためには、さまざまな方法がありますが、最終的には、スレーブエージェントとJenkinsのマスター間で、双方向のバイトストリーム通信を確立することが必要となりす。(たとえば、TCP/IPソケット通信など)</p>
+
+<p>スレーブがマスターに登録されると、マスター/スレーブ間でのビルドの負荷分散が開始されます。<br/>
+実際にスレーブ上でジョブが実行されるかどうかは、プロジェクトの設定次第になります。ビルドのために、特定のマシン上に張り付いていないといけないプロジェクトもあれば、自由にスレーブの場所を選んでビルドできるプロジェクトもあります。<br/>
+Jenkinsのウェブサイトにアクセスすると、透過的にビルドが行われていることが分かります。<br/>
+また、スレーブによるビルドが完了したことは全く知らなくとも、javadocやテスト結果、ビルドの成果物をマスターからダウンロードすることが出来ます。</p>
+
+
+<p>次のステップ <a href="Step-by-step-guide-to-set-up-master-and-slave-machines.html">Step by step guide to set up master and slave machines</a> では、分散ビルドを利用するためのクイックスタートについて解説します。</p>
+
+
+<h1 id="Distributedbuilds-スレーブエージェント起動の様々な方法">スレーブエージェント起動の様々な方法</h1>
+
+<p>皆さんが利用している環境と、マスターとスレーブが稼動するOSにとって、適切な方法を選んで下さい。</p>
+
+
+<h2 id="Distributedbuilds-ssh経由でマスターからスレーブエージェントを起動する">ssh経由でマスターからスレーブエージェントを起動する</h2>
+
+<p>JenkinsはビルトインのSSHクライアントを備えており、リモートのsshdと通信し、スレーブエージェントを開始することが出来ます。これは、Unixのスレーブに対しては、もっとも便利でお勧めの方法です。というのも、たいていのUnixでは、何もしなくとも、そのままでsshdが利用できるからです。<br/>
+『Jenkinsの管理』をクリックし、『ノードの管理』に進んで、&quot;新規ノード作成&quot;をクリックします。ここでは、接続情報を設定します。(スレーブのホスト名や、ユーザ名、sshの資格情報です)　なお、スレーブの ~/.ssh/authorized_keys に、マスターの公開鍵をコピーする必要がありますので、ご注意下さい。(sshについてのヘルプは、適切なHowto が<a href="http://sial.org/howto/openssh/publickey-auth/" class="external-link" rel="nofollow">こちら</a>にあります。)<br/>
+設定が済むと、スレーブエージェントに必要なバイナリのコピーも含め、スレーブの起動から停止といった残りの作業を、Jenkins自身が行ってくれます。<br/>
+ただし、プロジェクトに外部の依存関係がある場合は、自分自身で設定を行う必要があります。<span style="color: rgb(255,153,0);">[Where is this documented?]</span></p>
+
+<p>Unixにとっては、この方法がもっとも便利です。</p>
+
+
+<h2 id="Distributedbuilds-マスターからWindows上のスレーブエージェントを起動する">マスターからWindows上のスレーブエージェントを起動する</h2>
+
+<p>Windowsスレーブの場合は、Jenkinsは、Windows2000以後のバージョンにビルトインとなっている、リモート管理の機能を利用できます。(詳しい仕様は、こちらを参照して下さい。<a href="http://en.wikipedia.org/wiki/Windows_Management_Instrumentation" class="external-link" rel="nofollow">WMI</a>+<a href="http://en.wikipedia.org/wiki/Distributed_Component_Object_Model" class="external-link" rel="nofollow">DCOM</a>)<br/>
+この場合は、システムの管理者権限を持ったユーザ名とパスワードを設定すれば、JenkinsがリモートからWindowsサービスを作成し、リモートからの開始/停止を行います。</p>
+
+<p>この方法は、Windowsにとってはもっとも利用しやすいものですが、画面上の対話が必要なプログラムを起動することは出来ません。(たとえば、GUIテストなど)</p>
+
+<p><em>注意 : 他のノード設定と違い、ノード名の設定が非常に重要になります。ノード名を、サービスを作成するための実際のアドレスとして利用するからです !</em></p>
+
+<h2 id="Distributedbuilds-自分でスクリプトを作成し、Jenkinsのスレーブを開始する">自分でスクリプトを作成し、Jenkinsのスレーブを開始する</h2>
+
+<p>もし、上記のように標準で提供されている方法では、柔軟性の要件を満たせない場合、自分自身でスレーブを起動するスクリプトを書いて対応することもできます。</p>
+
+<p>典型として、SSHやRSH、その他類似の方法のような、リモートプログラム実行のためのメカニズムを、スクリプトに利用します。(Windowsでは<a href="http://www.cygwin.com/" class="external-link" rel="nofollow">cygwin</a>や<a href="http://www.microsoft.com/technet/sysinternals/utilities/psexec.mspx" class="external-link" rel="nofollow">psexec</a>を通して、同じプロトコルを利用することができます。) ただし、Jenkins自身が、接続のための特定の方法を持っているわけではありません。</p>
+
+<p>Jenkinsがスクリプトに求めているものは、結局のところ、 <code>java -jar slave.jar</code> のように、適切なコンピュータ上でスレーブエージェントプログラムを実行することであり、コンピュータ上の標準入出力を、スクリプトの標準入出力につなげることです。例えば、 &quot;<code>ssh</code> <code><em>myslave</em></code> <code>java -jar ~/bin/slave.jar</code>&quot; というスクリプトが、これに該当します。<br/>
+(Jenkinsは、標準入出力をスレーブエージェントとのコミュニケーションチャンネルとして利用するので、Jenkins自身にこのコマンドを実行させることが重要となります。このため、シェルから手動でスレーブエージェント実行することは、<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Launching+slave.jar+from+from+console">あまりお勧めではありません。</a>).</p>
+
+<p><code>slave.jar</code> のコピーは、<code><a href="http://yourserver:port/jnlpJars/slave.jar" class="external-link" rel="nofollow">http://yourserver:port/jnlpJars/slave.jar</a></code> から、スレーブ上にダウンロードすることが出来ます。<br/>
+実際、スクリプト中に、この160KB程度のjarファイルをダウンロードするコードを記載する例も多く見られます。これは、確実に、(マスターとの間で)一貫性を持ったバージョンの <code>slave.jar</code> を利用するためのものです。<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/SSH+Slaves+plugin">SSH Slaves</a>プラグインでは、この動作を自動で行っており、SSH Slavesプラグインを利用して設定されているスレーブは、常にマスターのJenkinsと整合性の取れた <code>slave.jar</code> を利用することができます。</p>
+
+
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">slave.jarのアップデートについて</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>技術的な観点から言うと、スレーブのセットアップにおいては、Jenkinsのバージョンを新しくする度に、 <code>slave.jar</code> もアップデートされるべきです。しかし、実際は、 <code>slave.jar</code> を頻繁に更新する必要は無いので、起動時にプログラムが深刻な問題を引き起こさない限りは、更新しないでおく、というのが現実的なところです。</p></div></div>
+<p>この方法によるスレーブの起動では、たいていスレーブ上での追加の初期設定が必要になります(特にWindowsでは、リモートログインのメカニズムはデフォルトでは利用できません)。ただし、このアプローチのメリットは、コネクションの悪化(切断)が発生しても、JenkinsのWebインタフェースを利用して、コネクションを再開できる、という点です。</p>
+
+<h2 id="Distributedbuilds-JavaWebStartを利用してスレーブエージェントを起動する">Java Web Startを利用してスレーブエージェントを起動する</h2>
+
+<p>スレーブエージェントを起動するもう1つの方法が、Java Web Start (JNLP) を利用することです。このアプローチでは、まず対話的にスレーブノードにログインし、ブラウザを開き、Jenkins上のスレーブのページを開きます。次に、JNLPのラウンチアイコンが表示されたら、そのアイコンをクリックすると、Java Web Startが呼び出され、ブラウザが実行されているコンピュータ上に、スレーブエージェントが起動されます。<br/>
+このモードは、カスター側からスレーブへのコネクションを開始できないような状況、例えば、マスターがファイアウォール外で稼動しているが、その他のスレーブはファイアウォールの中にある、といった状況下で、利便性の高い方法です。</p>
+
+<p>Windowsでは、いったん手動でJNLPを利用してスレーブエージェントを起動すると、<a href="36111078.html">Windowsのサービス</a> としてエージェントをインストールできます。このため、スレーブを対話的に起動しなおす必要はなくなります。</p>
+
+<p>Windows上で、画面上の対話 (GUIテストなど) が必要で、専用の(仮想の)テストマシンが用意できるなら、それにふさわしいオプションがあります。<br/>
+Jenkinsのユーザアカウントを作成し、<a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;324737" class="external-link" rel="nofollow">自動ログインを有効化</a>し、スタートアップアイテムの中にJNLPへのショートカットを作成します。(信頼されたスレーブエージェントの証明書を取得した後で)</p>
+
+<h2 id="Distributedbuilds-ヘッドレスな環境でのスレーブエージェントの起動">ヘッドレスな環境でのスレーブエージェントの起動</h2>
+
+<p>このラウンチモードは、GUIを利用せずに稼動させるという点を除いて、Java Web Startと非常に良く似たメカニズムを利用します。このモードは、Unix上のデーモンのようにエージェントを実行させる場合に便利な方法になります。<br/>
+このスレーブをJNLPスレーブとして設定するために、まずは上記で解説した通り、 <code>slave.jar</code> を取得します。次に、このようなコマンドを実行します:</p>
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>$ java -jar slave.jar -jnlpUrl http://yourserver:port/computer/slave-name/slave-agent.jnlp
+</pre>
+</div></div>
+<p>&quot;slave-name&quot; は、実際のスレーブ名に合ったものに置き換えて下さい。</p>
+
+<h2 id="Distributedbuilds-OtherRequirements/その他必要事項">Other Requirements / その他必要事項</h2>
+
+<p>スレーブはクラスタの一種であり、クラスタを運用することは、non-trivial な作業であることに注意して下さい。(特に、非常に大規模なクラスタや、異種環境が混在するクラスタにおいて)<br/>
+例えば、全てのスレーブに、JDK、Ant、CVS、あるいはその他ビルドに必要なツールを備えるようにする必要があります。また、全てのスレーブが起動し、稼働中であることも保障しなくてはいけません。Jenkinsはクラスタリングのミドルウェアではないので、この点でいくぶん(環境をそろえることは)難しくなります。</p>
+
+<h1 id="Distributedbuilds-例:Unix上の設定">例: Unix上の設定</h1>
+
+<p>このセクションでは、Sunの中で、日常のジョブのために私が利用しているJenkinsのスレーブの現在の設定について解説します。<br/>
+私のマスターのJenkinsはSPARC Solarisで稼動しており、たくさんのSPARC SolarisスレーブやOpteron Linuxスレーブがあります。また、少しばかりWindowsのスレーブもあります。</p>
+
+<ul>
+	<li>各コンピューターは <code>jenkins</code> と言うユーザと、 <code>jenkins</code> と言うグループを持っています。全てのコンピューターは同じSIDとGIDを利用しています。(もしNISサービスにアクセスできるのであれば、このあたりの設定はもっと簡単になるでしょう)<br/>
+この設定はJenkinsの利用の上での必須条件ではありませんが、こうすることで、スレーブを管理がしやすくなります。</li>
+</ul>
+
+
+<ul>
+	<li>各コンピューターには、 <code>jenkins</code> ユーザのホームディレクトリとして、 <code>/var/jenkins</code> というディレクトリを設定しています。 再度述べますが、こちらは必須ではありません。ですが、同じディレクトリ構成を持つことで、管理しやすくなります。</li>
+</ul>
+
+
+<ul>
+	<li>全てのマシンでSSHDが稼動しています。Windowsスレーブでは、sygwinのsshdが起動しています。</li>
+</ul>
+
+
+<ul>
+	<li>全てのマシンにはNTPクライアントがインストールされていて、通常、同じNTPサーバと時刻同期されています。</li>
+</ul>
+
+
+<ul>
+	<li>マスターの <code>/var/jenkins</code> の下には、2～3種類のバージョンのAntやMaven、JDKといった全てのビルドツールがインストールされています。 JDKはネイティブプログラムなので、私は必要となる全てのアーキテクチャ用のJDKのコピーを持っています。ディレクトリ構成は、下記のようになっています:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>/var/jenkins
+  +- .ssh
+  +- bin
+  |   +- slave  (スレーブに関しては下記に詳細があります)
+  +- workspace (Jenkinsがこのディレクトリを作成し、この中に全てのデータファイルを格納します)
+  +- tools
+      +- ant-1.5
+      +- ant-1.6
+      +- maven-1.0.2
+      +- maven-2.0
+      +- java-1.4 -&gt; native/java-1.4 (シンボリックリンク)
+      +- java-1.5 -&gt; native/java-1.5 (シンボリックリンク)
+      +- native -&gt; solaris-sparcv9 (シンボリックリンク; 各コンピュータで異なります)
+      +- solaris-sparcv9
+      |   +- java-1.4
+      |   +- java-1.5
+      +- linux-amd64
+          +- java-1.4
+          +- java-1.5
+</pre>
+</div></div></li>
+</ul>
+
+
+<ul>
+	<li>マスターの <code>/var/jenkins.ssh</code> には、秘密鍵/公開鍵と <code>authorized_keys</code> があります。こうして、マスターは <a href="http://www.google.com/search?q=ssh+keygen" class="external-link" rel="nofollow">公開鍵認証</a> を利用し、SSHを通してスレーブのプログラムを実行することが出来ます。</li>
+</ul>
+
+
+<ul>
+	<li>私は、マスター上に、マスターの <code>/var/jenkins</code> をrsyncしてスレーブに同期させるための小さなスクリプトを用意しています。(<code>/var/jenkins/workspace</code> は除きます)<br/>
+このスクリプトを使い、全スレーブにツールをレプリケートしています。</li>
+</ul>
+
+
+<ul>
+	<li><code>/var/jenkins/bin/launch-slave</code> は、Jenkinsがジョブをリモートで実行するためのスクリプトです。このシェルスクリプトは、まず <code>PATH</code> を通し、<code>slave.jar</code> の起動に先立って、ほかにも幾つかの処理を行います。下記は、非常にシンプルなサンプルスクリプトです。
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">#!/bin/bash
+
+JAVA_HOME=/opt/SUN/jdk1.6.0_04
+PATH=$PATH:$JAVA_HOME/bin
+export PATH
+java -jar /var/jenkins/bin/slave.jar
+</pre>
+</div></div></li>
+</ul>
+
+
+<ul>
+	<li>最後に、全てのコンピューターに、 <code>svn</code> や <code>csv</code> と言った、その他の標準的なビルドツールをインストールし、パスを通しておきます。</li>
+</ul>
+
+
+<h1 id="Distributedbuilds-スケジューリング戦略">スケジューリング戦略</h1>
+
+
+<p>速度の速いスレーブもあれば、遅いスレーブもあります。また、ネットワーク的にマスターに近いスレーブもある一方、非常に遠いスレーブもあります。このため、良好な分散ビルドを行うことは、ある意味チャレンジでもあります。現在、Jenkinsは次のような戦略を執っています:</p>
+<ol>
+	<li>プロジェクトがあるコンピューター専用に設定されている場合は、常にそれを優先します。</li>
+	<li>Jenkinsは以前ビルドしたコンピュータと同じコンピュータ上で、プロジェクトをビルドするように試みます。</li>
+	<li>Jenkinsは、長時間のビルドはスレーブで実行させるように試みます。なぜなら、マスターとスレーブのネットワーク通信の量は、ビルド継続の時間に対数的に関係するからです。(言い換えると、たとえプロジェクトAがプロジェクトBに比べ、ビルドに2倍の時間がかかるとしても、2倍のネットワーク転送は必要されないだろう、ということです)<br/>
+こうすることで、ネットワーク上のオーバーヘッドを減少させることに繋がります。</li>
+</ol>
+
+
+<p>もし面白そうなアイディア(あるいはもっと良くなるためアイディアや実装)があれば、ぜひ教えて下さい。</p>
+
+<h1 id="Distributedbuilds-マスターオンリーから、マスター/スレーブへの変換">マスターオンリーから、マスター/スレーブへの変換</h1>
+
+<p>通常、マスターのみのインストールでJenkinsを開始し、ずっと後になって、プロジェクトの増加に伴いスレーブを追加する、という流れになります。マスター/スレーブモードを有効にすると、Jenkinsは自動的に、全ての既存のプロジェクトをいったんマスタノード専用に設定します。これは、既存プロジェクトが分散されることを防ぐための対策です。なぜなら、試行錯誤無しにスレーブを正しく設定することは、ほとんど不可能だからです。スレーブ設定に成功したら、マスター/スレーブ間で自由にビルドを行えるように、個別にプロジェクトの設定を調整する必要があります。<br/>
+この作業は退屈なものですが、同時に、あるプロジェクトを改善させる機会でもあります。</p>
+
+<p>マスター/スレーブ対応となった後で、Jenkins上に新規に作られたプロジェクトは、デフォルトでは、いずれかのノードで実行できるタイプとして設定されます。</p>
+
+<h1 id="Distributedbuilds-パブリックネットワーク上のマスターとファイアウォール内のスレーブ">パブリックネットワーク上のマスターとファイアウォール内のスレーブ</h1>
+
+<p>パブリックネットワーク上(みんなが参照できる場所)にマスターを設置し、一方で、ファイアウォール内にビルド用スレーブが存在する構成を考えないといけない状況があるかもしれません。(インターネット上に多数のマシンを保持することはコストがかかるからです)<br/>
+この動作を可能にするには、2つ方法があります:</p>
+<ul>
+	<li>マスターからファイアウォール内のスレーブに対しポートフォワードを行います。スレーブに接続するためのIPを把握しているマスターしか、スレーブに接続できないため、ポートフォワードには制限があります。ファイアウォールが存在しないかのようにJenkinsが認識されるように、ファイアウォールを設定しないといけません。</li>
+</ul>
+
+
+<ul>
+	<li>他に方法が無い場合、JNLPスレーブを利用し、スレーブはマスターに接続します。このケースでは、スレーブがコネクションを開始するため、NATを利用したファイアウォールでは正常に動作します。</li>
+</ul>
+
+
+<p>どちらの場合でも、マスターがいったん危険にさらされると、残りの全てのスレーブも簡単に危険にさらされうることに注意して下さい。(言い換えると、悪質なマスターはスレーブの任意のプログラムを実行できてしまう、ということです)<br/>
+ですから、どちらの設定においても、セキュリティ上の弱点(セキュリティホール)を切り離すという点に関しては、いくぶん課題を残すことになります。<a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/Build+Publisher+Plugin">Build publisher plugin</a> が、よりセキュリティに配慮した形で、パブリックネットワーク上のマスターとプライベートネットワーク上のスレーブを繋ぐための、別の解を提供してくれています。</p>
+
+
+<h1 id="Distributedbuilds-同じマシンで複数のスレーブを稼動させる">同じマシンで複数のスレーブを稼動させる</h1>
+
+<p>Windowsマシン上に複数のスレーブインスタンスを走らせることが可能です。また、それらを別のサービスとしてインストールし、システムの起動時に開始させることも出来ます。エグゼキュータを適切に利用すれば、同じマシンで複数のスレーブインスタンスを利用する必要を減らすことができますが、その上で、下記のように特殊な事例を検討する必要もあるでしょう：</p>
+
+<ul>
+	<li>ノード間でもさらに設定の柔軟性がほしい場合。あるノードはできるだけ利用し、他のノードは必要になったときだけ利用したい、という場合です。</li>
+</ul>
+
+
+<ul>
+	<li>別々のビルドを行うために、複数のマスターのJenkinsをインストールすることも可能です。この設定により、同一マシン上で、複数のマスターのためのスレーブを持つことができます。実際その通りで、Jenkinsでは、マスターを2つ提供することもできます。</li>
+</ul>
+
+
+<p>同じWindowsマシン上で、複数のスレーブを稼動させるためは、下記のステップに従って下さい:</p>
+
+<ul>
+	<li>最初のスレーブノードをJenkins上に追加します。そして、専用のワーキングディレクトリを割り当てます。(e.g. jenkins-slave-a)</li>
+</ul>
+
+
+<ul>
+	<li>スレーブ設定画面からスレーブのページを開き、JNLPを使ってスレーブを起動します。次に、メニューから、『サービスとしてインストールする』、を実施します。</li>
+</ul>
+
+
+<ul>
+	<li>いったんサービスが開始されると、jenkins-slave.exeとjenkins-slave.xml が、スレーブのワーキングディレクトリに出来ていることが分かります。</li>
+</ul>
+
+
+<ul>
+	<li>Windowsサービスの設定画面に移動し、Jenkinsのスレーブサービスを停止します。</li>
+</ul>
+
+
+<ul>
+	<li>Shell(DOS)プロンプトを開き、スレーブのワーキングディレクトリに移動します。</li>
+</ul>
+
+
+<ul>
+	<li>まず、&quot;jenkins-slave.exe uninstall&quot;　というコマンドを実行し、JNLPで起動しインストールされたアプリケーションのアンインストールを行います。</li>
+</ul>
+
+
+<ul>
+	<li>次に、jenkins-slave.xml を編集します。IDと名前の値を変更すれば、複数のスレーブを識別できるようになります。たとえば、私の場合、IDをjenkins-slave-aとし、名前を Jenkins Slave Aと指定していました。</li>
+</ul>
+
+
+<ul>
+	<li>&quot;jenkins-slave.exe install&quot;を実行し、サービスがインストールされているかどうか、Windowsサービスの一覧<br/>
+からチェックして下さい。サービスを開始し、Jenkins上でスレーブインスタンスがアクティブになっているかどうかを確認して下さい。</li>
+</ul>
+
+
+<ul>
+	<li>マスターの設定画面で、新しいノードの設定を先に行ってから、次のスレーブにも同じ手順を繰り返して下さい。</li>
+	<li>追記: 新たに設定したノードに割り当てられたURLと、jenkins-slave.xml中に記載している &lt;arguments/&gt;のJnlpURLが同じになるようにして下さい。</li>
+</ul>
+
+
+
+<p>2番目のノードを作成する時は、既存のノードや、最初にあなたが作ったノードをコピーして作成することが出来ます。そうすれば、後はそのノードに固有のリモートFSルートを調整したり、残りの設定を行うだけで済みます。作業が終われば、2つ(もしくはそれ以上)のJenkinsのスレーブが、Windowsサービスの一覧に加わることになります。</p>
+
+<h1 id="Distributedbuilds-トラブルシューティング">トラブルシューティング</h1>
+
+<p>Windowsスレーブを利用する場合は、注意すべきページや問題(それに対する解決策)がいくつかあります:</p>
+
+<ul>
+	<li>DCOM経由でWindowsスレーブを起動できない</li>
+	<li>SSH経由でWindowsスレーブを起動できない</li>
+	<li>JNLP経由でWindowsスレーブを起動できない</li>
+</ul>
+
+
+<p>一般的なトラブルシューティングは、こちらになります:</p>
+
+<ol>
+	<li>ローカル/リモートに関わらず、Jenkinsがプログラムを起動する度に、コマンドライン(出力)はログに書き出されます。リモートでの実行に失敗したら、マスターが稼動するコンピュータに、マスターを起動しているのと同じユーザアカウントを使ってログインし、シェルからコマンドを実行してみて下さい。たいていこの方法で手際よく問題を解決することが出来ます。</li>
+</ol>
+
+
+<ol>
+	<li>各スレーブには、マスターとスレーブエージェントとの間で交わされる情報を表示するためのページがあります。このログ画面には、エラーレポートもたびたび表示されます(ので、ログを参考にして下さい)。</li>
+</ol>
+
+
+<ol>
+	<li>スレーブ起動のために、telnetのような (バイナリデータを直接扱えない) binary-unsafe なリモート操作用のメカニズムを使っているなら、 <code>slave.jar</code> の実行時に <code>-text</code> オプションを追加して下さい。そうすれば、Jenkinsが、ネットワーク上にバイナリデータが流れないように調整を行います。</li>
+</ol>
+
+
+<ol>
+	<li>Jenkins上では失敗してしまうのに、Jenkinsの外部で同じコマンドを実行するとうまくいく場合は、Jenkinsを起動する時と同じユーザアカウントでテストを行ってみて下さい。特に、Windows上でJenkinsのマスターを稼動させている場合は、 <a href="http://wiki.jenkins-ci.org:8085/display/JENKINS/How+to+get+command+prompt+as+the+SYSTEM+user">システムユーザ（アカウント）としてコマンドプロンプトを利用する方法</a> で、調査してみて下さい。</li>
+</ol>
+
+
+<ol>
+	<li>トラブルがある場合は、遠慮なく <code><a href="http://jenkins-ci.org/content/mailing-lists" class="external-link" rel="nofollow">こちらのいずれかのML</a></code> に相談してみて下さい。</li>
+</ol>
+
+
+<h1 id="Distributedbuilds-その他の参考情報">その他の参考情報</h1>
+
+<ul>
+	<li>Jenkins Build Farm Experience <a href="http://blogs.sonatype.com/people/2009/01/the-hudson-build-farm-experience-volume-i/" class="external-link" rel="nofollow">Volume I</a>, <a href="http://blogs.sonatype.com/people/2009/02/the-hudson-build-farm-experience-volume-ii/" class="external-link" rel="nofollow">Volume 2</a>, <a href="http://www.sonatype.com/people/2009/02/the-hudson-build-farm-experience-volume-iii/" class="external-link" rel="nofollow">Volume 3</a> and <a href="http://www.sonatype.com/people/2009/02/the-hudson-build-farm-experience-volume-iv/" class="external-link" rel="nofollow">Volume 4</a></li>
+</ul>
+
+
+<ul>
+	<li>HudsonWindowsSlavesSetup<br/>
+[http://community.jboss.org/wiki/HudsonWindowsSlavesSetup</li>
+</ul>
+                    </div>
+
+                    
+                                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="comments" class="pageSectionTitle">Comments:</h2>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-46337787"></a>
+                                    <font class="smallfont"><p>日本語の文章を加えています。<br/>
+適切でない、分かりにくい表現があれば、書き換えていただければ幸いです。</p>
+
+<p>英語版のオリジナルは下記になります。コメントなども多数ありますので、トラブルの際はオリジナルも参照してみて下さい。</p>
+<ul>
+	<li><a class="external-link" href="http://wiki.jenkins-ci.org/display/HUDSON/Distributed+builds" rel="nofollow">http://wiki.jenkins-ci.org/display/HUDSON/Distributed+builds</a></li>
+</ul></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/contenttypes/comment_16.png" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by akiko at Nov 22, 2010 14:31
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    </div>
+                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:52</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

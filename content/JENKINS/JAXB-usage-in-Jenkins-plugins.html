@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : JAXB usage in Jenkins plugins</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Known-Java-11-Compatibility-issues.html">Known Java 11 Compatibility issues</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : JAXB usage in Jenkins plugins
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (alecharp)</span>, last modified on Apr 29, 2019
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="JAXBusageinJenkinsplugins-Shortversion">Short version</h1><p>If you came across a <code>ClassNotFoundException</code>  in your logs or in the Jenkins UI about the class <code>com.sun.xml.internal.bind.v2.ContextFactory</code> , then you can solve this problem by adding a system property to your instance. </p><p>Edit the Jenkins launcher and add <code>-Djavax.xml.bind.JAXBContextFactory=com.sun.xml.bind.v2.ContextFactory</code> in the <code>JAVA_OPTS</code> .</p><h1 id="JAXBusageinJenkinsplugins-Longversion">Long version</h1><h2 id="JAXBusageinJenkinsplugins-Problem">Problem</h2><p>Some Jenkins plugins are using JAXB to deserialize configuration, reports or exchanges with external services.</p><p>When running Jenkins on Java 11, it is still possible to see this stack trace in the logs:</p><div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>hudson.remoting.ProxyException: java.lang.ClassNotFoundException: com.sun.xml.internal.bind.v2.ContextFactory
+	at jenkins.util.AntClassLoader.findClassInComponents(AntClassLoader.java:1374)
+	at jenkins.util.AntClassLoader.findClass(AntClassLoader.java:1327)
+	at jenkins.util.AntClassLoader.loadClass(AntClassLoader.java:1080)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+	at java.xml.bind/javax.xml.bind.ServiceLoaderUtil.nullSafeLoadClass(ServiceLoaderUtil.java:122)
+	at java.xml.bind/javax.xml.bind.ServiceLoaderUtil.safeLoadClass(ServiceLoaderUtil.java:155)
+	at java.xml.bind/javax.xml.bind.ContextFinder.newInstance(ContextFinder.java:276)
+Caused: hudson.remoting.ProxyException: javax.xml.bind.JAXBException: Implementation of JAXB-API has not been found on module path or classpath.</pre>
+</div></div><p>This kind of exception was reported on 
+<span class="jira-issue resolved" data-jira-key="JENKINS-55202" >
+                    <a href="https://issues.jenkins.io/browse/JENKINS-55202?src=confmacro" class="jira-issue-key"><img class="icon"
+                                                                                      src="https://issues.jenkins.io/secure/viewavatar?size=xsmall&amp;avatarId=14673&amp;avatarType=issuetype"/>JENKINS-55202</a>
+                            -
+            <span class="summary">Performance Signature Plugin: JAXB API is missing with Java 11</span>
+                                                <span class="aui-lozenge aui-lozenge-subtle             aui-lozenge-success
+     jira-macro-single-issue-export-pdf">Closed</span>
+                </span>
+ for example. </p><p>The <code>ContextFactory</code>  implementation is not existing in the library offered by the JAXB plugin. It's in fact a fallback implementation, which is not in the libraries. </p><p>What is happening is that JAXB requires a context, which is nonexistant. To create it, JAXB is looking for a context factory implementation. Without any configuration, it will try to use <code>com.sun.xml.internal.bind.v2.ContextFactory</code> .</p><h2 id="JAXBusageinJenkinsplugins-Solution">Solution</h2><p>It is possible to configure JAXB to use a context factory implementation existing in the classpath.</p><p>To do so, we can define a system property to locate the implementation. The name of the system property <strong>must</strong> be <code>javax.xml.bind.JAXBContextFactory</code>  and the value can differ depending on the libraries available. It is possible to use <code>com.sun.xml.bind.v2.ContextFactory</code> which is provided by the JAXB library and JAXB plugin.</p><p>This is possible, as long as the plugin is not explicitly using the <code>ClassLoader</code>  to access those classes. If not, you need to see <a href="http://java9.wtf/class-loading/" class="external-link" rel="nofollow">java9.wtf/class-loading</a> and use the <code>ClassLoader.getPlatformClassLoader</code>  method to have access to the <code>javax.xml.bind</code> package.</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 14:03</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

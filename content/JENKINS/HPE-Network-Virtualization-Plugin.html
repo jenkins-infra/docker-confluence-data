@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : HPE Network Virtualization Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : HPE Network Virtualization Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (itay_karo_hpe)</span>, last modified on Aug 23, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View HPE Network Virtualization <a href="https://plugins.jenkins.io/hpe-network-virtualization" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+
+<p>
+<p>This plugin allows HPE Network Virtualization to run tests under various network conditions.</p></p>
+
+<h1 id="HPENetworkVirtualizationPlugin-Summary">Summary</h1>
+
+<p>HPE Network Virtualization (NV) helps you to understand how networks affect your application's performance, and what you can do to optimize client and server performance in your application.<br/>
+Do your customers complain that your application works slowly? Are there timeout exceptions? Has your application ever failed when moved to production, even though the application worked perfectly when tested under lab conditions? Does your application suffer from non-reproducible issues?</p>
+
+<p>HPE Network Virtualization plugin enables you to impose network impairments and constraints on your testing environment, to improve the accuracy of your application testing. You can:</p>
+<ul>
+	<li>Emulate real-world network conditions, including bandwidth, latency, and packet loss.</li>
+	<li>Run tests under multiple network conditions.</li>
+	<li>Configure SLA's for your tests. The plugin can fail the tests that break these SLA's. By integrating a specific job into the plugin, and then running a selected set of tests with your CI/CD process, you can make sure that your main flow’s response time remains acceptable under various network conditions.</li>
+</ul>
+
+
+<p>Note that currently this plugin supports tests in JUnit format only.<br/>
+For further information about HPE Network Virtualization, click <a href="http://nvhelp.saas.hpe.com/en/Latest/help/Content/Resources/_TopNav/_TopNav_Home.htm" class="external-link" rel="nofollow">here</a>.</p>
+
+<h1 id="HPENetworkVirtualizationPlugin-Requirements">Requirements</h1>
+
+<ol>
+	<li>An installation of HPE Network Virtualization version 9.10 or newer.</li>
+	<li>Jenkins version 1.625.3 or newer.</li>
+	<li>JUnit plugin version 1.10 or newer.</li>
+</ol>
+
+
+<h1 id="HPENetworkVirtualizationPlugin-Configuration">Configuration</h1>
+
+<h3 id="HPENetworkVirtualizationPlugin-GlobalSettings">Global Settings</h3>
+
+<p>In the Configure System page, this plugin provides the following configuration options:</p>
+
+<p><span class="confluence-anchor-link" id="HPENetworkVirtualizationPlugin-nv_hosts"></span></p>
+<h6 id="HPENetworkVirtualizationPlugin-NVTestManagerHosts">NV Test Manager Hosts</h6>
+
+<p>Lets you specify one or more NV Test Manager hosts that the plugin can use. You must specify at least one NV Test Manager host. These hosts will be available for selection when you configure a job. For each NV Test Manager host, you must provide:</p>
+<ul>
+	<li>A logical name for the host.</li>
+	<li>The host’s connection details.</li>
+	<li>Sign-in credentials for the host.</li>
+</ul>
+
+
+<p>In addition, you can configure a proxy port. This is required only if NV Test Manager is configured to serve as a proxy server. You can read more about <a href="http://nvhelp.saas.hpe.com/en/Latest/help/Content/NVMobile/Controller/Settings.htm#proxy_settings_global" class="external-link" rel="nofollow">proxy settings</a> in the HPE Network Virtualization documentation.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614747.png" data-image-src="attachments/99451304/99614747.png" data-unresolved-comment-count="0" data-linked-resource-id="99614747" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="nv host.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<p><span class="confluence-anchor-link" id="HPENetworkVirtualizationPlugin-custom_profiles"></span></p>
+
+<h6 id="HPENetworkVirtualizationPlugin-CustomNetworkProfiles">Custom Network Profiles</h6>
+
+<p>In order to emulate specific network conditions, you must provide HPE Network Virtualization with a network profile. A network profile is a set of parameters that define network impairments and conditions. When your tests run, these network condition are applied. You can read more about <a href="http://nvhelp.saas.hpe.com/en/Latest/help/Content/NVMobile/Controller/Network_Profile_Overview.htm" class="external-link" rel="nofollow">network profiles</a> in the HPE Network Virtualization documentation. The HPE Network Virtualization plugin is installed with several predefined network profiles. In addition, you can configure your own “custom” network profiles. For each custom network profile, you must provide the network profile name and the parameters that define the network conditions. These custom network profiles, along with the predefined network profiles, will be available for selection when you configure a job.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614748.png" data-image-src="attachments/99451304/99614748.png" data-unresolved-comment-count="0" data-linked-resource-id="99614748" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="custom profile.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<h3 id="HPENetworkVirtualizationPlugin-Jobs">Jobs</h3>
+
+<h4 id="HPENetworkVirtualizationPlugin-General">General</h4>
+
+<p>Create any job where the plugin can be added as a build step.</p>
+
+<p>The HPE Network Virtualization plugin allows you to run your tests under one or more sets of network conditions, by selecting one or more network profiles. At the beginning of the job execution, the plugin creates a new test in the selected NV Test Manager. For each network profile, the plugin creates a separate transaction, and adds it to the test. Therefore, each test you configure will run the same number of times as the number of network profiles you selected for the test. This enables you to test several application flows under various network conditions in a single job execution.</p>
+
+<p>You can specify a “thresholds file” for any test. A thresholds file is a simple text file. It contains SLA's (duration, in seconds) for each test you run. These SLA’s determine the status of each test run, according to the test’s network performance. At the end of each network profile cycle, the plugin checks the JUnit test’s results XML file. For each test that ended successfully, the plugin checks the test’s duration. If the duration is greater than the SLA defined in the thresholds file for that test, the plugin marks the test as failed and adds a message to the results XML file. You can bypass this functionality by either not specifying a thresholds file, or by specifying a file with a large value.</p>
+
+<p>Note that the duration you specify as the threshold should be relative to the durations that are recorded in the JUnit results XML file – these values typically include a system overhead.</p>
+
+<h4 id="HPENetworkVirtualizationPlugin-Setup">Setup</h4>
+
+<h6 id="HPENetworkVirtualizationPlugin-NVTestManager">NV Test Manager</h6>
+<p>Select one of the NV Test Managers configured in the global settings. This host will apply the network conditions you specify, and collect the relevant network data.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614754.png" data-image-src="attachments/99451304/99614754.png" data-unresolved-comment-count="0" data-linked-resource-id="99614754" data-linked-resource-version="4" data-linked-resource-type="attachment" data-linked-resource-default-alias="nv select.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<p><span class="confluence-anchor-link" id="HPENetworkVirtualizationPlugin-proxy_config"></span></p>
+<h6 id="HPENetworkVirtualizationPlugin-ProxyConfiguration">Proxy Configuration</h6>
+<p>Select this option if NV Test Manager should be connected as a proxy. There are two scenarios that require NV Test Manager to be connected as a proxy:</p>
+<ol>
+	<li>NV Test Manager is not installed on the same host where the tests are run.</li>
+	<li>The traffic is secured.</li>
+</ol>
+
+
+<p>If neither of these conditions exist, leave this option unselected.<br/>
+After you select to use the NV Test Manager host as a proxy, you must specify the Environment Variable property. The plugin will set an environment variable using the name you provide, together with the proxy details, host IP:port. For example, in our case, 111.111.111.111:8888. You must read this environment variable into your tests and configure the proxy accordingly. This will enable the network traffic to go through NV Test Manager, and enable NV Test Manager to apply the required network conditions.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614753.png" data-image-src="attachments/99451304/99614753.png" data-unresolved-comment-count="0" data-linked-resource-id="99614753" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="nv proxy.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<p><span class="confluence-anchor-link" id="HPENetworkVirtualizationPlugin-test_results"></span></p>
+<h6 id="HPENetworkVirtualizationPlugin-TestResultsManipulation">Test Results Manipulation</h6>
+<p>Specify the location of the results XML file, and the name and location of the thresholds file. This enables the plugin to manipulate the results XML files.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614758.png" data-image-src="attachments/99451304/99614758.png" data-unresolved-comment-count="0" data-linked-resource-id="99614758" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test result.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<h6 id="HPENetworkVirtualizationPlugin-NetworkProfiles">Network Profiles</h6>
+<p>Select one or more network profiles from the lists. The lists contain both the predefined network profiles and the custom profiles defined in <a href="#HPENetworkVirtualizationPlugin-custom_profiles">Global Settings &gt; Custom Network Profiles</a>. If no network profile is selected, the tests will run with HPE Network Virtualization imposing no network conditions.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614756.png" data-image-src="attachments/99451304/99614756.png" data-unresolved-comment-count="0" data-linked-resource-id="99614756" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="profile select.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<p><span class="confluence-anchor-link" id="HPENetworkVirtualizationPlugin-steps_to_run"></span></p>
+<h6 id="HPENetworkVirtualizationPlugin-StepstoRun">Steps to Run</h6>
+<p>Define how to run the selected tests. You can run one or more steps. The only requirement is that the test results be in JUnit format. Other than that, you can select any steps that you want. In the example below, Maven step is used to run the selected tests by running a specific test suite.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614757.png" data-image-src="attachments/99451304/99614757.png" data-unresolved-comment-count="0" data-linked-resource-id="99614757" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="test config.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<h6 id="HPENetworkVirtualizationPlugin-AdvancedSettings">Advanced Settings</h6>
+<p>Configure Include Client IPs and Exclude Server IPs. The flow's network impairments and constraints are applied to network traffic between the specified client and server IP addresses. Both the client IPs and the server IPs must be &quot;included&quot; in order for the network impairments and constraints to be applied. Currently, only IPv4 IP addresses are supported. You can read more about <a href="http://nvhelp.saas.hpe.com/en/Latest/help/Content/NVMobile/Controller/Setting_Client_and_Server_IP_Ranges.htm" class="external-link" rel="nofollow">Setting Client and Server IP Ranges</a> in the HPE Network Virtualization documentation.<br/>
+By default, the server “Include IPs” list contains the entire IPv4 address range, thereby including all traffic. You must manually exclude all the servers for which you do not want traffic to be affected. In addition, all the IPv4 of the host machine where the tests run are included in the client IPs list and excluded in the server IPs list.<br/>
+Each list can include single IP addresses and/or IP ranges. Separate multiple IPs using a semi-colon ';'. Define an IP range using the minus sign '-', for example, 192.198.0.1-192.198.0.5.<br/>
+<span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/99451304/99614786.png" data-image-src="attachments/99451304/99614786.png" data-unresolved-comment-count="0" data-linked-resource-id="99614786" data-linked-resource-version="2" data-linked-resource-type="attachment" data-linked-resource-default-alias="advanced.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="99451304" data-linked-resource-container-version="47"></span></p>
+
+<h1 id="HPENetworkVirtualizationPlugin-HowitWorks">How it Works</h1>
+
+<p>The core of the plugin is the network profiles you select and the tests you configure to run. If no network profiles are selected, HPE Network Virtualization will not intervene in the tests invocation and will not change the network conditions.</p>
+
+<p>The main flow is as follows:</p>
+<ol>
+	<li>In case a proxy was set, set an environment variable where the name is the name configured in <a href="#HPENetworkVirtualizationPlugin-proxy_config">Proxy Configuration</a> and the value is &lt;IP:proxy port&gt; taken from the selected NV Test Manager configured in the <a href="#HPENetworkVirtualizationPlugin-nv_hosts">Global Settings &gt; NV Test Manager Hosts</a>.</li>
+	<li>Create and start a new test. The name of the test should be in the form &lt;job name&gt;_&lt;build number&gt;_test*.</li>
+	<li>Update the test with the first selected network profile.</li>
+	<li>Create a new transaction and add it to the test.</li>
+	<li>Do the following until all the network profiles are run:
+	<ol>
+		<li>Run all the steps defined in <a href="#HPENetworkVirtualizationPlugin-steps_to_run">Steps to Run</a>.</li>
+		<li>Process the test results based on <a href="#HPENetworkVirtualizationPlugin-test_results">Test Results Manipulation</a>. For each successful test, change its name by adding the profile name as a suffix. If the duration of the test is greater than the threshold defined in the <a href="#HPENetworkVirtualizationPlugin-test_results">Thresholds file</a>, the plugin fails the test and adds an appropriate message. The plugin updates the results XML file with the new results.</li>
+		<li>Use the next network profile to change the network conditions.</li>
+	</ol>
+	</li>
+	<li>When all the network profiles have been used, the plugin will stop the network emulation.</li>
+</ol>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614752.png">nv host.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614748.png">custom profile.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614747.png">nv host.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614755.png">nv proxy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614759.png">nv select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614753.png">nv proxy.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614756.png">profile select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614757.png">test config.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614758.png">test result.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614760.png">nv select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614761.png">nv select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614754.png">nv select.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614787.png">advanced.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/99451304/99614786.png">advanced.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:27</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

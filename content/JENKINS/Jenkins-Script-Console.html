@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins Script Console</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins Script Console
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kenliu)</span>, last modified by <span class='editor'> Unknown User (purefan)</span> on Jun 01, 2018
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="JenkinsScriptConsole-JenkinsScriptConsole">Jenkins Script Console</h1><p>Jenkins features a nice Groovy script console which allows one to run arbitrary Groovy scripts within the Jenkins master runtime or in the runtime on agents.</p><div class="confluence-information-macro confluence-information-macro-warning"><p class="title">Security warnings</p><span class="aui-icon aui-icon-small aui-iconfont-error confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>It is <em>very </em><strong>important</strong> to understand all of the following points because it affects the integrity of your Jenkins installation. The Jenkins Script Console:</p><ul><li>Access is controlled by the <code>RunScripts</code> permission.  Older versions of the <a href="Matrix-Authorization-Strategy-Plugin.html">Matrix Authorization Strategy Plugin</a> allow non-Admin users to be granted this permission.  <span style="color: rgb(41,43,44);">Matrix Authorization Strategy Plugin version 1.5 and later fixed this issue. If any authorization strategy allows this permission to be granted to users other than Admins, then extreme care should be taken not to allow non-admins.</span></li><li>Is a web-based Groovy shell into the Jenkins runtime. Groovy is a very powerful language which offers the ability to do practically anything Java can do including:<ul><li>Create sub-processes and execute arbitrary commands on the Jenkins master and agents.</li><li>It can even read files in which the Jenkins master has access to on the host (like <code>/etc/passwd</code>)</li><li>Decrypt credentials configured within Jenkins.</li></ul></li><li>Offers no administrative controls to stop a User (or Admin) once they are able to execute the Script Console from affecting all parts of the Jenkins infrastructure. Granting a normal Jenkins user Script Console Access is essentially the same as giving them Administrator rights within Jenkins.</li><li>Can configure any Jenkins setting. It can disable security, reconfigure security, even open a backdoor on the host operating system completely outside of the Jenkins process. Due to the mission critical importance many organizations place on Jenkins in their infrastructure this point is especially important because it would allow an attacker to move laterally within infrastructure with little effort.</li><li>Is so powerful because it was originally intended as a debugging interface for Jenkins developers but has since grown into an interface used by Jenkins Admins to configure Jenkins and debug Jenkins runtime issues.</li></ul><p>Because of the power offered by the Jenkins Script Console, Jenkins and its agents should never be run as the <code>root</code> user (on Linux) or system administrator on any other flavor of OS.   Videos linked in this wiki page demonstrate and discuss security warnings.</p><p><strong>Be sure to secure your Jenkins instance using known <a href="Jenkins-Best-Practices.html">good community practices</a>.</strong></p></div></div><h2 id="JenkinsScriptConsole-TableofContents">Table of Contents</h2><p><style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020123937 {padding: 0px;}
+div.rbtoc1631020123937 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020123937 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020123937'>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsScriptConsole-JenkinsScriptConsole'>Jenkins Script Console</a>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsScriptConsole-TableofContents'>Table of Contents</a></li>
+</ul>
+</li>
+<li><a href='#JenkinsScriptConsole-Multiplecontexts'>Multiple contexts</a>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsScriptConsole-RunningScriptConsoleonthemaster'>Running Script Console on the master</a></li>
+<li><a href='#JenkinsScriptConsole-RunningScriptConsoleonagents'>Running Script Console on agents</a></li>
+<li><a href='#JenkinsScriptConsole-RunscriptsfrommasterScriptConsoleonagents'>Run scripts from master Script Console on agents</a></li>
+</ul>
+</li>
+<li><a href='#JenkinsScriptConsole-Remoteaccess'>Remote access</a>
+<ul class='toc-indentation'>
+<li><a href='#JenkinsScriptConsole-RemoteaccesswithCSRFprotectionenabled'>Remote access with CSRF protection enabled</a></li>
+</ul>
+</li>
+<li><a href='#JenkinsScriptConsole-Shortcutkeyonscriptconsoletosubmit'>Shortcut key on script console to submit</a></li>
+<li><a href='#JenkinsScriptConsole-VideoTutorialsandadditionallearningmaterials'>Video Tutorials and additional learning materials</a></li>
+<li><a href='#JenkinsScriptConsole-ExampleGroovyscripts'>Example Groovy scripts</a></li>
+<li><a href='#JenkinsScriptConsole-PluginsenablingGroovyusage'>Plugins enabling Groovy usage</a>
+<ul class='toc-indentation'>
+<li><a href='#SnowGlobePlugin-Operations'>Operations</a>
+<ul class='toc-indentation'>
+<li><a href='#SnowGlobePlugin-Clone'>Clone</a></li>
+<li><a href='#SnowGlobePlugin-SetVariables'>Set Variables</a></li>
+<li><a href='#SnowGlobePlugin-GetVariables'>Get Variables</a></li>
+<li><a href='#SnowGlobePlugin-Apply'>Apply</a></li>
+<li><a href='#SnowGlobePlugin-State'>State</a></li>
+<li><a href='#SnowGlobePlugin-Destroy'>Destroy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></p><h1 id="JenkinsScriptConsole-Multiplecontexts">Multiple contexts</h1><p>The Jenkins Script Console can run either on the master or any configured agents.</p><h3 id="JenkinsScriptConsole-RunningScriptConsoleonthemaster">Running Script Console on the master</h3><p>This feature can be accessed from &quot;Manage Jenkins&quot; &gt; &quot;Script Console&quot;.  Or visit the sub-URL <code>/script</code> on your Jenkins instance.</p><h3 id="JenkinsScriptConsole-RunningScriptConsoleonagents">Running Script Console on agents</h3><p>Visit &quot;Manage Jenkins&quot; &gt; &quot;Manage Nodes&quot;.  Select any node to view the status page.  In the menu on the left, a menu item is available to open a &quot;Script Console&quot; on that specific agent.</p><h3 id="JenkinsScriptConsole-RunscriptsfrommasterScriptConsoleonagents">Run scripts from master Script Console on agents</h3><p>It's also possible to run scripts from the master Script Console on individual agents.  The following script is an example running a script on agents from the master Script Console.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Script executes code on agent from Master Script Console</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: false; theme: Confluence" data-theme="Confluence">import hudson.util.RemotingDiagnostics
+import jenkins.model.Jenkins
+
+String agent_name = &#39;your agent name&#39;
+//groovy script you want executed on an agent
+groovy_script = &#39;&#39;&#39;
+println System.getenv(&quot;PATH&quot;)
+println &quot;uname -a&quot;.execute().text
+&#39;&#39;&#39;.trim()
+
+String result
+Jenkins.instance.slaves.find { agent -&gt;
+    agent.name == agent_name
+}.with { agent -&gt;
+    result = RemotingDiagnostics.executeGroovy(groovy_script, agent.channel)
+}
+println result</pre>
+</div></div><h1 id="JenkinsScriptConsole-Remoteaccess"><span style="color: rgb(210,73,57);">Remote access</span></h1><p>A Jenkins Admin can execute groovy scripts remotely by sending an HTTP POST request to <code>/script/</code> url or <code>/scriptText/</code>.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>curl example via bash</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">curl -d &quot;script=&lt;your_script_here&gt;&quot; https://jenkins/script
+# or to get output as a plain text result (no HTML)
+curl -d &quot;script=&lt;your_script_here&gt;&quot; https://jenkins/scriptText</pre>
+</div></div><p>Also, <a href="Jenkins-CLI.html">Jenkins CLI</a> offers the possibility to execute groovy scripts remotely using <code>groovy</code> command or execute groovy interactivelly via <code>groovysh</code>. However, once again curl can be used to execute groovy scripts by making use of bash Command Substitution. In the following example <code>somescript.groovy</code> is a groovy script in the current working directory.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>curl submitting groovy file via bash</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">curl --data-urlencode &quot;script=$(&lt; ./somescript.groovy)&quot; https://jenkins/scriptText</pre>
+</div></div><p>If security is configured in Jenkins, then curl can be provided options to authenticate using the <code>curl --user</code> option.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>curl submitting groovy file providing username and password via bash</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">curl --user &#39;username:password&#39; --data-urlencode &quot;script=$(&lt; ./somescript.groovy)&quot; https://jenkins/scriptText</pre>
+</div></div><p>Here is the equivalent command using python, not curl.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>python submitting groovy file providing username and password</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: py; gutter: false; theme: Confluence" data-theme="Confluence">    with open(&#39;somescript.groovy&#39;, &#39;r&#39;) as fd:
+        data = fd.read()
+    r = requests.post(&#39;https://jenkins/scriptText&#39;, auth=(&#39;username&#39;, &#39;password&#39;), data={&#39;script&#39;: data})</pre>
+</div></div><h3 id="JenkinsScriptConsole-RemoteaccesswithCSRFprotectionenabled"><span style="color: rgb(210,73,57);">Remote access with CSRF protection enabled</span></h3><p>There's an extra step which must be performed to configure Jenkins via the Script Console when <a href="CSRF-Protection.html">CSRF Protection</a> is enabled. The extra step is to get a CSRF token. The token provides an extra security measure in Jenkins to ensure the script console is not being configured from an unauthorized source. It basically comes down to a two step process.</p><ol><li>Authenticate and get a CSRF token for submitting script console scripts.</li><li>Authenticate and <em>use the CSRF token</em> when submitting script console scripts.</li></ol><p>Here's an example. Get a CSRF token.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Getting CSRF token and saving it to a bash variable</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">mytoken=$(curl --user &#39;username:password&#39; -s https://jenkins/crumbIssuer/api/json | python -c &#39;import sys,json;j=json.load(sys.stdin);print j[&quot;crumbRequestField&quot;] + &quot;=&quot; + j[&quot;crumb&quot;]&#39;)</pre>
+</div></div><p>More examples of getting a CSRF token can be found in the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API#RemoteaccessAPI-CSRFProtection" class="external-link" rel="nofollow">Remote access API</a> wiki page.</p><p>Then use the <code>mytoken</code> environment variable to submit the token along with your authentication to the script console.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>curl example submitting script with username, password, and CSRF token</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">curl --user &#39;username:password&#39; -d &quot;$mytoken&quot; --data-urlencode &quot;script=$(&lt;./somescript.groovy)&quot; https://jenkins/scriptText</pre>
+</div></div><p>Additionally, you can <code>curl</code> the root of the Jenkins API to determine if CSRF protection is enabled.</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Use curl to determine if CSRF protection is enabled in Jenkins</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">curl --user &#39;username:password&#39; -s https://jenkins/api/json 2&gt; /dev/null | python -c &#39;import sys,json;exec &quot;try:\n  j=json.load(sys.stdin)\n  print str(j[\&quot;useCrumbs\&quot;]).lower()\nexcept:\n  pass&quot;&#39;</pre>
+</div></div><p>The above command will return <code>true</code> or <code>false</code>. If CSRF protection is enabled then it will return <code>true</code>.</p><h1 id="JenkinsScriptConsole-Shortcutkeyonscriptconsoletosubmit">Shortcut key on script console to submit</h1><p>You can submit a script without mouse. Jenkins has a shortcut key which enables to submit with keyboard.</p><ul><li>Windows / Linux : Ctrl + Enter</li><li>Mac : Command + Enter</li></ul><h1 id="JenkinsScriptConsole-VideoTutorialsandadditionallearningmaterials">Video Tutorials and additional learning materials</h1><p>Here are some recorded videos on the Jenkins Script Console:</p><ul><li><a href="https://www.youtube.com/watch?v=qaUPESDcsGg" class="external-link" rel="nofollow">Jenkins World 2017: Mastering the Jenkins Script Console</a> - 44 minutes - sample usage and security discussion</li><li><a href="https://www.youtube.com/watch?v=T1x2kCGRY1w" class="external-link" rel="nofollow">LA Jenkins Area Meetup 2016 - Hacking on Jenkins Internals - Jenkins Script Console</a> - 39 minutes - sample usage</li></ul><p>To expand your ability to write script console scripts the following references are recommended:</p><ul><li><a href="http://groovy-lang.org/learn.html" class="external-link" rel="nofollow">Learn Groovy</a> - Learning Groovy is useful for more than writing scripts for the Script Console.  Groovy is also relevant for other features of Jenkins like <a href="https://jenkins.io/doc/book/pipeline/" class="external-link" rel="nofollow">Pipelines and shared pipeline libraries</a>, the <a href="Groovy-plugin.html">Groovy Plugin</a>, the <a href="Job-DSL-Plugin.html">Job DSL plugin</a>, and many other plugins which utilize Groovy (see section &quot;Plugins enabling Groovy usage&quot; in this wiki page).</li><li><a href="http://www.mdoninger.de/2011/11/07/write-groovy-scripts-for-jenkins-with-code-completion.html" class="external-link" rel="nofollow">Write Groovy scripts for Jenkins with Code completion</a> - The gist of this is to create a Maven project within your IDE and to depend on org.jenkins-ci.main:jenkins-core (and any other plugins that you expect present). You can then write a Groovy script with code completion of Jenkins API objects and methods.</li></ul><h1 id="JenkinsScriptConsole-ExampleGroovyscripts">Example Groovy scripts</h1><div class="confluence-information-macro confluence-information-macro-information"><p class="title">Out of date scripts</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>Due to the nature of Groovy scripts accessing Jenkins source code directly, Script Console scripts are easily out of date from the Jenkins source code. It is possible to run a script and get exceptions because public methods and interfaces in Jenkins core or Jenkins plugins have changed. Keep this in mind when trying out examples. Jenkins is easily started from a local development machine via the following command:</p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Starting a local copy of Jenkins</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: bash; gutter: false; theme: Confluence" data-theme="Confluence">export JENKINS_HOME=&quot;./my_jenkins_home&quot;
+java -jar jenkins.war</pre>
+</div></div><p><span>Use CTRL+C to stop Jenkins. It is not recommended to try Script Console examples in a production Jenkins instance.</span></p></div></div><p>The following repositories offer solid examples of Groovy scripts for Jenkins.</p><ul><li><a href="https://github.com/cloudbees/jenkins-scripts" class="external-link" rel="nofollow">CloudBees jenkins-scripts repository</a>.</li><li><a href="https://github.com/jenkinsci/jenkins-scripts" class="external-link" rel="nofollow">Jenkins CI jenkins-scripts repository under the <code>scriptler/</code> directory</a> (scripts for the <a href="Scriptler-Plugin.html">Scriptler Plugin</a>).</li><li><a href="https://github.com/samrocketman/jenkins-script-console-scripts" class="external-link" rel="nofollow">Sam Gleske's jenkins-script-console-scripts repository</a>.</li><li><a href="https://github.com/samrocketman/jenkins-bootstrap-shared" class="external-link" rel="nofollow">Sam Gleske's jenkins-bootstrap-shared repository under the <code>scripts/</code> directory</a>.</li><li><a href="http://community.jboss.org/wiki/HudsonHowToDebug" class="external-link" rel="nofollow">Some scripts at JBoss.org</a>.</li></ul><p>Browse all <a href="Scriptler-Plugin.html">Scriptler Plugin</a> Groovy Scripts and <strong>please share your scripts with the </strong><strong><a href="Scriptler-Plugin.html">Scriptler Plugin</a>.</strong></p><p><ul class='childpages-macro'><li><a href="Activate-Chuck-Norris-Plugin.html">Activate Chuck Norris Plugin</a> &mdash; <span class="smalltext">This script activates Chuck Norris plugin for all jobs in your Jenkins server</span></li><li><a href="74416647.html">Add a Maven Installation, Tool Installation, Modify System Config</a></li><li><a href="Add-a-new-label-to-agents-meeting-a-condition.html">Add a new label to agents meeting a condition</a> &mdash; <span class="smalltext">This script shows how to alter the slave nodes&#39; label membership. In this case we create a new label if the existing label contains a string. It has been tested from the Jenkins command window.</span></li><li><a href="Add-notification-plugin-to-every-job.html">Add notification plugin to every job</a> &mdash; <span class="smalltext">This script will add the Notification Plugin to every job.</span></li><li><a href="Allow-broken-build-claiming-on-every-jobs.html">Allow broken build claiming on every jobs</a> &mdash; <span class="smalltext">With the following simple script, you can activate the option on every jobs of your server in just one go.</span></li><li><a href="Batch-Update-Mercurial-branch-that-is-checked-out.html">Batch-Update Mercurial branch that is checked out</a> &mdash; <span class="smalltext">Updates for multiple jobs which branch will be checked out from Hg</span></li><li><a href="Bulk-rename-projects.html">Bulk rename projects</a></li><li><a href="Change-JVM-Options-in-all-Maven-tasks-of-Freestyle-Jobs.html">Change JVM Options in all Maven tasks of Freestyle Jobs</a> &mdash; <span class="smalltext">This script find all Maven Tasks registered in freestyle jobs and replace JVM Options by a new value.</span></li><li><a href="Change-publish-over-SSH-configuration.html">Change publish over SSH configuration</a></li><li><a href="Change-SCMTrigger-for-each-project-to-disable-during-the-night-and-the-week-end.html">Change SCMTrigger for each project to disable during the night and the week-end</a> &mdash; <span class="smalltext">This script lets you easily change all jobs running every minutes so that it gets disabled between 21:00 and 07:00 and on Saturday and Sunday.</span></li><li><a href="Change-Version-Number-in-SVN-path.html">Change Version-Number in SVN-path</a></li><li><a href="Clone-all-projects-in-a-View.html">Clone all projects in a View</a> &mdash; <span class="smalltext">This script enumerates all projects belonging to a specific view and clones them.</span></li><li><a href="Convert-standard-mail-notifications-to-use-the-Mail-Ext-Publisher-plugin.html">Convert standard mail notifications to use the Mail-Ext Publisher plugin</a> &mdash; <span class="smalltext">This script replace mail notifications in all projects by Mail-Ext publisher plugin and re-uses existing recipients.</span></li><li><a href="Delete-.tmp-files-left-in-workspace-files.html">Delete .tmp files left in workspace-files</a> &mdash; <span class="smalltext">This scripts deletes all the tmp files left in workspace-files directory after the build. On windows servers, this seems pretty common so we run this script on daily basis.</span></li><li><a href="Delete-workspace-for-all-disabled-jobs.html">Delete workspace for all disabled jobs</a> &mdash; <span class="smalltext">Deletes the workspace for all disabled jobs to save space</span></li><li><a href="Disable-all-jobs.html">Disable all jobs</a> &mdash; <span class="smalltext">This script disables all jobs in your Jenkins server</span></li><li><a href="Display-Information-About-Nodes.html">Display Information About Nodes</a> &mdash; <span class="smalltext">This scripts displays a bunch of information about all the slave nodes.</span></li><li><a href="Display-job-parameters.html">Display job parameters</a> &mdash; <span class="smalltext">This scripts displays the parameters for all the jobs along with their default values (if applicable).</span></li><li><a href="Display-jobs-group-by-the-build-steps-they-use.html">Display jobs group by the build steps they use</a></li><li><a href="Display-list-of-projects-that-were-built-more-than-1-day-ago..html">Display list of projects that were built more than 1 day ago.</a> &mdash; <span class="smalltext">This script to display list of projects that were built more than 1 day ago.</span></li><li><a href="Display-mail-notifications-recipients.html">Display mail notifications recipients</a> &mdash; <span class="smalltext">This script displays for all jobs the list of mail recipients used for notifications.</span></li><li><a href="Display-monitors-status.html">Display monitors status</a> &mdash; <span class="smalltext">Jenkins uses monitors to validate various behaviors. If you dismiss one, Jenkins will never propose you to reactivate it. This script allows you to check the status of all monitors and to reactive them.</span></li><li><a href="138454178.html">Display the number of jobs using SCM Polling from Freestyle, Pipeline and Maven</a></li><li><a href="Display-timer-triggers.html">Display timer triggers</a> &mdash; <span class="smalltext">This scripts displays the timer triggers for all the jobs in order to better arrange them.</span></li><li><a href="Display-Tools-Location-on-All-Nodes.html">Display Tools Location on All Nodes</a> &mdash; <span class="smalltext">This script can help to get Jenkins tools localtion on all your slaves</span></li><li><a href="Enable-Timestamper-plugin-on-all-jobs.html">Enable Timestamper plugin on all jobs</a> &mdash; <span class="smalltext">With the following simple script, you can activate the option on every jobs of your server in just one go.</span></li><li><a href="Failed-Jobs.html">Failed Jobs</a> &mdash; <span class="smalltext">This scripts displays a list of all failed jobs. Addon: restart them.</span></li><li><a href="Find-builds-currently-running-that-has-been-executing-for-more-than-N-seconds.html">Find builds currently running that has been executing for more than N seconds</a></li><li><a href="Grant-Cancel-Permission-for-user-and-group-that-have-Build-permission.html">Grant Cancel Permission for user and group that have Build permission</a> &mdash; <span class="smalltext">This script will go through all groups and users in both Global security and per job security settings.</span></li><li><a href="Invalidate-Jenkins-HTTP-sessions.html">Invalidate Jenkins HTTP sessions</a> &mdash; <span class="smalltext">This script can monitor and invalidate HTTP sessions if there are many open ones on your server.</span></li><li><a href="Manually-run-log-rotation-on-all-jobs.html">Manually run log rotation on all jobs</a> &mdash; <span class="smalltext">Runs log rotation on all jobs to free space</span></li><li><a href="Monitor-and-Restart-Offline-Slaves.html">Monitor and Restart Offline Slaves</a> &mdash; <span class="smalltext">This script can monitor and restart offline nodes if they are not disconnected manually.</span></li><li><a href="Monitoring-Scripts.html">Monitoring Scripts</a> &mdash; <span class="smalltext">Several scripts to display data about http sessions, threads, memory, JVM or MBeans, when using the Monitoring plugin.</span></li><li><a href="My-Test-Grovvy.html">My Test Grovvy</a></li><li><a href="Parameterized-System-Groovy-script.html">Parameterized System Groovy script</a> &mdash; <span class="smalltext">This script will demonstrate how to get parameters in a system groovy script.</span></li><li><a href="Preselect-username-in-Maven-Release-Build.html">Preselect username in Maven Release Build</a></li><li><a href="Printing-a-list-of-credentials-and-their-IDs.html">Printing a list of credentials and their IDs</a></li><li><a href="Remove-all-disabled-modules-in-Maven-jobs.html">Remove all disabled modules in Maven jobs</a> &mdash; <span class="smalltext">To remove all disabled modules in Maven jobs</span></li><li><a href="Remove-Deployed-Artifacts-Actions.html">Remove Deployed Artifacts Actions</a> &mdash; <span class="smalltext">This script is used to remove the Deployed Artifacts list that is uselessly stored for each build by the Artifact Deployer Plugin. </span></li><li><a href="Remove-Git-Plugin-BuildsByBranch-BuildData.html">Remove Git Plugin BuildsByBranch BuildData</a> &mdash; <span class="smalltext">This script is used to remove the static list of BuildsByBranch that is uselessly stored for each build by the Git Plugin.</span></li><li><a href="Set-GitBlitRepositoryBrowser-with-custum-settings-on-all-repos.html">Set GitBlitRepositoryBrowser with custum settings on all repos</a> &mdash; <span class="smalltext">This scripts allows to update the repo browser. Can be adapted to any other browser, not only gitblit.</span></li><li><a href="Update-maven-jobs-to-use-the-post-build-task-to-deploy-artifacts.html">Update maven jobs to use the post build task to deploy artifacts</a> &mdash; <span class="smalltext">This script updates all maven jobs having a deploy goal by install and activate the post build step to deploy artifacts at the end of the build</span></li><li><a href="Update-SVN-Browser.html">Update SVN Browser</a></li><li><a href="Wipe-out-workspaces-of-all-jobs.html">Wipe out workspaces of all jobs</a> &mdash; <span class="smalltext">This script wipes out the workspaces of all jobs on your Jenkins server</span></li><li><a href="Wipe-workspaces-for-a-set-of-jobs-on-all-nodes.html">Wipe workspaces for a set of jobs on all nodes</a> &mdash; <span class="smalltext">The script wipes workspaces of certain jobs on all nodes.</span></li></ul></p><h1 id="JenkinsScriptConsole-PluginsenablingGroovyusage">Plugins enabling Groovy usage</h1><p>
+
+
+
+
+
+
+
+
+
+
+
+<ul class="content-by-label">
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Config+File+Provider+Plugin">Config File Provider Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Adds the ability to provide configuration files (i.e., settings.xml for maven, XML, groovy, custom files, etc.) loaded through the Jenkins UI which will be copied to the job's workspace.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Global+Post+Script+Plugin">Global Post Script Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Execute a global configured groovy script after each build of each job managed by the Jenkins.<br/> This is typical for cases when you need to do something based on a shared set of parameters, such as triggering downstream jobs managed by the same Jenkins or remote ones based on the parameters been passed to the parameterized jobs.<p><strong>Notice: jython script support removed since 1.1.0</strong></p></span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Groovy+plugin">Groovy plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin adds the ability to directly execute Groovy code.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Groovy+Postbuild+Plugin">Groovy Postbuild Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin executes a groovy script in the Jenkins JVM. Typically, the script checks some conditions and changes accordingly the build result, puts badges next to the build in the build history and/or displays information on the build summary page.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Groovy+Remote+Control+Plugin">Groovy Remote Control Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin provides <a href="http://groovy.codehaus.org/modules/remote/" class="external-link" rel="nofollow">Groovy Remote Control</a>'s receiver, and allows to control external application from Jenkins.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Matrix+Groovy+Execution+Strategy+Plugin">Matrix Groovy Execution Strategy Plugin</a>
+                
+                                        <span class="smalltext">&mdash; A plugin to decide the execution order and valid combinations of matrix projects.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Pipeline+Classpath+Step+Plugin">Pipeline Classpath Step Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Pipeline DSL step to add path to the groovy classpath</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/Scriptler+Plugin">Scriptler Plugin</a>
+                
+                                        <span class="smalltext">&mdash; Scriptler allows you to store/edit groovy scripts and execute it on any of the slaves/nodes... no need to copy/paste groovy code anymore.</span>
+            
+                    </div>
+    </li>
+        <li>
+        <div>
+                <span class="icon aui-icon content-type-page" title="Page">Page:</span>        </div>
+
+        <div class="details">
+                        <a href="/display/JENKINS/SnowGlobe+Plugin">SnowGlobe Plugin</a>
+                
+                                        <span class="smalltext">&mdash; This plugin provides the ability to define Infrastructure as Code. Create, update and tear down clusters of related docker containers for builds, testing or continuous delivery.<p> </p><p>Snowglobe plugin for Jenkins</p><p>This allows Jenkins jobs to control a SnowGlobe instance (see <a href="https://nirima.github.io/SnowGlobe/" rel="nofollow" class="external-link">https://nirima.github.io/SnowGlobe/</a>).</p><h2 id="SnowGlobePlugin-Operations"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#operations" rel="nofollow"></a>Operations</h2><p>The operations are relatively simple:</p><h3 id="SnowGlobePlugin-Clone"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#clone" rel="nofollow"></a>Clone</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_clone <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">sourceId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>ci-template<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">targetId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>new-globe-name<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-SetVariables"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#set-variables" rel="nofollow"></a>Set Variables</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_set_variables <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span>, <span class="pl-c1" style="color: rgb(0,92,197);">variables</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>key=&quot;value&quot;<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-GetVariables"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#get-variables" rel="nofollow"></a>Get Variables</h3><div class="highlight highlight-source-groovy"><pre>data <span class="pl-k" style="color: rgb(215,58,73);">=</span> snowglobe_get_variables  <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-Apply"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#apply" rel="nofollow"></a>Apply</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_apply <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-State"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#state" rel="nofollow"></a>State</h3><div class="highlight highlight-source-groovy"><pre>data <span class="pl-k" style="color: rgb(215,58,73);">=</span> snowglobe_state <span class="pl-c1" style="color: rgb(0,92,197);">createAction</span>: <span class="pl-c1" style="color: rgb(0,92,197);">false</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><h3 id="SnowGlobePlugin-Destroy"><a class="external-link" style="" href="https://github.com/nirima/snowglobe-plugin#destroy" rel="nofollow"></a>Destroy</h3><div class="highlight highlight-source-groovy"><pre>snowglobe_clone <span class="pl-c1" style="color: rgb(0,92,197);">remove</span>: <span class="pl-c1" style="color: rgb(0,92,197);">true</span>, <span class="pl-c1" style="color: rgb(0,92,197);">globeId</span>: <span class="pl-s" style="color: rgb(3,47,98);"><span class="pl-pds">'</span>my-globe<span class="pl-pds">'</span></span></pre></div><p>Remove: set to true to also remove the SnowGlobe after destruction.</p><p>In all cases - createAction controls whether to add an action to the build, which will also remove the globe when the CI build is complete.</p></span>
+            
+                    </div>
+    </li>
+    </ul>
+</p>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

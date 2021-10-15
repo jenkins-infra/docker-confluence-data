@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins Development Environment with Nexus</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Extend-Jenkins.html">Extend Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Building-Jenkins.html">Building Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins Development Environment with Nexus
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (russt)</span>, last modified by <span class='editor'> Unknown User (haroules)</span> on Feb 06, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h2 id="JenkinsDevelopmentEnvironmentwithNexus-HowtoSetuptheNexusRepositoryManagertoBuildJenkins">How to Set up the Nexus Repository Manager to Build Jenkins</h2>
+
+<ol>
+	<li>download the latest Nexus war from <a href="http://nexus.sonatype.org/downloads/" class="external-link" rel="nofollow">here</a>.</li>
+	<li>drop the war in your tomcat instance or some other container.</li>
+	<li>bring up the Nexus Manager and make sure you configure all of the <em>proxy repositories</em> that Jenkins requires (<a href="#JenkinsDevelopmentEnvironmentwithNexus-hudsonrepos">list below</a>).</li>
+	<li>replace your <code>~/.m2/settings.xml</code> file with the version <a href="#JenkinsDevelopmentEnvironmentwithNexus-settingsxml">below</a>, editing the Nexus instance address as needed.</li>
+</ol>
+
+
+<div class="confluence-information-macro confluence-information-macro-note"><p class="title">This page likely needs to be updated</p><span class="aui-icon aui-icon-small aui-iconfont-warning confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>There was a shift to using Artifactory instead of nexus, a few additional repos are needed to be proxied: <a class="external-link" href="http://maven.tmatesoft.com/content/repositories/releases/" rel="nofollow">http://maven.tmatesoft.com/content/repositories/releases/</a> and <a class="external-link" href="http://bits.netbeans.org/maven2/" rel="nofollow">http://bits.netbeans.org/maven2/</a> when using nexus.</p>
+</div></div>
+<p><br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-information"><p class="title">Note</p><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body"><p>The line <code>&lt;mirrorOf&gt;external:*&lt;/mirrorOf&gt;</code> in <code>settings.xml</code> allows nexus to pass-through <code>file://</code> based url's declared as <code>&lt;repository&gt;</code> elements in several of the plugin poms (and <em>no</em>, it is not best practice to use the source tree as a maven repository!)</p></div></div>
+
+<p>Okay, now you can build.  It will be the usual slow going if you remove your local maven build repository (default location <code>$HOME/.m2/repository</code>), which is advisable at first, to force nexus to cache all of the Jenkins artifacts.</p>
+
+<p>After your Nexus instance is populated, builds from scratch are very fast.</p>
+
+<p><strong>MAVEN SETTINGS.XML</strong> (<code>$HOME/.m2/settings.xml</code>):<br/>
+<span class="confluence-anchor-link" id="JenkinsDevelopmentEnvironmentwithNexus-settingsxml"></span></p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+&lt;settings&gt;
+  &lt;mirrors&gt;
+    &lt;mirror&gt;
+      &lt;!--This sends everything else to /public --&gt;
+      &lt;id&gt;nexus&lt;/id&gt;
+      &lt;mirrorOf&gt;external:*&lt;/mirrorOf&gt;
+      &lt;!-- your address may differ: --&gt;
+      &lt;url&gt;http://localhost:8080/nexus/content/groups/public&lt;/url&gt;
+    &lt;/mirror&gt;
+  &lt;/mirrors&gt;
+  &lt;profiles&gt;
+    &lt;profile&gt;
+      &lt;id&gt;nexus&lt;/id&gt;
+      &lt;!--Enable snapshots for the built in central repo to direct --&gt;
+      &lt;!--all requests to nexus via the mirror --&gt;
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;central&lt;/id&gt;
+          &lt;url&gt;http://central&lt;/url&gt;
+          &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
+          &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+     &lt;pluginRepositories&gt;
+        &lt;pluginRepository&gt;
+          &lt;id&gt;central&lt;/id&gt;
+          &lt;url&gt;http://central&lt;/url&gt;
+          &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
+          &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
+        &lt;/pluginRepository&gt;
+      &lt;/pluginRepositories&gt;
+    &lt;/profile&gt;
+  &lt;/profiles&gt;
+  &lt;activeProfiles&gt;
+    &lt;!--make the profile active all the time --&gt;
+    &lt;activeProfile&gt;nexus&lt;/activeProfile&gt;
+  &lt;/activeProfiles&gt;
+&lt;/settings&gt;
+</pre>
+</div></div>
+
+<p><span class="confluence-anchor-link" id="JenkinsDevelopmentEnvironmentwithNexus-hudsonrepos"></span><br/>
+<strong>PROXY REPOSITORY CONFIGURATION:</strong></p>
+
+<p>You only need to add <a href="http://maven.jenkins-ci.org/content/repositories/releases/" class="external-link" rel="nofollow">http://maven.jenkins-ci.org/content/repositories/releases/</a> as a proxy repository with release policy at this stage. The repositories below are proxied from jenkins-ci already so you don't have to.</p>
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: xml; gutter: false; theme: Confluence" data-theme="Confluence">
+      &lt;id&gt;google&lt;/id&gt;
+      &lt;name&gt;Google Code&lt;/name&gt;
+        &lt;url&gt;http://google-maven-repository.googlecode.com/svn/repository/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;atlassian&lt;/id&gt;
+      &lt;name&gt;atlassian&lt;/name&gt;
+        &lt;url&gt;https://maven.atlassian.com/content/groups/public/&lt;/url&gt;
+            &lt;id&gt;https://m2proxy.atlassian.com/repository/public&lt;/id&gt;
+            &lt;url&gt;https://m2proxy.atlassian.com/repository/public&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;JA-SIG&lt;/id&gt;
+      &lt;name&gt;JA-SIG&lt;/name&gt;
+        &lt;url&gt;http://developer.jasig.org/repo/content/groups/m2-legacy/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;m.g.o-public&lt;/id&gt;
+      &lt;name&gt;m.g.o-public&lt;/name&gt;
+        &lt;url&gt;http://maven.glassfish.org/content/groups/public/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;laughing-panda&lt;/id&gt;
+      &lt;name&gt;laughing-panda&lt;/name&gt;
+        &lt;url&gt;http://www.laughingpanda.org/maven2/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;jclouds&lt;/id&gt;
+      &lt;name&gt;jclouds&lt;/name&gt;
+        &lt;url&gt;http://jclouds.googlecode.com/svn/repo/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;jclouds-snapshots&lt;/id&gt;
+      &lt;name&gt;jclouds-snapshots&lt;/name&gt;
+        &lt;url&gt;http://jclouds.rimuhosting.com/maven2/snapshots/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;SNAPSHOT&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;tek42&lt;/id&gt;
+      &lt;name&gt;tek42&lt;/name&gt;
+        &lt;url&gt;http://tek42.com/maven2/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+
+      &lt;id&gt;googlecode.java-xmlbuilder&lt;/id&gt;
+      &lt;name&gt;googlecode.java-xmlbuilder&lt;/name&gt;
+        &lt;url&gt;http://java-xmlbuilder.googlecode.com/svn/repo/&lt;/url&gt;
+        &lt;repositoryPolicy&gt;RELEASE&lt;/repositoryPolicy&gt;
+</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:09</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins Infrastructure : Outage</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins Infrastructure</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="issues.jenkins-ci.org.html">issues.jenkins-ci.org</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins Infrastructure : Outage
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (kohsuke)</span>, last modified on Feb 02, 2011
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <h1 id="Outage-Feb2nd2011">Feb 2nd 2011</h1>
+
+<p>TCP connections are established but the request is not getting handled. But the obtained thread dump doesn't show anything unusual.</p>
+
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>jira@eggplant:/home/kohsuke$ jstack 2998
+2011-02-02 15:34:22
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (17.1-b03 mixed mode):
+
+&quot;Attach Listener&quot; daemon prio=10 tid=0x0000000042c25800 nid=0x1c95 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;http-127.0.0.1-8080-19&quot; daemon prio=10 tid=0x00007f7b086bd800 nid=0x15ab in Object.wait() [0x00007f7b14339000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b39699878&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b39699878&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-18&quot; daemon prio=10 tid=0x00007f7b08193800 nid=0x15aa in Object.wait() [0x00007f7b1453b000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b396995e0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b396995e0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-17&quot; daemon prio=10 tid=0x00007f7b08204000 nid=0x146f in Object.wait() [0x00007f7b0fffe000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b3943e3d0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b3943e3d0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-16&quot; daemon prio=10 tid=0x00007f7b08212000 nid=0x146e in Object.wait() [0x00007f7b0fcfb000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b39427318&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b39427318&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-15&quot; daemon prio=10 tid=0x00007f7b08214800 nid=0x146d in Object.wait() [0x00007f7b0fefd000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b39426ba0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b39426ba0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;SearchRequest-indexQueue:thread-1&quot; prio=10 tid=0x00007f7b095e0800 nid=0x11e6 waiting on condition [0x00007f7b1493f000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	- parking to wait for  &lt;0x00007f7b37e43f20&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:158)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1987)
+	at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:399)
+	at com.atlassian.jira.index.QueueingIndex$Task.index(QueueingIndex.java:133)
+	at com.atlassian.jira.index.QueueingIndex$Task.run(QueueingIndex.java:121)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-14&quot; daemon prio=10 tid=0x00007f7b08872000 nid=0xfb5 in Object.wait() [0x00007f7b0f6f5000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b38770368&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b38770368&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-13&quot; daemon prio=10 tid=0x00007f7b096b0800 nid=0xfb4 in Object.wait() [0x00007f7b0f7f6000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b387700d0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b387700d0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-12&quot; daemon prio=10 tid=0x00007f7b08136800 nid=0xfb3 in Object.wait() [0x00007f7b14a40000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b3876fe38&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b3876fe38&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-11&quot; daemon prio=10 tid=0x00007f7b0967f000 nid=0xeb7 in Object.wait() [0x00007f7b14137000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b38393b48&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b38393b48&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-10&quot; daemon prio=10 tid=0x00007f7b0921f800 nid=0xd85 in Object.wait() [0x00007f7b0f5f4000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b37d8ca08&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b37d8ca08&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-9&quot; daemon prio=10 tid=0x00007f7b094b0000 nid=0xc7f in Object.wait() [0x00007f7b1473d000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b37c12558&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b37c12558&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;COMMENT-indexQueue:thread-1&quot; prio=10 tid=0x00007f7b1153c000 nid=0xc4a waiting on condition [0x00007f7b151bd000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	- parking to wait for  &lt;0x00007f7b2fa620b0&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:158)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1987)
+	at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:399)
+	at com.atlassian.jira.index.QueueingIndex$Task.index(QueueingIndex.java:133)
+	at com.atlassian.jira.index.QueueingIndex$Task.run(QueueingIndex.java:121)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;ISSUE-indexQueue:thread-1&quot; prio=10 tid=0x00007f7b10655000 nid=0xc49 waiting on condition [0x00007f7b1443a000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	- parking to wait for  &lt;0x00007f7b2f9c43e0&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:158)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1987)
+	at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:399)
+	at com.atlassian.jira.index.QueueingIndex$Task.index(QueueingIndex.java:133)
+	at com.atlassian.jira.index.QueueingIndex$Task.run(QueueingIndex.java:121)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-8&quot; daemon prio=10 tid=0x00007f7b083f0000 nid=0xbfe in Object.wait() [0x00007f7b0fbfa000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b33456580&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b33456580&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-7&quot; daemon prio=10 tid=0x0000000040767800 nid=0xbfb in Object.wait() [0x00007f7b0eae9000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b32a5e5a0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b32a5e5a0&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-6&quot; daemon prio=10 tid=0x0000000041a12000 nid=0xbfa in Object.wait() [0x00007f7b0ebea000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b328a9178&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b328a9178&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-5&quot; daemon prio=10 tid=0x0000000041a11000 nid=0xbf9 in Object.wait() [0x00007f7b0eceb000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b328dc2e8&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b328dc2e8&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-4&quot; daemon prio=10 tid=0x00000000408ca000 nid=0xbf8 in Object.wait() [0x00007f7b0edec000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b329191f8&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b329191f8&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-3&quot; daemon prio=10 tid=0x00000000408c6000 nid=0xbf7 in Object.wait() [0x00007f7b0eeed000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b32944438&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b32944438&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-2&quot; daemon prio=10 tid=0x00000000408c5800 nid=0xbf6 in Object.wait() [0x00007f7b0f2f1000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b3296ca70&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b3296ca70&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;http-127.0.0.1-8080-1&quot; daemon prio=10 tid=0x0000000040c3d800 nid=0xbf5 in Object.wait() [0x00007f7b0efee000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b302d9a70&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.await(JIoEndpoint.java:423)
+	- locked &lt;0x00007f7b302d9a70&gt; (a org.apache.tomcat.util.net.JIoEndpoint$Worker)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:449)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;ContainerBackgroundProcessor[StandardEngine[Catalina]]&quot; daemon prio=10 tid=0x00007f7b105e5800 nid=0xbf3 waiting on condition [0x00007f7b0f1f0000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.sleep(Native Method)
+	at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.run(ContainerBase.java:1579)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;MultiThreadedHttpConnectionManager cleanup&quot; daemon prio=10 tid=0x00007f7b096ec000 nid=0xbef in Object.wait() [0x00007f7b0f3f2000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+	- locked &lt;0x00007f7b2bf2cf80&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at org.apache.commons.httpclient.MultiThreadedHttpConnectionManager$ReferenceQueueThread.run(MultiThreadedHttpConnectionManager.java:1082)
+
+&quot;com.google.common.base.internal.Finalizer&quot; daemon prio=10 tid=0x00000000419bb000 nid=0xbee in Object.wait() [0x00007f7b0f4f3000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2e60a058&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+	- locked &lt;0x00007f7b2e60a058&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:134)
+	at com.google.common.base.internal.Finalizer.run(Finalizer.java:127)
+
+&quot;Timer-1&quot; daemon prio=10 tid=0x0000000040818000 nid=0xbd7 in Object.wait() [0x00007f7b14c65000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2b18d5c8&gt; (a java.util.TaskQueue)
+	at java.lang.Object.wait(Object.java:485)
+	at java.util.TimerThread.mainLoop(Timer.java:483)
+	- locked &lt;0x00007f7b2b18d5c8&gt; (a java.util.TaskQueue)
+	at java.util.TimerThread.run(Timer.java:462)
+
+&quot;Timer-0&quot; daemon prio=10 tid=0x00000000407b6800 nid=0xbd6 in Object.wait() [0x00007f7b14d66000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2b179458&gt; (a java.util.TaskQueue)
+	at java.lang.Object.wait(Object.java:485)
+	at java.util.TimerThread.mainLoop(Timer.java:483)
+	- locked &lt;0x00007f7b2b179458&gt; (a java.util.TaskQueue)
+	at java.util.TimerThread.run(Timer.java:462)
+
+&quot;FelixPackageAdmin&quot; daemon prio=10 tid=0x0000000040e14000 nid=0xbd5 in Object.wait() [0x00007f7b14eb3000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2a3642e0&gt; (a org.apache.felix.framework.PackageAdminImpl)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.felix.framework.PackageAdminImpl.run(PackageAdminImpl.java:316)
+	- locked &lt;0x00007f7b2a3642e0&gt; (a org.apache.felix.framework.PackageAdminImpl)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;FelixStartLevel&quot; daemon prio=10 tid=0x0000000040e13800 nid=0xbd4 in Object.wait() [0x00007f7b14fb4000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2a363ca0&gt; (a java.util.ArrayList)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.felix.framework.StartLevelImpl.run(StartLevelImpl.java:242)
+	- locked &lt;0x00007f7b2a363ca0&gt; (a java.util.ArrayList)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;FelixDispatchQueue&quot; daemon prio=10 tid=0x0000000041369000 nid=0xbd3 in Object.wait() [0x00007f7b150bc000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2a472a78&gt; (a java.util.ArrayList)
+	at java.lang.Object.wait(Object.java:485)
+	at org.apache.felix.framework.util.EventDispatcher.run(EventDispatcher.java:917)
+	- locked &lt;0x00007f7b2a472a78&gt; (a java.util.ArrayList)
+	at org.apache.felix.framework.util.EventDispatcher.access$000(EventDispatcher.java:54)
+	at org.apache.felix.framework.util.EventDispatcher$1.run(EventDispatcher.java:106)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;Java2D Disposer&quot; daemon prio=10 tid=0x00007f7b08a18000 nid=0xbd1 in Object.wait() [0x00007f7b153c6000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b2a473020&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+	- locked &lt;0x00007f7b2a473020&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:134)
+	at sun.java2d.Disposer.run(Disposer.java:127)
+	at java.lang.Thread.run(Thread.java:662)
+
+&quot;JonasClock&quot; daemon prio=10 tid=0x00007f7b083c6000 nid=0xbd0 waiting on condition [0x00007f7b15949000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.sleep(Native Method)
+	at org.objectweb.jonas_timer.TimerManager.clock(TimerManager.java:142)
+	at org.objectweb.jonas_timer.Clock.run(TimerManager.java:46)
+
+&quot;JonasBatch&quot; daemon prio=10 tid=0x00007f7b08468800 nid=0xbcf in Object.wait() [0x00007f7b15a4a000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b29af7628&gt; (a java.util.Vector)
+	at java.lang.Object.wait(Object.java:485)
+	at org.objectweb.jonas_timer.TimerManager.batch(TimerManager.java:193)
+	- locked &lt;0x00007f7b29af7628&gt; (a java.util.Vector)
+	at org.objectweb.jonas_timer.Batch.run(TimerManager.java:65)
+
+&quot;JiraQuartzScheduler_Worker-3&quot; prio=10 tid=0x00007f7b08039800 nid=0xbcd in Object.wait() [0x00007f7b15c4c000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at org.quartz.simpl.SimpleThreadPool.getNextRunnable(SimpleThreadPool.java:423)
+	- locked &lt;0x00007f7b29af7ce8&gt; (a java.lang.Object)
+	at org.quartz.simpl.SimpleThreadPool.access$000(SimpleThreadPool.java:53)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:514)
+
+&quot;JiraQuartzScheduler_Worker-2&quot; prio=10 tid=0x00007f7b0842b800 nid=0xbcc in Object.wait() [0x00007f7b15d4d000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at org.quartz.simpl.SimpleThreadPool.getNextRunnable(SimpleThreadPool.java:423)
+	- locked &lt;0x00007f7b29af7ce8&gt; (a java.lang.Object)
+	at org.quartz.simpl.SimpleThreadPool.access$000(SimpleThreadPool.java:53)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:514)
+
+&quot;JiraQuartzScheduler_Worker-1&quot; prio=10 tid=0x00007f7b0836e000 nid=0xbcb in Object.wait() [0x00007f7b15e4e000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at org.quartz.simpl.SimpleThreadPool.getNextRunnable(SimpleThreadPool.java:423)
+	- locked &lt;0x00007f7b29af7ce8&gt; (a java.lang.Object)
+	at org.quartz.simpl.SimpleThreadPool.access$000(SimpleThreadPool.java:53)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:514)
+
+&quot;JiraQuartzScheduler_Worker-0&quot; prio=10 tid=0x00007f7b082ed000 nid=0xbca in Object.wait() [0x00007f7b15f4f000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at org.quartz.simpl.SimpleThreadPool.getNextRunnable(SimpleThreadPool.java:423)
+	- locked &lt;0x00007f7b29af7ce8&gt; (a java.lang.Object)
+	at org.quartz.simpl.SimpleThreadPool.access$000(SimpleThreadPool.java:53)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:514)
+
+&quot;MySQL Statement Cancellation Timer&quot; daemon prio=10 tid=0x00007f7b083da800 nid=0xbc9 in Object.wait() [0x00007f7b16676000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b29af8860&gt; (a java.util.TaskQueue)
+	at java.lang.Object.wait(Object.java:485)
+	at java.util.TimerThread.mainLoop(Timer.java:483)
+	- locked &lt;0x00007f7b29af8860&gt; (a java.util.TaskQueue)
+	at java.util.TimerThread.run(Timer.java:462)
+
+&quot;Low Memory Detector&quot; daemon prio=10 tid=0x00007f7b10025000 nid=0xbc7 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;CompilerThread1&quot; daemon prio=10 tid=0x00007f7b10022800 nid=0xbc6 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;CompilerThread0&quot; daemon prio=10 tid=0x00007f7b1001f800 nid=0xbc5 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;Signal Dispatcher&quot; daemon prio=10 tid=0x00007f7b1001d800 nid=0xbc4 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;Finalizer&quot; daemon prio=10 tid=0x0000000040734000 nid=0xbc3 in Object.wait() [0x00007f7b17413000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on &lt;0x00007f7b29accc60&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+	- locked &lt;0x00007f7b29accc60&gt; (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:134)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:159)
+
+&quot;Reference Handler&quot; daemon prio=10 tid=0x0000000040732000 nid=0xbc2 in Object.wait() [0x00007f7b17514000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Object.wait(Object.java:485)
+	at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:116)
+	- locked &lt;0x00007f7b29accc18&gt; (a java.lang.ref.Reference$Lock)
+
+&quot;main&quot; prio=10 tid=0x00000000406d4800 nid=0xbbd runnable [0x00007f7b43efd000]
+   java.lang.Thread.State: RUNNABLE
+	at java.net.PlainSocketImpl.socketAccept(Native Method)
+	at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:390)
+	- locked &lt;0x00007f7b302c5c50&gt; (a java.net.SocksSocketImpl)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:453)
+	at java.net.ServerSocket.accept(ServerSocket.java:421)
+	at org.apache.catalina.core.StandardServer.await(StandardServer.java:389)
+	at org.apache.catalina.startup.Catalina.await(Catalina.java:647)
+	at org.apache.catalina.startup.Catalina.start(Catalina.java:607)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.apache.catalina.startup.Bootstrap.start(Bootstrap.java:288)
+	at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:413)
+
+&quot;VM Thread&quot; prio=10 tid=0x000000004072e000 nid=0xbc1 runnable 
+
+&quot;GC task thread#0 (ParallelGC)&quot; prio=10 tid=0x00000000406e7800 nid=0xbbf runnable 
+
+&quot;GC task thread#1 (ParallelGC)&quot; prio=10 tid=0x00000000406e9800 nid=0xbc0 runnable 
+
+&quot;VM Periodic Task Thread&quot; prio=10 tid=0x00007f7b10030000 nid=0xbc8 waiting on condition 
+
+JNI global references: 1888
+</pre>
+</div></div>
+                    </div>
+
+                    
+                                                      
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 29, 2021 15:45</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

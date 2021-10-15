@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Consul Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Consul Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (liozn)</span>, last modified on Jul 26, 2017
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> View Consul <a href="https://plugins.jenkins.io/consul" class="external-link" rel="nofollow">on the plugin site</a> for more information. </p></td>
+</tr>
+</tbody></table>
+<p><span style="color: rgb(0,0,0);"><strong>Consul plugin for reading services using consul service discovery and K/V store.</strong></span></p><p><span style="color: rgb(0,0,0);"><strong>The plugin installs an agent, joins to the consul network, reads the necessary data and then leaves the network.</strong></span></p><h1 id="ConsulPlugin-Features">Features</h1><ul><li>Retrieve consul service's ip / port</li><li>Retrieve values from consul K/V store</li><li>Set values to consul K/V store</li><li>Install &amp; join consul gossip network</li><li>Filtering for service discovery (Healthy / Unhealthy / tagging)</li><li>Using multiple consul networks within the same job</li></ul><h1 id="ConsulPlugin-Settings">Settings</h1><h2 id="ConsulPlugin-Consulinstallation">Consul installation</h2><ul><li>Choose your installation name &amp; version.<br/>The executable will be auto downloaded &amp; installed from hashicorp's repository.</li></ul><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/106267864/108331478.png" data-image-src="attachments/106267864/108331478.png" data-unresolved-comment-count="0" data-linked-resource-id="108331478" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-4-3 10:32:15.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106267864" data-linked-resource-container-version="19"></span></p><h2 id="ConsulPlugin-Globalconfigurations">Global configurations</h2><p>Global settings configured using profiles for each environment / consul network.</p><p><strong>Profile name -</strong> Name of the profile, will be used in the job configuration.</p><p><strong>Masters list -</strong> Comma separated list of consul masters.</p><p><strong>Datacenter -</strong> Consul datacenter to join (default is 'dc1' if not configured in consul installation).</p><p><strong>Token -</strong> ACL token to join gossip network (leave empty if not needed).</p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/106267864/129073420.png" data-image-src="attachments/106267864/129073420.png" data-unresolved-comment-count="0" data-linked-resource-id="129073420" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="globalSettings.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106267864" data-linked-resource-container-version="19"></span></p><p> </p><h3 id="ConsulPlugin-Jobconfigurations">Job configurations</h3><p><strong>Consul installation -</strong> Choose consul version (list of installations configured in jenkins global configurations).</p><p><strong>Settings profile -</strong> Choose which consul settings profile you would like to use.</p><p><strong>Consul operations</strong></p><p><strong>  Retrieve value from K/V store</strong></p><p><strong>    K/V path -</strong> Consul path for value retrieval.</p><p><strong>    Environment variable name -</strong> Env var to populate the value with.</p><p><strong>  Service discovery query</strong></p><p><strong>    Service lookup name -</strong> Name of the service to lookup in consul.</p><p><strong>    Add Port? -</strong> Adding the port after each ip in the response.</p><p><strong>    Health status -</strong> Healthy / Unhealthy / All - filtering for service lookup.</p><p><strong>    Service tag -</strong> Tagging filtering for service lookup.</p><p><strong>    Environment variable name -</strong> Env var to populate the CSV list of extracted ip addresses.</p><p>  <strong>Set a value in K/V store</strong></p><p><strong>    K/V path - </strong>Path in consul to set the value.</p><p>    <strong>value - </strong>Environment variable name that holds the value or any other static value to set in consul.</p><p> </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/106267864/133957226.png" data-image-src="attachments/106267864/133957226.png" data-unresolved-comment-count="0" data-linked-resource-id="133957226" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-7-26 14:38:48.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106267864" data-linked-resource-container-version="19"></span></p><p>Consul build step can be added multiple times within the same job. Each step can use different consul settings profile.</p><p>This gives the ability to query multiple consul clusters &amp; query them in a single run.</p><p> </p><h3 id="ConsulPlugin-Pipeline">Pipeline</h3><p>Since version 2.0 the plugin supports pipeline.</p><p>Consul pipeline step will return JSON value with the required data.</p><p>Use the pipeline syntax tool (<a href="https://jenkins-prod.inner-active.mobi/pipeline-syntax/" class="external-link" rel="nofollow">https://your-jenkins-master-url/pipeline-syntax/</a>) to generate the code.</p><p> </p><p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/106267864/133957224.png" data-image-src="attachments/106267864/133957224.png" data-unresolved-comment-count="0" data-linked-resource-id="133957224" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="image2017-7-26 14:34:47.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="106267864" data-linked-resource-container-version="19"></span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline job example</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: groovy; gutter: true; theme: Confluence" data-theme="Confluence">node {
+	def consulJson = Consul consulSettingsProfileName: &#39;inneractive&#39;, installationName: &#39;consul_0.7.1&#39;, operationList: [[$class: &#39;ConsulServiceDiscoveryOperation&#39;, addPort: true, healthStatus: &#39;Healthy&#39;, serviceName: &#39;aerospike&#39;, serviceTag: &#39;&#39;], [$class: &#39;ConsulGetKV&#39;, valuePath: &#39;db/main/ip&#39;], [$class: &#39;ConsulSetKV&#39;, value: &#39;value&#39;, valuePath: &#39;test/consul/value&#39;]]
+	echo consulJson
+}</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Pipeline response example:</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: plain; gutter: false; theme: Confluence" data-theme="Confluence">{&quot;ServiceDiscovery&quot;:{&quot;aerospike&quot;:[&quot;XXX.XXX.XXX.XXX:3000&quot;,&quot;XXX.XXX.XXX.XXX:3000&quot;,&quot;XXX.XXX.XXX.XXX:3000&quot;]},&quot;KeyValueStore&quot;:{&quot;db/main/ip&quot;:&quot;XXX.XXX.XXX.XXX&quot;}}</pre>
+</div></div><p> </p><h2 id="ConsulPlugin-ToDo">ToDo</h2><p> <div class="jim-error-message jim-error-message-table">
+    <table class="aui">
+        <tbody>
+                <tr></tr>
+
+        <tr>
+                            <th>type</th>
+                            <th>key</th>
+                            <th>summary</th>
+                            <th>assignee</th>
+                            <th>reporter</th>
+                            <th>priority</th>
+                            <th>status</th>
+                            <th>resolution</th>
+                            <th>created</th>
+                            <th>updated</th>
+                            <th>due</th>
+                    </tr>
+
+        <tr>
+            <td colspan="11">
+                <div class="aui-message aui-message-warning">
+                    <p class="message">
+                        <span class="icon-in-pdf"></span>
+                        Can&#39;t show details. Ask your admin to whitelist this Jira URL.
+                    </p>
+                     <a class="jira-link" href="https://issues.jenkins-ci.org/secure/IssueNavigator.jspa?reset=true&amp;jqlQuery=component=consul-plugin%20and%20status%20not%20in%20%28Closed,%20Done,%20Resolved%29%20order%20by%20priority%20&amp;src=confmacro">View these issues in Jira</a>                 </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</p><h2 id="ConsulPlugin-Changelog">Changelog</h2><h4 id="ConsulPlugin-Version2.1(July26,2017)">Version 2.1 (July 26, 2017)</h4><ul><li>Added feature for setting consul K/V store - <a href="https://issues.jenkins-ci.org/browse/JENKINS-43330" class="external-link" rel="nofollow">JENKINS-43330</a></li></ul><h4 id="ConsulPlugin-Version2.0(June5,2017)">Version 2.0 (June 5, 2017)</h4><ul><li>Global consul settings changed from single to multiple profiles</li><li>Added pipeline support</li></ul><h4 id="ConsulPlugin-Version1.0(April4,2017)">Version 1.0 (April 4, 2017)</h4><ul><li>Initial release</li></ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/107020289.jpg">globalSettings.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/107020290.jpg">jobSettings.jpg</a> (image/jpeg)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/108331477.png">image2017-4-3 10:31:53.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/108331478.png">image2017-4-3 10:32:15.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/108331479.png">image2017-4-3 10:35:58.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/108331480.png">image2017-4-3 10:39:44.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/129073420.png">globalSettings.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/129073424.png">freeStyleJob.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/129073425.png">pipelineSyntax.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/133957224.png">image2017-7-26 14:34:47.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/106267864/133957226.png">image2017-7-26 14:38:48.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:18</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

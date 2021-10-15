@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Aliyun Container Service Deploy Plugin</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Plugins.html">Plugins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Aliyun Container Service Deploy Plugin
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (qinjiajia)</span>, last modified by <span class='editor'> Unknown User (orrc)</span> on Oct 11, 2016
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <table class="confluenceTable"><tbody>
+<tr>
+<th class="confluenceTh"><p> Plugin Information </p></th>
+</tr>
+<tr>
+<td class="confluenceTd"><p> No information for the plugin 'aliyun-container-service-deploy' is available. It may have been removed from distribution. </p></td>
+</tr>
+</tbody></table>
+
+
+<h1 id="AliyunContainerServiceDeployPlugin-Summary">Summary</h1>
+
+<p>Jenkins is a greate continuous delivery system.But you will find a little confused When the continuous delivery job meets ths Aliyun Container Service.Because current plugins can't relect the logical concepts in Aliyun Container Service such as application,service and something else. The Aliyun-Container-Service-Deploy plugin get through the gap between Jenkins and Aliyun Container Service.You can simply place a docker-compose configuration file in the root directory of the code repository.The plugin will detect the specific docker-compose configuration file , revoke the api of the Aliyun Container Service  and Deploy the application to the remote Aliyun Container Clusters.</p>
+
+<h1 id="AliyunContainerServiceDeployPlugin-Configuration">Configuration</h1>
+
+<p>After installing the plugin,you'll get a new Build Step entry named &quot;Aliyun Container Service Deploy&quot;. Fill the configuration and it will deploy the docker-compose configuration when the pre build step build successfully.</p>
+
+<h3 id="AliyunContainerServiceDeployPlugin-Parameters">Parameters</h3>
+
+
+<h5 id="AliyunContainerServiceDeployPlugin-MasterUrl">MasterUrl</h5>
+
+<p>MasterUrl is the endpoint of a container cluster.you can find the value on the console of  &lt;a href=&quot;https://cs.console.aliyun.com/#/cluster&quot; target=&quot;_blank&quot;/&gt;Aliyun Container Service&lt;/a&gt;.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100368400/100106309.png" data-image-src="attachments/100368400/100106309.png" data-unresolved-comment-count="0" data-linked-resource-id="100106309" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="ded60b9589c65187ed6b1d8965bbae96.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100368400" data-linked-resource-container-version="5"></span></p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100368400/100106308.png" data-image-src="attachments/100368400/100106308.png" data-unresolved-comment-count="0" data-linked-resource-id="100106308" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="4446ae8b09a2a4a04e9488fdd4f07059.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100368400" data-linked-resource-container-version="5"></span></p>
+
+
+<h5 id="AliyunContainerServiceDeployPlugin-ApplicationName">ApplicationName</h5>
+
+<p>Application is a logical concept in Aliyun Container Service.Application is the mininum unit of a single releasement.A standard application consist of several services and a service consist of serveral containers.If you want to deploy a application to Aliyun Container Service. You need to come up a awesome name firstly.</p>
+
+<h5 id="AliyunContainerServiceDeployPlugin-ComposeTemplate">ComposeTemplate</h5>
+
+<p>ComposeTemplate is the configuration of the application. The blank requires the relative path of the docker-compose.If your docker-compose.yml is under the path of docker/docker-compose.yml.Just fill the blank with the path.</p>
+
+<h5 id="AliyunContainerServiceDeployPlugin-HostCredetials">HostCredetials</h5>
+
+<p>HostCredetials are the certs of the target cluster. You can visit the remote container cluster with the specific certs on any computer with a docker client.</p>
+
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100368400/100106307.png" data-image-src="attachments/100368400/100106307.png" data-unresolved-comment-count="0" data-linked-resource-id="100106307" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="15e3bddcde04166a6b41843cab7642ec.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100368400" data-linked-resource-container-version="5"></span></p>
+
+<p>open the pem files , extract the content and fill the blank below.</p>
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/100368400/100106306.png" data-image-src="attachments/100368400/100106306.png" data-unresolved-comment-count="0" data-linked-resource-id="100106306" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="04d625cf2e2a982376e94768fca74755.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="100368400" data-linked-resource-container-version="5"></span></p>
+
+
+<h1 id="AliyunContainerServiceDeployPlugin-Knownissues">Known issues</h1>
+
+<ul>
+	<li>not support blue-green development</li>
+</ul>
+
+
+<h3 id="AliyunContainerServiceDeployPlugin-Needhelp">Need help</h3>
+
+<p>Maintainers:<br/>
+<a href="mailto:yujia.qyj@alibaba-inc.com" class="external-link" rel="nofollow">YuJia Qin</a><br/>
+<a href="mailto:zhongwei.lzw@alibaba-inc.com" class="external-link" rel="nofollow">Ringtail</a></p>
+
+<h1 id="AliyunContainerServiceDeployPlugin-Changelog">Changelog</h1>
+
+
+<h3 id="AliyunContainerServiceDeployPlugin-0.1.0">0.1.0</h3>
+
+<ul>
+	<li>beta version</li>
+</ul>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100368400/100106306.png">04d625cf2e2a982376e94768fca74755.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100368400/100106307.png">15e3bddcde04166a6b41843cab7642ec.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100368400/100106308.png">4446ae8b09a2a4a04e9488fdd4f07059.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/100368400/100106309.png">ded60b9589c65187ed6b1d8965bbae96.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

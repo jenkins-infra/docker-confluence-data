@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Jenkins Runner</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Starting-and-Accessing-Jenkins.html">Starting and Accessing Jenkins</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Jenkins Runner
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (mnadeem)</span>, last modified on Apr 03, 2014
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <div class="sectionColumnWrapper"><div class="sectionMacro">
+
+<div class="sectionMacroRow"><div class="columnMacro" style="width:70%;min-width:70%;max-width:70%;">
+
+<p><span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image" src="attachments/70878399/71008312.png" data-image-src="attachments/70878399/71008312.png" data-unresolved-comment-count="0" data-linked-resource-id="71008312" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="jenkins_logo.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="70878399" data-linked-resource-container-version="18"></span><br/>
+ <br/>
+<strong>Step 1 :</strong> Download <strong>Jenkins Runner</strong> From <a href="https://github.com/mnadeem/JenkinsRunner" class="external-link" rel="nofollow">Github repository</a></p>
+
+<p><strong>Step 2:</strong> Extract the Runner to a suitable place <em>/usr/share</em> or <em>/opt</em> in linux and <em>C:\tools</em> in windows</p>
+
+<p><strong>Step 3:</strong> Copy the <strong>jenkins.war</strong> to <em>RunnerHome/lib</em> directory </p>
+
+<p><strong>Step 4:</strong> Based on your environment Start the appropriate script ( under bin folder)</p>
+
+<p>For example on Windows you can click bin/[windows-x86-64] or [windows-x86-32]/StartJenkins.bat</p>
+
+<p><br class="atl-forced-newline"/></p>
+<div class="confluence-information-macro confluence-information-macro-information"><span class="aui-icon aui-icon-small aui-iconfont-info confluence-information-macro-icon"></span><div class="confluence-information-macro-body">
+<p>Jenkins Runner is based on Java Service Wrapper <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-external-resource" src="http://wrapper.static.tanukisoftware.co.jp/images/jsw-logo.jpg" data-image-src="http://wrapper.static.tanukisoftware.co.jp/images/jsw-logo.jpg"></span></p></div></div>
+
+<p><br class="atl-forced-newline"/></p>
+
+<h2 id="JenkinsRunner-FEATURES">FEATURES</h2>
+
+<hr/>
+<ul>
+	<li>Pre bundled script which would allow you to manage jenkins instance in different environments seamlessly</li>
+	<li>Configurations can be changed/added very easily</li>
+	<li>Scripts supports init.d configuration and Windows Service modes</li>
+	<li>Upgrading jenkins is just a matter of replacing j<em>enkins.war</em> in lib folder</li>
+	<li>Pre configured plugins can be provided with the bundle.</li>
+	<li>you can added other jar files easily in the class path</li>
+	<li><em>application parameters</em> and <em>jmv parameters</em> can configured very easily</li>
+</ul>
+
+
+
+
+<h3 id="JenkinsRunner-ShorterVersion">Shorter Version</h3>
+
+<ul>
+	<li>Easy instance Management</li>
+	<li>Easy Configuration</li>
+	<li>Easy Updating + Pre bundled Plugins</li>
+</ul>
+
+
+<h2 id="JenkinsRunner-DIRECTORYDETAILS">DIRECTORY DETAILS</h2>
+
+<hr/>
+<ul>
+	<li><em>data</em> ==&gt; contains files required for jenkins, configuration, jobs etc</li>
+</ul>
+
+
+<ul>
+	<li><em>logs</em> ==&gt; this where jenkins will spit out logs</li>
+</ul>
+
+
+<ul>
+	<li><em>conf</em> ==&gt; configuration that should be done to jenkins is driven through files in this folder</li>
+</ul>
+
+
+<ul>
+	<li><em>lib</em> ==&gt; this folder contains <em>wrapper.jar</em> and <em>jenkins.war</em>, and any other jars you want to make available to classpath</li>
+</ul>
+
+
+<ul>
+	<li><em>bin</em> ==&gt; binary executables are present here, based on you environment you have to execute one of the files in this directory</li>
+</ul>
+
+
+
+
+<h2 id="JenkinsRunner-FAQ">FAQ</h2>
+
+<hr/>
+<h3 id="JenkinsRunner-HowdoIchangetheport?">How do I change the port?</h3>
+
+<p><em>Modify the JenkinsRunnder/conf/wrapper.conf file (line number 31) as follows</em></p>
+
+<div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: java; gutter: false; theme: Confluence" data-theme="Confluence">wrapper.app.parameter.2=--httpPort=8070</pre>
+</div></div>
+<p>For more details on properties, go to <a href="http://wrapper.tanukisoftware.com/doc/english/properties.html" class="external-link" rel="nofollow">JSW website</a></p></div></div></div></div>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/70878399/71008312.png">jenkins_logo.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

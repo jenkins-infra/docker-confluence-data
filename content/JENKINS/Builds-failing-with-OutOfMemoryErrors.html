@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jenkins : Builds failing with OutOfMemoryErrors</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Home.html">Home</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Use-Jenkins.html">Use Jenkins</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="3309623.html">I&#39;m getting OutOfMemoryError</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Jenkins : Builds failing with OutOfMemoryErrors
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Unknown User (recampbell)</span>, last modified by <span class='editor'> Unknown User (jeffdickerson)</span> on Aug 18, 2015
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <style type='text/css'>/*<![CDATA[*/
+div.rbtoc1631020108912 {padding: 0px;}
+div.rbtoc1631020108912 ul {list-style: disc;margin-left: 0px;}
+div.rbtoc1631020108912 li {margin-left: 0px;padding-left: 0px;}
+
+/*]]>*/</style><div class='toc-macro rbtoc1631020108912'>
+<ul class='toc-indentation'>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-Buildsrunningoutofmemory?'>Builds running out of memory?</a>
+<ul class='toc-indentation'>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-HeaporPermgen?'>Heap or Permgen?</a></li>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-VariousBuildTools'>Various Build Tools</a>
+<ul class='toc-indentation'>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-Maven2/3ProjectType'>Maven2/3 Project Type</a></li>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-FreestyleprojectswithMavenBuildSteps'>Freestyle projects with Maven Build Steps</a></li>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-Gradlebuildsteps'>Gradle build steps</a></li>
+<li><a href='#BuildsfailingwithOutOfMemoryErrors-Antbuildsteps'>Ant build steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>
+
+<h1 id="BuildsfailingwithOutOfMemoryErrors-Buildsrunningoutofmemory?">Builds running out of memory?</h1>
+
+<p>As your project grows, and you use new tools to either build or analyze your code, you will inevitably exceed the memory settings which your JVM provides by default. This is especially true on 64 bit JVM's since they double the size of the reference pointer. This page aims to show you how to increase the memory available to your build process.</p>
+
+
+<h2 id="BuildsfailingwithOutOfMemoryErrors-HeaporPermgen?">Heap or Permgen?</h2>
+
+<p>There are two OutOfMemoryErrors which people usually encounter. The first is related to heap space: <code>java.lang.OutOfMemoryError: Heap space</code> When you see this, you need to increase the maximum heap space. You can do this by adding the following to your JVM arguments <code>-Xmx200m</code> where you replace the number 200 with the new heap size in megabytes.</p>
+
+<p>The second is related to PermGen: <code>java.lang.OutOfMemoryError: PermGen space</code>. When you see this, you need to increase the maximum Permanent Generation space, which is used for things like class files and interned strings. You can do this by adding the following to your JVM arguments <code>-XX:MaxPermSize=128m</code> where you replace the number 128 with the new PermGen size in megabytes.</p>
+
+
+<h2 id="BuildsfailingwithOutOfMemoryErrors-VariousBuildTools">Various Build Tools</h2>
+
+<p>This section demonstrates how to set these JVM switches depending on the kind of build you are running.</p>
+
+<h3 id="BuildsfailingwithOutOfMemoryErrors-Maven2/3ProjectType">Maven2/3 Project Type</h3>
+
+<p>If you are using a Maven2/3 project type, you can set the <code>-Xmx</code> or <code>-XX:MaxPermSize</code> in your Jenkins global configuration. To do this, navigate to Jenkins global configuration page (Manage Jenkins -&gt; Configure System) and look for the <strong>Maven Project Configuration</strong>. Add the necessary JVM settings to the <em>Global MAVEN_OPTS</em> field and press save. Subsequent Maven2/3 builds will use these new settings.</p>
+
+<p>You can adjust the MAVEN_OPTS individually per job by navigating to the job, then clicking &quot;configure&quot; on the job menu, then under the &quot;Build&quot; section clicking advanced, then specifying a setting for the MAVEN_OPTS option.</p>
+
+<h3 id="BuildsfailingwithOutOfMemoryErrors-FreestyleprojectswithMavenBuildSteps">Freestyle projects with Maven Build Steps</h3>
+
+<p>If you have a Freestyle project with a &quot;Invoke Top Level Maven Targets&quot; build step, you can add the appropriate JVM switches for a given build by clicking the <strong>Advanced</strong> button on the build step and entering the JVM arguments in the <em>JVM Options</em> field.</p>
+
+<p>Alternatively, you can affect all free style Maven build steps by adding a MAVEN_OPTS global environment variable in the Jenkins global configuration. To do this, click <strong>Manage Jenkins</strong>, then <strong>Configure System</strong>. In the <strong>Global properties</strong> section, click the <strong>Environment Variables</strong> checkbox, then add a new environment variable called MAVEN_OPTS with the value set appropriately:</p>
+
+<p>   <span class="confluence-embedded-file-wrapper"><img class="confluence-embedded-image confluence-content-image-border" src="attachments/65667926/65863739.png" data-image-src="attachments/65667926/65863739.png" data-unresolved-comment-count="0" data-linked-resource-id="65863739" data-linked-resource-version="1" data-linked-resource-type="attachment" data-linked-resource-default-alias="correct-maven-opts.png" data-base-url="https://wiki.jenkins.io" data-linked-resource-content-type="image/png" data-linked-resource-container-id="65667926" data-linked-resource-container-version="22"></span></p>
+
+<h3 id="BuildsfailingwithOutOfMemoryErrors-Gradlebuildsteps">Gradle build steps</h3>
+
+<p>You can set the <code>-Xmx</code> or <code>-XX:MaxPermSize</code> by adding a GRADLE_OPTS global environment variable in the Jenkins global configuration. To do this, click <strong>Manage Jenkins</strong>, then <strong>Configure System</strong>. In the <strong>Global properties</strong> section, click the <strong>Environment Variables</strong> checkbox, then add a new environment variable called GRADLE_OPTS with the value set appropriately, similar to the screen shot above regarding MAVEN_OPTS</p>
+
+<h3 id="BuildsfailingwithOutOfMemoryErrors-Antbuildsteps">Ant build steps</h3>
+
+<p>For Ant steps, there is no global environment variable; you must set the Ant options in each individual build step. In the configuration for the build, find the <strong>Invoke Ant</strong> step, click <strong>Advanced</strong>, and enter the options into the <strong>Java Options</strong> box.</p>
+</p>
+                    </div>
+
+                                        <div class="pageSection group">
+                        <div class="pageSectionHeader">
+                            <h2 id="attachments" class="pageSectionTitle">Attachments:</h2>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667926/65863736.png">Screenshot 11:26:12 10:08 AM-4.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667926/65863737.png">screenshot-global-maven-opts.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667926/65863738.png">screenshot-maven-opts-small.png</a> (image/png)
+                                <br/>
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="attachments/65667926/65863739.png">correct-maven-opts.png</a> (image/png)
+                                <br/>
+                                                    </div>
+                    </div>
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Sep 07, 2021 13:08</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>
