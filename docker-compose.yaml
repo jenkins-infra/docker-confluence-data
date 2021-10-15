@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nginx:
+    build: .
+    ports:
+      - 8080:80
+    volumes:
+      - ${PROJECT_HOME:-.}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    command: [nginx-debug, '-g', 'daemon off;']
+
+
+    # https://stackoverflow.com/a/52309059/4074148
