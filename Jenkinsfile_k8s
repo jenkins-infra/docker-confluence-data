@@ -1,5 +1,22 @@
-buildDockerAndPublishImage('wiki', [
-    mainBranch: 'main',
-    automaticSemanticVersioning: true,
-    gitCredentials: 'github-app-infra'
-])
+
+parallel(
+  failFast: true,
+  'docker-image': {
+    // Do not rebuild the image when triggered by a periodic job
+    if (!currentBuild.getBuildCauses().contains("hudson.triggers.TimerTrigger")){
+      buildDockerAndPublishImage('wiki', [
+        mainBranch: 'main',
+        automaticSemanticVersioning: true,
+        gitCredentials: 'github-app-infra'
+      ])
+    }
+  },
+  'updatecli': {
+    withCredentials([string(credentialsId: 'updatecli-github-token', variable: 'UPDATECLI_GITHUB_TOKEN')]) {
+      updatecli(action: 'diff', containerMemory: '512Mi')
+      if (env.BRANCH_NAME == 'main') {
+        updatecli(action: 'apply', cronTriggerExpression: '@weekly', containerMemory: '512Mi')
+      }
+    }
+  },
+)
