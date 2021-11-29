@@ -13,9 +13,9 @@ parallel(
   },
   'updatecli': {
     withCredentials([string(credentialsId: 'updatecli-github-token', variable: 'UPDATECLI_GITHUB_TOKEN')]) {
-      updatecli(action: 'diff', containerMemory: '256Mi')
+      updatecli(action: 'diff', containerMemory: '512Mi')
       if (env.BRANCH_NAME == 'main') {
-        updatecli(action: 'apply', cronTriggerExpression: '@weekly', containerMemory: '256Mi')
+        updatecli(action: 'apply', cronTriggerExpression: '@weekly', containerMemory: '512Mi')
       }
     }
   },
