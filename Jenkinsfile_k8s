@@ -1,4 +1,4 @@
-@Library('pipeline-library@pull/254/head') _
+@Library('pipeline-library@pull/255/head') _
 
 parallel(
   failFast: true,
@@ -16,7 +16,7 @@ parallel(
     withCredentials([string(credentialsId: 'updatecli-github-token', variable: 'UPDATECLI_GITHUB_TOKEN')]) {
       updatecli(action: 'diff')
       if (env.BRANCH_NAME == 'main') {
-        updatecli(action: 'apply', cronTriggerExpression: '@weekly')
+        updatecli(action: 'apply', cronTriggerExpression: '@weekly', containerMemory: '512Mi')
       }
     }
   },
