@@ -14,7 +14,7 @@ parallel(
   },
   'updatecli': {
     withCredentials([string(credentialsId: 'updatecli-github-token', variable: 'UPDATECLI_GITHUB_TOKEN')]) {
-      updatecli(action: 'diff')
+      updatecli(action: 'diff', containerMemory: '512Mi', updatecliDockerImage: 'ghcr.io/updatecli/updatecli:v0.15.0')
       if (env.BRANCH_NAME == 'main') {
         updatecli(action: 'apply', cronTriggerExpression: '@weekly', containerMemory: '512Mi', updatecliDockerImage: 'ghcr.io/updatecli/updatecli:v0.15.0')
       }
