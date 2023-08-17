@@ -9,7 +9,7 @@ group "default" {
 }
 
 target "wiki" {
-  dockerfile = "/Dockerfile"
+  dockerfile = "Dockerfile"
   tags = [
     "latest",
     "${TAG}"
