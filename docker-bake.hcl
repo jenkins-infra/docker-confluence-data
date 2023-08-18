@@ -4,7 +4,7 @@ variable "REGISTRY" {
   default = "docker.io"
 }
 
-variable "TAG" {
+variable "TAG_NAME" {
   default = ""
 }
 
@@ -19,7 +19,7 @@ target "default" {
   context = "."
   tags = [
     full_image_name("latest"),
-    full_image_name(TAG)
+    full_image_name(TAG_NAME)
   ]
   platforms = ["linux/amd64", "linux/arm64"]
 }
