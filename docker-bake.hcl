@@ -11,7 +11,7 @@ variable "TAG_NAME" {
 # return the full image name
 function "full_image_name" {
   params = [tag]
-  result = notequal(tag, "") ? "${REGISTRY}/${IMAGE_NAME}:${tag}" : "${REGISTRY}/${IMAGE_NAME}:latest"
+  result = notequal("", tag) ? "${REGISTRY}/${IMAGE_NAME}:${tag}" : "${REGISTRY}/${IMAGE_NAME}:latest"
 }
 
 target "default" {
