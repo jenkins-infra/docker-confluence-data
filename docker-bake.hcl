@@ -22,4 +22,19 @@ target "default" {
     full_image_name(TAG_NAME)
   ]
   platforms = ["linux/amd64", "linux/arm64"]
+  args = {
+    GIT_COMMIT_REV="$(GIT_COMMIT_REV)",
+    GIT_SCM_URL="$(GIT_SCM_URL)",
+    BUILD_DATE="$(BUILD_DATE)",
+  }
+  labels = {
+    "org.opencontainers.image.source"="$(GIT_SCM_URL)",
+    "org.label-schema.vcs-url"="$(GIT_SCM_URL)",
+    "org.opencontainers.image.url"="$(SCM_URI)",
+    "org.label-schema.url"="$(SCM_URI)",
+    "org.opencontainers.image.revision"="$(GIT_COMMIT_REV)",
+    "org.label-schema.vcs-ref"="$(GIT_COMMIT_REV)",
+    "org.opencontainers.image.created"="$(BUILD_DATE)",
+    "org.label-schema.build-date"="$(BUILD_DATE)",
+  }
 }
