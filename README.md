@@ -4,4 +4,4 @@
 
 This repository originally contained wiki confluence data exported to HTML.
 
-It's also now containing the docker image used to serve this static content at https://wiki.jenkins.io, and to redirect to search on (plugins.)jenkins.io if the requested URL doesn't correspond to any HTML file.
+It's also now containing the Docker image used to serve this static content at https://wiki.jenkins.io, and to redirect to search on (plugins.)jenkins.io if the requested URL doesn't correspond to any HTML file.
