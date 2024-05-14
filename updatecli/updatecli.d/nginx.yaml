@@ -1,4 +1,4 @@
-title: Bump nginx:stable docker image version
+name: Bump nginx:stable docker image version
 
 scms:
   default:
@@ -20,45 +20,45 @@ scms:
 sources:
   latestStableRelease:
     name: Get latest stable version of nginx
-    kind: gitTag
-    scmID: nginxGithubMirror
+    kind: gittag
+    scmid: nginxGithubMirror
     spec:
-      versionFilter:
+      versionfilter:
         kind: regex
         ## Nginx stable version have the minor digit as an even number
         pattern: 'release-(\d+)\.(\d*[0|2|4|6|8])\.(\d+)'
     transformers:
-      - trimPrefix: "release-"
-      - addSuffix: "-alpine"
+      - trimprefix: "release-"
+      - addsuffix: "-alpine"
 
 conditions:
   checkDockerImagePublished:
     name: "Test nginx:<latest_version> docker image tag"
-    kind: dockerImage
-    sourceID: latestStableRelease
+    kind: dockerimage
+    scmid: default
+    sourceid: latestStableRelease
     spec:
       image: "nginx"
       architecture: amd64
-      # tag comes from the sourceID
+      # tag comes from the sourceid
 
 targets:
   updateReleaseInDockerfile:
     name: "Update the version of nginx in the Dockerfile"
     kind: dockerfile
-    sourceID: latestStableRelease
+    sourceid: latestStableRelease
     spec:
       file: Dockerfile
       instruction:
         keyword: "FROM"
         matcher: "nginx"
-    scmID: default
+    scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
-    scmID: default
-    targets:
-      - updateReleaseInDockerfile
+    kind: github/pullrequest
+    title: Bump nginx version to {{ source "latestStableRelease" }}
+    scmid: default
     spec:
       labels:
         - dependencies
