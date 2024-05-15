@@ -29,24 +29,13 @@ sources:
         pattern: 'release-(\d+)\.(\d*[0|2|4|6|8])\.(\d+)'
     transformers:
       - trimprefix: "release-"
-      - addsuffix: "-alpine"
-  latestStableReleaseMainVersion:
-    name: Get Main Version latest stable version of nginx
-    kind: gittag
-    scmid: nginxGithubMirror
-    spec:
-      versionfilter:
-        kind: regex
-        ## Nginx stable version have the minor digit as an even number
-        pattern: 'release-(\d+)\.(\d*[0|2|4|6|8])\.(\d+)'
-    transformers:
-      - trimprefix: "release-"
-
 conditions:
   checkDockerImagePublished:
     name: "Test nginx:<latest_version> docker image tag"
     kind: dockerimage
     sourceid: latestStableRelease
+    transformers:
+      - addsuffix: "-alpine"
     spec:
       image: "nginx"
       architecture: amd64
@@ -65,7 +54,7 @@ targets:
     scmid: default
   updateTestHarness:
     name: "Update the expectedError version in the test harness"
-    sourceid: latestStableReleaseMainVersion
+    sourceid: latestStableRelease
     scmid: default
     kind: file
     spec:
@@ -73,7 +62,7 @@ targets:
       matchpattern: >
         expectedError: \["(.*)"]
       replacepattern: >
-        expectedError: ["{{ source "latestStableReleaseMainVersion" }}"]
+        expectedError: ["{{ source "latestStableRelease" }}"]
 actions:
   default:
     kind: github/pullrequest
