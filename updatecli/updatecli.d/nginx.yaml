@@ -46,6 +46,8 @@ targets:
     name: "Update the version of nginx in the Dockerfile"
     kind: dockerfile
     sourceid: latestStableRelease
+    transformers:
+      - addsuffix: "-alpine"
     spec:
       file: Dockerfile
       instruction:
@@ -56,13 +58,16 @@ targets:
     name: "Update the expectedError version in the test harness"
     sourceid: latestStableRelease
     scmid: default
-    kind: file
+    kind: yaml
+    transformers:
+      - findsubmatch:
+          pattern: '(\d+)\.(\d*[0|2|4|6|8])\.'
+          captureindex: 0
+      - addprefix: '"'
+      - addsuffix: '"'
     spec:
       file: "cst.yml"
-      matchpattern: >
-        expectedError: \["(.*)"]
-      replacepattern: >
-        expectedError: ["{{ source "latestStableRelease" }}"]
+      key: $.commandTests[0].expectedError[0]
 actions:
   default:
     kind: github/pullrequest
