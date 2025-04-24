@@ -1,4 +1,4 @@
-name: Bump nginx:stable docker image version
+name: Bump nginx version
 
 scms:
   default:
@@ -11,34 +11,32 @@ scms:
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       branch: "{{ .github.branch }}"
-  nginxGithubMirror:
-    kind: git
-    spec:
-      url: "https://github.com/nginx/nginx"
-      branch: "master"
 
 sources:
   latestStableRelease:
     name: Get latest stable version of nginx
     kind: gittag
-    scmid: nginxGithubMirror
     spec:
+      url: https://github.com/nginx/nginx
       versionfilter:
         kind: regex
         ## Nginx stable version have the minor digit as an even number
         pattern: 'release-(\d+)\.(\d*[0|2|4|6|8])\.(\d+)'
     transformers:
-      - trimprefix: "release-"
+      - trimprefix: release-
+
 conditions:
   checkDockerImagePublished:
     name: "Test nginx:<latest_version> docker image tag"
     kind: dockerimage
     sourceid: latestStableRelease
     transformers:
-      - addsuffix: "-alpine"
+      - addsuffix: -alpine
     spec:
-      image: "nginx"
-      architecture: amd64
+      image: nginx
+      architectures:
+        - arm64
+        - amd64
       # tag comes from the sourceid
 
 targets:
@@ -47,27 +45,27 @@ targets:
     kind: dockerfile
     sourceid: latestStableRelease
     transformers:
-      - addsuffix: "-alpine"
+      - addsuffix: -alpine
     spec:
-      file: Dockerfile
+      file: ./Dockerfile
       instruction:
-        keyword: "FROM"
-        matcher: "nginx"
+        keyword: FROM
+        matcher: nginx
     scmid: default
   updateTestHarness:
     name: "Update the expectedError version in the test harness"
     sourceid: latestStableRelease
-    scmid: default
     kind: yaml
     transformers:
       - findsubmatch:
           pattern: '(\d+)\.(\d*[0|2|4|6|8])\.'
           captureindex: 0
-      - addprefix: '"'
-      - addsuffix: '"'
     spec:
-      file: "cst.yml"
+      engine: yamlpath
+      file: ./cst.yml
       key: $.commandTests[0].expectedError[0]
+    scmid: default
+
 actions:
   default:
     kind: github/pullrequest
