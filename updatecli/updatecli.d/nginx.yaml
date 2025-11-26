@@ -1,4 +1,4 @@
-title: Bump nginx:stable docker image version
+name: Bump nginx version
 
 scms:
   default:
@@ -11,54 +11,66 @@ scms:
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       branch: "{{ .github.branch }}"
-  nginxGithubMirror:
-    kind: git
-    spec:
-      url: "https://github.com/nginx/nginx"
-      branch: "master"
 
 sources:
   latestStableRelease:
     name: Get latest stable version of nginx
-    kind: gitTag
-    scmID: nginxGithubMirror
+    kind: gittag
     spec:
-      versionFilter:
+      url: https://github.com/nginx/nginx
+      versionfilter:
         kind: regex
         ## Nginx stable version have the minor digit as an even number
         pattern: 'release-(\d+)\.(\d*[0|2|4|6|8])\.(\d+)'
     transformers:
-      - trimPrefix: "release-"
-      - addSuffix: "-alpine"
+      - trimprefix: release-
 
 conditions:
   checkDockerImagePublished:
     name: "Test nginx:<latest_version> docker image tag"
-    kind: dockerImage
-    sourceID: latestStableRelease
+    kind: dockerimage
+    sourceid: latestStableRelease
+    transformers:
+      - addsuffix: -alpine
     spec:
-      image: "nginx"
-      architecture: amd64
-      # tag comes from the sourceID
+      image: nginx
+      architectures:
+        - arm64
+        - amd64
+      # tag comes from the sourceid
 
 targets:
   updateReleaseInDockerfile:
     name: "Update the version of nginx in the Dockerfile"
     kind: dockerfile
-    sourceID: latestStableRelease
+    sourceid: latestStableRelease
+    transformers:
+      - addsuffix: -alpine
     spec:
-      file: Dockerfile
+      file: ./Dockerfile
       instruction:
-        keyword: "FROM"
-        matcher: "nginx"
-    scmID: default
+        keyword: FROM
+        matcher: nginx
+    scmid: default
+  updateTestHarness:
+    name: "Update the expectedError version in the test harness"
+    sourceid: latestStableRelease
+    kind: yaml
+    transformers:
+      - findsubmatch:
+          pattern: '(\d+)\.(\d*[0|2|4|6|8])\.'
+          captureindex: 0
+    spec:
+      engine: yamlpath
+      file: ./cst.yml
+      key: $.commandTests[0].expectedError[0]
+    scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
-    scmID: default
-    targets:
-      - updateReleaseInDockerfile
+    kind: github/pullrequest
+    title: Bump nginx version to {{ source "latestStableRelease" }}
+    scmid: default
     spec:
       labels:
         - dependencies
